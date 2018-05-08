@@ -28,6 +28,7 @@
 // TODO move to SDL_GetBasePath(), SDL_GetPrefPath() + SDL_free() usage (libSDL2)
 
 #include "game.h"
+#include "config/config.h"
 #include "ui/font.h"
 #include "gfx/shadow_map.h"
 #include "script_engine/script.h"
@@ -42,11 +43,7 @@
 
 
 
-//------------------------------------------------------------------------------------
-// настройки
-//------------------------------------------------------------------------------------
-// настройки игры
-sGameSetup Setup;
+
 
 
 //------------------------------------------------------------------------------------
@@ -395,21 +392,21 @@ int main( int argc, char **argv )
 	}
 
 	// работа с файлом данных... передаем базовый режим окна (обязательно после инициализации языков!)
-	bool FirstStart = LoadXMLSetupFile(NeedSafeMode);
+	bool FirstStart = LoadXMLConfigFile(NeedSafeMode);
 
-	if (Setup.FontNumber > FontQuantity)
-		Setup.FontNumber = 0;
+	if (GameConfig().FontNumber > FontQuantity)
+		ChangeGameConfig().FontNumber = 0;
 
 	// иним фонт
-	InitFont(FontList[Setup.FontNumber].FontFileName);
+	InitFont(FontList[GameConfig().FontNumber].FontFileName);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!vw_InitAudio()) {
-		Setup.Music_check = false;
-		Setup.Sound_check = false;
+		ChangeGameConfig().Music_check = false;
+		ChangeGameConfig().Sound_check = false;
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 	}
 
@@ -647,29 +644,29 @@ ReCreate:
 	// устанавливаем и корректируем текущие настройки окна
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (FirstStart) {
-		Setup.Width = CurrentVideoMode.W;
-		Setup.Height = CurrentVideoMode.H;
-		Setup.BPP = CurrentVideoMode.BPP;
+		ChangeGameConfig().Width = CurrentVideoMode.W;
+		ChangeGameConfig().Height = CurrentVideoMode.H;
+		ChangeGameConfig().BPP = CurrentVideoMode.BPP;
 	}
 	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama, например)
-	if ((VideoModes[VideoModesNum-1].W < Setup.Width) ||
-	    (VideoModes[VideoModesNum-1].H < Setup.Height)) {
-		Setup.Width = VideoModes[VideoModesNum-1].W;
-		Setup.Height = VideoModes[VideoModesNum-1].H;
-		Setup.BPP = CurrentVideoMode.BPP;
+	if ((VideoModes[VideoModesNum-1].W < GameConfig().Width) ||
+	    (VideoModes[VideoModesNum-1].H < GameConfig().Height)) {
+		ChangeGameConfig().Width = VideoModes[VideoModesNum-1].W;
+		ChangeGameConfig().Height = VideoModes[VideoModesNum-1].H;
+		ChangeGameConfig().BPP = CurrentVideoMode.BPP;
 	}
 	// делаем проверку по листу разрешений экрана, если входит - все ок, если нет - ставим оконный режим принудительно
 	bool NeedResetToWindowedMode = true;
 	for(int i = 0; i < VideoModesNum; i++) {
-		if ((VideoModes[i].W == Setup.Width) &&
-		    (VideoModes[i].H == Setup.Height) &&
-		    (VideoModes[i].BPP == Setup.BPP)) {
+		if ((VideoModes[i].W == GameConfig().Width) &&
+		    (VideoModes[i].H == GameConfig().Height) &&
+		    (VideoModes[i].BPP == GameConfig().BPP)) {
 			NeedResetToWindowedMode = false;
 			break;
 		}
 	}
 	if (NeedResetToWindowedMode)
-		Setup.BPP = 0;
+		ChangeGameConfig().BPP = 0;
 
 
 
@@ -679,7 +676,7 @@ ReCreate:
 
 
 	// устанавливаем язык текста
-	vw_SetTextLanguage(Setup.MenuLanguage);
+	vw_SetTextLanguage(GameConfig().MenuLanguage);
 
 
 
@@ -699,11 +696,11 @@ ReCreate:
 				std::cout << "Joystick Name " << i << ": " << SDL_JoystickNameForIndex(i) << "\n";
 			}
 
-			Joystick = SDL_JoystickOpen(Setup.JoystickNum);
+			Joystick = SDL_JoystickOpen(GameConfig().JoystickNum);
 
 			if(Joystick) {
-				std::cout << "Opened Joystick " << Setup.JoystickNum << "\n"
-					  << "Joystick Name: " << SDL_JoystickNameForIndex(Setup.JoystickNum) << "\n"
+				std::cout << "Opened Joystick " << GameConfig().JoystickNum << "\n"
+					  << "Joystick Name: " << SDL_JoystickNameForIndex(GameConfig().JoystickNum) << "\n"
 					  << "Joystick Number of Axes: " << SDL_JoystickNumAxes(Joystick) << "\n"
 					  << "Joystick Number of Buttons: " << SDL_JoystickNumButtons(Joystick) << "\n"
 					  << "Joystick Number of Balls: " << SDL_JoystickNumBalls(Joystick) << "\n\n";
@@ -723,23 +720,23 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// создаем окно и базовые опенжл контекст
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	bool Fullscreen = (Setup.BPP != 0);
-	int InitStatus = vw_InitWindow("AstroMenace", Setup.Width, Setup.Height, &Setup.BPP, Fullscreen, CurrentVideoModeX, CurrentVideoModeY, Setup.VSync);
+	bool Fullscreen = (GameConfig().BPP != 0);
+	int InitStatus = vw_InitWindow("AstroMenace", GameConfig().Width, GameConfig().Height, &ChangeGameConfig().BPP, Fullscreen, CurrentVideoModeX, CurrentVideoModeY, GameConfig().VSync);
 
 	// ошибка окна (размеры)
 	if (InitStatus == 1) {
 		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
-		if ((640 != Setup.Width) ||
-		    (480 != Setup.Height) ||
-		    (0 != Setup.BPP)) {
-			Setup.Width = 640;
-			Setup.Height = 480;
-			Setup.BPP = 0;
-			Setup.InternalWidth = 1024.0f;
-			Setup.InternalHeight = 768.0f;
-			Setup.MSAA = 0;
-			Setup.CSAA = 0;
-			SaveXMLSetupFile();
+		if ((640 != GameConfig().Width) ||
+		    (480 != GameConfig().Height) ||
+		    (0 != GameConfig().BPP)) {
+			ChangeGameConfig().Width = 640;
+			ChangeGameConfig().Height = 480;
+			ChangeGameConfig().BPP = 0;
+			ChangeGameConfig().InternalWidth = 1024.0f;
+			ChangeGameConfig().InternalHeight = 768.0f;
+			ChangeGameConfig().MSAA = 0;
+			ChangeGameConfig().CSAA = 0;
+			SaveXMLConfigFile();
 			SDL_Quit();
 			FirstStart = false;
 			goto ReCreate;
@@ -754,7 +751,7 @@ ReCreate:
 		return 0; // Quit If Window Was Not Created
 	}
 	if (!Fullscreen)
-		Setup.BPP = 0;
+		ChangeGameConfig().BPP = 0;
 
 
 
@@ -766,39 +763,39 @@ ReCreate:
 
 	// проверка поддержки шейдеров
 	// т.к. у нас шейдеры версии 120, проверяем версию OpenGL 2.0 и 2.1
-	if (Setup.UseGLSL120 &&
+	if (GameConfig().UseGLSL120 &&
 	    (!vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported))
-		Setup.UseGLSL120 = false;
+		ChangeGameConfig().UseGLSL120 = false;
 
 	// анализ системы только если это первый запуск
 	if (FirstStart) {
 		// если железо поддерживает OpenGL 3.0
 		if (vw_GetDevCaps().OpenGL_3_0_supported) {
 			// 100% держит наши шейдеры
-			Setup.UseGLSL120 = true;
-			Setup.ShadowMap = 1;
+			ChangeGameConfig().UseGLSL120 = true;
+			ChangeGameConfig().ShadowMap = 1;
 			// немного больше ставим другие опции
-			Setup.MSAA = 2;
-			Setup.CSAA = 2;
-			Setup.AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
-			Setup.MaxPointLights = 4;
+			ChangeGameConfig().MSAA = 2;
+			ChangeGameConfig().CSAA = 2;
+			ChangeGameConfig().AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
+			ChangeGameConfig().MaxPointLights = 4;
 		}
 		// если железо поддерживает OpenGL 4.2
 		if (vw_GetDevCaps().OpenGL_4_2_supported) {
 			// немного больше ставим другие опции
-			Setup.ShadowMap = 1;
-			Setup.MSAA = 4;
-			Setup.CSAA = 4;
-			Setup.MaxPointLights = 6;
+			ChangeGameConfig().ShadowMap = 1;
+			ChangeGameConfig().MSAA = 4;
+			ChangeGameConfig().CSAA = 4;
+			ChangeGameConfig().MaxPointLights = 6;
 		}
 
 		// устанавливаем соотношение сторон по установленному разрешению экрана
-		if ((Setup.Width*1.0f)/(Setup.Height*1.0f) < 1.4f) {
-			Setup.InternalWidth = 1024.0f;
-			Setup.InternalHeight = 768.0f;
+		if ((GameConfig().Width * 1.0f) / (GameConfig().Height * 1.0f) < 1.4f) {
+			ChangeGameConfig().InternalWidth = 1024.0f;
+			ChangeGameConfig().InternalHeight = 768.0f;
 		} else {
-			Setup.InternalWidth = 1228.0f;
-			Setup.InternalHeight = 768.0f;
+			ChangeGameConfig().InternalWidth = 1228.0f;
+			ChangeGameConfig().InternalHeight = 768.0f;
 		}
 	}
 
@@ -807,25 +804,27 @@ ReCreate:
 	    !vw_GetDevCaps().OpenGL_2_1_supported ||
 	    !vw_GetDevCaps().OpenGL_3_0_supported ||
 	    (vw_GetDevCaps().MaxTextureWidth < 2048))
-		Setup.ShadowMap = 0;
+		ChangeGameConfig().ShadowMap = 0;
 
 	// check MSAA/CSAA mode
 	bool FoundAAMode{false};
 	for (auto &Sample : vw_GetDevCaps().MultisampleCoverageModes) {
-		if ((Setup.MSAA == Sample.ColorSamples) &&
-		    (Setup.CSAA == Sample.CoverageSamples)) {
+		if ((GameConfig().MSAA == Sample.ColorSamples) &&
+		    (GameConfig().CSAA == Sample.CoverageSamples)) {
 			FoundAAMode = true;
 			break;
 		}
 	}
-	if (!FoundAAMode)
-		Setup.MSAA = Setup.CSAA = 0;
+	if (!FoundAAMode) {
+		ChangeGameConfig().MSAA = 0;
+		ChangeGameConfig().CSAA = 0;
+	}
 
 	// проверка режима сжатия текстур
 	if (!vw_GetDevCaps().EXT_texture_compression_s3tc)
-		Setup.TexturesCompressionType = 0;
-	if (!vw_GetDevCaps().ARB_texture_compression_bptc && (Setup.TexturesCompressionType > 1))
-		Setup.TexturesCompressionType = 0;
+		ChangeGameConfig().TexturesCompressionType = 0;
+	if (!vw_GetDevCaps().ARB_texture_compression_bptc && (GameConfig().TexturesCompressionType > 1))
+		ChangeGameConfig().TexturesCompressionType = 0;
 
 
 
@@ -835,7 +834,7 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// завершаем инициализацию
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_InitOpenGL(Setup.Width, Setup.Height, &Setup.MSAA, &Setup.CSAA);
+	vw_InitOpenGL(GameConfig().Width, GameConfig().Height, &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
 
 
 	// вторичная работа с настройками
@@ -856,7 +855,7 @@ ReCreate:
 	// сохраняем данные во время первого старта сразу после инициализации "железа"
 	// в случае некорректного завершения игры, файл настроек будет содержать актуальные параметры
 	if (FirstStart)
-		SaveXMLSetupFile();
+		SaveXMLConfigFile();
 
 
 
@@ -866,7 +865,7 @@ ReCreate:
 
 
 	// setup internal game resolution
-	vw_SetInternalResolution(Setup.InternalWidth, Setup.InternalHeight, true);
+	vw_SetInternalResolution(GameConfig().InternalWidth, GameConfig().InternalHeight, true);
 
 
 
@@ -1029,15 +1028,17 @@ loop:
 				int Y = SDL_JoystickGetAxis(Joystick, 1);
 
 				// учитываем "мертвую зону" хода ручки джойстика
-				if (abs(X) < Setup.JoystickDeadZone*3000) X = 0;
-				if (abs(Y) < Setup.JoystickDeadZone*3000) Y = 0;
+				if (abs(X) < (GameConfig().JoystickDeadZone * 3000))
+					X = 0;
+				if (abs(Y) < (GameConfig().JoystickDeadZone * 3000))
+					Y = 0;
 
 				if ((JoystickAxisX != X) || (JoystickAxisY != Y)) {
 					JoystickAxisX = 0;
 					JoystickAxisY = 0;
 
-					int Xsm = (int)(1000*(X/32768.0f)*JoystickTimeDelta);
-					int Ysm = (int)(1000*(Y/32768.0f)*JoystickTimeDelta);
+					int Xsm{static_cast<int>(1000 * (X / 32768.0f) * JoystickTimeDelta)};
+					int Ysm{static_cast<int>(1000 * (Y / 32768.0f) * JoystickTimeDelta)};
 
 					vw_SetMousePosRel(Xsm, Ysm);
 				}
@@ -1116,7 +1117,7 @@ GotoQuit:
 	// полностью выходим из SDL
 	SDL_Quit();
 	// сохраняем настройки игры
-	SaveXMLSetupFile();
+	SaveXMLConfigFile();
 
 	// если нужно перезагрузить игру с новыми параметрами
 	if (NeedReCreate) {
@@ -1138,7 +1139,7 @@ GotoQuit:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// завершаем работу со звуком
-	if (Setup.Music_check || Setup.Sound_check)
+	if (GameConfig().Music_check || GameConfig().Sound_check)
 		vw_ShutdownAudio();
 	// освобождаем память выделенную под ттф шрифт
 	vw_ShutdownFont();

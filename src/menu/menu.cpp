@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "../ui/font.h"
 #include "../script_engine/script.h"
 #include "../object3d/object3d.h"
@@ -93,8 +94,8 @@ void InitMenu()
 	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 	// установка мышки, чтобы не учитывать перемещения в меню
 	SDL_WarpMouseInWindow(vw_GetSDLWindow(),
-			      (int)((512.0f + 256.0f)/(Setup.InternalWidth / tmpViewportWidth)),
-			      (int)(384.0f / (Setup.InternalHeight / tmpViewportHeight)));
+			      static_cast<int>((512.0f + 256.0f) / (GameConfig().InternalWidth / tmpViewportWidth)),
+			      static_cast<int>(384.0f / (GameConfig().InternalHeight / tmpViewportHeight)));
 
 
 
@@ -133,7 +134,7 @@ void InitMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним камеру, всегда до работы со скриптом (!!!)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
+	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 
@@ -147,8 +148,9 @@ void InitMenu()
 	}
 	Script = new cScriptEngine;
 
-	if (Setup.MenuScript > 2) Setup.MenuScript = 0;
-	switch (Setup.MenuScript) {
+	if (GameConfig().MenuScript > 2)
+		ChangeGameConfig().MenuScript = 0;
+	switch (GameConfig().MenuScript) {
 	case 0:
 		Script->RunScript("script/menu1.xml", vw_GetTimeThread(0));
 		break;
@@ -163,7 +165,7 @@ void InitMenu()
 		Script->RunScript("script/menu1.xml", vw_GetTimeThread(0));
 		break;
 	}
-	Setup.MenuScript ++;
+	ChangeGameConfig().MenuScript++;
 
 	// немного прокручиваем скрипт
 	float Time1 = vw_GetTimeThread(0);
@@ -207,33 +209,43 @@ void SetOptionsMenu(eMenuStatus Menu)
 {
 	switch (Menu) {
 	case eMenuStatus::OPTIONS:
-		Options_Width = Setup.Width;
-		Options_Height = Setup.Height;
-		Options_BPP = Setup.BPP;
-		Options_VSync = Setup.VSync;
-		Options_iAspectRatioWidth = Setup.InternalWidth;
+		Options_Width = GameConfig().Width;
+		Options_Height = GameConfig().Height;
+		Options_BPP = GameConfig().BPP;
+		Options_VSync = GameConfig().VSync;
+		Options_iAspectRatioWidth = GameConfig().InternalWidth;
 		break;
 
 	case eMenuStatus::OPTIONS_ADVANCED:
-		Options_TexturesCompressionType = Setup.TexturesCompressionType;
-		Options_UseGLSL120 = Setup.UseGLSL120;
-		Options_MSAA = Setup.MSAA;
-		Options_CSAA = Setup.CSAA;
-		Options_TexturesAnisotropyLevel = Setup.AnisotropyLevel;
-		Options_ShadowMap = Setup.ShadowMap;
+		Options_TexturesCompressionType = GameConfig().TexturesCompressionType;
+		Options_UseGLSL120 = GameConfig().UseGLSL120;
+		Options_MSAA = GameConfig().MSAA;
+		Options_CSAA = GameConfig().CSAA;
+		Options_TexturesAnisotropyLevel = GameConfig().AnisotropyLevel;
+		Options_ShadowMap = GameConfig().ShadowMap;
 		break;
 
 	case eMenuStatus::CONFCONTROL:
-		if (Setup.KeyBoardUp == 0) Setup.KeyBoardUp = SDLK_UP;
-		if (Setup.KeyBoardDown == 0) Setup.KeyBoardDown = SDLK_DOWN;
-		if (Setup.KeyBoardLeft == 0) Setup.KeyBoardLeft = SDLK_LEFT;
-		if (Setup.KeyBoardRight == 0) Setup.KeyBoardRight = SDLK_RIGHT;
-		if (Setup.KeyBoardPrimary == 0) Setup.KeyBoardPrimary = SDLK_LCTRL;
-		if (Setup.KeyBoardSecondary == 0) Setup.KeyBoardSecondary = SDLK_SPACE;
-		if (Setup.MousePrimary == 0) Setup.MousePrimary = SDL_BUTTON_LEFT;
-		if (Setup.MouseSecondary == 0) Setup.MouseSecondary = SDL_BUTTON_RIGHT;
-		if (Setup.JoystickPrimary == -1) Setup.JoystickPrimary = 0;
-		if (Setup.JoystickSecondary == -1) Setup.JoystickSecondary = 1;
+		if (!GameConfig().KeyBoardUp)
+			ChangeGameConfig().KeyBoardUp = SDLK_UP;
+		if (!GameConfig().KeyBoardDown)
+			ChangeGameConfig().KeyBoardDown = SDLK_DOWN;
+		if (!GameConfig().KeyBoardLeft)
+			ChangeGameConfig().KeyBoardLeft = SDLK_LEFT;
+		if (!GameConfig().KeyBoardRight)
+			ChangeGameConfig().KeyBoardRight = SDLK_RIGHT;
+		if (!GameConfig().KeyBoardPrimary)
+			ChangeGameConfig().KeyBoardPrimary = SDLK_LCTRL;
+		if (!GameConfig().KeyBoardSecondary)
+			ChangeGameConfig().KeyBoardSecondary = SDLK_SPACE;
+		if (!GameConfig().MousePrimary)
+			ChangeGameConfig().MousePrimary = SDL_BUTTON_LEFT;
+		if (!GameConfig().MouseSecondary)
+			ChangeGameConfig().MouseSecondary = SDL_BUTTON_RIGHT;
+		if (GameConfig().JoystickPrimary == -1)
+			ChangeGameConfig().JoystickPrimary = 0;
+		if (GameConfig().JoystickSecondary == -1)
+			ChangeGameConfig().JoystickSecondary = 1;
 		break;
 
 	default:
@@ -258,16 +270,16 @@ void SetMenu(eMenuStatus Menu)
 
 	case eMenuStatus::TOP_SCORES:
 		// копируем исходные данные
-		for (int i=0; i<10; i++) {
-			strcpy(GameName[i], Setup.TopScores[i].Name);
-			GameScore[i] = Setup.TopScores[i].Score;
+		for (int i = 0; i < 10; i++) {
+			strcpy(GameName[i], GameConfig().TopScores[i].Name);
+			GameScore[i] = GameConfig().TopScores[i].Score;
 		}
 
 		// проверяем профайлы
-		for (int j=0; j<5; j++)
-			if (Setup.Profile[j].Used) {
-				AddTopScores(Setup.Profile[j].Experience, Setup.Profile[j].Name, true);
-			}
+		for (int j = 0; j < 5; j++) {
+			if (GameConfig().Profile[j].Used)
+				AddTopScores(GameConfig().Profile[j].Experience, GameConfig().Profile[j].Name, true);
+		}
 		break;
 
 	case eMenuStatus::MISSION:
@@ -385,15 +397,19 @@ void DrawMenu()
 			LastMenuUpdateTime = vw_GetTimeThread(0);
 
 			// выводим подсказку, если нужно
-			if (MenuStatus == eMenuStatus::PROFILE)
-				if (Setup.NeedShowHint[0]) SetCurrentDialogBox(eDialogBox::ProfileTipsAndTricks);
+			if ((MenuStatus == eMenuStatus::PROFILE) &&
+			    GameConfig().NeedShowHint[0])
+				SetCurrentDialogBox(eDialogBox::ProfileTipsAndTricks);
 			if (MenuStatus == eMenuStatus::WORKSHOP) {
-				if (CurrentWorkshop == 1)
-					if (Setup.NeedShowHint[1]) SetCurrentDialogBox(eDialogBox::ShipyardTipsAndTricks);
-				if (CurrentWorkshop == 2)
-					if (Setup.NeedShowHint[2]) SetCurrentDialogBox(eDialogBox::SystemsTipsAndTricks);
-				if (CurrentWorkshop == 3)
-					if (Setup.NeedShowHint[3]) SetCurrentDialogBox(eDialogBox::WeaponryTipsAndTricks);
+				if ((CurrentWorkshop == 1) &&
+				    GameConfig().NeedShowHint[1])
+					SetCurrentDialogBox(eDialogBox::ShipyardTipsAndTricks);
+				if ((CurrentWorkshop == 2) &&
+				    GameConfig().NeedShowHint[2])
+					SetCurrentDialogBox(eDialogBox::SystemsTipsAndTricks);
+				if ((CurrentWorkshop == 3) &&
+				    GameConfig().NeedShowHint[3])
+					SetCurrentDialogBox(eDialogBox::WeaponryTipsAndTricks);
 			}
 		}
 	}
@@ -428,7 +444,7 @@ void DrawMenu()
 	// надпись AstroMenace
 	sRECT SrcRect, DstRect;
 	SrcRect(0,0,863,128 );
-	int StartX = (Setup.InternalWidth - 863)/2;
+	int StartX = (GameConfig().InternalWidth - 863)/2;
 	DstRect(StartX,10,StartX+863,10+128);
 
 	if ((MenuStatus != eMenuStatus::WORKSHOP) &&
@@ -530,11 +546,11 @@ void DrawMenu()
 	vw_SetFontSize(10);
 	// Version
 	int VSize = vw_FontSize(vw_GetText("Version"));
-	vw_DrawFont(6, Setup.Height-16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f, vw_GetText("Version"));
-	vw_DrawFont(16 + VSize, Setup.Height-16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f, GAME_VERSION);
+	vw_DrawFont(6, GameConfig().Height - 16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f, vw_GetText("Version"));
+	vw_DrawFont(16 + VSize, GameConfig().Height - 16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f, GAME_VERSION);
 	// Copyright
 	int CSize = vw_FontSize("Copyright © 2007-2018, Viewizard");
-	vw_DrawFont(Setup.Width-6-CSize, Setup.Height-16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f,
+	vw_DrawFont(GameConfig().Width - 6 - CSize, GameConfig().Height - 16, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.99f,
 		    "Copyright © 2007-2018, Viewizard");
 	ResetFontSize();
 
@@ -567,8 +583,8 @@ void DrawMenu()
 
 		vw_Start2DMode(-1,1);
 
-		SrcRect(0,0,2,2);
-		DstRect(0,0,Setup.InternalWidth,768);
+		SrcRect(0, 0, 2, 2);
+		DstRect(0, 0, GameConfig().InternalWidth, 768);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
@@ -587,8 +603,8 @@ void DrawMenu()
 
 		vw_Start2DMode(-1,1);
 
-		SrcRect(0,0,2,2);
-		DstRect(0,0,Setup.InternalWidth,768);
+		SrcRect(0, 0, 2, 2);
+		DstRect(0, 0, GameConfig().InternalWidth, 768);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, MenuBlackTransp);
 
 		vw_End2DMode();
@@ -614,7 +630,7 @@ void MainMenu()
 {
 
 	int Prir = 100;
-	int X = (Setup.InternalWidth - 384)/2;
+	int X = (GameConfig().InternalWidth - 384) / 2;
 	int Y = 165;
 
 	if (DrawButton384(X,Y, vw_GetText("START GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {

@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "object3d.h"
+#include "../config/config.h"
 #include "../game.h"
 #include "../gfx/shadow_map.h"
 
@@ -687,14 +688,18 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		// если дальше - смотрим сколько воздействует источников света
 		if (PromptDrawRealDist2 > PromptDrawDist2) {
 			// если больше заданного кол-ва
-			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
-			else NeedOnePieceDraw = false;
+			if (LightsCount <= GameConfig().MaxPointLights)
+				NeedOnePieceDraw = true;
+			else
+				NeedOnePieceDraw = false;
 
 			// если это двигатели - не надо переходить
-			if (InternalLights >= LightsCount) NeedOnePieceDraw = true;
+			if (InternalLights >= LightsCount)
+				NeedOnePieceDraw = true;
 		} else {
 			// находимся близко, но нужно посмотреть, если кол-во источников ниже макс, надо перейти в упращенный режим
-			if (LightsCount <= Setup.MaxPointLights) NeedOnePieceDraw = true;
+			if (LightsCount <= GameConfig().MaxPointLights)
+				NeedOnePieceDraw = true;
 		}
 	}
 
@@ -824,7 +829,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// если используем тени - сразу находим режим сглаживания
 	int PCFMode{0};
 	if (ShadowMap)
-		PCFMode = Setup.ShadowMap;
+		PCFMode = GameConfig().ShadowMap;
 
 
 	// Устанавливаем данные для поверхности объекта
@@ -855,7 +860,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
 		NeedNormalMapping = 0;
-		if (Setup.UseGLSL120 &&
+		if (GameConfig().UseGLSL120 &&
 		    !NormalMap.empty() && NormalMap[0]) {
 			NeedNormalMapping = 1;
 			CurrentNormalMap = NormalMap[0];
@@ -865,9 +870,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		int LightType1, LightType2;
 		// включаем источники света
-		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
+		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, GameConfig().MaxPointLights, Matrix);
 
-		if (Setup.UseGLSL120 && (ObjectBlocks[0].ShaderType >= 0)) {
+		if (GameConfig().UseGLSL120 && (ObjectBlocks[0].ShaderType >= 0)) {
 			std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
 			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
@@ -1019,8 +1024,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
 				NeedNormalMapping = 0;
-				if (Setup.UseGLSL120 &&
-				    (NormalMap.size() > (unsigned)i)) {
+				if (GameConfig().UseGLSL120 &&
+				    (NormalMap.size() > static_cast<unsigned>(i))) {
 					if (NormalMap[i]) {
 						NeedNormalMapping = 1;
 						CurrentNormalMap = NormalMap[i];
@@ -1058,9 +1063,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			int LightType1, LightType2;
 			// включаем источники света
 			if (HitBB != nullptr)
-				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, Setup.MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBBLocation[i], HitBBRadius2[i], 2, GameConfig().MaxPointLights, Matrix);
 			else
-				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, Setup.MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, GameConfig().MaxPointLights, Matrix);
 
 
 			// если нужно рисовать прозрачным
@@ -1074,7 +1079,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				vw_PolygonOffset(true, 1.0f, 1.0f);
 			}
 
-			if (Setup.UseGLSL120 &&
+			if (GameConfig().UseGLSL120 &&
 			    (ObjectBlocks[i].ShaderType >= 0)) {
 				std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
@@ -1191,7 +1196,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 	// останавливаем шейдер, если был запущен
-	if (Setup.UseGLSL120)
+	if (GameConfig().UseGLSL120)
 		vw_StopShaderProgram();
 
 	// установка параметров текстур в исходное состояние

@@ -26,6 +26,8 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
+#include "../ui/font.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 
@@ -288,70 +290,70 @@ int GetSystemCost(int Num)
 
 void SellCurrentSystem()
 {
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) {
-		Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].EngineSystem);
-		Setup.Profile[CurrentProfile].EngineSystem = 0;
-		SetEarthSpaceFighterEngine(WorkshopFighterGame, Setup.Profile[CurrentProfile].EngineSystem);
+	if ((CurrentSystemStockNum >= 1) && (CurrentSystemStockNum <= 4)) {
+		ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].EngineSystem);
+		ChangeGameConfig().Profile[CurrentProfile].EngineSystem = 0;
+		SetEarthSpaceFighterEngine(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].EngineSystem);
 	}
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) {
-		Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].PowerSystem+4);
-		Setup.Profile[CurrentProfile].PowerSystem = 0;
+	if ((CurrentSystemStockNum >= 5) && (CurrentSystemStockNum <= 8)) {
+		ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].PowerSystem+4);
+		ChangeGameConfig().Profile[CurrentProfile].PowerSystem = 0;
 	}
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) {
-		Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].TargetingSystem+8);
-		Setup.Profile[CurrentProfile].TargetingSystem = 0;
+	if ((CurrentSystemStockNum >= 9) && (CurrentSystemStockNum <= 12)) {
+		ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingSystem+8);
+		ChangeGameConfig().Profile[CurrentProfile].TargetingSystem = 0;
 	}
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) {
-		Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12);
-		Setup.Profile[CurrentProfile].TargetingMechanicSystem = 0;
+	if ((CurrentSystemStockNum >= 13) && (CurrentSystemStockNum <= 16)) {
+		ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem+12);
+		ChangeGameConfig().Profile[CurrentProfile].TargetingMechanicSystem = 0;
 	}
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) {
-		Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16);
-		Setup.Profile[CurrentProfile].AdvancedProtectionSystem = 0;
+	if ((CurrentSystemStockNum >= 17) && (CurrentSystemStockNum <= 20)) {
+		ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem+16);
+		ChangeGameConfig().Profile[CurrentProfile].AdvancedProtectionSystem = 0;
 
-		SetEarthSpaceFighterArmour(WorkshopFighterGame, Setup.Profile[CurrentProfile].ShipHullUpgrade-1);
+		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 	}
 }
 
 
 void BuyCurrentSystem()
 {
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) {
-		if (Setup.Profile[CurrentProfile].EngineSystem != 0)
-			Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].EngineSystem);
-		Setup.Profile[CurrentProfile].EngineSystem = CurrentSystemStockNum;
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(Setup.Profile[CurrentProfile].EngineSystem);
+	if ((CurrentSystemStockNum >= 1) && (CurrentSystemStockNum <= 4)) {
+		if (GameConfig().Profile[CurrentProfile].EngineSystem != 0)
+			ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].EngineSystem);
+		ChangeGameConfig().Profile[CurrentProfile].EngineSystem = CurrentSystemStockNum;
+		ChangeGameConfig().Profile[CurrentProfile].Money -= GetSystemCost(GameConfig().Profile[CurrentProfile].EngineSystem);
 
-		SetEarthSpaceFighterEngine(WorkshopFighterGame, Setup.Profile[CurrentProfile].EngineSystem);
+		SetEarthSpaceFighterEngine(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].EngineSystem);
 	}
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) {
-		if (Setup.Profile[CurrentProfile].PowerSystem != 0)
-			Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].PowerSystem+4);
-		Setup.Profile[CurrentProfile].PowerSystem = CurrentSystemStockNum-4;
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(Setup.Profile[CurrentProfile].PowerSystem+4);
+	if ((CurrentSystemStockNum >= 5) && (CurrentSystemStockNum <= 8)) {
+		if (GameConfig().Profile[CurrentProfile].PowerSystem != 0)
+			ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].PowerSystem + 4);
+		ChangeGameConfig().Profile[CurrentProfile].PowerSystem = CurrentSystemStockNum - 4;
+		ChangeGameConfig().Profile[CurrentProfile].Money -= GetSystemCost(GameConfig().Profile[CurrentProfile].PowerSystem + 4);
 	}
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) {
-		if (Setup.Profile[CurrentProfile].TargetingSystem != 0)
-			Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].TargetingSystem+8);
-		Setup.Profile[CurrentProfile].TargetingSystem = CurrentSystemStockNum-8;
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(Setup.Profile[CurrentProfile].TargetingSystem+8);
+	if ((CurrentSystemStockNum >= 9) && (CurrentSystemStockNum <= 12)) {
+		if (GameConfig().Profile[CurrentProfile].TargetingSystem != 0)
+			ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingSystem + 8);
+		ChangeGameConfig().Profile[CurrentProfile].TargetingSystem = CurrentSystemStockNum - 8;
+		ChangeGameConfig().Profile[CurrentProfile].Money -= GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingSystem + 8);
 	}
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) {
-		if (Setup.Profile[CurrentProfile].TargetingMechanicSystem != 0)
-			Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12);
-		Setup.Profile[CurrentProfile].TargetingMechanicSystem = CurrentSystemStockNum-12;
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12);
+	if ((CurrentSystemStockNum >= 13) && (CurrentSystemStockNum <= 16)) {
+		if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem != 0)
+			ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12);
+		ChangeGameConfig().Profile[CurrentProfile].TargetingMechanicSystem = CurrentSystemStockNum - 12;
+		ChangeGameConfig().Profile[CurrentProfile].Money -= GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12);
 	}
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) {
-		if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem != 0)
-			Setup.Profile[CurrentProfile].Money += GetSystemCost(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16);
-		Setup.Profile[CurrentProfile].AdvancedProtectionSystem = CurrentSystemStockNum-16;
-		Setup.Profile[CurrentProfile].Money -= GetSystemCost(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16);
+	if ((CurrentSystemStockNum >= 17) && (CurrentSystemStockNum <= 20)) {
+		if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem != 0)
+			ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16);
+		ChangeGameConfig().Profile[CurrentProfile].AdvancedProtectionSystem = CurrentSystemStockNum - 16;
+		ChangeGameConfig().Profile[CurrentProfile].Money -= GetSystemCost(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16);
 
-		if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 2)
+		if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem == 2)
 			SetEarthSpaceFighterArmour(WorkshopFighterGame, 7);
 		else
-			SetEarthSpaceFighterArmour(WorkshopFighterGame, Setup.Profile[CurrentProfile].ShipHullUpgrade-1);
+			SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 	}
 }
 
@@ -382,8 +384,8 @@ int NeedPlayWorkshopOnButtonSoundY = 0;
 void Workshop_Workshop()
 {
 	sRECT SrcRect(0, 0, 256, 256);
-	sRECT DstRect(Setup.InternalWidth / 2 - 256, 0, Setup.InternalWidth / 2 - 256 + 512, 412);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f*MenuContentTransp);
+	sRECT DstRect(GameConfig().InternalWidth / 2 - 256, 0, GameConfig().InternalWidth / 2 - 256 + 512, 412);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f * MenuContentTransp);
 
 
 
@@ -393,7 +395,7 @@ void Workshop_Workshop()
 
 
 	SrcRect(0,0,210,600);
-	DstRect(Setup.InternalWidth/2-492,50-10,Setup.InternalWidth/2-492+210,50+600-10);
+	DstRect(GameConfig().InternalWidth/2-492, 50-10, GameConfig().InternalWidth/2-492+210, 50+600-10);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel2.tga"), true, MenuContentTransp);
 
 
@@ -403,7 +405,7 @@ void Workshop_Workshop()
 	float Current = 0.4f;
 
 	SrcRect(0,0,128,128);
-	DstRect(Setup.InternalWidth/2-451,60,Setup.InternalWidth/2-451+128,60+128);
+	DstRect(GameConfig().InternalWidth/2-451, 60, GameConfig().InternalWidth/2-451+128, 60+128);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
@@ -442,7 +444,7 @@ void Workshop_Workshop()
 	Current = 0.4f;
 
 	SrcRect(0,0,128,128);
-	DstRect(Setup.InternalWidth/2-451,200,Setup.InternalWidth/2-451+128,200+128);
+	DstRect(GameConfig().InternalWidth/2-451, 200, GameConfig().InternalWidth/2-451+128, 200+128);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
@@ -481,7 +483,7 @@ void Workshop_Workshop()
 	Current = 0.4f;
 
 	SrcRect(0,0,128,128);
-	DstRect(Setup.InternalWidth/2-451,340,Setup.InternalWidth/2-451+128,340+128);
+	DstRect(GameConfig().InternalWidth/2-451, 340, GameConfig().InternalWidth/2-451+128, 340+128);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
@@ -520,7 +522,7 @@ void Workshop_Workshop()
 	Current = 0.4f;
 
 	SrcRect(0,0,128,128);
-	DstRect(Setup.InternalWidth/2-451,610-128,Setup.InternalWidth/2-451+128,610);
+	DstRect(GameConfig().InternalWidth/2-451, 610-128, GameConfig().InternalWidth/2-451+128, 610);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
 			Audio_PlaySound2D(1,1.0f);
@@ -556,8 +558,8 @@ void Workshop_Workshop()
 
 
 	vw_SetFontSize(24);
-	vw_DrawFont(Setup.InternalWidth/2-475, 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("System Stock"));
-	vw_SetFontSize(16);
+	vw_DrawFont(GameConfig().InternalWidth/2-475, 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("System Stock"));
+	ResetFontSize();
 
 
 
@@ -571,7 +573,7 @@ void Workshop_Workshop()
 
 
 	SrcRect(0,0,210,600);
-	DstRect(Setup.InternalWidth/2+282,50-10,Setup.InternalWidth/2+492,50+600-10);
+	DstRect(GameConfig().InternalWidth/2+282, 50-10, GameConfig().InternalWidth/2+492, 50+600-10);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel2+.tga"), true, MenuContentTransp);
 
 
@@ -579,19 +581,19 @@ void Workshop_Workshop()
 	// проверяем, а все ли нормально с энергией... если не нормально, будем моргать и выведем соотв. надпись
 	bool NeedMoreEnergy = false;
 
-	if (Setup.Profile[CurrentProfile].PowerSystem != 0) {
+	if (GameConfig().Profile[CurrentProfile].PowerSystem != 0) {
 
-		float Have = GetShipRechargeEnergy(Setup.Profile[CurrentProfile].PowerSystem);
+		float Have = GetShipRechargeEnergy(GameConfig().Profile[CurrentProfile].PowerSystem);
 
 		float Need = 0.0f;
 
 		// если это не аркадный режим, нужно учитывать двигатель
-		if (Setup.Profile[CurrentProfile].SpaceShipControlMode != 1)
-			if (Setup.Profile[CurrentProfile].EngineSystem != 0)
-				Need += GetShipEngineSystemEnergyUse(Setup.Profile[CurrentProfile].EngineSystem);
+		if ((GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1) &&
+		    (GameConfig().Profile[CurrentProfile].EngineSystem != 0))
+			Need += GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem);
 		// если есть спец система, ее нужно тоже учитывать
-		if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem != 0)
-			Need += GetShipProtectionSystemEnergyUse(Setup.Profile[CurrentProfile].AdvancedProtectionSystem);
+		if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem != 0)
+			Need += GetShipProtectionSystemEnergyUse(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem);
 
 		// слабый реактор
 		if (Need >= Have) NeedMoreEnergy = true;
@@ -610,14 +612,14 @@ void Workshop_Workshop()
 		}
 
 		// вывод текста
-		int SizeI = (Setup.InternalWidth-vw_FontSize(vw_GetText("Warning! Low energy recharge rate!")))/2;
-		vw_DrawFont(SizeI, 60, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, vw_GetText("Warning! Low energy recharge rate!"));
+		int SizeI = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("Warning! Low energy recharge rate!"))) / 2;
+		vw_DrawFont(SizeI, 60, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3 * MenuContentTransp, vw_GetText("Warning! Low energy recharge rate!"));
 
-		SizeI = (Setup.InternalWidth-vw_FontSize(vw_GetText("Could be problems with")))/2;
-		vw_DrawFont(SizeI, 80, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, vw_GetText("Could be problems with"));
+		SizeI = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("Could be problems with"))) / 2;
+		vw_DrawFont(SizeI, 80, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3 * MenuContentTransp, vw_GetText("Could be problems with"));
 
-		SizeI = (Setup.InternalWidth-vw_FontSize(vw_GetText("systems function and/or weapons recharge!")))/2;
-		vw_DrawFont(SizeI, 100, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*MenuContentTransp, vw_GetText("systems function and/or weapons recharge!"));
+		SizeI = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("systems function and/or weapons recharge!"))) / 2;
+		vw_DrawFont(SizeI, 100, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3 * MenuContentTransp, vw_GetText("systems function and/or weapons recharge!"));
 	}
 
 
@@ -630,76 +632,76 @@ void Workshop_Workshop()
 	bool CanBuy = true;
 
 	// Engine
-	DstRect(Setup.InternalWidth/2+337,70,Setup.InternalWidth/2+437,70+100);
+	DstRect(GameConfig().InternalWidth/2+337, 70, GameConfig().InternalWidth/2+437, 70+100);
 
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) {
-		if (Setup.Profile[CurrentProfile].EngineSystem != 0) {
+	if ((CurrentSystemStockNum >= 1) && (CurrentSystemStockNum <= 4)) {
+		if (GameConfig().Profile[CurrentProfile].EngineSystem != 0) {
 			CanSell = true;
-			Cost = GetSystemCost(Setup.Profile[CurrentProfile].EngineSystem);
-			if (Cost + Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			Cost = GetSystemCost(GameConfig().Profile[CurrentProfile].EngineSystem);
+			if (Cost + GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		} else {
-			if (Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			if (GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		}
 	}
 
 
 	// Power
-	DstRect(Setup.InternalWidth/2+337,180,Setup.InternalWidth/2+437,180+100);
+	DstRect(GameConfig().InternalWidth/2+337, 180, GameConfig().InternalWidth/2+437, 180+100);
 
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) {
-		if (Setup.Profile[CurrentProfile].PowerSystem != 0) {
+	if ((CurrentSystemStockNum >= 5) && (CurrentSystemStockNum <= 8)) {
+		if (GameConfig().Profile[CurrentProfile].PowerSystem != 0) {
 			CanSell = true;
-			Cost = GetSystemCost(Setup.Profile[CurrentProfile].PowerSystem+4);
-			if (Cost + Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			Cost = GetSystemCost(GameConfig().Profile[CurrentProfile].PowerSystem + 4);
+			if (Cost + GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		} else {
-			if (Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			if (GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		}
 	}
 
 	// Target
-	DstRect(Setup.InternalWidth/2+337,290,Setup.InternalWidth/2+437,290+100);
+	DstRect(GameConfig().InternalWidth/2+337, 290, GameConfig().InternalWidth/2+437, 290+100);
 
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) {
-		if (Setup.Profile[CurrentProfile].TargetingSystem != 0) {
+	if ((CurrentSystemStockNum >= 9) && (CurrentSystemStockNum <= 12)) {
+		if (GameConfig().Profile[CurrentProfile].TargetingSystem != 0) {
 			CanSell = true;
-			Cost = GetSystemCost(Setup.Profile[CurrentProfile].TargetingSystem+8);
-			if (Cost + Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			Cost = GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingSystem+8);
+			if (Cost + GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		} else {
-			if (Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			if (GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		}
 	}
 
 
 	// Mech
-	DstRect(Setup.InternalWidth/2+337,400,Setup.InternalWidth/2+437,400+100);
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) {
-		if (Setup.Profile[CurrentProfile].TargetingMechanicSystem != 0) {
+	DstRect(GameConfig().InternalWidth/2+337, 400, GameConfig().InternalWidth/2+437, 400+100);
+	if ((CurrentSystemStockNum >= 13) && (CurrentSystemStockNum <= 16)) {
+		if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem != 0) {
 			CanSell = true;
-			Cost = GetSystemCost(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12);
-			if (Cost + Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			Cost = GetSystemCost(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12);
+			if (Cost + GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		} else {
-			if (Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			if (GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		}
 	}
 
 	// Protect
-	DstRect(Setup.InternalWidth/2+337,510,Setup.InternalWidth/2+437,510+100);
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) {
-		if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem != 0) {
+	DstRect(GameConfig().InternalWidth/2+337, 510, GameConfig().InternalWidth/2+437, 510+100);
+	if ((CurrentSystemStockNum >= 17) && (CurrentSystemStockNum <= 20)) {
+		if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem != 0) {
 			CanSell = true;
-			Cost = GetSystemCost(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16);
-			if (Cost + Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			Cost = GetSystemCost(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem+16);
+			if (Cost + GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		} else {
-			if (Setup.Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
+			if (GameConfig().Profile[CurrentProfile].Money < GetSystemCost(CurrentSystemStockNum))
 				CanBuy = false;
 		}
 	}
@@ -711,23 +713,24 @@ void Workshop_Workshop()
 
 	// Engine
 	SrcRect(0,0,128,128);
-	DstRect(Setup.InternalWidth/2+337,70,Setup.InternalWidth/2+437,70+100);
+	DstRect(GameConfig().InternalWidth/2+337, 70, GameConfig().InternalWidth/2+437, 70+100);
 	Current = 0.5f;
 	float ColorR, ColorG, ColorB;
 	ColorR = ColorG = ColorB = 1.0f;
 
 	if (NeedMoreEnergy &&
-	    Setup.Profile[CurrentProfile].EngineSystem != 0 &&
-	    Setup.Profile[CurrentProfile].SpaceShipControlMode != 1) {
+	    (GameConfig().Profile[CurrentProfile].EngineSystem != 0) &&
+	    (GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1)) {
 		ColorR = 1.0f;
 		ColorG = 0.0f;
 		ColorB = 0.0f;
 	}
 
 
-	if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4) {
-		if (!NeedMoreEnergy || Setup.Profile[CurrentProfile].EngineSystem == 0 ||
-		    Setup.Profile[CurrentProfile].SpaceShipControlMode == 1) {
+	if ((CurrentSystemStockNum >= 1) && (CurrentSystemStockNum <= 4)) {
+		if (!NeedMoreEnergy ||
+		    (GameConfig().Profile[CurrentProfile].EngineSystem == 0) ||
+		    (GameConfig().Profile[CurrentProfile].SpaceShipControlMode == 1)) {
 			if (CanBuy) {
 				ColorR = 0.0f;
 				ColorG = 0.8f;
@@ -742,7 +745,8 @@ void Workshop_Workshop()
 	}
 
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
-		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
+		if ((NeedPlayWorkshopOnButtonSoundX != DstRect.left) ||
+		    (NeedPlayWorkshopOnButtonSoundY != DstRect.top)) {
 			Audio_PlaySound2D(1,1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
@@ -760,7 +764,7 @@ void Workshop_Workshop()
 			NeedPlayWorkshopOnButtonSoundY = 0;
 		}
 	}
-	if (Setup.Profile[CurrentProfile].EngineSystem <= 0) {
+	if (GameConfig().Profile[CurrentProfile].EngineSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-4), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("empty"));
@@ -779,20 +783,20 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("Spaceship Engine"));
 	} else {
-		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].EngineSystem), true, Current*MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].EngineSystem), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].EngineSystem)));
+		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].EngineSystem)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
 			WScale = -128;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].EngineSystem)));
+		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].EngineSystem)));
 	}
 
 
 	// Power
-	DstRect(Setup.InternalWidth/2+337,180,Setup.InternalWidth/2+437,180+100);
+	DstRect(GameConfig().InternalWidth/2+337, 180, GameConfig().InternalWidth/2+437, 180+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
 	if (NeedMoreEnergy) {
@@ -802,7 +806,7 @@ void Workshop_Workshop()
 	}
 
 	Current = 0.5f;
-	if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8) {
+	if ((CurrentSystemStockNum >= 5) && (CurrentSystemStockNum <= 8)) {
 		if (!NeedMoreEnergy) {
 			if (CanBuy) {
 				ColorR = 0.0f;
@@ -837,7 +841,7 @@ void Workshop_Workshop()
 		}
 	}
 
-	if (Setup.Profile[CurrentProfile].PowerSystem <= 0) {
+	if (GameConfig().Profile[CurrentProfile].PowerSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-2), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("empty"));
@@ -856,25 +860,25 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("Power Source"));
 	} else {
-		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].PowerSystem+4), true, Current*MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].PowerSystem + 4), true, Current * MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].PowerSystem+4)));
+		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].PowerSystem + 4)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
 			WScale = -128;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].PowerSystem+4)));
+		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].PowerSystem + 4)));
 	}
 
 
 
 	// Target
-	DstRect(Setup.InternalWidth/2+337,290,Setup.InternalWidth/2+437,290+100);
+	DstRect(GameConfig().InternalWidth/2+337, 290, GameConfig().InternalWidth/2+437, 290+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
 	Current = 0.5f;
-	if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12) {
+	if ((CurrentSystemStockNum >= 9) && (CurrentSystemStockNum <= 12)) {
 		if (CanBuy) {
 			ColorR = 0.0f;
 			ColorG = 0.8f;
@@ -907,7 +911,7 @@ void Workshop_Workshop()
 		}
 	}
 
-	if (Setup.Profile[CurrentProfile].TargetingSystem <= 0) {
+	if (GameConfig().Profile[CurrentProfile].TargetingSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-1), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("empty"));
@@ -926,25 +930,25 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("Optical Computer"));
 	} else {
-		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingSystem+8), true, Current*MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].TargetingSystem + 8), true, Current * MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingSystem+8)));
+		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingSystem + 8)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
 			WScale = -128;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingSystem+8)));
+		vw_DrawFont(DstRect.left+(DstRect.right - DstRect.left-Size) / 2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current * MenuContentTransp, vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingSystem + 8)));
 	}
 
 
 
 	// Mech
-	DstRect(Setup.InternalWidth/2+337,400,Setup.InternalWidth/2+437,400+100);
+	DstRect(GameConfig().InternalWidth/2+337, 400, GameConfig().InternalWidth/2+437, 400+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
 	Current = 0.5f;
-	if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16) {
+	if ((CurrentSystemStockNum >= 13) && (CurrentSystemStockNum <= 16)) {
 		if (CanBuy) {
 			ColorR = 0.0f;
 			ColorG = 0.8f;
@@ -958,8 +962,9 @@ void Workshop_Workshop()
 	}
 
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
-		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+		if ((NeedPlayWorkshopOnButtonSoundX != DstRect.left) ||
+		    (NeedPlayWorkshopOnButtonSoundY != DstRect.top)) {
+			Audio_PlaySound2D(1, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -967,17 +972,18 @@ void Workshop_Workshop()
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
-			Audio_PlaySound2D(2,1.0f);
+			Audio_PlaySound2D(2, 1.0f);
 			CurrentSystemStockNum = 13;
 		}
 	} else {
-		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top) {
+		if ((NeedPlayWorkshopOnButtonSoundX == DstRect.left) &&
+		    (NeedPlayWorkshopOnButtonSoundY == DstRect.top)) {
 			NeedPlayWorkshopOnButtonSoundX = 0;
 			NeedPlayWorkshopOnButtonSoundY = 0;
 		}
 	}
 
-	if (Setup.Profile[CurrentProfile].TargetingMechanicSystem <= 0) {
+	if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(-3), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("empty"));
@@ -996,32 +1002,32 @@ void Workshop_Workshop()
 		}
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("Targeting System"));
 	} else {
-		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12), true, Current*MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12), true, Current * MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12)));
+		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
 			WScale = -128;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].TargetingMechanicSystem+12)));
+		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12)));
 	}
 
 
 
 	// Protect
-	DstRect(Setup.InternalWidth/2+337,510,Setup.InternalWidth/2+437,510+100);
+	DstRect(GameConfig().InternalWidth/2+337, 510, GameConfig().InternalWidth/2+437, 510+100);
 	ColorR = ColorG = ColorB = 1.0f;
 
-	if (NeedMoreEnergy && Setup.Profile[CurrentProfile].AdvancedProtectionSystem != 0) {
+	if (NeedMoreEnergy && (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem != 0)) {
 		ColorR = 1.0f;
 		ColorG = 0.0f;
 		ColorB = 0.0f;
 	}
 
 	Current = 0.5f;
-	if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20) {
-		if (!NeedMoreEnergy || Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 0) {
+	if ((CurrentSystemStockNum >= 17) && (CurrentSystemStockNum <= 20)) {
+		if (!NeedMoreEnergy || (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem == 0)) {
 			if (CanBuy) {
 				ColorR = 0.0f;
 				ColorG = 0.8f;
@@ -1055,7 +1061,7 @@ void Workshop_Workshop()
 		}
 	}
 
-	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem <= 0) {
+	if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem <= 0) {
 		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(0), true, Current*MenuContentTransp);
 
 		Size = vw_FontSize(vw_GetText("empty"));
@@ -1075,81 +1081,79 @@ void Workshop_Workshop()
 		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-20, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText("Advanced System"));
 
 	} else {
-		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16), true, Current*MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetSystemIcon(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16), true, Current*MenuContentTransp);
 
-		Size = vw_FontSize(vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16)));
+		Size = vw_FontSize(vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16)));
 		WScale = 0;
 		if (Size > 128) {
 			Size = 128;
 			WScale = -128;
 		}
-		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16)));
+		vw_DrawFont(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-70, WScale, 0, 1.0f, ColorR,ColorG,ColorB, Current*MenuContentTransp, vw_GetText(GetSystemName(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16)));
 	}
 
 
 
 	vw_SetFontSize(24);
-	vw_DrawFont(Setup.InternalWidth/2+475-vw_FontSize(vw_GetText("Installed Systems")), 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Installed Systems"));
-	vw_SetFontSize(16);
+	vw_DrawFont(GameConfig().InternalWidth/2+475-vw_FontSize(vw_GetText("Installed Systems")), 630, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, vw_GetText("Installed Systems"));
+	ResetFontSize();
 
 	// текущая система
-	vw_DrawFont(Setup.InternalWidth/2-250, 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Selected System"));
-	vw_DrawFont(Setup.InternalWidth/2+250-vw_FontSize(vw_GetText("Installed System")), 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Installed System"));
+	vw_DrawFont(GameConfig().InternalWidth/2-250, 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Selected System"));
+	vw_DrawFont(GameConfig().InternalWidth/2+250-vw_FontSize(vw_GetText("Installed System")), 430, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, vw_GetText("Installed System"));
 
 	if (CanBuy)
-		vw_DrawFont(Setup.InternalWidth/2-250, 485, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
+		vw_DrawFont(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
 	else
-		vw_DrawFont(Setup.InternalWidth/2-250, 485, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
+		vw_DrawFont(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
 
-	vw_DrawFont(Setup.InternalWidth/2+250-vw_FontSize("%s: %i", vw_GetText("Cost"), Cost), 485, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("Cost"), Cost);
+	vw_DrawFont(GameConfig().InternalWidth/2+250-vw_FontSize("%s: %i", vw_GetText("Cost"), Cost), 485, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%s: %i", vw_GetText("Cost"), Cost);
 
 
-	if (DrawButton128_2(Setup.InternalWidth/2-250,580-55, vw_GetText("Info"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-250,580-55, vw_GetText("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowSystemsInfo);
 		DialogSystem = CurrentSystemStockNum;
 	}
 
-	if (DrawButton128_2(Setup.InternalWidth/2+250-128,580-55, vw_GetText("Info"), MenuContentTransp, !CanSell)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2+250-128, 580-55, vw_GetText("Info"), MenuContentTransp, !CanSell)) {
 		SetCurrentDialogBox(eDialogBox::ShowSystemsInfo);
 
 		NeedMoreEnergyDialog = NeedMoreEnergy;
 
-		if (CurrentSystemStockNum>=1 && CurrentSystemStockNum<=4)
-			DialogSystem = Setup.Profile[CurrentProfile].EngineSystem;
-		if (CurrentSystemStockNum>=5 && CurrentSystemStockNum<=8)
-			DialogSystem = Setup.Profile[CurrentProfile].PowerSystem+4;
-		if (CurrentSystemStockNum>=9 && CurrentSystemStockNum<=12)
-			DialogSystem = Setup.Profile[CurrentProfile].TargetingSystem+8;
-		if (CurrentSystemStockNum>=13 && CurrentSystemStockNum<=16)
-			DialogSystem = Setup.Profile[CurrentProfile].TargetingMechanicSystem+12;
-		if (CurrentSystemStockNum>=17 && CurrentSystemStockNum<=20)
-			DialogSystem = Setup.Profile[CurrentProfile].AdvancedProtectionSystem+16;
+		if ((CurrentSystemStockNum >= 1) && (CurrentSystemStockNum <= 4))
+			DialogSystem = GameConfig().Profile[CurrentProfile].EngineSystem;
+		if ((CurrentSystemStockNum >= 5) && (CurrentSystemStockNum <= 8))
+			DialogSystem = GameConfig().Profile[CurrentProfile].PowerSystem + 4;
+		if ((CurrentSystemStockNum >= 9) && (CurrentSystemStockNum <= 12))
+			DialogSystem = GameConfig().Profile[CurrentProfile].TargetingSystem + 8;
+		if ((CurrentSystemStockNum >= 13) && (CurrentSystemStockNum <= 16))
+			DialogSystem = GameConfig().Profile[CurrentProfile].TargetingMechanicSystem + 12;
+		if ((CurrentSystemStockNum >= 17) && (CurrentSystemStockNum <= 20))
+			DialogSystem = GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16;
 	}
 
 
-	if (DrawButton128_2(Setup.InternalWidth/2-250,50+580-55, vw_GetText("Buy"), MenuContentTransp, !CanBuy)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-250, 50+580-55, vw_GetText("Buy"), MenuContentTransp, !CanBuy)) {
 		BuyCurrentSystem();
 	}
 	// покупка, если 2 раза кликнули на иконку текущей системы
-	DstRect(Setup.InternalWidth/2-451,55+128+20,Setup.InternalWidth/2-451+128,55+128+128+20);
-	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && CanBuy)
-		if (vw_GetMouseLeftDoubleClick(true))
-			BuyCurrentSystem();
+	DstRect(GameConfig().InternalWidth/2-451, 55+128+20, GameConfig().InternalWidth/2-451+128, 55+128+128+20);
+	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && CanBuy && vw_GetMouseLeftDoubleClick(true))
+		BuyCurrentSystem();
 
 
 
-	if (DrawButton128_2(Setup.InternalWidth/2+250-128,50+580-55, vw_GetText("Sell"), MenuContentTransp, !CanSell)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2+250-128, 50+580-55, vw_GetText("Sell"), MenuContentTransp, !CanSell))
 		SellCurrentSystem();
-	}
 
 
 	// вывод информации
 	vw_SetFontSize(20);
-	int SizeI = (Setup.InternalWidth-vw_FontSize("%s: %i", vw_GetText("Money"), Setup.Profile[CurrentProfile].Money))/2;
+	int SizeI = (GameConfig().InternalWidth-vw_FontSize("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
 	if (CanBuy)
-		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Money"), Setup.Profile[CurrentProfile].Money);
+		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,1.0f,0.0f, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
 	else
-		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), Setup.Profile[CurrentProfile].Money);
-	vw_SetFontSize(16);
+		vw_DrawFont(SizeI, 630, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
+	ResetFontSize();
 }
 

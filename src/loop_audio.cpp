@@ -28,6 +28,7 @@
 // TODO translate comments
 
 #include "game.h"
+#include "config/config.h"
 
 namespace {
 
@@ -155,8 +156,8 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 		break;
 	}
 
-	if (Setup.Music_check && //если можно играть
-	    Setup.MusicSw && // и громкость не нулевая
+	if (GameConfig().Music_check && //если можно играть
+	    GameConfig().MusicSw && // и громкость не нулевая
 	    !CurrentPlayingMusicName.empty()) {
 
 		vw_FadeOutAllMusicWithException(CurrentPlayingMusicName, FadeOutTicks, 1.0f, FadeInTicks);
@@ -165,7 +166,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 			return;
 
 		// пытаемся загрузить и играть
-		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection * (Setup.MusicSw / 10.0f),
+		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection * (GameConfig().MusicSw / 10.0f),
 				  CurrentPlayingMusicLoopPart.empty(), CurrentPlayingMusicLoopPart)) {
 			vw_ReleaseMusic(CurrentPlayingMusicName);
 			CurrentPlayingMusicName.clear();
@@ -186,7 +187,7 @@ void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
 void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 {
 	for (unsigned int i = 0; i < VoiceQuantity; i++) {
-		vw_SetSoundGlobalVolume(vw_GetText(VoiceNames[i].FileName, Setup.VoiceLanguage), NewGlobalVolume);
+		vw_SetSoundGlobalVolume(vw_GetText(VoiceNames[i].FileName, GameConfig().VoiceLanguage), NewGlobalVolume);
 	}
 }
 
@@ -195,8 +196,8 @@ void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 //------------------------------------------------------------------------------------
 unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 {
-	if (!Setup.Sound_check ||
-	    !Setup.SoundSw ||
+	if (!GameConfig().Sound_check ||
+	    !GameConfig().SoundSw ||
 	    (SoundID > MenuSoundQuantity))
 		return 0;
 
@@ -212,7 +213,7 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(MenuSoundNames[SoundID].FileName,
-			    LocalVolume, Setup.SoundSw / 10.0f, 0.0f, 0.0f, 0.0f,
+			    LocalVolume, GameConfig().SoundSw / 10.0f, 0.0f, 0.0f, 0.0f,
 			    true, MenuSoundNames[SoundID].AllowStop, 1);
 }
 
@@ -221,8 +222,8 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 //------------------------------------------------------------------------------------
 unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 {
-	if (!Setup.Sound_check ||
-	    !Setup.SoundSw ||
+	if (!GameConfig().Sound_check ||
+	    !GameConfig().SoundSw ||
 	    (VoiceID > VoiceQuantity))
 		return 0;
 
@@ -231,14 +232,14 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 
 	// FIXME should be connected to language code, not column number, that could be changed
 	// русский голос делаем немного тише
-	if (Setup.VoiceLanguage == 3)
+	if (GameConfig().VoiceLanguage == 3)
 		VoiceNames[VoiceID].VolumeCorrection = 0.6f;
 
 	LocalVolume = LocalVolume * VoiceNames[VoiceID].VolumeCorrection;
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	return vw_PlaySound(vw_GetText(VoiceNames[VoiceID].FileName, Setup.VoiceLanguage),
-			    LocalVolume, Setup.VoiceSw / 10.0f, 0.0f, 0.0f, 0.0f,
+	return vw_PlaySound(vw_GetText(VoiceNames[VoiceID].FileName, GameConfig().VoiceLanguage),
+			    LocalVolume, GameConfig().VoiceSw / 10.0f, 0.0f, 0.0f, 0.0f,
 			    true, VoiceNames[VoiceID].AllowStop, 1);
 }
 
@@ -247,8 +248,8 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 //------------------------------------------------------------------------------------
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType)
 {
-	if (!Setup.Sound_check ||
-	    !Setup.SoundSw)
+	if (!GameConfig().Sound_check ||
+	    !GameConfig().SoundSw)
 		return 0;
 
 	LocalVolume = LocalVolume * GameSoundList[SoundID-1].VolumeCorrection;
@@ -257,7 +258,7 @@ unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Locatio
 	SoundID--;
 
 	return vw_PlaySound(GameSoundList[SoundID].FileName,
-			    LocalVolume, Setup.SoundSw / 10.0f, Location.x, Location.y, Location.z,
+			    LocalVolume, GameConfig().SoundSw / 10.0f, Location.x, Location.y, Location.z,
 			    false, GameSoundList[SoundID].AllowStop, AtType);
 }
 
@@ -295,11 +296,11 @@ void Audio_LoopProc()
 
 	// запускаем нужную музыку... только включили громкость или выключили
 	if (!vw_IsAnyMusicPlaying()) {
-		if (Setup.MusicSw && // если громкость не нулевая
-		    Setup.Music_check && // если можно вообще играть
+		if (GameConfig().MusicSw && // если громкость не нулевая
+		    GameConfig().Music_check && // если можно вообще играть
 		    !CurrentPlayingMusicName.empty()) { // если установлен
 			// пытаемся загрузить и проиграть
-			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, Setup.MusicSw / 10.0f,
+			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, GameConfig().MusicSw / 10.0f,
 					  CurrentPlayingMusicLoopPart.empty(), CurrentPlayingMusicLoopPart)) {
 				vw_ReleaseMusic(CurrentPlayingMusicName);
 				CurrentPlayingMusicName.clear();
@@ -308,8 +309,8 @@ void Audio_LoopProc()
 		}
 	} else {
 		// если что-то играем, но звук уже выключен, нужно все убрать...
-		if (!Setup.MusicSw && // если громкость нулевая
-		    Setup.Music_check) { // но играть можно
+		if (!GameConfig().MusicSw && // если громкость нулевая
+		    GameConfig().Music_check) { // но играть можно
 			vw_ReleaseAllMusic();
 		}
 	}

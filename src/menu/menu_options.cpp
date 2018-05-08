@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 
 
 // временные данные для изменения и восстановления
@@ -62,37 +63,39 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 {
 
 	sRECT SrcRect, DstRect;
-	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.InternalWidth,768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
+	SrcRect(0, 0, 2, 2);
+	DstRect(0 ,0, GameConfig().InternalWidth, 768);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
 
 
 	int CurrentPos = 0;
 
-	int X1 = Setup.InternalWidth/2 - 375;
+	int X1 = GameConfig().InternalWidth / 2 - 375;
 	int Y1 = 65;
 	int Prir1 = 55;
 
 
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Music Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !Setup.Music_check || Setup.MusicSw==0)) {
-		Setup.MusicSw--;
-		if (Setup.MusicSw<0) Setup.MusicSw = 0;
-		vw_SetMusicGlobalVolume(Setup.MusicSw/10.0f);
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicSw == 0))) {
+		ChangeGameConfig().MusicSw--;
+		if (GameConfig().MusicSw < 0)
+			ChangeGameConfig().MusicSw = 0;
+		vw_SetMusicGlobalVolume(GameConfig().MusicSw / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !Setup.Music_check || Setup.MusicSw==10)) {
-		Setup.MusicSw++;
-		if (Setup.MusicSw>10) Setup.MusicSw = 10;
-		vw_SetMusicGlobalVolume(Setup.MusicSw/10.0f);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicSw == 10))) {
+		ChangeGameConfig().MusicSw++;
+		if (GameConfig().MusicSw > 10)
+			ChangeGameConfig().MusicSw = 10;
+		vw_SetMusicGlobalVolume(GameConfig().MusicSw / 10.0f);
 	}
-	if (!Setup.Music_check) {
+	if (!GameConfig().Music_check) {
 		int SizeI = (170-vw_FontSize(vw_GetText("Not available")))/2;
 		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("Not available"));
 	} else {
-		for (int i=0; i<10; i++) {
-			SrcRect(0,0,16,32);
-			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
-			if (Setup.MusicSw>i)
+		for (int i = 0; i < 10; i++) {
+			SrcRect(0 ,0, 16, 32);
+			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+			if (GameConfig().MusicSw > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
@@ -106,26 +109,28 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Voice Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !Setup.Sound_check || Setup.VoiceSw==0, false)) {
-		Setup.VoiceSw--;
-		if (Setup.VoiceSw<0) Setup.VoiceSw = 0;
-		Audio_SetVoiceGlobalVolume(Setup.VoiceSw/10.0f);
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceSw == 0), false)) {
+		ChangeGameConfig().VoiceSw--;
+		if (GameConfig().VoiceSw < 0)
+			ChangeGameConfig().VoiceSw = 0;
+		Audio_SetVoiceGlobalVolume(GameConfig().VoiceSw / 10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !Setup.Sound_check || Setup.VoiceSw==10, false)) {
-		Setup.VoiceSw++;
-		if (Setup.VoiceSw>10) Setup.VoiceSw = 10;
-		Audio_SetVoiceGlobalVolume(Setup.VoiceSw/10.0f);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceSw == 10), false)) {
+		ChangeGameConfig().VoiceSw++;
+		if (GameConfig().VoiceSw > 10)
+			ChangeGameConfig().VoiceSw = 10;
+		Audio_SetVoiceGlobalVolume(GameConfig().VoiceSw / 10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
-	if (!Setup.Sound_check) {
-		int SizeI = (170-vw_FontSize(vw_GetText("Not available")))/2;
+	if (!GameConfig().Sound_check) {
+		int SizeI = (170 - vw_FontSize(vw_GetText("Not available"))) / 2;
 		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("Not available"));
 	} else {
-		for (int i=0; i<10; i++) {
-			SrcRect(0,0,16,32);
-			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
-			if (Setup.VoiceSw>i)
+		for (int i = 0; i < 10; i++) {
+			SrcRect(0, 0, 16, 32);
+			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+			if (GameConfig().VoiceSw > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
@@ -138,24 +143,26 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Sound Effects Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !Setup.Sound_check || Setup.SoundSw==0)) {
-		Setup.SoundSw--;
-		if (Setup.SoundSw<0) Setup.SoundSw = 0;
-		Audio_SetSound2DGlobalVolume(Setup.SoundSw/10.0f);
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundSw == 0))) {
+		ChangeGameConfig().SoundSw--;
+		if (GameConfig().SoundSw < 0)
+			ChangeGameConfig().SoundSw = 0;
+		Audio_SetSound2DGlobalVolume(GameConfig().SoundSw / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !Setup.Sound_check || Setup.SoundSw==10)) {
-		Setup.SoundSw++;
-		if (Setup.SoundSw>10) Setup.SoundSw = 10;
-		Audio_SetSound2DGlobalVolume(Setup.SoundSw/10.0f);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundSw == 10))) {
+		ChangeGameConfig().SoundSw++;
+		if (GameConfig().SoundSw > 10)
+			ChangeGameConfig().SoundSw = 10;
+		Audio_SetSound2DGlobalVolume(GameConfig().SoundSw / 10.0f);
 	}
-	if (!Setup.Sound_check) {
+	if (!GameConfig().Sound_check) {
 		int SizeI = (170-vw_FontSize(vw_GetText("Not available")))/2;
 		vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, ContentTransp, vw_GetText("Not available"));
 	} else {
 		for (int i=0; i<10; i++) {
 			SrcRect(0,0,16,32);
 			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
-			if (Setup.SoundSw>i)
+			if (GameConfig().SoundSw > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
@@ -338,18 +345,20 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Brightness"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, Setup.Brightness<=1)) {
-		Setup.Brightness -= 1;
-		if (Setup.Brightness <= 1) Setup.Brightness = 1;
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, (GameConfig().Brightness <= 1))) {
+		ChangeGameConfig().Brightness--;
+		if (GameConfig().Brightness <= 1)
+			ChangeGameConfig().Brightness = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, Setup.Brightness>=10)) {
-		Setup.Brightness += 1;
-		if (Setup.Brightness >= 10) Setup.Brightness = 10;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, (GameConfig().Brightness >= 10))) {
+		ChangeGameConfig().Brightness++;
+		if (GameConfig().Brightness >= 10)
+			ChangeGameConfig().Brightness = 10;
 	}
-	for (int i=0; i<10; i++) {
-		SrcRect(0,0,16,32);
-		DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
-		if (Setup.Brightness>i)
+	for (int i = 0; i < 10; i++) {
+		SrcRect(0, 0, 16, 32);
+		DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+		if (GameConfig().Brightness > i)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
@@ -377,26 +386,28 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	int Y = 165+Prir*4;
 
 
-	X = Setup.InternalWidth/2 - 366;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Advanced"), ContentTransp, false)) {
+	X = GameConfig().InternalWidth / 2 - 366;
+	if (DrawButton200_2(X, Y+28, vw_GetText("Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
 			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
-		} else ComBuffer = eCommand::SWITCH_TO_OPTIONS_ADVANCED;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_OPTIONS_ADVANCED;
 	}
 
 
-	X = Setup.InternalWidth/2 - 100;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Interface"), ContentTransp, false)) {
+	X = GameConfig().InternalWidth / 2 - 100;
+	if (DrawButton200_2(X, Y+28, vw_GetText("Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
 			GameMenuStatus = eGameMenuStatus::INTERFACE;
-		} else ComBuffer = eCommand::SWITCH_TO_INTERFACE;
+		} else
+			ComBuffer = eCommand::SWITCH_TO_INTERFACE;
 	}
 
 
-	X = Setup.InternalWidth/2 + 166;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Config Controls"), ContentTransp, false)) {
+	X = GameConfig().InternalWidth / 2 + 166;
+	if (DrawButton200_2(X, Y+28, vw_GetText("Config Controls"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
 			GameMenuStatus = eGameMenuStatus::CONFCONTROL;
@@ -410,13 +421,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 
-	if ((Options_Width == Setup.Width &&
-	     Options_Height == Setup.Height &&
-	     Options_BPP == Setup.BPP &&
-	     Options_VSync == Setup.VSync &&
-	     Options_iAspectRatioWidth == Setup.InternalWidth)) {
-		X = (Setup.InternalWidth - 384)/2;
-		Y = Y+Prir;
+	if ((Options_Width == GameConfig().Width &&
+	     Options_Height == GameConfig().Height &&
+	     Options_BPP == GameConfig().BPP &&
+	     Options_VSync == GameConfig().VSync &&
+	     Options_iAspectRatioWidth == GameConfig().InternalWidth)) {
+		X = (GameConfig().InternalWidth - 384) / 2;
+		Y = Y + Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
 			if (DrawButton384(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
@@ -425,7 +436,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
 	} else {
-		X = Setup.InternalWidth/2 - 256 - 38;
+		X = GameConfig().InternalWidth / 2 - 256 - 38;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
 			if (DrawButton256(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
@@ -434,14 +445,14 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		}
-		X = Setup.InternalWidth/2 + 38;
+		X = GameConfig().InternalWidth / 2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
 			// проверяем, нужно перегружать или нет
-			if (Options_Width != Setup.Width ||
-			    Options_Height != Setup.Height ||
-			    Options_BPP != Setup.BPP ||
-			    Options_VSync != Setup.VSync ||
-			    Options_iAspectRatioWidth != Setup.InternalWidth) {
+			if (Options_Width != GameConfig().Width ||
+			    Options_Height != GameConfig().Height ||
+			    Options_BPP != GameConfig().BPP ||
+			    Options_VSync != GameConfig().VSync ||
+			    Options_iAspectRatioWidth != GameConfig().InternalWidth) {
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnOptionsChanged);
 				else {
@@ -458,20 +469,20 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 void SaveOptionsMenuTmpData()
 {
-	Setup.Width = Options_Width;
-	Setup.Height = Options_Height;
+	ChangeGameConfig().Width = Options_Width;
+	ChangeGameConfig().Height = Options_Height;
 
 	// пока своего управление нет- делаем автоматическую установку
 	if (Options_iAspectRatioWidth == 1024) {
-		Setup.InternalWidth = 1024.0f;
-		Setup.InternalHeight = 768.0f;
+		ChangeGameConfig().InternalWidth = 1024.0f;
+		ChangeGameConfig().InternalHeight = 768.0f;
 	} else {
-		Setup.InternalWidth = 1228.0f;
-		Setup.InternalHeight = 768.0f;
+		ChangeGameConfig().InternalWidth = 1228.0f;
+		ChangeGameConfig().InternalHeight = 768.0f;
 	}
 
-	Setup.BPP = Options_BPP;
-	Setup.VSync = Options_VSync;
+	ChangeGameConfig().BPP = Options_BPP;
+	ChangeGameConfig().VSync = Options_VSync;
 }
 
 

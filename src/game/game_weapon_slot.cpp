@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 // работа с морганием вывода
@@ -60,9 +61,10 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		Ypos = 220;
 		break;
 	}
-	if (Setup.GameWeaponInfoType == 1) Ypos += DrawLevelPos*15 - 25;
 
-	if (Setup.GameWeaponInfoType == 1) {
+	if (GameConfig().GameWeaponInfoType == 1) {
+		Ypos += DrawLevelPos * 15 - 25;
+
 		// выводим подложку меню - общую
 		SrcRect(0, 0, 164, 88);
 		DstRect(Xpos, Ypos, Xpos+164, Ypos+88);
@@ -114,7 +116,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/weapon_energy.tga"), true, 1.0f);
 		}
 	}
-	if (Setup.GameWeaponInfoType == 2) {
+	if (GameConfig().GameWeaponInfoType == 2) {
 		// выводим подложку меню - общую
 		SrcRect(0,0,2,2);
 		DstRect(Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
@@ -180,7 +182,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/energy.tga"), true, 1.0f);
 		}
 	}
-	if (Setup.GameWeaponInfoType == 3) {
+	if (GameConfig().GameWeaponInfoType == 3) {
 		// выводим подложку меню - общую
 		SrcRect(0,0,2,2);
 		DstRect(Xpos,Ypos,Xpos+18+5,Ypos+64+4);
@@ -241,7 +243,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 
 	sRECT SrcRect, DstRect;
 
-	int Xpos = Setup.InternalWidth-152;
+	int Xpos = GameConfig().InternalWidth - 152;
 	int Ypos = 80;
 	switch (DrawLevelPos) {
 	case 1:
@@ -254,12 +256,11 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		Ypos = 220;
 		break;
 	}
-	if (Setup.GameWeaponInfoType == 1) {
-		Ypos += DrawLevelPos*15 - 25;
-		Xpos = Setup.InternalWidth-164;
-	}
 
-	if (Setup.GameWeaponInfoType == 1) {
+	if (GameConfig().GameWeaponInfoType == 1) {
+		Ypos += DrawLevelPos*15 - 25;
+		Xpos = GameConfig().InternalWidth - 164;
+
 		// выводим подложку меню - общую
 		SrcRect(0,0,164,88);
 		DstRect(Xpos,Ypos,Xpos+164,Ypos+88);
@@ -309,7 +310,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/weapon_energy.tga"), true, 1.0f);
 		}
 	}
-	if (Setup.GameWeaponInfoType == 2) {
+	if (GameConfig().GameWeaponInfoType == 2) {
 		// выводим подложку меню - общую
 		SrcRect(0,0,2,2);
 		DstRect(Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
@@ -374,7 +375,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/energy.tga"), true, 1.0f);
 		}
 	}
-	if (Setup.GameWeaponInfoType == 3) {
+	if (GameConfig().GameWeaponInfoType == 3) {
 		// выводим подложку меню - общую
 		SrcRect(0,0,2,2);
 		DstRect(Xpos+128+1,Ypos,Xpos+128+18+6,Ypos+64+4);
@@ -441,7 +442,7 @@ void DrawGameWeaponSlots()
 	LeftDrawLevelPos = 1;
 
 
-	switch (Setup.Profile[CurrentProfile].Ship) {
+	switch (GameConfig().Profile[CurrentProfile].Ship) {
 	case 1:
 		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
 		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);

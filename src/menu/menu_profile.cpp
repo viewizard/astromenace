@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 
 
 // вот тут храним самый важный номер! - номер текущего профайла!!!
@@ -48,8 +49,10 @@ void NewRecord()
 {
 	// заносим в новый профайл (последний)
 	int ProfileNum = -1;
-	for (int i=4; i>=0; i--)
-		if (!Setup.Profile[i].Used) ProfileNum = i;
+	for (int i = 4; i >= 0; i--) {
+		if (!GameConfig().Profile[i].Used)
+			ProfileNum = i;
+	}
 
 
 	// выводим диалог - все заняты!
@@ -64,67 +67,67 @@ void NewRecord()
 
 	// пишем данные в профайл
 
-	Setup.Profile[ProfileNum].Used = true;
-	strcpy(Setup.Profile[ProfileNum].Name, ConvertUTF8.to_bytes(NewProfileName).c_str());
+	ChangeGameConfig().Profile[ProfileNum].Used = true;
+	strcpy(ChangeGameConfig().Profile[ProfileNum].Name, ConvertUTF8.to_bytes(NewProfileName).c_str());
 
-	Setup.Profile[ProfileNum].NPCWeaponPenalty = 3;
-	Setup.Profile[ProfileNum].NPCArmorPenalty = 2;
-	Setup.Profile[ProfileNum].NPCTargetingSpeedPenalty = 2;
-	Setup.Profile[ProfileNum].LimitedAmmo = 0;
-	Setup.Profile[ProfileNum].DestroyableWeapon = 1;
-	Setup.Profile[ProfileNum].WeaponTargetingMode = 0;
-	Setup.Profile[ProfileNum].SpaceShipControlMode = 1;
+	ChangeGameConfig().Profile[ProfileNum].NPCWeaponPenalty = 3;
+	ChangeGameConfig().Profile[ProfileNum].NPCArmorPenalty = 2;
+	ChangeGameConfig().Profile[ProfileNum].NPCTargetingSpeedPenalty = 2;
+	ChangeGameConfig().Profile[ProfileNum].LimitedAmmo = 0;
+	ChangeGameConfig().Profile[ProfileNum].DestroyableWeapon = 1;
+	ChangeGameConfig().Profile[ProfileNum].WeaponTargetingMode = 0;
+	ChangeGameConfig().Profile[ProfileNum].SpaceShipControlMode = 1;
 
 
-	Setup.Profile[ProfileNum].Ship = 1;
-	Setup.Profile[ProfileNum].ShipHullUpgrade = 1;
-	Setup.Profile[ProfileNum].ShipHullCurrentStrength = 30;
+	ChangeGameConfig().Profile[ProfileNum].Ship = 1;
+	ChangeGameConfig().Profile[ProfileNum].ShipHullUpgrade = 1;
+	ChangeGameConfig().Profile[ProfileNum].ShipHullCurrentStrength = 30;
 
 	// сброс настроек оружия
-	for (int i=0; i<6; i++) {
-		Setup.Profile[ProfileNum].Weapon[i] = 0;
-		Setup.Profile[ProfileNum].WeaponAmmo[i] = 0;
-		Setup.Profile[ProfileNum].WeaponControl[i] = 0;
-		Setup.Profile[ProfileNum].WeaponAltControl[i] = 0;
-		Setup.Profile[ProfileNum].WeaponAltControlData[i] = 0;
-		Setup.Profile[ProfileNum].WeaponSlotYAngle[i] = 0.0f;
+	for (int i = 0; i < 6; i++) {
+		ChangeGameConfig().Profile[ProfileNum].Weapon[i] = 0;
+		ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[i] = 0;
+		ChangeGameConfig().Profile[ProfileNum].WeaponControl[i] = 0;
+		ChangeGameConfig().Profile[ProfileNum].WeaponAltControl[i] = 0;
+		ChangeGameConfig().Profile[ProfileNum].WeaponAltControlData[i] = 0;
+		ChangeGameConfig().Profile[ProfileNum].WeaponSlotYAngle[i] = 0.0f;
 	}
 	// ставим 2 орудия первоначально
 
 
-	Setup.Profile[ProfileNum].Weapon[2] = 1;
-	Setup.Profile[ProfileNum].WeaponAmmo[2] = 3000;
-	Setup.Profile[ProfileNum].WeaponControl[2] = 1;
-	Setup.Profile[ProfileNum].Weapon[3] = 1;
-	Setup.Profile[ProfileNum].WeaponAmmo[3] = 3000;
-	Setup.Profile[ProfileNum].WeaponControl[3] = 1;
-	Setup.Profile[ProfileNum].Weapon[4] = 16;
-	Setup.Profile[ProfileNum].WeaponAmmo[4] = 200;
-	Setup.Profile[ProfileNum].WeaponControl[4] = 2;
+	ChangeGameConfig().Profile[ProfileNum].Weapon[2] = 1;
+	ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[2] = 3000;
+	ChangeGameConfig().Profile[ProfileNum].WeaponControl[2] = 1;
+	ChangeGameConfig().Profile[ProfileNum].Weapon[3] = 1;
+	ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[3] = 3000;
+	ChangeGameConfig().Profile[ProfileNum].WeaponControl[3] = 1;
+	ChangeGameConfig().Profile[ProfileNum].Weapon[4] = 16;
+	ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[4] = 200;
+	ChangeGameConfig().Profile[ProfileNum].WeaponControl[4] = 2;
 
-	Setup.Profile[ProfileNum].EngineSystem = 1;
-	Setup.Profile[ProfileNum].TargetingSystem = 1;
-	Setup.Profile[ProfileNum].AdvancedProtectionSystem = 1;
-	Setup.Profile[ProfileNum].PowerSystem = 1;
-	Setup.Profile[ProfileNum].TargetingMechanicSystem = 1;
+	ChangeGameConfig().Profile[ProfileNum].EngineSystem = 1;
+	ChangeGameConfig().Profile[ProfileNum].TargetingSystem = 1;
+	ChangeGameConfig().Profile[ProfileNum].AdvancedProtectionSystem = 1;
+	ChangeGameConfig().Profile[ProfileNum].PowerSystem = 1;
+	ChangeGameConfig().Profile[ProfileNum].TargetingMechanicSystem = 1;
 
-	Setup.Profile[ProfileNum].Difficulty = 50;
+	ChangeGameConfig().Profile[ProfileNum].Difficulty = 50;
 
-	Setup.Profile[ProfileNum].PrimaryWeaponFireMode = 2;
-	Setup.Profile[ProfileNum].SecondaryWeaponFireMode = 1;
+	ChangeGameConfig().Profile[ProfileNum].PrimaryWeaponFireMode = 2;
+	ChangeGameConfig().Profile[ProfileNum].SecondaryWeaponFireMode = 1;
 
 
-	Setup.Profile[ProfileNum].Money = 200;
-	Setup.Profile[ProfileNum].Experience = 0;
+	ChangeGameConfig().Profile[ProfileNum].Money = 200;
+	ChangeGameConfig().Profile[ProfileNum].Experience = 0;
 
 	// сброс настроек
-	for (int i=0; i<100; i++) {
-		Setup.Profile[ProfileNum].ByMissionExperience[i] = 0;
-		Setup.Profile[ProfileNum].MissionReplayCount[i] = 0;
+	for (int i = 0; i < 100; i++) {
+		ChangeGameConfig().Profile[ProfileNum].ByMissionExperience[i] = 0;
+		ChangeGameConfig().Profile[ProfileNum].MissionReplayCount[i] = 0;
 	}
 
 
-	Setup.Profile[ProfileNum].OpenLevelNum = 0;// 1;
+	ChangeGameConfig().Profile[ProfileNum].OpenLevelNum = 0;// 1;
 
 
 	// подготавливаем, для новой записи
@@ -132,10 +135,10 @@ void NewRecord()
 
 
 	CurrentProfile = ProfileNum;
-	Setup.LastProfile = CurrentProfile;
+	ChangeGameConfig().LastProfile = CurrentProfile;
 	// сразу ставим первую миссию все равно выбирать не из чего
 	CurrentMission = 0;
-	Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+	ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
 }
 
 
@@ -148,8 +151,10 @@ void DuplicateRecord()
 {
 	// ищем номер пустого слота для создания копии профайла
 	int ProfileNum = -1;
-	for (int i=4; i>=0; i--)
-		if (!Setup.Profile[i].Used) ProfileNum = i;
+	for (int i = 4; i >= 0; i--) {
+		if (!GameConfig().Profile[i].Used)
+			ProfileNum = i;
+	}
 
 	// выводим диалог - все слоты заняты!
 	if (ProfileNum == -1) {
@@ -158,11 +163,11 @@ void DuplicateRecord()
 	}
 
 	// копируем данные в новый профайл
-	memcpy(&Setup.Profile[ProfileNum], &Setup.Profile[CurrentProfile], sizeof(Setup.Profile[0]));
+	memcpy(&ChangeGameConfig().Profile[ProfileNum], &GameConfig().Profile[CurrentProfile], sizeof(GameConfig().Profile[0]));
 
 	CurrentProfile = ProfileNum;
-	Setup.LastProfile = CurrentProfile;
-	CurrentMission = Setup.Profile[CurrentProfile].LastMission;
+	ChangeGameConfig().LastProfile = CurrentProfile;
+	CurrentMission = GameConfig().Profile[CurrentProfile].LastMission;
 }
 
 
@@ -173,38 +178,39 @@ void DuplicateRecord()
 //------------------------------------------------------------------------------------
 void DeleteRecord()
 {
-	if (CurrentProfile == -1) return;
+	if (CurrentProfile == -1)
+		return;
 
 
 	// проверяем, входит в таблицу рекордов или нет
-	if (Setup.Profile[CurrentProfile].Experience != 0)
-		AddTopScores(Setup.Profile[CurrentProfile].Experience, Setup.Profile[CurrentProfile].Name, false);
+	if (GameConfig().Profile[CurrentProfile].Experience != 0)
+		AddTopScores(GameConfig().Profile[CurrentProfile].Experience, GameConfig().Profile[CurrentProfile].Name, false);
 
 
 	// если это последняя запись
 	if (CurrentProfile == 4) {
-		Setup.Profile[CurrentProfile].Used = false;
+		ChangeGameConfig().Profile[CurrentProfile].Used = false;
 		CurrentProfile -= 1;
 	} else
 		// или после этой записи - ничего нет
-		if (!Setup.Profile[CurrentProfile+1].Used) {
-			Setup.Profile[CurrentProfile].Used = false;
+		if (!GameConfig().Profile[CurrentProfile+1].Used) {
+			ChangeGameConfig().Profile[CurrentProfile].Used = false;
 			CurrentProfile -= 1;
-		} else
+		} else {
 			// удалили где-то в середине, сдвигаем все записи
-		{
-			for (int i=CurrentProfile; i<4; i++) {
-				memcpy(&Setup.Profile[i], &Setup.Profile[i+1], sizeof(Setup.Profile[0]));
-				Setup.Profile[i+1].Used = false;
+			for (int i = CurrentProfile; i < 4; i++) {
+				memcpy(&ChangeGameConfig().Profile[i], &GameConfig().Profile[i + 1], sizeof(GameConfig().Profile[0]));
+				ChangeGameConfig().Profile[i+1].Used = false;
 			}
 		}
 
 
 	// проверяем, текущий номер
-	if (CurrentProfile == -1)
-		if (Setup.Profile[0].Used) CurrentProfile = 0;
+	if ((CurrentProfile == -1) &&
+	    GameConfig().Profile[0].Used)
+		CurrentProfile = 0;
 
-	Setup.LastProfile = CurrentProfile;
+	ChangeGameConfig().LastProfile = CurrentProfile;
 }
 
 
@@ -260,7 +266,7 @@ void ProfileInputText()
 
 
 
-	int X1 = Setup.InternalWidth/2 - 372;
+	int X1 = GameConfig().InternalWidth / 2 - 372;
 	int Y1 = 230;
 
 	// находим положения ввода
@@ -268,12 +274,13 @@ void ProfileInputText()
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{X1 + Size + 2, Y1 - 2, X1 + 26 + Size, Y1 + 24};
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/whitepoint.tga"),
-		  true, CurrentProfileNameTransp*MenuContentTransp);
+		  true, CurrentProfileNameTransp * MenuContentTransp);
 
 	float DeltaTime = vw_GetTimeThread(0) - LastProfileNameTime;
 	LastProfileNameTime = vw_GetTimeThread(0);
-	CurrentProfileNameTransp -= 2.0f*DeltaTime;
-	if (CurrentProfileNameTransp < 0.2f) CurrentProfileNameTransp = 0.9f;
+	CurrentProfileNameTransp -= 2.0f * DeltaTime;
+	if (CurrentProfileNameTransp < 0.2f)
+		CurrentProfileNameTransp = 0.9f;
 
 }
 
@@ -299,11 +306,11 @@ void ProfileInputText()
 void ProfileMenu()
 {
 	sRECT SrcRect(2, 2, 861, 482);
-	sRECT DstRect(Setup.InternalWidth / 2 - 427, 160, Setup.InternalWidth / 2 + 432, 160 + 480);
+	sRECT DstRect(GameConfig().InternalWidth / 2 - 427, 160, GameConfig().InternalWidth / 2 + 432, 160 + 480);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
 
 
-	int X1 = Setup.InternalWidth/2 - 372;
+	int X1 = GameConfig().InternalWidth / 2 - 372;
 	int Y1 = 200;
 	int Prir1 = 24;
 
@@ -348,7 +355,7 @@ void ProfileMenu()
 		Size = 70;
 		WScale = -70;
 	}
-	int SizeI = Setup.InternalWidth/2+2 + (130 - Size)/2;
+	int SizeI = GameConfig().InternalWidth / 2 + 2 + (130 - Size) / 2;
 	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Money"));
 
 	Size = vw_FontSize(vw_GetText("Exp"));
@@ -357,7 +364,7 @@ void ProfileMenu()
 		Size = 100;
 		WScale = -100;
 	}
-	SizeI = Setup.InternalWidth/2+132 + (130 - Size)/2;
+	SizeI = GameConfig().InternalWidth / 2 + 132 + (130 - Size) / 2;
 	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Exp"));
 
 	Size = vw_FontSize(vw_GetText("Difficulty"));
@@ -366,7 +373,7 @@ void ProfileMenu()
 		Size = 100;
 		WScale = -100;
 	}
-	SizeI = Setup.InternalWidth/2+262 + (130 - Size)/2;
+	SizeI = GameConfig().InternalWidth / 2 + 262 + (130 - Size) / 2;
 	vw_DrawFont(SizeI, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, MenuContentTransp, vw_GetText("Difficulty"));
 
 
@@ -382,26 +389,26 @@ void ProfileMenu()
 
 	int TMPSoundOnProfileID = -1;
 	int TmpY = Y1-230+8;
-	for (int i=0; i<5; i++) {
-		if (Setup.Profile[i].Used) {
+	for (int i = 0; i < 5; i++) {
+		if (GameConfig().Profile[i].Used) {
 			vw_DrawFont(X1+10, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i.",i+1);
 
-			if (vw_FontSize(Setup.Profile[i].Name) > 300) {
-				vw_DrawFont(X1+50, TmpY, 0, 300, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[i].Name);
+			if (vw_FontSize(GameConfig().Profile[i].Name) > 300) {
+				vw_DrawFont(X1+50, TmpY, 0, 300, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameConfig().Profile[i].Name);
 				vw_DrawFont(X1+50+310, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "...");
 			} else
-				vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[i].Name);
+				vw_DrawFont(X1+50, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameConfig().Profile[i].Name);
 
 
-			Size = vw_FontSize("%i", Setup.Profile[i].Money);
-			SizeI = Setup.InternalWidth/2+2 + (130 - Size)/2;
-			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Setup.Profile[i].Money);
-			Size = vw_FontSize("%i", Setup.Profile[i].Experience);
-			SizeI = Setup.InternalWidth/2+132 + (130 - Size)/2;
-			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", Setup.Profile[i].Experience);
-			Size = vw_FontSize("%i%%", Setup.Profile[i].Difficulty);
-			SizeI = Setup.InternalWidth/2+262 + (130 - Size)/2;
-			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i%%", Setup.Profile[i].Difficulty);
+			Size = vw_FontSize("%i", GameConfig().Profile[i].Money);
+			SizeI = GameConfig().InternalWidth/2+2 + (130 - Size)/2;
+			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", GameConfig().Profile[i].Money);
+			Size = vw_FontSize("%i", GameConfig().Profile[i].Experience);
+			SizeI = GameConfig().InternalWidth/2+132 + (130 - Size)/2;
+			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i", GameConfig().Profile[i].Experience);
+			Size = vw_FontSize("%i%%", GameConfig().Profile[i].Difficulty);
+			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
+			vw_DrawFont(SizeI, TmpY, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "%i%%", GameConfig().Profile[i].Difficulty);
 
 
 			// работаем с клавиатурой
@@ -429,9 +436,10 @@ void ProfileMenu()
 
 					if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 						// если другой - нужно сбросить миссию...
-						if (CurrentProfile != i) CurrentMission = Setup.Profile[i].LastMission;
+						if (CurrentProfile != i)
+							CurrentMission = GameConfig().Profile[i].LastMission;
 						CurrentProfile = i;
-						Setup.LastProfile = CurrentProfile;
+						ChangeGameConfig().LastProfile = CurrentProfile;
 						// играем звук выбора
 						Audio_PlaySound2D(6,1.0f);
 						if (InFocusByKeyboard) {
@@ -444,9 +452,9 @@ void ProfileMenu()
 						// переход по 2-му клику
 						if (vw_GetMouseLeftDoubleClick(true)) {
 							CurrentProfile = i;
-							Setup.LastProfile = CurrentProfile;
+							ChangeGameConfig().LastProfile = CurrentProfile;
 							// если другой - нужно сбросить миссию...
-							CurrentMission = Setup.Profile[CurrentProfile].LastMission;
+							CurrentMission = GameConfig().Profile[CurrentProfile].LastMission;
 							ComBuffer = eCommand::SWITCH_TO_MISSION;
 						}
 
@@ -513,14 +521,14 @@ void ProfileMenu()
 
 
 
-	int X = Setup.InternalWidth/2 - 284;
+	int X = GameConfig().InternalWidth / 2 - 284;
 	int Y = 165+100*5;
 	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	X = Setup.InternalWidth/2 + 28;
+	X = GameConfig().InternalWidth / 2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("MISSIONS LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 		ComBuffer = eCommand::SWITCH_TO_MISSION;
 

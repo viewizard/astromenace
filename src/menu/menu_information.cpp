@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "../gfx/shadow_map.h"
 #include "../object3d/object3d.h"
 #include "../object3d/weapon/weapon.h"
@@ -621,7 +622,7 @@ void CreateInfoObject()
 void InformationObject3DText(int ObjectNum)
 {
 
-	int X1 = Setup.InternalWidth/2 + 68;
+	int X1 = GameConfig().InternalWidth / 2 + 68;
 	int Y1 = 130;
 	int Offset = 30;
 	int Size = 194;
@@ -1245,20 +1246,20 @@ void InformationObject3DText(int ObjectNum)
 void InformationMenu()
 {
 	sRECT SrcRect{0, 0, 2, 2};
-	sRECT DstRect{0, 0, (int)Setup.InternalWidth, 768};
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	sRECT DstRect{0, 0, static_cast<int>(GameConfig().InternalWidth), 768};
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
 
 
 	SrcRect(2,2,464-2,353-2);
-	DstRect((Setup.InternalWidth/2-432)-8,80-8+80,(Setup.InternalWidth/2-432)-8+464-4,80-8+353-4+80);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_back.tga"), true, 0.9f*MenuContentTransp);
+	DstRect((GameConfig().InternalWidth/2-432)-8,80-8+80,(GameConfig().InternalWidth/2-432)-8+464-4, 80-8+353-4+80);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_back.tga"), true, 0.9f * MenuContentTransp);
 
 
 
 	// выводим кол-во и текущую страницу
-	int	Size = vw_FontSize(vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
-	int SizeI = (Setup.InternalWidth-Size)/2;
-	vw_DrawFont(SizeI, 50+30*16+15, 0, 0, 1.0f, 0.5f,0.5f,0.5f, 0.6f*MenuContentTransp, vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
+	int Size = vw_FontSize(vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
+	int SizeI = (GameConfig().InternalWidth - Size) / 2;
+	vw_DrawFont(SizeI, 50+30*16+15, 0, 0, 1.0f, 0.5f,0.5f,0.5f, 0.6f * MenuContentTransp, vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
 
 
 //	DrawFont(760.0f, 660.0f, 0, 0, 1, 0.2f*MenuContentTransp, "PgUp - Previous Page");
@@ -1274,7 +1275,7 @@ void InformationMenu()
 
 
 	// проверяем колесо мышки
-	DstRect((int)(Setup.InternalWidth/2-440),80,(int)(Setup.InternalWidth/2+440),590);
+	DstRect(GameConfig().InternalWidth / 2 - 440, 80, GameConfig().InternalWidth / 2 + 440,590);
 	if (vw_MouseOverRect(DstRect)) {
 		if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
 			CreateNum += vw_GetWheelStatus();
@@ -1292,7 +1293,7 @@ void InformationMenu()
 
 
 	int Prir = 100;
-	int X = Setup.InternalWidth/2 - 432;
+	int X = GameConfig().InternalWidth / 2 - 432;
 	int Y = 165+Prir*4;
 	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoPrevGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoPrevGroup());
@@ -1300,42 +1301,46 @@ void InformationMenu()
 	}
 
 
-	X = Setup.InternalWidth/2 - 209;
+	X = GameConfig().InternalWidth / 2 - 209;
 	if (DrawButton200_2(X,Y+28, vw_GetText("Page Up"), MenuContentTransp, false)) {
 		CreateNum --;
-		if (CreateNum<1) CreateNum = InfoEnd;
+		if (CreateNum < 1)
+			CreateNum = InfoEnd;
 		CreateInfoObject();
 	}
 	if (vw_GetKeyStatus(SDLK_PAGEUP)) {
 		CreateNum --;
-		if (CreateNum<1) CreateNum = InfoEnd;
+		if (CreateNum < 1)
+			CreateNum = InfoEnd;
 		CreateInfoObject();
 		vw_SetKeyStatus(SDLK_PAGEUP, false);
 	}
 
-	X = Setup.InternalWidth/2 + 9;
+	X = GameConfig().InternalWidth / 2 + 9;
 	if (DrawButton200_2(X,Y+28, vw_GetText("Page Down"), MenuContentTransp, false)) {
 		CreateNum ++;
-		if (CreateNum>InfoEnd) CreateNum = 1;
+		if (CreateNum > InfoEnd)
+			CreateNum = 1;
 		CreateInfoObject();
 	}
 	if (vw_GetKeyStatus(SDLK_PAGEDOWN)) {
 		CreateNum ++;
-		if (CreateNum>InfoEnd) CreateNum = 1;
+		if (CreateNum > InfoEnd)
+			CreateNum = 1;
 		CreateInfoObject();
 		vw_SetKeyStatus(SDLK_PAGEDOWN, false);
 	}
 
 
-	X = Setup.InternalWidth/2 + 432 - 200;
+	X = GameConfig().InternalWidth / 2 + 432 - 200;
 	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoNextGroup());
 		CreateInfoObject();
 	}
 
 
-	X = (Setup.InternalWidth - 384)/2;
-	Y = Y+Prir;
+	X = (GameConfig().InternalWidth - 384) / 2;
+	Y = Y + Prir;
 	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		DestroyInfoObject();
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
@@ -1367,8 +1372,8 @@ void InformationDrawObject()
 	float tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight;
 	vw_GetViewport(&tmpViewportX, &tmpViewportY, &tmpViewportWidth, &tmpViewportHeight);
 
-	vw_SetViewport((GLint)((Setup.InternalWidth / 2 - 432) / (Setup.InternalWidth / tmpViewportWidth)), (GLint)(80+80 / (Setup.InternalHeight / tmpViewportHeight)),
-		       (GLsizei)(444 / (Setup.InternalWidth / tmpViewportWidth)), (GLsizei)(333 / (Setup.InternalHeight / tmpViewportHeight)));
+	vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 432) / (GameConfig().InternalWidth / tmpViewportWidth)), (GLint)(80+80 / (GameConfig().InternalHeight / tmpViewportHeight)),
+		       (GLsizei)(444 / (GameConfig().InternalWidth / tmpViewportWidth)), (GLsizei)(333 / (GameConfig().InternalHeight / tmpViewportHeight)));
 	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 2000.0f);
 	vw_Clear(RI_DEPTH_BUFFER);
 
@@ -1395,28 +1400,28 @@ void InformationDrawObject()
 	fLeft = fRight = fUp = fDown = 0.15f;
 
 
-	DstRectLeft((Setup.InternalWidth/2-432)+10,
+	DstRectLeft((GameConfig().InternalWidth/2-432)+10,
 		80+80+(333-32)/2,
-		(Setup.InternalWidth/2-432)+32+10,
+		(GameConfig().InternalWidth/2-432)+32+10,
 		80+80+(333+32)/2);
-	DstRectRight((Setup.InternalWidth/2-432)+444-32-10,
+	DstRectRight((GameConfig().InternalWidth/2-432)+444-32-10,
 		80+80+(333-32)/2,
-		(Setup.InternalWidth/2-432)+444-10,
+		(GameConfig().InternalWidth/2-432)+444-10,
 		80+80+(333+32)/2);
-	DstRectUp((Setup.InternalWidth/2-432)+(444-32)/2,
+	DstRectUp((GameConfig().InternalWidth/2-432)+(444-32)/2,
 		80+80+333-32-10,
-		(Setup.InternalWidth/2-432)+(444+32)/2,
+		(GameConfig().InternalWidth/2-432)+(444+32)/2,
 		80+80+333-10);
-	DstRectDown((Setup.InternalWidth/2-432)+(444-32)/2,
+	DstRectDown((GameConfig().InternalWidth/2-432)+(444-32)/2,
 		80+80+10,
-		(Setup.InternalWidth/2-432)+(444+32)/2,
+		(GameConfig().InternalWidth/2-432)+(444+32)/2,
 		80+80+32+10);
 
 	// для вращения объекта, только если мышка стоит над выводом 3д модели
 	sRECT DstRect;
-	DstRect((Setup.InternalWidth/2-432),
+	DstRect((GameConfig().InternalWidth/2-432),
 		80+80,
-		(Setup.InternalWidth/2-432)+444,
+		(GameConfig().InternalWidth/2-432)+444,
 		80+80+333);
 	if  (((DstRect.right  >= MouseX) &&
 	      (DstRect.left<= MouseX) &&
@@ -1582,7 +1587,7 @@ void InformationDrawObject()
 
 	bool ShadowMap = false;
 
-	if (Setup.ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0) {
 		float EffectiveDistance = PointCamera.Length();
 		ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
@@ -1715,7 +1720,7 @@ void InformationDrawObject()
 	}
 
 
-	if (Setup.ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0) {
 		ShadowMap_EndFinalRender();
 	}
 
@@ -1725,14 +1730,14 @@ void InformationDrawObject()
 
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
-	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
+	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 
 
 	// бордюр с тенью
 	vw_Start2DMode(-1,1);
 	sRECT SrcRect;
 	SrcRect(2,2,482,371);
-	DstRect(Setup.InternalWidth/2-450,80-18+80,Setup.InternalWidth/2+30,80+351+80);
+	DstRect(GameConfig().InternalWidth/2-450, 80-18+80, GameConfig().InternalWidth/2+30, 80+351+80);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, 1.0f*MenuContentTransp);
 
 	// отрисовка стрелок

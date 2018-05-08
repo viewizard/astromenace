@@ -31,7 +31,6 @@
 #include "../core/core.h"
 #include "../struct.h"
 
-extern sGameSetup Setup;
 
 extern int GameNPCWeaponPenalty;
 extern int GameNPCArmorPenalty;

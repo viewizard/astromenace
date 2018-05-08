@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "object3d.h"
+#include "../config/config.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"
 #include "projectile/projectile.h"
@@ -335,7 +336,6 @@ void DestroyProjectileWithExplosion(cProjectile *Projectile, sVECTOR3D IntercPoi
 //-----------------------------------------------------------------------------
 extern float GameMoney;
 extern float GameExperience;
-extern sGameSetup Setup;
 extern int CurrentProfile;
 extern int		AlienShipsKillQuant;
 extern float	AlienShipsKillBonus;
@@ -355,8 +355,9 @@ void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
 	if (Object->ObjectStatus == 1 && KilledByObjectStatus == 3) {
 		// вычисляем на какое значение нужно делить, в зависимости от кол-ва раз пройденной миссии
 		float BonusDiv = 1.0f;
-		for (int i=0; i<Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission]; i++)
+		for (int i = 0; i < GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]; i++) {
 			BonusDiv = BonusDiv*2.0f;
+		}
 
 
 		float TTTExperience = 0.0f;
@@ -370,35 +371,35 @@ void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
 			AlienShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			AlienShipsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
+			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
 		// 3 - Alien MotherShip
 		case 3:
 			AlienMotherShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			AlienMotherShipsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
+			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
 		// 4 - Pirate Ship
 		case 4:
 			PirateShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			PirateShipsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
+			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
 		// 5 - Pirate Vehicle (Wheeled + Tracked)
 		case 5:
 			PirateVehiclesKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			PirateVehiclesKillQuant += 1;
-			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
+			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
 		// 6 - Pirate Building
 		case 6:
 			PirateBuildingsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			PirateBuildingsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
+			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
 		// 7 - Asteroids
 		case 7:
@@ -409,7 +410,7 @@ void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
 
 			AsteroidsKillQuant += 1;
 			//TTTExperience += (1.0f*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/1.8f;
-			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty*(Setup.Profile[CurrentProfile].Difficulty/100.0f))/8.0f;
+			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 8.0f;
 			break;
 		}
 

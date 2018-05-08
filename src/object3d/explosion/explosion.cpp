@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "explosion.h"
+#include "../../config/config.h"
 
 
 //-----------------------------------------------------------------------------
@@ -166,9 +167,10 @@ bool cExplosion::Update(float Time)
 
 
 	// если не считаем в шейдере, нужно перебрать геометрию и собрать новые буферы
-	if (!Setup.UseGLSL120) {
+	if (!GameConfig().UseGLSL120) {
 		// первый раз - просто запоминаем время
-		if (ExplosionGeometryMoveLastTime == -1) ExplosionGeometryMoveLastTime = Time;
+		if (ExplosionGeometryMoveLastTime == -1)
+			ExplosionGeometryMoveLastTime = Time;
 
 		// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
 		if (ExplosionGeometryMoveLastTime + 0.035f < Time) {

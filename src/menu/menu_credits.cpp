@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 
 namespace {
 
@@ -133,7 +134,7 @@ void CreditsMenu()
 
 		if (!CreditsArray[i].empty()) {
 			const char *tmpText = vw_GetText(CreditsArray[i].c_str());
-			int CenteredX = (Setup.InternalWidth - vw_FontSize(tmpText)) / 2;
+			int CenteredX = (GameConfig().InternalWidth - vw_FontSize(tmpText)) / 2;
 			vw_DrawFont(CenteredX, TextY, 0, 0, 1.0f,
 				    1.0f, 1.0f, ColorB, tmpTransp * MenuContentTransp,
 				    tmpText);
@@ -144,7 +145,7 @@ void CreditsMenu()
 		ColorB = CreditsArray[i].empty() ? 0.0f : 1.0f;
 	}
 
-	int X = (Setup.InternalWidth - 384) / 2;
+	int X = (GameConfig().InternalWidth - 384) / 2;
 	int Y = 165 + 100 * 5;
 	if (DrawButton384(X, Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;

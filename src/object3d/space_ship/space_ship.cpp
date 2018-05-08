@@ -27,6 +27,7 @@
 
 #include "space_ship.h"
 #include "../../game.h"
+#include "../../config/config.h"
 #include "earth_space_fighter/earth_space_fighter.h"
 
 
@@ -1390,7 +1391,7 @@ bool cSpaceShip::Update(float Time)
 						// учитываем скорость поворота по горизонтали
 						float Min = 0.0f;
 						float Max = 0.0f;
-						GetShipWeaponSlotAngle(Setup.Profile[CurrentProfile].Ship, i, &Min, &Max);
+						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
 						if (Weapon[i]->Rotation.y < NeedAngle.y) {
 							float NeedAngle_y = Weapon[i]->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
 							if (NeedAngle_y > NeedAngle.y)
@@ -1541,7 +1542,7 @@ bool cSpaceShip::Update(float Time)
 					// учитываем скорость поворота по горизонтали
 					float Min = 0.0f;
 					float Max = 0.0f;
-					GetShipWeaponSlotAngle(Setup.Profile[CurrentProfile].Ship, i, &Min, &Max);
+					GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
 					if (Weapon[i]->Rotation.y > NeedAngle.y) {
 						float NeedAngle_y = Weapon[i]->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_y > NeedAngle.y)

@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "../ui/font.h"
 
 
@@ -45,11 +46,11 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 {
 
 	sRECT SrcRect, DstRect;
-	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.InternalWidth,768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*ContentTransp);
+	SrcRect(0, 0, 2, 2);
+	DstRect(0, 0, GameConfig().InternalWidth, 768);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
 
-	int X1 = Setup.InternalWidth/2 - 375;
+	int X1 = GameConfig().InternalWidth / 2 - 375;
 	int Y1 = 65;
 	int Prir1 = 55;
 
@@ -58,32 +59,32 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// выбор языка меню
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Menu Language"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
-		if (Setup.MenuLanguage == 0)
-			Setup.MenuLanguage = vw_GetLanguageListCount() - 1;
+		if (GameConfig().MenuLanguage == 0)
+			ChangeGameConfig().MenuLanguage = vw_GetLanguageListCount() - 1;
 		else
-			Setup.MenuLanguage--;
+			ChangeGameConfig().MenuLanguage--;
 
-		vw_SetTextLanguage(Setup.MenuLanguage);
+		vw_SetTextLanguage(GameConfig().MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
 		vw_ReleaseAllFontChars();
 		GenerateFonts();
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
-		if (Setup.MenuLanguage >= (vw_GetLanguageListCount() - 1))
-			Setup.MenuLanguage = 0;
+		if (GameConfig().MenuLanguage >= (vw_GetLanguageListCount() - 1))
+			ChangeGameConfig().MenuLanguage = 0;
 		else
-			Setup.MenuLanguage++;
+			ChangeGameConfig().MenuLanguage++;
 
-		vw_SetTextLanguage(Setup.MenuLanguage);
+		vw_SetTextLanguage(GameConfig().MenuLanguage);
 		// forced to regenerate textures (base texture connected to language-related characters set)
 		vw_ReleaseAllFontChars();
 		GenerateFonts();
 	}
 
 	int Size, SizeI;
-	Size = vw_FontSize(vw_GetText("English", Setup.MenuLanguage));
+	Size = vw_FontSize(vw_GetText("English", GameConfig().MenuLanguage));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("English", Setup.MenuLanguage));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("English", GameConfig().MenuLanguage));
 
 
 
@@ -92,53 +93,55 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Voice Language"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
-		if (Setup.VoiceLanguage == 0)
-			Setup.VoiceLanguage = vw_GetLanguageListCount() - 1;
+		if (GameConfig().VoiceLanguage == 0)
+			ChangeGameConfig().VoiceLanguage = vw_GetLanguageListCount() - 1;
 		else
-			Setup.VoiceLanguage--;
+			ChangeGameConfig().VoiceLanguage--;
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
-		if (Setup.VoiceLanguage >= (vw_GetLanguageListCount() - 1))
-			Setup.VoiceLanguage = 0;
+		if (GameConfig().VoiceLanguage >= (vw_GetLanguageListCount() - 1))
+			ChangeGameConfig().VoiceLanguage = 0;
 		else
-			Setup.VoiceLanguage++;
+			ChangeGameConfig().VoiceLanguage++;
 	}
 
-	Size = vw_FontSize(vw_GetText("English", Setup.VoiceLanguage));
+	Size = vw_FontSize(vw_GetText("English", GameConfig().VoiceLanguage));
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("English", Setup.VoiceLanguage));
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("English", GameConfig().VoiceLanguage));
 
 
 
 	// выбор шрифта
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Menu Font"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, Setup.FontNumber <= 0)) {
-		Setup.FontNumber --;
-		if (Setup.FontNumber < 0) Setup.FontNumber = 0;
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, GameConfig().FontNumber <= 0)) {
+		ChangeGameConfig().FontNumber --;
+		if (GameConfig().FontNumber < 0)
+			ChangeGameConfig().FontNumber = 0;
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
+		vw_InitFont(FontList[GameConfig().FontNumber].FontFileName);
 		GenerateFonts();
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, Setup.FontNumber >= FontQuantity-1)) {
-		Setup.FontNumber ++;
-		if (Setup.FontNumber > FontQuantity-1) Setup.FontNumber = FontQuantity-1;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, GameConfig().FontNumber >= (FontQuantity - 1))) {
+		ChangeGameConfig().FontNumber ++;
+		if (GameConfig().FontNumber > FontQuantity-1)
+			ChangeGameConfig().FontNumber = FontQuantity-1;
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		vw_InitFont(FontList[Setup.FontNumber].FontFileName);
+		vw_InitFont(FontList[GameConfig().FontNumber].FontFileName);
 		GenerateFonts();
 	}
 	int Scale = 0;
-	Size = vw_FontSize(FontList[Setup.FontNumber].FontTitle);
+	Size = vw_FontSize(FontList[GameConfig().FontNumber].FontTitle);
 	if (Size > 170) {
 		Scale = -170;
 		Size = 170;
 	}
 	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, FontList[Setup.FontNumber].FontTitle);
+	vw_DrawFont(X1+438+SizeI, Y1, Scale, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, FontList[GameConfig().FontNumber].FontTitle);
 
 
 
@@ -148,11 +151,15 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("'Tips and hints' Status"));
 	// узнаем есть ли вообще что ресетить
 	bool NeedReset = false;
-	for (int i=0; i<10; i++)
-		if (!Setup.NeedShowHint[i]) NeedReset = true;
+	for (int i = 0; i < 10; i++) {
+		if (!GameConfig().NeedShowHint[i])
+			NeedReset = true;
+	}
 	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_GetText("Reset"), ContentTransp, !NeedReset))
 		if (NeedCheck == 0) {
-			for (int i=0; i<10; i++) Setup.NeedShowHint[i] = true;
+			for (int i = 0; i < 10; i++) {
+				ChangeGameConfig().NeedShowHint[i] = true;
+			}
 		}
 
 
@@ -162,11 +169,11 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("FPS Сounter"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
-		Setup.ShowFPS = !Setup.ShowFPS;
+		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 	}
-	Size = vw_FontSize(Setup.ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
-	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, Setup.ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
+	Size = vw_FontSize(GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
+	SizeI = (170 - Size) / 2;
+	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
 
 
 
@@ -174,17 +181,19 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// вид панелей с оружием в игре
 	Y1 += Prir1;
 	vw_DrawFont(X1, Y1, -280, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText("Weapon Panels View"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, Setup.GameWeaponInfoType==1)) {
-		Setup.GameWeaponInfoType--;
-		if (Setup.GameWeaponInfoType < 1) Setup.GameWeaponInfoType = 1;
+	if (DrawButton128_2(X1 + 300, Y1 - 6, vw_GetText("Prev"), ContentTransp, GameConfig().GameWeaponInfoType==1)) {
+		ChangeGameConfig().GameWeaponInfoType--;
+		if (GameConfig().GameWeaponInfoType < 1)
+			ChangeGameConfig().GameWeaponInfoType = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, Setup.GameWeaponInfoType==4)) {
-		Setup.GameWeaponInfoType++;
-		if (Setup.GameWeaponInfoType > 4) Setup.GameWeaponInfoType = 4;
+	if (DrawButton128_2(X1 + 616, Y1 - 6, vw_GetText("Next"), ContentTransp, GameConfig().GameWeaponInfoType==4)) {
+		ChangeGameConfig().GameWeaponInfoType++;
+		if (GameConfig().GameWeaponInfoType > 4)
+			ChangeGameConfig().GameWeaponInfoType = 4;
 	}
-	Size = vw_FontSize(vw_GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
-	SizeI = (170-Size)/2;
-	vw_DrawFont(X1+438+SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonGameWeaponInfoType[Setup.GameWeaponInfoType-1]));
+	Size = vw_FontSize(vw_GetText(ButtonGameWeaponInfoType[GameConfig().GameWeaponInfoType - 1]));
+	SizeI = (170 - Size) / 2;
+	vw_DrawFont(X1 + 438 + SizeI, Y1, 0, 0, 1.0f, 1.0f,1.0f,1.0f, ContentTransp, vw_GetText(ButtonGameWeaponInfoType[GameConfig().GameWeaponInfoType - 1]));
 
 
 
@@ -205,7 +214,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	int Y = 165+Prir*4;
 
 
-	X = Setup.InternalWidth/2 - 366;
+	X = GameConfig().InternalWidth/2 - 366;
 	if (DrawButton200_2(X,Y+28, vw_GetText("Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
@@ -214,7 +223,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 			ComBuffer = eCommand::SWITCH_TO_OPTIONS_ADVANCED;
 	}
 
-	X = Setup.InternalWidth/2 - 100;
+	X = GameConfig().InternalWidth/2 - 100;
 	if (DrawButton200_2(X,Y+28, vw_GetText("Video & Audio"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS);
@@ -223,7 +232,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 			ComBuffer = eCommand::SWITCH_TO_OPTIONS;
 	}
 
-	X = Setup.InternalWidth/2 + 166;
+	X = GameConfig().InternalWidth/2 + 166;
 	if (DrawButton200_2(X,Y+28, vw_GetText("Config Controls"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
@@ -237,7 +246,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 
 
 
-	X = (Setup.InternalWidth - 384)/2;
+	X = (GameConfig().InternalWidth - 384) / 2;
 	Y = Y+Prir;
 	if (MenuStatus == eMenuStatus::GAME) {
 		if (DrawButton384(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))

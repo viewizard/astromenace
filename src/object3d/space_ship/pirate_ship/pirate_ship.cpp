@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "pirate_ship.h"
-
+#include "../../../config/config.h"
 
 
 struct sPirateShipData {
@@ -79,26 +79,27 @@ void cPirateShip::Create(int PirateShipNum)
 	ObjectType = 4;
 	ObjectCreationType = PirateShipNum;
 	PromptDrawDist2 = 100.0f;
-	if (PirateShipNum > 5) PromptDrawDist2 = 20000.0f; // большие корабли пиратов
+	if (PirateShipNum > 5)
+		PromptDrawDist2 = 20000.0f; // большие корабли пиратов
 
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	Strength = StrengthStart = PresetPirateShipData[PirateShipNum-1].Strength/GameNPCArmorPenalty;
-	WeaponQuantity = PresetPirateShipData[PirateShipNum-1].WeaponQuantity;
-	BossWeaponQuantity = PresetPirateShipData[PirateShipNum-1].BossWeaponQuantity;
+	Strength = StrengthStart = PresetPirateShipData[PirateShipNum - 1].Strength / GameNPCArmorPenalty;
+	WeaponQuantity = PresetPirateShipData[PirateShipNum - 1].WeaponQuantity;
+	BossWeaponQuantity = PresetPirateShipData[PirateShipNum - 1].BossWeaponQuantity;
 	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
 
 
-	LoadObjectData(PresetPirateShipData[PirateShipNum-1].Name, this, 0, 2.0f, PresetPirateShipData[PirateShipNum-1].NeedTangentAndBinormal && Setup.UseGLSL120);
+	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, this, 0, 2.0f, PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum-1].TextureName);
-		if (PresetPirateShipData[PirateShipNum-1].NeedTangentAndBinormal && Setup.UseGLSL120)
-			NormalMap[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum-1].NormalMapName);
+		Texture[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].TextureName);
+		if (PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120)
+			NormalMap[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].NormalMapName);
 	}
 
 
@@ -108,7 +109,7 @@ void cPirateShip::Create(int PirateShipNum)
 		WeaponLocation = new sVECTOR3D[WeaponQuantity];
 		WeaponType = new int[WeaponQuantity];
 		Weapon = new cWeapon*[WeaponQuantity];
-		for (int i=0; i<WeaponQuantity; i++) {
+		for (int i = 0; i < WeaponQuantity; i++) {
 			WeaponSetFire[i] = false;
 			WeaponType[i] = 1;
 			Weapon[i] = nullptr;
@@ -119,7 +120,7 @@ void cPirateShip::Create(int PirateShipNum)
 		BossWeaponLocation = new sVECTOR3D[BossWeaponQuantity];
 		BossWeaponType = new int[BossWeaponQuantity];
 		BossWeapon = new cWeapon*[BossWeaponQuantity];
-		for (int i=0; i<BossWeaponQuantity; i++) {
+		for (int i = 0; i < BossWeaponQuantity; i++) {
 			BossWeaponSetFire[i] = false;
 			BossWeaponType[i] = 1;
 			BossWeapon[i] = nullptr;

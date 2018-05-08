@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "../ui/font.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
@@ -485,7 +486,7 @@ Dialogs with default type:
 		H = 600;
 	}
 
-	int X = (Setup.InternalWidth-W)/2;
+	int X = (GameConfig().InternalWidth - W) / 2;
 	int Y = (768-H)/2;
 
 
@@ -494,8 +495,8 @@ Dialogs with default type:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// затемнение при выводе
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.InternalWidth,768);
+	SrcRect(0, 0, 2, 2);
+	DstRect(0, 0, GameConfig().InternalWidth, 768);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.6f*DialogContentTransp);
 
 
@@ -621,10 +622,12 @@ Dialogs with default type:
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
 			DeleteRecord();
-			if (CurrentProfile != -1) CurrentMission = Setup.Profile[CurrentProfile].LastMission;
+			if (CurrentProfile != -1)
+				CurrentMission = GameConfig().Profile[CurrentProfile].LastMission;
 			CloseDialog();
 		}
-		if (DrawDialogButton128(X+256+34,Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton128(X+256+34,Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp))
+			CloseDialog();
 		break;
 
 
@@ -979,45 +982,45 @@ Dialogs with default type:
 			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%2.1f %s", 0.0f, vw_GetText("units"));
 			Y1 += Offset;
 			vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("Energy Use:"));
-			if (NeedMoreEnergyDialog && Setup.Profile[CurrentProfile].SpaceShipControlMode != 1)
+			if (NeedMoreEnergyDialog && (GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1))
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), vw_GetText("units per sec"));
 			else {
-				if (Setup.Profile[CurrentProfile].EngineSystem == DialogSystem) {
+				if (GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) {
 					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), vw_GetText("units per sec"));
-				} else if (Setup.Profile[CurrentProfile].EngineSystem == 0)
+				} else if (GameConfig().Profile[CurrentProfile].EngineSystem == 0)
 					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), vw_GetText("units per sec"));
 				else {
-					if (GetShipEngineSystemEnergyUse(DialogSystem) < GetShipEngineSystemEnergyUse(Setup.Profile[CurrentProfile].EngineSystem))
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(Setup.Profile[CurrentProfile].EngineSystem), vw_GetText("units per sec"));
+					if (GetShipEngineSystemEnergyUse(DialogSystem) < GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem))
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units per sec"));
 					else
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(Setup.Profile[CurrentProfile].EngineSystem), vw_GetText("units per sec"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units per sec"));
 				}
 			}
 
 			Y1 += Offset;
 			vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("Engine Power:"));
-			if (Setup.Profile[CurrentProfile].EngineSystem == DialogSystem) {
+			if (GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) {
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), vw_GetText("units"));
-			} else if (Setup.Profile[CurrentProfile].EngineSystem == 0)
+			} else if (GameConfig().Profile[CurrentProfile].EngineSystem == 0)
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), vw_GetText("units"));
 			else {
-				if (GetEnginePower(DialogSystem) > GetEnginePower(Setup.Profile[CurrentProfile].EngineSystem))
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(Setup.Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
+				if (GetEnginePower(DialogSystem) > GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem))
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
 				else
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(Setup.Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
 			}
 
 			Y1 += Offset;
 			vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("Acceleration:"));
-			if (Setup.Profile[CurrentProfile].EngineSystem == DialogSystem) {
+			if (GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) {
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), vw_GetText("units"));
-			} else if (Setup.Profile[CurrentProfile].EngineSystem == 0)
+			} else if (GameConfig().Profile[CurrentProfile].EngineSystem == 0)
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), vw_GetText("units"));
 			else {
-				if (GetEngineAcceleration(DialogSystem) > GetEngineAcceleration(Setup.Profile[CurrentProfile].EngineSystem))
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(Setup.Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
+				if (GetEngineAcceleration(DialogSystem) > GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem))
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
 				else
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(Setup.Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
 			}
 
 			Y1 += Offset;
@@ -1027,7 +1030,7 @@ Dialogs with default type:
 			Y1 += Offset;
 			vw_DrawFont(X1+Size2, Y1, 0, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, vw_GetText("Power Source"));
 
-			if (Setup.Profile[CurrentProfile].SpaceShipControlMode == 1) {
+			if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
 				SizeI = (W-vw_FontSize(vw_GetText("Useless with Arcade")))/2-45;
@@ -1058,15 +1061,15 @@ Dialogs with default type:
 			Y1 += Offset;
 			vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("Energy Capacity:"));
 
-			if (Setup.Profile[CurrentProfile].PowerSystem == DialogSystem-4) {
+			if (GameConfig().Profile[CurrentProfile].PowerSystem == DialogSystem-4) {
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipMaxEnergy(DialogSystem-4), vw_GetText("units"));
-			} else if (Setup.Profile[CurrentProfile].PowerSystem == 0)
+			} else if (GameConfig().Profile[CurrentProfile].PowerSystem == 0)
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipMaxEnergy(DialogSystem-4), vw_GetText("units"));
 			else {
-				if (GetShipMaxEnergy(DialogSystem-4) > GetShipMaxEnergy(Setup.Profile[CurrentProfile].PowerSystem))
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipMaxEnergy(DialogSystem-4), GetShipMaxEnergy(Setup.Profile[CurrentProfile].PowerSystem), vw_GetText("units"));
+				if (GetShipMaxEnergy(DialogSystem-4) > GetShipMaxEnergy(GameConfig().Profile[CurrentProfile].PowerSystem))
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipMaxEnergy(DialogSystem-4), GetShipMaxEnergy(GameConfig().Profile[CurrentProfile].PowerSystem), vw_GetText("units"));
 				else
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipMaxEnergy(DialogSystem-4), GetShipMaxEnergy(Setup.Profile[CurrentProfile].PowerSystem), vw_GetText("units"));
+					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipMaxEnergy(DialogSystem-4), GetShipMaxEnergy(GameConfig().Profile[CurrentProfile].PowerSystem), vw_GetText("units"));
 			}
 
 			Y1 += Offset;
@@ -1074,15 +1077,15 @@ Dialogs with default type:
 			if (NeedMoreEnergyDialog)
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), vw_GetText("units per sec"));
 			else {
-				if (Setup.Profile[CurrentProfile].PowerSystem == DialogSystem-4) {
+				if (GameConfig().Profile[CurrentProfile].PowerSystem == (DialogSystem - 4)) {
 					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), vw_GetText("units per sec"));
-				} else if (Setup.Profile[CurrentProfile].PowerSystem == 0)
+				} else if (GameConfig().Profile[CurrentProfile].PowerSystem == 0)
 					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", GetShipRechargeEnergy(DialogSystem-4), vw_GetText("units per sec"));
 				else {
-					if (GetShipRechargeEnergy(DialogSystem-4) > GetShipRechargeEnergy(Setup.Profile[CurrentProfile].PowerSystem))
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipRechargeEnergy(DialogSystem-4), GetShipRechargeEnergy(Setup.Profile[CurrentProfile].PowerSystem), vw_GetText("units per sec"));
+					if (GetShipRechargeEnergy(DialogSystem-4) > GetShipRechargeEnergy(GameConfig().Profile[CurrentProfile].PowerSystem))
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipRechargeEnergy(DialogSystem-4), GetShipRechargeEnergy(GameConfig().Profile[CurrentProfile].PowerSystem), vw_GetText("units per sec"));
 					else
-						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipRechargeEnergy(DialogSystem-4), GetShipRechargeEnergy(Setup.Profile[CurrentProfile].PowerSystem), vw_GetText("units per sec"));
+						vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipRechargeEnergy(DialogSystem-4), GetShipRechargeEnergy(GameConfig().Profile[CurrentProfile].PowerSystem), vw_GetText("units per sec"));
 				}
 			}
 
@@ -1177,15 +1180,15 @@ Dialogs with default type:
 			vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 0.1f, vw_GetText("units per sec"));
 			Y1 += Offset;
 			vw_DrawFont(X1, Y1, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("Orientation Speed:"));
-			if (Setup.Profile[CurrentProfile].TargetingMechanicSystem == DialogSystem-12) {
+			if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem == (DialogSystem - 12)) {
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), vw_GetText("deg per sec"));
-			} else if (Setup.Profile[CurrentProfile].TargetingMechanicSystem == 0)
+			} else if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem == 0)
 				vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), vw_GetText("deg per sec"));
 			else {
-				if (DialogSystem-12 > Setup.Profile[CurrentProfile].TargetingMechanicSystem)
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f*(DialogSystem-12), 40.0f*Setup.Profile[CurrentProfile].TargetingMechanicSystem, vw_GetText("deg per sec"));
+				if (DialogSystem-12 > GameConfig().Profile[CurrentProfile].TargetingMechanicSystem)
+					vw_DrawFont(X1 + Size, Y1, WScale, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f * (DialogSystem - 12), 40.0f * GameConfig().Profile[CurrentProfile].TargetingMechanicSystem, vw_GetText("deg per sec"));
 				else
-					vw_DrawFont(X1+Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f*(DialogSystem-12), 40.0f*Setup.Profile[CurrentProfile].TargetingMechanicSystem, vw_GetText("deg per sec"));
+					vw_DrawFont(X1 + Size, Y1, WScale, 0, 1.0f, 1.0f,0.5f,0.0f, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f * (DialogSystem - 12), 40.0f * GameConfig().Profile[CurrentProfile].TargetingMechanicSystem, vw_GetText("deg per sec"));
 			}
 
 			Y1 += Offset;
@@ -1197,7 +1200,7 @@ Dialogs with default type:
 			Y1 += Offset;
 			vw_DrawFont(X1+Size2, Y1, 0, 0, 1.0f, 0.0f,1.0f,0.0f, DialogContentTransp, vw_GetText("Weapon Orientation"));
 
-			if (Setup.Profile[CurrentProfile].WeaponTargetingMode == 1) {
+			if (GameConfig().Profile[CurrentProfile].WeaponTargetingMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
 				SizeI = (W-vw_FontSize(vw_GetText("Useless with Arcade")))/2-45;
@@ -1278,7 +1281,8 @@ Dialogs with default type:
 
 
 		// закрываем...
-		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) CloseDialog();
+		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true))
+			CloseDialog();
 	}
 	break;
 
@@ -1313,11 +1317,12 @@ Dialogs with default type:
 		vw_DrawFont(X+25, Y+470, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("new mission."));
 
 		// чекбокс
-		bool ttt = !Setup.NeedShowHint[0];
+		bool ttt = !GameConfig().NeedShowHint[0];
 		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
-		Setup.NeedShowHint[0] = !ttt;
+		ChangeGameConfig().NeedShowHint[0] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+			CloseDialog();
 		break;
 	}
 	case eDialogBox::ShipyardTipsAndTricks: { // подсказки на меню шипъярд
@@ -1352,11 +1357,12 @@ Dialogs with default type:
 		vw_DrawFont(X+25, Y+120+k*13, -716, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("Attack Ship - heavy, large and heavily armed ships."));
 
 		// чекбокс
-		bool ttt = !Setup.NeedShowHint[1];
+		bool ttt = !GameConfig().NeedShowHint[1];
 		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
-		Setup.NeedShowHint[1] = !ttt;
+		ChangeGameConfig().NeedShowHint[1] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+			CloseDialog();
 		break;
 	}
 	case eDialogBox::SystemsTipsAndTricks: { // подсказки на меню системы
@@ -1396,11 +1402,12 @@ Dialogs with default type:
 		vw_DrawFont(X+40, Y+120+k*15, -701, 0, 1.0f, 1.0f,1.0f,1.0f, 0.5f*DialogContentTransp, vw_GetText("enhancing ship invulnerability."));
 
 		// чекбокс
-		bool ttt = !Setup.NeedShowHint[2];
+		bool ttt = !GameConfig().NeedShowHint[2];
 		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
-		Setup.NeedShowHint[2] = !ttt;
+		ChangeGameConfig().NeedShowHint[2] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+			CloseDialog();
 		break;
 	}
 	case eDialogBox::WeaponryTipsAndTricks: { // подсказки на меню оружейная
@@ -1443,11 +1450,12 @@ Dialogs with default type:
 
 
 		// чекбокс
-		bool ttt = !Setup.NeedShowHint[3];
+		bool ttt = !GameConfig().NeedShowHint[3];
 		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
-		Setup.NeedShowHint[3] = !ttt;
+		ChangeGameConfig().NeedShowHint[3] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+			CloseDialog();
 		break;
 	}
 
@@ -1482,9 +1490,9 @@ Dialogs with default type:
 
 
 		// чекбокс
-		bool ttt = !Setup.NeedShowHint[4];
+		bool ttt = !GameConfig().NeedShowHint[4];
 		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
-		Setup.NeedShowHint[4] = !ttt;
+		ChangeGameConfig().NeedShowHint[4] = !ttt;
 		// кнопки
 		if (DrawDialogButton128(X+512+90, Y+ButtonOffset, vw_GetText("START"), DialogContentTransp)) {
 			// ничего не тянем... только включили меню
@@ -1511,7 +1519,7 @@ Dialogs with default type:
 
 		SizeI = vw_FontSize(vw_GetText("You have already completed this mission. Your previous best"));
 		vw_DrawFont(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("You have already completed this mission. Your previous best"));
-		vw_DrawFont(X+25, Y+80+k*1, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("result is %i points of experience."), Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
+		vw_DrawFont(X+25, Y+80+k*1, -716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("result is %i points of experience."), GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
 
 		SizeI = vw_FontSize(vw_GetText("You can replay this mission as many times as you like, but you"));
 		vw_DrawFont(X+25, Y+100+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("You can replay this mission as many times as you like, but you"));
@@ -1529,9 +1537,9 @@ Dialogs with default type:
 
 
 		// чекбокс
-		bool ttt = !Setup.NeedShowHint[5];
+		bool ttt = !GameConfig().NeedShowHint[5];
 		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
-		Setup.NeedShowHint[5] = !ttt;
+		ChangeGameConfig().NeedShowHint[5] = !ttt;
 		// кнопки
 		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) {
 			CloseDialog();
@@ -1551,23 +1559,23 @@ Dialogs with default type:
 
 
 		if (DrawDialogButton128(X+34, Y+ButtonOffset-73, vw_GetText("Prev"), DialogContentTransp)) {
-			if (Setup.MenuLanguage == 0)
-				Setup.MenuLanguage = vw_GetLanguageListCount() - 1;
+			if (GameConfig().MenuLanguage == 0)
+				ChangeGameConfig().MenuLanguage = vw_GetLanguageListCount() - 1;
 			else
-				Setup.MenuLanguage--;
+				ChangeGameConfig().MenuLanguage--;
 
-			vw_SetTextLanguage(Setup.MenuLanguage);
+			vw_SetTextLanguage(GameConfig().MenuLanguage);
 			// forced to regenerate textures (base texture connected to language-related characters set)
 			vw_ReleaseAllFontChars();
 			GenerateFonts();
 		}
 		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, vw_GetText("Next"), DialogContentTransp)) {
-			if (Setup.MenuLanguage >= (vw_GetLanguageListCount() - 1))
-				Setup.MenuLanguage = 0;
+			if (GameConfig().MenuLanguage >= (vw_GetLanguageListCount() - 1))
+				ChangeGameConfig().MenuLanguage = 0;
 			else
-				Setup.MenuLanguage++;
+				ChangeGameConfig().MenuLanguage++;
 
-			vw_SetTextLanguage(Setup.MenuLanguage);
+			vw_SetTextLanguage(GameConfig().MenuLanguage);
 			// forced to regenerate textures (base texture connected to language-related characters set)
 			vw_ReleaseAllFontChars();
 			GenerateFonts();
@@ -1575,17 +1583,17 @@ Dialogs with default type:
 
 		vw_SetFontSize(24);
 		int Size;
-		Size = vw_FontSize(vw_GetText("English", Setup.MenuLanguage));
+		Size = vw_FontSize(vw_GetText("English", GameConfig().MenuLanguage));
 		SizeI = (170-Size)/2;
 		if (Size > 170)
-			vw_DrawFont(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("English", Setup.MenuLanguage));
+			vw_DrawFont(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("English", GameConfig().MenuLanguage));
 		else
-			vw_DrawFont(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("English", Setup.MenuLanguage));
+			vw_DrawFont(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, 1.0f,1.0f,1.0f, DialogContentTransp, vw_GetText("English", GameConfig().MenuLanguage));
 		ResetFontSize();
 
 		if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetText("OK"), DialogContentTransp)) {
 			// первоначально, язык голоса ставим такой же, как и язык меню
-			Setup.VoiceLanguage = Setup.MenuLanguage;
+			ChangeGameConfig().VoiceLanguage = GameConfig().MenuLanguage;
 			CloseDialog();
 		}
 		break;

@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "space_explosion.h"
+#include "../../../config/config.h"
 #include "../../space_object/ship_part/ship_part.h"
 
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
@@ -544,7 +545,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// смотрим по настройкам сколько пропускать
 		// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-		int NeedIn = Setup.VisualEffectsQuality;
+		int NeedIn = GameConfig().VisualEffectsQuality;
 
 		// составляем данные для взрыва
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
@@ -575,7 +576,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг
-			if (Setup.UseGLSL120) {
+			if (GameConfig().UseGLSL120) {
 				ObjectBlocks[i].VertexStride = 3 + 3 + 6;
 				ObjectBlocks[i].VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX;
 			}
@@ -683,7 +684,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
-				if (Setup.UseGLSL120) {
+				if (GameConfig().UseGLSL120) {
 					// Velocity/центр треугольника
 					tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 8] = ExplosionPieceData[Count].Velocity.x;
 					tmpObjectBlock.VertexArray.get()[tmpObjectBlock.VertexStride * i + 9] = ExplosionPieceData[Count].Velocity.y;
@@ -752,7 +753,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 			// установки по шейдеру для объекта
-			if (Setup.UseGLSL120) {
+			if (GameConfig().UseGLSL120) {
 				tmpObjectBlock.ShaderType = 2;
 				// дельта скорости
 				tmpObjectBlock.ShaderData[0] = 1.0f;

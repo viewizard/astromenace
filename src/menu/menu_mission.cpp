@@ -28,7 +28,7 @@
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../game.h"
-
+#include "../config/config.h"
 
 
 int	SoundOnMissionID = -1;
@@ -367,19 +367,19 @@ void MissionMenu()
 {
 
 	// проверка ограничения
-	if (Setup.Profile[CurrentProfile].OpenLevelNum > AllMission-1)
-		Setup.Profile[CurrentProfile].OpenLevelNum = AllMission-1;
+	if (GameConfig().Profile[CurrentProfile].OpenLevelNum > AllMission-1)
+		ChangeGameConfig().Profile[CurrentProfile].OpenLevelNum = AllMission-1;
 
 
 
 	sRECT SrcRect, DstRect;
-	SrcRect(2,2,863-2,484-2);
-	DstRect(Setup.InternalWidth/2-427,175-15,Setup.InternalWidth/2-427+863-4,175-15+484-4);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
+	SrcRect(2, 2, 863-2, 484-2);
+	DstRect(GameConfig().InternalWidth/2-427, 175-15, GameConfig().InternalWidth/2-427+863-4, 175-15+484-4);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f * MenuContentTransp);
 
 
 
-	int X1 = Setup.InternalWidth/2 - 372;
+	int X1 = GameConfig().InternalWidth/2 - 372;
 	int Y1 = 270;
 
 
@@ -389,11 +389,11 @@ void MissionMenu()
 	int Size = vw_FontSize("%s: ", vw_GetText("Pilot Profile"));
 	vw_DrawFont(X1, 208+12, 0, 0, 1.0f, 0.0f,1.0f,0.0f, 1.0f*MenuContentTransp, "%s: ", vw_GetText("Pilot Profile"));
 
-	if (Size+vw_FontSize(Setup.Profile[CurrentProfile].Name) > 500) {
-		vw_DrawFont(X1+Size, 208+12, 0, 500-Size, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[CurrentProfile].Name);
+	if ((Size + vw_FontSize(GameConfig().Profile[CurrentProfile].Name)) > 500) {
+		vw_DrawFont(X1+Size, 208+12, 0, 500-Size, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
 		vw_DrawFont(X1+510, 208+12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, "...");
 	} else
-		vw_DrawFont(X1+Size, 208+12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, Setup.Profile[CurrentProfile].Name);
+		vw_DrawFont(X1+Size, 208+12, 0, 0, 1.0f, 1.0f,1.0f,1.0f, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
 
 	if (DrawButton200_2(X1+616-72, 212, vw_GetText("Change Profile"), MenuContentTransp, false)) {
 		ComBuffer = eCommand::SWITCH_TO_PROFILE;
@@ -431,7 +431,7 @@ void MissionMenu()
 	for (int i=StartMission; i<=EndMission; i++)
 		if (AllMission > i) {
 			// если не можем выбирать...
-			if (i > Setup.Profile[CurrentProfile].OpenLevelNum) {
+			if (i > GameConfig().Profile[CurrentProfile].OpenLevelNum) {
 				SrcRect(0,0,64,64);
 				DstRect(X1+2,Y1+2,X1+62,Y1+62);
 
@@ -452,8 +452,8 @@ void MissionMenu()
 			}
 
 
-			DstRect(X1,Y1+1,X1+710,Y1+64);
-			if (i <= Setup.Profile[CurrentProfile].OpenLevelNum) {
+			DstRect(X1, Y1+1, X1+710, Y1+64);
+			if (i <= GameConfig().Profile[CurrentProfile].OpenLevelNum) {
 				// работаем с клавиатурой
 				if ((MenuContentTransp >= 0.99f) && !isDialogBoxDrawing()) CurrentActiveMenuElement++;
 				bool InFocusByKeyboard = false;
@@ -500,7 +500,7 @@ void MissionMenu()
 					if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 
 						CurrentMission = i;
-						Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+						ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
 						Audio_PlaySound2D(6,1.0f);
 						if (InFocusByKeyboard) {
 							vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -510,10 +510,10 @@ void MissionMenu()
 
 					if (vw_GetMouseLeftDoubleClick(true)) {
 						CurrentMission = i;
-						Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+						ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
 						// если уже играли в эту миссию
-						if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
-							if (Setup.NeedShowHint[5]) {
+						if (GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
+							if (GameConfig().NeedShowHint[5]) {
 								SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);
 							} else {
 								ComBuffer = eCommand::SWITCH_TO_WORKSHOP;
@@ -638,16 +638,16 @@ void MissionMenu()
 
 
 
-	int X = Setup.InternalWidth/2 - 284;
-	int Y = 165+100*5;
+	int X = GameConfig().InternalWidth / 2 - 284;
+	int Y = 165 + 100 * 5;
 	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 
-	X = Setup.InternalWidth/2 + 28;
+	X = GameConfig().InternalWidth / 2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
 		// если уже играли в эту миссию
-		if (Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
-			if (Setup.NeedShowHint[5]) {
+		if (GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
+			if (GameConfig().NeedShowHint[5]) {
 				SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);
 			} else {
 				ComBuffer = eCommand::SWITCH_TO_WORKSHOP;

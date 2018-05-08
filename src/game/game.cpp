@@ -33,6 +33,7 @@
 
 #include "../core/core.h"
 #include "../game.h"
+#include "../config/config.h"
 #include "../ui/font.h"
 #include "../gfx/star_system.h"
 #include "../script_engine/script.h"
@@ -255,7 +256,7 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	// вывод эмблем
 
-	Xstart = Setup.InternalWidth/2-57.0f;
+	Xstart = GameConfig().InternalWidth / 2 - 57.0f;
 	Ystart = 5;
 	GetGameNumFontData('E', SrcRect);
 	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
@@ -323,7 +324,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	tmp[k++] = U_Left;
 	tmp[k++] = V_Top;
 
-	Xstart = Setup.InternalWidth/2-56.0f;
+	Xstart = GameConfig().InternalWidth / 2 - 56.0f;
 	Ystart = 31;
 	GetGameNumFontData('$', SrcRect);
 	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
@@ -395,7 +396,7 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	// вывод опыта
 
-	Xstart = Setup.InternalWidth/2-57+23.0f;
+	Xstart = GameConfig().InternalWidth / 2 - 57 + 23.0f;
 	Ystart = 5;
 	if (Exp < 0)
 		Exp = 0;
@@ -480,7 +481,7 @@ void DrawGameExpMoney(int Exp, int Money)
 
 	// вывод денег
 
-	Xstart = Setup.InternalWidth/2-57+23.0f;
+	Xstart = GameConfig().InternalWidth / 2 - 57 + 23.0f;
 	Ystart = 31;
 	if (Money < 0)
 		Money = 0;
@@ -589,30 +590,30 @@ void InitGame()
 	if (CurrentMission == -1) CurrentMission = 0;
 
 
-	GameNPCWeaponPenalty = Setup.Profile[CurrentProfile].NPCWeaponPenalty;
-	GameNPCArmorPenalty = Setup.Profile[CurrentProfile].NPCArmorPenalty;
-	GameNPCTargetingSpeedPenalty = Setup.Profile[CurrentProfile].NPCTargetingSpeedPenalty;
-	GameLimitedAmmo = Setup.Profile[CurrentProfile].LimitedAmmo;
-	GameDestroyableWeapon = Setup.Profile[CurrentProfile].DestroyableWeapon;
-	GameWeaponTargetingMode = Setup.Profile[CurrentProfile].WeaponTargetingMode;
-	GameSpaceShipControlMode = Setup.Profile[CurrentProfile].SpaceShipControlMode;
+	GameNPCWeaponPenalty = GameConfig().Profile[CurrentProfile].NPCWeaponPenalty;
+	GameNPCArmorPenalty = GameConfig().Profile[CurrentProfile].NPCArmorPenalty;
+	GameNPCTargetingSpeedPenalty = GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty;
+	GameLimitedAmmo = GameConfig().Profile[CurrentProfile].LimitedAmmo;
+	GameDestroyableWeapon = GameConfig().Profile[CurrentProfile].DestroyableWeapon;
+	GameWeaponTargetingMode = GameConfig().Profile[CurrentProfile].WeaponTargetingMode;
+	GameSpaceShipControlMode = GameConfig().Profile[CurrentProfile].SpaceShipControlMode;
 
-	GameEngineSystem = Setup.Profile[CurrentProfile].EngineSystem;
+	GameEngineSystem = GameConfig().Profile[CurrentProfile].EngineSystem;
 	// если симулятивный режим, ставим 1...
 	if (GameSpaceShipControlMode == 1)
 		if (GameEngineSystem == 0) GameEngineSystem = 1;
 
-	GameTargetingSystem = Setup.Profile[CurrentProfile].TargetingSystem;
-	GameAdvancedProtectionSystem = Setup.Profile[CurrentProfile].AdvancedProtectionSystem;
-	GamePowerSystem = Setup.Profile[CurrentProfile].PowerSystem;
-	GameTargetingMechanicSystem = Setup.Profile[CurrentProfile].TargetingMechanicSystem;
-	GameMoney = Setup.Profile[CurrentProfile].Money*1.0f;
+	GameTargetingSystem = GameConfig().Profile[CurrentProfile].TargetingSystem;
+	GameAdvancedProtectionSystem = GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem;
+	GamePowerSystem = GameConfig().Profile[CurrentProfile].PowerSystem;
+	GameTargetingMechanicSystem = GameConfig().Profile[CurrentProfile].TargetingMechanicSystem;
+	GameMoney = GameConfig().Profile[CurrentProfile].Money * 1.0f;
 
 	// убираем данные этого уровня
-	GameExperience = (Setup.Profile[CurrentProfile].Experience - Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission])*1.0f;
+	GameExperience = (GameConfig().Profile[CurrentProfile].Experience - GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission]) * 1.0f;
 
 	// забираем эксклюзивное управление мышкой и клавой, если оконный режим
-	if (Setup.BPP == 0)
+	if (GameConfig().BPP == 0)
 		SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_TRUE);
 
 
@@ -635,7 +636,7 @@ void InitGame()
 	// инициализация счета времени (всегда первым)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_InitTimeThread(1);
-	vw_SetTimeThreadSpeed(1, Setup.GameSpeed);
+	vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
 
 
 
@@ -680,9 +681,9 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
-	vw_SetCameraLocation(sVECTOR3D(0,65,-100+10));
-	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,10), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
+	vw_SetCameraLocation(sVECTOR3D(0, 65, -100+10));
+	vw_SetCameraMoveAroundPoint(sVECTOR3D(0, 0, 10), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -736,7 +737,7 @@ void InitGame()
 		sharedLife3ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
 		sharedLife3ParticleSystem2D->CreationSize = sVECTOR3D(1.0f, 18.0f, 0.0f);
 		sharedLife3ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.InternalWidth - 33.0f, 29.0f, 0.0f));
+		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 	}
 
 	Life2ParticleSystem2D = vw_CreateParticleSystem2D();
@@ -762,7 +763,7 @@ void InitGame()
 		sharedLife2ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
 		sharedLife2ParticleSystem2D->CreationSize = sVECTOR3D(18.0f, 1.0f, 0.0f);
 		sharedLife2ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
-		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D(Setup.InternalWidth - 33.0f, 29.0f, 0.0f));
+		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 	}
 
 	LifeParticleSystem2D = vw_CreateParticleSystem2D();
@@ -792,7 +793,7 @@ void InitGame()
 		sharedLifeParticleSystem2D->IsMagnet = true;
 		sharedLifeParticleSystem2D->MagnetFactor = 25.0f;
 		sharedLifeParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare.tga");
-		sharedLifeParticleSystem2D->MoveSystem(sVECTOR3D(Setup.InternalWidth - 33.0f, 29.0f, 0.0f));
+		sharedLifeParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 		sharedLifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));
 	}
 
@@ -898,7 +899,7 @@ void RealExitGame()
 	vw_ReleaseParticleSystem(Shild2);
 
 	// отдаем управление
-	if (Setup.BPP == 0)
+	if (GameConfig().BPP == 0)
 		SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
 
 	// выгружаем AI файл
@@ -911,30 +912,30 @@ void RealExitGame()
 void ExitGameWithSave()
 {
 	// данные по деньгам и опыту
-	Setup.Profile[CurrentProfile].Money = (int)GameMoney;
+	ChangeGameConfig().Profile[CurrentProfile].Money = static_cast<int>(GameMoney);
 
 	// если получили больше опыта
-	if (Setup.Profile[CurrentProfile].Experience < (int)GameExperience) {
-		int Incr = (int)GameExperience - Setup.Profile[CurrentProfile].Experience;
-		Setup.Profile[CurrentProfile].ByMissionExperience[CurrentMission] += Incr;
-		Setup.Profile[CurrentProfile].Experience += Incr;
+	if (GameConfig().Profile[CurrentProfile].Experience < static_cast<int>(GameExperience)) {
+		int Incr = static_cast<int>(GameExperience) - GameConfig().Profile[CurrentProfile].Experience;
+		ChangeGameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission] += Incr;
+		ChangeGameConfig().Profile[CurrentProfile].Experience += Incr;
 	}
 	// увеличиваем счетчик пройденной миссии
-	Setup.Profile[CurrentProfile].MissionReplayCount[CurrentMission] ++;
+	ChangeGameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]++;
 
 	// состояние корпуса коробля
-	Setup.Profile[CurrentProfile].ShipHullCurrentStrength = PlayerFighter->Strength;
+	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = PlayerFighter->Strength;
 
 	// учет состояния оружия
-	for (int i=0; i<PlayerFighter->WeaponQuantity; i++) {
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
+	for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			// если оружие было уничтожено во время игры
 			if (PlayerFighter->Weapon[i]->Strength <= 0.0f) {
-				Setup.Profile[CurrentProfile].WeaponAmmo[i] = 0;
-				Setup.Profile[CurrentProfile].Weapon[i] = 0;
+				ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
+				ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
 			} else {
 				// если все ок, нужно запомнить сколько осталось в боекомплекте
-				Setup.Profile[CurrentProfile].WeaponAmmo[i] = PlayerFighter->Weapon[i]->Ammo;
+				ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = PlayerFighter->Weapon[i]->Ammo;
 			}
 		}
 	}
@@ -942,8 +943,8 @@ void ExitGameWithSave()
 	// ставим следующую миссию
 	CurrentMission ++;
 	// перемещаем ограничитель дальше, если это нужно
-	if (Setup.Profile[CurrentProfile].OpenLevelNum < CurrentMission)
-		Setup.Profile[CurrentProfile].OpenLevelNum = CurrentMission;
+	if (GameConfig().Profile[CurrentProfile].OpenLevelNum < CurrentMission)
+		ChangeGameConfig().Profile[CurrentProfile].OpenLevelNum = CurrentMission;
 
 	// если дальше уже ничего нет, просто снимаем все... пусть игрок сам выберет
 	if (CurrentMission > AllMission-1) {
@@ -966,7 +967,7 @@ void ExitGameWithSave()
 		}
 
 
-	Setup.Profile[CurrentProfile].LastMission = CurrentMission;
+	ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
 
 	ExitGame();
 }
@@ -1080,21 +1081,19 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Выводим верхнюю информационную панель
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.InternalWidth == 1024) {
+	if (GameConfig().InternalWidth == 1024) {
 		SrcRect(0, 0, 1024, 74);
 		DstRect(0, 0, 1024, 74);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/game_panel.tga"), true, 1.0f);
 	}
-	if (Setup.InternalWidth == 1228) {
+	if (GameConfig().InternalWidth == 1228) {
 		SrcRect(0, 0, 466, 73);
 		DstRect(0, 0, 466, 73);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
 
-
 		SrcRect(1, 74, 150, 145);
 		DstRect(540, 0, 540+149, 71);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
-
 
 		SrcRect(150, 74, 610, 145);
 		DstRect(768, 0, 768+460, 71);
@@ -1322,15 +1321,14 @@ void DrawGame()
 			for (int i=0; i<DrawLifeNum; i++) {
 				// получаем данные текущего фрагмента
 				SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
-				if (Setup.InternalWidth == 1024) {
+				if (GameConfig().InternalWidth == 1024)
 					DstRect = SrcRect;
-				}
-				if (Setup.InternalWidth == 1228) {
+				if (GameConfig().InternalWidth == 1228)
 					DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
-				}
 				// находим прозначность
 				float Transp = (CurrentDrawLifeNumFull * 19) - i;
-				if (Transp > 1.0f) Transp = 1.0f;
+				if (Transp > 1.0f)
+					Transp = 1.0f;
 
 				// texture's UV coordinates
 				float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
@@ -1430,14 +1428,15 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Скорость игры, если была изменена
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (GameContentTransp <= 0.0f) CurrentGameSpeed = Setup.GameSpeed;
+	if (GameContentTransp <= 0.0f)
+		CurrentGameSpeed = GameConfig().GameSpeed;
 	if (CurrentGameSpeedShowTime > 0.0f) {
 		float GameSpeedShowTransp = CurrentGameSpeedShowTime;
 		if (GameSpeedShowTransp>1.0f) GameSpeedShowTransp = 1.0f;
 
 		vw_SetFontSize(20);
-		int TmpFontSize = (Setup.InternalWidth-vw_FontSize("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed))/2;
-		vw_DrawFont(TmpFontSize, 80, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
+		int TmpFontSize = (GameConfig().InternalWidth - vw_FontSize("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed)) / 2;
+		vw_DrawFont(TmpFontSize, 80, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f * GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
 		ResetFontSize();
 
 		CurrentGameSpeedShowTime -= TimeDelta;
@@ -1488,14 +1487,14 @@ void DrawGame()
 			GameContentTransp = 1.0f;
 			NeedShowGameMenu = false;
 			DrawGameCursor = true;
-			if (Setup.BPP == 0) {
+			if (GameConfig().BPP == 0) {
 				SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_FALSE);
 				SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 			}
 		}
 		// плавно возвращаем игре сокрость
 		if (GameContentTransp != 0.0f)
-			vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp)*Setup.GameSpeed);
+			vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp) * GameConfig().GameSpeed);
 	}
 	// делаем полавное угасание меню
 	if (NeedHideGameMenu) {
@@ -1504,13 +1503,13 @@ void DrawGame()
 			GameContentTransp = 0.0f;
 			NeedHideGameMenu = false;
 			GameMenuStatus = eGameMenuStatus::GAME_MENU;
-			if (Setup.BPP == 0) {
+			if (GameConfig().BPP == 0) {
 				SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_TRUE);
 				SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 			}
 		}
 		// останавливаем игру
-		vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp)*Setup.GameSpeed);
+		vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp) * GameConfig().GameSpeed);
 	}
 	LastGameUpdateTime = vw_GetTimeThread(0);
 
@@ -1519,7 +1518,7 @@ void DrawGame()
 		if (GameMissionCompleteStatus) {
 			// выводим подложку меню
 			SrcRect(2, 2, 564-2, 564-2);
-			DstRect(Setup.InternalWidth / 2 - 256 - 26, 128 - 28, Setup.InternalWidth / 2 - 256 + 534, 128 + 532);
+			DstRect(GameConfig().InternalWidth / 2 - 256 - 26, 128 - 28, GameConfig().InternalWidth / 2 - 256 + 534, 128 + 532);
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					   true, 1.0f*GameContentTransp);
 			// название меню
@@ -1529,63 +1528,63 @@ void DrawGame()
 				Size = 190;
 				WScale = -190;
 			}
-			vw_DrawFont(Setup.InternalWidth/2-123-Size/2, 128+21, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("Mission Complete"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 123 - Size / 2, 128+21, WScale, 0, 1.0f, 1.0f, 1.0f, 0.0f, 0.7f * GameContentTransp, vw_GetText("Mission Complete"));
 
 
 			int Y = 128+90;
 			int Prir = 36;
 
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("Type"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, 1.0f, 1.0f, 0.0f, 0.5f * GameContentTransp, vw_GetText("Type"));
 			Size = vw_FontSize(vw_GetText("Killed"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
-			vw_DrawFont(Setup.InternalWidth/2-31+Size/2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("Killed"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 31 + Size / 2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f * GameContentTransp, vw_GetText("Killed"));
 			Size = vw_FontSize(vw_GetText("Bonus"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
-			vw_DrawFont(Setup.InternalWidth/2+97+Size/2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f*GameContentTransp, vw_GetText("Bonus"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 97 + Size / 2, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 0.5f * GameContentTransp, vw_GetText("Bonus"));
 			Y += Prir;
 
 			WScale = -210;
 
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  vw_GetText("Alien Spaceships"));
-			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienShipsKillQuant);
-			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AlienShipsKillBonus);
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  vw_GetText("Alien Spaceships"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%04i", AlienShipsKillQuant);
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%06i", (int)AlienShipsKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Alien Motherships"));
-			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienMotherShipsKillQuant);
-			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AlienMotherShipsKillQuant);
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp, vw_GetText("Alien Motherships"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%04i", AlienMotherShipsKillQuant);
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%06i", (int)AlienMotherShipsKillQuant);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Pirate Spaceships"));
-			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateShipsKillQuant);
-			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateShipsKillBonus);
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp, vw_GetText("Pirate Spaceships"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%04i", PirateShipsKillQuant);
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%06i", (int)PirateShipsKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Pirate Vehicles"));
-			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateVehiclesKillQuant);
-			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateVehiclesKillBonus);
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp, vw_GetText("Pirate Vehicles"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%04i", PirateVehiclesKillQuant);
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%06i", (int)PirateVehiclesKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Pirate Buildings"));
-			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", PirateBuildingsKillQuant);
-			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)PirateBuildingsKillBonus);
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp, vw_GetText("Pirate Buildings"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%04i", PirateBuildingsKillQuant);
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%06i", (int)PirateBuildingsKillBonus);
 			Y += Prir;
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp, vw_GetText("Asteroids"));
-			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AsteroidsKillQuant);
-			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)AsteroidsKillBonus);
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp, vw_GetText("Asteroids"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%04i", AsteroidsKillQuant);
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%06i", (int)AsteroidsKillBonus);
 
 			Y += (int)(Prir*1.5);
-			vw_DrawFont(Setup.InternalWidth/2-256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 1.0f*GameContentTransp, vw_GetText("Total"));
-			vw_DrawFont(Setup.InternalWidth/2+10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%04i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
+			vw_DrawFont(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, 1.0f,1.0f,0.0f, 1.0f * GameContentTransp, vw_GetText("Total"));
+			vw_DrawFont(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%04i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
 					       PirateShipsKillQuant+PirateVehiclesKillQuant+PirateBuildingsKillQuant+AsteroidsKillQuant);
-			vw_DrawFont(Setup.InternalWidth/2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f*GameContentTransp,  "%06i", (int)(GameMoney - Setup.Profile[CurrentProfile].Money*1.0f));
+			vw_DrawFont(GameConfig().InternalWidth / 2+126, Y, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 1.0f * GameContentTransp,  "%06i", (int)(GameMoney - GameConfig().Profile[CurrentProfile].Money * 1.0f));
 
 			// выводим кнопки меню
-			int X = Setup.InternalWidth/2-192;
+			int X = GameConfig().InternalWidth / 2 - 192;
 			Y = 545;
 			// продолжение игры
 			if (DrawButton384(X,Y, vw_GetText("NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
@@ -1599,18 +1598,18 @@ void DrawGame()
 			// основное меню игры
 			case eGameMenuStatus::GAME_MENU: {
 				// выводим подложку меню
-				SrcRect(2,2,564-2,564-2);
-				DstRect(Setup.InternalWidth/2-256+4-30,128+2-30,Setup.InternalWidth/2-256+564-30,128+564-2-30);
+				SrcRect(2, 2, 564-2, 564-2);
+				DstRect(GameConfig().InternalWidth / 2 - 256+4-30, 128+2-30, GameConfig().InternalWidth / 2 - 256+564-30, 128+564-2-30);
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
 					  true, GameContentTransp);
 				// название меню
 				int SizeI = 17 + (234-vw_FontSize(vw_GetText("GAME MENU")))/2;
-				vw_DrawFont(Setup.InternalWidth/2-256+SizeI, 128+22, 0, 0, 1.0f, 1.0f,1.0f,0.0f, 0.7f*GameContentTransp, vw_GetText("GAME MENU"));
+				vw_DrawFont(GameConfig().InternalWidth / 2 - 256 + SizeI, 128+22, 0, 0, 1.0f, 1.0f, 1.0f, 0.0f, 0.7f * GameContentTransp, vw_GetText("GAME MENU"));
 
 				// выводим кнопки меню
 
 
-				int X = Setup.InternalWidth/2-192;
+				int X = GameConfig().InternalWidth / 2 - 192;
 				int Y = 225;
 				int Prir = 100;
 
@@ -1683,7 +1682,7 @@ void DrawGame()
 
 			// вывод надписи пауза
 			SrcRect(0, 0, 256, 64);
-			DstRect(Setup.InternalWidth - 256 + 60, 768 - 54, Setup.InternalWidth + 60, 768+10);
+			DstRect(GameConfig().InternalWidth - 256 + 60, 768 - 54, GameConfig().InternalWidth + 60, 768 + 10);
 			if (GameContentTransp == 1.0f)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/pause.tga")), true, CurrentAlert2*GameContentTransp);
 			else
@@ -1763,14 +1762,14 @@ void DrawGame()
 			NeedOnGame = false;
 		}
 
-		SrcRect(0,0,2,2);
-		DstRect(0,0,Setup.InternalWidth,768);
+		SrcRect(0, 0, 2, 2);
+		DstRect(0, 0, GameConfig().InternalWidth, 768);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
 	// черное затемнение, если нужно
 	if (NeedOffGame) {
-		GameBlackTransp = 2.4f*(vw_GetTimeThread(0) - LastGameOnOffUpdateTime);
+		GameBlackTransp = 2.4f * (vw_GetTimeThread(0) - LastGameOnOffUpdateTime);
 		if (GameBlackTransp >= 1.0f) {
 			GameBlackTransp = 1.0f;
 			NeedOffGame = false;
@@ -1780,8 +1779,8 @@ void DrawGame()
 			ComBuffer = NewComBuffer;
 		}
 
-		SrcRect(0,0,2,2);
-		DstRect(0,0,Setup.InternalWidth,768);
+		SrcRect(0, 0, 2, 2);
+		DstRect(0, 0, GameConfig().InternalWidth, 768);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 

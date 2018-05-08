@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "../ui/font.h"
 #include "../object3d/explosion/space_explosion/space_explosion.h"
 #include "../object3d/space_object/space_object.h"
@@ -228,26 +229,26 @@ void InitGamePlayerShip()
 	GameNPCArmorPenalty = 1;
 
 	// если не создано, здесь будет ноль скорее всего
-	if (Setup.Profile[CurrentProfile].Ship == 0)
+	if (GameConfig().Profile[CurrentProfile].Ship == 0)
 		std::cerr << __func__ << "(): " << "Error, Pilot Profile not created.\n";
 
 	PlayerFighter = new cEarthSpaceFighter;
-	PlayerFighter->Create(Setup.Profile[CurrentProfile].Ship);
+	PlayerFighter->Create(GameConfig().Profile[CurrentProfile].Ship);
 	PlayerFighter->DeviationOn = true;
 	PlayerFighter->Deviation[0] = sVECTOR3D(0.0f, 0.0f, 1.0f);
 
 	PlayerFighter->ID = -1;
 	PlayerFighter->ObjectStatus = 3;
-	PlayerFighter->StrengthStart *= Setup.Profile[CurrentProfile].ShipHullUpgrade;
-	PlayerFighter->Strength = Setup.Profile[CurrentProfile].ShipHullCurrentStrength;
+	PlayerFighter->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
+	PlayerFighter->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 	PlayerFighter->ShowStrength = false;
 
 	// создаем оружие
 	for (int i=0; i<PlayerFighter->WeaponQuantity; i++) {
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
-			if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
-				PlayerFighter->Weapon[i]->Ammo = Setup.Profile[CurrentProfile].WeaponAmmo[i];
-				PlayerFighter->WeaponYAngle[i] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
+		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
+			if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
+				PlayerFighter->Weapon[i]->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
+				PlayerFighter->WeaponYAngle[i] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
 			}
 		}
 	}
@@ -259,7 +260,7 @@ void InitGamePlayerShip()
 		SetEarthSpaceFighterArmour(PlayerFighter, 7);
 	else
 		// установка защитного слоя (синяя броня), который снижает наносимые повреждения
-		SetEarthSpaceFighterArmour(PlayerFighter, Setup.Profile[CurrentProfile].ShipHullUpgrade-1);
+		SetEarthSpaceFighterArmour(PlayerFighter, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
 
@@ -273,7 +274,7 @@ void InitGamePlayerShip()
 
 
 
-	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 3) {
+	if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem == 3) {
 		Shild1 = vw_CreateParticleSystem();
 		if (auto sharedShild1 = Shild1.lock()) {
 			sharedShild1->ColorStart.r = 0.20f;
@@ -306,7 +307,7 @@ void InitGamePlayerShip()
 		ShildStartHitStatus = 100.0f;
 		ShildEnergyStatus = 1.0f;
 	}
-	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 4) {
+	if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem == 4) {
 		Shild1 = vw_CreateParticleSystem();
 		if (auto sharedShild1 = Shild1.lock()) {
 			sharedShild1->ColorStart.r = 0.50f;
@@ -465,7 +466,7 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Missile Detected")))/2;
+			int TmpFontSize = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("Missile Detected"))) / 2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("Missile Detected"));
 			ResetFontSize();
 			WarningMessagesCount++;
@@ -475,7 +476,7 @@ void GamePlayerShip()
 			} else if (VoiceMissileDetectedStatus) {
 				// визуальный вывод - выводим постоянно
 				vw_SetFontSize(24);
-				int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Missile Detected")))/2;
+				int TmpFontSize = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("Missile Detected"))) / 2;
 				vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.5f,0.0f, CurrentAlert3, vw_GetText("Missile Detected"));
 				ResetFontSize();
 				WarningMessagesCount++;
@@ -532,7 +533,7 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			int TmpFontSize = (Setup.InternalWidth-vw_FontSize(vw_GetText("Collision Course Detected")))/2;
+			int TmpFontSize = (GameConfig().InternalWidth - vw_FontSize(vw_GetText("Collision Course Detected"))) / 2;
 			vw_DrawFont(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, 1.0f,0.0f,0.0f, CurrentAlert3, vw_GetText("Collision Course Detected"));
 			ResetFontSize();
 			WarningMessagesCount++;
@@ -585,7 +586,7 @@ void GamePlayerShip()
 		bool NeedSkip = false;
 
 		// мышка
-		if (Setup.MouseControl) {
+		if (GameConfig().MouseControl) {
 			SDL_GetMouseState(&LastMouseXR, &LastMouseYR);
 
 			int X, Y;
@@ -596,11 +597,11 @@ void GamePlayerShip()
 			} else {
 				if (X != LastMouseX || Y != LastMouseY) {
 					// 0.9+0.1 = 1.0 - минимум, всегда 1.0 должен быть!
-					float Koef = 0.9f+Setup.ControlSensivity/10.0f;
+					float Koef = 0.9f + GameConfig().ControlSensivity / 10.0f;
 
 					// при любом реальном разрешении у нас x и y меняются с учетом AspectRatio
-					float AWw2 = Setup.InternalWidth/2.0f;
-					float AHw2 = Setup.InternalHeight/2.0f;
+					float AWw2 = GameConfig().InternalWidth / 2.0f;
+					float AHw2 = GameConfig().InternalHeight / 2.0f;
 
 					MoveFB += (-(Y-LastMouseY)/AHw2)*Koef;
 					MoveLR += ( (X-LastMouseX)/AWw2)*Koef;
@@ -633,19 +634,19 @@ void GamePlayerShip()
 
 				// -3000 3000 мертвая зона
 				if (Y > 3000) {
-					MoveFB -= 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveFB*PlayerFighter->TimeDelta;
+					MoveFB -= 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveFB * PlayerFighter->TimeDelta;
 					NeedSkip = true;
 				}
 				if (Y < -3000) {
-					MoveFB += 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveFB*PlayerFighter->TimeDelta;
+					MoveFB += 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveFB * PlayerFighter->TimeDelta;
 					NeedSkip = true;
 				}
 				if (X < -3000) {
-					MoveLR -= 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveLR*PlayerFighter->TimeDelta;
+					MoveLR -= 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveLR * PlayerFighter->TimeDelta;
 					NeedSkip = true;
 				}
 				if (X > 3000) {
-					MoveLR += 2.0f*(Setup.ControlSensivity/10.0f)*AccMoveLR*PlayerFighter->TimeDelta;
+					MoveLR += 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveLR * PlayerFighter->TimeDelta;
 					NeedSkip = true;
 				}
 			}
@@ -654,10 +655,14 @@ void GamePlayerShip()
 
 		// клавиатура
 		if (!NeedSkip) {
-			if (vw_GetKeyStatus(Setup.KeyBoardDown)) MoveFB -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
-			if (vw_GetKeyStatus(Setup.KeyBoardUp)) MoveFB += 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
-			if (vw_GetKeyStatus(Setup.KeyBoardLeft)) MoveLR -= 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
-			if (vw_GetKeyStatus(Setup.KeyBoardRight)) MoveLR += 2.0f*(Setup.ControlSensivity/10.0f)*PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(GameConfig().KeyBoardDown))
+				MoveFB -= 2.0f * (GameConfig().ControlSensivity / 10.0f) * PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(GameConfig().KeyBoardUp))
+				MoveFB += 2.0f * (GameConfig().ControlSensivity / 10.0f) * PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(GameConfig().KeyBoardLeft))
+				MoveLR -= 2.0f * (GameConfig().ControlSensivity / 10.0f) * PlayerFighter->TimeDelta;
+			if (vw_GetKeyStatus(GameConfig().KeyBoardRight))
+				MoveLR += 2.0f * (GameConfig().ControlSensivity / 10.0f) * PlayerFighter->TimeDelta;
 		}
 
 
@@ -675,7 +680,7 @@ void GamePlayerShip()
 
 		// находим конечную точку перемещения
 		sVECTOR3D PlayerFighterEndLocation;
-		if (Setup.InternalWidth == 1024)
+		if (GameConfig().InternalWidth == 1024)
 			PlayerFighterEndLocation = sVECTOR3D(-(73.15f-PlayerFighter->Width/2.0f+MoveFB*(20.05f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
 		else
 			PlayerFighterEndLocation = sVECTOR3D(-(70.0f-PlayerFighter->Width/2.0f+MoveFB*(23.2f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
@@ -686,7 +691,7 @@ void GamePlayerShip()
 		// если есть двигатель
 		if (GameEngineSystem != 0) {
 			// в зависимости от типа управления выполняем действия
-			if (Setup.Profile[CurrentProfile].SpaceShipControlMode == 1) {
+			if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode == 1) {
 				// аркадный режим
 
 				// запускаем маневровые двигатели, если тянем корабль в сторону
@@ -786,29 +791,30 @@ void GamePlayerShip()
 
 
 		// если стандартный аспект рейшен, надо смещать камеру
-		if (Setup.InternalWidth == 1024)
-			if (Setup.CameraModeWithStandardAspectRatio == 0) {
-				float DeviationSize = 14.55f;
+		if ((GameConfig().InternalWidth == 1024) &&
+		    (GameConfig().CameraModeWithStandardAspectRatio == 0)) {
+			float DeviationSize = 14.55f;
 
+			if (PlayerFighter->Location.x < 0.0f) {
+				float Diff = PlayerFighter->Location.x / 3.5f;
+				if (Diff < -DeviationSize)
+					Diff = -DeviationSize;
 
-				if (PlayerFighter->Location.x < 0.0f) {
-					float Diff = PlayerFighter->Location.x/3.5f;
-					if (Diff < -DeviationSize) Diff = -DeviationSize;
+				sVECTOR3D TMPCameraLocation;
+				vw_GetCameraLocation(&TMPCameraLocation);
+				TMPCameraLocation.x = Diff;
+				vw_SetCameraLocation(TMPCameraLocation);
+			} else {
+				float Diff = PlayerFighter->Location.x / 3.5f;
+				if (Diff > DeviationSize)
+					Diff = DeviationSize;
 
-					sVECTOR3D TMPCameraLocation;
-					vw_GetCameraLocation(&TMPCameraLocation);
-					TMPCameraLocation.x = Diff;
-					vw_SetCameraLocation(TMPCameraLocation);
-				} else {
-					float Diff = PlayerFighter->Location.x/3.5f;
-					if (Diff > DeviationSize) Diff = DeviationSize;
-
-					sVECTOR3D TMPCameraLocation;
-					vw_GetCameraLocation(&TMPCameraLocation);
-					TMPCameraLocation.x = Diff;
-					vw_SetCameraLocation(TMPCameraLocation);
-				}
+				sVECTOR3D TMPCameraLocation;
+				vw_GetCameraLocation(&TMPCameraLocation);
+				TMPCameraLocation.x = Diff;
+				vw_SetCameraLocation(TMPCameraLocation);
 			}
+		}
 
 	}
 
@@ -831,79 +837,83 @@ void GamePlayerShip()
 			SecondaryGroupCurrentFireWeaponDelay -= PlayerFighter->TimeDelta;
 
 			// находим кол-во оружия в группах
-			for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-				if (Setup.Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
+			for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+				if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
 
-					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 1 ||
-					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) {
+					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 1 ||
+					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3) {
 						PrimCount++;
 						PrimTime += PlayerFighter->Weapon[i]->NextFireTime;
 					}
 
-					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 2 ||
-					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) {
+					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 2 ||
+					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3) {
 						SecCount++;
 						SecTime += PlayerFighter->Weapon[i]->NextFireTime;
 					}
-
 				}
+			}
 
 
 			int PrimNum = 0;
 			int SecNum = 0;
 
-			for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-				if (Setup.Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
+			for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+				if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
 
 					PlayerFighter->WeaponSetFire[i] = false;
 
 					// получаем данные, в какую группу относится
 					bool primary_fire = false;
 					bool secondary_fire = false;
-					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 1 ||
-					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) primary_fire = true;
-					if (Setup.Profile[CurrentProfile].WeaponControl[i] == 2 ||
-					    Setup.Profile[CurrentProfile].WeaponControl[i] ==3) secondary_fire = true;
+					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 1 ||
+					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3)
+						primary_fire = true;
+					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 2 ||
+					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3)
+						secondary_fire = true;
 
 					// мышка
-					if (Setup.MouseControl) {
+					if (GameConfig().MouseControl) {
 						// primary fire
 						if (primary_fire)
-							if (SDL_MouseCurrentStatus[Setup.MousePrimary]) {
-								if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
+							if (SDL_MouseCurrentStatus[GameConfig().MousePrimary]) {
+								if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
 									PrimNum++;
 									if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
 									    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
-										PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
+										PrimaryGroupCurrentFireWeaponDelay = PrimTime / (PrimCount * PrimCount);
 										PlayerFighter->WeaponSetFire[i] = true;
-										PrimaryGroupCurrentFireWeaponNum ++;
-										if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+										PrimaryGroupCurrentFireWeaponNum++;
+										if (PrimaryGroupCurrentFireWeaponNum > PrimCount)
+											PrimaryGroupCurrentFireWeaponNum = 1;
 									}
 								}
 							}
 
 						// secondary fire
 						if (secondary_fire)
-							if (SDL_MouseCurrentStatus[Setup.MouseSecondary]) {
-								if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
+							if (SDL_MouseCurrentStatus[GameConfig().MouseSecondary]) {
+								if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
 									SecNum++;
 									if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
 									    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
-										SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
+										SecondaryGroupCurrentFireWeaponDelay = SecTime / (SecCount * SecCount);
 										PlayerFighter->WeaponSetFire[i] = true;
-										SecondaryGroupCurrentFireWeaponNum ++;
-										if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+										SecondaryGroupCurrentFireWeaponNum++;
+										if (SecondaryGroupCurrentFireWeaponNum > SecCount)
+											SecondaryGroupCurrentFireWeaponNum = 1;
 									}
 								}
 							}
 
 						// альтернативное управление
-						if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 2)
-							if (SDL_MouseCurrentStatus[Setup.Profile[CurrentProfile].WeaponAltControlData[i]])
+						if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 2)
+							if (SDL_MouseCurrentStatus[GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]])
 								PlayerFighter->WeaponSetFire[i] = true;
 					}
 
@@ -913,41 +923,43 @@ void GamePlayerShip()
 					if (Joystick != nullptr) {
 						// primary fire
 						if (primary_fire)
-							if (SDL_JoystickGetButton(Joystick, Setup.JoystickPrimary) == 1) {
-								if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
+							if (SDL_JoystickGetButton(Joystick, GameConfig().JoystickPrimary) == 1) {
+								if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
 									PrimNum++;
 									if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
 									    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
-										PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
+										PrimaryGroupCurrentFireWeaponDelay = PrimTime / (PrimCount * PrimCount);
 										PlayerFighter->WeaponSetFire[i] = true;
-										PrimaryGroupCurrentFireWeaponNum ++;
-										if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+										PrimaryGroupCurrentFireWeaponNum++;
+										if (PrimaryGroupCurrentFireWeaponNum > PrimCount)
+											PrimaryGroupCurrentFireWeaponNum = 1;
 									}
 								}
 							}
 
 						// secondary fire
 						if (secondary_fire)
-							if (SDL_JoystickGetButton(Joystick, Setup.JoystickSecondary) == 1) {
-								if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
+							if (SDL_JoystickGetButton(Joystick, GameConfig().JoystickSecondary) == 1) {
+								if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
 									SecNum++;
 									if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
 									    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
-										SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
+										SecondaryGroupCurrentFireWeaponDelay = SecTime / (SecCount * SecCount);
 										PlayerFighter->WeaponSetFire[i] = true;
-										SecondaryGroupCurrentFireWeaponNum ++;
-										if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+										SecondaryGroupCurrentFireWeaponNum++;
+										if (SecondaryGroupCurrentFireWeaponNum > SecCount)
+											SecondaryGroupCurrentFireWeaponNum = 1;
 									}
 								}
 							}
 
 						// альтернативное управление
-						if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 3)
-							if (SDL_JoystickGetButton(Joystick, Setup.Profile[CurrentProfile].WeaponAltControlData[i]) == 1)
+						if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 3)
+							if (SDL_JoystickGetButton(Joystick, GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]) == 1)
 								PlayerFighter->WeaponSetFire[i] = true;
 					}
 #endif
@@ -956,45 +968,47 @@ void GamePlayerShip()
 
 					// primary fire
 					if (primary_fire)
-						if (vw_GetKeyStatus(Setup.KeyBoardPrimary)) {
-							if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
+						if (vw_GetKeyStatus(GameConfig().KeyBoardPrimary)) {
+							if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
 								PlayerFighter->WeaponSetFire[i] = true;
 							} else {
 								PrimNum++;
 								if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
 								    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
-									PrimaryGroupCurrentFireWeaponDelay = PrimTime/(PrimCount*PrimCount);
+									PrimaryGroupCurrentFireWeaponDelay = PrimTime / (PrimCount * PrimCount);
 									PlayerFighter->WeaponSetFire[i] = true;
-									PrimaryGroupCurrentFireWeaponNum ++;
-									if (PrimaryGroupCurrentFireWeaponNum > PrimCount) PrimaryGroupCurrentFireWeaponNum = 1;
+									PrimaryGroupCurrentFireWeaponNum++;
+									if (PrimaryGroupCurrentFireWeaponNum > PrimCount)
+										PrimaryGroupCurrentFireWeaponNum = 1;
 								}
 							}
 						}
 
 					// secondary fire
 					if (secondary_fire)
-						if (vw_GetKeyStatus(Setup.KeyBoardSecondary)) {
-							if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
+						if (vw_GetKeyStatus(GameConfig().KeyBoardSecondary)) {
+							if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
 								PlayerFighter->WeaponSetFire[i] = true;
 							} else {
 								SecNum++;
 								if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
 								    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
-									SecondaryGroupCurrentFireWeaponDelay = SecTime/(SecCount*SecCount);
+									SecondaryGroupCurrentFireWeaponDelay = SecTime / (SecCount * SecCount);
 									PlayerFighter->WeaponSetFire[i] = true;
-									SecondaryGroupCurrentFireWeaponNum ++;
-									if (SecondaryGroupCurrentFireWeaponNum > SecCount) SecondaryGroupCurrentFireWeaponNum = 1;
+									SecondaryGroupCurrentFireWeaponNum++;
+									if (SecondaryGroupCurrentFireWeaponNum > SecCount)
+										SecondaryGroupCurrentFireWeaponNum = 1;
 								}
 							}
 						}
 
 					// альтернативное управление
-					if (Setup.Profile[CurrentProfile].WeaponAltControl[i] == 1)
-						if (vw_GetKeyStatus(Setup.Profile[CurrentProfile].WeaponAltControlData[i]))
+					if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 1)
+						if (vw_GetKeyStatus(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]))
 							PlayerFighter->WeaponSetFire[i] = true;
 
 				}
-
+			}
 		}
 
 
@@ -1061,8 +1075,8 @@ void GamePlayerShip()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// сейчас получаем всю энергию для перезарядки и выстрела
 	// потом лучше будет переделать на постепенный отбор энергии
-	for (int i=0; i<PlayerFighter->WeaponQuantity; i++)
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
+	for (int i = 0; i < PlayerFighter->WeaponQuantity; i++)
+		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			if (PlayerFighter->Weapon[i]->CurrentEnergyAccumulated < PlayerFighter->Weapon[i]->EnergyUse) {
 				// если энергии не достаточно для зарядки орудия
 				if (CurrentPlayerShipEnergy < PlayerFighter->Weapon[i]->EnergyUse) {

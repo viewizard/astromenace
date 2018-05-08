@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 
 
 
@@ -38,7 +39,7 @@ int	GameScore[10];
 
 
 
-void AddTopScores(int Score, char Name[PROFILE_NAME_SIZE], bool Type)
+void AddTopScores(int Score, const char Name[PROFILE_NAME_SIZE], bool Type)
 {
 	// данные буфера
 	int ScoreBuffer = Score;
@@ -66,17 +67,16 @@ void AddTopScores(int Score, char Name[PROFILE_NAME_SIZE], bool Type)
 		}
 	} else {
 		// если нужно установить в основную (удалили профайл)
-		for(int i=0; i<10; i++) {
-			if (ScoreBuffer < Setup.TopScores[i].Score) continue;
-			else {
+		for(int i = 0; i < 10; i++) {
+			if (ScoreBuffer >= GameConfig().TopScores[i].Score) {
 				// сохраняем данные текущей строки
-				int ScoreBuffer2 = Setup.TopScores[i].Score;
+				int ScoreBuffer2 = GameConfig().TopScores[i].Score;
 				char NameBuffer2[PROFILE_NAME_SIZE];
-				strcpy(NameBuffer2, Setup.TopScores[i].Name);
+				strcpy(NameBuffer2, GameConfig().TopScores[i].Name);
 
 				// записываем данные из буфера...
-				Setup.TopScores[i].Score = ScoreBuffer;
-				strcpy(Setup.TopScores[i].Name, NameBuffer);
+				ChangeGameConfig().TopScores[i].Score = ScoreBuffer;
+				strcpy(ChangeGameConfig().TopScores[i].Name, NameBuffer);
 
 				// устанавливаем нужные значения в буфер поиска
 				ScoreBuffer = ScoreBuffer2;
@@ -92,12 +92,12 @@ void AddTopScores(int Score, char Name[PROFILE_NAME_SIZE], bool Type)
 void TopScoresMenu()
 {
 	sRECT SrcRect, DstRect;
-	SrcRect(0,0,2,2);
-	DstRect(0,0,Setup.InternalWidth,768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+	SrcRect(0, 0, 2, 2);
+	DstRect(0, 0, GameConfig().InternalWidth, 768);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
 
 
-	int X1 = Setup.InternalWidth/2 - 362;
+	int X1 = GameConfig().InternalWidth / 2 - 362;
 	int Y1 = 165;
 	int Prir1 = 42;
 
@@ -118,7 +118,7 @@ void TopScoresMenu()
 
 
 
-	int X = (Setup.InternalWidth - 384)/2;
+	int X = (GameConfig().InternalWidth - 384) / 2;
 	int Y = 165+100*5;
 	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;

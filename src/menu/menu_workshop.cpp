@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "../gfx/shadow_map.h"
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
@@ -88,42 +89,41 @@ void WorkshopCreateShip(int Num)
 	GameNPCArmorPenalty = 1;
 
 	WorkshopFighterGame = new cEarthSpaceFighter;
-	WorkshopFighterGame->Create(Setup.Profile[CurrentProfile].Ship);
+	WorkshopFighterGame->Create(GameConfig().Profile[CurrentProfile].Ship);
 	WorkshopFighterGame->DeviationOn = true;
 
 	WorkshopFighterGame->ID = 1000;
 	WorkshopFighterGame->EngineDestroyType = true;
 	WorkshopFighterGame->ShowStrength = false;
 
-	WorkshopFighterGame->StrengthStart *= Setup.Profile[CurrentProfile].ShipHullUpgrade;
-	WorkshopFighterGame->Strength = Setup.Profile[CurrentProfile].ShipHullCurrentStrength;
+	WorkshopFighterGame->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
+	WorkshopFighterGame->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 
 
 	// создаем оружие
-	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++) {
-		if (Setup.Profile[CurrentProfile].Weapon[i] != 0) {
-			if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i+1, Setup.Profile[CurrentProfile].Weapon[i])) {
-				// убираем источник света
-				if (auto sharedFire = WorkshopFighterGame->Weapon[i]->Fire.lock())
-					vw_ReleaseLight(sharedFire->Light);
+	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
+		if (GameConfig().Profile[CurrentProfile].Weapon[i] &&
+		    SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
+			// убираем источник света
+			if (auto sharedFire = WorkshopFighterGame->Weapon[i]->Fire.lock())
+				vw_ReleaseLight(sharedFire->Light);
 
-				WorkshopFighterGame->Weapon[i]->Ammo = Setup.Profile[CurrentProfile].WeaponAmmo[i];
-				WorkshopFighterGame->WeaponYAngle[i] = -Setup.Profile[CurrentProfile].WeaponSlotYAngle[i];
+			WorkshopFighterGame->Weapon[i]->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
+			WorkshopFighterGame->WeaponYAngle[i] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
 
-				sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-				NeedAngle.y += WorkshopFighterGame->WeaponYAngle[i];
-				WorkshopFighterGame->Weapon[i]->SetRotation(NeedAngle);
-			}
+			sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
+			NeedAngle.y += WorkshopFighterGame->WeaponYAngle[i];
+			WorkshopFighterGame->Weapon[i]->SetRotation(NeedAngle);
 		}
 	}
 
 
 	// создаем системы (визуальные)
-	SetEarthSpaceFighterEngine(WorkshopFighterGame, Setup.Profile[CurrentProfile].EngineSystem);
-	if (Setup.Profile[CurrentProfile].AdvancedProtectionSystem == 2)
+	SetEarthSpaceFighterEngine(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].EngineSystem);
+	if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem == 2)
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, 7);
 	else
-		SetEarthSpaceFighterArmour(WorkshopFighterGame, Setup.Profile[CurrentProfile].ShipHullUpgrade-1);
+		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
 	WorkshopFighterGame->SetLocation(sVECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
@@ -224,8 +224,10 @@ void WorkshopCreate()
 	CurrentAlert3 = 1.0f;
 
 	// чтобы только при старте не повоторялись!
-	if (CurrentWorkshopNewFighter == Setup.Profile[CurrentProfile].Ship) CurrentWorkshopNewFighter ++;
-	if (CurrentWorkshopNewFighter > 22) CurrentWorkshopNewFighter = 1;
+	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].Ship)
+		CurrentWorkshopNewFighter++;
+	if (CurrentWorkshopNewFighter > 22)
+		CurrentWorkshopNewFighter = 1;
 
 	WorkshopCreateShip(CurrentWorkshop);
 	WorkshopCreateNewShip();
@@ -352,7 +354,7 @@ void WorkshopMenu()
 
 	// кнопки
 
-	int X = Setup.InternalWidth/2-482;
+	int X = GameConfig().InternalWidth / 2 - 482;
 	int Y = 180+100*5;
 	if (DrawButton128_2(X,Y, vw_GetText("BACK"), MenuContentTransp, false)) {
 		ComBuffer = eCommand::SWITCH_TO_MISSION;
@@ -366,9 +368,10 @@ void WorkshopMenu()
 
 
 
-	X = Setup.InternalWidth/2-320;
+	X = GameConfig().InternalWidth / 2 - 320;
 	bool Off = false;
-	if (CurrentWorkshop == 1) Off = true;
+	if (CurrentWorkshop == 1)
+		Off = true;
 	if (DrawButton200_2(X,Y, vw_GetText("Shipyard"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 1;
 		// используем разные повороты объектов, нужно пересоздать объект
@@ -380,13 +383,15 @@ void WorkshopMenu()
 		DragWeapon = false;
 		WeaponSetupSlot = -1;
 
-		if (Setup.NeedShowHint[1]) SetCurrentDialogBox(eDialogBox::ShipyardTipsAndTricks);
+		if (GameConfig().NeedShowHint[1])
+			SetCurrentDialogBox(eDialogBox::ShipyardTipsAndTricks);
 	}
 
 
-	X = Setup.InternalWidth/2-100;
+	X = GameConfig().InternalWidth / 2 - 100;
 	Off = false;
-	if (CurrentWorkshop == 2) Off = true;
+	if (CurrentWorkshop == 2)
+		Off = true;
 	if (DrawButton200_2(X,Y, vw_GetText("Workshop"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 2;
 		// используем разные повороты объектов, нужно пересоздать объект
@@ -397,13 +402,15 @@ void WorkshopMenu()
 		DragWeapon = false;
 		WeaponSetupSlot = -1;
 
-		if (Setup.NeedShowHint[2]) SetCurrentDialogBox(eDialogBox::SystemsTipsAndTricks);
+		if (GameConfig().NeedShowHint[2])
+			SetCurrentDialogBox(eDialogBox::SystemsTipsAndTricks);
 	}
 
 
-	X = Setup.InternalWidth/2+120;
+	X = GameConfig().InternalWidth / 2 + 120;
 	Off = false;
-	if (CurrentWorkshop == 3) Off = true;
+	if (CurrentWorkshop == 3)
+		Off = true;
 	if (DrawButton200_2(X,Y, vw_GetText("Weaponry"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 3;
 		// используем разные повороты объектов, нужно пересоздать объект
@@ -415,14 +422,16 @@ void WorkshopMenu()
 		DragWeapon = false;
 		WeaponSetupSlot = -1;
 
-		if (Setup.NeedShowHint[3]) SetCurrentDialogBox(eDialogBox::WeaponryTipsAndTricks);
+		if (GameConfig().NeedShowHint[3])
+			SetCurrentDialogBox(eDialogBox::WeaponryTipsAndTricks);
 	}
 
 
 
-	X = Setup.InternalWidth/2+354;
+	X = GameConfig().InternalWidth / 2 + 354;
 	if (DrawButton128_2(X,Y, vw_GetText("START"), MenuContentTransp, false)) {
-		if (Setup.NeedShowHint[4]) SetCurrentDialogBox(eDialogBox::ShortkeyTipsAndTricks);
+		if (GameConfig().NeedShowHint[4])
+			SetCurrentDialogBox(eDialogBox::ShortkeyTipsAndTricks);
 		else {
 			MenuContentTransp = 0.98f; // небольшая "защелка" от быстрых двойных нажатий на кнопку
 			// ничего не тянем... только включили меню
@@ -462,8 +471,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurentDeviation));
 		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
 
-		vw_SetViewport((GLint)((Setup.InternalWidth / 2 - 512) / (Setup.InternalWidth / tmpViewportWidth)), 0,
-			       (GLsizei)(1024 / (Setup.InternalWidth / tmpViewportWidth)), (GLsizei)(768 / (Setup.InternalHeight / tmpViewportHeight)));
+		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) / (GameConfig().InternalWidth / tmpViewportWidth)), 0,
+			       (GLsizei)(1024 / (GameConfig().InternalWidth / tmpViewportWidth)), (GLsizei)(768 / (GameConfig().InternalHeight / tmpViewportHeight)));
 		vw_ResizeScene(45.0f, 1024.0f/768.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 
@@ -475,7 +484,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 		bool ShadowMap = false;
 
-		if (Setup.ShadowMap > 0) {
+		if (GameConfig().ShadowMap > 0) {
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(sVECTOR3D(0,5,0), EffectiveDistance, EffectiveDistance*2);
 
@@ -498,16 +507,15 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 					SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
 			}
 
-		if (Setup.ShadowMap > 0) {
+		if (GameConfig().ShadowMap > 0)
 			ShadowMap_EndFinalRender();
-		}
 
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(SpaceFighter->Engines);
 
 		vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 		vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
-		vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
+		vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 		return;
 	}
 
@@ -516,8 +524,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 	if (Mode == 4) {
 		WorkShopPointCamera = sVECTOR3D(0.0f, 35.0f, -0.01f);
 		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurentDeviation));
-		vw_SetViewport((GLint)((Setup.InternalWidth / 2) / (Setup.InternalWidth / tmpViewportWidth)), 30,
-			       (GLsizei)(512 / (Setup.InternalWidth / tmpViewportWidth)), (GLsizei)(638 / (Setup.InternalHeight / tmpViewportHeight)));
+		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) / (GameConfig().InternalWidth / tmpViewportWidth)), 30,
+			       (GLsizei)(512 / (GameConfig().InternalWidth / tmpViewportWidth)), (GLsizei)(638 / (GameConfig().InternalHeight / tmpViewportHeight)));
 		vw_ResizeScene(45.0f, 512.0f/608.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
@@ -528,7 +536,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 		bool ShadowMap = false;
 
-		if (Setup.ShadowMap > 0) {
+		if (GameConfig().ShadowMap > 0) {
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
@@ -551,16 +559,15 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 					SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
 			}
 
-		if (Setup.ShadowMap > 0) {
+		if (GameConfig().ShadowMap > 0)
 			ShadowMap_EndFinalRender();
-		}
 
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(SpaceFighter->Engines);
 
 		vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 		vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
-		vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
+		vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 		return;
 	}
 
@@ -572,8 +579,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 	if (Mode == 3) {
 		WorkShopPointCamera = sVECTOR3D(0.0f, 10.0f, -34.0f);
 		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
-		vw_SetViewport((GLint)((Setup.InternalWidth / 2) / (Setup.InternalWidth / tmpViewportWidth)), 0,
-			       (GLsizei)(512 / (Setup.InternalWidth / tmpViewportWidth)), (GLsizei)(512 / (Setup.InternalHeight / tmpViewportHeight)));
+		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) / (GameConfig().InternalWidth / tmpViewportWidth)), 0,
+			       (GLsizei)(512 / (GameConfig().InternalWidth / tmpViewportWidth)), (GLsizei)(512 / (GameConfig().InternalHeight / tmpViewportHeight)));
 		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
@@ -585,8 +592,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		sVECTOR3D PointCameraTMP = WorkShopPointCamera;
 		vw_RotatePoint(PointCameraTMP, sVECTOR3D(0.0f, -90.0f, 0.0f));
 		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
-		vw_SetViewport((GLint)((Setup.InternalWidth / 2 - 512) / (Setup.InternalWidth / tmpViewportWidth)), 0,
-			       (GLsizei)(512 / (Setup.InternalWidth / tmpViewportWidth)), (GLsizei)(512 / (Setup.InternalHeight / tmpViewportHeight)));
+		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) / (GameConfig().InternalWidth / tmpViewportWidth)), 0,
+			       (GLsizei)(512 / (GameConfig().InternalWidth / tmpViewportWidth)), (GLsizei)(512 / (GameConfig().InternalHeight / tmpViewportHeight)));
 		vw_ResizeScene(45.0f, 512.0f/512.0f, 1.0f, 2000.0f);
 		vw_Clear(RI_DEPTH_BUFFER);
 		vw_LoadIdentity();
@@ -598,7 +605,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	bool ShadowMap = false;
 
-	if (Setup.ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0) {
 		float EffectiveDistance = 20.0f;
 		ShadowMap_StartRenderToFBO(sVECTOR3D(0,-2,0), EffectiveDistance, EffectiveDistance*2);
 
@@ -622,16 +629,15 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 				SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
 		}
 
-	if (Setup.ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();
-	}
 
 	// рисуем эффекты двигателей только для этой модели
 	vw_DrawParticleSystems(SpaceFighter->Engines);
 
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
-	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
+	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 
 }
 
@@ -654,8 +660,8 @@ void WorkshopDrawWeapon(cWeapon *Weapon)
 	vw_RotatePoint(PointCameraTMP, sVECTOR3D(0.0f, -90.0f, 0.0f));
 
 	Weapon->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
-	vw_SetViewport((GLint)((Setup.InternalWidth / 2 - 448) / (Setup.InternalWidth / tmpViewportWidth)), (GLint)(105 / (Setup.InternalHeight / tmpViewportHeight)),
-		       (GLsizei)(384 / (Setup.InternalWidth / tmpViewportWidth)), (GLsizei)(350 / (Setup.InternalHeight / tmpViewportHeight)));
+	vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 448) / (GameConfig().InternalWidth / tmpViewportWidth)), (GLint)(105 / (GameConfig().InternalHeight / tmpViewportHeight)),
+		       (GLsizei)(384 / (GameConfig().InternalWidth / tmpViewportWidth)), (GLsizei)(350 / (GameConfig().InternalHeight / tmpViewportHeight)));
 	vw_ResizeScene(45.0f, 384.0f/350.0f, 1.0f, 2000.0f);
 	vw_Clear(RI_DEPTH_BUFFER);
 	vw_LoadIdentity();
@@ -666,7 +672,7 @@ void WorkshopDrawWeapon(cWeapon *Weapon)
 	Weapon->Draw(false);
 
 	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
-	vw_ResizeScene(45.0f, Setup.InternalWidth / Setup.InternalHeight, 1.0f, 2000.0f);
+	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
 }
 

@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "alien_space_mothership.h"
-
+#include "../../../config/config.h"
 
 
 struct sAlienSpaceMotherShipData {
@@ -86,7 +86,7 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 	unsigned int EngineQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity;
 
 
-	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this, 0, 2.0f, Setup.UseGLSL120);
+	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this, 0, 2.0f, GameConfig().UseGLSL120);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {

@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
+#include "../config/config.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"
 #include "space_object/space_object.h"
@@ -69,7 +70,7 @@ void DrawAllObject3D(eDrawType DrawType)
 
 	bool ShadowMap = false;
 
-	if (Setup.ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0) {
 		switch (DrawType) {
 		// меню
 		case eDrawType::MENU:
@@ -112,9 +113,8 @@ void DrawAllObject3D(eDrawType DrawType)
 	DrawAllProjectile(false, ShadowMap);
 
 
-	if (Setup.ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();
-	}
 
 	// взрывы
 	DrawAllExplosion(false);
@@ -133,7 +133,7 @@ void DrawAllObject3D(eDrawType DrawType)
 	StarSystemDrawThirdLayer(DrawType);
 
 	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
-	if( Setup.Brightness != 5 ) {
+	if(GameConfig().Brightness != 5) {
 
 		float *buff = new float[4*4]; // RI_2f_XY | RI_1_TEX
 
@@ -145,17 +145,17 @@ void DrawAllObject3D(eDrawType DrawType)
 		buff[k++] = 0.0f;
 
 		buff[k++] = 0.0f;
-		buff[k++] = Setup.InternalHeight;
+		buff[k++] = GameConfig().InternalHeight;
 		buff[k++] = 1.0f;
 		buff[k++] = 1.0f;
 
-		buff[k++] = Setup.InternalWidth;
+		buff[k++] = GameConfig().InternalWidth;
 		buff[k++] = 0.0f;
 		buff[k++] = 0.0f;
 		buff[k++] = 0.0f;
 
-		buff[k++] = Setup.InternalWidth;
-		buff[k++] = Setup.InternalHeight;
+		buff[k++] = GameConfig().InternalWidth;
+		buff[k++] = GameConfig().InternalHeight;
 		buff[k++] = 0.0f;
 		buff[k++] = 1.0f;
 
@@ -163,7 +163,7 @@ void DrawAllObject3D(eDrawType DrawType)
 		GLtexture TileTexture = vw_FindTextureByName("menu/whitepoint.tga");
 		vw_BindTexture(0, TileTexture);
 
-		float BrightnessF = 1.0f + (Setup.Brightness - 5)/5.0f;
+		float BrightnessF = 1.0f + (GameConfig().Brightness - 5) / 5.0f;
 
 		if( BrightnessF > 1.0f ) {
 			vw_SetTextureBlend(true, eTextureBlendFactor::DST_COLOR, eTextureBlendFactor::ONE);

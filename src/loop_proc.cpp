@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "game.h"
+#include "config/config.h"
 
 
 // командный буфер
@@ -164,9 +165,9 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вывод вспомогательной информации
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Setup.ShowFPS) {
+	if (GameConfig().ShowFPS) {
 		// фпс
-		if (Setup.VSync == 0)
+		if (GameConfig().VSync == 0)
 			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f", vw_GetText("fps"), eFPS);
 		else
 			vw_DrawFont(6,5, 0, 0, 1.0f, 1.0f,1.0f,1.0f, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("fps"), eFPS, vw_GetText("On"));
@@ -329,7 +330,7 @@ void Loop_Proc()
 
 	// выключение fps и примитивов
 	if (vw_GetKeyStatus(SDLK_F2)) {
-		Setup.ShowFPS = !Setup.ShowFPS;
+		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 		vw_SetKeyStatus(SDLK_F2, false);
 	}
 
@@ -339,7 +340,7 @@ void Loop_Proc()
 		std::array<char, 128> tmpBuffer;
 		std::strftime(tmpBuffer.data(), tmpBuffer.size(), "/AstroMenaceScreenshot%Y-%m-%d_%H:%M:%S.bmp", std::localtime(&RawTime));
 
-		vw_Screenshot(Setup.Width, Setup.Height, ScreenshotDir + std::string{tmpBuffer.data()});
+		vw_Screenshot(GameConfig().Width, GameConfig().Height, ScreenshotDir + std::string{tmpBuffer.data()});
 		vw_SetKeyStatus(SDLK_PRINTSCREEN, false);
 		vw_SetKeyStatus(SDLK_F12, false);
 	}
@@ -348,50 +349,50 @@ void Loop_Proc()
 	if ((MenuStatus == eMenuStatus::GAME) &&
 	    (GameContentTransp<=0.0f) &&
 	    !GameMissionCompleteStatus) {
-		if (vw_GetKeyStatus(Setup.KeyboardDecreaseGameSpeed)) {
-			Setup.GameSpeed -= 0.1f;
-			if (Setup.GameSpeed < 0.1f)
-				Setup.GameSpeed = 0.1f;
+		if (vw_GetKeyStatus(GameConfig().KeyboardDecreaseGameSpeed)) {
+			ChangeGameConfig().GameSpeed -= 0.1f;
+			if (GameConfig().GameSpeed < 0.1f)
+				ChangeGameConfig().GameSpeed = 0.1f;
 			CurrentGameSpeedShowTime = 2.0f;
-			vw_SetTimeThreadSpeed(1, Setup.GameSpeed);
-			vw_SetKeyStatus(Setup.KeyboardDecreaseGameSpeed, false);
+			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
+			vw_SetKeyStatus(GameConfig().KeyboardDecreaseGameSpeed, false);
 		}
-		if (vw_GetKeyStatus(Setup.KeyboardResetGameSpeed)) {
-			Setup.GameSpeed = 1.5f;
-			vw_SetTimeThreadSpeed(1, Setup.GameSpeed);
+		if (vw_GetKeyStatus(GameConfig().KeyboardResetGameSpeed)) {
+			ChangeGameConfig().GameSpeed = 1.5f;
+			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
 			CurrentGameSpeedShowTime = 2.0f;
-			vw_SetKeyStatus(Setup.KeyboardResetGameSpeed, false);
+			vw_SetKeyStatus(GameConfig().KeyboardResetGameSpeed, false);
 		}
-		if (vw_GetKeyStatus(Setup.KeyboardIncreaseGameSpeed)) {
-			Setup.GameSpeed += 0.1f;
-			if (Setup.GameSpeed > 3.0f)
-				Setup.GameSpeed = 3.0f;
+		if (vw_GetKeyStatus(GameConfig().KeyboardIncreaseGameSpeed)) {
+			ChangeGameConfig().GameSpeed += 0.1f;
+			if (GameConfig().GameSpeed > 3.0f)
+				ChangeGameConfig().GameSpeed = 3.0f;
 			CurrentGameSpeedShowTime = 2.0f;
-			vw_SetTimeThreadSpeed(1, Setup.GameSpeed);
-			vw_SetKeyStatus(Setup.KeyboardIncreaseGameSpeed, false);
+			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
+			vw_SetKeyStatus(GameConfig().KeyboardIncreaseGameSpeed, false);
 		}
 	}
 
 	if (MenuStatus == eMenuStatus::GAME) {
 		// изменение вывода состояния вооружения
-		if (vw_GetKeyStatus(Setup.KeyboardGameWeaponInfoType)) {
-			Setup.GameWeaponInfoType ++;
-			if (Setup.GameWeaponInfoType > 4)
-				Setup.GameWeaponInfoType = 1;
-			vw_SetKeyStatus(Setup.KeyboardGameWeaponInfoType, false);
+		if (vw_GetKeyStatus(GameConfig().KeyboardGameWeaponInfoType)) {
+			ChangeGameConfig().GameWeaponInfoType++;
+			if (GameConfig().GameWeaponInfoType > 4)
+				ChangeGameConfig().GameWeaponInfoType = 1;
+			vw_SetKeyStatus(GameConfig().KeyboardGameWeaponInfoType, false);
 		}
 		// изменение типов стрельбы
-		if (vw_GetKeyStatus(Setup.KeyboardPrimaryWeaponFireMode)) {
-			Setup.Profile[CurrentProfile].PrimaryWeaponFireMode ++;
-			if (Setup.Profile[CurrentProfile].PrimaryWeaponFireMode > 2)
-				Setup.Profile[CurrentProfile].PrimaryWeaponFireMode = 1;
-			vw_SetKeyStatus(Setup.KeyboardPrimaryWeaponFireMode, false);
+		if (vw_GetKeyStatus(GameConfig().KeyboardPrimaryWeaponFireMode)) {
+			ChangeGameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode++;
+			if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode > 2)
+				ChangeGameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode = 1;
+			vw_SetKeyStatus(GameConfig().KeyboardPrimaryWeaponFireMode, false);
 		}
-		if (vw_GetKeyStatus(Setup.KeyboardSecondaryWeaponFireMode)) {
-			Setup.Profile[CurrentProfile].SecondaryWeaponFireMode ++;
-			if (Setup.Profile[CurrentProfile].SecondaryWeaponFireMode > 2)
-				Setup.Profile[CurrentProfile].SecondaryWeaponFireMode = 1;
-			vw_SetKeyStatus(Setup.KeyboardSecondaryWeaponFireMode, false);
+		if (vw_GetKeyStatus(GameConfig().KeyboardSecondaryWeaponFireMode)) {
+			ChangeGameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode++;
+			if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode > 2)
+				ChangeGameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode = 1;
+			vw_SetKeyStatus(GameConfig().KeyboardSecondaryWeaponFireMode, false);
 		}
 
 	}

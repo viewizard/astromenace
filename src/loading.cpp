@@ -34,6 +34,7 @@
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "game.h"
+#include "config/config.h"
 #include "object3d/object3d.h"
 #include "gfx/star_system.h"
 #include "gfx/shadow_map.h"
@@ -560,7 +561,7 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 
 	while (ShowLogoLife > 0) {
 		sRECT SrcRect{1, 1, 511, 511};
-		int StartX{static_cast<int>((Setup.InternalWidth - 510) / 2)};
+		int StartX{static_cast<int>((GameConfig().InternalWidth - 510) / 2)};
 		int EndX{StartX + 510};
 		sRECT DstRect{StartX, 128 + 1, EndX, 640 - 2};
 		float Transp{1.0f};
@@ -632,14 +633,14 @@ static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime,
 	vw_Start2DMode(-1, 1);
 
 	sRECT SrcRect{0, 0, 1024, 512};
-	sRECT DstRect{0, 64+32, static_cast<int>(Setup.InternalWidth), 64+32+512};
+	sRECT DstRect{0, 64+32, static_cast<int>(GameConfig().InternalWidth), 64+32+512};
 	vw_Draw2D(DstRect, SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
 
-	vw_DrawFont(Setup.InternalWidth / 2 - vw_FontSize(vw_GetText("LOADING")) / 2,
+	vw_DrawFont(GameConfig().InternalWidth / 2 - vw_FontSize(vw_GetText("LOADING")) / 2,
 		    768-128, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, vw_GetText("LOADING"));
 
 	SrcRect(0, 0, 256, 32);
-	int StartX = (Setup.InternalWidth - 256) / 2;
+	int StartX = (GameConfig().InternalWidth - 256) / 2;
 	DstRect(StartX, 768-64-8-32, StartX + SrcRect.right - SrcRect.left, 768-64-8-32 + SrcRect.bottom - SrcRect.top);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("loading/loading_back.tga"), true, 1.0f, 0.0f);
 
@@ -691,7 +692,7 @@ static void PreLoadGameData(eLoading LoadType)
 
 	// FIXME should be moved to game-related code
 	if (LoadType == eLoading::Game) {
-		SaveXMLSetupFile();
+		SaveXMLConfigFile();
 
 		char *FileName = GetMissionFileName();
 		if (FileName == nullptr) {
@@ -768,7 +769,7 @@ static void PreLoadGameData(eLoading LoadType)
 static void PostLoadGameData(eLoading LoadType)
 {
 	// инициализируем шадов меп, делаем это постоянно т.к. у нас разные размеры карт для меню и игры
-	if (Setup.ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0) {
 		int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
 
 		auto MenuShadowMap = [&ShadowMapSize] () {
@@ -776,7 +777,7 @@ static void PostLoadGameData(eLoading LoadType)
 			if (ShadowMapSize > 2048)
 				ShadowMapSize = 2048;
 			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize / 2))
-				Setup.ShadowMap = 0;
+				ChangeGameConfig().ShadowMap = 0;
 		};
 
 		switch(LoadType) {
@@ -795,7 +796,7 @@ static void PostLoadGameData(eLoading LoadType)
 			if (ShadowMapSize > 4096)
 				ShadowMapSize = 4096;
 			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
-				Setup.ShadowMap = 0;
+				ChangeGameConfig().ShadowMap = 0;
 			break;
 
 		default:
@@ -855,7 +856,7 @@ void LoadGameData(eLoading LoadType)
 	bool NeedLoadShaders = false;
 	if (vw_GetDevCaps().OpenGL_2_0_supported &&
 	    vw_GetDevCaps().OpenGL_2_1_supported &&
-	    Setup.UseGLSL120 &&
+	    GameConfig().UseGLSL120 &&
 	    vw_ShadersMapEmpty()) {
 		AllDrawLoading += GLSLLoadListCount*100;
 		NeedLoadShaders = true;
@@ -916,7 +917,7 @@ void LoadGameData(eLoading LoadType)
 	int RealLoadedAssets{0};
 	if (NeedLoadShaders) {
 		for (unsigned i = 0; i < GLSLLoadListCount; i++) {
-			if (Setup.UseGLSL120) {
+			if (GameConfig().UseGLSL120) {
 
 				std::weak_ptr<cGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
 									       GLSLLoadList[i].VertexShaderFileName,
@@ -925,9 +926,9 @@ void LoadGameData(eLoading LoadType)
 				if (!Program.expired()) {
 					// получаем сразу состояние, смогли прилинковать или нет
 					if (!vw_LinkShaderProgram(Program))
-						Setup.UseGLSL120 = false;
+						ChangeGameConfig().UseGLSL120 = false;
 				} else
-					Setup.UseGLSL120 = false;
+					ChangeGameConfig().UseGLSL120 = false;
 
 				RealLoadedAssets += 100;
 				// рисуем текущее состояние загрузки, если не рисуем логотип
@@ -971,12 +972,12 @@ void LoadGameData(eLoading LoadType)
 	}
 	// еще одна проверка перед тем как будем использовать шадовмеп
 	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего
-	if (!Setup.UseGLSL120)
-		Setup.ShadowMap = 0;
+	if (!GameConfig().UseGLSL120)
+		ChangeGameConfig().ShadowMap = 0;
 
 	// инициализация менеджера частиц (обязательно после загрузки шейдеров)
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-	vw_InitParticleSystems(Setup.UseGLSL120, Setup.VisualEffectsQuality + 1.0f);
+	vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
 
 	eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
 	for (unsigned i = 0; i < LoadListCount; i++) {
@@ -985,14 +986,14 @@ void LoadGameData(eLoading LoadType)
 		case 0:
 			// установки параметров
 			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
-			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
+			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * GameConfig().AnisotropyLevel,
 					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
 			tmpCompress = eTextureCompressionType::NONE;
 			if (LoadList[i].NeedCompression) {
-				if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
+				if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
 					tmpCompress = eTextureCompressionType::S3TC;
-				else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
+				else if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
 					tmpCompress = eTextureCompressionType::BPTC;
 			}
 			vw_LoadTexture(LoadList[i].FileName, tmpCompress);
@@ -1002,20 +1003,20 @@ void LoadGameData(eLoading LoadType)
 		case 1:
 			// установки параметров
 			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
-			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * Setup.AnisotropyLevel,
+			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * GameConfig().AnisotropyLevel,
 					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
 			// если это карта нормалей, но у нас не включены шейдеры - пропускаем
 			// (если эту опцию убрать - можно объеденить 2д текстуры и 3д текстуры)
-			if (!Setup.UseGLSL120 &&
+			if (!GameConfig().UseGLSL120 &&
 			    (LoadList[i].FileName.find("models/normalmap") != std::string::npos))
 				break;
 
 			tmpCompress = eTextureCompressionType::NONE;
 			if (LoadList[i].NeedCompression) {
-				if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
+				if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
 					tmpCompress = eTextureCompressionType::S3TC;
-				else if (Setup.TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
+				else if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
 					tmpCompress = eTextureCompressionType::BPTC;
 			}
 			vw_LoadTexture(LoadList[i].FileName, tmpCompress);
@@ -1024,13 +1025,13 @@ void LoadGameData(eLoading LoadType)
 		// предварит. загрузка моделей
 		case 2:
 			vw_LoadModel3D(LoadList[i].FileName, LoadList[i].TriangleSizeLimit,
-				       LoadList[i].NeedTangentAndBinormal && Setup.UseGLSL120);
+				       LoadList[i].NeedTangentAndBinormal && GameConfig().UseGLSL120);
 			break;
 
 		// загрузка sfx
 		case 4:
 			// если вообще можем играть звуки
-			if (Setup.Sound_check)
+			if (GameConfig().Sound_check)
 				vw_LoadSoundBuffer(LoadList[i].FileName);
 			break;
 		}

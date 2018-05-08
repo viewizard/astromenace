@@ -43,7 +43,6 @@ class cEarthSpaceFighter;
 //------------------------------------------------------------------------------------
 // Main.cpp
 //------------------------------------------------------------------------------------
-extern sGameSetup Setup;
 extern eMenuStatus MenuStatus;
 extern SDL_Joystick *Joystick;
 extern sVECTOR3D GamePoint;
@@ -96,12 +95,6 @@ int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePat
 
 
 
-
-//------------------------------------------------------------------------------------
-// Setup.cpp
-//------------------------------------------------------------------------------------
-bool LoadXMLSetupFile(bool NeedSafeMode);
-void SaveXMLSetupFile();
 
 
 
@@ -358,11 +351,11 @@ void DestroyInfoObject();
 //------------------------------------------------------------------------------------
 // Menu_TopScores.cpp
 //------------------------------------------------------------------------------------
-extern char GameName[10][PROFILE_NAME_SIZE];
+extern char GameName[10][1024];// PROFILE_NAME_SIZE
 extern int GameScore[10];
 
 void TopScoresMenu();
-void AddTopScores(int Score, char Name[PROFILE_NAME_SIZE], bool Type);
+void AddTopScores(int Score, const char Name[1024], bool Type);
 
 
 

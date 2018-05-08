@@ -39,6 +39,7 @@ In order to show movement and more 'live' space, star system render "space dust"
 */
 
 #include "../struct.h"
+#include "../config/config.h"
 #include "../object3d/space_object/space_object.h"
 #include "skybox.h"
 
@@ -417,7 +418,7 @@ void StarSystemDraw(eDrawType DrawType)
 void StarSystemDrawThirdLayer(eDrawType DrawType)
 {
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-	if (Setup.VisualEffectsQuality > 1)
+	if (GameConfig().VisualEffectsQuality > 1)
 		return;
 
 	float width_2{0.0f};
