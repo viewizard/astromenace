@@ -107,13 +107,6 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "GameSpeed"), "value", Config.GameSpeed);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Control settings ");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value", SDL_GetKeyName(Config.KeyboardDecreaseGameSpeed));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyboardResetGameSpeed"), "value", SDL_GetKeyName(Config.KeyboardResetGameSpeed));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value", SDL_GetKeyName(Config.KeyboardIncreaseGameSpeed));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyboardGameWeaponInfoType"), "value", SDL_GetKeyName(Config.KeyboardGameWeaponInfoType));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value", SDL_GetKeyName(Config.KeyboardPrimaryWeaponFireMode));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value", SDL_GetKeyName(Config.KeyboardSecondaryWeaponFireMode));
-
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardLeft"), "value", SDL_GetKeyName(Config.KeyBoardLeft));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardRight"), "value", SDL_GetKeyName(Config.KeyBoardRight));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardUp"), "value", SDL_GetKeyName(Config.KeyBoardUp));
@@ -349,37 +342,6 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameWeaponInfoType"), "value", Config.GameWeaponInfoType);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "GameSpeed"))
 		XMLdoc->fGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameSpeed"), "value", Config.GameSpeed);
-
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardDecreaseGameSpeed")) {
-		std::string tmpKeyboardDecreaseGameSpeed{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardDecreaseGameSpeed"), "value", tmpKeyboardDecreaseGameSpeed))
-			Config.KeyboardDecreaseGameSpeed = SDL_GetKeyFromName(tmpKeyboardDecreaseGameSpeed.c_str());
-	}
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardResetGameSpeed")) {
-		std::string tmpKeyboardResetGameSpeed{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardResetGameSpeed"), "value", tmpKeyboardResetGameSpeed))
-			Config.KeyboardResetGameSpeed = SDL_GetKeyFromName(tmpKeyboardResetGameSpeed.c_str());
-	}
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardIncreaseGameSpeed")) {
-		std::string tmpKeyboardIncreaseGameSpeed{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardIncreaseGameSpeed"), "value", tmpKeyboardIncreaseGameSpeed))
-			Config.KeyboardIncreaseGameSpeed = SDL_GetKeyFromName(tmpKeyboardIncreaseGameSpeed.c_str());
-	}
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardGameWeaponInfoType")) {
-		std::string tmpKeyboardGameWeaponInfoType{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardGameWeaponInfoType"), "value", tmpKeyboardGameWeaponInfoType))
-			Config.KeyboardGameWeaponInfoType = SDL_GetKeyFromName(tmpKeyboardGameWeaponInfoType.c_str());
-	}
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardPrimaryWeaponFireMode")) {
-		std::string tmpKeyboardPrimaryWeaponFireMode{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardPrimaryWeaponFireMode"), "value", tmpKeyboardPrimaryWeaponFireMode))
-			Config.KeyboardPrimaryWeaponFireMode = SDL_GetKeyFromName(tmpKeyboardPrimaryWeaponFireMode.c_str());
-	}
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardSecondaryWeaponFireMode")) {
-		std::string tmpKeyboardSecondaryWeaponFireMode{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyboardSecondaryWeaponFireMode"), "value", tmpKeyboardSecondaryWeaponFireMode))
-			Config.KeyboardSecondaryWeaponFireMode = SDL_GetKeyFromName(tmpKeyboardSecondaryWeaponFireMode.c_str());
-	}
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardLeft")) {
 		std::string tmpKeyBoardLeft{};

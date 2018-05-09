@@ -165,13 +165,6 @@ struct sGameConfig {
 				 {"Kelvin", 5000},
 				 {"Stephan Gregory", 1000}};
 
-	int KeyboardDecreaseGameSpeed{SDLK_F5};
-	int KeyboardResetGameSpeed{SDLK_F6};
-	int KeyboardIncreaseGameSpeed{SDLK_F7};
-	int KeyboardGameWeaponInfoType{SDLK_F8};
-	int KeyboardPrimaryWeaponFireMode{SDLK_F9};
-	int KeyboardSecondaryWeaponFireMode{SDLK_F10};
-
 	// keyboard
 	int KeyBoardLeft{SDLK_LEFT};
 	int KeyBoardRight{SDLK_RIGHT};

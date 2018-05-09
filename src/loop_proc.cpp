@@ -349,50 +349,50 @@ void Loop_Proc()
 	if ((MenuStatus == eMenuStatus::GAME) &&
 	    (GameContentTransp<=0.0f) &&
 	    !GameMissionCompleteStatus) {
-		if (vw_GetKeyStatus(GameConfig().KeyboardDecreaseGameSpeed)) {
+		if (vw_GetKeyStatus(SDLK_F5)) {
 			ChangeGameConfig().GameSpeed -= 0.1f;
 			if (GameConfig().GameSpeed < 0.1f)
 				ChangeGameConfig().GameSpeed = 0.1f;
 			CurrentGameSpeedShowTime = 2.0f;
 			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
-			vw_SetKeyStatus(GameConfig().KeyboardDecreaseGameSpeed, false);
+			vw_SetKeyStatus(SDLK_F5, false);
 		}
-		if (vw_GetKeyStatus(GameConfig().KeyboardResetGameSpeed)) {
+		if (vw_GetKeyStatus(SDLK_F6)) {
 			ChangeGameConfig().GameSpeed = 1.5f;
 			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
 			CurrentGameSpeedShowTime = 2.0f;
-			vw_SetKeyStatus(GameConfig().KeyboardResetGameSpeed, false);
+			vw_SetKeyStatus(SDLK_F6, false);
 		}
-		if (vw_GetKeyStatus(GameConfig().KeyboardIncreaseGameSpeed)) {
+		if (vw_GetKeyStatus(SDLK_F7)) {
 			ChangeGameConfig().GameSpeed += 0.1f;
 			if (GameConfig().GameSpeed > 3.0f)
 				ChangeGameConfig().GameSpeed = 3.0f;
 			CurrentGameSpeedShowTime = 2.0f;
 			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
-			vw_SetKeyStatus(GameConfig().KeyboardIncreaseGameSpeed, false);
+			vw_SetKeyStatus(SDLK_F7, false);
 		}
 	}
 
 	if (MenuStatus == eMenuStatus::GAME) {
 		// изменение вывода состояния вооружения
-		if (vw_GetKeyStatus(GameConfig().KeyboardGameWeaponInfoType)) {
+		if (vw_GetKeyStatus(SDLK_F8)) {
 			ChangeGameConfig().GameWeaponInfoType++;
 			if (GameConfig().GameWeaponInfoType > 4)
 				ChangeGameConfig().GameWeaponInfoType = 1;
-			vw_SetKeyStatus(GameConfig().KeyboardGameWeaponInfoType, false);
+			vw_SetKeyStatus(SDLK_F8, false);
 		}
 		// изменение типов стрельбы
-		if (vw_GetKeyStatus(GameConfig().KeyboardPrimaryWeaponFireMode)) {
+		if (vw_GetKeyStatus(SDLK_F9)) {
 			ChangeGameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode++;
 			if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode > 2)
 				ChangeGameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode = 1;
-			vw_SetKeyStatus(GameConfig().KeyboardPrimaryWeaponFireMode, false);
+			vw_SetKeyStatus(SDLK_F9, false);
 		}
-		if (vw_GetKeyStatus(GameConfig().KeyboardSecondaryWeaponFireMode)) {
+		if (vw_GetKeyStatus(SDLK_F10)) {
 			ChangeGameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode++;
 			if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode > 2)
 				ChangeGameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode = 1;
-			vw_SetKeyStatus(GameConfig().KeyboardSecondaryWeaponFireMode, false);
+			vw_SetKeyStatus(SDLK_F10, false);
 		}
 
 	}
