@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "core/vfs/vfs.h"
-#include "config.h"
+#include "build_config.h"
 
 const std::string GameData[] = {
 	"lang/ru/voice/EngineMalfunction.wav",

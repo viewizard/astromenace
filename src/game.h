@@ -32,7 +32,7 @@
 
 #include "core/core.h"
 #include "struct.h"
-#include "config.h"
+#include "build_config.h"
 
 class cSpaceStars;
 class cScriptEngine;

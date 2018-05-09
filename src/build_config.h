@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef BUILD_CONFIG_H
+#define BUILD_CONFIG_H
 
 #define GAME_VERSION		"1.3.9 git"
 #define GAME_VFS_BUILD		180505
@@ -43,4 +43,4 @@
 // game configuration file will be stored with game binary file
 // #define portable
 
-#endif /* CONFIG_H */
+#endif // BUILD_CONFIG_H

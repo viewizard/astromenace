@@ -38,7 +38,7 @@ usage for fonts in menu elements.
 */
 
 #include "../core/core.h"
-#include "../config.h"
+#include "../build_config.h"
 
 namespace {
 
