@@ -58,6 +58,32 @@ sGameConfig &ChangeGameConfig()
 }
 
 /*
+ * Pack data with XOR.
+ * Since we store data in XML, all data should be 'converted' into proper symbols.
+ * In our case, we start from 97 (small 'a', see ASCII table) and store separately
+ * tens (0-25, since unsigned char max is 255) and ones (0-9). So, in XML we will
+ * see string with small letters only.
+ */
+static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsigned char *Data)
+{
+	// should be stored: XOR key, 'ten', 'one', and null-terminated symbol at the end of array
+	DataXOR.resize(DataSize * 3 + 1);
+	for (int i = 0; i < DataSize; i++) {
+		int tmpOffset = DataSize + i * 2;
+		// XOR key, randomize for each character
+		DataXOR[i] = 97 + static_cast<unsigned char>(vw_iRandNum(25));
+		// XOR
+		unsigned char tmpDataXOR = Data[i] ^ DataXOR[i];
+		// store 'ten'
+		DataXOR[tmpOffset] = 97 + static_cast<unsigned char>(tmpDataXOR / 10.0f);
+		// store 'one'
+		DataXOR[tmpOffset + 1] = 97 + (tmpDataXOR - (DataXOR[tmpOffset] - 97) * 10);
+	}
+	// we should return null-terminated array
+	DataXOR[DataSize * 3] = '\0';
+}
+
+/*
  * Save game configuration file.
  */
 void SaveXMLConfigFile()
@@ -73,8 +99,10 @@ void SaveXMLConfigFile()
 
 	XMLdoc->AddComment(*RootXMLEntry, " AstroMenace game Settings ");
 
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuLanguage"), "value", vw_GetText("en", Config.MenuLanguage));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceLanguage"), "value", vw_GetText("en", Config.VoiceLanguage));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuLanguage"), "value",
+				  vw_GetText("en", Config.MenuLanguage));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceLanguage"), "value",
+				  vw_GetText("en", Config.VoiceLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontNumber"), "value", Config.FontNumber);
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Width"), "value", Config.Width);
@@ -86,14 +114,17 @@ void SaveXMLConfigFile()
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AspectRatio"), "value", "4:3");
 	else
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AspectRatio"), "value", "16:10");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Config.CameraModeWithStandardAspectRatio);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value",
+				  Config.CameraModeWithStandardAspectRatio);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Common settings ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MSAA"), "value", Config.MSAA);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CSAA"), "value", Config.CSAA);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VisualEffectsQuality"), "value", Config.VisualEffectsQuality);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VisualEffectsQuality"), "value",
+				  Config.VisualEffectsQuality);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AnisotropyLevel"), "value", Config.AnisotropyLevel);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "TexturesCompressionType"), "value", Config.TexturesCompressionType);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "TexturesCompressionType"), "value",
+				  Config.TexturesCompressionType);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "UseGLSL120"), "value", Config.UseGLSL120);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "ShadowMap"), "value", Config.ShadowMap);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MaxPointLights"), "value", Config.MaxPointLights);
@@ -107,12 +138,18 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "GameSpeed"), "value", Config.GameSpeed);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Control settings ");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardLeft"), "value", SDL_GetKeyName(Config.KeyBoardLeft));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardRight"), "value", SDL_GetKeyName(Config.KeyBoardRight));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardUp"), "value", SDL_GetKeyName(Config.KeyBoardUp));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardDown"), "value", SDL_GetKeyName(Config.KeyBoardDown));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardPrimary"), "value", SDL_GetKeyName(Config.KeyBoardPrimary));
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardSecondary"), "value", SDL_GetKeyName(Config.KeyBoardSecondary));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardLeft"), "value",
+				  SDL_GetKeyName(Config.KeyBoardLeft));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardRight"), "value",
+				  SDL_GetKeyName(Config.KeyBoardRight));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardUp"), "value",
+				  SDL_GetKeyName(Config.KeyBoardUp));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardDown"), "value",
+				  SDL_GetKeyName(Config.KeyBoardDown));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardPrimary"), "value",
+				  SDL_GetKeyName(Config.KeyBoardPrimary));
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "KeyBoardSecondary"), "value",
+				  SDL_GetKeyName(Config.KeyBoardSecondary));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MousePrimary"), "value", Config.MousePrimary);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MouseSecondary"), "value", Config.MouseSecondary);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "JoystickPrimary"), "value", Config.JoystickPrimary);
@@ -126,103 +163,19 @@ void SaveXMLConfigFile()
 
 	for(int i = 0; i < 10; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
-		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, tmpString.c_str()), "value", Config.NeedShowHint[i]);
+		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, tmpString.c_str()), "value",
+					  Config.NeedShowHint[i]);
 	}
 
-	//
-	// всегда последние
-	//
+	std::vector<unsigned char> TopScoresXOR{};
+	PackWithXOR(TopScoresXOR, sizeof(sTopScores) * 10, reinterpret_cast<unsigned char *>(Config.TopScores));
+	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, "TopScores"),
+				reinterpret_cast<char *>(TopScoresXOR.data()));
 
-	// упаковка таблицы рекордов
-	int TopScoresDataSize = sizeof(sTopScores) * 10;
-	unsigned char *TopScoresData = new unsigned char[TopScoresDataSize];
-	memcpy(TopScoresData, Config.TopScores, TopScoresDataSize);
-
-	unsigned char *TopScoresDataXORCode = new unsigned char[TopScoresDataSize * 3];
-	char *TopScoresResultString = new char[TopScoresDataSize * 4 + 1];
-
-	// XOR
-	for (int i=0; i < TopScoresDataSize; i++) {
-		int k1 = i;
-		int k2 = TopScoresDataSize + i * 2;
-		TopScoresDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
-		TopScoresDataXORCode[k2] = 0;
-		TopScoresDataXORCode[k2 + 1] = TopScoresData[i]^TopScoresDataXORCode[k1];
-		// в первую - десятки, во вторую - еденицы
-		TopScoresDataXORCode[k2] = 97 + (unsigned char)(TopScoresDataXORCode[k2 + 1] / 10.0f);
-		TopScoresDataXORCode[k2 + 1] = 97 + (TopScoresDataXORCode[k2 + 1] - (TopScoresDataXORCode[k2] - 97) * 10);
-	}
-
-	// чтобы разбить на блоки вставляем пробел
-	// тогда красиво отображаться будет (если врапинг выставлен в редакторе)
-	int k = 0;
-	int j = 0;
-	for (int i = 0; i < (TopScoresDataSize * 3); i++) {
-		TopScoresResultString[k] = TopScoresDataXORCode[i];
-		k++;
-		j++;
-		if (j >= 125) {
-			TopScoresResultString[k] = 0x20;
-			k++;
-			j=0;
-		}
-	}
-	TopScoresResultString[k] = 0;
-
-
-	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, "TopScores"), TopScoresResultString);
-
-	if (TopScoresResultString != nullptr)
-		delete [] TopScoresResultString;
-	if (TopScoresData != nullptr)
-		delete [] TopScoresData;
-	if (TopScoresDataXORCode != nullptr)
-		delete [] TopScoresDataXORCode;
-
-	// упаковка профайлов
-
-	int ProfileDataSize = sizeof(sPilotProfile) * 5;
-	unsigned char *ProfileData = new unsigned char[ProfileDataSize];
-	memcpy(ProfileData, Config.Profile, ProfileDataSize);
-
-	unsigned char *ProfileDataXORCode = new unsigned char[ProfileDataSize * 3];
-	char *ResultString = new char[ProfileDataSize * 4 + 1];
-
-	// XOR
-	for (int i=0; i < ProfileDataSize; i++) {
-		int k1 = i;
-		int k2 = ProfileDataSize + i * 2;
-		ProfileDataXORCode[k1] = 97 + (unsigned char)vw_iRandNum(25);
-		ProfileDataXORCode[k2] = 0;
-		ProfileDataXORCode[k2 + 1] = ProfileData[i] ^ ProfileDataXORCode[k1];
-		// в первую - десятки, во вторую - еденицы
-		ProfileDataXORCode[k2] = 97 + (unsigned char)(ProfileDataXORCode[k2 + 1] / 10.0f);
-		ProfileDataXORCode[k2 + 1] = 97 + (ProfileDataXORCode[k2 + 1] - (ProfileDataXORCode[k2] - 97) * 10);
-	}
-
-	// чтобы разбить на блоки вставляем пробел
-	// тогда красиво отображаться будет (если врапинг выставлен в редакторе)
-	k = 0;
-	j = 0;
-	for (int i = 0; i < ProfileDataSize * 3; i++) {
-		ResultString[k] = ProfileDataXORCode[i];
-		k++;
-		j++;
-		if (j >= 125) {
-			ResultString[k] = 0x20;
-			k++;
-			j=0;
-		}
-	}
-	ResultString[k] = 0;
-
-	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, "PilotsProfiles"), ResultString);
-
-	delete [] ResultString;
-	if (ProfileData != nullptr)
-		delete [] ProfileData;
-	if (ProfileDataXORCode != nullptr)
-		delete [] ProfileDataXORCode;
+	std::vector<unsigned char> ProfileXOR{};
+	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
+	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, "PilotsProfiles"),
+				reinterpret_cast<char *>(ProfileXOR.data()));
 
 	XMLdoc->Save(ConfigFileName);
 }
@@ -265,7 +218,8 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage")) {
 		std::string tmpMenuLanguage{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage"), "value", tmpMenuLanguage)) {
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage"), "value",
+					      tmpMenuLanguage)) {
 			for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
 				if (tmpMenuLanguage == vw_GetText("en", i)) {
 					Config.MenuLanguage = i;
@@ -276,7 +230,8 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceLanguage")) {
 		std::string tmpVoiceLanguage{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceLanguage"), "value", tmpVoiceLanguage)) {
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceLanguage"), "value",
+					      tmpVoiceLanguage)) {
 			for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
 				if (tmpVoiceLanguage == vw_GetText("en", i)) {
 					Config.VoiceLanguage = i;
@@ -286,7 +241,8 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 		}
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"), "value", Config.FontNumber);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"), "value",
+					   Config.FontNumber);
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Width"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Width"), "value", Config.Width);
@@ -297,7 +253,8 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "AspectRatio")) {
 		std::string tmpAspectRatio{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AspectRatio"), "value", tmpAspectRatio)) {
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AspectRatio"), "value",
+					      tmpAspectRatio)) {
 			if (tmpAspectRatio == "16:10") {
 				Config.InternalWidth = 1228.0f;
 				Config.InternalHeight = 768.0f;
@@ -308,99 +265,131 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 		}
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value", Config.CameraModeWithStandardAspectRatio);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"),
+					   "value", Config.CameraModeWithStandardAspectRatio);
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MSAA"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MSAA"), "value", Config.MSAA);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "CSAA"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "CSAA"), "value", Config.CSAA);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VisualEffectsQuality"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VisualEffectsQuality"), "value", Config.VisualEffectsQuality);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VisualEffectsQuality"), "value",
+					   Config.VisualEffectsQuality);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "AnisotropyLevel"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AnisotropyLevel"), "value", Config.AnisotropyLevel);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AnisotropyLevel"), "value",
+					   Config.AnisotropyLevel);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesCompressionType"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesCompressionType"), "value", Config.TexturesCompressionType);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesCompressionType"), "value",
+					   Config.TexturesCompressionType);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL120"))
-		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL120"), "value", Config.UseGLSL120);
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL120"), "value",
+					   Config.UseGLSL120);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "ShadowMap"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ShadowMap"), "value", Config.ShadowMap);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ShadowMap"), "value",
+					   Config.ShadowMap);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MaxPointLights"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MaxPointLights"), "value", Config.MaxPointLights);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MaxPointLights"), "value",
+					   Config.MaxPointLights);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MusicVolume"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MusicVolume"), "value", Config.MusicVolume);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MusicVolume"), "value",
+					   Config.MusicVolume);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "SoundVolume"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "SoundVolume"), "value", Config.SoundVolume);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "SoundVolume"), "value",
+					   Config.SoundVolume);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceVolume"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceVolume"), "value", Config.VoiceVolume);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceVolume"), "value",
+					   Config.VoiceVolume);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VSync"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VSync"), "value", Config.VSync);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VSync"), "value",
+					   Config.VSync);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Brightness"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Brightness"), "value", Config.Brightness);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Brightness"), "value",
+					   Config.Brightness);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "ShowFPS"))
-		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ShowFPS"), "value", Config.ShowFPS);
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ShowFPS"), "value",
+					   Config.ShowFPS);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "GameWeaponInfoType"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameWeaponInfoType"), "value", Config.GameWeaponInfoType);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameWeaponInfoType"), "value",
+					   Config.GameWeaponInfoType);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "GameSpeed"))
-		XMLdoc->fGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameSpeed"), "value", Config.GameSpeed);
+		XMLdoc->fGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameSpeed"), "value",
+					   Config.GameSpeed);
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardLeft")) {
 		std::string tmpKeyBoardLeft{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardLeft"), "value", tmpKeyBoardLeft))
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardLeft"), "value",
+					      tmpKeyBoardLeft))
 			Config.KeyBoardLeft = SDL_GetKeyFromName(tmpKeyBoardLeft.c_str());
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardRight")) {
 		std::string tmpKeyBoardRight{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardRight"), "value", tmpKeyBoardRight))
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardRight"), "value",
+					      tmpKeyBoardRight))
 			Config.KeyBoardRight = SDL_GetKeyFromName(tmpKeyBoardRight.c_str());
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardUp")) {
 		std::string tmpKeyBoardUp{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardUp"), "value", tmpKeyBoardUp))
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardUp"), "value",
+					      tmpKeyBoardUp))
 			Config.KeyBoardUp = SDL_GetKeyFromName(tmpKeyBoardUp.c_str());
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardDown")) {
 		std::string tmpKeyBoardDown{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardDown"), "value", tmpKeyBoardDown))
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardDown"), "value",
+					      tmpKeyBoardDown))
 			Config.KeyBoardDown = SDL_GetKeyFromName(tmpKeyBoardDown.c_str());
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardPrimary")) {
 		std::string tmpKeyBoardPrimary{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardPrimary"), "value", tmpKeyBoardPrimary))
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardPrimary"), "value",
+					      tmpKeyBoardPrimary))
 			Config.KeyBoardPrimary = SDL_GetKeyFromName(tmpKeyBoardPrimary.c_str());
 	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardSecondary")) {
 		std::string tmpKeyBoardSecondary{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardSecondary"), "value", tmpKeyBoardSecondary))
+		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "KeyBoardSecondary"), "value",
+					      tmpKeyBoardSecondary))
 			Config.KeyBoardSecondary = SDL_GetKeyFromName(tmpKeyBoardSecondary.c_str());
 	}
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MousePrimary"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MousePrimary"), "value", Config.MousePrimary);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MousePrimary"), "value",
+					   Config.MousePrimary);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MouseSecondary"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MouseSecondary"), "value", Config.MouseSecondary);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MouseSecondary"), "value",
+					   Config.MouseSecondary);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickPrimary"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickPrimary"), "value", Config.JoystickPrimary);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickPrimary"), "value",
+					   Config.JoystickPrimary);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickSecondary"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickSecondary"), "value", Config.JoystickSecondary);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickSecondary"), "value",
+					   Config.JoystickSecondary);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickNum"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickNum"), "value", Config.JoystickNum);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickNum"), "value",
+					   Config.JoystickNum);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickDeadZone"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickDeadZone"), "value", Config.JoystickDeadZone);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "JoystickDeadZone"), "value",
+					   Config.JoystickDeadZone);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "ControlSensivity"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ControlSensivity"), "value", Config.ControlSensivity);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ControlSensivity"), "value",
+					   Config.ControlSensivity);
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MouseControl"))
-		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MouseControl"), "value", Config.MouseControl);
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MouseControl"), "value",
+					   Config.MouseControl);
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "LastProfile"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "LastProfile"), "value", Config.LastProfile);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "LastProfile"), "value",
+					   Config.LastProfile);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MenuScript"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuScript"), "value", Config.MenuScript);
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuScript"), "value",
+					   Config.MenuScript);
 
 	for(int i=0; i<10; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
 		if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()))
-			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()), "value", Config.NeedShowHint[i]);
+			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()), "value",
+						    Config.NeedShowHint[i]);
 	}
 
 	//
@@ -488,7 +477,7 @@ LoadProfiles:
 			unsigned char XORhash = ProfileDataXORCode[k1];
 			unsigned char XORdata = ((ProfileDataXORCode[k2] - 97) * 10) + (ProfileDataXORCode[k2 + 1] - 97);
 
-			ProfileData[i] = XORdata^XORhash;
+			ProfileData[i] = XORdata ^ XORhash;
 		}
 
 		// переносим данные в структуру
