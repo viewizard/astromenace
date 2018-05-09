@@ -27,7 +27,6 @@
 
 // TODO translate comments
 // TODO revise code in order to remove 'goto' statement
-// TODO revise code in order to remove new/delete usage.
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
@@ -178,6 +177,23 @@ void SaveXMLConfigFile()
 				reinterpret_cast<char *>(ProfileXOR.data()));
 
 	XMLdoc->Save(ConfigFileName);
+}
+
+/*
+ * Unpack data with XOR.
+ */
+static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std::string &DataXOR)
+{
+	if ((DataXOR.size() / 3) < DataSize) {
+		std::cerr << __func__ << "(): " << "DataXOR string less than expected.\n";
+		return;
+	}
+
+	for (unsigned int i = 0; i < DataSize; i++) {
+		int tmpOffset = DataSize + i * 2;
+		// Data = XOR key ^ (tens + ones)
+		Data[i] = DataXOR[i] ^ (((DataXOR[tmpOffset] - 97) * 10) + (DataXOR[tmpOffset + 1] - 97));
+	}
 }
 
 /*
@@ -392,104 +408,19 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 						    Config.NeedShowHint[i]);
 	}
 
-	//
-	// заполняем таблицу рекордов
-	//
-
 	if ((XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")) &&
-	    !XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content.empty()) {
-
-		int TopScoresDataSize = XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content.size();
-		unsigned char *TopScoresData = new unsigned char[TopScoresDataSize+1];
-		unsigned char *TopScoresDataXORCode = new unsigned char[TopScoresDataSize+1];
-		char *TopScoresResultString = new char[TopScoresDataSize+1];
-
-		strcpy(TopScoresResultString, XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content.c_str());
-
-		// первый цикл, восстанавливаем правильную последовательность, убираем все лишние элементы
-		int k = 0;
-		for (int i = 0; i < TopScoresDataSize; i++) {
-			// берем только нужные символы
-			if ((TopScoresResultString[i] >= 97) &&
-			    (TopScoresResultString[i] <= 97 + 26)) {
-				TopScoresDataXORCode[k] = TopScoresResultString[i];
-				k++;
-			}
-		}
-		// находим правильное значение, т.к. загружали использую длину строки (!!!)
-		TopScoresDataSize = k / 3;
-
-		// второй цикл, восстанавливаем последовательность структуры
-		for (int i = 0; i< TopScoresDataSize; i++) {
-			int k1 = i;
-			int k2 = TopScoresDataSize + i * 2;
-
-			unsigned char XORhash = TopScoresDataXORCode[k1];
-			unsigned char XORdata = ((TopScoresDataXORCode[k2] - 97) * 10) + (TopScoresDataXORCode[k2 + 1] - 97);
-
-			TopScoresData[i] = XORdata ^ XORhash;
-		}
-
-		// переносим данные в структуру
-		memcpy(Config.TopScores, TopScoresData, TopScoresDataSize);
-
-		if (TopScoresResultString)
-			delete [] TopScoresResultString;
-		if (TopScoresData)
-			delete [] TopScoresData;
-		if (TopScoresDataXORCode)
-			delete [] TopScoresDataXORCode;
-	}
+	    !XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content.empty())
+		UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.TopScores),
+			      sizeof(sTopScores) * 10,
+			      XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content);
 
 LoadProfiles:
 
-	//
-	// загрузка профайлов пилотов
-	//
-
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles") &&
-	    !XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.empty()) {
-		int ProfileDataSize = XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.size();
-		unsigned char *ProfileData = new unsigned char[ProfileDataSize+1];
-		unsigned char *ProfileDataXORCode = new unsigned char[ProfileDataSize+1];
-		char *ResultString = new char[ProfileDataSize + 1];
-
-		strcpy(ResultString, XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.c_str());
-
-		// первый цикл, восстанавливаем правильную последовательность, убираем все лишние элементы
-		int k = 0;
-		for (unsigned int i = 0; i < strlen(ResultString); i++) {
-			// берем только нужные символы
-			if ((ResultString[i] >= 97) &&
-			    (ResultString[i] <= 97 + 26)) {
-				ProfileDataXORCode[k] = ResultString[i];
-				k++;
-			}
-		}
-		// находим правильное значение, т.к. загружали используя длину строки (!!!)
-		ProfileDataSize = k / 3;
-
-		// второй цикл, восстанавливаем последовательность структуры
-		for (int i = 0; i < ProfileDataSize; i++) {
-			int k1 = i;
-			int k2 = ProfileDataSize + i * 2;
-
-			unsigned char XORhash = ProfileDataXORCode[k1];
-			unsigned char XORdata = ((ProfileDataXORCode[k2] - 97) * 10) + (ProfileDataXORCode[k2 + 1] - 97);
-
-			ProfileData[i] = XORdata ^ XORhash;
-		}
-
-		// переносим данные в структуру
-		memcpy(Config.Profile, ProfileData, ProfileDataSize);
-
-		if (ResultString != nullptr)
-			delete [] ResultString;
-		if (ProfileData != nullptr)
-			delete [] ProfileData;
-		if (ProfileDataXORCode != nullptr)
-			delete [] ProfileDataXORCode;
-	}
+	    !XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.empty())
+		UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile),
+			      sizeof(sPilotProfile) * 5,
+			      XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content);
 
 	//
 	// делаем изменения, проверки и т.п.
