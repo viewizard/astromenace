@@ -25,9 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-// TODO revise code in order to remove 'goto' statement
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../game.h"
@@ -197,40 +194,92 @@ static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std:
 }
 
 /*
+ * Check configuration.
+ */
+static void CheckConfig()
+{
+	if (Config.KeyBoardUp == 0)
+		Config.KeyBoardUp = SDLK_UP;
+	if (Config.KeyBoardDown == 0)
+		Config.KeyBoardDown = SDLK_DOWN;
+	if (Config.KeyBoardLeft == 0)
+		Config.KeyBoardLeft = SDLK_LEFT;
+	if (Config.KeyBoardRight == 0)
+		Config.KeyBoardRight = SDLK_RIGHT;
+	if (Config.KeyBoardPrimary == 0)
+		Config.KeyBoardPrimary = SDLK_LCTRL;
+	if (Config.KeyBoardSecondary == 0)
+		Config.KeyBoardSecondary = SDLK_SPACE;
+	if (Config.MousePrimary == 0)
+		Config.MousePrimary = SDL_BUTTON_LEFT;
+	if (Config.MouseSecondary == 0)
+		Config.MouseSecondary = SDL_BUTTON_RIGHT;
+	if (Config.JoystickPrimary == -1)
+		Config.JoystickPrimary = 0;
+	if (Config.JoystickSecondary == -1)
+		Config.JoystickSecondary = 1;
+
+	if ((Config.FontNumber > (FontQuantity - 1)) || (Config.FontNumber < 0))
+		Config.FontNumber = 0;
+	if (Config.ControlSensivity > 10)
+		Config.ControlSensivity = 10;
+	if (Config.Brightness > 10)
+		Config.Brightness = 10;
+	if (Config.JoystickDeadZone > 10)
+		Config.JoystickDeadZone = 10;
+}
+
+/*
+ * Setup current profile and mission from loaded configurations.
+ */
+static void SetupCurrentProfileAndMission()
+{
+	if ((Config.LastProfile >= 0) &&
+	    (Config.LastProfile <= 4) &&
+	    Config.Profile[Config.LastProfile].Used)
+		CurrentProfile = Config.LastProfile;
+	if (CurrentProfile != -1)
+		CurrentMission = Config.Profile[Config.LastProfile].LastMission;
+}
+
+/*
  * Load game configuration file.
  */
 bool LoadXMLConfigFile(bool NeedSafeMode)
 {
 	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(ConfigFileName)};
 
-	// читаем данные
 	if (!XMLdoc->GetRootEntry()) {
 		SaveXMLConfigFile();
 		return true;
 	}
 
-	// берем первый элемент в скрипте
 	sXMLEntry *RootXMLEntry = XMLdoc->GetRootEntry();
 
-	// дополнительная проверка на содержимое конфигурационного файла
 	if (!RootXMLEntry) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		// сохранить дефолтные настройки, перезаписав файл
 		SaveXMLConfigFile();
-		// и сказать игре что это "первый запуск"
 		return true;
 	}
 	if ("AstroMenaceSettings" != RootXMLEntry->Name) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		// сохранить дефолтные настройки, перезаписав файл
 		SaveXMLConfigFile();
-		// и сказать игре что это "первый запуск"
 		return true;
 	}
 
-	// если установлен NeedSafeMode, не грузим часть данных
-	if (NeedSafeMode)
-		goto LoadProfiles;
+	// NeedSafeMode, only pilots profiles should be loaded
+	if (NeedSafeMode) {
+		if (XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles") &&
+		    !XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.empty())
+			UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile),
+				      sizeof(sPilotProfile) * 5,
+				      XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content);
+
+		CheckConfig();
+		SetupCurrentProfileAndMission();
+
+		return false;
+	}
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage")) {
 		std::string tmpMenuLanguage{};
@@ -401,7 +450,7 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuScript"), "value",
 					   Config.MenuScript);
 
-	for(int i=0; i<10; i++) {
+	for(int i = 0; i < 10; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
 		if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()))
 			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()), "value",
@@ -414,54 +463,14 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 			      sizeof(sTopScores) * 10,
 			      XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content);
 
-LoadProfiles:
-
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles") &&
 	    !XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.empty())
 		UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile),
 			      sizeof(sPilotProfile) * 5,
 			      XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content);
 
-	//
-	// делаем изменения, проверки и т.п.
-	//
-
-	if (Config.KeyBoardUp == 0)
-		Config.KeyBoardUp = SDLK_UP;
-	if (Config.KeyBoardDown == 0)
-		Config.KeyBoardDown = SDLK_DOWN;
-	if (Config.KeyBoardLeft == 0)
-		Config.KeyBoardLeft = SDLK_LEFT;
-	if (Config.KeyBoardRight == 0)
-		Config.KeyBoardRight = SDLK_RIGHT;
-	if (Config.KeyBoardPrimary == 0)
-		Config.KeyBoardPrimary = SDLK_LCTRL;
-	if (Config.KeyBoardSecondary == 0)
-		Config.KeyBoardSecondary = SDLK_SPACE;
-	if (Config.MousePrimary == 0)
-		Config.MousePrimary = SDL_BUTTON_LEFT;
-	if (Config.MouseSecondary == 0)
-		Config.MouseSecondary = SDL_BUTTON_RIGHT;
-	if (Config.JoystickPrimary == -1)
-		Config.JoystickPrimary = 0;
-	if (Config.JoystickSecondary == -1)
-		Config.JoystickSecondary = 1;
-
-	if ((Config.LastProfile >= 0) &&
-	    (Config.LastProfile <= 4) &&
-	    Config.Profile[Config.LastProfile].Used)
-		CurrentProfile = Config.LastProfile;
-	if (CurrentProfile != -1)
-		CurrentMission = Config.Profile[Config.LastProfile].LastMission;
-
-	if ((Config.FontNumber > (FontQuantity - 1)) || (Config.FontNumber < 0))
-		Config.FontNumber = 0;
-	if (Config.ControlSensivity > 10)
-		Config.ControlSensivity = 10;
-	if (Config.Brightness > 10)
-		Config.Brightness = 10;
-	if (Config.JoystickDeadZone > 10)
-		Config.JoystickDeadZone = 10;
+	CheckConfig();
+	SetupCurrentProfileAndMission();
 
 	return false;
 }
