@@ -97,9 +97,9 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "UseGLSL120"), "value", Config.UseGLSL120);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "ShadowMap"), "value", Config.ShadowMap);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MaxPointLights"), "value", Config.MaxPointLights);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MusicSw"), "value", Config.MusicSw);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "SoundSw"), "value", Config.SoundSw);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceSw"), "value", Config.VoiceSw);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MusicVolume"), "value", Config.MusicVolume);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "SoundVolume"), "value", Config.SoundVolume);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VoiceVolume"), "value", Config.VoiceVolume);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VSync"), "value", Config.VSync);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Brightness"), "value", Config.Brightness);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "ShowFPS"), "value", Config.ShowFPS);
@@ -333,12 +333,12 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ShadowMap"), "value", Config.ShadowMap);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MaxPointLights"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MaxPointLights"), "value", Config.MaxPointLights);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MusicSw"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MusicSw"), "value", Config.MusicSw);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "SoundSw"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "SoundSw"), "value", Config.SoundSw);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceSw"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceSw"), "value", Config.VoiceSw);
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MusicVolume"))
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MusicVolume"), "value", Config.MusicVolume);
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, "SoundVolume"))
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "SoundVolume"), "value", Config.SoundVolume);
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceVolume"))
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VoiceVolume"), "value", Config.VoiceVolume);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "VSync"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "VSync"), "value", Config.VSync);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Brightness"))

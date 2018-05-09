@@ -76,17 +76,17 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Music Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicSw == 0))) {
-		ChangeGameConfig().MusicSw--;
-		if (GameConfig().MusicSw < 0)
-			ChangeGameConfig().MusicSw = 0;
-		vw_SetMusicGlobalVolume(GameConfig().MusicSw / 10.0f);
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicVolume == 0))) {
+		ChangeGameConfig().MusicVolume--;
+		if (GameConfig().MusicVolume < 0)
+			ChangeGameConfig().MusicVolume = 0;
+		vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicSw == 10))) {
-		ChangeGameConfig().MusicSw++;
-		if (GameConfig().MusicSw > 10)
-			ChangeGameConfig().MusicSw = 10;
-		vw_SetMusicGlobalVolume(GameConfig().MusicSw / 10.0f);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicVolume == 10))) {
+		ChangeGameConfig().MusicVolume++;
+		if (GameConfig().MusicVolume > 10)
+			ChangeGameConfig().MusicVolume = 10;
+		vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
 	}
 	if (!GameConfig().Music_check) {
 		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
@@ -95,7 +95,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		for (int i = 0; i < 10; i++) {
 			SrcRect(0 ,0, 16, 32);
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
-			if (GameConfig().MusicSw > i)
+			if (GameConfig().MusicVolume > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
@@ -109,18 +109,18 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Voice Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceSw == 0), false)) {
-		ChangeGameConfig().VoiceSw--;
-		if (GameConfig().VoiceSw < 0)
-			ChangeGameConfig().VoiceSw = 0;
-		Audio_SetVoiceGlobalVolume(GameConfig().VoiceSw / 10.0f);
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceVolume == 0), false)) {
+		ChangeGameConfig().VoiceVolume--;
+		if (GameConfig().VoiceVolume < 0)
+			ChangeGameConfig().VoiceVolume = 0;
+		Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceSw == 10), false)) {
-		ChangeGameConfig().VoiceSw++;
-		if (GameConfig().VoiceSw > 10)
-			ChangeGameConfig().VoiceSw = 10;
-		Audio_SetVoiceGlobalVolume(GameConfig().VoiceSw / 10.0f);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceVolume == 10), false)) {
+		ChangeGameConfig().VoiceVolume++;
+		if (GameConfig().VoiceVolume > 10)
+			ChangeGameConfig().VoiceVolume = 10;
+		Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
 	if (!GameConfig().Sound_check) {
@@ -130,7 +130,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		for (int i = 0; i < 10; i++) {
 			SrcRect(0, 0, 16, 32);
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
-			if (GameConfig().VoiceSw > i)
+			if (GameConfig().VoiceVolume > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
@@ -143,17 +143,17 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Sound Effects Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundSw == 0))) {
-		ChangeGameConfig().SoundSw--;
-		if (GameConfig().SoundSw < 0)
-			ChangeGameConfig().SoundSw = 0;
-		Audio_SetSound2DGlobalVolume(GameConfig().SoundSw / 10.0f);
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundVolume == 0))) {
+		ChangeGameConfig().SoundVolume--;
+		if (GameConfig().SoundVolume < 0)
+			ChangeGameConfig().SoundVolume = 0;
+		Audio_SetSound2DGlobalVolume(GameConfig().SoundVolume / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundSw == 10))) {
-		ChangeGameConfig().SoundSw++;
-		if (GameConfig().SoundSw > 10)
-			ChangeGameConfig().SoundSw = 10;
-		Audio_SetSound2DGlobalVolume(GameConfig().SoundSw / 10.0f);
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundVolume == 10))) {
+		ChangeGameConfig().SoundVolume++;
+		if (GameConfig().SoundVolume > 10)
+			ChangeGameConfig().SoundVolume = 10;
+		Audio_SetSound2DGlobalVolume(GameConfig().SoundVolume / 10.0f);
 	}
 	if (!GameConfig().Sound_check) {
 		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
@@ -161,8 +161,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	} else {
 		for (int i=0; i<10; i++) {
 			SrcRect(0,0,16,32);
-			DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
-			if (GameConfig().SoundSw > i)
+			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+			if (GameConfig().SoundVolume > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
