@@ -67,72 +67,12 @@ void NewRecord()
 
 	// пишем данные в профайл
 
+	ChangeGameConfig().Profile[ProfileNum] = sPilotProfile{};
 	ChangeGameConfig().Profile[ProfileNum].Used = true;
 	strcpy(ChangeGameConfig().Profile[ProfileNum].Name, ConvertUTF8.to_bytes(NewProfileName).c_str());
 
-	ChangeGameConfig().Profile[ProfileNum].NPCWeaponPenalty = 3;
-	ChangeGameConfig().Profile[ProfileNum].NPCArmorPenalty = 2;
-	ChangeGameConfig().Profile[ProfileNum].NPCTargetingSpeedPenalty = 2;
-	ChangeGameConfig().Profile[ProfileNum].LimitedAmmo = 0;
-	ChangeGameConfig().Profile[ProfileNum].DestroyableWeapon = 1;
-	ChangeGameConfig().Profile[ProfileNum].WeaponTargetingMode = 0;
-	ChangeGameConfig().Profile[ProfileNum].SpaceShipControlMode = 1;
-
-
-	ChangeGameConfig().Profile[ProfileNum].Ship = 1;
-	ChangeGameConfig().Profile[ProfileNum].ShipHullUpgrade = 1;
-	ChangeGameConfig().Profile[ProfileNum].ShipHullCurrentStrength = 30;
-
-	// сброс настроек оружия
-	for (int i = 0; i < 6; i++) {
-		ChangeGameConfig().Profile[ProfileNum].Weapon[i] = 0;
-		ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[i] = 0;
-		ChangeGameConfig().Profile[ProfileNum].WeaponControl[i] = 0;
-		ChangeGameConfig().Profile[ProfileNum].WeaponAltControl[i] = 0;
-		ChangeGameConfig().Profile[ProfileNum].WeaponAltControlData[i] = 0;
-		ChangeGameConfig().Profile[ProfileNum].WeaponSlotYAngle[i] = 0.0f;
-	}
-	// ставим 2 орудия первоначально
-
-
-	ChangeGameConfig().Profile[ProfileNum].Weapon[2] = 1;
-	ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[2] = 3000;
-	ChangeGameConfig().Profile[ProfileNum].WeaponControl[2] = 1;
-	ChangeGameConfig().Profile[ProfileNum].Weapon[3] = 1;
-	ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[3] = 3000;
-	ChangeGameConfig().Profile[ProfileNum].WeaponControl[3] = 1;
-	ChangeGameConfig().Profile[ProfileNum].Weapon[4] = 16;
-	ChangeGameConfig().Profile[ProfileNum].WeaponAmmo[4] = 200;
-	ChangeGameConfig().Profile[ProfileNum].WeaponControl[4] = 2;
-
-	ChangeGameConfig().Profile[ProfileNum].EngineSystem = 1;
-	ChangeGameConfig().Profile[ProfileNum].TargetingSystem = 1;
-	ChangeGameConfig().Profile[ProfileNum].AdvancedProtectionSystem = 1;
-	ChangeGameConfig().Profile[ProfileNum].PowerSystem = 1;
-	ChangeGameConfig().Profile[ProfileNum].TargetingMechanicSystem = 1;
-
-	ChangeGameConfig().Profile[ProfileNum].Difficulty = 50;
-
-	ChangeGameConfig().Profile[ProfileNum].PrimaryWeaponFireMode = 2;
-	ChangeGameConfig().Profile[ProfileNum].SecondaryWeaponFireMode = 1;
-
-
-	ChangeGameConfig().Profile[ProfileNum].Money = 200;
-	ChangeGameConfig().Profile[ProfileNum].Experience = 0;
-
-	// сброс настроек
-	for (int i = 0; i < 100; i++) {
-		ChangeGameConfig().Profile[ProfileNum].ByMissionExperience[i] = 0;
-		ChangeGameConfig().Profile[ProfileNum].MissionReplayCount[i] = 0;
-	}
-
-
-	ChangeGameConfig().Profile[ProfileNum].OpenLevelNum = 0;// 1;
-
-
 	// подготавливаем, для новой записи
 	NewProfileName.clear();
-
 
 	CurrentProfile = ProfileNum;
 	ChangeGameConfig().LastProfile = CurrentProfile;

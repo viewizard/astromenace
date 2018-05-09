@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef GAME_CONFIG_H
 #define GAME_CONFIG_H
 
@@ -45,60 +43,78 @@ struct sPilotProfile {
 	bool Used{false};
 
 	char Name[PROFILE_NAME_SIZE];
-	// замедление снарядов NPC ... 1-3...
-	uint8_t NPCWeaponPenalty;
-	// ум. защиты NPC объектов
-	uint8_t NPCArmorPenalty;
-	// "замедление" наведения NPC ... 1-4
-	uint8_t NPCTargetingSpeedPenalty;
-	// 0-ограничено, 1-нет
-	uint8_t LimitedAmmo;
-	// 0-может быть уничтожено, 1-нет
-	uint8_t DestroyableWeapon;
-	// 1-аркада, 0-симулятор
-	uint8_t WeaponTargetingMode;
-	// 1-аркада, 0-симулятор
-	uint8_t SpaceShipControlMode;
 
-	uint8_t Ship;
-	uint8_t ShipHullUpgrade;
-	float ShipHullCurrentStrength;
+	// game difficulty related settings
+	uint8_t NPCWeaponPenalty{3};		// NPC weapon fire penalty [1, 3]
+	uint8_t NPCArmorPenalty{2};		// NPC armor strength penalty [1, 4]
+	uint8_t NPCTargetingSpeedPenalty{2};	// NPC targeting speed penalty [1, 4]
+	uint8_t LimitedAmmo{0};			// 0 - on, 1 - off
+	uint8_t DestroyableWeapon{1};		// 0 - destroyable, 1 - immortal
+	uint8_t WeaponTargetingMode{0};		// 0 - simulator, 1 - arcade
+	uint8_t SpaceShipControlMode{1};	// 0 - simulator, 1 - arcade
+	uint8_t Difficulty{50};			// default difficulty in %, this parameter based on all previous parameters
 
+	// default player's ship (first ship, without additional hull upgrades)
+	uint8_t Ship{1};
+	uint8_t ShipHullUpgrade{1};
+	float ShipHullCurrentStrength{30.0f};
+
+	// weapon related settings
 	uint8_t Weapon[6];
 	int WeaponAmmo[6];
-	// для каждого
-	// 1-только примари, 2 только секондари, 3 оба
-	uint8_t WeaponControl[6];
-	// доп. управление, 0-нет, 1-клава,2-мышка,3-джойст
-	uint8_t WeaponAltControl[6];
-	uint8_t WeaponAltControlData[6];
-	// для каждого слота - текущее положение оружия
-	float WeaponSlotYAngle[6];
+	float WeaponSlotYAngle[6];	// wealon Y angle
+	uint8_t WeaponControl[6];	// 1 - primary fire control, 2 - secondary fire control, 3 - both
+	uint8_t WeaponAltControl[6];		// 0 - disabled, 1 - keyboard, 2 - mouse, 3 - joystick
+	uint8_t WeaponAltControlData[6];	// alt control data
 
-	uint8_t EngineSystem;
-	uint8_t TargetingSystem;
-	uint8_t AdvancedProtectionSystem;
-	uint8_t PowerSystem;
-	uint8_t TargetingMechanicSystem;
+	// default systems for default ship
+	uint8_t EngineSystem{1};
+	uint8_t TargetingSystem{1};
+	uint8_t AdvancedProtectionSystem{1};
+	uint8_t PowerSystem{1};
+	uint8_t TargetingMechanicSystem{1};
 
-	uint8_t Difficulty;
+	int Money{200};
+	int Experience{0};
 
-	int Money;
-	int Experience;
+	uint8_t PrimaryWeaponFireMode{2};	// 1 - shoot a volley, 2 - shoot a burst
+	uint8_t SecondaryWeaponFireMode{2};	// 1 - shoot a volley, 2 - shoot a burst
 
-	// как стрелять // 1 - как и раньше, все вместе... 2 - поочереди
-	uint8_t PrimaryWeaponFireMode;
-	uint8_t SecondaryWeaponFireMode;
+	int OpenLevelNum{0};	// allowed missions
+	int LastMission{0};	// current chosen mission
 
-	// последний открытый уровень для данной записи
-	int OpenLevelNum;
-	// последняя выбранная миссия
-	int LastMission;
+	int ByMissionExperience[MAXIMUM_GAME_MISSIONS];	// experience for each mission
+	int MissionReplayCount[MAXIMUM_GAME_MISSIONS];	// how many times mission was replayed
 
-	// опыт за каждую миссию
-	int ByMissionExperience[MAXIMUM_GAME_MISSIONS];
-	// кол-во раз которое играли в миссию
-	int MissionReplayCount[MAXIMUM_GAME_MISSIONS];
+	sPilotProfile()
+	{
+		memset(Name, 0, PROFILE_NAME_SIZE);
+
+		for (int i = 0; i < 6; i++) {
+			Weapon[i] = 0;
+			WeaponAmmo[i] = 0;
+			WeaponSlotYAngle[i] = 0.0f;
+			WeaponControl[i] = 0;
+			WeaponAltControl[i] = 0;
+			WeaponAltControlData[i] = 0;
+		}
+
+		// default weapons for default ship
+		Weapon[2] = 1;
+		WeaponAmmo[2] = 3000;
+		WeaponControl[2] = 1;
+		Weapon[3] = 1;
+		WeaponAmmo[3] = 3000;
+		WeaponControl[3] = 1;
+		Weapon[4] = 16;
+		WeaponAmmo[4] = 200;
+		WeaponControl[4] = 2;
+
+		for (int i = 0; i < 100; i++) {
+			ByMissionExperience[i] = 0;
+			MissionReplayCount[i] = 0;
+		}
+	}
 };
 
 // This structure should be POD, since we "pack" it into the game config file
@@ -132,10 +148,9 @@ struct sGameConfig {
 	int CSAA{0}; // CS anti aliasing
 
 	int VisualEffectsQuality{0};	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-	int AnisotropyLevel{1};
+	int AnisotropyLevel{1};		// textures anisotropic filtering level
 	int TexturesCompressionType{0};	// 0 - disabled, 1 - S3TC, 2 - BPTC
 	bool UseGLSL120{false};		// 120 (OpenGL 2.1)
-	// использование шадовмеп
 	int ShadowMap{0};		// gfx (shadow map)
 	int MaxPointLights{3};		// lights point max quantity
 
@@ -179,11 +194,7 @@ struct sGameConfig {
 	bool ShowFPS{false};
 	int GameWeaponInfoType{1};
 
-	sPilotProfile Profile[5]{sPilotProfile{},
-				 sPilotProfile{},
-				 sPilotProfile{},
-				 sPilotProfile{},
-				 sPilotProfile{}};
+	sPilotProfile Profile[5];
 
 	int LastProfile{-1}; // last used pilot profile
 
