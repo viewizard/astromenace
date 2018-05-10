@@ -70,6 +70,16 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
 	// 1 - tag's name (starts after '<' and ends by ' ', '>', '/' (/>), '\t')
 	unsigned long TagNameEnd = Buffer.find_first_of(" />\t");
 	XMLEntry->Name = Buffer.substr(1, TagNameEnd - 1);
+	if (CalculateHash) {
+		XMLEntry->NameHash = xml::hash(XMLEntry->Name.c_str());
+		auto tmpHash = HashCheckMap.find(XMLEntry->NameHash);
+		if (tmpHash == HashCheckMap.end())
+			HashCheckMap.emplace(XMLEntry->NameHash, XMLEntry->Name);
+		else if (tmpHash->second != XMLEntry->Name)
+			std::cerr << "Warning! Detected hash collision for tag name: "
+				  << XMLEntry->Name << " and tag name: "
+				  << tmpHash->second << "\n";
+	}
 
 	// 2 - check for attributes
 	unsigned long i = TagNameEnd;
@@ -239,8 +249,10 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned lon
 /*
  * Load XML from file.
  */
-cXMLDocument::cXMLDocument(const std::string &XMLFileName)
+cXMLDocument::cXMLDocument(const std::string &XMLFileName, bool Hash)
 {
+	CalculateHash = Hash;
+
 	std::cout << "Open XML file: " << XMLFileName << "\n";
 
 	// just to be sure, release any previous data
@@ -272,6 +284,15 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName)
 
 	if (!RootXMLEntry.get())
 		std::cerr << __func__ << "(): " << "XML file corrupted, root element not found: " << XMLFileName << "\n";
+
+	if (CalculateHash) {
+		std::cout << "Hash table for XML file " << XMLFileName << "\n";
+		for (const auto &tmpHash : HashCheckMap) {
+			std::cout << tmpHash.first << " : " << tmpHash.second << "\n";
+		}
+		std::cout << "\n";
+		HashCheckMap.clear();
+	}
 }
 
 /*

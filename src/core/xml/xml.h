@@ -46,7 +46,21 @@
  * Special features:
  * 1. For game scripts debug, XML will care about lines numbers and open tag.
  * 2. Test XML file structure (in the way we need).
+ * 3. Hash calculation for tags names (for fast search, or switch statement).
  */
+
+namespace xml {
+
+/*
+ * Compile-time Bernstein hash (djb2a) calculation.
+ */
+#pragma GCC diagnostic ignored "-Winline"
+constexpr unsigned hash(const char *str, int h = 0)
+{
+	return !str[h] ? 5381 : (hash(str, h + 1) * 33) ^ str[h];
+}
+
+}
 
 enum class eEntryType {
 	Regular,	// regular, could contain attributes and sub-entries
@@ -55,9 +69,10 @@ enum class eEntryType {
 
 struct sXMLEntry {
 	eEntryType EntryType{eEntryType::Regular};
-	std::string Name; // name, if entry type is comment - comment's text
-	std::string Content;
-	std::unordered_map<std::string, std::string> Attributes;
+	std::string Name{}; // name, if entry type is comment - comment's text
+	unsigned NameHash{0}; // name's hash
+	std::string Content{};
+	std::unordered_map<std::string, std::string> Attributes{};
 	std::list<sXMLEntry> ChildrenList{};
 
 	int LineNumber{0}; // line number in file (for new created, 0)
@@ -67,7 +82,7 @@ class cXMLDocument {
 public:
 	cXMLDocument() = default;
 	// Load XML from file.
-	cXMLDocument(const std::string &XMLFileName);
+	cXMLDocument(const std::string &XMLFileName, bool Hash = false);
 
 	// Save XML to file (libSDL RWops).
 	bool Save(const std::string &XMLFileName);
@@ -221,6 +236,10 @@ private:
 	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
 	// "XML documents must contain one root element that is the parent of all other elements".
 	std::unique_ptr<sXMLEntry> RootXMLEntry{};
+	// calculate hash for tags names
+	bool CalculateHash{false};
+	// hash check for collisions
+	std::map<unsigned, std::string> HashCheckMap{};
 };
 
 #endif // XML_H
