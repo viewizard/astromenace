@@ -645,7 +645,8 @@ void cMissionScript::UpdateTimeLine()
 {
 	for (auto &TL : xmlEntryIter->ChildrenList) {
 
-		if (TL.Name == "EarthFighter") {
+		switch (TL.NameHash) {
+		case xml::hash("EarthFighter"): {
 			cEarthSpaceFighter *Fighter = nullptr;
 			Fighter = new cEarthSpaceFighter;
 			int tmpType{0};
@@ -799,7 +800,10 @@ void cMissionScript::UpdateTimeLine()
 					}
 				}
 			}
-		} else if (TL.Name == "AlienFighter") {
+			}
+			break;
+
+		case xml::hash("AlienFighter"): {
 			cAlienSpaceFighter *Fighter = new cAlienSpaceFighter;
 			int tmpType{0};
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
@@ -932,7 +936,10 @@ void cMissionScript::UpdateTimeLine()
 					}
 				}
 			}
-		} else if (TL.Name == "AlienMotherShip") {
+			}
+			break;
+
+		case xml::hash("AlienMotherShip"): {
 			cAlienSpaceMotherShip *Fighter = new cAlienSpaceMotherShip;
 			int tmpType{0};
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
@@ -1069,7 +1076,10 @@ void cMissionScript::UpdateTimeLine()
 					}
 				}
 			}
-		} else if (TL.Name == "PirateShip") {
+			}
+			break;
+
+		case xml::hash("PirateShip"): {
 			cPirateShip *Fighter = new cPirateShip;
 			int tmpType{0};
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
@@ -1207,7 +1217,10 @@ void cMissionScript::UpdateTimeLine()
 					}
 				}
 			}
-		} else if (TL.Name == "CreateAsteroid") {
+			}
+			break;
+
+		case xml::hash("CreateAsteroid"): {
 			cAsteroid *Asteroid = new cAsteroid;
 
 			// тип сейчас не задействован, всегда ставим 1
@@ -1225,7 +1238,10 @@ void cMissionScript::UpdateTimeLine()
 			xmlDoc->fGetEntryAttribute(TL, "rotx", Asteroid->RotationSpeed.x);
 			xmlDoc->fGetEntryAttribute(TL, "roty", Asteroid->RotationSpeed.y);
 			xmlDoc->fGetEntryAttribute(TL, "rotz", Asteroid->RotationSpeed.z);
-		} else if (TL.Name == "CreateBasePart") {
+			}
+			break;
+
+		case xml::hash("CreateBasePart"): {
 			cBasePart *BasePart = new cBasePart;
 
 			// тип части
@@ -1244,7 +1260,10 @@ void cMissionScript::UpdateTimeLine()
 
 			SetRotation(BasePart, &TL, xmlDoc);
 			SetLocation(BasePart, &TL, xmlDoc, TimeOpLag);
-		} else if (TL.Name == "CreateBigAsteroid") {
+			}
+			break;
+
+		case xml::hash("CreateBigAsteroid"): {
 			cBigAsteroid *BigAsteroid = new cBigAsteroid;
 
 			// тип части
@@ -1263,7 +1282,10 @@ void cMissionScript::UpdateTimeLine()
 
 			SetRotation(BigAsteroid, &TL, xmlDoc);
 			SetLocation(BigAsteroid, &TL, xmlDoc, TimeOpLag);
-		} else if (TL.Name == "CreateMBuilding") {
+			}
+			break;
+
+		case xml::hash("CreateMBuilding"): {
 			cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
 
 			// тип части
@@ -1350,7 +1372,10 @@ void cMissionScript::UpdateTimeLine()
 					}
 				}
 			}
-		} else if (TL.Name == "CreateBuilding") {
+			}
+			break;
+
+		case xml::hash("CreateBuilding"): {
 			cBuilding *GroundObject = new cBuilding;
 			int tmpType{0};
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
@@ -1365,7 +1390,10 @@ void cMissionScript::UpdateTimeLine()
 
 			SetRotation(GroundObject, &TL, xmlDoc);
 			SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
-		} else if (TL.Name == "CreateMine") {
+			}
+			break;
+
+		case xml::hash("CreateMine"): {
 			cProjectile *Mine = new cProjectile;
 			// т.к. мины у нас с 214-217, делаем +213
 			int tmpType{0};
@@ -1400,7 +1428,10 @@ void cMissionScript::UpdateTimeLine()
 
 			SetProjectileRotation(Mine, &TL, xmlDoc);
 			SetProjectileLocation(Mine, &TL, xmlDoc, TimeOpLag);
-		} else if (TL.Name == "CreateTracked") {
+			}
+			break;
+
+		case xml::hash("CreateTracked"): {
 			cTracked *GroundObject = new cTracked;
 			int tmpType{0};
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
@@ -1503,7 +1534,10 @@ void cMissionScript::UpdateTimeLine()
 					}
 				}
 			}
-		} else if (TL.Name == "CreateWheeled") {
+			}
+			break;
+
+		case xml::hash("CreateWheeled"): {
 			cWheeled *GroundObject = new cWheeled;
 			int tmpType{0};
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
@@ -1607,10 +1641,14 @@ void cMissionScript::UpdateTimeLine()
 					}
 				}
 			}
-		} else {
+			}
+			break;
+
+		default:
 			// если тут - значит не нашли директиву, или произошла ошибка
 			std::cerr << __func__ << "(): " << "ScriptEngine: tag " << TL.Name
 				  << " not found, line " << TL.LineNumber << "\n";
+			break;
 		}
 	}
 }
