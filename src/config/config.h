@@ -30,19 +30,29 @@
 
 #include "../core/base.h"
 
+namespace config {
+
+// (!) changes make previous game configuration file incompatible
+
+// maximum profiles
+constexpr unsigned MAX_PROFILES{5};
 // profile name size
-// (!) changes make previous game configuration file incompatible
-#define PROFILE_NAME_SIZE 1024
+constexpr unsigned PROFILE_NAME_SIZE{1024};
 // maximum possible missions number for arrays in pilot profile
-// (!) changes make previous game configuration file incompatible
-#define MAXIMUM_GAME_MISSIONS 100
+constexpr unsigned MAX_MISSIONS{100};
+// maximum ships weapons slots
+constexpr unsigned MAX_WEAPONS{6};
+// maximum hints
+constexpr unsigned MAX_HINTS{10};
+
+} // config
 
 // This structure should be POD, since we "pack" it into the game config file
 // as memory block. Don't use std::string or any containers here.
 struct sPilotProfile {
 	bool Used{false};
 
-	char Name[PROFILE_NAME_SIZE];
+	char Name[config::PROFILE_NAME_SIZE];
 
 	// game difficulty related settings
 	uint8_t NPCWeaponPenalty{3};		// NPC weapon fire penalty [1, 3]
@@ -60,12 +70,12 @@ struct sPilotProfile {
 	float ShipHullCurrentStrength{30.0f};
 
 	// weapon related settings
-	uint8_t Weapon[6];
-	int WeaponAmmo[6];
-	float WeaponSlotYAngle[6];	// wealon Y angle
-	uint8_t WeaponControl[6];	// 1 - primary fire control, 2 - secondary fire control, 3 - both
-	uint8_t WeaponAltControl[6];		// 0 - disabled, 1 - keyboard, 2 - mouse, 3 - joystick
-	uint8_t WeaponAltControlData[6];	// alt control data
+	uint8_t Weapon[config::MAX_WEAPONS];
+	int WeaponAmmo[config::MAX_WEAPONS];
+	float WeaponSlotYAngle[config::MAX_WEAPONS];		// wealon Y angle
+	uint8_t WeaponControl[config::MAX_WEAPONS];		// 1 - primary fire control, 2 - secondary fire control, 3 - both
+	uint8_t WeaponAltControl[config::MAX_WEAPONS];		// 0 - disabled, 1 - keyboard, 2 - mouse, 3 - joystick
+	uint8_t WeaponAltControlData[config::MAX_WEAPONS];	// alt control data
 
 	// default systems for default ship
 	uint8_t EngineSystem{1};
@@ -83,14 +93,14 @@ struct sPilotProfile {
 	int OpenLevelNum{0};	// allowed missions
 	int LastMission{0};	// current chosen mission
 
-	int ByMissionExperience[MAXIMUM_GAME_MISSIONS];	// experience for each mission
-	int MissionReplayCount[MAXIMUM_GAME_MISSIONS];	// how many times mission was replayed
+	int ByMissionExperience[config::MAX_MISSIONS];	// experience for each mission
+	int MissionReplayCount[config::MAX_MISSIONS];	// how many times mission was replayed
 
 	sPilotProfile()
 	{
-		memset(Name, 0, PROFILE_NAME_SIZE);
+		memset(Name, 0, config::PROFILE_NAME_SIZE);
 
-		for (int i = 0; i < 6; i++) {
+		for (unsigned i = 0; i < config::MAX_WEAPONS; i++) {
 			Weapon[i] = 0;
 			WeaponAmmo[i] = 0;
 			WeaponSlotYAngle[i] = 0.0f;
@@ -110,7 +120,7 @@ struct sPilotProfile {
 		WeaponAmmo[4] = 200;
 		WeaponControl[4] = 2;
 
-		for (int i = 0; i < 100; i++) {
+		for (unsigned i = 0; i < config::MAX_MISSIONS; i++) {
 			ByMissionExperience[i] = 0;
 			MissionReplayCount[i] = 0;
 		}
@@ -120,7 +130,7 @@ struct sPilotProfile {
 // This structure should be POD, since we "pack" it into the game config file
 // as memory block. Don't use std::string or any containers here.
 struct sTopScores {
-	char Name[PROFILE_NAME_SIZE];
+	char Name[config::PROFILE_NAME_SIZE];
 	int Score;
 };
 
@@ -187,15 +197,21 @@ struct sGameConfig {
 	bool ShowFPS{false};
 	int GameWeaponInfoType{1};
 
-	sPilotProfile Profile[5];
+	sPilotProfile Profile[config::MAX_PROFILES];
 
 	int LastProfile{-1}; // last used pilot profile
 
 	// tips and hints status
-	bool NeedShowHint[10]{true, true, true, true, true,
-			      true, true, true, true, true};
+	bool NeedShowHint[config::MAX_HINTS];
 
 	int MenuScript{0}; // last used menu background script number
+
+	sGameConfig()
+	{
+		for (unsigned i = 0; i < config::MAX_HINTS; i++) {
+			NeedShowHint[i] = true;
+		}
+	}
 };
 
 

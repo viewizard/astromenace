@@ -31,7 +31,7 @@
 
 
 // информация о победителях, для вывода
-char	GameName[10][PROFILE_NAME_SIZE];
+char	GameName[10][config::PROFILE_NAME_SIZE];
 int	GameScore[10];
 
 
@@ -39,11 +39,11 @@ int	GameScore[10];
 
 
 
-void AddTopScores(int Score, const char Name[PROFILE_NAME_SIZE], bool Type)
+void AddTopScores(int Score, const char Name[config::PROFILE_NAME_SIZE], bool Type)
 {
 	// данные буфера
 	int ScoreBuffer = Score;
-	char NameBuffer[PROFILE_NAME_SIZE];
+	char NameBuffer[config::PROFILE_NAME_SIZE];
 	strcpy(NameBuffer, Name);
 
 	// сдвигаем...
@@ -53,7 +53,7 @@ void AddTopScores(int Score, const char Name[PROFILE_NAME_SIZE], bool Type)
 			else {
 				// сохраняем данные текущей строки
 				int ScoreBuffer2 = GameScore[i];
-				char NameBuffer2[PROFILE_NAME_SIZE];
+				char NameBuffer2[config::PROFILE_NAME_SIZE];
 				strcpy(NameBuffer2, GameName[i]);
 
 				// записываем данные из буфера...
@@ -71,7 +71,7 @@ void AddTopScores(int Score, const char Name[PROFILE_NAME_SIZE], bool Type)
 			if (ScoreBuffer >= GameConfig().TopScores[i].Score) {
 				// сохраняем данные текущей строки
 				int ScoreBuffer2 = GameConfig().TopScores[i].Score;
-				char NameBuffer2[PROFILE_NAME_SIZE];
+				char NameBuffer2[config::PROFILE_NAME_SIZE];
 				strcpy(NameBuffer2, GameConfig().TopScores[i].Name);
 
 				// записываем данные из буфера...
