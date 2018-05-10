@@ -36,7 +36,7 @@
 #include "../config/config.h"
 #include "../ui/font.h"
 #include "../gfx/star_system.h"
-#include "../script_engine/script.h"
+#include "../script/script.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 #include <stdarg.h> // va_start
 

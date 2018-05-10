@@ -31,7 +31,7 @@
 #include "config/config.h"
 #include "ui/font.h"
 #include "gfx/shadow_map.h"
-#include "script_engine/script.h"
+#include "script/script.h"
 #include "object3d/object3d.h"
 #include <sys/stat.h> // stat
 
