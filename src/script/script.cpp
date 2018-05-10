@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../game.h"
@@ -273,7 +275,7 @@ void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry)
 
 
 
-cScriptEngine::cScriptEngine()
+cMissionScript::cMissionScript()
 {
 	// отладочный режим
 	NeedShowBB = 0;
@@ -284,7 +286,7 @@ cScriptEngine::cScriptEngine()
 //-----------------------------------------------------------------------------
 // запустить скрипт на выполнение
 //-----------------------------------------------------------------------------
-bool cScriptEngine::RunScript(const char *FileName, float InitTime)
+bool cMissionScript::RunScript(const char *FileName, float InitTime)
 {
 	// установка значений
 	StartTime = TimeLastOp = InitTime;
@@ -359,7 +361,7 @@ bool cScriptEngine::RunScript(const char *FileName, float InitTime)
 //-----------------------------------------------------------------------------
 // проверяем скрипт
 //-----------------------------------------------------------------------------
-bool cScriptEngine::Update(float Time)
+bool cMissionScript::Update(float Time)
 {
 	// скрипт не загружен
 	if (xmlDoc == nullptr)
@@ -655,7 +657,7 @@ bool cScriptEngine::Update(float Time)
 //-----------------------------------------------------------------------------
 // проверяем скрипт дополнительно для TimeLine
 //-----------------------------------------------------------------------------
-void cScriptEngine::UpdateTimeLine()
+void cMissionScript::UpdateTimeLine()
 {
 	for (auto &TL : xmlEntryIter->ChildrenList) {
 

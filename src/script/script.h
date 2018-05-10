@@ -25,16 +25,15 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
-//-----------------------------------------------------------------------------
-// Основной класс сценария
-//-----------------------------------------------------------------------------
-class cScriptEngine
+class cMissionScript
 {
 public:
-	cScriptEngine();
+	cMissionScript();
 
 	// запустить скрипт на выполнение
 	bool RunScript(const char *FileName, float InitTime);

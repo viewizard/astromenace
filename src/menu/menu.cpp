@@ -146,7 +146,7 @@ void InitMenu()
 		delete Script;
 		Script = nullptr;
 	}
-	Script = new cScriptEngine;
+	Script = new cMissionScript;
 
 	if (GameConfig().MenuScript > 2)
 		ChangeGameConfig().MenuScript = 0;

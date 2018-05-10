@@ -41,7 +41,7 @@
 #include <stdarg.h> // va_start
 
 
-cScriptEngine *Script = nullptr;
+cMissionScript *Script = nullptr;
 
 
 
@@ -659,7 +659,7 @@ void InitGame()
 
 	if (Script != nullptr)
 		delete Script;
-	Script = new cScriptEngine;
+	Script = new cMissionScript;
 
 	if (Script != nullptr) {
 		if (GetMissionFileName() != nullptr) {

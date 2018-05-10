@@ -35,7 +35,7 @@
 #include "build_config.h"
 
 class cSpaceStars;
-class cScriptEngine;
+class cMissionScript;
 class cEarthSpaceFighter;
 
 
@@ -104,7 +104,7 @@ int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePat
 //------------------------------------------------------------------------------------
 // loop_proc.cpp
 //------------------------------------------------------------------------------------
-extern cScriptEngine *Script;
+extern cMissionScript *Script;
 
 extern eCommand ComBuffer;
 extern int CurrentCursorStatus;
