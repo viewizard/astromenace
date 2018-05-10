@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// FIXME continue in the middle of the cycle
+
 // TODO translate comments
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
@@ -48,23 +50,7 @@
 #include "../object3d/ground_object/wheeled/wheeled.h"
 #include "../object3d/ground_object/tracked/tracked.h"
 
-
-void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
-void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry);
-void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
-void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
-void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag);
-void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
-void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag);
-void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
-void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag);
-void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc);
-
-
-
-
 // проверка, если конец уровня как всех убъем
-
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
 extern cGroundObject *StartGroundObject;
@@ -76,8 +62,6 @@ extern int NeedShowBB;
 extern bool UndeadDebugMode;
 // показывать время при скорости 1.5
 extern bool ShowGameTime;
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -97,8 +81,6 @@ void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXM
 	}
 }
 
-
-
 //-----------------------------------------------------------------------------
 //  ID
 //-----------------------------------------------------------------------------
@@ -106,8 +88,6 @@ void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDoc
 {
 	xmlDoc->iGetEntryAttribute(*xmlEntry, "id", Object->ID);
 }
-
-
 
 //-----------------------------------------------------------------------------
 // Location
@@ -134,6 +114,7 @@ void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_
 
 	Object->SetLocation(POS);
 }
+
 void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
@@ -156,6 +137,7 @@ void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, const std::
 
 	Object->SetLocation(POS);
 }
+
 void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
@@ -179,10 +161,6 @@ void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<c
 	Object->SetLocation(POS);
 }
 
-
-
-
-
 //-----------------------------------------------------------------------------
 // Rotation
 //-----------------------------------------------------------------------------
@@ -200,6 +178,7 @@ void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_
 
 	Object->SetRotation(ANGLE);
 }
+
 void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
@@ -214,6 +193,7 @@ void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::
 
 	Object->SetRotation(ANGLE);
 }
+
 void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
@@ -229,9 +209,6 @@ void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<c
 	Object->SetRotation(ANGLE);
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 // DeleteOnHide
 //-----------------------------------------------------------------------------
@@ -242,9 +219,6 @@ void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::uniq
 	    (Object->ShowDeleteOnHide <= 0))
 			Object->ShowDeleteOnHide = -1;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // DebugInformation
@@ -272,16 +246,12 @@ void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry)
 }
 #endif // NDEBUG
 
-
-
-
 cMissionScript::cMissionScript()
 {
 	// отладочный режим
 	NeedShowBB = 0;
 	UndeadDebugMode = false;
-};
-
+}
 
 //-----------------------------------------------------------------------------
 // запустить скрипт на выполнение
@@ -320,7 +290,7 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 	ShowGameTime = false;
 
 
-	xmlDoc.reset(new cXMLDocument(FileName));
+	xmlDoc.reset(new cXMLDocument(FileName, true));
 
 	// проверяем корневой элемент
 	if (!xmlDoc->GetRootEntry() || ("AstroMenaceScript" != xmlDoc->GetRootEntry()->Name)) {
@@ -353,18 +323,13 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 	return true;
 }
 
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // проверяем скрипт
 //-----------------------------------------------------------------------------
 bool cMissionScript::Update(float Time)
 {
 	// скрипт не загружен
-	if (xmlDoc == nullptr)
+	if (!xmlDoc)
 		return false;
 
 	// находим дельту времени
@@ -373,12 +338,13 @@ bool cMissionScript::Update(float Time)
 
 	// генерация астероидов
 	if (AsterOn) {
-		if (AsterLastTime == -1.0) AsterLastTime = Time;
+		if (AsterLastTime == -1.0)
+			AsterLastTime = Time;
 		float AsterTimeDelta = Time - AsterLastTime;
 		AsterLastTime = Time;
 
 		// складываем все
-		float NeedGener = AsterQuant*AsterTimeDelta+AsterRealNeed;
+		float NeedGener = AsterQuant * AsterTimeDelta + AsterRealNeed;
 		// получаем целое кол-во на генерацию
 		unsigned int NeedGenerInt = (unsigned int)NeedGener;
 		// находим остаток... который нужно будет потом учесть
@@ -409,8 +375,6 @@ bool cMissionScript::Update(float Time)
 		AsterFastCount++;
 		if (AsterFastCount > 30) AsterFastCount = 0;
 	}
-
-
 
 	// если нужно, смотрим когда заканчивать миссию
 	if ((EndDelayMissionComplete > 0.0f) || NeedCheckSpaceShip || NeedCheckGroundObject) {
@@ -464,29 +428,30 @@ bool cMissionScript::Update(float Time)
 		return true;
 	}
 
-
-
-
-
 	// we don't check FindEntryByName() result, since we checked it in RunScript()
 	for (; xmlEntryIter != xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action")->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
-		if (xmlEntry.Name == "TimeLine") {
-			float onTime = 0.0f;
-			xmlDoc->fGetEntryAttribute(xmlEntry, "value", onTime);
+		switch (xmlEntry.NameHash) {
+		case xml::hash("TimeLine"): {
+				float onTime = 0.0f;
+				xmlDoc->fGetEntryAttribute(xmlEntry, "value", onTime);
 
-			// если еще не время выполнять... нужно уйти из процедуры
-			if (onTime > TimeDelta) return true;
+				// если еще не время выполнять... нужно уйти из процедуры
+				if (onTime > TimeDelta)
+					return true;
 
-			// считаем лаг, чтобы правильно вычеслить положение при создании
-			TimeOpLag = TimeDelta - onTime;
+				// считаем лаг, чтобы правильно вычеслить положение при создании
+				TimeOpLag = TimeDelta - onTime;
 
-			// дальше смотрим, что нужно сделать...
-			UpdateTimeLine();
+				// дальше смотрим, что нужно сделать...
+				UpdateTimeLine();
 
-			TimeLastOp = Time - TimeOpLag;
-			TimeDelta = TimeOpLag;//Time - TimeLastOp;
-		} else if (xmlEntry.Name == "Debug") {
+				TimeLastOp = Time - TimeOpLag;
+				TimeDelta = TimeOpLag;
+			}
+			break;
+
+		case xml::hash("Debug"):
 			ShowDebugModeLine = false;
 			xmlDoc->bGetEntryAttribute(xmlEntry, "showline", ShowDebugModeLine);
 
@@ -498,17 +463,21 @@ bool cMissionScript::Update(float Time)
 
 			ShowGameTime = false;
 			xmlDoc->bGetEntryAttribute(xmlEntry, "time", ShowGameTime);
+			break;
 
-		} else if (xmlEntry.Name == "StarSystem") {
-			int SystemNum{0};
-			if (xmlDoc->iGetEntryAttribute(xmlEntry, "system", SystemNum)) {
-				sVECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "anglex", TmpBaseRotation.x);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "angley", TmpBaseRotation.y);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "anglez", TmpBaseRotation.z);
-				StarSystemInit(SystemNum, TmpBaseRotation);
+		case xml::hash("StarSystem"): {
+				int SystemNum{0};
+				if (xmlDoc->iGetEntryAttribute(xmlEntry, "system", SystemNum)) {
+					sVECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "anglex", TmpBaseRotation.x);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "angley", TmpBaseRotation.y);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "anglez", TmpBaseRotation.z);
+					StarSystemInit(SystemNum, TmpBaseRotation);
+				}
 			}
-		} else if (xmlEntry.Name == "Music") {
+			break;
+
+		case xml::hash("Music"):
 			// если корабль игрока уничтожен - не меняем уже музыку в игре вообще,
 			// должна проигрываться только музыка поражения
 			if (PlayerFighter != nullptr)
@@ -521,17 +490,22 @@ bool cMissionScript::Update(float Time)
 							StartMusicWithFade(eMusicTheme::BOSS, 1500, 2000);
 					}
 				}
-		} else if (xmlEntry.Name == "CreatePlanet") {
-			cPlanet *Planet = new cPlanet;
-			int tmpType{0};
-			if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
-				Planet->Create(tmpType);
-				SetRotation(Planet, &xmlEntry, xmlDoc);
-				SetLocation(Planet, &xmlEntry, xmlDoc, 0.0f);
-				Planet->ShowDeleteOnHide = 0;
-				xmlDoc->fGetEntryAttribute(xmlEntry, "speed", Planet->Speed);
+			break;
+
+		case xml::hash("CreatePlanet"): {
+				cPlanet *Planet = new cPlanet;
+				int tmpType{0};
+				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
+					Planet->Create(tmpType);
+					SetRotation(Planet, &xmlEntry, xmlDoc);
+					SetLocation(Planet, &xmlEntry, xmlDoc, 0.0f);
+					Planet->ShowDeleteOnHide = 0;
+					xmlDoc->fGetEntryAttribute(xmlEntry, "speed", Planet->Speed);
+				}
 			}
-		} else if (xmlEntry.Name == "AsteroidField") {
+			break;
+
+		case xml::hash("AsteroidField"):
 			xmlDoc->bGetEntryAttribute(xmlEntry, "status", AsterOn);
 			xmlDoc->fGetEntryAttribute(xmlEntry, "persec", AsterQuant);
 			xmlDoc->fGetEntryAttribute(xmlEntry, "w", AsterW);
@@ -541,118 +515,128 @@ bool cMissionScript::Update(float Time)
 			xmlDoc->fGetEntryAttribute(xmlEntry, "posz", AsterZPos);
 			xmlDoc->fGetEntryAttribute(xmlEntry, "slow", AsterMaxSpeed);
 			xmlDoc->fGetEntryAttribute(xmlEntry, "fast", AsterMinFastSpeed);
-		} else if (xmlEntry.Name == "Light") {
-			eLightType LightType{eLightType::Directional}; // по умолчанию, солнце
-			int tmpType{0};
-			if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType) &&
-			    (tmpType == 1))
-				LightType = eLightType::Point;
+			break;
 
-			std::weak_ptr<cLight> NewLight = vw_CreateLight(LightType);
-			if (auto sharedLight = NewLight.lock()) {
-				sharedLight->Diffuse[0] = 0.0f;
-				sharedLight->Diffuse[1] = 0.0f;
-				sharedLight->Diffuse[2] = 0.0f;
-				sharedLight->Diffuse[3] = 1.0f;
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffr", sharedLight->Diffuse[0]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffg", sharedLight->Diffuse[1]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffb", sharedLight->Diffuse[2]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diffa", sharedLight->Diffuse[3]);
+		case xml::hash("Light"): {
+				eLightType LightType{eLightType::Directional}; // по умолчанию, солнце
+				int tmpType{0};
+				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType) &&
+				    (tmpType == 1))
+					LightType = eLightType::Point;
 
-				sharedLight->Specular[0] = 0.0f;
-				sharedLight->Specular[1] = 0.0f;
-				sharedLight->Specular[2] = 0.0f;
-				sharedLight->Specular[3] = 1.0f;
-				xmlDoc->fGetEntryAttribute(xmlEntry, "specr", sharedLight->Specular[0]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "specg", sharedLight->Specular[1]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "specb", sharedLight->Specular[2]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "speca", sharedLight->Specular[3]);
+				std::weak_ptr<cLight> NewLight = vw_CreateLight(LightType);
+				if (auto sharedLight = NewLight.lock()) {
+					sharedLight->Diffuse[0] = 0.0f;
+					sharedLight->Diffuse[1] = 0.0f;
+					sharedLight->Diffuse[2] = 0.0f;
+					sharedLight->Diffuse[3] = 1.0f;
+					xmlDoc->fGetEntryAttribute(xmlEntry, "diffr", sharedLight->Diffuse[0]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "diffg", sharedLight->Diffuse[1]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "diffb", sharedLight->Diffuse[2]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "diffa", sharedLight->Diffuse[3]);
 
-				sharedLight->Ambient[0] = 0.0f;
-				sharedLight->Ambient[1] = 0.0f;
-				sharedLight->Ambient[2] = 0.0f;
-				sharedLight->Ambient[3] = 1.0f;
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambir", sharedLight->Ambient[0]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambig", sharedLight->Ambient[1]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambib", sharedLight->Ambient[2]);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "ambia", sharedLight->Ambient[3]);
+					sharedLight->Specular[0] = 0.0f;
+					sharedLight->Specular[1] = 0.0f;
+					sharedLight->Specular[2] = 0.0f;
+					sharedLight->Specular[3] = 1.0f;
+					xmlDoc->fGetEntryAttribute(xmlEntry, "specr", sharedLight->Specular[0]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "specg", sharedLight->Specular[1]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "specb", sharedLight->Specular[2]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "speca", sharedLight->Specular[3]);
 
-				sharedLight->Direction = sVECTOR3D(0.0f,0.0f,1.0f);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "dirx", sharedLight->Direction.x);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "diry", sharedLight->Direction.y);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "dirz", sharedLight->Direction.z);
-				sharedLight->Direction.Normalize();
+					sharedLight->Ambient[0] = 0.0f;
+					sharedLight->Ambient[1] = 0.0f;
+					sharedLight->Ambient[2] = 0.0f;
+					sharedLight->Ambient[3] = 1.0f;
+					xmlDoc->fGetEntryAttribute(xmlEntry, "ambir", sharedLight->Ambient[0]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "ambig", sharedLight->Ambient[1]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "ambib", sharedLight->Ambient[2]);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "ambia", sharedLight->Ambient[3]);
 
-				sharedLight->Location = sVECTOR3D(0.0f,0.0f,0.0f);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "posx", sharedLight->Location.x);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "posy", sharedLight->Location.y);
-				xmlDoc->fGetEntryAttribute(xmlEntry, "posz", sharedLight->Location.z);
+					sharedLight->Direction = sVECTOR3D(0.0f,0.0f,1.0f);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "dirx", sharedLight->Direction.x);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "diry", sharedLight->Direction.y);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "dirz", sharedLight->Direction.z);
+					sharedLight->Direction.Normalize();
 
-				sharedLight->On = true;
-				xmlDoc->bGetEntryAttribute(xmlEntry, "status", sharedLight->On);
+					sharedLight->Location = sVECTOR3D(0.0f,0.0f,0.0f);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "posx", sharedLight->Location.x);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "posy", sharedLight->Location.y);
+					xmlDoc->fGetEntryAttribute(xmlEntry, "posz", sharedLight->Location.z);
+
+					sharedLight->On = true;
+					xmlDoc->bGetEntryAttribute(xmlEntry, "status", sharedLight->On);
+				}
 			}
-		} else if (xmlEntry.Name == "Label") {
+			break;
+
+		case xml::hash("Label"):
 			// ничего не делаем
-		} else if (xmlEntry.Name == "Goto") {
-			// если есть указатель на метку
-			std::string tmpLabel{};
-			if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
-				// нужно перебрать все метки и остановится на нужной
-				// we don't check FindEntryByName() result, since we checked it in RunScript()
-				sXMLEntry *tmpCycle = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
-				// перебор по всем меткам
-				for (auto tmpEntryIter = tmpCycle->ChildrenList.begin(); tmpEntryIter != tmpCycle->ChildrenList.end(); ++tmpEntryIter) {
-					sXMLEntry &tmpEntry = *tmpEntryIter;
-					if (tmpEntry.Name == "Label") {
-						std::string tmpName{};
-						if (xmlDoc->GetEntryAttribute(tmpEntry, "name", tmpName) &&
-						    (tmpLabel == tmpName)) {
-							// ставим новый указатель
-							xmlEntryIter = tmpEntryIter;
-							return true;
+			break;
+
+		case xml::hash("Goto"): {
+				// если есть указатель на метку
+				std::string tmpLabel{};
+				if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
+					// нужно перебрать все метки и остановится на нужной
+					// we don't check FindEntryByName() result, since we checked it in RunScript()
+					sXMLEntry *tmpCycle = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
+					// перебор по всем меткам
+					for (auto tmpEntryIter = tmpCycle->ChildrenList.begin();
+					     tmpEntryIter != tmpCycle->ChildrenList.end();
+					     ++tmpEntryIter) {
+						sXMLEntry &tmpEntry = *tmpEntryIter;
+						if (tmpEntry.Name == "Label") {
+							std::string tmpName{};
+							if (xmlDoc->GetEntryAttribute(tmpEntry, "name", tmpName) &&
+							    (tmpLabel == tmpName)) {
+								// ставим новый указатель
+								xmlEntryIter = tmpEntryIter;
+								return true;
+							}
 						}
 					}
 				}
 			}
-		} else if (xmlEntry.Name == "MissionComplete") {
-			SetGameMissionComplete();
-		} else if (xmlEntry.Name == "MissionCompleteAtNoEnemy") {
-			bool SetGameMissionFlag = false;
-			NeedCheckSpaceShip = false;
-			if (xmlDoc->bGetEntryAttribute(xmlEntry, "ships", NeedCheckSpaceShip))
-				SetGameMissionFlag = true;
-			NeedCheckGroundObject = false;
-			if (xmlDoc->bGetEntryAttribute(xmlEntry, "grounds", NeedCheckGroundObject))
-				SetGameMissionFlag = true;
-			EndDelayMissionComplete = 0.0f;
-			if (xmlDoc->fGetEntryAttribute(xmlEntry, "delay", EndDelayMissionComplete))
-				SetGameMissionFlag = true;
+			break;
 
-			if (!SetGameMissionFlag) {
-				// если время не выставили и нечего ждать, работаем как и с обычным завершением
-				SetGameMissionComplete();
-			} else {
-				LastTimeMissionComplete = Time;
-				return true;
+		case xml::hash("MissionComplete"):
+			SetGameMissionComplete();
+			break;
+
+		case xml::hash("MissionCompleteAtNoEnemy"): {
+				bool SetGameMissionFlag = false;
+				NeedCheckSpaceShip = false;
+				if (xmlDoc->bGetEntryAttribute(xmlEntry, "ships", NeedCheckSpaceShip))
+					SetGameMissionFlag = true;
+				NeedCheckGroundObject = false;
+				if (xmlDoc->bGetEntryAttribute(xmlEntry, "grounds", NeedCheckGroundObject))
+					SetGameMissionFlag = true;
+				EndDelayMissionComplete = 0.0f;
+				if (xmlDoc->fGetEntryAttribute(xmlEntry, "delay", EndDelayMissionComplete))
+					SetGameMissionFlag = true;
+
+				if (!SetGameMissionFlag) {
+					// если время не выставили и нечего ждать, работаем как и с обычным завершением
+					SetGameMissionComplete();
+				} else {
+					LastTimeMissionComplete = Time;
+					return true;
+				}
 			}
-		} else {
+			break;
+
+		default:
 			// если тут - значит не нашли директиву, или произошла ошибка
 			std::cerr << __func__ << "(): " << "ScriptEngine: tag " << xmlEntry.Name
 			  << " not found, line " << xmlEntry.LineNumber << "\n";
+			break;
 		}
 	}
 
 	// выходим, скрипт закончился
 	return false;
 }
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // проверяем скрипт дополнительно для TimeLine
@@ -1552,19 +1536,19 @@ void cMissionScript::UpdateTimeLine()
 						TimeSheet->InUse = false;
 
 						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
+						TimeSheet->Acceler = 1.0f; //0-1
 						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
+						TimeSheet->AccelerLR = 1.0f; //0-1
 						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
+						TimeSheet->AccelerUD = 1.0f; //0-1
 						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
+						TimeSheet->AccelerByCamFB = 1.0f; //0-1
 						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
+						TimeSheet->AccelerByCamLR = 1.0f; //0-1
 						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
+						TimeSheet->AccelerByCamUD = 1.0f; //0-1
 						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f); //0-1
 						TimeSheet->Fire = false;
 						TimeSheet->BossFire = false;
 						TimeSheet->Targeting = false;
@@ -1579,27 +1563,27 @@ void cMissionScript::UpdateTimeLine()
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "speed", TimeSheet->Speed);
 
 
-						TimeSheet->Acceler = 1.0f;//0-1
+						TimeSheet->Acceler = 1.0f; //0-1
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "acceler", TimeSheet->Acceler);
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
 						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
+						TimeSheet->AccelerLR = 1.0f; //0-1
 						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
+						TimeSheet->AccelerUD = 1.0f; //0-1
 						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
+						TimeSheet->AccelerByCamFB = 1.0f; //0-1
 						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
+						TimeSheet->AccelerByCamLR = 1.0f; //0-1
 						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
+						TimeSheet->AccelerByCamUD = 1.0f; //0-1
 
 						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotx", TimeSheet->Rotation.x);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "roty", TimeSheet->Rotation.y);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotz", TimeSheet->Rotation.z);
 
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
+						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f); //0-1
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacx", TimeSheet->RotationAcceler.x);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacy", TimeSheet->RotationAcceler.y);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacz", TimeSheet->RotationAcceler.z);
@@ -1630,7 +1614,3 @@ void cMissionScript::UpdateTimeLine()
 		}
 	}
 }
-
-
-
-
