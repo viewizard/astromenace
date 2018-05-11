@@ -773,6 +773,31 @@ static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXM
 	}
 }
 
+static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
+				const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
+				const std::shared_ptr<cXMLDocument> &xmlAI)
+{
+	SetID(GroundObject, xmlEntry, xmlDoc);
+	if (ShowLineNumber)
+		SetDebugInformation(GroundObject, xmlEntry, ShowLineNumber);
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", GroundObject.NeedSpeed))
+		GroundObject.Speed = GroundObject.NeedSpeed;
+
+	SetShowDeleteOnHide(GroundObject, xmlEntry, xmlDoc);
+	SetAIMode(GroundObject.TimeSheetList, xmlEntry, xmlDoc, xmlAI);
+	SetRotation(GroundObject, xmlEntry, xmlDoc);
+	SetLocation(GroundObject, xmlEntry, xmlDoc, TimeOpLag);
+
+	// дальше смотрим, что нужно сделать...
+	for (const auto &tmpXMLEntry : xmlEntry.ChildrenList) {
+		if (tmpXMLEntry.Name == "TimeSheet") {
+			GroundObject.TimeSheetList.emplace_back();
+			LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+					  GroundObject.TimeSheetList.back(), xmlAI);
+		}
+	}
+}
+
 //-----------------------------------------------------------------------------
 // проверяем скрипт дополнительно для TimeLine
 //-----------------------------------------------------------------------------
@@ -911,54 +936,6 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateMBuilding"): {
-				cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
-
-				// тип части
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					GroundObject->Create(tmpType);
-				else
-					continue;
-
-				SetID(*GroundObject, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
-				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
-				SetAIMode(GroundObject->TimeSheetList, TL, xmlDoc, xmlAI);
-
-				SetRotation(*GroundObject, TL, xmlDoc);
-				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
-
-				// дальше смотрим, что нужно сделать...
-				for (const auto &tmpXMLEntry : TL.ChildrenList) {
-					if (tmpXMLEntry.Name == "TimeSheet") {
-						GroundObject->TimeSheetList.emplace_back();
-						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-								  GroundObject->TimeSheetList.back(), xmlAI);
-					}
-				}
-			}
-			break;
-
-		case xml::hash("CreateBuilding"): {
-				cBuilding *GroundObject = new cBuilding;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					GroundObject->Create(tmpType);
-				else
-					continue;
-
-				SetID(*GroundObject, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
-				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
-
-				SetRotation(*GroundObject, TL, xmlDoc);
-				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
-			}
-			break;
-
 		case xml::hash("CreateMine"): {
 				cProjectile *Mine = new cProjectile;
 				// т.к. мины у нас с 214-217, делаем +213
@@ -996,6 +973,32 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
+		case xml::hash("CreateMBuilding"): {
+				cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
+
+				// тип части
+				int tmpType{0};
+				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
+					GroundObject->Create(tmpType);
+				else
+					continue;
+
+				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+			}
+			break;
+
+		case xml::hash("CreateBuilding"): {
+				cBuilding *GroundObject = new cBuilding;
+				int tmpType{0};
+				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
+					GroundObject->Create(tmpType);
+				else
+					continue;
+
+				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+			}
+			break;
+
 		case xml::hash("CreateTracked"): {
 				cTracked *GroundObject = new cTracked;
 				int tmpType{0};
@@ -1004,25 +1007,7 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(*GroundObject, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
-				if (xmlDoc->fGetEntryAttribute(TL, "speed", GroundObject->NeedSpeed))
-					GroundObject->Speed = GroundObject->NeedSpeed;
-
-				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
-				SetAIMode(GroundObject->TimeSheetList, TL, xmlDoc, xmlAI);
-				SetRotation(*GroundObject, TL, xmlDoc);
-				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
-
-				// дальше смотрим, что нужно сделать...
-				for (const auto &tmpXMLEntry : TL.ChildrenList) {
-					if (tmpXMLEntry.Name == "TimeSheet") {
-						GroundObject->TimeSheetList.emplace_back();
-						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-								  GroundObject->TimeSheetList.back(), xmlAI);
-					}
-				}
+				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
@@ -1034,25 +1019,7 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(*GroundObject, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
-				if (xmlDoc->fGetEntryAttribute(TL, "speed", GroundObject->NeedSpeed))
-					GroundObject->Speed = GroundObject->NeedSpeed;
-
-				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
-				SetAIMode(GroundObject->TimeSheetList, TL, xmlDoc, xmlAI);
-				SetRotation(*GroundObject, TL, xmlDoc);
-				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
-
-				// дальше смотрим, что нужно сделать...
-				for (const auto &tmpXMLEntry : TL.ChildrenList) {
-					if (tmpXMLEntry.Name == "TimeSheet") {
-						GroundObject->TimeSheetList.emplace_back();
-						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-								  GroundObject->TimeSheetList.back(), xmlAI);
-					}
-				}
+				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
