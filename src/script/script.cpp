@@ -1173,7 +1173,7 @@ void InitGameAI(const char *FileName)
 // Установка нового (добавление) TimeSheet в нужное место
 // !!! эта процедура заменяет вызов AttachTimeSheet
 //-----------------------------------------------------------------------------
-static void AddNewTimeSheetToPos(cObject3D *Object, sTimeSheet *TimeSheet, sTimeSheet *AfterThisTimeSheet)
+static void AddAfterTimeSheet(cObject3D *Object, sTimeSheet *TimeSheet, sTimeSheet *AfterThisTimeSheet)
 {
 	if (!Object || !TimeSheet || !AfterThisTimeSheet)
 		return;
@@ -1209,7 +1209,7 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 				if (TChildEntry.Name == "TimeSheet") {
 					sTimeSheet *TimeSheet;
 					TimeSheet = new sTimeSheet;
-					AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
+					AddAfterTimeSheet(Object, TimeSheet, AddAfter);
 					AddAfter = TimeSheet;
 					LoadTimeSheetData(xmlAI, TChildEntry, TimeSheet);
 				}
@@ -1219,7 +1219,7 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 			if (TimeSheetMain->Time == -1) {
 				sTimeSheet *TimeSheet;
 				TimeSheet = new sTimeSheet;
-				AddNewTimeSheetToPos(Object, TimeSheet, AddAfter);
+				AddAfterTimeSheet(Object, TimeSheet, AddAfter);
 				// same "packed" element with cycled marker (Time = -1)
 				TimeSheet->AI_Mode = TimeSheetMain->AI_Mode;
 				TimeSheet->Time = -1.0f;
