@@ -736,6 +736,43 @@ static void LoadTimeSheetData(cXMLDocument &xmlDoc, const sXMLEntry &XMLEntry,
 		TimeSheet.Targeting = true;
 }
 
+static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXMLDocument> &xmlDoc,
+				const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
+				const std::shared_ptr<cXMLDocument> &xmlAI)
+{
+	SetID(SpaceShip, xmlEntry, xmlDoc);
+	if (ShowLineNumber)
+		SetDebugInformation(SpaceShip, xmlEntry, ShowLineNumber);
+
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", SpaceShip.NeedSpeed))
+		SpaceShip.Speed = SpaceShip.NeedSpeed;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedlr", SpaceShip.NeedSpeedLR))
+		SpaceShip.SpeedLR = SpaceShip.NeedSpeedLR;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedud", SpaceShip.NeedSpeedUD))
+		SpaceShip.SpeedUD = SpaceShip.NeedSpeedUD;
+
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamfb", SpaceShip.NeedSpeedByCamFB))
+		SpaceShip.SpeedByCamFB = SpaceShip.NeedSpeedByCamFB;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamlr", SpaceShip.NeedSpeedByCamLR))
+		SpaceShip.SpeedByCamLR = SpaceShip.NeedSpeedByCamLR;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamud", SpaceShip.NeedSpeedByCamUD))
+		SpaceShip.SpeedByCamUD = SpaceShip.NeedSpeedByCamUD;
+
+	SetShowDeleteOnHide(SpaceShip, xmlEntry, xmlDoc);
+	SetAIMode(SpaceShip.TimeSheetList, xmlEntry, xmlDoc, xmlAI);
+	SetShipRotation(SpaceShip, xmlEntry, xmlDoc);
+	SetShipLocation(SpaceShip, xmlEntry, xmlDoc, TimeOpLag);
+
+	// дальше смотрим, что нужно сделать...
+	for (const auto &tmpXMLEntry : xmlEntry.ChildrenList) {
+		if (tmpXMLEntry.Name == "TimeSheet") {
+			SpaceShip.TimeSheetList.emplace_back();
+			LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+					  SpaceShip.TimeSheetList.back(), xmlAI);
+		}
+	}
+}
+
 //-----------------------------------------------------------------------------
 // проверяем скрипт дополнительно для TimeLine
 //-----------------------------------------------------------------------------
@@ -753,24 +790,7 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(*SpaceShip, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
-					SpaceShip->Speed = SpaceShip->NeedSpeed;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedlr", SpaceShip->NeedSpeedLR))
-					SpaceShip->SpeedLR = SpaceShip->NeedSpeedLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedud", SpaceShip->NeedSpeedUD))
-					SpaceShip->SpeedUD = SpaceShip->NeedSpeedUD;
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamfb", SpaceShip->NeedSpeedByCamFB))
-					SpaceShip->SpeedByCamFB = SpaceShip->NeedSpeedByCamFB;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamlr", SpaceShip->NeedSpeedByCamLR))
-					SpaceShip->SpeedByCamLR = SpaceShip->NeedSpeedByCamLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamud", SpaceShip->NeedSpeedByCamUD))
-					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
-
+				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 
 				int tmp{0};
 				if (xmlDoc->iGetEntryAttribute(TL, "armour", tmp))
@@ -787,20 +807,6 @@ void cMissionScript::UpdateTimeLine()
 					SetEarthSpaceFighterWeapon(SpaceShip, 5, tmp);
 				if (xmlDoc->iGetEntryAttribute(TL, "weapon6", tmp))
 					SetEarthSpaceFighterWeapon(SpaceShip, 6, tmp);
-
-				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
-				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
-				SetShipRotation(*SpaceShip, TL, xmlDoc);
-				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
-
-				// дальше смотрим, что нужно сделать...
-				for (const auto &tmpXMLEntry : TL.ChildrenList) {
-					if (tmpXMLEntry.Name == "TimeSheet") {
-						SpaceShip->TimeSheetList.emplace_back();
-						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-								  SpaceShip->TimeSheetList.back(), xmlAI);
-					}
-				}
 			}
 			break;
 
@@ -812,37 +818,7 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(*SpaceShip, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
-					SpaceShip->Speed = SpaceShip->NeedSpeed;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedlr", SpaceShip->NeedSpeedLR))
-					SpaceShip->SpeedLR = SpaceShip->NeedSpeedLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedud", SpaceShip->NeedSpeedUD))
-					SpaceShip->SpeedUD = SpaceShip->NeedSpeedUD;
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamfb", SpaceShip->NeedSpeedByCamFB))
-					SpaceShip->SpeedByCamFB = SpaceShip->NeedSpeedByCamFB;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamlr", SpaceShip->NeedSpeedByCamLR))
-					SpaceShip->SpeedByCamLR = SpaceShip->NeedSpeedByCamLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamud", SpaceShip->NeedSpeedByCamUD))
-					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
-
-				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
-				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
-				SetShipRotation(*SpaceShip, TL, xmlDoc);
-				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
-
-				// дальше смотрим, что нужно сделать...
-				for (const auto &tmpXMLEntry : TL.ChildrenList) {
-					if (tmpXMLEntry.Name == "TimeSheet") {
-						SpaceShip->TimeSheetList.emplace_back();
-						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-								  SpaceShip->TimeSheetList.back(), xmlAI);
-					}
-				}
+				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
@@ -854,37 +830,7 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(*SpaceShip, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
-					SpaceShip->Speed = SpaceShip->NeedSpeed;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedlr", SpaceShip->NeedSpeedLR))
-					SpaceShip->SpeedLR = SpaceShip->NeedSpeedLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedud", SpaceShip->NeedSpeedUD))
-					SpaceShip->SpeedUD = SpaceShip->NeedSpeedUD;
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamfb", SpaceShip->NeedSpeedByCamFB))
-					SpaceShip->SpeedByCamFB = SpaceShip->NeedSpeedByCamFB;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamlr", SpaceShip->NeedSpeedByCamLR))
-					SpaceShip->SpeedByCamLR = SpaceShip->NeedSpeedByCamLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamud", SpaceShip->NeedSpeedByCamUD))
-					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
-
-				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
-				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
-				SetShipRotation(*SpaceShip, TL, xmlDoc);
-				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
-
-				// дальше смотрим, что нужно сделать...
-				for (const auto &tmpXMLEntry : TL.ChildrenList) {
-					if (tmpXMLEntry.Name == "TimeSheet") {
-						SpaceShip->TimeSheetList.emplace_back();
-						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-								  SpaceShip->TimeSheetList.back(), xmlAI);
-					}
-				}
+				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
@@ -896,37 +842,7 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(*SpaceShip, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
-					SpaceShip->Speed = SpaceShip->NeedSpeed;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedlr", SpaceShip->NeedSpeedLR))
-					SpaceShip->SpeedLR = SpaceShip->NeedSpeedLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedud", SpaceShip->NeedSpeedUD))
-					SpaceShip->SpeedUD = SpaceShip->NeedSpeedUD;
-
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamfb", SpaceShip->NeedSpeedByCamFB))
-					SpaceShip->SpeedByCamFB = SpaceShip->NeedSpeedByCamFB;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamlr", SpaceShip->NeedSpeedByCamLR))
-					SpaceShip->SpeedByCamLR = SpaceShip->NeedSpeedByCamLR;
-				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamud", SpaceShip->NeedSpeedByCamUD))
-					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
-
-				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
-				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
-				SetShipRotation(*SpaceShip, TL, xmlDoc);
-				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
-
-				// дальше смотрим, что нужно сделать...
-				for (const auto &tmpXMLEntry: TL.ChildrenList) {
-					if (tmpXMLEntry.Name == "TimeSheet") {
-						SpaceShip->TimeSheetList.emplace_back();
-						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-								  SpaceShip->TimeSheetList.back(), xmlAI);
-					}
-				}
+				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
