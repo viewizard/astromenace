@@ -39,7 +39,6 @@
 #include "gfx/star_system.h"
 #include "gfx/shadow_map.h"
 #include "ui/font.h"
-#include "script/script.h"
 
 struct sLoadList {
 	// имя файла
@@ -691,64 +690,6 @@ static void PreLoadGameData(eLoading LoadType)
 	// FIXME should be moved to proper sources
 	vw_StartTimeThreads();
 
-	// FIXME should be moved to game-related code
-	if (LoadType == eLoading::Game) {
-		SaveXMLConfigFile();
-
-		char *FileName = GetMissionFileName();
-		if (FileName == nullptr) {
-			std::cerr << __func__ << "(): "
-				  << "Critical error. Can't find this mission script file or mission list file.\n"
-				  << "Please, check your ./script/ folder for xml files (aimode, list, missions).\n";
-			exit(0);
-		}
-
-		std::unique_ptr<cXMLDocument> xmlDoc{new cXMLDocument(FileName)};
-
-		// проверяем корневой элемент
-		if (!xmlDoc->GetRootEntry() || ("AstroMenaceScript" != xmlDoc->GetRootEntry()->Name)) {
-			std::cerr << __func__ << "(): "
-				  << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
-			exit(0);
-		}
-
-		// переходим на загрузку
-		sXMLEntry *xmlEntry = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Load");
-		if (!xmlEntry) {
-			std::cerr << __func__ << "(): " << "Can't find Load element in the: " << FileName << "\n";
-			exit(0);
-		}
-
-		if (xmlEntry->ChildrenList.empty()) {
-			std::cerr << __func__ << "(): " << "Can't find Load element's children in the: " << FileName << "\n";
-			exit(0);
-		}
-
-		// установка прозрачности слоев
-		float Layer1TranspStart{0.2f};
-		float Layer1TranspEnd{0.7f};
-		float Layer2TranspStart{0.9f};
-		float Layer2TranspEnd{0.7f};
-
-		for (auto &tmpEntry : xmlEntry->ChildrenList) {
-			if (tmpEntry.Name == "AIFile") { // загружаем данные по AI
-				if (!tmpEntry.Content.empty())
-					InitGameAI(tmpEntry.Content.c_str()); // "script/aimode.xml"
-			} else if (tmpEntry.Name == "LayersTransp") {
-				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstStart", Layer1TranspStart);
-				xmlDoc->fGetEntryAttribute(tmpEntry, "FirstEnd", Layer1TranspEnd);
-				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondStart", Layer2TranspStart);
-				xmlDoc->fGetEntryAttribute(tmpEntry, "SecondEnd", Layer2TranspEnd);
-			}
-		}
-
-		// чистим память, со скриптом работать больше не надо
-		xmlDoc.reset();
-
-		StarSystemLayer1Transp(Layer1TranspStart, Layer1TranspEnd);
-		StarSystemLayer3Transp(Layer2TranspStart, Layer2TranspEnd);
-	}
-
 	// FIXME should be moved to proper sources
 	switch(LoadType) {
 	// меню, загрузка в самом начале
@@ -761,6 +702,10 @@ static void PreLoadGameData(eLoading LoadType)
 	case eLoading::Menu:
 		MenuStatus = eMenuStatus::MISSION;
 		StartMusicWithFade(eMusicTheme::MENU, 2000, 2000);
+		break;
+	// переход меню-игра
+	case eLoading::Game:
+		SaveXMLConfigFile();
 		break;
 	default:
 		break;

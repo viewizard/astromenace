@@ -1,22 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <AstroMenaceScript name="AstroMenace mission script">
-<Load>
-
-	<StarSystem1/><!-- StarSystem 1 SkyBox -->
-	<Pirate/><!-- Pirates -->
-	<Planet/><!-- Planets -->
-	<BasePart/><!--Parts of the pirate base -->
-	<Asteroid/><!-- Asteroids -->
-	<Building/><!-- Pirates buildings -->
 
 	<!-- Load aimode file -->
 	<AIFile>script/aimode.xml</AIFile>
-
-	<!-- Setup stars tile layer transparency for this mission -->
-	<LayersTransp FirstStart="0.4"/>
-
-</Load>
-<Action>
 
 	<!-- Debug setup -->
 	<Debug showline="0" undead="0" showbb="0"/>
@@ -25,6 +11,8 @@
 
 	<!-- Star system -->
 	<StarSystem system="1" angley="250" anglez="75"/>
+	<!-- Setup stars tile layer transparency for this mission -->
+	<LayersTransp FirstStart="0.4"/>
 	<!-- Planets -->
 	<CreatePlanet type="4" speed="1.0" posax="170" posay="-450" posaz="1600" anglax="45"/>
 	<CreatePlanet type="3" speed="0.5" posax="-250" posay="-450" posaz="1100"/>
@@ -1831,5 +1819,4 @@
 	<!-- end -->
 	<MissionComplete />
 
-</Action>
 </AstroMenaceScript>

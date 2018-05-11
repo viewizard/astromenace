@@ -1,8 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <!-- Описание скрипта меню игры AstroMenace в формате xml -->
 <AstroMenaceScript name="AstroMenace menu background script">
-<Action>
 
 	<!-- Установка и настройка данных работы скрипта -->
 	<!--Debug showline="1"/-->
@@ -244,5 +242,4 @@
 	
 	
 <!-- Завершение работы скрипта, уже все выполнили -->
-</Action>
 </AstroMenaceScript>

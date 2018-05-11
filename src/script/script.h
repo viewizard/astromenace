@@ -30,6 +30,8 @@
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
+#include "../core/core.h"
+
 class cObject3D;
 
 struct sTimeSheet {
@@ -39,6 +41,7 @@ struct sTimeSheet {
 	float Time{0.0f};
 	// включена ли автоматическая настройка поведения по предустановкам
 	int AI_Mode{0};
+	std::shared_ptr<cXMLDocument> xmlAI{};
 
 	// данные, скорость
 	float Speed{0.0f};
@@ -114,13 +117,13 @@ public:
 	float AsterLastTime{-1.0f};
 	int AsterFastCount{0};
 	bool AsterOn{false};
+
+private:
+	std::shared_ptr<cXMLDocument> xmlAI{};
 };
 
 
 // работа с распаковкой sTimeSheet
 void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheet);
-// работа с набором AI
-void ReleaseGameAI();
-void InitGameAI(const char *FileName);
 
 #endif // SCRIPT_H

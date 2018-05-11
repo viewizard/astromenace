@@ -1,20 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <AstroMenaceScript name="AstroMenace mission script">
-<Load>
-
-	<StarSystem2/><!-- StarSystem 2 SkyBox -->
-	<AlienFighter/><!-- Aliens fighters -->
-	<Asteroid/><!-- Asteroids -->
-	<Planet/><!-- Planets -->
 
 	<!-- Load aimode file -->
 	<AIFile>script/aimode.xml</AIFile>
-
-	<!-- Setup stars tile layer transparency for this mission -->
-	<LayersTransp FirstStart="0.4"/>
-
-</Load>
-<Action>
 
 	<!-- Debug setup -->
 	<Debug showline="0" undead="0" showbb="0"/>
@@ -23,6 +11,8 @@
 
 	<!-- Star system -->
 	<StarSystem system="2" angley="-225" anglez="-195"/>
+	<!-- Setup stars tile layer transparency for this mission -->
+	<LayersTransp FirstStart="0.4"/>
 	<!-- Planets -->
 	<CreatePlanet type="2" speed="0.9" posax="150" posay="-350" posaz="1300"/>
 	<CreatePlanet type="4" speed="2.0" posax="-250" posay="-500" posaz="1700" anglax="-90"/>
@@ -1447,7 +1437,4 @@
 	<!-- end -->
 	<MissionComplete/>
 
-
-
-</Action>
 </AstroMenaceScript>

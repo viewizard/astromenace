@@ -1089,7 +1089,6 @@ GotoQuit:
 		Script = nullptr;
 	}
 
-	ReleaseGameAI();
 	MissionsListRelease();
 	DestroyInfoObject();
 	WorkshopDestroyData();

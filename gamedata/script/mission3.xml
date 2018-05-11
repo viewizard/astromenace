@@ -1,17 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <AstroMenaceScript name="AstroMenace mission script">
-<Load>
-
-	<StarSystem1/><!-- StarSystem 1 SkyBox -->
-	<AlienFighter/><!-- Aliens fighters -->
-	<Asteroid/><!-- Asteroids -->
-	<Planet/><!-- Planets -->
 
 	<!-- Load aimode file -->
 	<AIFile>script/aimode.xml</AIFile>
-
-</Load>
-<Action>
 
 	<!-- Debug setup -->
 	<Debug showline="0" undead="0" showbb="0"/>
@@ -990,7 +981,4 @@
 	<!-- end -->
 	<MissionComplete/>
 
-
-	
-</Action>
 </AstroMenaceScript>

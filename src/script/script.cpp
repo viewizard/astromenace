@@ -50,13 +50,6 @@
 #include "../object3d/ground_object/wheeled/wheeled.h"
 #include "../object3d/ground_object/tracked/tracked.h"
 
-namespace {
-
-std::unique_ptr<cXMLDocument> xmlAI{};
-
-} // unnamed namespace
-
-
 // проверка, если конец уровня как всех убъем
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
@@ -84,7 +77,8 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 //-----------------------------------------------------------------------------
 // aimode
 //-----------------------------------------------------------------------------
-void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc,
+	       const std::shared_ptr<cXMLDocument> &xmlAI)
 {
 	int tmpAI_Mode{0};
 	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "aimode", tmpAI_Mode)) {
@@ -95,6 +89,7 @@ void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXM
 
 		TimeSheet->Time = -1;
 		TimeSheet->AI_Mode = tmpAI_Mode;
+		TimeSheet->xmlAI = xmlAI;
 	}
 }
 
@@ -298,14 +293,11 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 	AsterOn = false;
 	AsterLastTime = -1.0f;
 
-
-
 	// отладочный режим
 	ShowDebugModeLine = false;
 	NeedShowBB = 0;
 	UndeadDebugMode = false;
 	ShowGameTime = false;
-
 
 	xmlDoc.reset(new cXMLDocument(FileName, true));
 
@@ -316,24 +308,14 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 		return false;
 	}
 
-
 	// переходим на действия
-	sXMLEntry *xmlEntry = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
-	if (!xmlEntry) {
-		std::cerr << __func__ << "(): " << "Can't find Action element in the: " << FileName << "\n";
+	if (xmlDoc->GetRootEntry()->ChildrenList.empty()) {
+		std::cerr << __func__ << "(): " << "Can't find element's children in the: " << FileName << "\n";
 		xmlDoc.reset();
 		return false;
 	}
 
-	if (xmlEntry->ChildrenList.empty()) {
-		std::cerr << __func__ << "(): " << "Can't find Action element's children in the: " << FileName << "\n";
-		xmlDoc.reset();
-		return false;
-	}
-
-	xmlEntryIter = xmlEntry->ChildrenList.begin();
-
-
+	xmlEntryIter = xmlDoc->GetRootEntry()->ChildrenList.begin();
 
 	// идем и выполняем то, что по времени 0 стоит, т.е. начальную инициализацию
 	Update(StartTime);
@@ -351,7 +333,6 @@ bool cMissionScript::Update(float Time)
 
 	// находим дельту времени
 	float TimeDelta = Time - TimeLastOp;
-
 
 	// генерация астероидов
 	if (AsterOn) {
@@ -395,7 +376,8 @@ bool cMissionScript::Update(float Time)
 
 	// если нужно, смотрим когда заканчивать миссию
 	if ((EndDelayMissionComplete > 0.0f) || NeedCheckSpaceShip || NeedCheckGroundObject) {
-		if (LastTimeMissionComplete == -1.0) LastTimeMissionComplete = Time;
+		if (LastTimeMissionComplete == -1.0)
+			LastTimeMissionComplete = Time;
 		float TimeDeltaMissionComplete = Time - LastTimeMissionComplete;
 		LastTimeMissionComplete = Time;
 
@@ -431,7 +413,6 @@ bool cMissionScript::Update(float Time)
 				NeedDecrease = false;
 		}
 
-
 		if (NeedDecrease) EndDelayMissionComplete -= TimeDeltaMissionComplete;
 		if (EndDelayMissionComplete<=0.0f) {
 			EndDelayMissionComplete = 0.0f;
@@ -446,7 +427,7 @@ bool cMissionScript::Update(float Time)
 	}
 
 	// we don't check FindEntryByName() result, since we checked it in RunScript()
-	for (; xmlEntryIter != xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action")->ChildrenList.end(); ++xmlEntryIter) {
+	for (; xmlEntryIter != xmlDoc->GetRootEntry()->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		switch (xmlEntry.NameHash) {
 		case xml::hash("TimeLine"): {
@@ -465,6 +446,16 @@ bool cMissionScript::Update(float Time)
 
 				TimeLastOp = Time - TimeOpLag;
 				TimeDelta = TimeOpLag;
+			}
+			break;
+
+		case xml::hash("AIFile"):
+			if (!xmlEntry.Content.empty()) {
+				xmlAI.reset(new cXMLDocument(xmlEntry.Content));
+				if (!xmlAI->GetRootEntry()) {
+					xmlAI.reset();
+					std::cerr << __func__ << "(): " << "AIFile not loaded.\n";
+				}
 			}
 			break;
 
@@ -491,6 +482,22 @@ bool cMissionScript::Update(float Time)
 					xmlDoc->fGetEntryAttribute(xmlEntry, "anglez", TmpBaseRotation.z);
 					StarSystemInit(SystemNum, TmpBaseRotation);
 				}
+			}
+			break;
+
+		case xml::hash("LayersTransp"): {
+				float Layer1TranspStart{0.2f};
+				float Layer1TranspEnd{0.7f};
+				float Layer2TranspStart{0.9f};
+				float Layer2TranspEnd{0.7f};
+
+				xmlDoc->fGetEntryAttribute(xmlEntry, "FirstStart", Layer1TranspStart);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "FirstEnd", Layer1TranspEnd);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "SecondStart", Layer2TranspStart);
+				xmlDoc->fGetEntryAttribute(xmlEntry, "SecondEnd", Layer2TranspEnd);
+
+				StarSystemLayer1Transp(Layer1TranspStart, Layer1TranspEnd);
+				StarSystemLayer3Transp(Layer2TranspStart, Layer2TranspEnd);
 			}
 			break;
 
@@ -597,7 +604,7 @@ bool cMissionScript::Update(float Time)
 				if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
 					// нужно перебрать все метки и остановится на нужной
 					// we don't check FindEntryByName() result, since we checked it in RunScript()
-					sXMLEntry *tmpCycle = xmlDoc->FindEntryByName(*xmlDoc->GetRootEntry(), "Action");
+					sXMLEntry *tmpCycle = xmlDoc->GetRootEntry();
 					// перебор по всем меткам
 					for (auto tmpEntryIter = tmpCycle->ChildrenList.begin();
 					     tmpEntryIter != tmpCycle->ChildrenList.end();
@@ -658,10 +665,12 @@ bool cMissionScript::Update(float Time)
 /*
  * Load TimeSheet data from xml entry.
  */
-static void LoadTimeSheetData(const std::unique_ptr<cXMLDocument> &xmlDoc, const sXMLEntry &XMLEntry, sTimeSheet *TimeSheet)
+static void LoadTimeSheetData(cXMLDocument *xmlDoc, const sXMLEntry &XMLEntry, sTimeSheet *TimeSheet,
+			      const std::shared_ptr<cXMLDocument> &xmlAI)
 {
 	if (xmlDoc->iGetEntryAttribute(XMLEntry, "aimode", TimeSheet->AI_Mode)) {
 		xmlDoc->fGetEntryAttribute(XMLEntry, "time", TimeSheet->Time);
+		TimeSheet->xmlAI = xmlAI;
 		return;
 	}
 
@@ -777,7 +786,7 @@ void cMissionScript::UpdateTimeLine()
 					SetEarthSpaceFighterWeapon(SpaceShip, 6, tmp);
 
 				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc); // на тот случае если просто ставим и все...
+				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 				SetShipRotation(SpaceShip, &TL, xmlDoc);
 				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
 
@@ -788,7 +797,7 @@ void cMissionScript::UpdateTimeLine()
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc, tmpXMLEntry, TimeSheet);
+						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
 					}
 				}
 			}
@@ -820,7 +829,7 @@ void cMissionScript::UpdateTimeLine()
 					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
 
 				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc); // на тот случае если просто ставим и все...
+				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 				SetShipRotation(SpaceShip, &TL, xmlDoc);
 				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
 
@@ -831,7 +840,7 @@ void cMissionScript::UpdateTimeLine()
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc, tmpXMLEntry, TimeSheet);
+						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
 					}
 				}
 			}
@@ -863,7 +872,7 @@ void cMissionScript::UpdateTimeLine()
 					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
 
 				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc); // на тот случае если просто ставим и все...
+				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 				SetShipRotation(SpaceShip, &TL, xmlDoc);
 				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
 
@@ -874,7 +883,7 @@ void cMissionScript::UpdateTimeLine()
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc, tmpXMLEntry, TimeSheet);
+						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
 					}
 				}
 			}
@@ -906,7 +915,7 @@ void cMissionScript::UpdateTimeLine()
 					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
 
 				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc); // на тот случае если просто ставим и все...
+				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 				SetShipRotation(SpaceShip, &TL, xmlDoc);
 				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
 
@@ -917,7 +926,7 @@ void cMissionScript::UpdateTimeLine()
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc, tmpXMLEntry, TimeSheet);
+						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
 					}
 				}
 			}
@@ -1002,7 +1011,7 @@ void cMissionScript::UpdateTimeLine()
 				if (ShowDebugModeLine)
 					SetDebugInformation(GroundObject, &TL);
 				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
-				SetAIMode(GroundObject, &TL, xmlDoc); // на тот случае если просто ставим и все...
+				SetAIMode(GroundObject, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 
 				SetRotation(GroundObject, &TL, xmlDoc);
 				SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
@@ -1014,7 +1023,7 @@ void cMissionScript::UpdateTimeLine()
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						GroundObject->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc, tmpXMLEntry, TimeSheet);
+						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
 					}
 				}
 			}
@@ -1090,7 +1099,7 @@ void cMissionScript::UpdateTimeLine()
 					GroundObject->Speed = GroundObject->NeedSpeed;
 
 				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
-				SetAIMode(GroundObject, &TL, xmlDoc); // на тот случае если просто ставим и все...
+				SetAIMode(GroundObject, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 				SetRotation(GroundObject, &TL, xmlDoc);
 				SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
 
@@ -1101,7 +1110,7 @@ void cMissionScript::UpdateTimeLine()
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						GroundObject->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc, tmpXMLEntry, TimeSheet);
+						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
 					}
 				}
 			}
@@ -1122,7 +1131,7 @@ void cMissionScript::UpdateTimeLine()
 					GroundObject->Speed = GroundObject->NeedSpeed;
 
 				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
-				SetAIMode(GroundObject, &TL, xmlDoc); // на тот случае если просто ставим и все...
+				SetAIMode(GroundObject, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 				SetRotation(GroundObject, &TL, xmlDoc);
 				SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
 
@@ -1133,7 +1142,7 @@ void cMissionScript::UpdateTimeLine()
 						sTimeSheet *TimeSheet;
 						TimeSheet = new sTimeSheet;
 						GroundObject->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc, tmpXMLEntry, TimeSheet);
+						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
 					}
 				}
 			}
@@ -1145,27 +1154,6 @@ void cMissionScript::UpdateTimeLine()
 				  << " not found, line " << TL.LineNumber << "\n";
 			break;
 		}
-	}
-}
-
-//-----------------------------------------------------------------------------
-// освобождаем данные
-//-----------------------------------------------------------------------------
-void ReleaseGameAI()
-{
-	xmlAI.release();
-}
-
-//-----------------------------------------------------------------------------
-// иним текстовый xml
-//-----------------------------------------------------------------------------
-void InitGameAI(const char *FileName)
-{
-	xmlAI.reset(new cXMLDocument(FileName));
-	// иним скрипт
-	if (!xmlAI->GetRootEntry()) {
-		ReleaseGameAI();
-		return;
 	}
 }
 
@@ -1194,14 +1182,14 @@ static void AddAfterTimeSheet(cObject3D *Object, sTimeSheet *TimeSheet, sTimeShe
 //-----------------------------------------------------------------------------
 void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 {
-	if (!Object || !TimeSheetMain || !xmlAI)
+	if (!Object || !TimeSheetMain || !TimeSheetMain->xmlAI)
 		return;
 
 	sTimeSheet *AddAfter = TimeSheetMain;
 
-	for (auto &xmlEntry : xmlAI->GetRootEntry()->ChildrenList) {
+	for (auto &xmlEntry : TimeSheetMain->xmlAI->GetRootEntry()->ChildrenList) {
 		int tmpAI_Mode{0};
-		if (xmlAI->iGetEntryAttribute(xmlEntry, "num", tmpAI_Mode) &&
+		if (TimeSheetMain->xmlAI->iGetEntryAttribute(xmlEntry, "num", tmpAI_Mode) &&
 		    (tmpAI_Mode == TimeSheetMain->AI_Mode)) {
 
 			// "unpack" all the elements
@@ -1211,7 +1199,8 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 					TimeSheet = new sTimeSheet;
 					AddAfterTimeSheet(Object, TimeSheet, AddAfter);
 					AddAfter = TimeSheet;
-					LoadTimeSheetData(xmlAI, TChildEntry, TimeSheet);
+					LoadTimeSheetData(TimeSheetMain->xmlAI.get(), TChildEntry, TimeSheet,
+							  TimeSheetMain->xmlAI);
 				}
 			}
 
@@ -1222,6 +1211,7 @@ void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
 				AddAfterTimeSheet(Object, TimeSheet, AddAfter);
 				// same "packed" element with cycled marker (Time = -1)
 				TimeSheet->AI_Mode = TimeSheetMain->AI_Mode;
+				TimeSheet->xmlAI = TimeSheetMain->xmlAI;
 				TimeSheet->Time = -1.0f;
 			}
 
