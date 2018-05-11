@@ -47,47 +47,7 @@ extern int GameTargetingMechanicSystem;
 
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
 
-
-//-----------------------------------------------------------------------------
-// еденичная запись поведения
-//-----------------------------------------------------------------------------
-struct sTimeSheet {
-	// флаг, показывает что установлен и задействован этот режим
-	bool InUse{false};
-	// кол-во времени (оставшееся), которое работает этот режим
-	float Time{0.0f};
-	// включена ли автоматическая настройка поведения по предустановкам
-	int AI_Mode{0};
-
-	// данные, скорость
-	float Speed{0.0f};
-	float Acceler{1.0f}; // [0.0f, 1.0f]
-	float SpeedLR{0.0f};
-	float AccelerLR{1.0f}; // [0.0f, 1.0f]
-	float SpeedUD{0.0f};
-	float AccelerUD{1.0f}; // [0.0f, 1.0f]
-
-	float SpeedByCamFB{0.0f};
-	float AccelerByCamFB{1.0f}; // [0.0f, 1.0f]
-	float SpeedByCamLR{0.0f};
-	float AccelerByCamLR{1.0f}; // [0.0f, 1.0f]
-	float SpeedByCamUD{0.0f};
-	float AccelerByCamUD{1.0f}; // [0.0f, 1.0f]
-
-	// поворот
-	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
-	sVECTOR3D RotationAcceler{1.0f, 1.0f, 1.0f}; // [0.0f, 1.0f]
-	// стрельба
-	bool Fire{false};
-	// стрельба спец оружием боса
-	bool BossFire{false};
-	// наведение на цель (для турелей)
-	bool Targeting{false};
-
-	// указатели на цепочку
-	sTimeSheet *Next;
-	sTimeSheet *Prev;
-};
+struct sTimeSheet;
 
 //-----------------------------------------------------------------------------
 // Класс cObject3D
@@ -265,13 +225,6 @@ public:
 	void	AttachTimeSheet(sTimeSheet *TimeSheet);
 	void	DetachTimeSheet(sTimeSheet *TimeSheet);
 };
-
-
-// работа с распаковкой sTimeSheet
-void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheet);
-// работа с набором AI
-void ReleaseGameAI();
-void InitGameAI(const char *FileName);
 
 
 //-----------------------------------------------------------------------------

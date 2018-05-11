@@ -29,6 +29,7 @@
 #include "../config/config.h"
 #include "../game.h"
 #include "../gfx/shadow_map.h"
+#include "../script/script.h"
 
 
 // флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)

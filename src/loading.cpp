@@ -39,6 +39,7 @@
 #include "gfx/star_system.h"
 #include "gfx/shadow_map.h"
 #include "ui/font.h"
+#include "script/script.h"
 
 struct sLoadList {
 	// имя файла
