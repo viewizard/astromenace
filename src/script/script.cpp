@@ -31,7 +31,7 @@
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
-#include "../game.h"
+#include "../core/core.h"
 #include "script.h"
 #include "../gfx/star_system.h"
 #include "../object3d/object3d.h"
@@ -62,6 +62,16 @@ extern int NeedShowBB;
 extern bool UndeadDebugMode;
 // показывать время при скорости 1.5
 extern bool ShowGameTime;
+
+// FIXME should be fixed, don't allow global scope interaction for local variables
+extern sVECTOR3D GamePoint;
+extern sVECTOR3D GameCameraMovement;
+extern cMissionScript *Script;
+extern cEarthSpaceFighter *PlayerFighter;
+// FIXME should be fixed, use 'include' instead
+float GameCameraGetSpeed();
+void SetGameMissionComplete();
+void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks);
 
 
 //-----------------------------------------------------------------------------
@@ -104,7 +114,7 @@ void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
-	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
+	PosWithLag = GameCameraMovement ^ (-GameCameraGetSpeed() * TimeOpLag);
 	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", POS.x))
 		POS.x += GamePoint.x + PosWithLag.x;
 	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", POS.y))
