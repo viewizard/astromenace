@@ -31,7 +31,6 @@
 #include "config/config.h"
 #include "ui/font.h"
 #include "gfx/shadow_map.h"
-#include "script/script.h"
 #include "object3d/object3d.h"
 #include <sys/stat.h> // stat
 
@@ -40,8 +39,6 @@
 #include <unistd.h>
 #include <pwd.h>
 #endif // unix
-
-
 
 
 
@@ -1082,12 +1079,6 @@ GotoQuit:
 
 	if (!NeedShowSystemCursor)
 		SDL_ShowCursor(SDL_ENABLE);
-
-	// завершение, и освобождение памяти...
-	if (Script != nullptr) {
-		delete Script;
-		Script = nullptr;
-	}
 
 	MissionsListRelease();
 	DestroyInfoObject();

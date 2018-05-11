@@ -31,6 +31,8 @@
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../core/core.h"
 #include "../game.h"
 #include "../config/config.h"
@@ -40,8 +42,13 @@
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 #include <stdarg.h> // va_start
 
+namespace {
 
-cMissionScript *Script = nullptr;
+std::unique_ptr<cMissionScript> MissionScript{};
+
+} // unnamed namespace
+
+
 
 
 
@@ -657,21 +664,9 @@ void InitGame()
 	// иначе нужно выносить перечень загружаемого в скрипт (менять не смогут уровни)
 
 
-	if (Script != nullptr)
-		delete Script;
-	Script = new cMissionScript;
-
-	if (Script != nullptr) {
-		if (GetMissionFileName() != nullptr) {
-			if (!Script->RunScript(GetMissionFileName(), vw_GetTimeThread(1))) {
-				delete Script;
-				Script = nullptr;
-			}
-		} else {
-			delete Script;
-			Script = nullptr;
-		}
-	}
+	MissionScript.reset(new cMissionScript);
+	if (!MissionScript->RunScript(GetMissionFileName(), vw_GetTimeThread(1)))
+		MissionScript.reset();
 
 
 	// выводим номер миссии 3 секунды
@@ -1044,12 +1039,9 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// работаем со скриптом, пока он есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((Script != nullptr) &&
-	    (!Script->Update(vw_GetTimeThread(1)))) {
-		// удаляем скрипт
-		delete Script;
-		Script = nullptr;
-	}
+	if (MissionScript &&
+	    (!MissionScript->Update(vw_GetTimeThread(1))))
+		MissionScript.reset();
 
 
 

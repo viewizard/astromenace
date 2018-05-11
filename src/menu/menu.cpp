@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 #include "../game.h"
 #include "../config/config.h"
 #include "../ui/font.h"
@@ -32,10 +34,11 @@
 #include "../object3d/object3d.h"
 #include "../gfx/star_system.h"
 
+namespace {
 
-//------------------------------------------------------------------------------------
-// переменные
-//------------------------------------------------------------------------------------
+std::unique_ptr<cMissionScript> MenuScript{};
+
+} // unnamed namespace
 
 float LastMenuUpdateTime = 0.0f;
 float MenuContentTransp = 0.0f;
@@ -75,7 +78,6 @@ float Button13Transp = 1.0f;
 float LastButton13UpdateTime = 0.0f;
 float Button14Transp = 1.0f;
 float LastButton14UpdateTime = 0.0f;
-
 
 
 
@@ -142,41 +144,37 @@ void InitMenu()
 	// games levels do, we should reset game camera first
 	ResetGameCamera();
 
-	if (Script != nullptr) {
-		delete Script;
-		Script = nullptr;
-	}
-	Script = new cMissionScript;
+	MenuScript.reset(new cMissionScript);
 
 	if (GameConfig().MenuScript > 2)
 		ChangeGameConfig().MenuScript = 0;
 	switch (GameConfig().MenuScript) {
 	case 0:
-		Script->RunScript("script/menu1.xml", vw_GetTimeThread(0));
+		MenuScript->RunScript("script/menu1.xml", vw_GetTimeThread(0));
 		break;
 	case 1:
-		Script->RunScript("script/menu2.xml", vw_GetTimeThread(0));
+		MenuScript->RunScript("script/menu2.xml", vw_GetTimeThread(0));
 		break;
 	case 2:
-		Script->RunScript("script/menu3.xml", vw_GetTimeThread(0));
+		MenuScript->RunScript("script/menu3.xml", vw_GetTimeThread(0));
 		break;
 	// на всякий случай
 	default:
-		Script->RunScript("script/menu1.xml", vw_GetTimeThread(0));
+		MenuScript->RunScript("script/menu1.xml", vw_GetTimeThread(0));
 		break;
 	}
 	ChangeGameConfig().MenuScript++;
 
 	// немного прокручиваем скрипт
 	float Time1 = vw_GetTimeThread(0);
-	Script->StartTime = Time1-30;
-	Script->TimeLastOp = Time1-30;
+	MenuScript->StartTime = Time1-30;
+	MenuScript->TimeLastOp = Time1-30;
 	for (float i=Time1-30; i<Time1; i+=1.0f) {
 		UpdateAllObject3D(i);
-		Script->Update(i);
+		MenuScript->Update(i);
 	}
-	Script->StartTime = Time1;
-	Script->TimeLastOp = Time1;
+	MenuScript->StartTime = Time1;
+	MenuScript->TimeLastOp = Time1;
 
 
 
@@ -474,12 +472,9 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// работаем со скриптом, пока он есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((Script != nullptr) &&
-	    (!Script->Update(vw_GetTimeThread(0)))) {
-		// удаляем скрипт
-		delete Script;
-		Script = nullptr;
-	}
+	if (MenuScript &&
+	    (!MenuScript->Update(vw_GetTimeThread(0))))
+		MenuScript.reset();
 
 
 
