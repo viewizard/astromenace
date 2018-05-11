@@ -1539,39 +1539,29 @@ bool cObject3D::Update(float Time)
 
 
 
-	// если есть, нужно обработать
-	if (StartTimeSheet != nullptr) {
-
-		// если это не вечная запись
-		if ((StartTimeSheet != nullptr) &&
-		    (StartTimeSheet->Time > -1.0f)) {
+	// if we have TimeSheet with actions
+	if (StartTimeSheet) {
+		// if this is not a cycled entry
+		if (StartTimeSheet->Time > -1.0f) {
 			StartTimeSheet->Time -= TimeDelta;
-			// ставим первую запись
+			// if this entry is out of time, remove it
 			if (StartTimeSheet->Time <= 0.0f) {
-				// чтобы не переделать больше чем нужно (особенно при поворотах)
+				// correct time delta
 				if (StartTimeSheet->Time < 0.0f)
-					TimeDelta -= StartTimeSheet->Time;
+					TimeDelta += StartTimeSheet->Time;
 
 				sTimeSheet* TmpTimeSheet = StartTimeSheet;
-				// отсоединяем от списка
 				DetachTimeSheet(StartTimeSheet);
-				// удаляем
 				delete TmpTimeSheet;
-				TmpTimeSheet = nullptr;
 			}
 		}
-
-
-		// нужно проверить, если это упаковынные действия, нужно распаковать
-		if ((StartTimeSheet != nullptr) &&
-		    (StartTimeSheet->AI_Mode != 0)) {
-			// передаем на распаковку
+		// should be unpacked
+		if (StartTimeSheet->AI_Mode != 0) {
 			InterAIMode(this, StartTimeSheet);
-			// удаляем эту запись, мы ее уже распаковали
+			// since we already unpack this entry, remove it
 			sTimeSheet* TmpTimeSheet = StartTimeSheet;
 			DetachTimeSheet(StartTimeSheet);
 			delete TmpTimeSheet;
-			TmpTimeSheet = nullptr;
 		}
 	}
 
