@@ -98,7 +98,7 @@ public:
 	std::list<sXMLEntry>::iterator xmlEntryIter{};
 
 	// включен отладочный режим или нет... по умолчанию выключен
-	bool ShowDebugModeLine{false};
+	bool ShowLineNumber{false};
 
 	bool NeedCheckSpaceShip{false};
 	bool NeedCheckGroundObject{false};

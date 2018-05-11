@@ -66,7 +66,6 @@ extern bool ShowGameTime;
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
-extern cMissionScript *Script;
 extern cEarthSpaceFighter *PlayerFighter;
 // FIXME should be fixed, use 'include' instead
 float GameCameraGetSpeed();
@@ -77,8 +76,8 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 //-----------------------------------------------------------------------------
 // aimode
 //-----------------------------------------------------------------------------
-void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc,
-	       const std::shared_ptr<cXMLDocument> &xmlAI)
+static void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc,
+		      const std::shared_ptr<cXMLDocument> &xmlAI)
 {
 	int tmpAI_Mode{0};
 	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "aimode", tmpAI_Mode)) {
@@ -96,7 +95,7 @@ void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXM
 //-----------------------------------------------------------------------------
 //  ID
 //-----------------------------------------------------------------------------
-void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	xmlDoc->iGetEntryAttribute(*xmlEntry, "id", Object->ID);
 }
@@ -104,127 +103,130 @@ void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDoc
 //-----------------------------------------------------------------------------
 // Location
 //-----------------------------------------------------------------------------
-void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
+static void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry,
+			    const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
-	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
+	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", POS.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", POS.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", POS.z);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", tmpPosition.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", tmpPosition.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", tmpPosition.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement ^ (-GameCameraGetSpeed() * TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", POS.x))
-		POS.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", POS.y))
-		POS.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", POS.z))
-		POS.z += GamePoint.z + PosWithLag.z;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", tmpPosition.x))
+		tmpPosition.x += GamePoint.x + PosWithLag.x;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", tmpPosition.y))
+		tmpPosition.y += GamePoint.y + PosWithLag.y;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", tmpPosition.z))
+		tmpPosition.z += GamePoint.z + PosWithLag.z;
 
-	Object->SetLocation(POS);
+	Object->SetLocation(tmpPosition);
 }
 
-void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
+static void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry,
+				  const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
-	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
+	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", POS.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", POS.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", POS.z);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", tmpPosition.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", tmpPosition.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", tmpPosition.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", POS.x))
-		POS.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", POS.y))
-		POS.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", POS.z))
-		POS.z += GamePoint.z + PosWithLag.z;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", tmpPosition.x))
+		tmpPosition.x += GamePoint.x + PosWithLag.x;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", tmpPosition.y))
+		tmpPosition.y += GamePoint.y + PosWithLag.y;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", tmpPosition.z))
+		tmpPosition.z += GamePoint.z + PosWithLag.z;
 
-	Object->SetLocation(POS);
+	Object->SetLocation(tmpPosition);
 }
 
-void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
+static void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry,
+			const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
-	sVECTOR3D POS(0.0f, 0.0f, 0.0f);
+	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", POS.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", POS.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", POS.z);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", tmpPosition.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", tmpPosition.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", tmpPosition.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", POS.x))
-		POS.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", POS.y))
-		POS.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", POS.z))
-		POS.z += GamePoint.z + PosWithLag.z;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", tmpPosition.x))
+		tmpPosition.x += GamePoint.x + PosWithLag.x;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", tmpPosition.y))
+		tmpPosition.y += GamePoint.y + PosWithLag.y;
+	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", tmpPosition.z))
+		tmpPosition.z += GamePoint.z + PosWithLag.z;
 
-	Object->SetLocation(POS);
+	Object->SetLocation(tmpPosition);
 }
 
 //-----------------------------------------------------------------------------
 // Rotation
 //-----------------------------------------------------------------------------
-void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
-	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", ANGLE.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", ANGLE.z);
+	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", tmpAngle.z);
 
 // пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", ANGLE.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", ANGLE.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", ANGLE.z);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", tmpAngle.z);
 
-	Object->SetRotation(ANGLE);
+	Object->SetRotation(tmpAngle);
 }
 
-void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
-	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", ANGLE.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", ANGLE.z);
+	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", tmpAngle.z);
 
 // пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", ANGLE.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", ANGLE.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", ANGLE.z);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", tmpAngle.z);
 
-	Object->SetRotation(ANGLE);
+	Object->SetRotation(tmpAngle);
 }
 
-void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
-	sVECTOR3D ANGLE(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", ANGLE.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", ANGLE.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz" ,ANGLE.z);
+	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz" ,tmpAngle.z);
 
 // пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", ANGLE.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", ANGLE.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", ANGLE.z);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", tmpAngle.z);
 
-	Object->SetRotation(ANGLE);
+	Object->SetRotation(tmpAngle);
 }
 
 //-----------------------------------------------------------------------------
 // DeleteOnHide
 //-----------------------------------------------------------------------------
-void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	Object->ShowDeleteOnHide = 0;
 	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "onhide", Object->ShowDeleteOnHide) &&
@@ -236,19 +238,15 @@ void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::uniq
 // DebugInformation
 //-----------------------------------------------------------------------------
 #ifdef NDEBUG
-void SetDebugInformation(cObject3D *UNUSED(Object), sXMLEntry *UNUSED(xmlEntry))
+static void SetDebugInformation(cObject3D *UNUSED(Object), sXMLEntry *UNUSED(xmlEntry), bool UNUSED(ShowLineNumber))
 {
-	// не нужно ничего устанавливать, выходим
-	if (!Script->ShowDebugModeLine)
-		return;
-
 	return;
 }
 #else
-void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry)
+static void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry)
 {
 	// не нужно ничего устанавливать, выходим
-	if (!Script->ShowDebugModeLine)
+	if (!ShowLineNumber)
 		return;
 
 	std::string buffer{std::to_string(xmlEntry->LineNumber)};
@@ -270,6 +268,9 @@ cMissionScript::cMissionScript()
 //-----------------------------------------------------------------------------
 bool cMissionScript::RunScript(const char *FileName, float InitTime)
 {
+	if (!FileName)
+		return false;
+
 	// установка значений
 	StartTime = TimeLastOp = InitTime;
 
@@ -294,7 +295,7 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 	AsterLastTime = -1.0f;
 
 	// отладочный режим
-	ShowDebugModeLine = false;
+	ShowLineNumber = false;
 	NeedShowBB = 0;
 	UndeadDebugMode = false;
 	ShowGameTime = false;
@@ -460,8 +461,8 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		case xml::hash("Debug"):
-			ShowDebugModeLine = false;
-			xmlDoc->bGetEntryAttribute(xmlEntry, "showline", ShowDebugModeLine);
+			ShowLineNumber = false;
+			xmlDoc->bGetEntryAttribute(xmlEntry, "showline", ShowLineNumber);
 
 			NeedShowBB = 0;
 			xmlDoc->iGetEntryAttribute(xmlEntry, "showbb", NeedShowBB);
@@ -751,8 +752,8 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(SpaceShip, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(SpaceShip, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -812,7 +813,7 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(SpaceShip, &TL, xmlDoc);
-				if (ShowDebugModeLine) SetDebugInformation(SpaceShip, &TL);
+				if (ShowLineNumber) SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -855,7 +856,7 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(SpaceShip, &TL, xmlDoc);
-				if (ShowDebugModeLine) SetDebugInformation(SpaceShip, &TL);
+				if (ShowLineNumber) SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -898,7 +899,7 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(SpaceShip, &TL, xmlDoc);
-				if (ShowDebugModeLine) SetDebugInformation(SpaceShip, &TL);
+				if (ShowLineNumber) SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -939,8 +940,8 @@ void cMissionScript::UpdateTimeLine()
 				Asteroid->Create(1);
 
 				SetID(Asteroid, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(Asteroid, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(Asteroid, &TL, ShowLineNumber);
 				xmlDoc->fGetEntryAttribute(TL, "speed", Asteroid->Speed);
 				SetShowDeleteOnHide(Asteroid, &TL, xmlDoc);
 
@@ -966,8 +967,8 @@ void cMissionScript::UpdateTimeLine()
 				xmlDoc->fGetEntryAttribute(TL, "speed", BasePart->Speed);
 
 				SetID(BasePart, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(BasePart, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(BasePart, &TL, ShowLineNumber);
 				SetShowDeleteOnHide(BasePart, &TL, xmlDoc);
 
 				SetRotation(BasePart, &TL, xmlDoc);
@@ -988,8 +989,8 @@ void cMissionScript::UpdateTimeLine()
 				xmlDoc->fGetEntryAttribute(TL, "speed", BigAsteroid->Speed);
 
 				SetID(BigAsteroid, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(BigAsteroid, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(BigAsteroid, &TL, ShowLineNumber);
 				SetShowDeleteOnHide(BigAsteroid, &TL, xmlDoc);
 
 				SetRotation(BigAsteroid, &TL, xmlDoc);
@@ -1008,8 +1009,8 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(GroundObject, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(GroundObject, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
 				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
 				SetAIMode(GroundObject, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
 
@@ -1038,8 +1039,8 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(GroundObject, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(GroundObject, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
 				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
 
 				SetRotation(GroundObject, &TL, xmlDoc);
@@ -1075,8 +1076,8 @@ void cMissionScript::UpdateTimeLine()
 				Mine->SpeedStart = Mine->SpeedEnd = Mine->Speed = Mine->SpeedStart / CurrentPenalty;
 
 				SetID(Mine, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(Mine, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(Mine, &TL, ShowLineNumber);
 				SetShowDeleteOnHide(Mine, &TL, xmlDoc);
 
 				SetProjectileRotation(Mine, &TL, xmlDoc);
@@ -1093,8 +1094,8 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(GroundObject, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(GroundObject, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", GroundObject->NeedSpeed))
 					GroundObject->Speed = GroundObject->NeedSpeed;
 
@@ -1125,8 +1126,8 @@ void cMissionScript::UpdateTimeLine()
 					continue;
 
 				SetID(GroundObject, &TL, xmlDoc);
-				if (ShowDebugModeLine)
-					SetDebugInformation(GroundObject, &TL);
+				if (ShowLineNumber)
+					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", GroundObject->NeedSpeed))
 					GroundObject->Speed = GroundObject->NeedSpeed;
 
