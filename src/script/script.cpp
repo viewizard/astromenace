@@ -774,8 +774,8 @@ static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXM
 }
 
 static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
-				const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
-				const std::shared_ptr<cXMLDocument> &xmlAI)
+				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
+				   const std::shared_ptr<cXMLDocument> &xmlAI)
 {
 	SetID(GroundObject, xmlEntry, xmlDoc);
 	if (ShowLineNumber)
@@ -796,6 +796,23 @@ static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::uniqu
 					  GroundObject.TimeSheetList.back(), xmlAI);
 		}
 	}
+}
+
+static void LoadSpaceObjectScript(cSpaceObject &SpaceObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
+				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag)
+{
+	SetID(SpaceObject, xmlEntry, xmlDoc);
+	if (ShowLineNumber)
+		SetDebugInformation(SpaceObject, xmlEntry, ShowLineNumber);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "speed", SpaceObject.Speed);
+	SetShowDeleteOnHide(SpaceObject, xmlEntry, xmlDoc);
+
+	SetRotation(SpaceObject, xmlEntry, xmlDoc);
+	SetLocation(SpaceObject, xmlEntry, xmlDoc, TimeOpLag);
+
+	xmlDoc->fGetEntryAttribute(xmlEntry, "rotx", SpaceObject.RotationSpeed.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "roty", SpaceObject.RotationSpeed.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "rotz", SpaceObject.RotationSpeed.z);
 }
 
 //-----------------------------------------------------------------------------
@@ -872,67 +889,35 @@ void cMissionScript::UpdateTimeLine()
 			break;
 
 		case xml::hash("CreateAsteroid"): {
-				cAsteroid *Asteroid = new cAsteroid;
-
+				cAsteroid *SpaceObject = new cAsteroid;
 				// тип сейчас не задействован, всегда ставим 1
-				Asteroid->Create(1);
+				SpaceObject->Create(1);
 
-				SetID(*Asteroid, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*Asteroid, TL, ShowLineNumber);
-				xmlDoc->fGetEntryAttribute(TL, "speed", Asteroid->Speed);
-				SetShowDeleteOnHide(*Asteroid, TL, xmlDoc);
-
-				SetRotation(*Asteroid, TL, xmlDoc);
-				SetLocation(*Asteroid, TL, xmlDoc, TimeOpLag);
-
-				xmlDoc->fGetEntryAttribute(TL, "rotx", Asteroid->RotationSpeed.x);
-				xmlDoc->fGetEntryAttribute(TL, "roty", Asteroid->RotationSpeed.y);
-				xmlDoc->fGetEntryAttribute(TL, "rotz", Asteroid->RotationSpeed.z);
+				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case xml::hash("CreateBasePart"): {
-				cBasePart *BasePart = new cBasePart;
-
-				// тип части
+				cBasePart *SpaceObject = new cBasePart;
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					BasePart->Create(tmpType);
+					SpaceObject->Create(tmpType);
 				else
 					continue;
 
-				xmlDoc->fGetEntryAttribute(TL, "speed", BasePart->Speed);
-
-				SetID(*BasePart, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*BasePart, TL, ShowLineNumber);
-				SetShowDeleteOnHide(*BasePart, TL, xmlDoc);
-
-				SetRotation(*BasePart, TL, xmlDoc);
-				SetLocation(*BasePart, TL, xmlDoc, TimeOpLag);
+				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case xml::hash("CreateBigAsteroid"): {
-				cBigAsteroid *BigAsteroid = new cBigAsteroid;
-
-				// тип части
+				cBigAsteroid *SpaceObject = new cBigAsteroid;
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					BigAsteroid->Create(tmpType);
+					SpaceObject->Create(tmpType);
 				else
 					continue;
 
-				xmlDoc->fGetEntryAttribute(TL, "speed", BigAsteroid->Speed);
-
-				SetID(*BigAsteroid, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*BigAsteroid, TL, ShowLineNumber);
-				SetShowDeleteOnHide(*BigAsteroid, TL, xmlDoc);
-
-				SetRotation(*BigAsteroid, TL, xmlDoc);
-				SetLocation(*BigAsteroid, TL, xmlDoc, TimeOpLag);
+				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
@@ -975,8 +960,6 @@ void cMissionScript::UpdateTimeLine()
 
 		case xml::hash("CreateMBuilding"): {
 				cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
-
-				// тип части
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
 					GroundObject->Create(tmpType);
