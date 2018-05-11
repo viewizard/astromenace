@@ -53,40 +53,40 @@ unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Locatio
 //-----------------------------------------------------------------------------
 struct sTimeSheet {
 	// флаг, показывает что установлен и задействован этот режим
-	bool	InUse;
+	bool InUse{false};
 	// кол-во времени (оставшееся), которое работает этот режим
-	float	Time;
+	float Time{0.0f};
 	// включена ли автоматическая настройка поведения по предустановкам
-	int	AI_Mode;
+	int AI_Mode{0};
 
 	// данные, скорость
-	float	Speed;
-	float	Acceler;
-	float	SpeedLR;
-	float	AccelerLR;
-	float	SpeedUD;
-	float	AccelerUD;
+	float Speed{0.0f};
+	float Acceler{1.0f}; // [0.0f, 1.0f]
+	float SpeedLR{0.0f};
+	float AccelerLR{1.0f}; // [0.0f, 1.0f]
+	float SpeedUD{0.0f};
+	float AccelerUD{1.0f}; // [0.0f, 1.0f]
 
-	float	SpeedByCamFB;
-	float	AccelerByCamFB;
-	float	SpeedByCamLR;
-	float	AccelerByCamLR;
-	float	SpeedByCamUD;
-	float	AccelerByCamUD;
+	float SpeedByCamFB{0.0f};
+	float AccelerByCamFB{1.0f}; // [0.0f, 1.0f]
+	float SpeedByCamLR{0.0f};
+	float AccelerByCamLR{1.0f}; // [0.0f, 1.0f]
+	float SpeedByCamUD{0.0f};
+	float AccelerByCamUD{1.0f}; // [0.0f, 1.0f]
 
 	// поворот
-	sVECTOR3D	Rotation;
-	sVECTOR3D	RotationAcceler;
+	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D RotationAcceler{1.0f, 1.0f, 1.0f}; // [0.0f, 1.0f]
 	// стрельба
-	bool	Fire;
+	bool Fire{false};
 	// стрельба спец оружием боса
-	bool	BossFire;
+	bool BossFire{false};
 	// наведение на цель (для турелей)
-	bool	Targeting;
+	bool Targeting{false};
 
 	// указатели на цепочку
-	sTimeSheet	*Next;
-	sTimeSheet	*Prev;
+	sTimeSheet *Next;
+	sTimeSheet *Prev;
 };
 
 //-----------------------------------------------------------------------------

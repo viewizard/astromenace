@@ -703,86 +703,45 @@ void cMissionScript::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					Fighter->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->iGetEntryAttribute(TLEarthFighter, "aimode", TimeSheet->AI_Mode)) {
-						TimeSheet->Time = 0.0f;
+					if (xmlDoc->iGetEntryAttribute(TLEarthFighter, "aimode", TimeSheet->AI_Mode))
+						xmlDoc->fGetEntryAttribute(TLEarthFighter, "time", TimeSheet->Time);
+					else {
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "time", TimeSheet->Time);
 
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-						TimeSheet->Fire = false;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
-					} else {
-						TimeSheet->AI_Mode = 0;
-
-						TimeSheet->Time = 0.0f;
-						xmlDoc->fGetEntryAttribute(TLEarthFighter, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "speed", TimeSheet->Speed);
 
-						TimeSheet->Acceler = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "acceler", TimeSheet->Acceler);
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
-						TimeSheet->SpeedLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedlr", TimeSheet->SpeedLR);
 
-						TimeSheet->AccelerLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerlr", TimeSheet->AccelerLR);
 						vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedud", TimeSheet->SpeedUD);
 
-						TimeSheet->AccelerUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerud", TimeSheet->AccelerUD);
 						vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
-
-						TimeSheet->SpeedByCamFB = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedbycamfb", TimeSheet->SpeedByCamFB);
 
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamfb", TimeSheet->AccelerByCamFB);
 						vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedbycamlr", TimeSheet->SpeedByCamLR);
 
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamlr", TimeSheet->AccelerByCamLR);
 						vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "speedbycamud", TimeSheet->SpeedByCamUD);
 
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "accelerbycamud", TimeSheet->AccelerByCamUD);
 						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
-
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotx", TimeSheet->Rotation.x);
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "roty", TimeSheet->Rotation.y);
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotz", TimeSheet->Rotation.z);
 
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacx", TimeSheet->RotationAcceler.x);
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacy", TimeSheet->RotationAcceler.y);
 						xmlDoc->fGetEntryAttribute(TLEarthFighter, "rotacz", TimeSheet->RotationAcceler.z);
@@ -790,13 +749,10 @@ void cMissionScript::UpdateTimeLine()
 						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
-						TimeSheet->Fire = false;
 						int tmpFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLEarthFighter, "fire", tmpFire) &&
 						    (tmpFire > 0))
 							TimeSheet->Fire = true;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
 					}
 				}
 			}
@@ -841,83 +797,46 @@ void cMissionScript::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					Fighter->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->iGetEntryAttribute(TLAlienFighter, "aimode", TimeSheet->AI_Mode)) {
-						TimeSheet->Time = 0.0f;
+					if (xmlDoc->iGetEntryAttribute(TLAlienFighter, "aimode", TimeSheet->AI_Mode))
+						xmlDoc->fGetEntryAttribute(TLAlienFighter, "time", TimeSheet->Time);
+					else {
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "time", TimeSheet->Time);
 						TimeSheet->InUse = false;
 
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-						TimeSheet->Fire = false;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
-					} else {
-						TimeSheet->AI_Mode = 0;
-
-						TimeSheet->Time = 0.0f;
-						xmlDoc->fGetEntryAttribute(TLAlienFighter, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "speed", TimeSheet->Speed);
 
-						TimeSheet->Acceler = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "acceler", TimeSheet->Acceler);
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
-						TimeSheet->SpeedLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedlr", TimeSheet->SpeedLR);
 
-						TimeSheet->AccelerLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerlr", TimeSheet->AccelerLR);
 						vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedud", TimeSheet->SpeedUD);
 
-						TimeSheet->AccelerUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerud", TimeSheet->AccelerUD);
 						vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamFB = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedbycamfb", TimeSheet->SpeedByCamFB);
 
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamfb", TimeSheet->AccelerByCamFB);
 						vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedbycamlr", TimeSheet->SpeedByCamLR);
 
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamlr", TimeSheet->AccelerByCamLR);
 						vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "speedbycamud", TimeSheet->SpeedByCamUD);
 
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "accelerbycamud", TimeSheet->AccelerByCamUD);
 						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotx", TimeSheet->Rotation.x);
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "roty", TimeSheet->Rotation.y);
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotz", TimeSheet->Rotation.z);
 
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacx", TimeSheet->RotationAcceler.x);
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacy", TimeSheet->RotationAcceler.y);
 						xmlDoc->fGetEntryAttribute(TLAlienFighter, "rotacz", TimeSheet->RotationAcceler.z);
@@ -925,14 +844,10 @@ void cMissionScript::UpdateTimeLine()
 						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
-						TimeSheet->Fire = false;
 						int tmpFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLAlienFighter, "fire", tmpFire) &&
 						    (tmpFire > 0))
 							TimeSheet->Fire = true;
-						TimeSheet->BossFire = false;
-
-						TimeSheet->Targeting = false;
 					}
 				}
 			}
@@ -977,83 +892,46 @@ void cMissionScript::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					Fighter->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "aimode", TimeSheet->AI_Mode)) {
-						TimeSheet->Time = 0.0f;
+					if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "aimode", TimeSheet->AI_Mode))
+						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "time", TimeSheet->Time);
+					else {
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "time", TimeSheet->Time);
 						TimeSheet->InUse = false;
 
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-						TimeSheet->Fire = false;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
-					} else {
-						TimeSheet->AI_Mode = 0;
-
-						TimeSheet->Time = 0.0f;
-						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speed", TimeSheet->Speed);
 
-						TimeSheet->Acceler = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "acceler", TimeSheet->Acceler);
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
-						TimeSheet->SpeedLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedlr", TimeSheet->SpeedLR);
 
-						TimeSheet->AccelerLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerlr", TimeSheet->AccelerLR);
 						vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedud", TimeSheet->SpeedUD);
 
-						TimeSheet->AccelerUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerud", TimeSheet->AccelerUD);
 						vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamFB = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedbycamfb", TimeSheet->SpeedByCamFB);
 
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamfb", TimeSheet->AccelerByCamFB);
 						vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedbycamlr", TimeSheet->SpeedByCamLR);
 
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamlr", TimeSheet->AccelerByCamLR);
 						vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "speedbycamud", TimeSheet->SpeedByCamUD);
 
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "accelerbycamud", TimeSheet->AccelerByCamUD);
 						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotx", TimeSheet->Rotation.x);
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "roty", TimeSheet->Rotation.y);
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotz", TimeSheet->Rotation.z);
 
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacx", TimeSheet->RotationAcceler.x);
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacy", TimeSheet->RotationAcceler.y);
 						xmlDoc->fGetEntryAttribute(TLAlienMotherShip, "rotacz", TimeSheet->RotationAcceler.z);
@@ -1061,18 +939,15 @@ void cMissionScript::UpdateTimeLine()
 						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
-						TimeSheet->Fire = false;
 						int tmpFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "fire", tmpFire) &&
 						    (tmpFire > 0))
 							TimeSheet->Fire = true;
-						TimeSheet->BossFire = false;
+
 						int tmpBossFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLAlienMotherShip, "bossfire", tmpBossFire) &&
 						    (tmpBossFire > 0))
 							TimeSheet->BossFire = true;
-
-						TimeSheet->Targeting = false;
 					}
 				}
 			}
@@ -1117,83 +992,46 @@ void cMissionScript::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					Fighter->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->iGetEntryAttribute(TLPirateShip, "aimode", TimeSheet->AI_Mode)) {
-						TimeSheet->Time = 0.0f;
+					if (xmlDoc->iGetEntryAttribute(TLPirateShip, "aimode", TimeSheet->AI_Mode))
+						xmlDoc->fGetEntryAttribute(TLPirateShip, "time", TimeSheet->Time);
+					else {
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "time", TimeSheet->Time);
 						TimeSheet->InUse = false;
 
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-						TimeSheet->Fire = false;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
-					} else {
-						TimeSheet->AI_Mode = 0;
-
-						TimeSheet->Time = 0.0f;
-						xmlDoc->fGetEntryAttribute(TLPirateShip, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "speed", TimeSheet->Speed);
 
-						TimeSheet->Acceler = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "acceler", TimeSheet->Acceler);
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
-						TimeSheet->SpeedLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "speedlr", TimeSheet->SpeedLR);
 
-						TimeSheet->AccelerLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerlr", TimeSheet->AccelerLR);
 						vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "speedud", TimeSheet->SpeedUD);
 
-						TimeSheet->AccelerUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerud", TimeSheet->AccelerUD);
 						vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamFB = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "speedbycamfb", TimeSheet->SpeedByCamFB);
 
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamfb", TimeSheet->AccelerByCamFB);
 						vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamLR = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "speedbycamlr", TimeSheet->SpeedByCamLR);
 
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamlr", TimeSheet->AccelerByCamLR);
 						vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
 
-						TimeSheet->SpeedByCamUD = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "speedbycamud", TimeSheet->SpeedByCamUD);
 
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "accelerbycamud", TimeSheet->AccelerByCamUD);
 						vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
 
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "rotx", TimeSheet->Rotation.x);
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "roty", TimeSheet->Rotation.y);
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "rotz", TimeSheet->Rotation.z);
 
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacx", TimeSheet->RotationAcceler.x);
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacy", TimeSheet->RotationAcceler.y);
 						xmlDoc->fGetEntryAttribute(TLPirateShip, "rotacz", TimeSheet->RotationAcceler.z);
@@ -1201,19 +1039,15 @@ void cMissionScript::UpdateTimeLine()
 						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
-						TimeSheet->Fire = false;
 						int tmpFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLPirateShip, "fire", tmpFire) &&
 						    (tmpFire > 0))
 							TimeSheet->Fire = true;
 
-						TimeSheet->BossFire = false;
 						int tmpBossFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLPirateShip, "bossfire", tmpBossFire) &&
 						    (tmpBossFire > 0))
 							TimeSheet->BossFire = true;
-
-						TimeSheet->Targeting = false;
 					}
 				}
 			}
@@ -1312,59 +1146,16 @@ void cMissionScript::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					GroundObject->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode", TimeSheet->AI_Mode)) {
-						TimeSheet->Time = 0.0f;
+					if (xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode", TimeSheet->AI_Mode))
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-						TimeSheet->Fire = false;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
-					} else {
-						TimeSheet->AI_Mode = 0;
-
-						TimeSheet->Time = 0.0f;
+					else {
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
 
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-
-						TimeSheet->Fire = false;
 						int tmpFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire", tmpFire) &&
 						    (tmpFire > 0))
 							TimeSheet->Fire = true;
 
-						TimeSheet->BossFire = false;
-
-						TimeSheet->Targeting = false;
 						int tmpTargeting{0};
 						if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting", tmpTargeting) &&
 						    (tmpTargeting != 0))
@@ -1458,59 +1249,18 @@ void cMissionScript::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					GroundObject->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode", TimeSheet->AI_Mode)) {
-						TimeSheet->Time = 0.0f;
+					if (xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode", TimeSheet->AI_Mode))
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f;//0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
-						TimeSheet->Fire = false;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
-					} else {
-						TimeSheet->AI_Mode = 0;
-
-						TimeSheet->Time = 0.0f;
+					else {
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "speed", TimeSheet->Speed);
-
-						TimeSheet->Acceler = 1.0f;//0-1
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "acceler", TimeSheet->Acceler);
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f;//0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f;//0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f;//0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f;//0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f;//0-1
-
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotx", TimeSheet->Rotation.x);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "roty", TimeSheet->Rotation.y);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotz", TimeSheet->Rotation.z);
 
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f);//0-1
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacx", TimeSheet->RotationAcceler.x);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacy", TimeSheet->RotationAcceler.y);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacz", TimeSheet->RotationAcceler.z);
@@ -1518,15 +1268,11 @@ void cMissionScript::UpdateTimeLine()
 						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
-						TimeSheet->Fire = false;
 						int tmpFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire", tmpFire) &&
 						    (tmpFire > 0))
 							TimeSheet->Fire = true;
 
-						TimeSheet->BossFire = false;
-
-						TimeSheet->Targeting = false;
 						int tmpTargeting{0};
 						if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting", tmpTargeting) &&
 						    (tmpTargeting > 0))
@@ -1564,60 +1310,18 @@ void cMissionScript::UpdateTimeLine()
 					TimeSheet = new sTimeSheet;
 					GroundObject->AttachTimeSheet(TimeSheet);
 
-					if (xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode", TimeSheet->AI_Mode)) {
-						TimeSheet->Time = 0.0f;
+					if (xmlDoc->iGetEntryAttribute(TLGroundObject, "aimode", TimeSheet->AI_Mode))
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
-						TimeSheet->Acceler = 1.0f; //0-1
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f; //0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f; //0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f; //0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f; //0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f; //0-1
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f); //0-1
-						TimeSheet->Fire = false;
-						TimeSheet->BossFire = false;
-						TimeSheet->Targeting = false;
-					} else {
-						TimeSheet->AI_Mode = 0;
-
-						TimeSheet->Time = 0.0f;
+					else {
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "time", TimeSheet->Time);
-						TimeSheet->InUse = false;
-
-						TimeSheet->Speed = 0.0f;
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "speed", TimeSheet->Speed);
-
-
-						TimeSheet->Acceler = 1.0f; //0-1
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "acceler", TimeSheet->Acceler);
 						vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
 
-						TimeSheet->SpeedLR = 0.0f;
-						TimeSheet->AccelerLR = 1.0f; //0-1
-						TimeSheet->SpeedUD = 0.0f;
-						TimeSheet->AccelerUD = 1.0f; //0-1
-						TimeSheet->SpeedByCamFB = 0.0f;
-						TimeSheet->AccelerByCamFB = 1.0f; //0-1
-						TimeSheet->SpeedByCamLR = 0.0f;
-						TimeSheet->AccelerByCamLR = 1.0f; //0-1
-						TimeSheet->SpeedByCamUD = 0.0f;
-						TimeSheet->AccelerByCamUD = 1.0f; //0-1
-
-						TimeSheet->Rotation = sVECTOR3D(0.0f, 0.0f, 0.0f);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotx", TimeSheet->Rotation.x);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "roty", TimeSheet->Rotation.y);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotz", TimeSheet->Rotation.z);
 
-						TimeSheet->RotationAcceler = sVECTOR3D(1.0f, 1.0f, 1.0f); //0-1
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacx", TimeSheet->RotationAcceler.x);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacy", TimeSheet->RotationAcceler.y);
 						xmlDoc->fGetEntryAttribute(TLGroundObject, "rotacz", TimeSheet->RotationAcceler.z);
@@ -1625,15 +1329,11 @@ void cMissionScript::UpdateTimeLine()
 						vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
 						vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
 
-						TimeSheet->Fire = false;
 						int tmpFire{0};
 						if (xmlDoc->iGetEntryAttribute(TLGroundObject, "fire", tmpFire) &&
 						    (tmpFire > 0))
 							TimeSheet->Fire = true;
 
-						TimeSheet->BossFire = false;
-
-						TimeSheet->Targeting = false;
 						int tmpTargeting{0};
 						if (xmlDoc->iGetEntryAttribute(TLGroundObject, "targeting", tmpTargeting) &&
 						    (tmpTargeting != 0))
