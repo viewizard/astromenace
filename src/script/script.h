@@ -32,8 +32,6 @@
 
 #include "../core/core.h"
 
-class cObject3D;
-
 struct sTimeSheet {
 	// флаг, показывает что установлен и задействован этот режим
 	bool InUse{false};
@@ -67,10 +65,6 @@ struct sTimeSheet {
 	bool BossFire{false};
 	// наведение на цель (для турелей)
 	bool Targeting{false};
-
-	// указатели на цепочку
-	sTimeSheet *Next;
-	sTimeSheet *Prev;
 };
 
 class cMissionScript
@@ -124,6 +118,6 @@ private:
 
 
 // работа с распаковкой sTimeSheet
-void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheet);
+void InterAIMode(std::list<sTimeSheet> &TimeSheetList);
 
 #endif // SCRIPT_H

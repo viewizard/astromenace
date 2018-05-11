@@ -75,12 +75,6 @@ cObject3D::~cObject3D()
 
 	if (DebugInfo != nullptr)
 		delete [] DebugInfo;
-
-	// удаляем все записи, если они есть
-	while (StartTimeSheet != nullptr) {
-		DetachTimeSheet(StartTimeSheet);
-	}
-
 }
 
 
@@ -1541,94 +1535,24 @@ bool cObject3D::Update(float Time)
 
 
 	// if we have TimeSheet with actions and this is not a cycled entry
-	if (StartTimeSheet &&
-	    (StartTimeSheet->Time > -1.0f)) {
-		StartTimeSheet->Time -= TimeDelta;
+	if (!TimeSheetList.empty() &&
+	    (TimeSheetList.front().Time > -1.0f)) {
+		TimeSheetList.front().Time -= TimeDelta;
 		// if this entry is out of time, remove it
-		if (StartTimeSheet->Time <= 0.0f) {
+		if (TimeSheetList.front().Time <= 0.0f) {
 			// correct time delta
-			if (StartTimeSheet->Time < 0.0f)
-				TimeDelta += StartTimeSheet->Time;
-
-			sTimeSheet* TmpTimeSheet = StartTimeSheet;
-			DetachTimeSheet(StartTimeSheet);
-			delete TmpTimeSheet;
+			if (TimeSheetList.front().Time < 0.0f)
+				TimeDelta += TimeSheetList.front().Time;
+			TimeSheetList.pop_front();
 		}
 	}
 	// should be unpacked
-	if (StartTimeSheet &&
-	    (StartTimeSheet->AI_Mode != 0)) {
-		InterAIMode(this, StartTimeSheet);
+	if (!TimeSheetList.empty() &&
+	    (TimeSheetList.front().AI_Mode != 0)) {
+		InterAIMode(TimeSheetList);
 		// since we already unpack this entry, remove it
-		sTimeSheet* TmpTimeSheet = StartTimeSheet;
-		DetachTimeSheet(StartTimeSheet);
-		delete TmpTimeSheet;
+		TimeSheetList.pop_front();
 	}
 
-
-
-
-
-	// объект в порядке - удалять не нужно
 	return true;
 }
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-void cObject3D::AttachTimeSheet(sTimeSheet* TimeSheet)
-{
-	if (TimeSheet == nullptr)
-		return;
-
-	// первый в списке...
-	if (EndTimeSheet == nullptr) {
-		TimeSheet->Prev = nullptr;
-		TimeSheet->Next = nullptr;
-		StartTimeSheet = TimeSheet;
-		EndTimeSheet = TimeSheet;
-	} else { // продолжаем заполнение...
-		TimeSheet->Prev = EndTimeSheet;
-		TimeSheet->Next = nullptr;
-		EndTimeSheet->Next = TimeSheet;
-		EndTimeSheet = TimeSheet;
-	}
-}
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-void cObject3D::DetachTimeSheet(sTimeSheet* TimeSheet)
-{
-	if (TimeSheet == nullptr)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartTimeSheet == TimeSheet)
-		StartTimeSheet = TimeSheet->Next;
-	if (EndTimeSheet == TimeSheet)
-		EndTimeSheet = TimeSheet->Prev;
-
-	if (TimeSheet->Next != nullptr)
-		TimeSheet->Next->Prev = TimeSheet->Prev;
-	else if (TimeSheet->Prev != nullptr)
-		TimeSheet->Prev->Next = nullptr;
-
-	if (TimeSheet->Prev != nullptr)
-		TimeSheet->Prev->Next = TimeSheet->Next;
-	else if (TimeSheet->Next != nullptr)
-		TimeSheet->Next->Prev = nullptr;
-}
-
-
-
-

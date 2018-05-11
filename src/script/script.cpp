@@ -76,183 +76,185 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 //-----------------------------------------------------------------------------
 // aimode
 //-----------------------------------------------------------------------------
-static void SetAIMode(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc,
-		      const std::shared_ptr<cXMLDocument> &xmlAI)
+static void SetAIMode(std::list<sTimeSheet> &TimeSheetList, const sXMLEntry &xmlEntry,
+		      const std::unique_ptr<cXMLDocument> &xmlDoc, const std::shared_ptr<cXMLDocument> &xmlAI)
 {
 	int tmpAI_Mode{0};
-	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "aimode", tmpAI_Mode)) {
-		// собираем новый элемент
-		sTimeSheet *TimeSheet;
-		TimeSheet = new sTimeSheet;
-		Object->AttachTimeSheet(TimeSheet);
-
-		TimeSheet->Time = -1;
-		TimeSheet->AI_Mode = tmpAI_Mode;
-		TimeSheet->xmlAI = xmlAI;
+	if (xmlDoc->iGetEntryAttribute(xmlEntry, "aimode", tmpAI_Mode)) {
+		TimeSheetList.emplace_back();
+		TimeSheetList.back().Time = -1;
+		TimeSheetList.back().AI_Mode = tmpAI_Mode;
+		TimeSheetList.back().xmlAI = xmlAI;
 	}
 }
 
 //-----------------------------------------------------------------------------
 //  ID
 //-----------------------------------------------------------------------------
-static void SetID(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetID(cObject3D &Object, const sXMLEntry &xmlEntry,
+		  const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
-	xmlDoc->iGetEntryAttribute(*xmlEntry, "id", Object->ID);
+	xmlDoc->iGetEntryAttribute(xmlEntry, "id", Object.ID);
 }
 
 //-----------------------------------------------------------------------------
 // Location
 //-----------------------------------------------------------------------------
-static void SetShipLocation(cSpaceShip *Object, sXMLEntry *xmlEntry,
+static void SetShipLocation(cSpaceShip &Object, const sXMLEntry &xmlEntry,
 			    const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", tmpPosition.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", tmpPosition.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", tmpPosition.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posax", tmpPosition.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posay", tmpPosition.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posaz", tmpPosition.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement ^ (-GameCameraGetSpeed() * TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", tmpPosition.x))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
 		tmpPosition.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", tmpPosition.y))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpPosition.y))
 		tmpPosition.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", tmpPosition.z))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posz", tmpPosition.z))
 		tmpPosition.z += GamePoint.z + PosWithLag.z;
 
-	Object->SetLocation(tmpPosition);
+	Object.SetLocation(tmpPosition);
 }
 
-static void SetProjectileLocation(cProjectile *Object, sXMLEntry *xmlEntry,
+static void SetProjectileLocation(cProjectile &Object, const sXMLEntry &xmlEntry,
 				  const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", tmpPosition.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", tmpPosition.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", tmpPosition.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posax", tmpPosition.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posay", tmpPosition.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posaz", tmpPosition.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", tmpPosition.x))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
 		tmpPosition.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", tmpPosition.y))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpPosition.y))
 		tmpPosition.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", tmpPosition.z))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posz", tmpPosition.z))
 		tmpPosition.z += GamePoint.z + PosWithLag.z;
 
-	Object->SetLocation(tmpPosition);
+	Object.SetLocation(tmpPosition);
 }
 
-static void SetLocation(cObject3D *Object, sXMLEntry *xmlEntry,
+static void SetLocation(cObject3D &Object, const sXMLEntry &xmlEntry,
 			const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
 
 	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posax", tmpPosition.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posay", tmpPosition.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "posaz", tmpPosition.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posax", tmpPosition.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posay", tmpPosition.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "posaz", tmpPosition.z);
 
 	// относительные координаты
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posx", tmpPosition.x))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
 		tmpPosition.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posy", tmpPosition.y))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpPosition.y))
 		tmpPosition.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(*xmlEntry, "posz", tmpPosition.z))
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posz", tmpPosition.z))
 		tmpPosition.z += GamePoint.z + PosWithLag.z;
 
-	Object->SetLocation(tmpPosition);
+	Object.SetLocation(tmpPosition);
 }
 
 //-----------------------------------------------------------------------------
 // Rotation
 //-----------------------------------------------------------------------------
-static void SetShipRotation(cSpaceShip *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetShipRotation(cSpaceShip &Object, const sXMLEntry &xmlEntry,
+			    const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", tmpAngle.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglax", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglay", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz", tmpAngle.z);
 
 // пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", tmpAngle.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglx", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "angly", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglz", tmpAngle.z);
 
-	Object->SetRotation(tmpAngle);
+	Object.SetRotation(tmpAngle);
 }
 
-static void SetProjectileRotation(cProjectile *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetProjectileRotation(cProjectile &Object, const sXMLEntry &xmlEntry,
+				  const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz", tmpAngle.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglax", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglay", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz", tmpAngle.z);
 
 // пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", tmpAngle.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglx", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "angly", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglz", tmpAngle.z);
 
-	Object->SetRotation(tmpAngle);
+	Object.SetRotation(tmpAngle);
 }
 
-static void SetRotation(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetRotation(cObject3D &Object, const sXMLEntry &xmlEntry,
+			const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglax", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglay", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglaz" ,tmpAngle.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglax", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglay", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz" ,tmpAngle.z);
 
 // пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglx", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "angly", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(*xmlEntry, "anglz", tmpAngle.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglx", tmpAngle.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "angly", tmpAngle.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "anglz", tmpAngle.z);
 
-	Object->SetRotation(tmpAngle);
+	Object.SetRotation(tmpAngle);
 }
 
 //-----------------------------------------------------------------------------
 // DeleteOnHide
 //-----------------------------------------------------------------------------
-static void SetShowDeleteOnHide(cObject3D *Object, sXMLEntry *xmlEntry, const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetShowDeleteOnHide(cObject3D &Object, const sXMLEntry &xmlEntry,
+				const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
-	Object->ShowDeleteOnHide = 0;
-	if (xmlDoc->iGetEntryAttribute(*xmlEntry, "onhide", Object->ShowDeleteOnHide) &&
-	    (Object->ShowDeleteOnHide <= 0))
-			Object->ShowDeleteOnHide = -1;
+	Object.ShowDeleteOnHide = 0;
+	if (xmlDoc->iGetEntryAttribute(xmlEntry, "onhide", Object.ShowDeleteOnHide) &&
+	    (Object.ShowDeleteOnHide <= 0))
+			Object.ShowDeleteOnHide = -1;
 }
 
 //-----------------------------------------------------------------------------
 // DebugInformation
 //-----------------------------------------------------------------------------
 #ifdef NDEBUG
-static void SetDebugInformation(cObject3D *UNUSED(Object), sXMLEntry *UNUSED(xmlEntry), bool UNUSED(ShowLineNumber))
+static void SetDebugInformation(cObject3D &UNUSED(Object), const sXMLEntry &UNUSED(xmlEntry),
+				bool UNUSED(ShowLineNumber))
 {
 	return;
 }
 #else
-static void SetDebugInformation(cObject3D *Object, sXMLEntry *xmlEntry)
+static void SetDebugInformation(cObject3D &Object, const sXMLEntry &xmlEntry, bool ShowLineNumber)
 {
 	// не нужно ничего устанавливать, выходим
 	if (!ShowLineNumber)
 		return;
 
-	std::string buffer{std::to_string(xmlEntry->LineNumber)};
+	std::string buffer{std::to_string(xmlEntry.LineNumber)};
 
-	Object->DebugInfo = new char[buffer.size()+1];
-	strcpy(Object->DebugInfo, buffer.c_str());
+	Object.DebugInfo = new char[buffer.size()+1];
+	strcpy(Object.DebugInfo, buffer.c_str());
 }
 #endif // NDEBUG
 
@@ -522,8 +524,8 @@ bool cMissionScript::Update(float Time)
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
 					Planet->Create(tmpType);
-					SetRotation(Planet, &xmlEntry, xmlDoc);
-					SetLocation(Planet, &xmlEntry, xmlDoc, 0.0f);
+					SetRotation(*Planet, xmlEntry, xmlDoc);
+					SetLocation(*Planet, xmlEntry, xmlDoc, 0.0f);
 					Planet->ShowDeleteOnHide = 0;
 					xmlDoc->fGetEntryAttribute(xmlEntry, "speed", Planet->Speed);
 				}
@@ -666,72 +668,72 @@ bool cMissionScript::Update(float Time)
 /*
  * Load TimeSheet data from xml entry.
  */
-static void LoadTimeSheetData(cXMLDocument *xmlDoc, const sXMLEntry &XMLEntry, sTimeSheet *TimeSheet,
-			      const std::shared_ptr<cXMLDocument> &xmlAI)
+static void LoadTimeSheetData(cXMLDocument &xmlDoc, const sXMLEntry &XMLEntry,
+			      sTimeSheet &TimeSheet, const std::shared_ptr<cXMLDocument> &xmlAI)
 {
-	if (xmlDoc->iGetEntryAttribute(XMLEntry, "aimode", TimeSheet->AI_Mode)) {
-		xmlDoc->fGetEntryAttribute(XMLEntry, "time", TimeSheet->Time);
-		TimeSheet->xmlAI = xmlAI;
+	if (xmlDoc.iGetEntryAttribute(XMLEntry, "aimode", TimeSheet.AI_Mode)) {
+		xmlDoc.fGetEntryAttribute(XMLEntry, "time", TimeSheet.Time);
+		TimeSheet.xmlAI = xmlAI;
 		return;
 	}
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "time", TimeSheet->Time);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "time", TimeSheet.Time);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "speed", TimeSheet->Speed);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "speed", TimeSheet.Speed);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "acceler", TimeSheet->Acceler);
-	vw_Clamp(TimeSheet->Acceler, 0.0f, 1.0f);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "acceler", TimeSheet.Acceler);
+	vw_Clamp(TimeSheet.Acceler, 0.0f, 1.0f);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "speedlr", TimeSheet->SpeedLR);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "speedlr", TimeSheet.SpeedLR);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "accelerlr", TimeSheet->AccelerLR);
-	vw_Clamp(TimeSheet->AccelerLR, 0.0f, 1.0f);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerlr", TimeSheet.AccelerLR);
+	vw_Clamp(TimeSheet.AccelerLR, 0.0f, 1.0f);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "speedud", TimeSheet->SpeedUD);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "speedud", TimeSheet.SpeedUD);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "accelerud", TimeSheet->AccelerUD);
-	vw_Clamp(TimeSheet->AccelerUD, 0.0f, 1.0f);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerud", TimeSheet.AccelerUD);
+	vw_Clamp(TimeSheet.AccelerUD, 0.0f, 1.0f);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "speedbycamfb", TimeSheet->SpeedByCamFB);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "speedbycamfb", TimeSheet.SpeedByCamFB);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "accelerbycamfb", TimeSheet->AccelerByCamFB);
-	vw_Clamp(TimeSheet->AccelerByCamFB, 0.0f, 1.0f);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerbycamfb", TimeSheet.AccelerByCamFB);
+	vw_Clamp(TimeSheet.AccelerByCamFB, 0.0f, 1.0f);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "speedbycamlr", TimeSheet->SpeedByCamLR);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "speedbycamlr", TimeSheet.SpeedByCamLR);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "accelerbycamlr", TimeSheet->AccelerByCamLR);
-	vw_Clamp(TimeSheet->AccelerByCamLR, 0.0f, 1.0f);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerbycamlr", TimeSheet.AccelerByCamLR);
+	vw_Clamp(TimeSheet.AccelerByCamLR, 0.0f, 1.0f);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "speedbycamud", TimeSheet->SpeedByCamUD);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "speedbycamud", TimeSheet.SpeedByCamUD);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "accelerbycamud", TimeSheet->AccelerByCamUD);
-	vw_Clamp(TimeSheet->AccelerByCamUD, 0.0f, 1.0f);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerbycamud", TimeSheet.AccelerByCamUD);
+	vw_Clamp(TimeSheet.AccelerByCamUD, 0.0f, 1.0f);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "rotx", TimeSheet->Rotation.x);
-	xmlDoc->fGetEntryAttribute(XMLEntry, "roty", TimeSheet->Rotation.y);
-	xmlDoc->fGetEntryAttribute(XMLEntry, "rotz", TimeSheet->Rotation.z);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "rotx", TimeSheet.Rotation.x);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "roty", TimeSheet.Rotation.y);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "rotz", TimeSheet.Rotation.z);
 
-	xmlDoc->fGetEntryAttribute(XMLEntry, "rotacx", TimeSheet->RotationAcceler.x);
-	xmlDoc->fGetEntryAttribute(XMLEntry, "rotacy", TimeSheet->RotationAcceler.y);
-	xmlDoc->fGetEntryAttribute(XMLEntry, "rotacz", TimeSheet->RotationAcceler.z);
-	vw_Clamp(TimeSheet->RotationAcceler.x, 0.0f, 1.0f);
-	vw_Clamp(TimeSheet->RotationAcceler.y, 0.0f, 1.0f);
-	vw_Clamp(TimeSheet->RotationAcceler.z, 0.0f, 1.0f);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "rotacx", TimeSheet.RotationAcceler.x);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "rotacy", TimeSheet.RotationAcceler.y);
+	xmlDoc.fGetEntryAttribute(XMLEntry, "rotacz", TimeSheet.RotationAcceler.z);
+	vw_Clamp(TimeSheet.RotationAcceler.x, 0.0f, 1.0f);
+	vw_Clamp(TimeSheet.RotationAcceler.y, 0.0f, 1.0f);
+	vw_Clamp(TimeSheet.RotationAcceler.z, 0.0f, 1.0f);
 
 	int tmpFire{0};
-	if (xmlDoc->iGetEntryAttribute(XMLEntry, "fire", tmpFire) &&
+	if (xmlDoc.iGetEntryAttribute(XMLEntry, "fire", tmpFire) &&
 	    (tmpFire > 0))
-		TimeSheet->Fire = true;
+		TimeSheet.Fire = true;
 
 	int tmpBossFire{0};
-	if (xmlDoc->iGetEntryAttribute(XMLEntry, "bossfire", tmpBossFire) &&
+	if (xmlDoc.iGetEntryAttribute(XMLEntry, "bossfire", tmpBossFire) &&
 	    (tmpBossFire > 0))
-		TimeSheet->BossFire = true;
+		TimeSheet.BossFire = true;
 
 	int tmpTargeting{0};
-	if (xmlDoc->iGetEntryAttribute(XMLEntry, "targeting", tmpTargeting) &&
+	if (xmlDoc.iGetEntryAttribute(XMLEntry, "targeting", tmpTargeting) &&
 	    (tmpTargeting != 0))
-		TimeSheet->Targeting = true;
+		TimeSheet.Targeting = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -751,9 +753,9 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(SpaceShip, &TL, xmlDoc);
+				SetID(*SpaceShip, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
+					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -786,19 +788,17 @@ void cMissionScript::UpdateTimeLine()
 				if (xmlDoc->iGetEntryAttribute(TL, "weapon6", tmp))
 					SetEarthSpaceFighterWeapon(SpaceShip, 6, tmp);
 
-				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
-				SetShipRotation(SpaceShip, &TL, xmlDoc);
-				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
+				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
+				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
+				SetShipRotation(*SpaceShip, TL, xmlDoc);
+				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
 				for (const auto &tmpXMLEntry : TL.ChildrenList) {
 					if (tmpXMLEntry.Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
+						SpaceShip->TimeSheetList.emplace_back();
+						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+								  SpaceShip->TimeSheetList.back(), xmlAI);
 					}
 				}
 			}
@@ -812,8 +812,9 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(SpaceShip, &TL, xmlDoc);
-				if (ShowLineNumber) SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
+				SetID(*SpaceShip, TL, xmlDoc);
+				if (ShowLineNumber)
+					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -829,19 +830,17 @@ void cMissionScript::UpdateTimeLine()
 				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamud", SpaceShip->NeedSpeedByCamUD))
 					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
 
-				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
-				SetShipRotation(SpaceShip, &TL, xmlDoc);
-				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
+				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
+				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
+				SetShipRotation(*SpaceShip, TL, xmlDoc);
+				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
 				for (const auto &tmpXMLEntry : TL.ChildrenList) {
 					if (tmpXMLEntry.Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
+						SpaceShip->TimeSheetList.emplace_back();
+						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+								  SpaceShip->TimeSheetList.back(), xmlAI);
 					}
 				}
 			}
@@ -855,8 +854,9 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(SpaceShip, &TL, xmlDoc);
-				if (ShowLineNumber) SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
+				SetID(*SpaceShip, TL, xmlDoc);
+				if (ShowLineNumber)
+					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -872,19 +872,17 @@ void cMissionScript::UpdateTimeLine()
 				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamud", SpaceShip->NeedSpeedByCamUD))
 					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
 
-				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
-				SetShipRotation(SpaceShip, &TL, xmlDoc);
-				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
+				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
+				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
+				SetShipRotation(*SpaceShip, TL, xmlDoc);
+				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
 				for (const auto &tmpXMLEntry : TL.ChildrenList) {
 					if (tmpXMLEntry.Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
+						SpaceShip->TimeSheetList.emplace_back();
+						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+								  SpaceShip->TimeSheetList.back(), xmlAI);
 					}
 				}
 			}
@@ -898,8 +896,9 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(SpaceShip, &TL, xmlDoc);
-				if (ShowLineNumber) SetDebugInformation(SpaceShip, &TL, ShowLineNumber);
+				SetID(*SpaceShip, TL, xmlDoc);
+				if (ShowLineNumber)
+					SetDebugInformation(*SpaceShip, TL, ShowLineNumber);
 
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", SpaceShip->NeedSpeed))
 					SpaceShip->Speed = SpaceShip->NeedSpeed;
@@ -915,19 +914,17 @@ void cMissionScript::UpdateTimeLine()
 				if (xmlDoc->fGetEntryAttribute(TL, "speedbycamud", SpaceShip->NeedSpeedByCamUD))
 					SpaceShip->SpeedByCamUD = SpaceShip->NeedSpeedByCamUD;
 
-				SetShowDeleteOnHide(SpaceShip, &TL, xmlDoc);
-				SetAIMode(SpaceShip, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
-				SetShipRotation(SpaceShip, &TL, xmlDoc);
-				SetShipLocation(SpaceShip, &TL, xmlDoc, TimeOpLag);
+				SetShowDeleteOnHide(*SpaceShip, TL, xmlDoc);
+				SetAIMode(SpaceShip->TimeSheetList, TL, xmlDoc, xmlAI);
+				SetShipRotation(*SpaceShip, TL, xmlDoc);
+				SetShipLocation(*SpaceShip, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
 				for (const auto &tmpXMLEntry: TL.ChildrenList) {
 					if (tmpXMLEntry.Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						SpaceShip->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
+						SpaceShip->TimeSheetList.emplace_back();
+						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+								  SpaceShip->TimeSheetList.back(), xmlAI);
 					}
 				}
 			}
@@ -939,14 +936,14 @@ void cMissionScript::UpdateTimeLine()
 				// тип сейчас не задействован, всегда ставим 1
 				Asteroid->Create(1);
 
-				SetID(Asteroid, &TL, xmlDoc);
+				SetID(*Asteroid, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(Asteroid, &TL, ShowLineNumber);
+					SetDebugInformation(*Asteroid, TL, ShowLineNumber);
 				xmlDoc->fGetEntryAttribute(TL, "speed", Asteroid->Speed);
-				SetShowDeleteOnHide(Asteroid, &TL, xmlDoc);
+				SetShowDeleteOnHide(*Asteroid, TL, xmlDoc);
 
-				SetRotation(Asteroid, &TL, xmlDoc);
-				SetLocation(Asteroid, &TL, xmlDoc, TimeOpLag);
+				SetRotation(*Asteroid, TL, xmlDoc);
+				SetLocation(*Asteroid, TL, xmlDoc, TimeOpLag);
 
 				xmlDoc->fGetEntryAttribute(TL, "rotx", Asteroid->RotationSpeed.x);
 				xmlDoc->fGetEntryAttribute(TL, "roty", Asteroid->RotationSpeed.y);
@@ -966,13 +963,13 @@ void cMissionScript::UpdateTimeLine()
 
 				xmlDoc->fGetEntryAttribute(TL, "speed", BasePart->Speed);
 
-				SetID(BasePart, &TL, xmlDoc);
+				SetID(*BasePart, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(BasePart, &TL, ShowLineNumber);
-				SetShowDeleteOnHide(BasePart, &TL, xmlDoc);
+					SetDebugInformation(*BasePart, TL, ShowLineNumber);
+				SetShowDeleteOnHide(*BasePart, TL, xmlDoc);
 
-				SetRotation(BasePart, &TL, xmlDoc);
-				SetLocation(BasePart, &TL, xmlDoc, TimeOpLag);
+				SetRotation(*BasePart, TL, xmlDoc);
+				SetLocation(*BasePart, TL, xmlDoc, TimeOpLag);
 			}
 			break;
 
@@ -988,13 +985,13 @@ void cMissionScript::UpdateTimeLine()
 
 				xmlDoc->fGetEntryAttribute(TL, "speed", BigAsteroid->Speed);
 
-				SetID(BigAsteroid, &TL, xmlDoc);
+				SetID(*BigAsteroid, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(BigAsteroid, &TL, ShowLineNumber);
-				SetShowDeleteOnHide(BigAsteroid, &TL, xmlDoc);
+					SetDebugInformation(*BigAsteroid, TL, ShowLineNumber);
+				SetShowDeleteOnHide(*BigAsteroid, TL, xmlDoc);
 
-				SetRotation(BigAsteroid, &TL, xmlDoc);
-				SetLocation(BigAsteroid, &TL, xmlDoc, TimeOpLag);
+				SetRotation(*BigAsteroid, TL, xmlDoc);
+				SetLocation(*BigAsteroid, TL, xmlDoc, TimeOpLag);
 			}
 			break;
 
@@ -1008,23 +1005,21 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(GroundObject, &TL, xmlDoc);
+				SetID(*GroundObject, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
-				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
-				SetAIMode(GroundObject, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
+					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
+				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
+				SetAIMode(GroundObject->TimeSheetList, TL, xmlDoc, xmlAI);
 
-				SetRotation(GroundObject, &TL, xmlDoc);
-				SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
+				SetRotation(*GroundObject, TL, xmlDoc);
+				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
 				for (const auto &tmpXMLEntry : TL.ChildrenList) {
 					if (tmpXMLEntry.Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						GroundObject->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
+						GroundObject->TimeSheetList.emplace_back();
+						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+								  GroundObject->TimeSheetList.back(), xmlAI);
 					}
 				}
 			}
@@ -1038,13 +1033,13 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(GroundObject, &TL, xmlDoc);
+				SetID(*GroundObject, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
-				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
+					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
+				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
 
-				SetRotation(GroundObject, &TL, xmlDoc);
-				SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
+				SetRotation(*GroundObject, TL, xmlDoc);
+				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
 			}
 			break;
 
@@ -1075,13 +1070,13 @@ void cMissionScript::UpdateTimeLine()
 				Mine->DamageSystems = Mine->DamageSystems / CurrentPenalty;
 				Mine->SpeedStart = Mine->SpeedEnd = Mine->Speed = Mine->SpeedStart / CurrentPenalty;
 
-				SetID(Mine, &TL, xmlDoc);
+				SetID(*Mine, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(Mine, &TL, ShowLineNumber);
-				SetShowDeleteOnHide(Mine, &TL, xmlDoc);
+					SetDebugInformation(*Mine, TL, ShowLineNumber);
+				SetShowDeleteOnHide(*Mine, TL, xmlDoc);
 
-				SetProjectileRotation(Mine, &TL, xmlDoc);
-				SetProjectileLocation(Mine, &TL, xmlDoc, TimeOpLag);
+				SetProjectileRotation(*Mine, TL, xmlDoc);
+				SetProjectileLocation(*Mine, TL, xmlDoc, TimeOpLag);
 			}
 			break;
 
@@ -1093,25 +1088,23 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(GroundObject, &TL, xmlDoc);
+				SetID(*GroundObject, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
+					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", GroundObject->NeedSpeed))
 					GroundObject->Speed = GroundObject->NeedSpeed;
 
-				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
-				SetAIMode(GroundObject, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
-				SetRotation(GroundObject, &TL, xmlDoc);
-				SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
+				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
+				SetAIMode(GroundObject->TimeSheetList, TL, xmlDoc, xmlAI);
+				SetRotation(*GroundObject, TL, xmlDoc);
+				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
 				for (const auto &tmpXMLEntry : TL.ChildrenList) {
 					if (tmpXMLEntry.Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						GroundObject->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
+						GroundObject->TimeSheetList.emplace_back();
+						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+								  GroundObject->TimeSheetList.back(), xmlAI);
 					}
 				}
 			}
@@ -1125,25 +1118,23 @@ void cMissionScript::UpdateTimeLine()
 				else
 					continue;
 
-				SetID(GroundObject, &TL, xmlDoc);
+				SetID(*GroundObject, TL, xmlDoc);
 				if (ShowLineNumber)
-					SetDebugInformation(GroundObject, &TL, ShowLineNumber);
+					SetDebugInformation(*GroundObject, TL, ShowLineNumber);
 				if (xmlDoc->fGetEntryAttribute(TL, "speed", GroundObject->NeedSpeed))
 					GroundObject->Speed = GroundObject->NeedSpeed;
 
-				SetShowDeleteOnHide(GroundObject, &TL, xmlDoc);
-				SetAIMode(GroundObject, &TL, xmlDoc, xmlAI); // на тот случае если просто ставим и все...
-				SetRotation(GroundObject, &TL, xmlDoc);
-				SetLocation(GroundObject, &TL, xmlDoc, TimeOpLag);
+				SetShowDeleteOnHide(*GroundObject, TL, xmlDoc);
+				SetAIMode(GroundObject->TimeSheetList, TL, xmlDoc, xmlAI);
+				SetRotation(*GroundObject, TL, xmlDoc);
+				SetLocation(*GroundObject, TL, xmlDoc, TimeOpLag);
 
 				// дальше смотрим, что нужно сделать...
 				for (const auto &tmpXMLEntry : TL.ChildrenList) {
 					if (tmpXMLEntry.Name == "TimeSheet") {
-						// собираем новый элемент
-						sTimeSheet *TimeSheet;
-						TimeSheet = new sTimeSheet;
-						GroundObject->AttachTimeSheet(TimeSheet);
-						LoadTimeSheetData(xmlDoc.get(), tmpXMLEntry, TimeSheet, xmlAI);
+						GroundObject->TimeSheetList.emplace_back();
+						LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
+								  GroundObject->TimeSheetList.back(), xmlAI);
 					}
 				}
 			}
@@ -1159,62 +1150,32 @@ void cMissionScript::UpdateTimeLine()
 }
 
 //-----------------------------------------------------------------------------
-// Установка нового (добавление) TimeSheet в нужное место
-// !!! эта процедура заменяет вызов AttachTimeSheet
-//-----------------------------------------------------------------------------
-static void AddAfterTimeSheet(cObject3D *Object, sTimeSheet *TimeSheet, sTimeSheet *AfterThisTimeSheet)
-{
-	if (!Object || !TimeSheet || !AfterThisTimeSheet)
-		return;
-
-	if (AfterThisTimeSheet->Next)
-		AfterThisTimeSheet->Next->Prev = TimeSheet;
-	else
-		Object->EndTimeSheet = TimeSheet;
-
-	TimeSheet->Next = AfterThisTimeSheet->Next;
-	TimeSheet->Prev = AfterThisTimeSheet;
-
-	AfterThisTimeSheet->Next = TimeSheet;
-}
-
-//-----------------------------------------------------------------------------
 // Замена маркера действия набором действий
 //-----------------------------------------------------------------------------
-void InterAIMode(cObject3D *Object, sTimeSheet *TimeSheetMain)
+void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
 {
-	if (!Object || !TimeSheetMain || !TimeSheetMain->xmlAI)
+	if (TimeSheetList.empty())
 		return;
 
-	sTimeSheet *AddAfter = TimeSheetMain;
+	auto iter = TimeSheetList.begin();
 
-	for (auto &xmlEntry : TimeSheetMain->xmlAI->GetRootEntry()->ChildrenList) {
+	for (auto &xmlEntry : TimeSheetList.front().xmlAI->GetRootEntry()->ChildrenList) {
 		int tmpAI_Mode{0};
-		if (TimeSheetMain->xmlAI->iGetEntryAttribute(xmlEntry, "num", tmpAI_Mode) &&
-		    (tmpAI_Mode == TimeSheetMain->AI_Mode)) {
+		if (TimeSheetList.front().xmlAI->iGetEntryAttribute(xmlEntry, "num", tmpAI_Mode) &&
+		    (tmpAI_Mode == TimeSheetList.front().AI_Mode)) {
 
 			// "unpack" all the elements
-			for (auto &TChildEntry : xmlEntry.ChildrenList) {
-				if (TChildEntry.Name == "TimeSheet") {
-					sTimeSheet *TimeSheet;
-					TimeSheet = new sTimeSheet;
-					AddAfterTimeSheet(Object, TimeSheet, AddAfter);
-					AddAfter = TimeSheet;
-					LoadTimeSheetData(TimeSheetMain->xmlAI.get(), TChildEntry, TimeSheet,
-							  TimeSheetMain->xmlAI);
+			for (auto &tmpChildEntry : xmlEntry.ChildrenList) {
+				if (tmpChildEntry.Name == "TimeSheet") {
+					iter = TimeSheetList.emplace(++iter);
+					LoadTimeSheetData(*TimeSheetList.front().xmlAI.get(), tmpChildEntry,
+							  *iter, TimeSheetList.front().xmlAI);
 				}
 			}
 
 			// for cycled, create duplicate at the end of unpacked elements
-			if (TimeSheetMain->Time == -1) {
-				sTimeSheet *TimeSheet;
-				TimeSheet = new sTimeSheet;
-				AddAfterTimeSheet(Object, TimeSheet, AddAfter);
-				// same "packed" element with cycled marker (Time = -1)
-				TimeSheet->AI_Mode = TimeSheetMain->AI_Mode;
-				TimeSheet->xmlAI = TimeSheetMain->xmlAI;
-				TimeSheet->Time = -1.0f;
-			}
+			if (TimeSheetList.front().Time == -1)
+				TimeSheetList.emplace(++iter, TimeSheetList.front());
 
 			return;
 		}

@@ -30,7 +30,7 @@
 
 #include "../core/core.h"
 #include "../struct.h"
-
+#include "../script/script.h"
 
 extern int GameNPCWeaponPenalty;
 extern int GameNPCArmorPenalty;
@@ -46,8 +46,6 @@ extern int GamePowerSystem;
 extern int GameTargetingMechanicSystem;
 
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
-
-struct sTimeSheet;
 
 //-----------------------------------------------------------------------------
 // Класс cObject3D
@@ -219,11 +217,7 @@ public:
 	char	*DebugInfo{nullptr};
 
 	// данные по текущему сценарию действий объекта
-	sTimeSheet	*StartTimeSheet{nullptr}; // - этот текущий
-	sTimeSheet	*EndTimeSheet{nullptr};
-	// действия
-	void	AttachTimeSheet(sTimeSheet *TimeSheet);
-	void	DetachTimeSheet(sTimeSheet *TimeSheet);
+	std::list<sTimeSheet> TimeSheetList{};
 };
 
 

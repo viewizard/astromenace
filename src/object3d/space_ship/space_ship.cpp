@@ -386,41 +386,40 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// обработка скрипта
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (StartTimeSheet != nullptr)
-		if (!StartTimeSheet->InUse) {
-			StartTimeSheet->InUse = true;
+	if (!TimeSheetList.empty() &&
+	    !TimeSheetList.front().InUse) {
+		TimeSheetList.front().InUse = true;
 
-			NeedSpeed = StartTimeSheet->Speed;
-			NeedAcceler = StartTimeSheet->Acceler;
-			NeedSpeedLR = StartTimeSheet->SpeedLR;
-			NeedAccelerLR = StartTimeSheet->AccelerLR;
-			NeedSpeedUD = StartTimeSheet->SpeedUD;
-			NeedAccelerUD = StartTimeSheet->AccelerUD;
+		NeedSpeed = TimeSheetList.front().Speed;
+		NeedAcceler = TimeSheetList.front().Acceler;
+		NeedSpeedLR = TimeSheetList.front().SpeedLR;
+		NeedAccelerLR = TimeSheetList.front().AccelerLR;
+		NeedSpeedUD = TimeSheetList.front().SpeedUD;
+		NeedAccelerUD = TimeSheetList.front().AccelerUD;
 
-			NeedSpeedByCamFB = StartTimeSheet->SpeedByCamFB;
-			NeedAccelerByCamFB = StartTimeSheet->AccelerByCamFB;
-			NeedSpeedByCamLR = StartTimeSheet->SpeedByCamLR;
-			NeedAccelerByCamLR = StartTimeSheet->AccelerByCamLR;
-			NeedSpeedByCamUD = StartTimeSheet->SpeedByCamUD;
-			NeedAccelerByCamUD = StartTimeSheet->AccelerByCamUD;
+		NeedSpeedByCamFB = TimeSheetList.front().SpeedByCamFB;
+		NeedAccelerByCamFB = TimeSheetList.front().AccelerByCamFB;
+		NeedSpeedByCamLR = TimeSheetList.front().SpeedByCamLR;
+		NeedAccelerByCamLR = TimeSheetList.front().AccelerByCamLR;
+		NeedSpeedByCamUD = TimeSheetList.front().SpeedByCamUD;
+		NeedAccelerByCamUD = TimeSheetList.front().AccelerByCamUD;
 
+		NeedRotate = TimeSheetList.front().Rotation;
+		RotationSpeed = TimeSheetList.front().RotationAcceler;
 
-			NeedRotate = StartTimeSheet->Rotation;
-			RotationSpeed = StartTimeSheet->RotationAcceler;
-
-
-
-			if (Weapon != nullptr)
-				for (int i = 0; i < WeaponQuantity; i++) {
-					if (Weapon[i] != nullptr)
-						WeaponSetFire[i] = StartTimeSheet->Fire;
-				}
-			if (BossWeapon != nullptr)
-				for (int i = 0; i < BossWeaponQuantity; i++) {
-					if (BossWeapon[i] != nullptr)
-						BossWeaponSetFire[i] = StartTimeSheet->BossFire;
-				}
+		if (Weapon) {
+			for (int i = 0; i < WeaponQuantity; i++) {
+				if (Weapon[i])
+					WeaponSetFire[i] = TimeSheetList.front().Fire;
+			}
 		}
+		if (BossWeapon) {
+			for (int i = 0; i < BossWeaponQuantity; i++) {
+				if (BossWeapon[i])
+					BossWeaponSetFire[i] = TimeSheetList.front().BossFire;
+			}
+		}
+	}
 
 
 

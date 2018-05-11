@@ -179,20 +179,20 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// обработка скрипта
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((StartTimeSheet != nullptr) &&
-	    (!StartTimeSheet->InUse)) {
-		StartTimeSheet->InUse = true;
+	if (!TimeSheetList.empty() &&
+	    !TimeSheetList.front().InUse) {
+		TimeSheetList.front().InUse = true;
 
-		NeedSpeed = StartTimeSheet->Speed;
-		NeedAcceler = StartTimeSheet->Acceler;
-		NeedRotate = StartTimeSheet->Rotation;
-		RotationSpeed = StartTimeSheet->RotationAcceler;
-		WeaponTargeting = StartTimeSheet->Targeting;
+		NeedSpeed = TimeSheetList.front().Speed;
+		NeedAcceler = TimeSheetList.front().Acceler;
+		NeedRotate = TimeSheetList.front().Rotation;
+		RotationSpeed = TimeSheetList.front().RotationAcceler;
+		WeaponTargeting = TimeSheetList.front().Targeting;
 
 		if (Weapon != nullptr)
 			for (int i = 0; i < WeaponQuantity; i++) {
 				if (Weapon[i] != nullptr)
-					WeaponSetFire[i] = StartTimeSheet->Fire;
+					WeaponSetFire[i] = TimeSheetList.front().Fire;
 			}
 	}
 
