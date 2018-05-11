@@ -1540,31 +1540,31 @@ bool cObject3D::Update(float Time)
 
 
 
-	// if we have TimeSheet with actions
-	if (StartTimeSheet) {
-		// if this is not a cycled entry
-		if (StartTimeSheet->Time > -1.0f) {
-			StartTimeSheet->Time -= TimeDelta;
-			// if this entry is out of time, remove it
-			if (StartTimeSheet->Time <= 0.0f) {
-				// correct time delta
-				if (StartTimeSheet->Time < 0.0f)
-					TimeDelta += StartTimeSheet->Time;
+	// if we have TimeSheet with actions and this is not a cycled entry
+	if (StartTimeSheet &&
+	    (StartTimeSheet->Time > -1.0f)) {
+		StartTimeSheet->Time -= TimeDelta;
+		// if this entry is out of time, remove it
+		if (StartTimeSheet->Time <= 0.0f) {
+			// correct time delta
+			if (StartTimeSheet->Time < 0.0f)
+				TimeDelta += StartTimeSheet->Time;
 
-				sTimeSheet* TmpTimeSheet = StartTimeSheet;
-				DetachTimeSheet(StartTimeSheet);
-				delete TmpTimeSheet;
-			}
-		}
-		// should be unpacked
-		if (StartTimeSheet->AI_Mode != 0) {
-			InterAIMode(this, StartTimeSheet);
-			// since we already unpack this entry, remove it
 			sTimeSheet* TmpTimeSheet = StartTimeSheet;
 			DetachTimeSheet(StartTimeSheet);
 			delete TmpTimeSheet;
 		}
 	}
+	// should be unpacked
+	if (StartTimeSheet &&
+	    (StartTimeSheet->AI_Mode != 0)) {
+		InterAIMode(this, StartTimeSheet);
+		// since we already unpack this entry, remove it
+		sTimeSheet* TmpTimeSheet = StartTimeSheet;
+		DetachTimeSheet(StartTimeSheet);
+		delete TmpTimeSheet;
+	}
+
 
 
 
