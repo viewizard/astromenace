@@ -259,7 +259,7 @@ bool cMissionScript::Update(float Time)
 
 		float NeedGener = AsterQuant * AsterTimeDelta + AsterRealNeed;
 		unsigned NeedGenerInt = static_cast<unsigned>(NeedGener);
-		AsterRealNeed = NeedGener - NeedGenerInt;
+		AsterRealNeed = NeedGener - static_cast<float>(NeedGenerInt);
 
 		while (NeedGenerInt > 0) {
 			cAsteroid *CreateAsteroid = new cAsteroid;

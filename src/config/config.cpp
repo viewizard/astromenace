@@ -67,13 +67,13 @@ static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsig
 	for (int i = 0; i < DataSize; i++) {
 		int tmpOffset = DataSize + i * 2;
 		// XOR key, randomize for each character
-		DataXOR[i] = 97 + static_cast<unsigned char>(vw_iRandNum(25));
+		DataXOR[i] = static_cast<unsigned char>(97 + vw_iRandNum(25));
 		// XOR
 		unsigned char tmpDataXOR = Data[i] ^ DataXOR[i];
 		// store 'ten'
-		DataXOR[tmpOffset] = 97 + static_cast<unsigned char>(tmpDataXOR / 10.0f);
+		DataXOR[tmpOffset] = static_cast<unsigned char>(97 + tmpDataXOR / 10.0f);
 		// store 'one'
-		DataXOR[tmpOffset + 1] = 97 + (tmpDataXOR - (DataXOR[tmpOffset] - 97) * 10);
+		DataXOR[tmpOffset + 1] = static_cast<unsigned char>(97 + (tmpDataXOR - (DataXOR[tmpOffset] - 97) * 10));
 	}
 	// we should return null-terminated array
 	DataXOR[DataSize * 3] = '\0';
@@ -189,7 +189,8 @@ static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std:
 	for (unsigned int i = 0; i < DataSize; i++) {
 		int tmpOffset = DataSize + i * 2;
 		// Data = XOR key ^ (tens + ones)
-		Data[i] = DataXOR[i] ^ (((DataXOR[tmpOffset] - 97) * 10) + (DataXOR[tmpOffset + 1] - 97));
+		Data[i] = static_cast<unsigned char>(DataXOR[i] ^
+						     (((DataXOR[tmpOffset] - 97) * 10) + (DataXOR[tmpOffset + 1] - 97)));
 	}
 }
 
