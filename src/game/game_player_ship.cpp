@@ -495,7 +495,7 @@ void GamePlayerShip()
 
 			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
 			// если объект ближе чем радиус, кричим
-			if (tmpS->ObjectType == 15) // только с большими астероидами
+			if (tmpS->ObjectType == eObjectType::BigAsteroid)
 				if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
 							     tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
 					if (vw_SphereAABBCollision(tmpS->AABB, tmpS->Location,
@@ -511,7 +511,7 @@ void GamePlayerShip()
 
 			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
 			// если объект ближе чем радиус, кричим
-			if (tmpG->ObjectType == 12) // только со зданиями (чтобы не цепляло блоки конструкций баз)
+			if (tmpG->ObjectType == eObjectType::CivilianBuilding)
 				if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
 							     tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
 					if (vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,

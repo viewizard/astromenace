@@ -232,7 +232,7 @@ cProjectile::cProjectile()
 {
 	// друг
 	ObjectStatus = 2;
-	ObjectType = 10;
+	ObjectType = eObjectType::Projectile;
 
 	// проверяем на столкновения только по радиусу
 	Radius = 0.0f;

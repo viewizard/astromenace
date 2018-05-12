@@ -85,7 +85,6 @@ void	DetachSpaceObject(cSpaceObject* SpaceObject);
 void	UpdateAllSpaceObject(float Time);
 // Прорисовываем все объекты
 void	DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap);
-int 	DrawAllSpaceObjectCount(int DrawOnlyType);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceObject();
 

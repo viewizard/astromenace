@@ -135,23 +135,14 @@ void UpdateAllSpaceShip(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType)
+void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap)
 {
-
 	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
 		cSpaceShip *tmp2 = tmp->Next;
-
-		if (DrawOnlyType != -1) {
-			// если нужно прорисовать только определенный тип
-			if (tmp->ObjectType == DrawOnlyType)
-				tmp->Draw(VertexOnlyPass, ShadowMap);
-		} else
-			tmp->Draw(VertexOnlyPass, ShadowMap);
-
+		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
-
 }
 
 

@@ -518,7 +518,7 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 	}
 
 	ObjectStatus = 2; // свой
-	ObjectType = 1;
+	ObjectType = eObjectType::EarthFighter;
 	ObjectCreationType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
 

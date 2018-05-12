@@ -361,52 +361,58 @@ void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
 
 
 		float TTTExperience = 0.0f;
-		// перебираем по типу корабля и заносим данные
+		// don't use 'default' case here, we need compiler's warning if anyone was missed
 		switch (Object->ObjectType) {
-		// 1 - Earth Fighter
-		case 1:
+		case eObjectType::none:
+		case eObjectType::EarthFighter:
+		case eObjectType::ShipPart:
+		case eObjectType::ShipWeapon:
+		case eObjectType::Explosion:
+		case eObjectType::CivilianBuilding:
+		case eObjectType::BasePart:
+		case eObjectType::Planet:
+		case eObjectType::BigAsteroid:
+		case eObjectType::Projectile:
 			break;
-		// 2 - Alien Fighter
-		case 2:
+
+		case eObjectType::AlienFighter:
 			AlienShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			AlienShipsKillQuant += 1;
 			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
-		// 3 - Alien MotherShip
-		case 3:
+
+		case eObjectType::AlienMotherShip:
 			AlienMotherShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			AlienMotherShipsKillQuant += 1;
 			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
-		// 4 - Pirate Ship
-		case 4:
+
+		case eObjectType::PirateShip:
 			PirateShipsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			PirateShipsKillQuant += 1;
 			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
-		// 5 - Pirate Vehicle (Wheeled + Tracked)
-		case 5:
+
+		case eObjectType::PirateVehicle:
 			PirateVehiclesKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			PirateVehiclesKillQuant += 1;
 			TTTExperience += (Object->StrengthStart*GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
-		// 6 - Pirate Building
-		case 6:
+
+		case eObjectType::PirateBuilding:
 			PirateBuildingsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/1.8f)/BonusDiv;
 			PirateBuildingsKillQuant += 1;
 			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 1.8f;
 			break;
-		// 7 - Asteroids
-		case 7:
-			//GameMoney += 1.0f/BonusDiv;
+
+		case eObjectType::Asteroids:
 			AsteroidsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/8.0f)/BonusDiv;
 			GameMoney += ((Object->StrengthStart*GameNPCArmorPenalty)/8.0f)/BonusDiv;
-
 			AsteroidsKillQuant += 1;
 			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (GameConfig().Profile[CurrentProfile].Difficulty / 100.0f)) / 8.0f;
 			break;
@@ -414,13 +420,6 @@ void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
 
 		GameExperience += TTTExperience;
 	}
-	// случайно убили своего
-/// !!! не ставим, люди не понимают, думают глюк
-	/*    if (Object->ObjectStatus == 2 && KilledByObjectStatus == 3 && Object->ObjectType == 1)
-	    {
-	        GameMoney -= Object->StrengthStart*GameNPCArmorPenalty*10.0f;
-	        if (GameMoney < 0.0f) GameMoney = 0.0f;
-	    }*/
 }
 
 
@@ -483,7 +482,7 @@ void DetectCollisionAllObject3D()
 				tmpShip->Strength -= (DamagesData.DamageSystems/tmpShip->ResistanceHull) * vw_fRand();
 				// есть шанс полностью убить пришельца
 				if (DamagesData.DamageSystems > 0.0f)
-					if (tmpShip->ObjectType == 2)
+					if (tmpShip->ObjectType == eObjectType::AlienFighter)
 						if (vw_fRand() > 0.7f) tmpShip->Strength = 0;
 
 
@@ -496,21 +495,22 @@ void DetectCollisionAllObject3D()
 					// если не корабль игрока! его удалим сами
 					if (tmpShip->ObjectStatus != 3) {
 						switch (tmpShip->ObjectType) {
-						case 2:
+						case eObjectType::AlienFighter:
 							new cSpaceExplosion(tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
-						case 1:
+						case eObjectType::EarthFighter:
 							new cSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
-						case 3:
+						case eObjectType::AlienMotherShip:
 							new cSpaceExplosion(tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
-						case 4:
+						case eObjectType::PirateShip:
 							if (tmpShip->ObjectCreationType <= 5)
 								new cSpaceExplosion(tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							else
 								new cSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
-
+							break;
+						default:
 							break;
 						}
 						delete tmpShip;
@@ -525,7 +525,7 @@ void DetectCollisionAllObject3D()
 					// игроку тут ничего не делаем!.. с него хватит и щита
 					if (tmpShip->ObjectStatus != 3)
 						// если это не босс уровня (Alien MotherShip)
-						if (tmpShip->ObjectType != 3)
+						if (tmpShip->ObjectType != eObjectType::AlienMotherShip)
 							// если нужно, смотрим что делать с системами
 							if (DamagesData.DamageSystems > 0.0f) {
 								float Rand = vw_fRand();
@@ -620,7 +620,8 @@ void DetectCollisionAllObject3D()
 								  tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
 						if (CheckHitBBOBBCollisionDetection(tmpShip, tmpS, &ObjectPieceNum)) {
 
-							if (tmpS->ObjectType == 13 || tmpS->ObjectType == 15) // только с базой или большими астероидами
+							if ((tmpS->ObjectType == eObjectType::BasePart) ||
+							    (tmpS->ObjectType == eObjectType::BigAsteroid))
 								if (!CheckHitBBMeshCollisionDetection(tmpShip, tmpS, &ObjectPieceNum)) {
 									// если не столкнулись = выходим
 									goto exitN1;
@@ -648,11 +649,13 @@ void DetectCollisionAllObject3D()
 									AddPlayerBonus(tmpS, tmpShip->ObjectStatus);
 
 									switch (tmpS->ObjectType) {
-									case 7:
+									case eObjectType::Asteroids:
 										new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 										break;
-									case 8:
+									case eObjectType::ShipPart:
 										new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+										break;
+									default:
 										break;
 									}
 									delete tmpS;
@@ -666,21 +669,23 @@ void DetectCollisionAllObject3D()
 									// если не корабль игрока! его удалим сами
 									if (tmpShip->ObjectStatus != 3) {
 										switch (tmpShip->ObjectType) {
-										case 2:
+										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
-										case 1:
+										case eObjectType::EarthFighter:
 											new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
-										case 3:
+										case eObjectType::AlienMotherShip:
 											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
-										case 4:
+										case eObjectType::PirateShip:
 											if (tmpShip->ObjectCreationType <= 5)
 												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											else
 												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 
+											break;
+										default:
 											break;
 										}
 										delete tmpShip;
@@ -715,7 +720,7 @@ exitN1:
 								  tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
 						if (CheckHitBBHitBBCollisionDetection(tmpShip, tmpG, &ObjectPieceNum1, &ObjectPieceNum2)) {
 
-							if (tmpG->ObjectType == 12) // только с большими сооружениями, которые уничтожить нельзя
+							if (tmpG->ObjectType == eObjectType::CivilianBuilding)
 								if (!CheckHitBBMeshCollisionDetection(tmpShip, tmpG, &ObjectPieceNum2)) {
 									// если не столкнулись = выходим
 									goto exitN2;
@@ -743,11 +748,13 @@ exitN1:
 									AddPlayerBonus(tmpG, tmpShip->ObjectStatus);
 
 									switch (tmpG->ObjectType) {
-									case 6:
+									case eObjectType::PirateBuilding:
 										new cGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum2);
 										break;
-									case 5:
+									case eObjectType::PirateVehicle:
 										new cGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum2);
+										break;
+									default:
 										break;
 									}
 									delete tmpG;
@@ -761,21 +768,23 @@ exitN1:
 									// если не корабль игрока! его удалим сами
 									if (tmpShip->ObjectStatus != 3) {
 										switch (tmpShip->ObjectType) {
-										case 2:
+										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 1:
+										case eObjectType::EarthFighter:
 											new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 3:
+										case eObjectType::AlienMotherShip:
 											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 4:
+										case eObjectType::PirateShip:
 											if (tmpShip->ObjectCreationType <= 5)
 												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
 												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 
+											break;
+										default:
 											break;
 										}
 										delete tmpShip;
@@ -835,21 +844,23 @@ exitN2:
 									// если не корабль игрока! его удалим сами
 									if (tmpCollisionShip1->ObjectStatus != 3) {
 										switch (tmpCollisionShip1->ObjectType) {
-										case 2:
+										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
-										case 1:
+										case eObjectType::EarthFighter:
 											new cSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
-										case 3:
+										case eObjectType::AlienMotherShip:
 											new cSpaceExplosion(tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
-										case 4:
+										case eObjectType::PirateShip:
 											if (tmpCollisionShip1->ObjectCreationType <= 5)
 												new cSpaceExplosion(tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											else
 												new cSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 
+											break;
+										default:
 											break;
 										}
 										// если удаляем, нужно подправить указатель...
@@ -870,21 +881,23 @@ exitN2:
 									// если не корабль игрока! его удалим сами
 									if (tmpShip->ObjectStatus != 3) {
 										switch (tmpShip->ObjectType) {
-										case 2:
+										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 1:
+										case eObjectType::EarthFighter:
 											new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 3:
+										case eObjectType::AlienMotherShip:
 											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
-										case 4:
+										case eObjectType::PirateShip:
 											if (tmpShip->ObjectCreationType <= 5)
 												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
 												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 
+											break;
+										default:
 											break;
 										}
 										delete tmpShip;
@@ -943,11 +956,13 @@ exitN2:
 						AddPlayerBonus(tmpG, tmpProjectile->ObjectStatus);
 
 						switch (tmpG->ObjectType) {
-						case 6:
+						case eObjectType::PirateBuilding:
 							new cGroundExplosion(tmpG, 1, IntercPoint, ObjectPieceNum);
 							break;
-						case 5:
+						case eObjectType::PirateVehicle:
 							new cGroundExplosion(tmpG, 2, IntercPoint, ObjectPieceNum);
+							break;
+						default:
 							break;
 						}
 						delete tmpG;
@@ -981,7 +996,7 @@ exitN2:
 			int ObjectPieceNum;
 
 			// не проверяем с частями базы
-			if (tmpS->ObjectType != 13)
+			if (tmpS->ObjectType != eObjectType::BasePart)
 				// не проверяем если оба не можем уничтожить
 				if (NeedCheckCollision(tmpG) || NeedCheckCollision(tmpS))
 					if (vw_SphereSphereCollision(tmpG->Radius, tmpG->Location,
@@ -1009,11 +1024,13 @@ exitN2:
 											AddPlayerBonus(tmpS, tmpG->ObjectStatus);
 
 											switch (tmpS->ObjectType) {
-											case 7:
+											case eObjectType::Asteroids:
 												new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 												break;
-											case 8:
+											case eObjectType::ShipPart:
 												new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+												break;
+											default:
 												break;
 											}
 											delete tmpS;
@@ -1025,11 +1042,13 @@ exitN2:
 										// если уже все... удаляем
 										if (tmpG->Strength <= 0.0f) {
 											switch (tmpG->ObjectType) {
-											case 6:
+											case eObjectType::PirateBuilding:
 												new cGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum);
 												break;
-											case 5:
+											case eObjectType::PirateVehicle:
 												new cGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum);
+												break;
+											default:
 												break;
 											}
 											delete tmpG;
@@ -1077,11 +1096,13 @@ exitN2:
 						AddPlayerBonus(tmpS, tmpProjectile->ObjectStatus);
 
 						switch (tmpS->ObjectType) {
-						case 7:
+						case eObjectType::Asteroids:
 							new cSpaceExplosion(tmpS, 1, IntercPoint, tmpS->Speed, -1);
 							break;
-						case 8:
+						case eObjectType::ShipPart:
 							new cSpaceExplosion(tmpS, 32, IntercPoint, tmpS->Speed, -1);
+							break;
+						default:
 							break;
 						}
 						delete tmpS;
@@ -1122,16 +1143,12 @@ exitN2:
 						// если попали в часть базы - просто летим в другую сторону,
 						// если это обломок корабля или модели
 						// и если большой астероид
-						if ((tmpS->ObjectType == 13 && tmpCollisionSpace1->ObjectType == 8) ||
-						    (tmpS->ObjectType == 8 && tmpCollisionSpace1->ObjectType == 13)) {
-							if (tmpS->ObjectType == 8) {
-								//tmpS->SetRotation(sVECTOR3D(0.0f,180.0f,0.0f));
+						if (((tmpS->ObjectType == eObjectType::BasePart) && (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart)) ||
+						    ((tmpS->ObjectType == eObjectType::ShipPart) && (tmpCollisionSpace1->ObjectType == eObjectType::BasePart))) {
+							if (tmpS->ObjectType == eObjectType::ShipPart)
 								vw_RotatePoint(tmpS->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
-							}
-							if (tmpCollisionSpace1->ObjectType == 8) {
-								//tmpCollisionSpace1->SetRotation(sVECTOR3D(0.0f,180.0f,0.0f));
+							if (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart)
 								vw_RotatePoint(tmpCollisionSpace1->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
-							}
 
 							goto exitN4;
 						}
@@ -1139,17 +1156,18 @@ exitN2:
 
 
 						// смотрим, чтобы это были не только обломки с обломками (иначе не красиво взрываются корабли)
-						if (tmpCollisionSpace1->ObjectType != 8 || tmpS->ObjectType != 8) {
+						if ((tmpCollisionSpace1->ObjectType != eObjectType::ShipPart) ||
+						    (tmpS->ObjectType != eObjectType::ShipPart)) {
 
 							int ObjectPieceNum;
 
 							// проверка, если это столкновение с базой - надо внимательно смотреть
-							if ((tmpS->ObjectType == 13) &&
+							if ((tmpS->ObjectType == eObjectType::BasePart) &&
 							    (!CheckHitBBMeshCollisionDetection(tmpCollisionSpace1, tmpS, &ObjectPieceNum)))
 									// если не столкнулись = выходим
 									goto exitN4;
 							// проверка, если это столкновение с базой - надо внимательно смотреть
-							if ((tmpCollisionSpace1->ObjectType == 13) &&
+							if ((tmpCollisionSpace1->ObjectType == eObjectType::BasePart) &&
 							    (!CheckHitBBMeshCollisionDetection(tmpS, tmpCollisionSpace1, &ObjectPieceNum)))
 									// если не столкнулись = выходим
 									goto exitN4;
@@ -1159,13 +1177,16 @@ exitN2:
 							bool SFXplayed = false;
 
 							if ((NeedCheckCollision(tmpCollisionSpace1)) &&
-							    (tmpCollisionSpace1->ObjectType == 7 || tmpCollisionSpace1->ObjectType == 8)) {
+							    ((tmpCollisionSpace1->ObjectType == eObjectType::Asteroids) ||
+							     (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart))) {
 								switch (tmpCollisionSpace1->ObjectType) {
-								case 7:
+								case eObjectType::Asteroids:
 									new cSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 									break;
-								case 8:
+								case eObjectType::ShipPart:
 									new cSpaceExplosion(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
+									break;
+								default:
 									break;
 								}
 								SFXplayed = true;
@@ -1176,13 +1197,15 @@ exitN2:
 							}
 
 							if ((NeedCheckCollision(tmpS)) &&
-							    (tmpS->ObjectType == 7 || tmpS->ObjectType == 8)) {
+							    ((tmpS->ObjectType == eObjectType::Asteroids) || (tmpS->ObjectType == eObjectType::ShipPart))) {
 								switch (tmpS->ObjectType) {
-								case 7:
+								case eObjectType::Asteroids:
 									new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 									break;
-								case 8:
+								case eObjectType::ShipPart:
 									new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
+									break;
+								default:
 									break;
 								}
 								delete tmpS;
@@ -1414,7 +1437,7 @@ void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Poi
 			     ((ObjectStatus == 1) && (tmpS->ObjectStatus > 1))) &&
 			    (DontTouchObject != tmpS)) {
 				if (CheckSphereSphereDestroyDetection(tmpS, Point, Radius, &Distance2)) {
-					if ((tmpS->ObjectType == 8) &&
+					if ((tmpS->ObjectType == eObjectType::ShipPart) &&
 					    (vw_fRand() > 0.4f))
 						goto NexttmpS;
 
@@ -1477,21 +1500,23 @@ NexttmpS:
 					// если не корабль игрока! его удалим сами
 					if (tmpShip->ObjectStatus != 3) {
 						switch (tmpShip->ObjectType) {
-						case 2:
+						case eObjectType::AlienFighter:
 							new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
 							break;
-						case 1:
+						case eObjectType::EarthFighter:
 							new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
 							break;
-						case 3:
+						case eObjectType::AlienMotherShip:
 							new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
 							break;
-						case 4:
+						case eObjectType::PirateShip:
 							if (tmpShip->ObjectCreationType <= 5)
 								new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
 							else
 								new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
 
+							break;
+						default:
 							break;
 						}
 						delete tmpShip;
@@ -1534,11 +1559,13 @@ NexttmpS:
 					AddPlayerBonus(tmpG, ObjectStatus);
 
 					switch (tmpG->ObjectType) {
-					case 6:
+					case eObjectType::PirateBuilding:
 						new cGroundExplosion(tmpG, 1, tmpG->Location, -1);
 						break;
-					case 5:
+					case eObjectType::PirateVehicle:
 						new cGroundExplosion(tmpG, 2, tmpG->Location, -1);
+						break;
+					default:
 						break;
 					}
 

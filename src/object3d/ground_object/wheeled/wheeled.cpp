@@ -61,7 +61,7 @@ void cWheeled::Create(int WheeledNum)
 		return;
 	}
 
-	ObjectType = 5;
+	ObjectType = eObjectType::PirateVehicle;
 	ObjectCreationType = WheeledNum;
 	MaxSpeed = 20.0f;
 	MaxAcceler = 5.0f;

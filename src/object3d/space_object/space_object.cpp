@@ -152,9 +152,11 @@ bool cSpaceObject::Update(float Time)
 
 
 	// если астероиды
-	if (ObjectType == 7 || ObjectType == 15) {
+	if ((ObjectType == eObjectType::Asteroids) ||
+	    (ObjectType == eObjectType::BigAsteroid)) {
 		// если большие астероиды летящие сверху
-		if (ObjectType == 15 && (ObjectCreationType>20 && ObjectCreationType<30)) {
+		if ((ObjectType == eObjectType::BigAsteroid) &&
+		    ((ObjectCreationType > 20) && (ObjectCreationType < 30))) {
 			SetRotation(sVECTOR3D(RotationSpeed.x*TimeDelta, RotationSpeed.y*TimeDelta, 0.0f));
 		} else {
 			if (RotationSpeed.x != 0.0f) {
@@ -173,7 +175,7 @@ bool cSpaceObject::Update(float Time)
 
 
 	// если части корабля или техники, останавливаем
-	if (ObjectType == 8) {
+	if (ObjectType == eObjectType::ShipPart) {
 		if (Speed > 0.0f) {
 			Speed -= TimeDelta;
 			if (Speed < 0.0f)
@@ -203,7 +205,8 @@ bool cSpaceObject::Update(float Time)
 
 
 	// если планеты, должны учесть положение камеры т.е. ее смещение
-	if (ObjectType == 14 ||	ObjectType == 15) {
+	if ((ObjectType == eObjectType::Planet) ||
+	    (ObjectType == eObjectType::BigAsteroid)) {
 		sVECTOR3D Temp = GamePoint - LastCameraPoint;
 
 		// у планет особое движение... они немного могут двигаться на камеру...
@@ -213,7 +216,7 @@ bool cSpaceObject::Update(float Time)
 		LastCameraPoint = GamePoint;
 
 		// вращения планет и их частей
-		if (ObjectType == 14) {
+		if (ObjectType == eObjectType::Planet) {
 			switch (ObjectCreationType) {
 			// планета с астероидным кольцом
 			case 1:

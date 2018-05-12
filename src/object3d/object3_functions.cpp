@@ -36,68 +36,55 @@
 //-----------------------------------------------------------------------------
 bool NeedCheckCollision(cObject3D* Object3D)
 {
-	// по типу
+	// don't use 'default' case here, we need compiler's warning if anyone was missed
 	switch (Object3D->ObjectType) {
-	// 1 - Earth Fighter
-	case 1:
-		return true;
-
-	// 2 - Alien Fighter
-	case 2:
-		return true;
-
-	// 3 - Alien MotherShip
-	case 3:
-		return true;
-
-	// 4 - Pirate Ship
-	case 4:
-		return true;
-
-	// 5 - Pirate Vehicle (Wheeled + Tracked)
-	case 5:
-		return true;
-
-	// 6 - Pirate Building
-	case 6:
-		return true;
-
-	// 7 - Asteroids
-	case 7:
-		return true;
-
-	// 8 - ShipPart
-	case 8:
-		return true;
-
-	// 9 - ShipWeapon
-	case 9:
-		return true;
-
-	// 10 - Projectile
-	case 10:
-		return true;
-
-	// 11 - Explosion
-	case 11:
+	case eObjectType::none:
 		return false;
 
-	// 12 - Civilian Building
-	case 12:
+	case eObjectType::EarthFighter:
+		return true;
+
+	case eObjectType::AlienFighter:
+		return true;
+
+	case eObjectType::AlienMotherShip:
+		return true;
+
+	case eObjectType::PirateShip:
+		return true;
+
+	case eObjectType::PirateVehicle:
+		return true;
+
+	case eObjectType::PirateBuilding:
+		return true;
+
+	case eObjectType::Asteroids:
+		return true;
+
+	case eObjectType::ShipPart:
+		return true;
+
+	case eObjectType::ShipWeapon:
+		return true;
+
+	case eObjectType::Projectile:
+		return true;
+
+	case eObjectType::Explosion:
 		return false;
 
-	// 13 - BasePart
-	case 13:
+	case eObjectType::CivilianBuilding:
 		return false;
 
-	// 14 - Planet
-	case 14:
+	case eObjectType::BasePart:
 		return false;
 
-	// 15 - Big Asteroid
-	case 15:
+	case eObjectType::Planet:
 		return false;
 
+	case eObjectType::BigAsteroid:
+		return false;
 	}
 
 	return false;
@@ -1340,7 +1327,7 @@ cObject3D *GetMissileOnTargetOrientateion(
 			// выбираем врага, по своим не целимся
 			if ((ObjectStatus == 1 && tmpS->ObjectStatus>1) ||
 			    (ObjectStatus > 1 && tmpS->ObjectStatus==1))
-				if (tmpS->ObjectType != 8) { // если это не части кораблей
+				if (tmpS->ObjectType != eObjectType::ShipPart) {
 					// проверяем, спереди или сзади стоит противник
 					tmp1 = A2 * (tmpS->Location.x)  + B2 * (tmpS->Location.y)  + C2 * (tmpS->Location.z)  + D2;
 					if (tmp1>0.0f) {

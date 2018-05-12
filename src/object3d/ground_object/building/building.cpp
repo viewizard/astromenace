@@ -62,7 +62,7 @@ void cBuilding::Create(int	BuildingNum)
 		return;
 	}
 
-	ObjectType = 12;
+	ObjectType = eObjectType::CivilianBuilding;
 	ObjectCreationType = BuildingNum;
 	// здания неразрушимы, не показываем вообще их жизнь
 	ShowStrength = false;

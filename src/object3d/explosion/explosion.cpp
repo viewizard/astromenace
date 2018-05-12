@@ -37,7 +37,7 @@ cExplosion::cExplosion()
 
 	// ставим тот, что нужно... т.е. того кого взорвали
 	ObjectStatus = 1; // чужой
-	ObjectType = 11;
+	ObjectType = eObjectType::Explosion;
 
 	// нужно рисовать без оптимизации
 	NeedCullFaces = false;

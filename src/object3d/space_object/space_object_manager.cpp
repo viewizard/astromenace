@@ -119,41 +119,15 @@ void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap)
 		cSpaceObject *tmp2 = tmp->Next;
 
 		// планеты и астероиды рисуем до тайловой анимации в игре!!!
-		if ((tmp->ObjectType != 14) &&
-		    !((tmp->ObjectType == 15) &&
-		      (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
+		if ((tmp->ObjectType != eObjectType::Planet) &&
+		    !((tmp->ObjectType == eObjectType::BigAsteroid) &&
+		      ((tmp->ObjectCreationType > 10) && (tmp->ObjectCreationType < 20))))
 			tmp->Draw(VertexOnlyPass, ShadowMap);
 
 		tmp = tmp2;
 	}
 }
-int DrawAllSpaceObjectCount(int DrawOnlyType)
-{
-	int Count = 0;
 
-	cSpaceObject *tmp = StartSpaceObject;
-	while (tmp != nullptr) {
-		cSpaceObject *tmp2 = tmp->Next;
-
-		if (DrawOnlyType != -1) {
-			// если нужно прорисовать только определенный тип
-			if ((tmp->ObjectType == DrawOnlyType) &&
-			    (tmp->ObjectType != 14 &&
-			     !(tmp->ObjectType == 15 && (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20))))
-				Count++;
-		} else {
-			// планеты и астероиды рисуем до тайловой анимации в игре!!!
-			if (tmp->ObjectType != 14 &&
-			    !(tmp->ObjectType == 15 &&
-			      (tmp->ObjectCreationType>10 && tmp->ObjectCreationType<20)))
-				Count++;
-		}
-
-		tmp = tmp2;
-	}
-
-	return Count;
-}
 
 
 

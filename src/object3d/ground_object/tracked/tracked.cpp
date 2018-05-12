@@ -67,7 +67,7 @@ void cTracked::Create(int TrackedNum)
 		return;
 	}
 
-	ObjectType = 5;
+	ObjectType = eObjectType::PirateVehicle;
 	MaxSpeed = 20.0f;
 	MaxAcceler = 5.0f;
 	MaxSpeedRotate = 20.0f;

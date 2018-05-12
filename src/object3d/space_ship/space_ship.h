@@ -212,7 +212,7 @@ cSpaceShip *FindSpaceShipByID(int ID);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceShip(float Time);
 // Прорисовываем все объекты
-void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap, int DrawOnlyType=-1);
+void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceShip();
 

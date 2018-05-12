@@ -36,7 +36,7 @@
 //-----------------------------------------------------------------------------
 void cBasePart::Create(int BasePartNum)
 {
-	ObjectType = 13;
+	ObjectType = eObjectType::BasePart;
 	ObjectStatus = 1; // чужой
 	NeedAlphaTest = true;
 

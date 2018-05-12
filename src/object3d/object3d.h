@@ -47,9 +47,25 @@ extern int GameTargetingMechanicSystem;
 
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
 
-//-----------------------------------------------------------------------------
-// Класс cObject3D
-//-----------------------------------------------------------------------------
+enum class eObjectType {
+	none,
+	EarthFighter,
+	AlienFighter,
+	AlienMotherShip,
+	PirateShip,
+	PirateVehicle,
+	PirateBuilding,
+	Asteroids,
+	ShipPart,
+	ShipWeapon,
+	Projectile,
+	Explosion,
+	CivilianBuilding,
+	BasePart,
+	Planet,
+	BigAsteroid
+};
+
 class cObject3D
 {
 public:
@@ -80,23 +96,7 @@ public:
 	// уникальный идентифакационный номер, или 0, если он не нужен
 	int	ID{0};
 	// тип объекта
-	// 1 - Earth Fighter
-	// 2 - Alien Fighter
-	// 3 - Alien MotherShip
-	// 4 - Pirate Ship
-	// 5 - Pirate Vehicle (Wheeled + Tracked)
-	// 6 - Pirate Building
-	// 7 - Asteroids
-	// 8 - ShipPart
-	// 9 - ShipWeapon
-	// 10 - Projectile
-	// 11 - Explosion
-	// 12 - Civilian Building
-	// 13 - BasePart
-	// 14 - Planet
-	// 15 - Big Asteroid
-	// добавь в функцию NeedCheckCollision!!!
-	int	ObjectType{0};
+	eObjectType ObjectType{eObjectType::none};
 
 	// тип (номер при создании)
 	int	ObjectCreationType{0};

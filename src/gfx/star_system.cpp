@@ -286,7 +286,7 @@ void StarSystemDraw(eDrawType DrawType)
 		cSpaceObject *tmp2 = tmpSpaceObject->Next;
 
 		// planets
-		if (tmpSpaceObject->ObjectType == 14) {
+		if (tmpSpaceObject->ObjectType == eObjectType::Planet) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
 				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.90f - GameCameraGetDeviation() * 4.0f,
@@ -295,7 +295,7 @@ void StarSystemDraw(eDrawType DrawType)
 			tmpSpaceObject->Draw(false);
 			if (DrawType == eDrawType::GAME)
 				vw_PopMatrix();
-		} else if (tmpSpaceObject->ObjectType == 15 && // big asteroids
+		} else if ((tmpSpaceObject->ObjectType == eObjectType::BigAsteroid) &&
 			   ((tmpSpaceObject->ObjectCreationType > 10) && (tmpSpaceObject->ObjectCreationType < 20))) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();

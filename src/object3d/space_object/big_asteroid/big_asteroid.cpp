@@ -36,7 +36,7 @@
 void cBigAsteroid::Create(int AsteroidNum)
 {
 	ObjectStatus = 1; // чужой
-	ObjectType = 15;
+	ObjectType = eObjectType::BigAsteroid;
 
 	// задали первичный, нужно случайным образом найти
 	if (AsteroidNum == 1 || AsteroidNum == 2) {

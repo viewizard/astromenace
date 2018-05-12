@@ -433,7 +433,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			cShipPart *ShipPart;
 			ShipPart = new cShipPart;
-			ShipPart->ObjectType = 8;
+			ShipPart->ObjectType = eObjectType::ShipPart;
 			ShipPart->ShowDeleteOnHide = 0;
 
 			// только одна текстура (!) 2-ю для подстветки не тянем

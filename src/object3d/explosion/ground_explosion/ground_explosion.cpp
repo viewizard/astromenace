@@ -91,7 +91,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				// создаем часть
 				cShipPart *ShipPart;
 				ShipPart = new cShipPart;
-				ShipPart->ObjectType = 8;
+				ShipPart->ObjectType = eObjectType::ShipPart;
 				ShipPart->ShowDeleteOnHide = 0;
 
 				// только одна текстура (!) 2-ю для подстветки не тянем

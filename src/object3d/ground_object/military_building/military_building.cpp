@@ -60,7 +60,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		return;
 	}
 
-	ObjectType = 6;
+	ObjectType = eObjectType::PirateBuilding;
 	ObjectCreationType = MilitaryBuildingNum;
 
 	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum-1].Name, this, 0, 2.0f);

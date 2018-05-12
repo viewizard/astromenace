@@ -36,7 +36,7 @@
 //-----------------------------------------------------------------------------
 void cShipPart::Create(int ShipPartNum)
 {
-	ObjectType = 8;
+	ObjectType = eObjectType::ShipPart;
 	ObjectCreationType = ShipPartNum;
 
 	// тут все делаем сами...

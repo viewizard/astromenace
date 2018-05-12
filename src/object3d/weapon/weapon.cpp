@@ -236,7 +236,7 @@ cWeapon::cWeapon()
 	// друг
 	ObjectStatus = 2;
 
-	ObjectType = 9;
+	ObjectType = eObjectType::ShipWeapon;
 
 	// никогда не показываем линию
 	ShowStrength = false;
