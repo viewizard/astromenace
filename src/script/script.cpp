@@ -337,7 +337,7 @@ bool cMissionScript::Update(float Time)
 		return true;
 	}
 
-	// we don't check FindEntryByName() result, since we checked it in RunScript()
+	// we don't check GetRootEntry() result, since we checked it in RunScript()
 	for (; xmlEntryIter != xmlDoc->GetRootEntry()->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		switch (xmlEntry.NameHash) {
@@ -456,45 +456,30 @@ bool cMissionScript::Update(float Time)
 
 				std::weak_ptr<cLight> NewLight = vw_CreateLight(LightType);
 				if (auto sharedLight = NewLight.lock()) {
-					sharedLight->Diffuse[0] = 0.0f;
-					sharedLight->Diffuse[1] = 0.0f;
-					sharedLight->Diffuse[2] = 0.0f;
-					sharedLight->Diffuse[3] = 1.0f;
 					xmlDoc->fGetEntryAttribute(xmlEntry, "diffr", sharedLight->Diffuse[0]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "diffg", sharedLight->Diffuse[1]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "diffb", sharedLight->Diffuse[2]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "diffa", sharedLight->Diffuse[3]);
 
-					sharedLight->Specular[0] = 0.0f;
-					sharedLight->Specular[1] = 0.0f;
-					sharedLight->Specular[2] = 0.0f;
-					sharedLight->Specular[3] = 1.0f;
 					xmlDoc->fGetEntryAttribute(xmlEntry, "specr", sharedLight->Specular[0]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "specg", sharedLight->Specular[1]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "specb", sharedLight->Specular[2]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "speca", sharedLight->Specular[3]);
 
-					sharedLight->Ambient[0] = 0.0f;
-					sharedLight->Ambient[1] = 0.0f;
-					sharedLight->Ambient[2] = 0.0f;
-					sharedLight->Ambient[3] = 1.0f;
 					xmlDoc->fGetEntryAttribute(xmlEntry, "ambir", sharedLight->Ambient[0]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "ambig", sharedLight->Ambient[1]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "ambib", sharedLight->Ambient[2]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "ambia", sharedLight->Ambient[3]);
 
-					sharedLight->Direction = sVECTOR3D(0.0f, 0.0f, 1.0f);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "dirx", sharedLight->Direction.x);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "diry", sharedLight->Direction.y);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "dirz", sharedLight->Direction.z);
 					sharedLight->Direction.Normalize();
 
-					sharedLight->Location = sVECTOR3D(0.0f, 0.0f, 0.0f);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "posx", sharedLight->Location.x);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "posy", sharedLight->Location.y);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "posz", sharedLight->Location.z);
 
-					sharedLight->On = true;
 					xmlDoc->bGetEntryAttribute(xmlEntry, "status", sharedLight->On);
 				}
 			}
@@ -508,7 +493,7 @@ bool cMissionScript::Update(float Time)
 				std::string tmpLabel{};
 				if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
 					// нужно перебрать все метки и остановится на нужной
-					// we don't check FindEntryByName() result, since we checked it in RunScript()
+					// we don't check GetRootEntry() result, since we checked it in RunScript()
 					sXMLEntry *tmpCycle = xmlDoc->GetRootEntry();
 					// перебор по всем меткам
 					for (auto iter = tmpCycle->ChildrenList.begin();
