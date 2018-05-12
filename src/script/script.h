@@ -25,23 +25,18 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
 #include "../core/core.h"
 
 struct sTimeSheet {
-	// флаг, показывает что установлен и задействован этот режим
 	bool InUse{false};
-	// кол-во времени (оставшееся), которое работает этот режим
 	float Time{0.0f};
-	// включена ли автоматическая настройка поведения по предустановкам
-	int AI_Mode{0};
-	std::shared_ptr<cXMLDocument> xmlAI{};
 
-	// данные, скорость
+	int AI_Mode{0}; // packed TimeSheet
+	std::shared_ptr<cXMLDocument> xmlAI{}; // xml with packed TimeSheets
+
 	float Speed{0.0f};
 	float Acceler{1.0f}; // [0.0f, 1.0f]
 	float SpeedLR{0.0f};
@@ -56,14 +51,10 @@ struct sTimeSheet {
 	float SpeedByCamUD{0.0f};
 	float AccelerByCamUD{1.0f}; // [0.0f, 1.0f]
 
-	// поворот
 	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
 	sVECTOR3D RotationAcceler{1.0f, 1.0f, 1.0f}; // [0.0f, 1.0f]
-	// стрельба
 	bool Fire{false};
-	// стрельба спец оружием боса
 	bool BossFire{false};
-	// наведение на цель (для турелей)
 	bool Targeting{false};
 };
 
@@ -72,26 +63,17 @@ class cMissionScript
 public:
 	cMissionScript();
 
-	// запустить скрипт на выполнение
 	bool RunScript(const char *FileName, float InitTime);
-
-	// проверяем скрипт
 	bool Update(float Time);
-	// доп. проверка для TimeLine
 	void UpdateTimeLine();
-	// последнее время выполнения команды
-	float TimeLastOp{0};
-	// время старта скрипта
-	float StartTime{0};
-	// разность между текущем временем и необходимым, нужно чтобы правильно считать положение при появлении
-	float TimeOpLag{0};
 
-	// основной документ
+	float TimeLastOp{0}; // last operational time
+	float StartTime{0}; // script start time
+	float TimeOpLag{0}; // care about time lag
+
 	std::unique_ptr<cXMLDocument> xmlDoc{};
-	// текущий итератор (положение в скрипте)
 	std::list<sXMLEntry>::iterator xmlEntryIter{};
 
-	// включен отладочный режим или нет... по умолчанию выключен
 	bool ShowLineNumber{false};
 
 	bool NeedCheckSpaceShip{false};
@@ -117,7 +99,9 @@ private:
 };
 
 
-// работа с распаковкой sTimeSheet
+/*
+ * Unpack TimeSheet to the list.
+ */
 void InterAIMode(std::list<sTimeSheet> &TimeSheetList);
 
 #endif // SCRIPT_H

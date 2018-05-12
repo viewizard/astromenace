@@ -25,14 +25,15 @@
 
 *************************************************************************************/
 
-// FIXME continue in the middle of the cycle
+// TODO "AsteroidField" should be moved to separate sources (gfx?)
 
-// TODO translate comments
+// TODO "MissionCompleteAtNoEnemy" related code should be moved to propriate code (game?)
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../core/core.h"
 #include "script.h"
+#include "../config/config.h"
 #include "../gfx/star_system.h"
 #include "../object3d/object3d.h"
 #include "../object3d/space_ship/space_ship.h"
@@ -50,17 +51,13 @@
 #include "../object3d/ground_object/wheeled/wheeled.h"
 #include "../object3d/ground_object/tracked/tracked.h"
 
-// проверка, если конец уровня как всех убъем
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
 extern cGroundObject *StartGroundObject;
 extern cGroundObject *EndGroundObject;
 
-// отображение коробок... отладка
 extern int NeedShowBB;
-// неубиваемость... отладка
 extern bool UndeadDebugMode;
-// показывать время при скорости 1.5
 extern bool ShowGameTime;
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
@@ -73,9 +70,9 @@ void SetGameMissionComplete();
 void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks);
 
 
-//-----------------------------------------------------------------------------
-// aimode
-//-----------------------------------------------------------------------------
+/*
+ * Set TimeSheet's AI_Mode.
+ */
 static void SetAIMode(std::list<sTimeSheet> &TimeSheetList, const sXMLEntry &xmlEntry,
 		      const std::unique_ptr<cXMLDocument> &xmlDoc, const std::shared_ptr<cXMLDocument> &xmlAI)
 {
@@ -88,31 +85,30 @@ static void SetAIMode(std::list<sTimeSheet> &TimeSheetList, const sXMLEntry &xml
 	}
 }
 
-//-----------------------------------------------------------------------------
-//  ID
-//-----------------------------------------------------------------------------
+/*
+ * Set object ID.
+ */
 static void SetID(cObject3D &Object, const sXMLEntry &xmlEntry,
 		  const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
 	xmlDoc->iGetEntryAttribute(xmlEntry, "id", Object.ID);
 }
 
-//-----------------------------------------------------------------------------
-// Location
-//-----------------------------------------------------------------------------
-static void SetShipLocation(cSpaceShip &Object, const sXMLEntry &xmlEntry,
-			    const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
+/*
+ * Set object location.
+ */
+static void SetLocation(cObject3D &Object, const sXMLEntry &xmlEntry,
+			const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
 {
 	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
 
-	// абсолютные координаты
+	// absolute coordinates
 	xmlDoc->fGetEntryAttribute(xmlEntry, "posax", tmpPosition.x);
 	xmlDoc->fGetEntryAttribute(xmlEntry, "posay", tmpPosition.y);
 	xmlDoc->fGetEntryAttribute(xmlEntry, "posaz", tmpPosition.z);
 
-	// относительные координаты
+	// camera-related coordinates
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
-	// находим на сколько перелетим
 	PosWithLag = GameCameraMovement ^ (-GameCameraGetSpeed() * TimeOpLag);
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
 		tmpPosition.x += GamePoint.x + PosWithLag.x;
@@ -124,89 +120,9 @@ static void SetShipLocation(cSpaceShip &Object, const sXMLEntry &xmlEntry,
 	Object.SetLocation(tmpPosition);
 }
 
-static void SetProjectileLocation(cProjectile &Object, const sXMLEntry &xmlEntry,
-				  const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
-{
-	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
-
-	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(xmlEntry, "posax", tmpPosition.x);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "posay", tmpPosition.y);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "posaz", tmpPosition.z);
-
-	// относительные координаты
-	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
-	// находим на сколько перелетим
-	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
-		tmpPosition.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpPosition.y))
-		tmpPosition.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posz", tmpPosition.z))
-		tmpPosition.z += GamePoint.z + PosWithLag.z;
-
-	Object.SetLocation(tmpPosition);
-}
-
-static void SetLocation(cObject3D &Object, const sXMLEntry &xmlEntry,
-			const std::unique_ptr<cXMLDocument> &xmlDoc, float TimeOpLag)
-{
-	sVECTOR3D tmpPosition(0.0f, 0.0f, 0.0f);
-
-	// абсолютные координаты
-	xmlDoc->fGetEntryAttribute(xmlEntry, "posax", tmpPosition.x);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "posay", tmpPosition.y);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "posaz", tmpPosition.z);
-
-	// относительные координаты
-	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
-	// находим на сколько перелетим
-	PosWithLag = GameCameraMovement^(-GameCameraGetSpeed()*TimeOpLag);
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
-		tmpPosition.x += GamePoint.x + PosWithLag.x;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpPosition.y))
-		tmpPosition.y += GamePoint.y + PosWithLag.y;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posz", tmpPosition.z))
-		tmpPosition.z += GamePoint.z + PosWithLag.z;
-
-	Object.SetLocation(tmpPosition);
-}
-
-//-----------------------------------------------------------------------------
-// Rotation
-//-----------------------------------------------------------------------------
-static void SetShipRotation(cSpaceShip &Object, const sXMLEntry &xmlEntry,
-			    const std::unique_ptr<cXMLDocument> &xmlDoc)
-{
-	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglax", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglay", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz", tmpAngle.z);
-
-// пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglx", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "angly", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglz", tmpAngle.z);
-
-	Object.SetRotation(tmpAngle);
-}
-
-static void SetProjectileRotation(cProjectile &Object, const sXMLEntry &xmlEntry,
-				  const std::unique_ptr<cXMLDocument> &xmlDoc)
-{
-	sVECTOR3D tmpAngle(0.0f, 0.0f, 0.0f);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglax", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglay", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz", tmpAngle.z);
-
-// пока делает тоже самое!!! потом переделать
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglx", tmpAngle.x);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "angly", tmpAngle.y);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "anglz", tmpAngle.z);
-
-	Object.SetRotation(tmpAngle);
-}
-
+/*
+ * Set object rotation.
+ */
 static void SetRotation(cObject3D &Object, const sXMLEntry &xmlEntry,
 			const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
@@ -215,7 +131,7 @@ static void SetRotation(cObject3D &Object, const sXMLEntry &xmlEntry,
 	xmlDoc->fGetEntryAttribute(xmlEntry, "anglay", tmpAngle.y);
 	xmlDoc->fGetEntryAttribute(xmlEntry, "anglaz" ,tmpAngle.z);
 
-// пока делает тоже самое!!! потом переделать
+	// absolute and camera-related angles are the same for now
 	xmlDoc->fGetEntryAttribute(xmlEntry, "anglx", tmpAngle.x);
 	xmlDoc->fGetEntryAttribute(xmlEntry, "angly", tmpAngle.y);
 	xmlDoc->fGetEntryAttribute(xmlEntry, "anglz", tmpAngle.z);
@@ -223,9 +139,9 @@ static void SetRotation(cObject3D &Object, const sXMLEntry &xmlEntry,
 	Object.SetRotation(tmpAngle);
 }
 
-//-----------------------------------------------------------------------------
-// DeleteOnHide
-//-----------------------------------------------------------------------------
+/*
+ * Set object's ShowDeleteOnHide field.
+ */
 static void SetShowDeleteOnHide(cObject3D &Object, const sXMLEntry &xmlEntry,
 				const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
@@ -235,9 +151,9 @@ static void SetShowDeleteOnHide(cObject3D &Object, const sXMLEntry &xmlEntry,
 			Object.ShowDeleteOnHide = -1;
 }
 
-//-----------------------------------------------------------------------------
-// DebugInformation
-//-----------------------------------------------------------------------------
+/*
+ * Set object's DebugInfo field.
+ */
 #ifdef NDEBUG
 static void SetDebugInformation(cObject3D &UNUSED(Object), const sXMLEntry &UNUSED(xmlEntry),
 				bool UNUSED(ShowLineNumber))
@@ -258,6 +174,9 @@ static void SetDebugInformation(cObject3D &Object, const sXMLEntry &xmlEntry, bo
 }
 #endif // NDEBUG
 
+/*
+ * cMissionScript constructor.
+ */
 cMissionScript::cMissionScript()
 {
 	// отладочный режим
@@ -265,15 +184,14 @@ cMissionScript::cMissionScript()
 	UndeadDebugMode = false;
 }
 
-//-----------------------------------------------------------------------------
-// запустить скрипт на выполнение
-//-----------------------------------------------------------------------------
+/*
+ * Load and run script.
+ */
 bool cMissionScript::RunScript(const char *FileName, float InitTime)
 {
 	if (!FileName)
 		return false;
 
-	// установка значений
 	StartTime = TimeLastOp = InitTime;
 
 	TimeOpLag = 0;
@@ -296,7 +214,6 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 	AsterOn = false;
 	AsterLastTime = -1.0f;
 
-	// отладочный режим
 	ShowLineNumber = false;
 	NeedShowBB = 0;
 	UndeadDebugMode = false;
@@ -304,14 +221,12 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 
 	xmlDoc.reset(new cXMLDocument(FileName, true));
 
-	// проверяем корневой элемент
 	if (!xmlDoc->GetRootEntry() || ("AstroMenaceScript" != xmlDoc->GetRootEntry()->Name)) {
 		std::cerr << __func__ << "(): " << "Can't find AstroMenaceScript element in the: " << FileName << "\n";
 		xmlDoc.reset();
 		return false;
 	}
 
-	// переходим на действия
 	if (xmlDoc->GetRootEntry()->ChildrenList.empty()) {
 		std::cerr << __func__ << "(): " << "Can't find element's children in the: " << FileName << "\n";
 		xmlDoc.reset();
@@ -320,38 +235,33 @@ bool cMissionScript::RunScript(const char *FileName, float InitTime)
 
 	xmlEntryIter = xmlDoc->GetRootEntry()->ChildrenList.begin();
 
-	// идем и выполняем то, что по времени 0 стоит, т.е. начальную инициализацию
+	// check all tags for 0 time
 	Update(StartTime);
 	return true;
 }
 
-//-----------------------------------------------------------------------------
-// проверяем скрипт
-//-----------------------------------------------------------------------------
+/*
+ * Update script status.
+ */
 bool cMissionScript::Update(float Time)
 {
-	// скрипт не загружен
 	if (!xmlDoc)
 		return false;
 
-	// находим дельту времени
 	float TimeDelta = Time - TimeLastOp;
 
-	// генерация астероидов
+	// in case of "AsteroidField", we need generate asteroid field
 	if (AsterOn) {
 		if (AsterLastTime == -1.0)
 			AsterLastTime = Time;
 		float AsterTimeDelta = Time - AsterLastTime;
 		AsterLastTime = Time;
 
-		// складываем все
 		float NeedGener = AsterQuant * AsterTimeDelta + AsterRealNeed;
-		// получаем целое кол-во на генерацию
-		unsigned int NeedGenerInt = (unsigned int)NeedGener;
-		// находим остаток... который нужно будет потом учесть
+		unsigned NeedGenerInt = static_cast<unsigned>(NeedGener);
 		AsterRealNeed = NeedGener - NeedGenerInt;
 
-		while (NeedGenerInt>0) {
+		while (NeedGenerInt > 0) {
 			cAsteroid *CreateAsteroid = new cAsteroid;
 			CreateAsteroid->Create(1);
 			if (AsterFastCount != 20)
@@ -359,65 +269,64 @@ bool cMissionScript::Update(float Time)
 			else
 				CreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed * vw_fRand();
 			CreateAsteroid->ShowDeleteOnHide = 0;
-			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));// !!!учесть камеру
+			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));
 
 			if (AsterFastCount != 20)
-				CreateAsteroid->SetLocation(
-					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_fRand(), AsterZPos + 20.0f)
-					+GamePoint);
+				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_Randf0 + AsterXPos,
+								      AsterYPos * 2 + AsterH * vw_fRand(),
+								      AsterZPos + 20.0f) +
+							    GamePoint);
 			else
-				CreateAsteroid->SetLocation(
-					sVECTOR3D(AsterW * vw_Randf0 + AsterXPos, AsterYPos * 2 + AsterH * vw_fRand(), AsterZPos)
-					+GamePoint);
+				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_Randf0 + AsterXPos,
+								      AsterYPos * 2 + AsterH * vw_fRand(),
+								      AsterZPos) +
+							    GamePoint);
 
 			NeedGenerInt--;
 		}
 
 		AsterFastCount++;
-		if (AsterFastCount > 30) AsterFastCount = 0;
+		if (AsterFastCount > 30)
+			AsterFastCount = 0;
 	}
 
-	// если нужно, смотрим когда заканчивать миссию
+	// in case of "MissionCompleteAtNoEnemy" we should check enemy on the field
 	if ((EndDelayMissionComplete > 0.0f) || NeedCheckSpaceShip || NeedCheckGroundObject) {
 		if (LastTimeMissionComplete == -1.0)
 			LastTimeMissionComplete = Time;
 		float TimeDeltaMissionComplete = Time - LastTimeMissionComplete;
 		LastTimeMissionComplete = Time;
 
-		// уменьшаем только тогда, когда уже никого нет... т.е. отступ это от смерти последнего
-		bool NeedDecrease = true;
+		bool NeedDecreaseTime{true};
 
-
-		// собственно сами проверки...
 		if (NeedCheckSpaceShip) {
-			// если нет врагов
-			int count = 0;
-			cSpaceShip *Tmp1 = StartSpaceShip;
-			while (Tmp1 != nullptr) {
-				// если это враг, и мы его показали (иначе он где-то там летает)
-				if ((Tmp1->ObjectStatus == 1) && (Tmp1->ShowDeleteOnHide != 0))
-					count++;
-				Tmp1 = Tmp1->Next;
+			int tmpEnemyCount{0};
+			cSpaceShip *tmpObject = StartSpaceShip;
+			while (tmpObject) {
+				if ((tmpObject->ObjectStatus == 1) && (tmpObject->ShowDeleteOnHide != 0))
+					tmpEnemyCount++;
+				tmpObject = tmpObject->Next;
 			}
-			if (count > 0) NeedDecrease = false;
+			if (tmpEnemyCount > 0)
+				NeedDecreaseTime = false;
 
 		}
 		if (NeedCheckGroundObject) {
-			// если нет врагов, которых можем уничтожить
-			int count = 0;
-			cGroundObject *Tmp1 = StartGroundObject;
-			while (Tmp1 != nullptr) {
-				// если это враг, и мы его показали
-				if (NeedCheckCollision(Tmp1) && (Tmp1->ShowDeleteOnHide != 0))
-					count++;
-				Tmp1 = Tmp1->Next;
+			int tmpEnemyCount{0};
+			cGroundObject *tmpObject = StartGroundObject;
+			while (tmpObject) {
+				if (NeedCheckCollision(tmpObject) && (tmpObject->ShowDeleteOnHide != 0))
+					tmpEnemyCount++;
+				tmpObject = tmpObject->Next;
 			}
-			if (count > 0)
-				NeedDecrease = false;
+			if (tmpEnemyCount > 0)
+				NeedDecreaseTime = false;
 		}
 
-		if (NeedDecrease) EndDelayMissionComplete -= TimeDeltaMissionComplete;
-		if (EndDelayMissionComplete<=0.0f) {
+		if (NeedDecreaseTime)
+			EndDelayMissionComplete -= TimeDeltaMissionComplete;
+
+		if (EndDelayMissionComplete <= 0.0f) {
 			EndDelayMissionComplete = 0.0f;
 			NeedCheckSpaceShip = false;
 			NeedCheckGroundObject = false;
@@ -425,7 +334,6 @@ bool cMissionScript::Update(float Time)
 			return false;
 		}
 
-		// говорим, что скрипт еще не закончился!
 		return true;
 	}
 
@@ -434,17 +342,13 @@ bool cMissionScript::Update(float Time)
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		switch (xmlEntry.NameHash) {
 		case xml::hash("TimeLine"): {
-				float onTime = 0.0f;
+				float onTime{0.0f};
 				xmlDoc->fGetEntryAttribute(xmlEntry, "value", onTime);
 
-				// если еще не время выполнять... нужно уйти из процедуры
 				if (onTime > TimeDelta)
 					return true;
 
-				// считаем лаг, чтобы правильно вычеслить положение при создании
 				TimeOpLag = TimeDelta - onTime;
-
-				// дальше смотрим, что нужно сделать...
 				UpdateTimeLine();
 
 				TimeLastOp = Time - TimeOpLag;
@@ -505,9 +409,8 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		case xml::hash("Music"):
-			// если корабль игрока уничтожен - не меняем уже музыку в игре вообще,
-			// должна проигрываться только музыка поражения
-			if (PlayerFighter != nullptr)
+			// change music only if player's ship still alive, otherwise we are playing 'fail' theme
+			if (PlayerFighter)
 				if (PlayerFighter->Strength > 0.0f) {
 					int Theme{0};
 					if (xmlDoc->iGetEntryAttribute(xmlEntry, "theme", Theme)) {
@@ -545,7 +448,7 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		case xml::hash("Light"): {
-				eLightType LightType{eLightType::Directional}; // по умолчанию, солнце
+				eLightType LightType{eLightType::Directional};
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType) &&
 				    (tmpType == 1))
@@ -580,13 +483,13 @@ bool cMissionScript::Update(float Time)
 					xmlDoc->fGetEntryAttribute(xmlEntry, "ambib", sharedLight->Ambient[2]);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "ambia", sharedLight->Ambient[3]);
 
-					sharedLight->Direction = sVECTOR3D(0.0f,0.0f,1.0f);
+					sharedLight->Direction = sVECTOR3D(0.0f, 0.0f, 1.0f);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "dirx", sharedLight->Direction.x);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "diry", sharedLight->Direction.y);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "dirz", sharedLight->Direction.z);
 					sharedLight->Direction.Normalize();
 
-					sharedLight->Location = sVECTOR3D(0.0f,0.0f,0.0f);
+					sharedLight->Location = sVECTOR3D(0.0f, 0.0f, 0.0f);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "posx", sharedLight->Location.x);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "posy", sharedLight->Location.y);
 					xmlDoc->fGetEntryAttribute(xmlEntry, "posz", sharedLight->Location.z);
@@ -598,7 +501,6 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		case xml::hash("Label"):
-			// ничего не делаем
 			break;
 
 		case xml::hash("Goto"): {
@@ -609,16 +511,16 @@ bool cMissionScript::Update(float Time)
 					// we don't check FindEntryByName() result, since we checked it in RunScript()
 					sXMLEntry *tmpCycle = xmlDoc->GetRootEntry();
 					// перебор по всем меткам
-					for (auto tmpEntryIter = tmpCycle->ChildrenList.begin();
-					     tmpEntryIter != tmpCycle->ChildrenList.end();
-					     ++tmpEntryIter) {
-						sXMLEntry &tmpEntry = *tmpEntryIter;
+					for (auto iter = tmpCycle->ChildrenList.begin();
+					     iter != tmpCycle->ChildrenList.end();
+					     ++iter) {
+						sXMLEntry &tmpEntry = *iter;
 						if (tmpEntry.Name == "Label") {
 							std::string tmpName{};
 							if (xmlDoc->GetEntryAttribute(tmpEntry, "name", tmpName) &&
 							    (tmpLabel == tmpName)) {
 								// ставим новый указатель
-								xmlEntryIter = tmpEntryIter;
+								xmlEntryIter = iter;
 								return true;
 							}
 						}
@@ -632,7 +534,7 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		case xml::hash("MissionCompleteAtNoEnemy"): {
-				bool SetGameMissionFlag = false;
+				bool SetGameMissionFlag{false};
 				NeedCheckSpaceShip = false;
 				if (xmlDoc->bGetEntryAttribute(xmlEntry, "ships", NeedCheckSpaceShip))
 					SetGameMissionFlag = true;
@@ -644,7 +546,7 @@ bool cMissionScript::Update(float Time)
 					SetGameMissionFlag = true;
 
 				if (!SetGameMissionFlag) {
-					// если время не выставили и нечего ждать, работаем как и с обычным завершением
+					// if no flags setted up, act as "MissionComplete"
 					SetGameMissionComplete();
 				} else {
 					LastTimeMissionComplete = Time;
@@ -654,19 +556,17 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		default:
-			// если тут - значит не нашли директиву, или произошла ошибка
-			std::cerr << __func__ << "(): " << "ScriptEngine: tag " << xmlEntry.Name
+			std::cerr << __func__ << "(): " << "tag " << xmlEntry.Name
 			  << " not found, line " << xmlEntry.LineNumber << "\n";
 			break;
 		}
 	}
 
-	// выходим, скрипт закончился
 	return false;
 }
 
 /*
- * Load TimeSheet data from xml entry.
+ * Load TimeSheet related script data.
  */
 static void LoadTimeSheetData(cXMLDocument &xmlDoc, const sXMLEntry &XMLEntry,
 			      sTimeSheet &TimeSheet, const std::shared_ptr<cXMLDocument> &xmlAI)
@@ -680,32 +580,26 @@ static void LoadTimeSheetData(cXMLDocument &xmlDoc, const sXMLEntry &XMLEntry,
 	xmlDoc.fGetEntryAttribute(XMLEntry, "time", TimeSheet.Time);
 
 	xmlDoc.fGetEntryAttribute(XMLEntry, "speed", TimeSheet.Speed);
-
 	xmlDoc.fGetEntryAttribute(XMLEntry, "acceler", TimeSheet.Acceler);
 	vw_Clamp(TimeSheet.Acceler, 0.0f, 1.0f);
 
 	xmlDoc.fGetEntryAttribute(XMLEntry, "speedlr", TimeSheet.SpeedLR);
-
 	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerlr", TimeSheet.AccelerLR);
 	vw_Clamp(TimeSheet.AccelerLR, 0.0f, 1.0f);
 
 	xmlDoc.fGetEntryAttribute(XMLEntry, "speedud", TimeSheet.SpeedUD);
-
 	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerud", TimeSheet.AccelerUD);
 	vw_Clamp(TimeSheet.AccelerUD, 0.0f, 1.0f);
 
 	xmlDoc.fGetEntryAttribute(XMLEntry, "speedbycamfb", TimeSheet.SpeedByCamFB);
-
 	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerbycamfb", TimeSheet.AccelerByCamFB);
 	vw_Clamp(TimeSheet.AccelerByCamFB, 0.0f, 1.0f);
 
 	xmlDoc.fGetEntryAttribute(XMLEntry, "speedbycamlr", TimeSheet.SpeedByCamLR);
-
 	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerbycamlr", TimeSheet.AccelerByCamLR);
 	vw_Clamp(TimeSheet.AccelerByCamLR, 0.0f, 1.0f);
 
 	xmlDoc.fGetEntryAttribute(XMLEntry, "speedbycamud", TimeSheet.SpeedByCamUD);
-
 	xmlDoc.fGetEntryAttribute(XMLEntry, "accelerbycamud", TimeSheet.AccelerByCamUD);
 	vw_Clamp(TimeSheet.AccelerByCamUD, 0.0f, 1.0f);
 
@@ -736,6 +630,9 @@ static void LoadTimeSheetData(cXMLDocument &xmlDoc, const sXMLEntry &XMLEntry,
 		TimeSheet.Targeting = true;
 }
 
+/*
+ * Load SpaceShip related script data.
+ */
 static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXMLDocument> &xmlDoc,
 				const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
 				const std::shared_ptr<cXMLDocument> &xmlAI)
@@ -760,10 +657,9 @@ static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXM
 
 	SetShowDeleteOnHide(SpaceShip, xmlEntry, xmlDoc);
 	SetAIMode(SpaceShip.TimeSheetList, xmlEntry, xmlDoc, xmlAI);
-	SetShipRotation(SpaceShip, xmlEntry, xmlDoc);
-	SetShipLocation(SpaceShip, xmlEntry, xmlDoc, TimeOpLag);
+	SetRotation(SpaceShip, xmlEntry, xmlDoc);
+	SetLocation(SpaceShip, xmlEntry, xmlDoc, TimeOpLag);
 
-	// дальше смотрим, что нужно сделать...
 	for (const auto &tmpXMLEntry : xmlEntry.ChildrenList) {
 		if (tmpXMLEntry.Name == "TimeSheet") {
 			SpaceShip.TimeSheetList.emplace_back();
@@ -773,6 +669,9 @@ static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXM
 	}
 }
 
+/*
+ * Load GroundObject related script data.
+ */
 static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
 				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
 				   const std::shared_ptr<cXMLDocument> &xmlAI)
@@ -788,7 +687,6 @@ static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::uniqu
 	SetRotation(GroundObject, xmlEntry, xmlDoc);
 	SetLocation(GroundObject, xmlEntry, xmlDoc, TimeOpLag);
 
-	// дальше смотрим, что нужно сделать...
 	for (const auto &tmpXMLEntry : xmlEntry.ChildrenList) {
 		if (tmpXMLEntry.Name == "TimeSheet") {
 			GroundObject.TimeSheetList.emplace_back();
@@ -798,6 +696,9 @@ static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::uniqu
 	}
 }
 
+/*
+ * Load SpaceObject related script data.
+ */
 static void LoadSpaceObjectScript(cSpaceObject &SpaceObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
 				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag)
 {
@@ -815,75 +716,53 @@ static void LoadSpaceObjectScript(cSpaceObject &SpaceObject, const std::unique_p
 	xmlDoc->fGetEntryAttribute(xmlEntry, "rotz", SpaceObject.RotationSpeed.z);
 }
 
-//-----------------------------------------------------------------------------
-// проверяем скрипт дополнительно для TimeLine
-//-----------------------------------------------------------------------------
+/*
+ * Update TimeLine.
+ */
 void cMissionScript::UpdateTimeLine()
 {
 	for (auto &TL : xmlEntryIter->ChildrenList) {
 
+		int tmpType{0};
+
 		switch (TL.NameHash) {
-		case xml::hash("EarthFighter"): {
-				cEarthSpaceFighter *SpaceShip = nullptr;
-				SpaceShip = new cEarthSpaceFighter;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					SpaceShip->Create(tmpType);
-				else
-					continue;
-
+		case xml::hash("EarthFighter"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
+				cEarthSpaceFighter *SpaceShip = new cEarthSpaceFighter;
+				SpaceShip->Create(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 
-				int tmp{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "armour", tmp))
-					SetEarthSpaceFighterArmour(SpaceShip, tmp);
-				if (xmlDoc->iGetEntryAttribute(TL, "weapon1", tmp))
-					SetEarthSpaceFighterWeapon(SpaceShip, 1, tmp);
-				if (xmlDoc->iGetEntryAttribute(TL, "weapon2", tmp))
-					SetEarthSpaceFighterWeapon(SpaceShip, 2, tmp);
-				if (xmlDoc->iGetEntryAttribute(TL, "weapon3", tmp))
-					SetEarthSpaceFighterWeapon(SpaceShip, 3, tmp);
-				if (xmlDoc->iGetEntryAttribute(TL, "weapon4", tmp))
-					SetEarthSpaceFighterWeapon(SpaceShip, 4, tmp);
-				if (xmlDoc->iGetEntryAttribute(TL, "weapon5", tmp))
-					SetEarthSpaceFighterWeapon(SpaceShip, 5, tmp);
-				if (xmlDoc->iGetEntryAttribute(TL, "weapon6", tmp))
-					SetEarthSpaceFighterWeapon(SpaceShip, 6, tmp);
+				int tmpInteger{0};
+				if (xmlDoc->iGetEntryAttribute(TL, "armour", tmpInteger))
+					SetEarthSpaceFighterArmour(SpaceShip, tmpInteger);
+
+				for (unsigned int i = 1; i <= config::MAX_WEAPONS; i++) {
+					if (xmlDoc->iGetEntryAttribute(TL, "weapon" + std::to_string(i), tmpInteger))
+						SetEarthSpaceFighterWeapon(SpaceShip, i, tmpInteger);
+				}
 			}
 			break;
 
-		case xml::hash("AlienFighter"): {
+		case xml::hash("AlienFighter"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cAlienSpaceFighter *SpaceShip = new cAlienSpaceFighter;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					SpaceShip->Create(tmpType);
-				else
-					continue;
-
+				SpaceShip->Create(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
-		case xml::hash("AlienMotherShip"): {
+		case xml::hash("AlienMotherShip"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cAlienSpaceMotherShip *SpaceShip = new cAlienSpaceMotherShip;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					SpaceShip->Create(tmpType);
-				else
-					continue;
-
+				SpaceShip->Create(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
-		case xml::hash("PirateShip"): {
+		case xml::hash("PirateShip"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cPirateShip *SpaceShip = new cPirateShip;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					SpaceShip->Create(tmpType);
-				else
-					continue;
-
+				SpaceShip->Create(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
@@ -892,132 +771,69 @@ void cMissionScript::UpdateTimeLine()
 				cAsteroid *SpaceObject = new cAsteroid;
 				// тип сейчас не задействован, всегда ставим 1
 				SpaceObject->Create(1);
-
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
-		case xml::hash("CreateBasePart"): {
+		case xml::hash("CreateBasePart"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cBasePart *SpaceObject = new cBasePart;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					SpaceObject->Create(tmpType);
-				else
-					continue;
-
+				SpaceObject->Create(tmpType);
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
-		case xml::hash("CreateBigAsteroid"): {
+		case xml::hash("CreateBigAsteroid"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cBigAsteroid *SpaceObject = new cBigAsteroid;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					SpaceObject->Create(tmpType);
-				else
-					continue;
-
+				SpaceObject->Create(tmpType);
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
-		case xml::hash("CreateMine"): {
-				cProjectile *Mine = new cProjectile;
-				// т.к. мины у нас с 214-217, делаем +213
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-					int MineType = tmpType + 213;
-					vw_Clamp(MineType, 214, 217);
-					Mine->Create(MineType);
-				} else
-					continue;
-
-				Mine->ProjectileType = 1;
-
-				// по умолчанию враг
-				Mine->ObjectStatus = 1;
-				xmlDoc->iGetEntryAttribute(TL, "status", Mine->ObjectStatus);
-
-				// общий - пенальти, если не игрок
-				float CurrentPenalty = GameNPCWeaponPenalty * 1.0f;
-				// если игрок или свои - ничего не надо...
-				if (Mine->ObjectStatus >= 2)
-					CurrentPenalty = 1.0f;
-
-				Mine->DamageHull = Mine->DamageHull / CurrentPenalty;
-				Mine->DamageSystems = Mine->DamageSystems / CurrentPenalty;
-				Mine->SpeedStart = Mine->SpeedEnd = Mine->Speed = Mine->SpeedStart / CurrentPenalty;
-
-				SetID(*Mine, TL, xmlDoc);
-				if (ShowLineNumber)
-					SetDebugInformation(*Mine, TL, ShowLineNumber);
-				SetShowDeleteOnHide(*Mine, TL, xmlDoc);
-
-				SetProjectileRotation(*Mine, TL, xmlDoc);
-				SetProjectileLocation(*Mine, TL, xmlDoc, TimeOpLag);
-			}
-			break;
-
-		case xml::hash("CreateMBuilding"): {
+		case xml::hash("CreateMBuilding"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					GroundObject->Create(tmpType);
-				else
-					continue;
-
+				GroundObject->Create(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
-		case xml::hash("CreateBuilding"): {
+		case xml::hash("CreateBuilding"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cBuilding *GroundObject = new cBuilding;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					GroundObject->Create(tmpType);
-				else
-					continue;
-
+				GroundObject->Create(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
-		case xml::hash("CreateTracked"): {
+		case xml::hash("CreateTracked"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cTracked *GroundObject = new cTracked;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					GroundObject->Create(tmpType);
-				else
-					continue;
-
+				GroundObject->Create(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
-		case xml::hash("CreateWheeled"): {
+		case xml::hash("CreateWheeled"):
+			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cWheeled *GroundObject = new cWheeled;
-				int tmpType{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType))
-					GroundObject->Create(tmpType);
-				else
-					continue;
-
+				GroundObject->Create(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		default:
-			// если тут - значит не нашли директиву, или произошла ошибка
-			std::cerr << __func__ << "(): " << "ScriptEngine: tag " << TL.Name
+			std::cerr << __func__ << "(): " << "tag " << TL.Name
 				  << " not found, line " << TL.LineNumber << "\n";
 			break;
 		}
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Замена маркера действия набором действий
-//-----------------------------------------------------------------------------
+/*
+ * Unpack TimeSheet to the list.
+ */
 void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
 {
 	if (TimeSheetList.empty())
@@ -1046,4 +862,6 @@ void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
 			return;
 		}
 	}
+
+	std::cerr << __func__ << "(): " << "AI_Mode " << TimeSheetList.front().AI_Mode << " not found.\n";
 }
