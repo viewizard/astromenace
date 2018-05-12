@@ -737,30 +737,6 @@ int vw_TextWidthUTF32(const std::u32string &Text)
 }
 
 /*
- * vw_DrawText3DUTF32 wrapper with variadic arguments and conversion into utf32.
- */
-int vw_DrawText3D(float X, float Y, float Z, const char *Text, ...)
-{
-	if (!Text)
-		return ERR_PARAMETERS;
-
-	// get string with variadic arguments
-	// allocate buffer
-	va_list ap;
-	va_start(ap, Text);
-	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, Text, ap));
-	va_end(ap);
-	// get data into buffer
-	va_start(ap, Text);
-	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
-	va_end(ap);
-	// convert from utf8 into utf32
-	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
-
-	return vw_DrawText3DUTF32(X, Y, Z, UTF32String);
-}
-
-/*
  * Draw 3D text with current font.
  */
 int vw_DrawText3DUTF32(float X, float Y, float Z, const std::u32string &Text)

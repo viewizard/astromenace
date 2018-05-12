@@ -57,7 +57,5 @@ int vw_TextWidth(const char *Text, ...);
 // Draw text with current font with variadic arguments.
 int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		const sRGBCOLOR &Color, float Transp, const char *Text, ...);
-// Draw 3D text with current font with variadic arguments.
-int vw_DrawText3D(float X, float Y, float Z, const char *Text, ...);
 
 #endif // FONT_H
