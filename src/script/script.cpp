@@ -163,14 +163,10 @@ static void SetDebugInformation(cObject3D &UNUSED(Object), const sXMLEntry &UNUS
 #else
 static void SetDebugInformation(cObject3D &Object, const sXMLEntry &xmlEntry, bool ShowLineNumber)
 {
-	// не нужно ничего устанавливать, выходим
 	if (!ShowLineNumber)
 		return;
 
-	std::string buffer{std::to_string(xmlEntry.LineNumber)};
-
-	Object.DebugInfo = new char[buffer.size()+1];
-	strcpy(Object.DebugInfo, buffer.c_str());
+	Object.ScriptLineNumberUTF32 = ConvertUTF8.from_bytes(std::to_string(xmlEntry.LineNumber).data());
 }
 #endif // NDEBUG
 

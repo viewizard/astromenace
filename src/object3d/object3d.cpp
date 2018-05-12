@@ -72,9 +72,6 @@ cObject3D::~cObject3D()
 		if (DeviationObjNum != nullptr)
 			delete [] DeviationObjNum;
 	}
-
-	if (DebugInfo != nullptr)
-		delete [] DebugInfo;
 }
 
 
@@ -1210,11 +1207,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 
 
-
-	// вывод отладочной информации, если она есть
-	if (DebugInfo != nullptr)
-		vw_DrawText3D(Location.x, Location.y+AABB[0].y, Location.z, DebugInfo);
-
+#ifndef NDEBUG
+	// debug info, line number in script file
+	if (!ScriptLineNumberUTF32.empty())
+		vw_DrawText3DUTF32(Location.x, Location.y + AABB[0].y, Location.z, ScriptLineNumberUTF32);
+#endif // NDEBUG
 
 
 

@@ -213,8 +213,8 @@ public:
 				     0.0f, 1.0f, 0.0f,
 				     0.0f, 0.0f, 1.0f};
 
-	// отладочная информация... номер линии в скрипте
-	char	*DebugInfo{nullptr};
+	// debug info, line number in script file
+	std::u32string ScriptLineNumberUTF32{};
 
 	// данные по текущему сценарию действий объекта
 	std::list<sTimeSheet> TimeSheetList{};
