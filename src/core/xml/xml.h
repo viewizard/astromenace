@@ -54,6 +54,7 @@ namespace xml {
 /*
  * Compile-time Bernstein hash (djb2a) calculation.
  */
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 constexpr unsigned hash(const char *str, int h = 0)
 {
@@ -61,6 +62,7 @@ constexpr unsigned hash(const char *str, int h = 0)
 }
 
 }
+#pragma GCC diagnostic pop
 
 enum class eEntryType {
 	Regular,	// regular, could contain attributes and sub-entries
