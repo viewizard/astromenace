@@ -45,12 +45,12 @@ public:
 	virtual ~cSpaceShip();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time);
+	virtual bool	Update(float Time) override;
 	// Установка положения объекта
-	virtual void	SetLocation(sVECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation) override;
 	virtual void	SetLocationArcadePlayer(sVECTOR3D NewLocation);
 	// Установка углов поворота объекта
-	virtual void	SetRotation(sVECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation) override;
 
 	// текущей вектор движения корабля
 	sVECTOR3D	Velocity{0.0f, 0.0f, 0.0f};

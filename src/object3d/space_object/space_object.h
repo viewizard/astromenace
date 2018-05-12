@@ -42,11 +42,11 @@ public:
 	virtual ~cSpaceObject();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time);
+	virtual bool	Update(float Time) override;
 	// Установка положения объекта
-	virtual void	SetLocation(sVECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation) override;
 	// Установка углов поворота объекта
-	virtual void	SetRotation(sVECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation) override;
 
 	// скорость
 	float		Speed{0.0f};

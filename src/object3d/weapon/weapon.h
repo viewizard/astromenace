@@ -43,13 +43,13 @@ public:
 	virtual ~cWeapon();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time);
+	virtual bool	Update(float Time) override;
 	// Выстрел
 	virtual bool	WeaponFire(float Time);
 	// Установка углов поворота
-	virtual void	SetRotation(sVECTOR3D NewRotation);
+	virtual void	SetRotation(sVECTOR3D NewRotation) override;
 	// Установка положения
-	virtual void	SetLocation(sVECTOR3D NewLocation);
+	virtual void	SetLocation(sVECTOR3D NewLocation) override;
 	// Создание нужного объекта
 	virtual void	Create(int WeaponNum);
 

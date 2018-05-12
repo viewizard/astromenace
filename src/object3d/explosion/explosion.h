@@ -63,7 +63,7 @@ public:
 	virtual ~cExplosion();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time);
+	virtual bool	Update(float Time) override;
 
 	int		ExplosionType{0};
 	int		ExplosionTypeByClass{0};
