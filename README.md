@@ -3,13 +3,13 @@
 Immerse into a decisive battle against tons of cunning foes, face the terrifying bosses and protect your homeland throughout 15 diverse levels of the game. The hardcore gameplay of AstroMenace, packed with pure non-stop action, will become a full scale test for your basic instinct of survival.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/preview1.jpg" alt="preview"/>
+  <img src="./preview1.jpg" alt="preview"/>
 </p>
 
 The game provides a wide variety of armaments and weapon upgrades for discharging the retributive wrath upon the hordes of enemies, besides it has a great number of improvements for enhancing the defensive abilities of your spaceship. Collect money during the combat and invest them into turning your spaceship into an ultimate weapon of mass destruction.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/viewizard/astromenace/master/preview2.png" alt="preview"/>
+  <img src="./preview2.png" alt="preview"/>
 </p>
 
 More information and screenshots could be found at [AstroMenace web site](http://www.viewizard.com/).
