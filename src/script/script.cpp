@@ -86,15 +86,6 @@ static void SetAIMode(std::list<sTimeSheet> &TimeSheetList, const sXMLEntry &xml
 }
 
 /*
- * Set object ID.
- */
-static void SetID(cObject3D &Object, const sXMLEntry &xmlEntry,
-		  const std::unique_ptr<cXMLDocument> &xmlDoc)
-{
-	xmlDoc->iGetEntryAttribute(xmlEntry, "id", Object.ID);
-}
-
-/*
  * Set object location.
  */
 static void SetLocation(cObject3D &Object, const sXMLEntry &xmlEntry,
@@ -619,7 +610,6 @@ static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXM
 				const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
 				const std::shared_ptr<cXMLDocument> &xmlAI)
 {
-	SetID(SpaceShip, xmlEntry, xmlDoc);
 	if (ShowLineNumber)
 		SetDebugInformation(SpaceShip, xmlEntry, ShowLineNumber);
 
@@ -658,7 +648,6 @@ static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::uniqu
 				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
 				   const std::shared_ptr<cXMLDocument> &xmlAI)
 {
-	SetID(GroundObject, xmlEntry, xmlDoc);
 	if (ShowLineNumber)
 		SetDebugInformation(GroundObject, xmlEntry, ShowLineNumber);
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", GroundObject.NeedSpeed))
@@ -684,7 +673,6 @@ static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::uniqu
 static void LoadSpaceObjectScript(cSpaceObject &SpaceObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
 				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag)
 {
-	SetID(SpaceObject, xmlEntry, xmlDoc);
 	if (ShowLineNumber)
 		SetDebugInformation(SpaceObject, xmlEntry, ShowLineNumber);
 	xmlDoc->fGetEntryAttribute(xmlEntry, "speed", SpaceObject.Speed);
