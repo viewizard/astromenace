@@ -37,7 +37,7 @@
 void cShipPart::Create(int ShipPartNum)
 {
 	ObjectType = eObjectType::ShipPart;
-	ObjectCreationType = ShipPartNum;
+	InternalType = ShipPartNum;
 
 	// тут все делаем сами...
 	// т.к. это часть большого корабля

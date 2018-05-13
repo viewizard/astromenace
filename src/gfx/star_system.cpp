@@ -296,7 +296,7 @@ void StarSystemDraw(eDrawType DrawType)
 			if (DrawType == eDrawType::GAME)
 				vw_PopMatrix();
 		} else if ((tmpSpaceObject->ObjectType == eObjectType::BigAsteroid) &&
-			   ((tmpSpaceObject->ObjectCreationType > 10) && (tmpSpaceObject->ObjectCreationType < 20))) {
+			   ((tmpSpaceObject->InternalType > 10) && (tmpSpaceObject->InternalType < 20))) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
 				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,

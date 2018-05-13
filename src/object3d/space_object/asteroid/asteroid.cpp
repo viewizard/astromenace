@@ -38,7 +38,7 @@
 void cAsteroid::Create(int SpaceObjectNum)
 {
 	ObjectType = eObjectType::Asteroids;
-	ObjectCreationType = SpaceObjectNum;
+	InternalType = SpaceObjectNum;
 
 	Strength = StrengthStart = 10.0f/GameNPCArmorPenalty;
 

@@ -75,7 +75,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 
 	ObjectStatus = 1; // чужой
 	ObjectType = eObjectType::AlienFighter;
-	ObjectCreationType = SpaceShipNum;
+	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
 
 	ResistanceHull = 1.0f;

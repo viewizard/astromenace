@@ -121,7 +121,7 @@ void DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap)
 		// планеты и астероиды рисуем до тайловой анимации в игре!!!
 		if ((tmp->ObjectType != eObjectType::Planet) &&
 		    !((tmp->ObjectType == eObjectType::BigAsteroid) &&
-		      ((tmp->ObjectCreationType > 10) && (tmp->ObjectCreationType < 20))))
+		      ((tmp->InternalType > 10) && (tmp->InternalType < 20))))
 			tmp->Draw(VertexOnlyPass, ShadowMap);
 
 		tmp = tmp2;

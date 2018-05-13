@@ -63,7 +63,7 @@ void cBuilding::Create(int	BuildingNum)
 	}
 
 	ObjectType = eObjectType::CivilianBuilding;
-	ObjectCreationType = BuildingNum;
+	InternalType = BuildingNum;
 	// здания неразрушимы, не показываем вообще их жизнь
 	ShowStrength = false;
 	PromptDrawDist2 = 100.0f;

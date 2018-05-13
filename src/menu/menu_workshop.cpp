@@ -651,7 +651,7 @@ void WorkshopDrawWeapon(cWeapon *Weapon)
 	vw_GetViewport(&tmpViewportX, &tmpViewportY, &tmpViewportWidth, &tmpViewportHeight);
 
 	// удаление относительно размеров оружия
-	if (Weapon->ObjectCreationType == 18 || Weapon->ObjectCreationType == 19)
+	if (Weapon->InternalType == 18 || Weapon->InternalType == 19)
 		WorkShopPointCamera = sVECTOR3D(0.0f, 1.25f, -5.0f);
 	else
 		WorkShopPointCamera = sVECTOR3D(0.0f, 1.0f, -4.0f);

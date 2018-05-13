@@ -45,7 +45,7 @@ void cBigAsteroid::Create(int AsteroidNum)
 		if (Rand > 5) Rand = 5;
 		AsteroidNum = AsteroidNum*10 + Rand;
 	}
-	ObjectCreationType = AsteroidNum;
+	InternalType = AsteroidNum;
 
 
 	// перебираем и ставим нужные данные

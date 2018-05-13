@@ -268,7 +268,7 @@ void cWeapon::Create(int WeaponNum)
 		return;
 	}
 
-	ObjectCreationType = WeaponNum;
+	InternalType = WeaponNum;
 
 
 
@@ -496,8 +496,8 @@ bool cWeapon::Update(float Time)
 
 	// для землян, создание эффекта повреждения оружия
 	// если оружие только повредили...
-	if ((ObjectCreationType >= 1) &&
-	    (ObjectCreationType <= 99) &&
+	if ((InternalType >= 1) &&
+	    (InternalType <= 99) &&
 	    (Strength < StrengthStart) &&
 	    DestroyedFire.expired()) {
 		// горение
@@ -527,12 +527,12 @@ bool cWeapon::Update(float Time)
 
 			// небольшая поправка для ракетных систем
 
-			if (ObjectCreationType == 16 || ObjectCreationType == 17) {
+			if (InternalType == 16 || InternalType == 17) {
 				sharedDestroyedFire->DeadZone = Width/2.0f - 0.1f;
-			} else if (ObjectCreationType == 18) {
+			} else if (InternalType == 18) {
 				sharedDestroyedFire->CreationSize = sVECTOR3D(Width/3.5f,Width/3.5f,0.1f);
 				sharedDestroyedFire->DeadZone = Width/3.5f - 0.1f;
-			} else if (ObjectCreationType == 19) {
+			} else if (InternalType == 19) {
 				sharedDestroyedFire->CreationSize = sVECTOR3D(Width/3.0f,Width/3.0f,0.1f);
 				sharedDestroyedFire->DeadZone = Width/3.0f - 0.1f;
 			}
@@ -542,8 +542,8 @@ bool cWeapon::Update(float Time)
 
 	// для землян, создание эффекта уничтоженного оружия
 	// проверяем тут был ли выход из строя
-	if ((ObjectCreationType >= 1) &&
-	    (ObjectCreationType <= 99) &&
+	if ((InternalType >= 1) &&
+	    (InternalType <= 99) &&
 	    (Strength <= 0.0f) &&
 	    DestroyedSmoke.expired()) {
 		// дым
@@ -580,7 +580,7 @@ bool cWeapon::Update(float Time)
 
 
 	// если это swamp - запуск других ракет
-	if (ObjectCreationType == 17 && SwampNum > 0)
+	if (InternalType == 17 && SwampNum > 0)
 		if (LastFireTime + 0.15f < Time)
 			if (Ammo > 0 || GameLimitedAmmo != 1) {
 				LastFireTime = Time;
@@ -626,7 +626,7 @@ bool cWeapon::Update(float Time)
 
 				// создаем снаряд
 				cProjectile *Projectile = new cProjectile;
-				Projectile->Create(ObjectCreationType);
+				Projectile->Create(InternalType);
 				Projectile->SetLocation(Location+FireLocation);
 				Projectile->SetRotation(Rotation);
 				for (auto tmpGFX : Projectile->GraphicFX) {
@@ -667,7 +667,7 @@ bool cWeapon::Update(float Time)
 
 	// если это фларес - выпускаем остальные
 	// SwampNum в этом случае используем с другой целью
-	if (ObjectCreationType == 203 && SwampNum > 0)
+	if (InternalType == 203 && SwampNum > 0)
 		if (LastFireTime + 0.4f < Time)
 			if (Ammo > 0 || GameLimitedAmmo != 1) {
 				LastFireTime = Time;
@@ -681,7 +681,7 @@ bool cWeapon::Update(float Time)
 
 				// создаем снаряд
 				cProjectile *Projectile = new cProjectile;
-				Projectile->Create(ObjectCreationType);
+				Projectile->Create(InternalType);
 				Projectile->SetLocation(Location + FireLocation);
 				Projectile->SetRotation(Rotation + sVECTOR3D(vw_Randf0 * 30.0f, 0.0f, vw_Randf0 * 30.0f));
 
@@ -735,7 +735,7 @@ bool cWeapon::Update(float Time)
 			// находимся в начальном состоянии поворота ствола
 			sVECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
 			GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
-						      CurrentRotationMat,	&NeedAngle, ObjectCreationType);
+						      CurrentRotationMat,	&NeedAngle, InternalType);
 
 			// наводим на цель
 			TargetHorizObjectNeedAngle = NeedAngle.y;
@@ -1005,7 +1005,7 @@ bool cWeapon::WeaponFire(float Time)
 {
 
 	// если оружие не установлено - нам тут делать нечего
-	if (ObjectCreationType == 0) return false;
+	if (InternalType == 0) return false;
 
 
 	// общий - пенальти, если не игрок
@@ -1015,7 +1015,7 @@ bool cWeapon::WeaponFire(float Time)
 
 
 	// если фларес - тоже ничего не надо
-	if (ObjectCreationType == 203) CurrentPenalty = 1.0f;
+	if (InternalType == 203) CurrentPenalty = 1.0f;
 
 
 	// проверяем по времени, можем стрелять или нет
@@ -1027,7 +1027,7 @@ bool cWeapon::WeaponFire(float Time)
 
 
 	// для оружия землян, делаем небольшие проверки...
-	if (ObjectCreationType >= 1 && ObjectCreationType <= 99) {
+	if (InternalType >= 1 && InternalType <= 99) {
 
 		// для поврежденного оружия проверяем... может быть осечка в стрельбе
 		bool Misfire = false;
@@ -1043,7 +1043,7 @@ bool cWeapon::WeaponFire(float Time)
 
 			float fVol = 1.0f;
 
-			switch (ObjectCreationType) {
+			switch (InternalType) {
 			// Kinetic
 			case 1:
 			case 2:
@@ -1107,7 +1107,7 @@ bool cWeapon::WeaponFire(float Time)
 
 
 		// делаем вспышку возле ствола для всего оружия землят (только землян), если это не ракетная установка
-		if (ObjectCreationType < 16)
+		if (InternalType < 16)
 			if (auto sharedFire = Fire.lock())
 				sharedFire->IsSuppressed = false;
 
@@ -1162,7 +1162,7 @@ bool cWeapon::WeaponFire(float Time)
 
 	// создаем снаряд
 	cProjectile *Projectile = new cProjectile;
-	Projectile->Create(ObjectCreationType);
+	Projectile->Create(InternalType);
 
 
 	// если лучевое оружие, немного все делаем по другому
@@ -1251,11 +1251,11 @@ bool cWeapon::WeaponFire(float Time)
 	// если это груповой выстрел:
 
 	// нужно создать еще 9 ракет
-	if (ObjectCreationType == 17)
+	if (InternalType == 17)
 		SwampNum = 9;
 
 	// нужно создать еще 4 фларес
-	if (ObjectCreationType == 203)
+	if (InternalType == 203)
 		SwampNum = 4;
 
 

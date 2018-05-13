@@ -389,7 +389,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 		int Money = GameConfig().Profile[CurrentProfile].Money;
 		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
-			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
+			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 					       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 
@@ -405,7 +405,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				// если тут было оружие - сначало продаем его
 				if (WorkshopFighterGame->Weapon[SlotNum]) {
 					ChangeGameConfig().Profile[CurrentProfile].Money +=
-						GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
+						GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 							      WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 							      WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 					delete WorkshopFighterGame->Weapon[SlotNum];
@@ -477,7 +477,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			Audio_PlaySound2D(9, 1.0f);
 
 			DragWeapon = true;
-			DragWeaponNum = WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType;
+			DragWeaponNum = WorkshopFighterGame->Weapon[SlotNum]->InternalType;
 			DragWeaponLevel = WorkshopFighterGame->Weapon[SlotNum]->WeaponLevel;
 			DragWeaponAmmo = WorkshopFighterGame->Weapon[SlotNum]->Ammo;
 			DragWeaponAmmoStart = WorkshopFighterGame->Weapon[SlotNum]->AmmoStart;
@@ -486,7 +486,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			DragWeaponAltControlData = GameConfig().Profile[CurrentProfile].WeaponAltControlData[SlotNum];
 
 			ChangeGameConfig().Profile[CurrentProfile].Money +=
-				GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
+				GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 					      WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 					      WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 			delete WorkshopFighterGame->Weapon[SlotNum];
@@ -572,7 +572,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 	SrcRect(0,0,128,64);
 	DstRect(X,Y,X+128,Y+64);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType)), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->InternalType)), true, MenuContentTransp);
 
 
 
@@ -635,7 +635,7 @@ void ShipSlotSetupWeapon(int Slot)
 		Ypos += 30;
 		vw_DrawText(Xpos, Ypos, -230, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Reload Cost:"));
 		// находим стоимость перезарядки
-		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->Weapon[Slot]->ObjectCreationType,
+		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->Weapon[Slot]->InternalType,
 						     WorkshopFighterGame->Weapon[Slot]->Ammo,
 						     WorkshopFighterGame->Weapon[Slot]->AmmoStart);
 		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth("%i", ReloadCost);
@@ -782,7 +782,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 		int Money = GameConfig().Profile[CurrentProfile].Money;
 		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
-			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
+			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 					       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 
@@ -797,7 +797,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 				// если тут было оружие - сначало продаем его
 				if (WorkshopFighterGame->Weapon[SlotNum] != nullptr) {
-					ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->ObjectCreationType,
+					ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 									       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 									       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
 					delete WorkshopFighterGame->Weapon[SlotNum];
@@ -1133,25 +1133,25 @@ void Workshop_Weaponry()
 
 
 	int k2 = 0;
-	if (GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f) {
+	if (GetWeaponHullDamage(WorkshopNewWeapon->InternalType) > 0.0f) {
 		vw_DrawText(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Damage, Hull:"));
-		if ((WorkshopNewWeapon->ObjectCreationType == 11) ||
-		    (WorkshopNewWeapon->ObjectCreationType == 12) ||
-		    (WorkshopNewWeapon->ObjectCreationType == 14))
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/sec"));
+		if ((WorkshopNewWeapon->InternalType == 11) ||
+		    (WorkshopNewWeapon->InternalType == 12) ||
+		    (WorkshopNewWeapon->InternalType == 14))
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
 		else
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/shot"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
 
 		k2=20;
 	}
-	if (GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType) > 0.0f) {
+	if (GetWeaponSystemsDamage(WorkshopNewWeapon->InternalType) > 0.0f) {
 		vw_DrawText(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Damage, Systems:"));
-		if ((WorkshopNewWeapon->ObjectCreationType == 11) ||
-		    (WorkshopNewWeapon->ObjectCreationType == 12) ||
-		    (WorkshopNewWeapon->ObjectCreationType == 14))
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/sec"));
+		if ((WorkshopNewWeapon->InternalType == 11) ||
+		    (WorkshopNewWeapon->InternalType == 12) ||
+		    (WorkshopNewWeapon->InternalType == 14))
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
 		else
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->ObjectCreationType), vw_GetText("units/shot"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
 
 	}
 
@@ -1239,7 +1239,7 @@ void Workshop_Weaponry()
 		// находим стоимость перезарядки
 		for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
 			if (WorkshopFighterGame->Weapon[i])
-				ReloadCost += GetWeaponReloadCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
+				ReloadCost += GetWeaponReloadCost(WorkshopFighterGame->Weapon[i]->InternalType,
 								  WorkshopFighterGame->Weapon[i]->Ammo,
 								  WorkshopFighterGame->Weapon[i]->AmmoStart);
 		}

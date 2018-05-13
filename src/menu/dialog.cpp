@@ -754,8 +754,8 @@ Dialogs with default type:
 	// вывод данных по кораблю
 	case eDialogBox::ShowShipInfo: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWorkshopShipName(DialogSpaceShip->ObjectCreationType))))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText(GetWorkshopShipName(DialogSpaceShip->ObjectCreationType)));
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWorkshopShipName(DialogSpaceShip->InternalType))))/2;
+		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText(GetWorkshopShipName(DialogSpaceShip->InternalType)));
 		// текст диалога
 		int Y1 = Y+80;
 		int Offset = 31;
@@ -767,7 +767,7 @@ Dialogs with default type:
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Space Ship"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Ship Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText(GetShipGroupTitle(DialogSpaceShip->ObjectCreationType)));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText(GetShipGroupTitle(DialogSpaceShip->InternalType)));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Developer:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Earth Federation"));
@@ -816,41 +816,41 @@ Dialogs with default type:
 		Y1 += Offset;
 		if (WorkshopFighterGame == DialogSpaceShip) {
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Armor:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), vw_GetText("units"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)GetShipArmor(DialogSpaceShip->InternalType), vw_GetText("units"));
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), vw_GetText("units"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*2), vw_GetText("units"));
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), vw_GetText("units"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*3), vw_GetText("units"));
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), vw_GetText("units"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*4), vw_GetText("units"));
 
 		} else {
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Armor:"));
-			if (GetShipArmor(DialogSpaceShip->ObjectCreationType) < GetShipArmor(WorkshopFighterGame->ObjectCreationType)) {
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), (int)GetShipArmor(WorkshopFighterGame->ObjectCreationType), vw_GetText("units"));
+			if (GetShipArmor(DialogSpaceShip->InternalType) < GetShipArmor(WorkshopFighterGame->InternalType)) {
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(DialogSpaceShip->InternalType), (int)GetShipArmor(WorkshopFighterGame->InternalType), vw_GetText("units"));
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*2), vw_GetText("units"));
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*2), (int)(GetShipArmor(WorkshopFighterGame->InternalType)*2), vw_GetText("units"));
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*3), vw_GetText("units"));
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*3), (int)(GetShipArmor(WorkshopFighterGame->InternalType)*3), vw_GetText("units"));
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*4), vw_GetText("units"));
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*4), (int)(GetShipArmor(WorkshopFighterGame->InternalType)*4), vw_GetText("units"));
 			} else {
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(DialogSpaceShip->ObjectCreationType), (int)GetShipArmor(WorkshopFighterGame->ObjectCreationType), vw_GetText("units"));
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(DialogSpaceShip->InternalType), (int)GetShipArmor(WorkshopFighterGame->InternalType), vw_GetText("units"));
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*2), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*2), vw_GetText("units"));
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*2), (int)(GetShipArmor(WorkshopFighterGame->InternalType)*2), vw_GetText("units"));
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*3), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*3), vw_GetText("units"));
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*3), (int)(GetShipArmor(WorkshopFighterGame->InternalType)*3), vw_GetText("units"));
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->ObjectCreationType)*4), (int)(GetShipArmor(WorkshopFighterGame->ObjectCreationType)*4), vw_GetText("units"));
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(DialogSpaceShip->InternalType)*4), (int)(GetShipArmor(WorkshopFighterGame->InternalType)*4), vw_GetText("units"));
 			}
 		}
 
@@ -878,8 +878,8 @@ Dialogs with default type:
 	// вывод данных по оружию
 	case eDialogBox::ShowWeaponsInfo: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWeaponName(DialogWeapon->ObjectCreationType))))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText(GetWeaponName(DialogWeapon->ObjectCreationType)));
+		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWeaponName(DialogWeapon->InternalType))))/2;
+		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText(GetWeaponName(DialogWeapon->InternalType)));
 		// текст диалога
 		int Y1 = Y+80;
 		int Offset = 31;
@@ -888,14 +888,14 @@ Dialogs with default type:
 		int X1 = X+45;
 
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Object Class:"));
-		if (DialogWeapon->ObjectCreationType<16)
+		if (DialogWeapon->InternalType<16)
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Weapon, Cannon"));
 		else
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Weapon, Launcher"));
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText(GetWeaponGroupTitle(DialogWeapon->ObjectCreationType)));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText(GetWeaponGroupTitle(DialogWeapon->InternalType)));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Developer:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Earth Federation"));
@@ -916,21 +916,21 @@ Dialogs with default type:
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Damage, Hull:"));
 
-		if ((DialogWeapon->ObjectCreationType == 11) |
-		    (DialogWeapon->ObjectCreationType == 12) |
-		    (DialogWeapon->ObjectCreationType == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), vw_GetText("units/sec"));
+		if ((DialogWeapon->InternalType == 11) |
+		    (DialogWeapon->InternalType == 12) |
+		    (DialogWeapon->InternalType == 14))
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->InternalType), vw_GetText("units/sec"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->ObjectCreationType), vw_GetText("units/shot"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponHullDamage(DialogWeapon->InternalType), vw_GetText("units/shot"));
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Damage, Systems:"));
-		if ((DialogWeapon->ObjectCreationType == 11) |
-		    (DialogWeapon->ObjectCreationType == 12) |
-		    (DialogWeapon->ObjectCreationType == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), vw_GetText("units/sec"));
+		if ((DialogWeapon->InternalType == 11) |
+		    (DialogWeapon->InternalType == 12) |
+		    (DialogWeapon->InternalType == 14))
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->InternalType), vw_GetText("units/sec"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->ObjectCreationType), vw_GetText("units/shot"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", GetWeaponSystemsDamage(DialogWeapon->InternalType), vw_GetText("units/shot"));
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Energy Use:"));
@@ -943,7 +943,7 @@ Dialogs with default type:
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%3.1f %s", DialogWeapon->NextFireTime, vw_GetText("seconds"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Range:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%3.1f %s", GetProjectileRange(DialogWeapon->ObjectCreationType), vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%3.1f %s", GetProjectileRange(DialogWeapon->InternalType), vw_GetText("units"));
 
 		// закрываем...
 		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) CloseDialog();

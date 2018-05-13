@@ -505,7 +505,7 @@ void DetectCollisionAllObject3D()
 							new cSpaceExplosion(tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case eObjectType::PirateShip:
-							if (tmpShip->ObjectCreationType <= 5)
+							if (tmpShip->InternalType <= 5)
 								new cSpaceExplosion(tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							else
 								new cSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
@@ -679,7 +679,7 @@ void DetectCollisionAllObject3D()
 											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											break;
 										case eObjectType::PirateShip:
-											if (tmpShip->ObjectCreationType <= 5)
+											if (tmpShip->InternalType <= 5)
 												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 											else
 												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
@@ -778,7 +778,7 @@ exitN1:
 											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case eObjectType::PirateShip:
-											if (tmpShip->ObjectCreationType <= 5)
+											if (tmpShip->InternalType <= 5)
 												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
 												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
@@ -854,7 +854,7 @@ exitN2:
 											new cSpaceExplosion(tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											break;
 										case eObjectType::PirateShip:
-											if (tmpCollisionShip1->ObjectCreationType <= 5)
+											if (tmpCollisionShip1->InternalType <= 5)
 												new cSpaceExplosion(tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 											else
 												new cSpaceExplosion(tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
@@ -891,7 +891,7 @@ exitN2:
 											new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											break;
 										case eObjectType::PirateShip:
-											if (tmpShip->ObjectCreationType <= 5)
+											if (tmpShip->InternalType <= 5)
 												new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 											else
 												new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
@@ -1510,7 +1510,7 @@ NexttmpS:
 							new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
 							break;
 						case eObjectType::PirateShip:
-							if (tmpShip->ObjectCreationType <= 5)
+							if (tmpShip->InternalType <= 5)
 								new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
 							else
 								new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);

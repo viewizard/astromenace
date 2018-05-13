@@ -334,6 +334,7 @@ bool cMissionScript::Update(float Time)
 	}
 
 	// we don't check GetRootEntry() result, since we checked it in RunScript()
+	// xml::hash() could generate error at compile-time, make sure hashes is unique
 	for (; xmlEntryIter != xmlDoc->GetRootEntry()->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		switch (xmlEntry.NameHash) {
@@ -706,6 +707,7 @@ void cMissionScript::UpdateTimeLine()
 
 		int tmpType{0};
 
+		// xml::hash() could generate error at compile-time, make sure hashes is unique
 		switch (TL.NameHash) {
 		case xml::hash("EarthFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {

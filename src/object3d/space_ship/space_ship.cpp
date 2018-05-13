@@ -1220,7 +1220,7 @@ bool cSpaceShip::Update(float Time)
 				if ((Weapon[i] != nullptr) &&
 				    (Weapon[i]->NeedRotateOnTargeting) &&
 				    (WeapNum == -1)) {
-					WeapNum = Weapon[0]->ObjectCreationType;
+					WeapNum = Weapon[0]->InternalType;
 				}
 			}
 			if (WeapNum == -1)
@@ -1288,7 +1288,7 @@ bool cSpaceShip::Update(float Time)
 				if ((BossWeapon[i] != nullptr) &&
 				    (BossWeapon[i]->NeedRotateOnTargeting) &&
 				    (WeapNum == -1)) {
-					WeapNum = BossWeapon[0]->ObjectCreationType;
+					WeapNum = BossWeapon[0]->InternalType;
 				}
 			}
 			if (WeapNum == -1)
@@ -1370,7 +1370,7 @@ bool cSpaceShip::Update(float Time)
 
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Rotation,
 									    Length, CurrentRotationMat, &NeedAngle, Width, true, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 
 						sVECTOR3D NeedAngleTmp = NeedAngle;
 
@@ -1419,7 +1419,7 @@ bool cSpaceShip::Update(float Time)
 
 
 						// если это не ракетные системы, нужно повернуть
-						if (Weapon[i]->ObjectCreationType < 16) {
+						if (Weapon[i]->InternalType < 16) {
 							Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1));
 							Weapon[i]->SetRotation(NeedAngle);
 						}
@@ -1502,23 +1502,23 @@ bool cSpaceShip::Update(float Time)
 					case 1:
 						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
 									    Length, RotationMat2, &NeedAngle, Width, false, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 2:
 						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
 									    Length, RotationMat2, &NeedAngle, Width, true, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 3:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->Rotation,
 									    Length,Weapon[i]->CurrentRotationMat, &NeedAngle, Weapon[i]->Width, false, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 4:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation,
 									    sVECTOR3D(Weapon[i]->Rotation.x, 0 , Weapon[i]->Rotation.z) + sVECTOR3D(0,WeaponYAngle[i],0),
 									    Length,Weapon[i]->CurrentRotationMat, &NeedAngle, Width, false, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->ObjectCreationType);
+									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					}
 

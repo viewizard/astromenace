@@ -77,7 +77,7 @@ void cPirateShip::Create(int PirateShipNum)
 
 	ObjectStatus = 1; // чужой
 	ObjectType = eObjectType::PirateShip;
-	ObjectCreationType = PirateShipNum;
+	InternalType = PirateShipNum;
 	PromptDrawDist2 = 100.0f;
 	if (PirateShipNum > 5)
 		PromptDrawDist2 = 20000.0f; // большие корабли пиратов

@@ -156,7 +156,7 @@ bool cSpaceObject::Update(float Time)
 	    (ObjectType == eObjectType::BigAsteroid)) {
 		// если большие астероиды летящие сверху
 		if ((ObjectType == eObjectType::BigAsteroid) &&
-		    ((ObjectCreationType > 20) && (ObjectCreationType < 30))) {
+		    ((InternalType > 20) && (InternalType < 30))) {
 			SetRotation(sVECTOR3D(RotationSpeed.x*TimeDelta, RotationSpeed.y*TimeDelta, 0.0f));
 		} else {
 			if (RotationSpeed.x != 0.0f) {
@@ -217,7 +217,7 @@ bool cSpaceObject::Update(float Time)
 
 		// вращения планет и их частей
 		if (ObjectType == eObjectType::Planet) {
-			switch (ObjectCreationType) {
+			switch (InternalType) {
 			// планета с астероидным кольцом
 			case 1:
 				ObjectBlocks[0].Rotation.y += 0.5f * TimeDelta;

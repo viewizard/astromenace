@@ -47,7 +47,7 @@ void cBasePart::Create(int BasePartNum)
 		if (Rand > 5) Rand = 5;
 		BasePartNum = BasePartNum*10 + Rand;
 	}
-	ObjectCreationType = BasePartNum;
+	InternalType = BasePartNum;
 
 	// перебираем и ставим нужные данные
 	switch (BasePartNum) {

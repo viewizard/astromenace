@@ -220,7 +220,7 @@ bool cGroundObject::Update(float Time)
 		sVECTOR3D FirePos(0.0f,0.0f,0.0f);
 		if (Weapon != nullptr) {
 			if (Weapon[0] != nullptr)
-				WeapNum = Weapon[0]->ObjectCreationType;
+				WeapNum = Weapon[0]->InternalType;
 
 			int Count = 0;
 			for (int i = 0; i < WeaponQuantity; i++) {

@@ -71,7 +71,7 @@ void cTracked::Create(int TrackedNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 5.0f;
 	MaxSpeedRotate = 20.0f;
-	ObjectCreationType = TrackedNum;
+	InternalType = TrackedNum;
 
 
 	// ставим без оптимизации, иначе не увидим гусениц

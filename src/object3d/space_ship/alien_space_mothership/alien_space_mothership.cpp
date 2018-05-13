@@ -69,7 +69,7 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 
 	ObjectStatus = 1; // чужой
 	ObjectType = eObjectType::AlienMotherShip;
-	ObjectCreationType = SpaceShipNum;
+	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 20000.0f;
 
 	ResistanceHull = 1.0f;

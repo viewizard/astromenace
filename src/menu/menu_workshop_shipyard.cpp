@@ -245,7 +245,7 @@ int GetWorkshopShipFullCost(int Num, cEarthSpaceFighter *Fighter)
 	// прибавить стоимость оружия
 	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++)
 		if (WorkshopFighterGame->Weapon[i] != nullptr) {
-			ShipCost += GetWeaponCost(WorkshopFighterGame->Weapon[i]->ObjectCreationType,
+			ShipCost += GetWeaponCost(WorkshopFighterGame->Weapon[i]->InternalType,
 						  WorkshopFighterGame->Weapon[i]->Ammo,
 						  WorkshopFighterGame->Weapon[i]->AmmoStart);
 		}
@@ -310,7 +310,7 @@ void WorkshopCreateBuyShip()
 	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++)
 		if (WorkshopFighterGame->Weapon[i] != nullptr) {
 			ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(
-									    WorkshopFighterGame->Weapon[i]->ObjectCreationType,
+									    WorkshopFighterGame->Weapon[i]->InternalType,
 									    WorkshopFighterGame->Weapon[i]->Ammo,
 									    WorkshopFighterGame->Weapon[i]->AmmoStart);
 			delete WorkshopFighterGame->Weapon[i];

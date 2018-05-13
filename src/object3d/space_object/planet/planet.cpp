@@ -39,7 +39,7 @@ void cPlanet::Create(int PlanetNum)
 	ObjectType = eObjectType::Planet;
 	ObjectStatus = 1; // чужой
 
-	ObjectCreationType = PlanetNum;
+	InternalType = PlanetNum;
 
 
 	// перебираем и ставим нужные данные

@@ -98,8 +98,8 @@ public:
 	// тип объекта
 	eObjectType ObjectType{eObjectType::none};
 
-	// тип (номер при создании)
-	int	ObjectCreationType{0};
+	// internal object's type for objects with same ObjectType, usually, same as creation type (num)
+	int InternalType{0};
 
 	// время жизни объекта в секундах, оставшееся
 	float	Lifetime{-1.0f};
