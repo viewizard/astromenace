@@ -131,15 +131,15 @@ static void SetRotation(cObject3D &Object, const sXMLEntry &xmlEntry,
 }
 
 /*
- * Set object's ShowDeleteOnHide field.
+ * Set object's DeleteAfterLeaveScene field.
  */
-static void SetShowDeleteOnHide(cObject3D &Object, const sXMLEntry &xmlEntry,
-				const std::unique_ptr<cXMLDocument> &xmlDoc)
+static void SetDeleteAfterLeaveScene(cObject3D &Object, const sXMLEntry &xmlEntry,
+				     const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
-	Object.ShowDeleteOnHide = 0;
-	if (xmlDoc->iGetEntryAttribute(xmlEntry, "onhide", Object.ShowDeleteOnHide) &&
-	    (Object.ShowDeleteOnHide <= 0))
-			Object.ShowDeleteOnHide = -1;
+	Object.DeleteAfterLeaveScene = 0;
+	if (xmlDoc->iGetEntryAttribute(xmlEntry, "onhide", Object.DeleteAfterLeaveScene) &&
+	    (Object.DeleteAfterLeaveScene <= 0))
+			Object.DeleteAfterLeaveScene = -1;
 }
 
 /*
@@ -255,7 +255,7 @@ bool cMissionScript::Update(float Time)
 				CreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
 			else
 				CreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed * vw_fRand();
-			CreateAsteroid->ShowDeleteOnHide = 0;
+			CreateAsteroid->DeleteAfterLeaveScene = 0;
 			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));
 
 			if (AsterFastCount != 20)
@@ -290,7 +290,8 @@ bool cMissionScript::Update(float Time)
 			int tmpEnemyCount{0};
 			cSpaceShip *tmpObject = StartSpaceShip;
 			while (tmpObject) {
-				if ((tmpObject->ObjectStatus == eObjectStatus::Enemy) && (tmpObject->ShowDeleteOnHide != 0))
+				if ((tmpObject->ObjectStatus == eObjectStatus::Enemy) &&
+				    (tmpObject->DeleteAfterLeaveScene != 0))
 					tmpEnemyCount++;
 				tmpObject = tmpObject->Next;
 			}
@@ -302,7 +303,7 @@ bool cMissionScript::Update(float Time)
 			int tmpEnemyCount{0};
 			cGroundObject *tmpObject = StartGroundObject;
 			while (tmpObject) {
-				if (NeedCheckCollision(tmpObject) && (tmpObject->ShowDeleteOnHide != 0))
+				if (NeedCheckCollision(tmpObject) && (tmpObject->DeleteAfterLeaveScene != 0))
 					tmpEnemyCount++;
 				tmpObject = tmpObject->Next;
 			}
@@ -417,7 +418,7 @@ bool cMissionScript::Update(float Time)
 					Planet->Create(tmpType);
 					SetRotation(*Planet, xmlEntry, xmlDoc);
 					SetLocation(*Planet, xmlEntry, xmlDoc, 0.0f);
-					Planet->ShowDeleteOnHide = 0;
+					Planet->DeleteAfterLeaveScene = 0;
 					xmlDoc->fGetEntryAttribute(xmlEntry, "speed", Planet->Speed);
 				}
 			}
@@ -627,7 +628,7 @@ static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXM
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamud", SpaceShip.NeedSpeedByCamUD))
 		SpaceShip.SpeedByCamUD = SpaceShip.NeedSpeedByCamUD;
 
-	SetShowDeleteOnHide(SpaceShip, xmlEntry, xmlDoc);
+	SetDeleteAfterLeaveScene(SpaceShip, xmlEntry, xmlDoc);
 	SetAIMode(SpaceShip.TimeSheetList, xmlEntry, xmlDoc, xmlAI);
 	SetRotation(SpaceShip, xmlEntry, xmlDoc);
 	SetLocation(SpaceShip, xmlEntry, xmlDoc, TimeOpLag);
@@ -653,7 +654,7 @@ static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::uniqu
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", GroundObject.NeedSpeed))
 		GroundObject.Speed = GroundObject.NeedSpeed;
 
-	SetShowDeleteOnHide(GroundObject, xmlEntry, xmlDoc);
+	SetDeleteAfterLeaveScene(GroundObject, xmlEntry, xmlDoc);
 	SetAIMode(GroundObject.TimeSheetList, xmlEntry, xmlDoc, xmlAI);
 	SetRotation(GroundObject, xmlEntry, xmlDoc);
 	SetLocation(GroundObject, xmlEntry, xmlDoc, TimeOpLag);
@@ -676,7 +677,7 @@ static void LoadSpaceObjectScript(cSpaceObject &SpaceObject, const std::unique_p
 	if (ShowLineNumber)
 		SetDebugInformation(SpaceObject, xmlEntry, ShowLineNumber);
 	xmlDoc->fGetEntryAttribute(xmlEntry, "speed", SpaceObject.Speed);
-	SetShowDeleteOnHide(SpaceObject, xmlEntry, xmlDoc);
+	SetDeleteAfterLeaveScene(SpaceObject, xmlEntry, xmlDoc);
 
 	SetRotation(SpaceObject, xmlEntry, xmlDoc);
 	SetLocation(SpaceObject, xmlEntry, xmlDoc, TimeOpLag);

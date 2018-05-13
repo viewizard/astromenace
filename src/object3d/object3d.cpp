@@ -776,17 +776,19 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// оптимизация, если не в фруструме - соотв. и не видем его
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
 		// если показали а сейчас нет - установка флага
-		if (ShowDeleteOnHide == 1) ShowDeleteOnHide = 2;
+		if (DeleteAfterLeaveScene == 1)
+			DeleteAfterLeaveScene = 2;
 
 		return;
 	}
 
 
 	// показываем - нужно установить флаг
-	if (ShowDeleteOnHide == 0) ShowDeleteOnHide = 1;
+	if (DeleteAfterLeaveScene == 0)
+		DeleteAfterLeaveScene = 1;
 	// уже включили обратный отсчет на удаление - нужно его выключить
-	if (ShowDeleteOnHide == 3) {
-		ShowDeleteOnHide = 1;
+	if (DeleteAfterLeaveScene == 3) {
+		DeleteAfterLeaveScene = 1;
 		Lifetime = -1.0f;
 	}
 
@@ -1497,11 +1499,11 @@ bool cObject3D::Update(float Time)
 
 
 	// нужно удалить объект - он вышел из зоны видемости
-	if (ShowDeleteOnHide == 2) {
+	if (DeleteAfterLeaveScene == 2) {
 		// показываем еще 1 секунду, и удаляем
-		Lifetime = 1.0f;
+		Lifetime = DeleteAfterLeaveSceneDelay;
 		// если объект еще раз покажем, опять будем показывать 1 секунду с момента ухода со сцены
-		ShowDeleteOnHide = 3;
+		DeleteAfterLeaveScene = 3;
 	}
 
 

@@ -73,6 +73,9 @@ enum class eObjectType {
 	BigAsteroid
 };
 
+// delay before object delete, since object could back to the scene
+#define DeleteAfterLeaveSceneDelay 1.0f
+
 class cObject3D
 {
 public:
@@ -98,8 +101,6 @@ public:
 
 	// in-game object's status relatively to player
 	eObjectStatus ObjectStatus{eObjectStatus::none};
-	// флаг показать - удалить -1 - не задействован, 0-ждем показа, 1-показали, 2-нужно удалить
-	int ShowDeleteOnHide{-1};
 	// unique object ID (or 0, if not applicable)
 	int ID{0};
 	// global object type
@@ -107,6 +108,8 @@ public:
 	// internal object's type for objects with same ObjectType, usually, same as creation type (num)
 	int InternalType{0};
 
+	// in case we need show object and delete after it leave scene (after DeleteAfterLeaveSceneDelay time)
+	int DeleteAfterLeaveScene{-1};
 	// время жизни объекта в секундах, оставшееся
 	float	Lifetime{-1.0f};
 
