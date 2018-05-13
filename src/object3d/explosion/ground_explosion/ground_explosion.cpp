@@ -92,7 +92,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				cShipPart *ShipPart;
 				ShipPart = new cShipPart;
 				ShipPart->ObjectType = eObjectType::ShipPart;
-				ShipPart->DeleteAfterLeaveScene = 0;
+				ShipPart->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 
 				// только одна текстура (!) 2-ю для подстветки не тянем
 				ShipPart->Texture.resize(1, 0);

@@ -136,10 +136,11 @@ static void SetRotation(cObject3D &Object, const sXMLEntry &xmlEntry,
 static void SetDeleteAfterLeaveScene(cObject3D &Object, const sXMLEntry &xmlEntry,
 				     const std::unique_ptr<cXMLDocument> &xmlDoc)
 {
-	Object.DeleteAfterLeaveScene = 0;
-	if (xmlDoc->iGetEntryAttribute(xmlEntry, "onhide", Object.DeleteAfterLeaveScene) &&
-	    (Object.DeleteAfterLeaveScene <= 0))
-			Object.DeleteAfterLeaveScene = -1;
+	Object.DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
+	int tmpStatus{0};
+	if (xmlDoc->iGetEntryAttribute(xmlEntry, "onhide", tmpStatus) &&
+	    (tmpStatus <= 0))
+		Object.DeleteAfterLeaveScene = eDeleteAfterLeaveScene::disabled;
 }
 
 /*
@@ -255,7 +256,7 @@ bool cMissionScript::Update(float Time)
 				CreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
 			else
 				CreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed * vw_fRand();
-			CreateAsteroid->DeleteAfterLeaveScene = 0;
+			CreateAsteroid->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));
 
 			if (AsterFastCount != 20)
@@ -291,7 +292,7 @@ bool cMissionScript::Update(float Time)
 			cSpaceShip *tmpObject = StartSpaceShip;
 			while (tmpObject) {
 				if ((tmpObject->ObjectStatus == eObjectStatus::Enemy) &&
-				    (tmpObject->DeleteAfterLeaveScene != 0))
+				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled))
 					tmpEnemyCount++;
 				tmpObject = tmpObject->Next;
 			}
@@ -303,7 +304,8 @@ bool cMissionScript::Update(float Time)
 			int tmpEnemyCount{0};
 			cGroundObject *tmpObject = StartGroundObject;
 			while (tmpObject) {
-				if (NeedCheckCollision(tmpObject) && (tmpObject->DeleteAfterLeaveScene != 0))
+				if (NeedCheckCollision(tmpObject) &&
+				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled))
 					tmpEnemyCount++;
 				tmpObject = tmpObject->Next;
 			}
@@ -418,7 +420,7 @@ bool cMissionScript::Update(float Time)
 					Planet->Create(tmpType);
 					SetRotation(*Planet, xmlEntry, xmlDoc);
 					SetLocation(*Planet, xmlEntry, xmlDoc, 0.0f);
-					Planet->DeleteAfterLeaveScene = 0;
+					Planet->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 					xmlDoc->fGetEntryAttribute(xmlEntry, "speed", Planet->Speed);
 				}
 			}

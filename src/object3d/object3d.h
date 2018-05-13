@@ -73,6 +73,13 @@ enum class eObjectType {
 	BigAsteroid
 };
 
+enum class eDeleteAfterLeaveScene {
+	disabled,
+	enabled,	// waiting, object should being shown on the scene first
+	showed,		// object shown, waiting when it will be out of the scene
+	need_delete,	// object shown and out of the scene, should be deleted
+	wait_delay	// will be deleted after delay
+};
 // delay before object delete, since object could back to the scene
 #define DeleteAfterLeaveSceneDelay 1.0f
 
@@ -109,7 +116,7 @@ public:
 	int InternalType{0};
 
 	// in case we need show object and delete after it leave scene (after DeleteAfterLeaveSceneDelay time)
-	int DeleteAfterLeaveScene{-1};
+	eDeleteAfterLeaveScene DeleteAfterLeaveScene{eDeleteAfterLeaveScene::disabled};
 	// время жизни объекта в секундах, оставшееся
 	float	Lifetime{-1.0f};
 

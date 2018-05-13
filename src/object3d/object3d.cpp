@@ -776,19 +776,19 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// оптимизация, если не в фруструме - соотв. и не видем его
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
 		// если показали а сейчас нет - установка флага
-		if (DeleteAfterLeaveScene == 1)
-			DeleteAfterLeaveScene = 2;
+		if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::showed)
+			DeleteAfterLeaveScene = eDeleteAfterLeaveScene::need_delete;
 
 		return;
 	}
 
 
 	// показываем - нужно установить флаг
-	if (DeleteAfterLeaveScene == 0)
-		DeleteAfterLeaveScene = 1;
+	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::enabled)
+		DeleteAfterLeaveScene = eDeleteAfterLeaveScene::showed;
 	// уже включили обратный отсчет на удаление - нужно его выключить
-	if (DeleteAfterLeaveScene == 3) {
-		DeleteAfterLeaveScene = 1;
+	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::wait_delay) {
+		DeleteAfterLeaveScene = eDeleteAfterLeaveScene::showed;
 		Lifetime = -1.0f;
 	}
 
@@ -1499,11 +1499,9 @@ bool cObject3D::Update(float Time)
 
 
 	// нужно удалить объект - он вышел из зоны видемости
-	if (DeleteAfterLeaveScene == 2) {
-		// показываем еще 1 секунду, и удаляем
+	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::need_delete) {
 		Lifetime = DeleteAfterLeaveSceneDelay;
-		// если объект еще раз покажем, опять будем показывать 1 секунду с момента ухода со сцены
-		DeleteAfterLeaveScene = 3;
+		DeleteAfterLeaveScene = eDeleteAfterLeaveScene::wait_delay;
 	}
 
 
