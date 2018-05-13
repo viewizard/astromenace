@@ -230,8 +230,7 @@ float GetProjectileSpeed(int Num)
 //-----------------------------------------------------------------------------
 cProjectile::cProjectile()
 {
-	// друг
-	ObjectStatus = 2;
+	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::Projectile;
 
 	// проверяем на столкновения только по радиусу
@@ -1328,7 +1327,7 @@ bool cProjectile::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
 	// если игрок или свои - ничего не надо...
-	if (ObjectStatus >= 2)
+	if ((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player))
 		CurrentPenalty = 1.0f;
 
 
@@ -1450,8 +1449,8 @@ missile:
 
 			float EffectiveRange = 1000000.0f;
 			// только для ракет игрока учитываем максимальную дальность полета
-			if (ObjectStatus == 3)
-				EffectiveRange = Lifetime*Speed;
+			if (ObjectStatus == eObjectStatus::Player)
+				EffectiveRange = Lifetime * Speed;
 
 			// устанавливаем в Target на что наведен этот снаряд, если еще ничего не выбрано
 			if (Target == nullptr) {

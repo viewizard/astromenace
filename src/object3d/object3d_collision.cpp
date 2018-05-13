@@ -79,31 +79,28 @@ struct sDamagesData {
 
 bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjectile *Projectile, sVECTOR3D *IntercPoint, sDamagesData *DamagesData, float ObjectSpeed)
 {
-
 	DamagesData->DamageHull = 0.0f;
 	DamagesData->DamageSystems = 0.0f;
 	// поправка на скорость камеры для корабля игрока
-	if (Object->ObjectStatus == 3) {
+	if (Object->ObjectStatus == eObjectStatus::Player)
 		ObjectSpeed += GameCameraGetSpeed();
-	}
 
 
 	// проверяем, нужно ли для этого снаряда проверять данный объект
-	// снаряды союзников или игрока  - с врагами
-	if (((Object->ObjectStatus == 1 && Projectile->ObjectStatus > 1) ||
+	// снаряды союзников или игрока - с врагами
+	if ((((Object->ObjectStatus == eObjectStatus::Enemy) && ((Projectile->ObjectStatus == eObjectStatus::Ally) || (Projectile->ObjectStatus == eObjectStatus::Player))) ||
 	     // снаряды врагов - с союзниками или игроком
-	     (Object->ObjectStatus > 1 && Projectile->ObjectStatus == 1) ||
+	     (((Object->ObjectStatus == eObjectStatus::Ally) || (Object->ObjectStatus == eObjectStatus::Player)) && (Projectile->ObjectStatus == eObjectStatus::Enemy)) ||
 	     // снаряды игрока со всеми, кроме игрока
-	     (Object->ObjectStatus < 3 && Projectile->ObjectStatus == 3))
-
-	    // или это не разрушимый объект и нужно 100% проверить, чтобы не пролетало через него снарядов
+	     (((Object->ObjectStatus == eObjectStatus::Enemy) || (Object->ObjectStatus == eObjectStatus::Ally)) && (Projectile->ObjectStatus == eObjectStatus::Player)))
+	    // или это не разрушаемый объект и нужно 100% проверить, чтобы не пролетало через него снарядов
 	    || (!NeedCheckCollision(Object))) {
 		switch (Projectile->ProjectileType) {
 		// обычные снаряды
 		case 0:
 			// если игрок со щитом или дифлектором, и щит заряжен
-			if (ShildEnergyStatus*ShildStartHitStatus > Projectile->DamageHull*GameNPCWeaponPenalty
-			    && Object->ObjectStatus == 3) {
+			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameNPCWeaponPenalty)) &&
+			    (Object->ObjectStatus == eObjectStatus::Player)) {
 				// у игрока есть щит, просто проверяем, если снаряд приблизился
 				// на расстояние =< радиуса - уничтожаем его
 				if (vw_SphereSphereCollision(Object->Radius, Object->Location,
@@ -193,8 +190,8 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 		// ракеты-торпеды-бомбы
 		case 1:
 			// если игрок со щитом или дифлектором, и щит заряжен
-			if (ShildEnergyStatus*ShildStartHitStatus > Projectile->DamageHull*GameNPCWeaponPenalty
-			    && Object->ObjectStatus == 3) {
+			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameNPCWeaponPenalty)) &&
+			    (Object->ObjectStatus == eObjectStatus::Player)) {
 				// у игрока есть щит, просто проверяем, если снаряд приблизился
 				// на расстояние =< радиуса - уничтожаем его
 				if (vw_SphereSphereCollision(Object->Radius, Object->Location,
@@ -349,10 +346,11 @@ extern int		PirateBuildingsKillQuant;
 extern float	PirateBuildingsKillBonus;
 extern int		AsteroidsKillQuant;
 extern float	AsteroidsKillBonus;
-void AddPlayerBonus(cObject3D *Object, int KilledByObjectStatus)
+void AddPlayerBonus(cObject3D *Object, eObjectStatus KilledByObjectStatus)
 {
 	// убили врага
-	if (Object->ObjectStatus == 1 && KilledByObjectStatus == 3) {
+	if ((Object->ObjectStatus == eObjectStatus::Enemy) &&
+	    (KilledByObjectStatus == eObjectStatus::Player)) {
 		// вычисляем на какое значение нужно делить, в зависимости от кол-ва раз пройденной миссии
 		float BonusDiv = 1.0f;
 		for (int i = 0; i < GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]; i++) {
@@ -493,7 +491,7 @@ void DetectCollisionAllObject3D()
 					AddPlayerBonus(tmpShip, tmpProjectile->ObjectStatus);
 
 					// если не корабль игрока! его удалим сами
-					if (tmpShip->ObjectStatus != 3) {
+					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 						switch (tmpShip->ObjectType) {
 						case eObjectType::AlienFighter:
 							new cSpaceExplosion(tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
@@ -523,7 +521,7 @@ void DetectCollisionAllObject3D()
 					}
 				} else
 					// игроку тут ничего не делаем!.. с него хватит и щита
-					if (tmpShip->ObjectStatus != 3)
+					if (tmpShip->ObjectStatus != eObjectStatus::Player)
 						// если это не босс уровня (Alien MotherShip)
 						if (tmpShip->ObjectType != eObjectType::AlienMotherShip)
 							// если нужно, смотрим что делать с системами
@@ -562,7 +560,7 @@ void DetectCollisionAllObject3D()
 			// проверка на попадание в оружие (только для игрока и если включено в настройках)
 			// проверять только до OBB
 			if ((tmpShip != nullptr) && (tmpProjectile != nullptr))
-				if (tmpShip->ObjectStatus == 3 && tmpProjectile->ObjectStatus == 1)
+				if ((tmpShip->ObjectStatus == eObjectStatus::Player) && (tmpProjectile->ObjectStatus == eObjectStatus::Enemy))
 					if (GameDestroyableWeapon == 0) {
 						if (tmpShip->Weapon != nullptr)
 							for (int i=0; i<tmpShip->WeaponQuantity; i++)
@@ -631,7 +629,7 @@ void DetectCollisionAllObject3D()
 							// если столкновение с преградой которую не можем уничтожить
 							if (!NeedCheckCollision(tmpS)) {
 								// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
-								if (tmpShip->ObjectStatus != 3)
+								if (tmpShip->ObjectStatus != eObjectStatus::Player)
 									tmpShip->Strength -= (tmpShip->StrengthStart/0.5f)*tmpShip->TimeDelta;
 								else
 									tmpShip->Strength -= (tmpShip->StrengthStart/2.0f)*tmpShip->TimeDelta;
@@ -667,7 +665,7 @@ void DetectCollisionAllObject3D()
 								// если уже все... удаляем
 								if (tmpShip->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
-									if (tmpShip->ObjectStatus != 3) {
+									if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 										switch (tmpShip->ObjectType) {
 										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
@@ -730,7 +728,7 @@ exitN1:
 							// если столкновение с преградой которую не можем уничтожить
 							if (!NeedCheckCollision(tmpG)) {
 								// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
-								if (tmpShip->ObjectStatus != 3)
+								if (tmpShip->ObjectStatus != eObjectStatus::Player)
 									tmpShip->Strength -= (tmpShip->StrengthStart/0.5f)*tmpShip->TimeDelta;
 								else
 									tmpShip->Strength -= (tmpShip->StrengthStart/2.0f)*tmpShip->TimeDelta;
@@ -766,7 +764,7 @@ exitN1:
 								// если уже все... удаляем
 								if (tmpShip->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
-									if (tmpShip->ObjectStatus != 3) {
+									if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 										switch (tmpShip->ObjectType) {
 										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
@@ -842,7 +840,7 @@ exitN2:
 								// если уже все... удаляем
 								if (tmpCollisionShip1->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
-									if (tmpCollisionShip1->ObjectStatus != 3) {
+									if (tmpCollisionShip1->ObjectStatus != eObjectStatus::Player) {
 										switch (tmpCollisionShip1->ObjectType) {
 										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
@@ -879,7 +877,7 @@ exitN2:
 								// если уже все... удаляем
 								if (tmpShip->Strength <= 0.0f) {
 									// если не корабль игрока! его удалим сами
-									if (tmpShip->ObjectStatus != 3) {
+									if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 										switch (tmpShip->ObjectType) {
 										case eObjectType::AlienFighter:
 											new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
@@ -1245,11 +1243,11 @@ exitN4:
 
 			// делаем все тут , а не в общей процедуре, тк не обрабатываем там фларес
 
-			if ((tmpProjectile->ObjectStatus == 1 && tmpProject1->ObjectStatus > 1) ||
+			if (((tmpProjectile->ObjectStatus == eObjectStatus::Enemy) && ((tmpProject1->ObjectStatus == eObjectStatus::Ally) || (tmpProject1->ObjectStatus == eObjectStatus::Player))) ||
 			    // снаряды врагов - с союзниками или игроком
-			    (tmpProjectile->ObjectStatus > 1 && tmpProject1->ObjectStatus == 1) ||
+			    (((tmpProjectile->ObjectStatus == eObjectStatus::Ally) || (tmpProjectile->ObjectStatus == eObjectStatus::Player)) && (tmpProject1->ObjectStatus == eObjectStatus::Enemy)) ||
 			    // снаряды игрока со всеми, кроме игрока
-			    (tmpProjectile->ObjectStatus != 3 && tmpProject1->ObjectStatus == 3)) {
+			    ((tmpProjectile->ObjectStatus != eObjectStatus::Player) && (tmpProject1->ObjectStatus == eObjectStatus::Player))) {
 
 				// если это уничтожаемая цель...
 				if (tmpProjectile->ProjectileType == 1) {
@@ -1403,7 +1401,7 @@ bool CheckSphereSphereDestroyDetection(cObject3D *Object1, sVECTOR3D Point, floa
 //-----------------------------------------------------------------------------
 // Удаление всех удаляемых объектов, если они ближе радиуса
 //-----------------------------------------------------------------------------
-void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, int ObjectStatus)
+void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, eObjectStatus ObjectStatus)
 {
 
 	// важно!!!
@@ -1433,8 +1431,8 @@ void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Poi
 
 		if (NeedCheckCollision(tmpS))
 			// своих не трогаем
-			if ((((ObjectStatus > 1) && (tmpS->ObjectStatus == 1)) ||
-			     ((ObjectStatus == 1) && (tmpS->ObjectStatus > 1))) &&
+			if (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy)) ||
+			     ((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player)))) &&
 			    (DontTouchObject != tmpS)) {
 				if (CheckSphereSphereDestroyDetection(tmpS, Point, Radius, &Distance2)) {
 					if ((tmpS->ObjectType == eObjectType::ShipPart) &&
@@ -1477,53 +1475,51 @@ NexttmpS:
 	while (tmpShip != nullptr) {
 		cSpaceShip *tmpShip2 = tmpShip->Next;
 
-		if (NeedCheckCollision(tmpShip))
-			// своих не трогаем
-			if ((((ObjectStatus > 1) && (tmpShip->ObjectStatus == 1)) ||
-			     ((ObjectStatus == 1) && (tmpShip->ObjectStatus > 1))) &&
-			    (DontTouchObject != tmpShip) &&
-			    (CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, &Distance2))) {
+		if (NeedCheckCollision(tmpShip) &&
+		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip->ObjectStatus == eObjectStatus::Enemy)) ||
+		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip->ObjectStatus == eObjectStatus::Ally) || (tmpShip->ObjectStatus == eObjectStatus::Player)))) &&
+		     (DontTouchObject != tmpShip) &&
+		     CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, &Distance2))) {
 
-				float DamageHull = Damage*(1.0f-Distance2/(Radius*Radius));
+			float DamageHull = Damage*(1.0f-Distance2/(Radius*Radius));
 
-				// просто убираем щит
-				tmpShip->ShieldStrength = 0.0f;
+			// просто убираем щит
+			tmpShip->ShieldStrength = 0.0f;
 
-				// отнимаем у всех по DamageHull
-				tmpShip->Strength -= DamageHull/tmpShip->ResistanceHull;
+			// отнимаем у всех по DamageHull
+			tmpShip->Strength -= DamageHull/tmpShip->ResistanceHull;
 
-				// если уже все... удаляем
-				if (tmpShip->Strength <= 0.0f) {
-					// проверка, нужно начислять или нет
-					AddPlayerBonus(tmpShip, ObjectStatus);
+			// если уже все... удаляем
+			if (tmpShip->Strength <= 0.0f) {
+				// проверка, нужно начислять или нет
+				AddPlayerBonus(tmpShip, ObjectStatus);
 
-					// если не корабль игрока! его удалим сами
-					if (tmpShip->ObjectStatus != 3) {
-						switch (tmpShip->ObjectType) {
-						case eObjectType::AlienFighter:
-							new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
-							break;
-						case eObjectType::EarthFighter:
-							new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
-							break;
-						case eObjectType::AlienMotherShip:
-							new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
-							break;
-						case eObjectType::PirateShip:
-							if (tmpShip->InternalType <= 5)
-								new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
-							else
-								new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
-
-							break;
-						default:
-							break;
-						}
-						delete tmpShip;
-						tmpShip = nullptr;
+				// если не корабль игрока! его удалим сами
+				if (tmpShip->ObjectStatus != eObjectStatus::Player) {
+					switch (tmpShip->ObjectType) {
+					case eObjectType::AlienFighter:
+						new cSpaceExplosion(tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
+						break;
+					case eObjectType::EarthFighter:
+						new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
+						break;
+					case eObjectType::AlienMotherShip:
+						new cSpaceExplosion(tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
+						break;
+					case eObjectType::PirateShip:
+						if (tmpShip->InternalType <= 5)
+							new cSpaceExplosion(tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
+						else
+							new cSpaceExplosion(tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
+						break;
+					default:
+						break;
 					}
+					delete tmpShip;
+					tmpShip = nullptr;
 				}
 			}
+		}
 
 		tmpShip = tmpShip2;
 	}
@@ -1542,12 +1538,11 @@ NexttmpS:
 	while (tmpG != nullptr) {
 		cGroundObject *tmpGround2 = tmpG->Next;
 
-		if (NeedCheckCollision(tmpG))
-			// своих не трогаем
-			if ((((ObjectStatus > 1) && (tmpG->ObjectStatus == 1)) ||
-			     ((ObjectStatus == 1) && (tmpG->ObjectStatus > 1))) &&
-			    (DontTouchObject != tmpG) &&
-			    (CheckSphereSphereDestroyDetection(tmpG, Point, Radius, &Distance2))) {
+		if (NeedCheckCollision(tmpG) &&
+		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)) ||
+		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player)))) &&
+		     (DontTouchObject != tmpG) &&
+		     CheckSphereSphereDestroyDetection(tmpG, Point, Radius, &Distance2))) {
 				float DamageHull = Damage*(1.0f-Distance2/(Radius*Radius));
 
 				// отнимаем у всех по Damage

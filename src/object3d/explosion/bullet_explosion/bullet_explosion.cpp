@@ -29,7 +29,7 @@
 #include "../../../config/config.h"
 
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
-void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, int ObjectStatus);
+void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, eObjectStatus ObjectStatus);
 
 
 void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType)

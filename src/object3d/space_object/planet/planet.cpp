@@ -36,8 +36,8 @@
 //-----------------------------------------------------------------------------
 void cPlanet::Create(int PlanetNum)
 {
+	ObjectStatus = eObjectStatus::none;
 	ObjectType = eObjectType::Planet;
-	ObjectStatus = 1; // чужой
 
 	InternalType = PlanetNum;
 

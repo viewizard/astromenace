@@ -47,9 +47,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 	int InternalExplosionType = 0;
 
 	// общий - пенальти, если не игрок
-	float CurrentPenalty = GameNPCWeaponPenalty*1.0f+1.0f; // чуть больше убираем...
-	// если игрок или свои - ничего не надо...
-	if (Object->ObjectStatus >= 2) CurrentPenalty = 1.0f;
+	float CurrentPenalty = GameNPCWeaponPenalty * 1.0f + 1.0f; // чуть больше убираем...
+	if ((Object->ObjectStatus == eObjectStatus::Ally) ||
+	    (Object->ObjectStatus == eObjectStatus::Player))
+		CurrentPenalty = 1.0f;
 	// сохраняем статус объекта, чтобы правильно создавать части-снаряды и обломки
 	ObjectStatus = Object->ObjectStatus;
 	// сохраняем тип взрыва

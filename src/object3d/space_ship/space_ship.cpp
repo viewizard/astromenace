@@ -434,11 +434,13 @@ bool cSpaceShip::Update(float Time)
 		while (!NeedFlare && (tmpProjectile != nullptr)) {
 			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 
-			if ((((ObjectStatus == 1) && (tmpProjectile->ObjectStatus > 1)) ||
+			if ((((ObjectStatus == eObjectStatus::Enemy) &&
+			      ((tmpProjectile->ObjectStatus == eObjectStatus::Ally) || (tmpProjectile->ObjectStatus == eObjectStatus::Player))) ||
 			     // снаряды врагов - с союзниками или игроком
-			     ((ObjectStatus > 1) && (tmpProjectile->ObjectStatus == 1)) ||
+			     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) &&
+			      (tmpProjectile->ObjectStatus == eObjectStatus::Enemy)) ||
 			     // снаряды игрока со всеми, кроме игрока
-			     ((ObjectStatus != 3) && (tmpProjectile->ObjectStatus == 3))) &&
+			     ((ObjectStatus != eObjectStatus::Player) && (tmpProjectile->ObjectStatus == eObjectStatus::Player))) &&
 			    (tmpProjectile->ProjectileType == 1))
 					NeedFlare = true;
 
@@ -472,7 +474,7 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// обработка указателей действия, нужно для управления кораблем игрока
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ObjectStatus == 3) {
+	if (ObjectStatus == eObjectStatus::Player) {
 		if (MoveForward > 0.0f || MoveBackward > 0.0f) {
 			NeedSpeed = MaxSpeed*MoveForward-MaxSpeed*MoveBackward;
 		} else NeedSpeed = 0.0f;
@@ -495,7 +497,7 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// если нужно поворачивать
-	if (ObjectStatus != 3) {
+	if (ObjectStatus != eObjectStatus::Player) {
 
 		// выключаем двигатели, если нужно - включим
 		if (!EnginesLeft.empty()) {
@@ -637,7 +639,7 @@ bool cSpaceShip::Update(float Time)
 
 	// вперед-назад
 	// если нужно разогнаться, или управление на игроке - и нужно стремиться к нулю
-	if (NeedSpeed != 0.0f || (ObjectStatus == 3 && Speed != 0.0f)) {
+	if ((NeedSpeed != 0.0f) || ((ObjectStatus == eObjectStatus::Player) && (Speed != 0.0f))) {
 		float Sign = 1.0f;
 		// нужно двигать назад
 		if (NeedSpeed < 0.0f)
@@ -926,11 +928,12 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (Weapon != nullptr) {
 		// если залп или игрок (игроку регулируем сами)
-		if (WeaponFireType == 1 || ObjectStatus == 3) {
-			for (int i=0; i<WeaponQuantity; i++)
+		if ((WeaponFireType == 1) || (ObjectStatus == eObjectStatus::Player)) {
+			for (int i=0; i<WeaponQuantity; i++) {
 				if ((Weapon[i] != nullptr) &&
 				    (WeaponSetFire[i]))
 					Weapon[i]->WeaponFire(Time);
+			}
 		} else { // переменный огонь
 
 			int PrimCount = 0;
@@ -1085,11 +1088,10 @@ bool cSpaceShip::Update(float Time)
 		}
 
 	// только для корабля игрока - небольшое болтание во время полета
-	if ((ObjectStatus == 3) &&
-	    (DeviationOn)) {
-			NeedWeaponRotate = false;
-			SetRotation((Deviation[0]^(CurentDeviation[0]*50.0f)));
-		}
+	if ((ObjectStatus == eObjectStatus::Player) && DeviationOn) {
+		NeedWeaponRotate = false;
+		SetRotation((Deviation[0]^(CurentDeviation[0]*50.0f)));
+	}
 
 
 
@@ -1127,8 +1129,8 @@ bool cSpaceShip::Update(float Time)
 
 
 	// если это не корабль игрока и включена девиация
-	if (ObjectStatus != 3)
-		if (DeviationOn) Velocity += Deviation[0]^CurentDeviation[0];
+	if ((ObjectStatus != eObjectStatus::Player) && DeviationOn)
+		Velocity += Deviation[0]^CurentDeviation[0];
 
 
 
@@ -1188,12 +1190,12 @@ bool cSpaceShip::Update(float Time)
 
 
 	// если не игрок игрок и есть режим действия - нужно "искать" противника
-	if (ObjectStatus == 1 && NeedFire) {
+	if ((ObjectStatus == eObjectStatus::Enemy) && NeedFire) {
 		sVECTOR3D NeedAngle = Rotation;
 
 		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
 		int tmpID = ID;
-		ID = 111111;
+		ID = 111111; // FIXME
 
 		// находим среднюю точку положение оружия
 		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
@@ -1257,7 +1259,7 @@ bool cSpaceShip::Update(float Time)
 
 		ID = tmpID;
 	}
-	if ((ObjectStatus == 1) && NeedBossFire) {
+	if ((ObjectStatus == eObjectStatus::Enemy) && NeedBossFire) {
 		sVECTOR3D NeedAngle = Rotation;
 
 		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
@@ -1333,7 +1335,7 @@ bool cSpaceShip::Update(float Time)
 	// если в игре, а не в меню - иначе в оружейной дергается оружие
 	if (MenuStatus == eMenuStatus::GAME)
 		// так стреляют только свои :)
-		if (ObjectStatus == 2) {
+		if (ObjectStatus == eObjectStatus::Ally) {
 			// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
 			int tmpID = ID;
 			ID = 111111;
@@ -1436,7 +1438,7 @@ bool cSpaceShip::Update(float Time)
 
 
 	// если корабль игрока
-	if (ObjectStatus == 3) {
+	if (ObjectStatus == eObjectStatus::Player) {
 		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
 		int tmpID = ID;
 		ID = 111111;

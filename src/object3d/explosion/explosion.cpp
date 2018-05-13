@@ -34,9 +34,7 @@
 //-----------------------------------------------------------------------------
 cExplosion::cExplosion()
 {
-
-	// ставим тот, что нужно... т.е. того кого взорвали
-	ObjectStatus = 1; // чужой
+	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::Explosion;
 
 	// нужно рисовать без оптимизации

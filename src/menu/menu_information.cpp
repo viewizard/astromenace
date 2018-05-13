@@ -392,7 +392,7 @@ void CreateInfoObject()
 		InfoMine = new cProjectile;
 		InfoMine->Create(213+tmpCreateNum);
 		InfoMine->ID = 1000;
-		InfoMine->ObjectStatus = -1; // чтобы не наводилось
+		InfoMine->ObjectStatus = eObjectStatus::none; // чтобы не наводилось
 		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
 		InfoMine->GraphicFXDestroyType = true;
 		InfoMine->SetLocation(sVECTOR3D(1000,-1000-InfoMine->AABB[6].y, 0));

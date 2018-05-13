@@ -233,9 +233,7 @@ static sWeaponData PresetPirateWeaponData[] = {
 //-----------------------------------------------------------------------------
 cWeapon::cWeapon()
 {
-	// друг
-	ObjectStatus = 2;
-
+	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::ShipWeapon;
 
 	// никогда не показываем линию
@@ -275,8 +273,7 @@ void cWeapon::Create(int WeaponNum)
 
 	// 1-99 - это оружие землян
 	if (WeaponNum >= 1 && WeaponNum <= 99) {
-		// союзник
-		ObjectStatus = 2;
+		ObjectStatus = eObjectStatus::Ally;
 
 		Strength = StrengthStart = PresetEarthWeaponData[WeaponNum-1].Strength;
 		WeaponLevel = PresetEarthWeaponData[WeaponNum-1].WeaponLevel;
@@ -313,8 +310,7 @@ void cWeapon::Create(int WeaponNum)
 		// внутренний номер
 		int IntWeaponNum = WeaponNum - 100;
 
-		// враг
-		ObjectStatus = 1;
+		ObjectStatus = eObjectStatus::Enemy;
 
 		Strength = StrengthStart = PresetAlienWeaponData[IntWeaponNum-1].Strength;
 		WeaponLevel = PresetAlienWeaponData[IntWeaponNum-1].WeaponLevel;
@@ -332,8 +328,7 @@ void cWeapon::Create(int WeaponNum)
 		// внутренний номер
 		int IntWeaponNum = WeaponNum - 200;
 
-		// враг
-		ObjectStatus = 1;
+		ObjectStatus = eObjectStatus::Enemy;
 
 		Strength = StrengthStart = PresetPirateWeaponData[IntWeaponNum-1].Strength;
 		WeaponLevel = PresetPirateWeaponData[IntWeaponNum-1].WeaponLevel;
@@ -591,7 +586,8 @@ bool cWeapon::Update(float Time)
 				// общий - пенальти, если не игрок
 				float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
 				// если игрок - ничего не надо...
-				if (ObjectStatus >= 2) CurrentPenalty = 1.0f;
+				if ((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player))
+					CurrentPenalty = 1.0f;
 
 				switch (SwampNum) {
 				case 9:
@@ -735,7 +731,7 @@ bool cWeapon::Update(float Time)
 			// находимся в начальном состоянии поворота ствола
 			sVECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
 			GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
-						      CurrentRotationMat,	&NeedAngle, InternalType);
+						      CurrentRotationMat, &NeedAngle, InternalType);
 
 			// наводим на цель
 			TargetHorizObjectNeedAngle = NeedAngle.y;
@@ -1005,13 +1001,15 @@ bool cWeapon::WeaponFire(float Time)
 {
 
 	// если оружие не установлено - нам тут делать нечего
-	if (InternalType == 0) return false;
+	if (InternalType == 0)
+		return false;
 
 
 	// общий - пенальти, если не игрок
 	float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
 	// если игрок или свои - ничего не надо...
-	if (ObjectStatus >= 2) CurrentPenalty = 1.0f;
+	if ((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player))
+		CurrentPenalty = 1.0f;
 
 
 	// если фларес - тоже ничего не надо
@@ -1097,13 +1095,16 @@ bool cWeapon::WeaponFire(float Time)
 
 
 		// только для игрока! проверяем заряд энергии для выстрела
-		if (ObjectStatus == 3) {
-			if (CurrentEnergyAccumulated < EnergyUse) return false;
-			else CurrentEnergyAccumulated = 0.0f;
+		if (ObjectStatus == eObjectStatus::Player) {
+			if (CurrentEnergyAccumulated < EnergyUse)
+				return false;
+			else
+				CurrentEnergyAccumulated = 0.0f;
 		}
 
 		// ум. кол-во боеприпасов, если нужно
-		if (GameLimitedAmmo == 0) Ammo -= 1;
+		if (GameLimitedAmmo == 0)
+			Ammo -= 1;
 
 
 		// делаем вспышку возле ствола для всего оружия землят (только землян), если это не ракетная установка

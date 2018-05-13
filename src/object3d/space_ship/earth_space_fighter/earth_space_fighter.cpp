@@ -517,7 +517,7 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 		return;
 	}
 
-	ObjectStatus = 2; // свой
+	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::EarthFighter;
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;

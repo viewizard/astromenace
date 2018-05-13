@@ -299,7 +299,7 @@ bool cMissionScript::Update(float Time)
 			int tmpEnemyCount{0};
 			cSpaceShip *tmpObject = StartSpaceShip;
 			while (tmpObject) {
-				if ((tmpObject->ObjectStatus == 1) && (tmpObject->ShowDeleteOnHide != 0))
+				if ((tmpObject->ObjectStatus == eObjectStatus::Enemy) && (tmpObject->ShowDeleteOnHide != 0))
 					tmpEnemyCount++;
 				tmpObject = tmpObject->Next;
 			}

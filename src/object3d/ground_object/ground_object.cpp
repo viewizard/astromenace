@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 cGroundObject::cGroundObject()
 {
-	ObjectStatus = 1; // чужой
+	ObjectStatus = eObjectStatus::Enemy;
 
 	// подключаем к своему списку
 	AttachGroundObject(this);

@@ -75,7 +75,7 @@ void cPirateShip::Create(int PirateShipNum)
 		return;
 	}
 
-	ObjectStatus = 1; // чужой
+	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::PirateShip;
 	InternalType = PirateShipNum;
 	PromptDrawDist2 = 100.0f;

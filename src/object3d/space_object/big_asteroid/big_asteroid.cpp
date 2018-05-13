@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
 void cBigAsteroid::Create(int AsteroidNum)
 {
-	ObjectStatus = 1; // чужой
+	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BigAsteroid;
 
 	// задали первичный, нужно случайным образом найти

@@ -36,8 +36,8 @@
 //-----------------------------------------------------------------------------
 void cBasePart::Create(int BasePartNum)
 {
+	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BasePart;
-	ObjectStatus = 1; // чужой
 	NeedAlphaTest = true;
 
 	// задали первичный, нужно случайным образом найти

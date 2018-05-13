@@ -47,6 +47,13 @@ extern int GameTargetingMechanicSystem;
 
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
 
+enum class eObjectStatus {
+	none,
+	Enemy,
+	Ally,
+	Player
+};
+
 enum class eObjectType {
 	none,
 	EarthFighter,
@@ -89,15 +96,14 @@ public:
 	// Установка углов поворота модели
 	virtual void	SetRotation(sVECTOR3D NewRotation);
 
-	// статус объекта свой-чужой (1враг-2друг-3игрок)
-	int	ObjectStatus{2};
+	// in-game object's status relatively to player
+	eObjectStatus ObjectStatus{eObjectStatus::none};
 	// флаг показать - удалить -1 - не задействован, 0-ждем показа, 1-показали, 2-нужно удалить
-	int	ShowDeleteOnHide{-1};
-	// уникальный идентифакационный номер, или 0, если он не нужен
-	int	ID{0};
-	// тип объекта
+	int ShowDeleteOnHide{-1};
+	// unique object ID (or 0, if not applicable)
+	int ID{0};
+	// global object type
 	eObjectType ObjectType{eObjectType::none};
-
 	// internal object's type for objects with same ObjectType, usually, same as creation type (num)
 	int InternalType{0};
 
@@ -245,24 +251,24 @@ bool NeedCheckCollision(cObject3D* Object3D);
 void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum,
 		    float TriangleSizeLimit, bool NeedTangentAndBinormal=false);
 // Получение угла поворота оружия на врага
-void GetShipOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
+void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
 				 float MinDistance, float (&RotationMatrix)[9], sVECTOR3D *NeedAngle,
 				 float ObjectWidth, bool NeedCenterOrientation,
 				 bool NeedByWeaponOrientation, sVECTOR3D WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
-void GetEnemyShipOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
+void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
 				      float (&RotationMatrix)[9], sVECTOR3D *NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
-bool GetTurretOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
+bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
 				   float (&RotationMatrix)[9], sVECTOR3D *NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
-cObject3D *GetMissileOnTargetOrientateion(int ObjectStatus, sVECTOR3D Location,
+cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location,
 					  sVECTOR3D CurrentObjectRotation, float (&RotationMatrix)[9],
 					  sVECTOR3D *NeedAngle, float MaxDistance);
 bool GetMissileOnTargetOrientateion(sVECTOR3D Location, sVECTOR3D CurrentObjectRotation, float (&RotationMatrix)[9],
 				    cObject3D *TargetObject, sVECTOR3D *NeedAngle);
 bool GetMissileTargetStatus(cObject3D *TargetObject, sVECTOR3D Location, float (&RotationMatrix)[9]);
 // Получение положения ближайшего врага, для мин
-cObject3D *GetCloserTargetPosition(int ObjectStatus, sVECTOR3D Location);
+cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, sVECTOR3D Location);
 
 #endif // OBJECT3D_H

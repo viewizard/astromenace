@@ -36,14 +36,12 @@
 //-----------------------------------------------------------------------------
 cSpaceObject::cSpaceObject()
 {
-
-	ObjectStatus = 1; // чужой
+	ObjectStatus = eObjectStatus::Enemy;
 
 	LastCameraPoint = GamePoint;
 
 	// подключаем к своему списку
 	AttachSpaceObject(this);
-
 }
 
 

@@ -67,7 +67,7 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 		return;
 	}
 
-	ObjectStatus = 1; // чужой
+	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::AlienMotherShip;
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 20000.0f;
