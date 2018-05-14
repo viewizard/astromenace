@@ -137,6 +137,16 @@ public:
 	float	MoveUp{0.0f};
 	float	MoveDown{0.0f};
 
+	// небольшая девиация-болтание корабля
+	bool DeviationOn{false};
+	int DeviationObjQuantity{0};
+	sVECTOR3D *Deviation{nullptr};
+	float *CurentDeviation{nullptr};
+	float *NeedDeviation{nullptr};
+	float *CurentDeviationSum{nullptr};
+	// ассоциированный объект (если нужно)
+	int *DeviationObjNum{nullptr};
+
 	// кол-во оружия доступного на данной моделе
 	int		WeaponQuantity{0};
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е

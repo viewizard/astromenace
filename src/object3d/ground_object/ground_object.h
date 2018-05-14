@@ -138,6 +138,16 @@ public:
 	int	BarrelObjectQuantity{0};
 	int	*BarrelObject{nullptr};
 
+	// небольшая девиация-болтание колес
+	bool DeviationOn{false};
+	int DeviationObjQuantity{0};
+	sVECTOR3D *Deviation{nullptr};
+	float *CurentDeviation{nullptr};
+	float *NeedDeviation{nullptr};
+	float *CurentDeviationSum{nullptr};
+	// ассоциированный объект (если нужно)
+	int *DeviationObjNum{nullptr};
+
 	// для собственного списка
 	cGroundObject	*Next{nullptr};
 	cGroundObject	*Prev{nullptr};

@@ -164,16 +164,6 @@ public:
 	// время между апдейтами
 	float TimeDelta{0.0f};
 
-	// небольшая девиация-болтание модели или каки-то объектов
-	bool DeviationOn{false};
-	int DeviationObjQuantity{0};
-	sVECTOR3D *Deviation{nullptr};
-	float *CurentDeviation{nullptr};
-	float *NeedDeviation{nullptr};
-	float *CurentDeviationSum{nullptr};
-	// ассоциированный объект (если нужно)
-	int *DeviationObjNum{nullptr};
-
 	// текстура для объектов геометрии
 	std::vector<GLtexture> Texture{};
 	std::vector<GLtexture> TextureIllum{};

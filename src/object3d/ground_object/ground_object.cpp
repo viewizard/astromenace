@@ -75,6 +75,19 @@ cGroundObject::~cGroundObject()
 		BarrelObject = nullptr;
 	};
 
+	if (DeviationObjQuantity != 0) {
+		if (Deviation != nullptr)
+			delete [] Deviation;
+		if (NeedDeviation != nullptr)
+			delete [] NeedDeviation;
+		if (CurentDeviation != nullptr)
+			delete [] CurentDeviation;
+		if (CurentDeviationSum != nullptr)
+			delete [] CurentDeviationSum;
+		if (DeviationObjNum != nullptr)
+			delete [] DeviationObjNum;
+	}
+
 	DetachGroundObject(this);
 }
 

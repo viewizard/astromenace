@@ -59,19 +59,6 @@ cObject3D::~cObject3D()
 		delete [] HitBBRadius2;
 	if (HitBBSize != nullptr)
 		delete [] HitBBSize;
-
-	if (DeviationObjQuantity != 0) {
-		if (Deviation != nullptr)
-			delete [] Deviation;
-		if (NeedDeviation != nullptr)
-			delete [] NeedDeviation;
-		if (CurentDeviation != nullptr)
-			delete [] CurentDeviation;
-		if (CurentDeviationSum != nullptr)
-			delete [] CurentDeviationSum;
-		if (DeviationObjNum != nullptr)
-			delete [] DeviationObjNum;
-	}
 }
 
 
