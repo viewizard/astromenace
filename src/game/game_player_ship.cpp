@@ -237,7 +237,6 @@ void InitGamePlayerShip()
 	PlayerFighter->DeviationOn = true;
 	PlayerFighter->Deviation[0] = sVECTOR3D(0.0f, 0.0f, 1.0f);
 
-	PlayerFighter->ID = -1;
 	PlayerFighter->ObjectStatus = eObjectStatus::Player;
 	PlayerFighter->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 	PlayerFighter->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;

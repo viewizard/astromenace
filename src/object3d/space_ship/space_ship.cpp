@@ -1193,10 +1193,6 @@ bool cSpaceShip::Update(float Time)
 	if ((ObjectStatus == eObjectStatus::Enemy) && NeedFire) {
 		sVECTOR3D NeedAngle = Rotation;
 
-		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
-		int tmpID = ID;
-		ID = 111111; // FIXME
-
 		// находим среднюю точку положение оружия
 		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
@@ -1241,7 +1237,7 @@ bool cSpaceShip::Update(float Time)
 		}
 
 		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-						 CurrentRotationMat, &NeedAngle,	WeapNum);
+						 CurrentRotationMat, &NeedAngle, WeapNum);
 
 		// всему оружию ставим нужную ориентацию
 		if (Weapon != nullptr) {
@@ -1256,15 +1252,10 @@ bool cSpaceShip::Update(float Time)
 				}
 			}
 		}
-
-		ID = tmpID;
 	}
+
 	if ((ObjectStatus == eObjectStatus::Enemy) && NeedBossFire) {
 		sVECTOR3D NeedAngle = Rotation;
-
-		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
-		int tmpID = ID;
-		ID = 111111;
 
 		// находим среднюю точку положение оружия
 		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
@@ -1324,113 +1315,101 @@ bool cSpaceShip::Update(float Time)
 				}
 			}
 		}
-
-		ID = tmpID;
 	}
 
 
 
 
 
-	// если в игре, а не в меню - иначе в оружейной дергается оружие
-	if (MenuStatus == eMenuStatus::GAME)
-		// так стреляют только свои :)
-		if (ObjectStatus == eObjectStatus::Ally) {
-			// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
-			int tmpID = ID;
-			ID = 111111;
+	// так стреляют только свои :)
+	if (ObjectStatus == eObjectStatus::Ally) {
 
-			// находим среднюю точку положение оружия
-			sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
-			int UsedWeaponQunt = 0;
-			if (Weapon != nullptr) {
-				for (int i=0; i<WeaponQuantity; i++) {
-					if (Weapon[i] != nullptr) {
-						WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
-						UsedWeaponQunt++;
-					}
+		// находим среднюю точку положение оружия
+		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		int UsedWeaponQunt = 0;
+		if (Weapon != nullptr) {
+			for (int i=0; i<WeaponQuantity; i++) {
+				if (Weapon[i] != nullptr) {
+					WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
+					UsedWeaponQunt++;
 				}
 			}
-			WeaponAvLocation.x = WeaponAvLocation.x / UsedWeaponQunt;
-			WeaponAvLocation.y = WeaponAvLocation.y / UsedWeaponQunt;
-			WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
-
-
-			sVECTOR3D NeedAngle = Rotation;
-
-			// всему оружию ставим нужную ориентацию
-			if (Weapon != nullptr) {
-				// ставим скорость наведения оружия
-				float TargetingSpeed = 1.0f;
-
-				for (int i = 0; i < WeaponQuantity; i++) {
-					if ((Weapon[i] !=nullptr) &&
-					    (Weapon[i]->NeedRotateOnTargeting)) {
-						NeedAngle = Rotation;
-						// добавляем базовый угол, чтобы по умолчанию устанавливало его
-						NeedAngle.y += WeaponYAngle[i];
-
-						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Rotation,
-									    Length, CurrentRotationMat, &NeedAngle, Width, true, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
-
-						sVECTOR3D NeedAngleTmp = NeedAngle;
-
-						// учитываем скорость поворота по вертикали
-						if (Weapon[i]->Rotation.x < NeedAngle.x) {
-							float NeedAngle_x = Weapon[i]->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
-							if (NeedAngle_x > NeedAngle.x)
-								NeedAngle_x = NeedAngle.x;
-							NeedAngle.x = NeedAngle_x;
-
-						}
-						if (Weapon[i]->Rotation.x > NeedAngle.x) {
-							float NeedAngle_x = Weapon[i]->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
-							if (NeedAngle_x < NeedAngle.x)
-								NeedAngle_x = NeedAngle.x;
-							NeedAngle.x = NeedAngle_x;
-						}
-
-						// учитываем скорость поворота по горизонтали
-						float Min = 0.0f;
-						float Max = 0.0f;
-						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
-						if (Weapon[i]->Rotation.y < NeedAngle.y) {
-							float NeedAngle_y = Weapon[i]->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
-							if (NeedAngle_y > NeedAngle.y)
-								NeedAngle_y = NeedAngle.y;
-							NeedAngle.y = NeedAngle_y;
-							// проверка на достижение предела поворота
-							if (NeedAngle.y > Max+Rotation.y)
-								NeedAngle.y = Max+Rotation.y;
-						}
-						if (Weapon[i]->Rotation.y > NeedAngle.y) {
-							float NeedAngle_y = Weapon[i]->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
-							if (NeedAngle_y < NeedAngle.y)
-								NeedAngle_y = NeedAngle.y;
-							NeedAngle.y = NeedAngle_y;
-							// проверка на достижение предела поворота
-							if (NeedAngle.y < Min+Rotation.y)
-								NeedAngle.y = Min+Rotation.y;
-						}
-
-
-						// если выключен прикол с поворотом - моментально поворачиваем ствол
-						if (GameWeaponTargetingMode == 1)
-							NeedAngle = NeedAngleTmp;
-
-
-						// если это не ракетные системы, нужно повернуть
-						if (Weapon[i]->InternalType < 16) {
-							Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1));
-							Weapon[i]->SetRotation(NeedAngle);
-						}
-					}
-				}
-			}
-
-			ID = tmpID;
 		}
+		WeaponAvLocation.x = WeaponAvLocation.x / UsedWeaponQunt;
+		WeaponAvLocation.y = WeaponAvLocation.y / UsedWeaponQunt;
+		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
+
+		sVECTOR3D NeedAngle = Rotation;
+
+		// всему оружию ставим нужную ориентацию
+		if (Weapon != nullptr) {
+			// ставим скорость наведения оружия
+			float TargetingSpeed = 1.0f;
+
+			for (int i = 0; i < WeaponQuantity; i++) {
+				if ((Weapon[i] !=nullptr) &&
+				    (Weapon[i]->NeedRotateOnTargeting)) {
+					NeedAngle = Rotation;
+					// добавляем базовый угол, чтобы по умолчанию устанавливало его
+					NeedAngle.y += WeaponYAngle[i];
+
+					GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Rotation,
+								    Length, CurrentRotationMat, &NeedAngle, Width, true, true,
+								    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
+
+					sVECTOR3D NeedAngleTmp = NeedAngle;
+
+					// учитываем скорость поворота по вертикали
+					if (Weapon[i]->Rotation.x < NeedAngle.x) {
+						float NeedAngle_x = Weapon[i]->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
+						if (NeedAngle_x > NeedAngle.x)
+							NeedAngle_x = NeedAngle.x;
+						NeedAngle.x = NeedAngle_x;
+
+					}
+					if (Weapon[i]->Rotation.x > NeedAngle.x) {
+						float NeedAngle_x = Weapon[i]->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
+						if (NeedAngle_x < NeedAngle.x)
+							NeedAngle_x = NeedAngle.x;
+						NeedAngle.x = NeedAngle_x;
+					}
+
+					// учитываем скорость поворота по горизонтали
+					float Min = 0.0f;
+					float Max = 0.0f;
+					GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
+					if (Weapon[i]->Rotation.y < NeedAngle.y) {
+						float NeedAngle_y = Weapon[i]->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
+						if (NeedAngle_y > NeedAngle.y)
+							NeedAngle_y = NeedAngle.y;
+						NeedAngle.y = NeedAngle_y;
+						// проверка на достижение предела поворота
+						if (NeedAngle.y > Max+Rotation.y)
+							NeedAngle.y = Max+Rotation.y;
+					}
+					if (Weapon[i]->Rotation.y > NeedAngle.y) {
+						float NeedAngle_y = Weapon[i]->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
+						if (NeedAngle_y < NeedAngle.y)
+							NeedAngle_y = NeedAngle.y;
+						NeedAngle.y = NeedAngle_y;
+						// проверка на достижение предела поворота
+						if (NeedAngle.y < Min+Rotation.y)
+							NeedAngle.y = Min+Rotation.y;
+					}
+
+					// если выключен прикол с поворотом - моментально поворачиваем ствол
+					if (GameWeaponTargetingMode == 1)
+						NeedAngle = NeedAngleTmp;
+
+					// если это не ракетные системы, нужно повернуть
+					if (Weapon[i]->InternalType < 16) {
+						Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1));
+						Weapon[i]->SetRotation(NeedAngle);
+					}
+				}
+			}
+		}
+	}
 
 
 
@@ -1439,9 +1418,6 @@ bool cSpaceShip::Update(float Time)
 
 	// если корабль игрока
 	if (ObjectStatus == eObjectStatus::Player) {
-		// используем ID как маркер, чтобы не обрабатывать этот объект в процедуре
-		int tmpID = ID;
-		ID = 111111;
 
 		// ставим скорость наведения оружия
 		float TargetingSpeed = GameTargetingMechanicSystem*1.0f;
@@ -1492,7 +1468,7 @@ bool cSpaceShip::Update(float Time)
 
 
 		// всему оружию ставим нужную ориентацию
-		if (Weapon != nullptr)
+		if (Weapon != nullptr) {
 			for (int i = 0; i < WeaponQuantity; i++) {
 				if ((Weapon[i] != nullptr) &&
 				    (Weapon[i]->NeedRotateOnTargeting)) {
@@ -1575,8 +1551,7 @@ bool cSpaceShip::Update(float Time)
 					Weapon[i]->SetRotation(NeedAngle);
 				}
 			}
-
-		ID = tmpID;
+		}
 	}
 
 

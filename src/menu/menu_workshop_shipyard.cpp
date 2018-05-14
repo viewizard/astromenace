@@ -338,7 +338,7 @@ void WorkshopCreateBuyShip()
 
 	WorkshopFighterGame = new cEarthSpaceFighter;
 	WorkshopFighterGame->Create(GameConfig().Profile[CurrentProfile].Ship);
-	WorkshopFighterGame->ID = 1000;
+	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	WorkshopFighterGame->EngineDestroyType = true;
 	WorkshopFighterGame->ShowStrength = false;
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = WorkshopFighterGame->Strength;

@@ -92,7 +92,7 @@ void WorkshopCreateShip(int Num)
 	WorkshopFighterGame->Create(GameConfig().Profile[CurrentProfile].Ship);
 	WorkshopFighterGame->DeviationOn = true;
 
-	WorkshopFighterGame->ID = 1000;
+	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	WorkshopFighterGame->EngineDestroyType = true;
 	WorkshopFighterGame->ShowStrength = false;
 
@@ -159,7 +159,7 @@ void WorkshopCreateNewShip()
 	WorkshopNewFighter->Create(CurrentWorkshopNewFighter);
 	WorkshopNewFighter->DeviationOn = true;
 
-	WorkshopNewFighter->ID = 1001;
+	WorkshopNewFighter->ObjectStatus = eObjectStatus::none;
 	WorkshopNewFighter->EngineDestroyType = true;
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
@@ -188,6 +188,7 @@ void WorkshopCreateNewWeapon()
 	WorkshopNewWeapon = new cWeapon;
 	WorkshopNewWeapon->Create(CurrentWorkshopNewWeapon);
 
+	WorkshopNewWeapon->ObjectStatus = eObjectStatus::none;
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
 
 	sVECTOR3D Ptmp = sVECTOR3D(0,-(WorkshopNewWeapon->Height/2.0f + WorkshopNewWeapon->AABB[6].y), -(WorkshopNewWeapon->Length/2.0f + WorkshopNewWeapon->AABB[6].z)-0.5f);

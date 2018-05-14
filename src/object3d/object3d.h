@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef OBJECT3D_H
 #define OBJECT3D_H
 
@@ -32,6 +34,7 @@
 #include "../struct.h"
 #include "../script/script.h"
 
+// FIXME should be fixed, don't allow global scope interaction for local variables
 extern int GameNPCWeaponPenalty;
 extern int GameNPCArmorPenalty;
 extern int GameNPCTargetingSpeedPenalty;
@@ -44,7 +47,7 @@ extern int GameTargetingSystem;
 extern int GameAdvancedProtectionSystem;
 extern int GamePowerSystem;
 extern int GameTargetingMechanicSystem;
-
+// FIXME should be fixed, use 'include' instead
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
 
 enum class eObjectStatus {
@@ -89,27 +92,25 @@ public:
 	virtual ~cObject3D();
 
 	// Установка AABB, OBB и габаритов по геометрии объекта
-	virtual void	InitByDrawObjectList();
+	virtual void InitByDrawObjectList();
 	// Прорисовка объектa Object3D
-	virtual void	Draw(bool VertexOnlyPass, bool ShadowMap=false);
-	bool		NeedCullFaces{true}; // нужно резать бэк фейсы
-	bool		NeedAlphaTest{false}; // нужно включить альфа тест
+	virtual void Draw(bool VertexOnlyPass, bool ShadowMap=false);
+	bool NeedCullFaces{true}; // нужно резать бэк фейсы
+	bool NeedAlphaTest{false}; // нужно включить альфа тест
 	// Обновление данных объектa Object3D
 	virtual bool	Update(float Time);
 
 	// Установка положения 1 объекта модели
-	void	SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum);
+	void SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum);
 	// Установка углов поворота 1 объекта модели
-	void	SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum);
+	void SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum);
 	// Установка положения модели
-	virtual void	SetLocation(sVECTOR3D NewLocation);
+	virtual void SetLocation(sVECTOR3D NewLocation);
 	// Установка углов поворота модели
-	virtual void	SetRotation(sVECTOR3D NewRotation);
+	virtual void SetRotation(sVECTOR3D NewRotation);
 
 	// in-game object's status relatively to player
 	eObjectStatus ObjectStatus{eObjectStatus::none};
-	// unique object ID (or 0, if not applicable)
-	int ID{0};
 	// global object type
 	eObjectType ObjectType{eObjectType::none};
 	// internal object's type for objects with same ObjectType, usually, same as creation type (num)
@@ -118,60 +119,60 @@ public:
 	// in case we need show object and delete after it leave scene (after DeleteAfterLeaveSceneDelay time)
 	eDeleteAfterLeaveScene DeleteAfterLeaveScene{eDeleteAfterLeaveScene::disabled};
 	// время жизни объекта в секундах, оставшееся
-	float	Lifetime{-1.0f};
+	float Lifetime{-1.0f};
 
 	// направление, куда ориентирован объект
-	sVECTOR3D	Orientation{0.0f, 0.0f, 1.0f};
+	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
 	// углы поворота объекта по трем осям на данный момент
-	sVECTOR3D	Rotation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
 	// обратный угол поворота, старого
-	sVECTOR3D	OldRotationInv{0.0f, 0.0f, 0.0f};
+	sVECTOR3D OldRotationInv{0.0f, 0.0f, 0.0f};
 	// положение объекта
-	sVECTOR3D	Location{0.0f, 0.0f, 0.0f};
-	sVECTOR3D	GeometryCenterLocation{0.0f, 0.0f, 0.0f}; // точка "центра геометрии" внутри модели
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D GeometryCenterLocation{0.0f, 0.0f, 0.0f}; // точка "центра геометрии" внутри модели
 	// предыдущее положение объекта
-	sVECTOR3D	PrevLocation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
 	// коробки объекта для проверки прорисовки и коллизий
-	sVECTOR3D	AABB[8]{{0.0f, 0.0f, 0.0f},
-				{0.0f, 0.0f, 0.0f},
-				{0.0f, 0.0f, 0.0f},
-				{0.0f, 0.0f, 0.0f},
-				{0.0f, 0.0f, 0.0f},
-				{0.0f, 0.0f, 0.0f},
-				{0.0f, 0.0f, 0.0f},
-				{0.0f, 0.0f, 0.0f}}; // в AABB всегда абсолютные координаты (относ. коорд. модели)
-	sVECTOR3D	OBB[8]{{0.0f, 0.0f, 0.0f},
-			       {0.0f, 0.0f, 0.0f},
-			       {0.0f, 0.0f, 0.0f},
-			       {0.0f, 0.0f, 0.0f},
-			       {0.0f, 0.0f, 0.0f},
-			       {0.0f, 0.0f, 0.0f},
-			       {0.0f, 0.0f, 0.0f},
-			       {0.0f, 0.0f, 0.0f}};
-	sVECTOR3D	OBBLocation{0.0f, 0.0f, 0.0f}; // положение OBB относительно координат модели
+	sVECTOR3D AABB[8]{{0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f}}; // в AABB всегда абсолютные координаты
+	sVECTOR3D OBB[8]{{0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f}};
+	sVECTOR3D OBBLocation{0.0f, 0.0f, 0.0f}; // положение OBB относительно координат модели
 	// для каждого объекта в моделе
-	sVECTOR3D	**HitBB{nullptr};
-	sVECTOR3D	*HitBBLocation{nullptr}; // положение HitBB относительно координат модели
-	float		*HitBBRadius2{nullptr}; 	// квадрат радиуса HitBB
-	sVECTOR3D	*HitBBSize{nullptr}; // размеры HitBB
+	sVECTOR3D **HitBB{nullptr};
+	sVECTOR3D *HitBBLocation{nullptr}; // положение HitBB относительно координат модели
+	float *HitBBRadius2{nullptr}; 	// квадрат радиуса HitBB
+	sVECTOR3D *HitBBSize{nullptr}; // размеры HitBB
 	// радиус, для первой проверки коллизий
-	float		Radius{0.0f};
+	float Radius{0.0f};
 
 	// последнее время, когда проверяли-обновляли объект
-	float	TimeLastUpdate{-1.0f};
+	float TimeLastUpdate{-1.0f};
 	// время между апдейтами
-	float	TimeDelta{0.0f};
+	float TimeDelta{0.0f};
 
 	// небольшая девиация-болтание модели или каки-то объектов
-	bool		DeviationOn{false};
-	int		DeviationObjQuantity{0};
-	sVECTOR3D	*Deviation{nullptr};
-	float		*CurentDeviation{nullptr};
-	float		*NeedDeviation{nullptr};
-	float		*CurentDeviationSum{nullptr};
+	bool DeviationOn{false};
+	int DeviationObjQuantity{0};
+	sVECTOR3D *Deviation{nullptr};
+	float *CurentDeviation{nullptr};
+	float *NeedDeviation{nullptr};
+	float *CurentDeviationSum{nullptr};
 	// ассоциированный объект (если нужно)
-	int		*DeviationObjNum{nullptr};
+	int *DeviationObjNum{nullptr};
 
 	// текстура для объектов геометрии
 	std::vector<GLtexture> Texture{};
@@ -186,48 +187,48 @@ public:
 	GLuint GlobalIBO{0};
 	GLuint GlobalVAO{0};
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно
-	float		PromptDrawDist2{-1.0f};
-	int		InternalLights{0}; // кол-во внутренних источников света
+	float PromptDrawDist2{-1.0f};
+	int InternalLights{0}; // кол-во внутренних источников света
 
 	// данные материала объекта
-	float	Diffuse[4]{1.0f, 1.0f, 1.0f, 1.0f};
-	float	Specular[4]{1.0f, 1.0f, 1.0f, 1.0f};
-	float	Ambient[4]{0.1f, 0.1f, 0.1f, 0.1f};
-	float	Power[1]{64.0f};
+	float Diffuse[4]{1.0f, 1.0f, 1.0f, 1.0f};
+	float Specular[4]{1.0f, 1.0f, 1.0f, 1.0f};
+	float Ambient[4]{0.1f, 0.1f, 0.1f, 0.1f};
+	float Power[1]{64.0f};
 
 	// вес объекта
-	float	Weight{1.0f};
+	float Weight{1.0f};
 	// ширина
-	float	Width{1.0f};
+	float Width{1.0f};
 	// длина
-	float	Length{1.0f};
+	float Length{1.0f};
 	// высота
-	float	Height{1.0f};
+	float Height{1.0f};
 	// прочность
-	float	Strength{0.0f};
-	float	StrengthStart{0.0f};
+	float Strength{0.0f};
+	float StrengthStart{0.0f};
 	// прочность щита
-	float	ShieldStrength{0.0f};
-	float	ShieldStrengthStart{0.0f};
-	float	ShieldRecharge{0.0f}; // перезарядка щита в секунду
+	float ShieldStrength{0.0f};
+	float ShieldStrengthStart{0.0f};
+	float ShieldRecharge{0.0f}; // перезарядка щита в секунду
 	// показывать полосу или нет
-	bool	ShowStrength{true};
+	bool ShowStrength{true};
 	// этот параметр устанавливается автоматически!
 	// если попали, будем всегда показывать (даже если щит перезарядился)
-	bool	NeedShowStrengthNow{false};
+	bool NeedShowStrengthNow{false};
 
 	// максимально возможное ослабление воздействий на корпус
-	float	ResistanceHull{1.0f};
+	float ResistanceHull{1.0f};
 	// максимально возможное ослабление воздействий на системы
-	float	ResistanceSystems{1.0f};
+	float ResistanceSystems{1.0f};
 
 	// матрицы поворота, для оптимизации просчетов
-	float	CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
-				      0.0f, 1.0f, 0.0f,
-				      0.0f, 0.0f, 1.0f};
-	float	OldInvRotationMat[9]{1.0f, 0.0f, 0.0f,
-				     0.0f, 1.0f, 0.0f,
-				     0.0f, 0.0f, 1.0f};
+	float CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
+				    0.0f, 1.0f, 0.0f,
+				    0.0f, 0.0f, 1.0f};
+	float OldInvRotationMat[9]{1.0f, 0.0f, 0.0f,
+				   0.0f, 1.0f, 0.0f,
+				   0.0f, 0.0f, 1.0f};
 
 	// debug info, line number in script file
 	std::u32string ScriptLineNumberUTF32{};
@@ -247,7 +248,7 @@ void ReleaseAllObject3D();
 void DrawAllObject3D(eDrawType DrawType);
 // Проверяем все объекты на столкновение
 void DetectCollisionAllObject3D();
-//	Проверяем все объекты, обновляем данные
+// Проверяем все объекты, обновляем данные
 void UpdateAllObject3D(float Time);
 
 
@@ -256,10 +257,10 @@ void UpdateAllObject3D(float Time);
 //-----------------------------------------------------------------------------
 
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
-bool NeedCheckCollision(cObject3D* Object3D);
+bool NeedCheckCollision(cObject3D *Object3D);
 // Загрузка в модель нужной геометрии
-void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum,
-		    float TriangleSizeLimit, bool NeedTangentAndBinormal=false);
+void LoadObjectData(const char *Name, cObject3D *Object3D, int ObjectNum,
+		    float TriangleSizeLimit, bool NeedTangentAndBinormal = false);
 // Получение угла поворота оружия на врага
 void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
 				 float MinDistance, float (&RotationMatrix)[9], sVECTOR3D *NeedAngle,

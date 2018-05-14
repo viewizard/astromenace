@@ -330,7 +330,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoFighterStart+1;
 		InfoFighter = new cEarthSpaceFighter;
 		InfoFighter->Create(tmpCreateNum);
-		InfoFighter->ID = 1000;
+		InfoFighter->ObjectStatus = eObjectStatus::none;
 		InfoFighter->EngineDestroyType = true;
 		InfoFighter->SetLocation(sVECTOR3D(1000,-1000-InfoFighter->AABB[6].y, 0));
 		ObjectBaseLocation = InfoFighter->Location - sVECTOR3D(1000,-1000,0);
@@ -361,7 +361,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
 		InfoWeapon = new cWeapon;
 		InfoWeapon->Create(tmpCreateNum);
-		InfoWeapon->ID = 1000;
+		InfoWeapon->ObjectStatus = eObjectStatus::none;
 		ObjectBaseLocation = sVECTOR3D(0.0f,-InfoWeapon->AABB[6].y, -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z));
 
 		Point = sVECTOR3D(1000,-1000+InfoWeapon->Height/3.0f,0);
@@ -391,8 +391,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
 		InfoMine = new cProjectile;
 		InfoMine->Create(213+tmpCreateNum);
-		InfoMine->ID = 1000;
-		InfoMine->ObjectStatus = eObjectStatus::none; // чтобы не наводилось
+		InfoMine->ObjectStatus = eObjectStatus::none;
 		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
 		InfoMine->GraphicFXDestroyType = true;
 		InfoMine->SetLocation(sVECTOR3D(1000,-1000-InfoMine->AABB[6].y, 0));
@@ -418,7 +417,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
 		InfoAlien = new cAlienSpaceFighter;
 		InfoAlien->Create(tmpCreateNum);
-		InfoAlien->ID = 1000;
+		InfoAlien->ObjectStatus = eObjectStatus::none;
 		InfoAlien->EngineDestroyType = true;
 		InfoAlien->SetLocation(sVECTOR3D(1000,-1000-InfoAlien->AABB[6].y, 0));
 		ObjectBaseLocation = InfoAlien->Location - sVECTOR3D(1000,-1000,0);
@@ -448,7 +447,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
 		InfoAlienMotherShip = new cAlienSpaceMotherShip;
 		InfoAlienMotherShip->Create(tmpCreateNum);
-		InfoAlienMotherShip->ID = 1000;
+		InfoAlienMotherShip->ObjectStatus = eObjectStatus::none;
 		InfoAlienMotherShip->EngineDestroyType = true;
 		InfoAlienMotherShip->SetLocation(sVECTOR3D(1000,-1000-InfoAlienMotherShip->AABB[6].y, 0));
 		ObjectBaseLocation = InfoAlienMotherShip->Location - sVECTOR3D(1000,-1000,0);
@@ -477,7 +476,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
 		InfoPirateShip = new cPirateShip;
 		InfoPirateShip->Create(tmpCreateNum);
-		InfoPirateShip->ID = 1000;
+		InfoPirateShip->ObjectStatus = eObjectStatus::none;
 		InfoPirateShip->EngineDestroyType = true;
 		InfoPirateShip->SetLocation(sVECTOR3D(1000,-1000-InfoPirateShip->AABB[6].y, 0));
 		ObjectBaseLocation = InfoPirateShip->Location - sVECTOR3D(1000,-1000,0);
@@ -516,7 +515,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
 		InfoBuilding = new cBuilding;
 		InfoBuilding->Create(tmpCreateNum);
-		InfoBuilding->ID = 1000;
+		InfoBuilding->ObjectStatus = eObjectStatus::none;
 		InfoBuilding->SetLocation(sVECTOR3D(1000,-1000-InfoBuilding->AABB[6].y, 0));
 		ObjectBaseLocation = InfoBuilding->Location - sVECTOR3D(1000,-1000,0);
 
@@ -539,7 +538,7 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoMilitaryBuildingStart+1;
 		InfoMilitaryBuilding = new cMilitaryBuilding;
 		InfoMilitaryBuilding->Create(tmpCreateNum);
-		InfoMilitaryBuilding->ID = 1000;
+		InfoMilitaryBuilding->ObjectStatus = eObjectStatus::none;
 		InfoMilitaryBuilding->SetLocation(sVECTOR3D(1000,-1000-InfoMilitaryBuilding->AABB[6].y, 0));
 		ObjectBaseLocation = InfoMilitaryBuilding->Location - sVECTOR3D(1000,-1000,0);
 
@@ -563,7 +562,7 @@ void CreateInfoObject()
 		InfoWheeled = new cWheeled;
 		InfoWheeled->Create(tmpCreateNum);
 		InfoWheeled->DeviationOn = true;
-		InfoWheeled->ID = 1000;
+		InfoWheeled->ObjectStatus = eObjectStatus::none;
 		InfoWheeled->SetLocation(sVECTOR3D(1000,-1000-InfoWheeled->AABB[6].y, 0));
 		ObjectBaseLocation = InfoWheeled->Location - sVECTOR3D(1000,-1000,0);
 		InfoWheeled->WheelTrackSpeed = 350.0f;
@@ -588,7 +587,7 @@ void CreateInfoObject()
 		InfoTracked = new cTracked;
 		InfoTracked->Create(tmpCreateNum);
 		InfoTracked->DeviationOn = true;
-		InfoTracked->ID = 1000;
+		InfoTracked->ObjectStatus = eObjectStatus::none;
 		InfoTracked->SetLocation(sVECTOR3D(1000,-1000-InfoTracked->AABB[6].y, 0));
 		ObjectBaseLocation = InfoTracked->Location - sVECTOR3D(1000,-1000,0);
 		InfoTracked->WheelTrackSpeed = 350.0f;

@@ -33,6 +33,7 @@
 
 //-----------------------------------------------------------------------------
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
+// так же используется для определения "неубиваемых" объектов
 //-----------------------------------------------------------------------------
 bool NeedCheckCollision(cObject3D* Object3D)
 {
@@ -228,7 +229,7 @@ void GetShipOnTargetOrientateion(
 	while (tmp != nullptr) {
 		cSpaceShip *tmpShip2 = tmp->Next;
 		// проверка, чтобы не считать свой корабль
-		if ((tmp->ID != 111111) && (NeedCheckCollision(tmp)) &&
+		if ((NeedCheckCollision(tmp)) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 			// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
@@ -1211,7 +1212,7 @@ cObject3D *GetMissileOnTargetOrientateion(
 	while (tmp != nullptr) {
 		cSpaceShip *tmpShip2 = tmp->Next;
 		// проверка, чтобы не считать свой корабль
-		if ((tmp->ID != 111111) && NeedCheckCollision(tmp) &&
+		if (NeedCheckCollision(tmp) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 
