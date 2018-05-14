@@ -27,6 +27,13 @@
 
 // TODO translate comments
 
+// TODO as soon, as cSpaceShip will be moved to STL usage with weapon (shared_ptr?),
+//      switch to eDeleteAfterLeaveScene::enabled by default and remove SetDeleteAfterLeaveScene()
+//      also explosions creation code should be corrected (remove DeleteAfterLeaveScene setup)
+
+// TODO in case DeleteAfterLeaveScene is 'enabled', also should be limited by time
+//      if object was never shown on the scene (during this time), should be deleted + warning output
+
 #ifndef OBJECT3D_H
 #define OBJECT3D_H
 
@@ -103,8 +110,12 @@ struct sHitBox {
 
 class cObject3D
 {
-public:
+protected:
+	// don't allow object of this class creation
+	cObject3D() = default;
 	virtual ~cObject3D() = default;
+
+public:
 
 	// Установка AABB, OBB и габаритов по геометрии объекта
 	virtual void InitByDrawObjectList();
@@ -113,7 +124,7 @@ public:
 	bool NeedCullFaces{true}; // нужно резать бэк фейсы
 	bool NeedAlphaTest{false}; // нужно включить альфа тест
 	// Обновление данных объектa Object3D
-	virtual bool	Update(float Time);
+	virtual bool Update(float Time);
 
 	// Установка положения 1 объекта модели
 	void SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum);
