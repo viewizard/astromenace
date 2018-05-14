@@ -137,14 +137,7 @@ void LoadObjectData(const char *Name, cObject3D* Object3D, int ObjectNum, float 
 	Object3D->NormalMap.resize(Object3D->ObjectBlocks.size(), 0);
 
 	// резервируем память для HitBB
-	Object3D->HitBBLocation = new sVECTOR3D[Object3D->ObjectBlocks.size()];
-	Object3D->HitBBRadius2 = new float[Object3D->ObjectBlocks.size()];
-	Object3D->HitBBSize = new sVECTOR3D[Object3D->ObjectBlocks.size()];
-	Object3D->HitBB = new sVECTOR3D*[Object3D->ObjectBlocks.size()];
-
-	for (unsigned int i = 0; i < Object3D->ObjectBlocks.size(); i++) {
-		Object3D->HitBB[i] = new sVECTOR3D[8];
-	}
+	Object3D->HitBox.resize(Object3D->ObjectBlocks.size());
 }
 
 

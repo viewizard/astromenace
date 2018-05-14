@@ -115,19 +115,12 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				}
 
 				// резервируем память для HitBB
-				ShipPart->HitBBLocation = new sVECTOR3D[ShipPart->ObjectBlocks.size()];
-				ShipPart->HitBBRadius2 = new float[ShipPart->ObjectBlocks.size()];
-				ShipPart->HitBBSize = new sVECTOR3D[ShipPart->ObjectBlocks.size()];
-				ShipPart->HitBB = new sVECTOR3D*[ShipPart->ObjectBlocks.size()];
-				for (unsigned int i1 = 0; i1 < ShipPart->ObjectBlocks.size(); i1++) {
-					ShipPart->HitBB[i1] = new sVECTOR3D[8];
-				}
-
+				ShipPart->HitBox.resize(ShipPart->ObjectBlocks.size());
 
 				// находим точку локального положения объекта в моделе
 				sVECTOR3D LocalLocation = Object->ObjectBlocks[i].Location;
 				vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
-				LocalLocation = Object->HitBBLocation[i]-LocalLocation;
+				LocalLocation = Object->HitBox[i].Location - LocalLocation;
 				vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
 				ShipPart->ObjectBlocks[0].Location = LocalLocation ^ (-1.0f);
@@ -136,7 +129,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				ShipPart->InitByDrawObjectList();
 
 				// установка текущего положения и поворота
-				ShipPart->SetLocation(Object->Location+Object->HitBBLocation[i]);
+				ShipPart->SetLocation(Object->Location + Object->HitBox[i].Location);
 				ShipPart->SetRotation(Object->Rotation);
 
 
