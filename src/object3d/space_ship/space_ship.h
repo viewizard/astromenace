@@ -207,8 +207,6 @@ public:
 void	AttachSpaceShip(cSpaceShip* SpaceShip);
 // Исключаем из списка
 void	DetachSpaceShip(cSpaceShip* SpaceShip);
-// Находим нужный по ID
-cSpaceShip *FindSpaceShipByID(int ID);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceShip(float Time);
 // Прорисовываем все объекты

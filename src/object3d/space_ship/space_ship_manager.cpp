@@ -95,25 +95,6 @@ void DetachSpaceShip(cSpaceShip* SpaceShip)
 
 
 //-----------------------------------------------------------------------------
-// Находим нужный объекты по ID
-//-----------------------------------------------------------------------------
-cSpaceShip *FindSpaceShipByID(int ID)
-{
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp != nullptr) {
-		cSpaceShip *tmp2 = tmp->Next;
-		if (tmp->ID == ID) return tmp;
-		tmp = tmp2;
-	}
-	return nullptr;
-}
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------
 void UpdateAllSpaceShip(float Time)
