@@ -31,88 +31,82 @@
 #include "../object3d.h"
 #include "../projectile/projectile.h"
 
-
-//-----------------------------------------------------------------------------
-// Класс cWeapon
-//-----------------------------------------------------------------------------
-class cWeapon : public cObject3D
-{
+class cWeapon : public cObject3D {
 public:
-
 	cWeapon();
 	virtual ~cWeapon();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time) override;
+	virtual bool Update(float Time) override;
 	// Выстрел
-	virtual bool	WeaponFire(float Time);
+	virtual bool WeaponFire(float Time);
 	// Установка углов поворота
-	virtual void	SetRotation(sVECTOR3D NewRotation) override;
+	virtual void SetRotation(sVECTOR3D NewRotation) override;
 	// Установка положения
-	virtual void	SetLocation(sVECTOR3D NewLocation) override;
+	virtual void SetLocation(sVECTOR3D NewLocation) override;
 	// Создание нужного объекта
-	virtual void	Create(int WeaponNum);
+	virtual void Create(int WeaponNum);
 
-	// уровень оружия, по мощьности
-	int	WeaponLevel{1};
+	// уровень оружия, по мощности
+	int WeaponLevel{1};
 
 	// боекомплект
-	int	Ammo{100};
+	int Ammo{100};
 	// начальное значение боекомплекта
-	int	AmmoStart{100};
+	int AmmoStart{100};
 
 	// скорострельность, в мили секундах - время между выстрелами
-	float	NextFireTime{0.3f};
+	float NextFireTime{0.3f};
 	// время последнего выстрела
-	float	LastFireTime{-10.0f};
+	float LastFireTime{-10.0f};
 
 	// потребление энергии на выстрел
-	float	EnergyUse{1.0f};
+	float EnergyUse{1.0f};
 	// текущее состояние энергии
-	float	CurrentEnergyAccumulated{0.0f};
+	float CurrentEnergyAccumulated{0.0f};
 
 	// swamp
-	int	SwampNum{0};
+	int SwampNum{0};
 
 	// нужно вращать-поворачивать при наведении внешне ( не нужно для турелей и ракетных систем)
-	bool	NeedRotateOnTargeting{true};
+	bool NeedRotateOnTargeting{true};
 
 	// лучевое оружие
 	// собственно объект=снаряд
-	cProjectile	*LaserMaser{nullptr};
+	cProjectile *LaserMaser{nullptr};
 	// номер проигрываемого звука, чтобы была возможность выключить при уничтожении
 	unsigned int LaserMaserSoundNum{0};
 	// флаг, это турель
-	bool	WeaponTurret{false};
+	bool WeaponTurret{false};
 
 	// для просчета положения точки стрельбы, считаем как кости
-	sVECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
-	sVECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
-	sVECTOR3D	WeaponBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D BaseBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D MiddleBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D WeaponBound{0.0f, 0.0f, 0.0f};
 
 	// набор указателей на номера объектов, которыми нацеливаемся по горизонтале
-	int	TargetHorizObject{-1};
-	float	TargetHorizObjectCurrentAngle{0.0f};
-	float	TargetHorizObjectNeedAngle{0.0f};
+	int TargetHorizObject{-1};
+	float TargetHorizObjectCurrentAngle{0.0f};
+	float TargetHorizObjectNeedAngle{0.0f};
 	// набор указателей на номера объектов, которыми нацеливаемся по вертикали
-	int	TargetVertObject{-1};
-	float	TargetVertObjectMaxAngle{80.0f};
-	float	TargetVertObjectMinAngle{0.0f};
-	float	TargetVertObjectCurrentAngle{0.0f};
-	float	TargetVertObjectNeedAngle{0.0f};
+	int TargetVertObject{-1};
+	float TargetVertObjectMaxAngle{80.0f};
+	float TargetVertObjectMinAngle{0.0f};
+	float TargetVertObjectCurrentAngle{0.0f};
+	float TargetVertObjectNeedAngle{0.0f};
 
 	// выстрел - вылет частиц (засветка возле ствола)
 	std::weak_ptr<cParticleSystem> Fire{};
-	sVECTOR3D	FireLocation{0.0f, 0.0f, 0.0f};
-	int		SoundNum{0}; // нужный номер
+	sVECTOR3D FireLocation{0.0f, 0.0f, 0.0f};
+	int SoundNum{0}; // нужный номер
 
 	// если оружие уничтожено, делаем вырывающийся огонь
 	std::weak_ptr<cParticleSystem> DestroyedFire{};
 	std::weak_ptr<cParticleSystem> DestroyedSmoke{};
-	sVECTOR3D	DestroyedFireLocation{0.0f, 0.0f, 0.0f};
+	sVECTOR3D DestroyedFireLocation{0.0f, 0.0f, 0.0f};
 
-	cWeapon	*Next{nullptr};
-	cWeapon	*Prev{nullptr};
+	cWeapon *Next{nullptr};
+	cWeapon *Prev{nullptr};
 };
 
 

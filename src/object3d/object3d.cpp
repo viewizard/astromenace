@@ -25,23 +25,21 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "object3d.h"
 #include "../config/config.h"
 #include "../game.h"
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"
 
-
 // флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)
 int NeedShowBB = 0;
 
-
+// FIXME should be fixed, don't allow global scope interaction for local variables
 extern std::weak_ptr<cGLSL> GLSLShaderType1;
 extern std::weak_ptr<cGLSL> GLSLShaderType2;
 extern std::weak_ptr<cGLSL> GLSLShaderType3;
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -58,7 +56,6 @@ void cObject3D::InitByDrawObjectList()
 		float Matrix[9];
 		vw_Matrix33CreateRotate(Matrix, ObjectBlocks[i].Rotation);
 
-
 		float MinX = 10000.0f;
 		float MaxX = -10000.0f;
 		float MinY = 10000.0f;
@@ -66,7 +63,7 @@ void cObject3D::InitByDrawObjectList()
 		float MinZ = 10000.0f;
 		float MaxZ = -10000.0f;
 		if (ObjectBlocks[i].VertexQuantity > 0) {
-			int j = 0;
+			int j{0};
 			int j2;
 			if (ObjectBlocks[i].IndexArray)
 				j2 = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
@@ -100,12 +97,18 @@ void cObject3D::InitByDrawObjectList()
 			v.y = ObjectBlocks[i].VertexArray.get()[j2 + 1];
 			v.z = ObjectBlocks[i].VertexArray.get()[j2 + 2];
 			vw_Matrix33CalcPoint(v, Matrix);
-			if (MinX > v.x) MinX = v.x;
-			if (MinY > v.y) MinY = v.y;
-			if (MinZ > v.z) MinZ = v.z;
-			if (MaxX < v.x) MaxX = v.x;
-			if (MaxY < v.y) MaxY = v.y;
-			if (MaxZ < v.z) MaxZ = v.z;
+			if (MinX > v.x)
+				MinX = v.x;
+			if (MinY > v.y)
+				MinY = v.y;
+			if (MinZ > v.z)
+				MinZ = v.z;
+			if (MaxX < v.x)
+				MaxX = v.x;
+			if (MaxY < v.y)
+				MaxY = v.y;
+			if (MaxZ < v.z)
+				MaxZ = v.z;
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
@@ -141,8 +144,6 @@ void cObject3D::InitByDrawObjectList()
 		// учитываем положение самого объекта в моделе
 		HitBox[i].Location += ObjectBlocks[i].Location;
 	}
-
-
 
 	// находим AABB, OBB... первоначально без учета текущего положения и поворота - их нет
 	// 1-й HitBB всегда есть... фактически это OBB
@@ -180,27 +181,25 @@ void cObject3D::InitByDrawObjectList()
 	OBB[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 	// находим координаты центра OBB относительно координат модели
-	OBBLocation.x = (MaxX + MinX)/2.0f;
-	OBBLocation.y = (MaxY + MinY)/2.0f;
-	OBBLocation.z = (MaxZ + MinZ)/2.0f;
+	OBBLocation.x = (MaxX + MinX) / 2.0f;
+	OBBLocation.y = (MaxY + MinY) / 2.0f;
+	OBBLocation.z = (MaxZ + MinZ) / 2.0f;
 
 	// переносим данные OBB чтобы центр стал центром
-	for (int k=0; k<8; k++) {
+	for (int k = 0; k < 8; k++) {
 		OBB[k] -= OBBLocation;
 	}
 
-
 	// габариты
-	Width = fabsf(MaxX-MinX);
-	Height = fabsf(MaxY-MinY);
-	Length = fabsf(MaxZ-MinZ);
+	Width = fabsf(MaxX - MinX);
+	Height = fabsf(MaxY - MinY);
+	Length = fabsf(MaxZ - MinZ);
 
-	float Width2 = Width/2.0f;
-	float Length2 = Length/2.0f;
-	float Height2 = Height/2.0f;
+	float Width2 = Width / 2.0f;
+	float Length2 = Length / 2.0f;
+	float Height2 = Height / 2.0f;
 	// находим радиус
-	Radius = vw_sqrtf(Width2*Width2+Length2*Length2+Height2*Height2);
-
+	Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 
 	// находим "центр массы", в базовом режиме считаем всю геометрию
 	int AllVertexCounted = 0;
@@ -214,26 +213,21 @@ void cObject3D::InitByDrawObjectList()
 			else
 				tmpIndex = tmpObjectBlock.VertexStride * j;
 
-			GeometryCenterLocation += tmpObjectBlock.Location + sVECTOR3D(tmpObjectBlock.VertexArray.get()[tmpIndex],
-						  tmpObjectBlock.VertexArray.get()[tmpIndex + 1],
-						  tmpObjectBlock.VertexArray.get()[tmpIndex + 2]);
+			GeometryCenterLocation += tmpObjectBlock.Location +
+						  sVECTOR3D{tmpObjectBlock.VertexArray.get()[tmpIndex],
+							    tmpObjectBlock.VertexArray.get()[tmpIndex + 1],
+							    tmpObjectBlock.VertexArray.get()[tmpIndex + 2]};
 		}
 	}
 	if (AllVertexCounted > 0)
 		GeometryCenterLocation = GeometryCenterLocation / AllVertexCounted;
 }
 
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Установка положения 1 объекта модели
 //-----------------------------------------------------------------------------
 void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 {
-
 	// пересчет HitBB
 	if (!HitBox.empty()) {
 		// делаем временную обратную матрицу модели
@@ -246,7 +240,6 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 		vw_Matrix33CalcPoint(HitBox[ObjectNum].Location, CurrentRotationMat);
 
 		// нужно подкорректировать OBB и ABB
-
 		float MinX = 10000.0f;
 		float MaxX = -10000.0f;
 		float MinY = 10000.0f;
@@ -289,26 +282,24 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 		OBB[6] = sVECTOR3D(MinX, MinY, MinZ);
 		OBB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
-
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
-		Width = fabsf(MaxX-MinX);
-		Height = fabsf(MaxY-MinY);
-		Length = fabsf(MaxZ-MinZ);
+		Width = fabsf(MaxX - MinX);
+		Height = fabsf(MaxY - MinY);
+		Length = fabsf(MaxZ - MinZ);
 
-		float Width2 = Width/2.0f;
-		float Length2 = Length/2.0f;
-		float Height2 = Height/2.0f;
+		float Width2 = Width / 2.0f;
+		float Length2 = Length / 2.0f;
+		float Height2 = Height / 2.0f;
 		// находим радиус
-		Radius = vw_sqrtf(Width2*Width2+Length2*Length2+Height2*Height2);
-
+		Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 
 		// находим координаты центра OBB относительно координат модели
-		OBBLocation.x = (MaxX + MinX)/2.0f;
-		OBBLocation.y = (MaxY + MinY)/2.0f;
-		OBBLocation.z = (MaxZ + MinZ)/2.0f;
+		OBBLocation.x = (MaxX + MinX) / 2.0f;
+		OBBLocation.y = (MaxY + MinY) / 2.0f;
+		OBBLocation.z = (MaxZ + MinZ) / 2.0f;
 
 		// переносим данные OBB чтобы центр стал центром
-		for (int k=0; k<8; k++) {
+		for (int k = 0; k < 8; k++) {
 			OBB[k] -= OBBLocation;
 			vw_Matrix33CalcPoint(OBB[k], CurrentRotationMat);
 		}
@@ -319,13 +310,19 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 		MinY = MaxY = OBB[0].y + OBBLocation.y;
 		MinZ = MaxZ = OBB[0].z + OBBLocation.z;
 		// берем и проверяем
-		for (int j=0; j<8; j++) {
-			if (MinX > OBB[j].x + OBBLocation.x) MinX = OBB[j].x + OBBLocation.x;
-			if (MinY > OBB[j].y + OBBLocation.y) MinY = OBB[j].y + OBBLocation.y;
-			if (MinZ > OBB[j].z + OBBLocation.z) MinZ = OBB[j].z + OBBLocation.z;
-			if (MaxX < OBB[j].x + OBBLocation.x) MaxX = OBB[j].x + OBBLocation.x;
-			if (MaxY < OBB[j].y + OBBLocation.y) MaxY = OBB[j].y + OBBLocation.y;
-			if (MaxZ < OBB[j].z + OBBLocation.z) MaxZ = OBB[j].z + OBBLocation.z;
+		for (int j = 0; j < 8; j++) {
+			if (MinX > OBB[j].x + OBBLocation.x)
+				MinX = OBB[j].x + OBBLocation.x;
+			if (MinY > OBB[j].y + OBBLocation.y)
+				MinY = OBB[j].y + OBBLocation.y;
+			if (MinZ > OBB[j].z + OBBLocation.z)
+				MinZ = OBB[j].z + OBBLocation.z;
+			if (MaxX < OBB[j].x + OBBLocation.x)
+				MaxX = OBB[j].x + OBBLocation.x;
+			if (MaxY < OBB[j].y + OBBLocation.y)
+				MaxY = OBB[j].y + OBBLocation.y;
+			if (MaxZ < OBB[j].z + OBBLocation.z)
+				MaxZ = OBB[j].z + OBBLocation.z;
 		}
 		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -340,9 +337,6 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 	// собственно меняем данные в геометрии
 	ObjectBlocks[ObjectNum].Location = NewLocation;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // Установка углов поворота 1 объекта модели
@@ -378,9 +372,7 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 			vw_Matrix33CalcPoint(HitBox[ObjectNum].HitBB[j], CurrentRotationMat);
 		}
 
-
 		// нужно подкорректировать OBB и ABB
-
 		float MinX = 10000.0f;
 		float MaxX = -10000.0f;
 		float MinY = 10000.0f;
@@ -423,26 +415,24 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		OBB[6] = sVECTOR3D(MinX, MinY, MinZ);
 		OBB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
-
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
-		Width = fabsf(MaxX-MinX);
-		Height = fabsf(MaxY-MinY);
-		Length = fabsf(MaxZ-MinZ);
+		Width = fabsf(MaxX - MinX);
+		Height = fabsf(MaxY - MinY);
+		Length = fabsf(MaxZ - MinZ);
 
-		float Width2 = Width/2.0f;
-		float Length2 = Length/2.0f;
-		float Height2 = Height/2.0f;
+		float Width2 = Width / 2.0f;
+		float Length2 = Length / 2.0f;
+		float Height2 = Height / 2.0f;
 		// находим радиус
-		Radius = vw_sqrtf(Width2*Width2+Length2*Length2+Height2*Height2);
-
+		Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 
 		// находим координаты центра OBB относительно координат модели
-		OBBLocation.x = (MaxX + MinX)/2.0f;
-		OBBLocation.y = (MaxY + MinY)/2.0f;
-		OBBLocation.z = (MaxZ + MinZ)/2.0f;
+		OBBLocation.x = (MaxX + MinX) / 2.0f;
+		OBBLocation.y = (MaxY + MinY) / 2.0f;
+		OBBLocation.z = (MaxZ + MinZ) / 2.0f;
 
 		// переносим данные OBB чтобы центр стал центром
-		for (int k=0; k<8; k++) {
+		for (int k = 0; k < 8; k++) {
 			OBB[k] -= OBBLocation;
 			vw_Matrix33CalcPoint(OBB[k], CurrentRotationMat);
 		}
@@ -453,13 +443,19 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		MinY = MaxY = OBB[0].y + OBBLocation.y;
 		MinZ = MaxZ = OBB[0].z + OBBLocation.z;
 		// берем и проверяем
-		for (int j=0; j<8; j++) {
-			if (MinX > OBB[j].x + OBBLocation.x) MinX = OBB[j].x + OBBLocation.x;
-			if (MinY > OBB[j].y + OBBLocation.y) MinY = OBB[j].y + OBBLocation.y;
-			if (MinZ > OBB[j].z + OBBLocation.z) MinZ = OBB[j].z + OBBLocation.z;
-			if (MaxX < OBB[j].x + OBBLocation.x) MaxX = OBB[j].x + OBBLocation.x;
-			if (MaxY < OBB[j].y + OBBLocation.y) MaxY = OBB[j].y + OBBLocation.y;
-			if (MaxZ < OBB[j].z + OBBLocation.z) MaxZ = OBB[j].z + OBBLocation.z;
+		for (int j = 0; j < 8; j++) {
+			if (MinX > OBB[j].x + OBBLocation.x)
+				MinX = OBB[j].x + OBBLocation.x;
+			if (MinY > OBB[j].y + OBBLocation.y)
+				MinY = OBB[j].y + OBBLocation.y;
+			if (MinZ > OBB[j].z + OBBLocation.z)
+				MinZ = OBB[j].z + OBBLocation.z;
+			if (MaxX < OBB[j].x + OBBLocation.x)
+				MaxX = OBB[j].x + OBBLocation.x;
+			if (MaxY < OBB[j].y + OBBLocation.y)
+				MaxY = OBB[j].y + OBBLocation.y;
+			if (MaxZ < OBB[j].z + OBBLocation.z)
+				MaxZ = OBB[j].z + OBBLocation.z;
 		}
 		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -471,15 +467,9 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 	}
 
-
 	// собственно меняем данные в геометрии
 	ObjectBlocks[ObjectNum].Rotation = NewRotation;
 }
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Установка положения модели
@@ -491,31 +481,24 @@ void cObject3D::SetLocation(sVECTOR3D NewLocation)
 	Location = NewLocation;
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 // Установка углов поворота модели
 //-----------------------------------------------------------------------------
 void cObject3D::SetRotation(sVECTOR3D NewRotation)
 {
 	// Записываем данные в Rotation
-	OldRotationInv = sVECTOR3D(-Rotation.x,-Rotation.y,-Rotation.z);
+	OldRotationInv = sVECTOR3D(-Rotation.x, -Rotation.y, -Rotation.z);
 	Rotation += NewRotation;
 
-
 	// сохраняем старые значения + пересчет новых
-	memcpy(OldInvRotationMat, CurrentRotationMat, 9*sizeof(CurrentRotationMat[0]));
+	memcpy(OldInvRotationMat, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
 	// делаем инверсную старую матрицу
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Rotation);
 
-
-
 	// По углам находим новые значения вектора Orientation
 	vw_Matrix33CalcPoint(Orientation, OldInvRotationMat);
 	vw_Matrix33CalcPoint(Orientation, CurrentRotationMat);
-
 
 	// пересчет HitBB
 	if (!HitBox.empty()) {
@@ -538,7 +521,6 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 		vw_Matrix33CalcPoint(OBB[j], CurrentRotationMat);
 	}
 
-
 	// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
 	float MinX = 10000.0f;
 	float MaxX = -10000.0f;
@@ -547,13 +529,19 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 	float MinZ = 10000.0f;
 	float MaxZ = -10000.0f;
 	// берем и проверяем
-	for (int j=0; j<8; j++) {
-		if (MinX > OBB[j].x + OBBLocation.x) MinX = OBB[j].x + OBBLocation.x;
-		if (MinY > OBB[j].y + OBBLocation.y) MinY = OBB[j].y + OBBLocation.y;
-		if (MinZ > OBB[j].z + OBBLocation.z) MinZ = OBB[j].z + OBBLocation.z;
-		if (MaxX < OBB[j].x + OBBLocation.x) MaxX = OBB[j].x + OBBLocation.x;
-		if (MaxY < OBB[j].y + OBBLocation.y) MaxY = OBB[j].y + OBBLocation.y;
-		if (MaxZ < OBB[j].z + OBBLocation.z) MaxZ = OBB[j].z + OBBLocation.z;
+	for (int j = 0; j < 8; j++) {
+		if (MinX > OBB[j].x + OBBLocation.x)
+			MinX = OBB[j].x + OBBLocation.x;
+		if (MinY > OBB[j].y + OBBLocation.y)
+			MinY = OBB[j].y + OBBLocation.y;
+		if (MinZ > OBB[j].z + OBBLocation.z)
+			MinZ = OBB[j].z + OBBLocation.z;
+		if (MaxX < OBB[j].x + OBBLocation.x)
+			MaxX = OBB[j].x + OBBLocation.x;
+		if (MaxY < OBB[j].y + OBBLocation.y)
+			MaxY = OBB[j].y + OBBLocation.y;
+		if (MaxZ < OBB[j].z + OBBLocation.z)
+			MaxZ = OBB[j].z + OBBLocation.z;
 	}
 	AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 	AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -566,13 +554,6 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 
 }
 
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Прорисовка одной линии
 //-----------------------------------------------------------------------------
@@ -580,8 +561,8 @@ void DrawLine(sVECTOR3D Point1, sVECTOR3D Point2, float ColorR, float ColorG, fl
 {
 	// буфер для последовательности RI_LINES
 	// войдет RI_3f_XYZ | RI_4f_COLOR
-	float *tmpDATA = new float[2*(3+4)];
-	int k=0;
+	float *tmpDATA = new float[2 * (3 + 4)];
+	int k = 0;
 
 	tmpDATA[k++] = Point1.x;		// X
 	tmpDATA[k++] = Point1.y;		// Y
@@ -599,11 +580,11 @@ void DrawLine(sVECTOR3D Point1, sVECTOR3D Point2, float ColorR, float ColorG, fl
 	tmpDATA[k++] = ColorB;
 	tmpDATA[k] = ColorA;
 
-
 	vw_Draw3D(ePrimitiveType::LINES, 2, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
 
 	delete [] tmpDATA;
 }
+
 //-----------------------------------------------------------------------------
 // Прорисовка сетки бокса
 //-----------------------------------------------------------------------------
@@ -611,7 +592,6 @@ void DrawBoxLines(sVECTOR3D Point[8], sVECTOR3D LocalLocation, float ColorR, flo
 {
 	vw_PushMatrix();
 	vw_Translate(LocalLocation);
-
 
 	DrawLine(Point[0], Point[1], ColorR, ColorG, ColorB, ColorA);
 	DrawLine(Point[1], Point[2], ColorR, ColorG, ColorB, ColorA);
@@ -624,22 +604,12 @@ void DrawBoxLines(sVECTOR3D Point[8], sVECTOR3D LocalLocation, float ColorR, flo
 	DrawLine(Point[7], Point[4], ColorR, ColorG, ColorB, ColorA);
 
 	DrawLine(Point[0], Point[4], ColorR, ColorG, ColorB, ColorA);
-
 	DrawLine(Point[1], Point[5], ColorR, ColorG, ColorB, ColorA);
-
 	DrawLine(Point[2], Point[6], ColorR, ColorG, ColorB, ColorA);
-
 	DrawLine(Point[3], Point[7], ColorR, ColorG, ColorB, ColorA);
-
 
 	vw_PopMatrix();
 }
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Прорисовка объектa Object3D
@@ -650,17 +620,18 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	if (ObjectBlocks.empty())
 		return;
 
-
 	// если есть установка, нужно получить квадрат расстояния до камеры
 	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
-	bool NeedOnePieceDraw = false;
+	bool NeedOnePieceDraw{false};
 	if (PromptDrawDist2 >= 0.0f) {
 		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
-		float PromptDrawRealDist2 = (Location.x-CurrentCameraLocation.x)*(Location.x-CurrentCameraLocation.x)+(Location.y-CurrentCameraLocation.y)*(Location.y-CurrentCameraLocation.y)+(Location.z-CurrentCameraLocation.z)*(Location.z-CurrentCameraLocation.z);
+		float PromptDrawRealDist2 = (Location.x - CurrentCameraLocation.x) * (Location.x - CurrentCameraLocation.x) +
+					    (Location.y - CurrentCameraLocation.y) * (Location.y - CurrentCameraLocation.y) +
+					    (Location.z - CurrentCameraLocation.z) * (Location.z - CurrentCameraLocation.z);
 
 		// получаем кол-во точечных источников, воздействующих на объект
-		int LightsCount = vw_CalculateAllPointLightsAttenuation(Location, Radius*Radius, nullptr);
+		int LightsCount = vw_CalculateAllPointLightsAttenuation(Location, Radius * Radius, nullptr);
 
 		// если дальше - смотрим сколько воздействует источников света
 		if (PromptDrawRealDist2 > PromptDrawDist2) {
@@ -680,7 +651,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 	}
 
-
 	// fast rendering for shadows map generation, without textures, shaders, etc
 	// make sure, we call this one _before_ any camera/frustum checks, since not visible
 	// for us 3D model could also drop the shadow on visible for us part of scene
@@ -692,10 +662,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_Rotate(Rotation.y, 0.0f, 1.0f, 0.0f);
 		vw_Rotate(Rotation.x, 1.0f, 0.0f, 0.0f);
 
-
 		if (NeedOnePieceDraw) {
-
-			int GlobalVertexCount = 0;
+			int GlobalVertexCount{0};
 			for (auto &tmpObjectBlock : ObjectBlocks) {
 				GlobalVertexCount += tmpObjectBlock.VertexQuantity;
 			}
@@ -705,10 +673,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				  ObjectBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
 				  GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 		} else {
-
 			// установка текстур и подхотовка к прорисовке
 			for (auto &tmpObjectBlock : ObjectBlocks) {
-
 				vw_PushMatrix();
 
 				// сдвигаем его в нужное место
@@ -724,7 +690,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_Rotate(tmpObjectBlock.GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
 				}
 
-
 				// работаем только с шейдером взрывов, т.к. он меняет положение и размеры треугольников
 				if (tmpObjectBlock.ShaderType == 2) {
 					if (auto sharedGLSL = GLSLShaderType2.lock()) {
@@ -737,11 +702,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					}
 				}
 
-
 				vw_Draw3D(ePrimitiveType::TRIANGLES, tmpObjectBlock.VertexQuantity, RI_3f_XYZ, tmpObjectBlock.VertexArray.get(),
 					  tmpObjectBlock.VertexStride * sizeof(float), tmpObjectBlock.VBO,
 					  tmpObjectBlock.RangeStart, tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO, tmpObjectBlock.VAO);
-
 
 				if ((tmpObjectBlock.ShaderType == 2) &&
 				    !GLSLShaderType2.expired())
@@ -756,8 +719,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		return;
 	}
 
-
-
 	// оптимизация, если не в фруструме - соотв. и не видем его
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
 		// если показали а сейчас нет - установка флага
@@ -766,7 +727,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		return;
 	}
-
 
 	// показываем - нужно установить флаг
 	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::enabled)
@@ -777,13 +737,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		Lifetime = -1.0f;
 	}
 
-
-
 	// у модели может быть нормал меппинг только на отдельные объекты
 	GLtexture CurrentNormalMap{0};
 	// текущий шейдер, чтобы не ставить лишний раз
 	std::weak_ptr<cGLSL> CurrentGLSL{};
-	int NeedNormalMapping = 0;
+	int NeedNormalMapping{0};
 	// получаем матрицу, до всех преобразований
 	float Matrix[16];
 	vw_GetMatrix(eMatrixPname::MODELVIEW, Matrix);
@@ -796,7 +754,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	vw_Rotate(Rotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(Rotation.x, 1.0f, 0.0f, 0.0f);
 
-
 	// для корректной прорисовки на всех видеокартах атмосферы планеты ...
 	bool N1 = false;
 	for (auto &tmpObjectBlock : ObjectBlocks) {
@@ -804,19 +761,16 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			N1 = true;
 	}
 
-
 	// если используем тени - сразу находим режим сглаживания
 	int PCFMode{0};
 	if (ShadowMap)
 		PCFMode = GameConfig().ShadowMap;
-
 
 	// Устанавливаем данные для поверхности объекта
 	vw_MaterialV(eMaterialParameter::DIFFUSE, Diffuse);
 	vw_MaterialV(eMaterialParameter::AMBIENT, Ambient);
 	vw_MaterialV(eMaterialParameter::SPECULAR, Specular);
 	vw_MaterialV(eMaterialParameter::SHININESS, Power);
-
 
 	if (!NeedCullFaces)
 		vw_CullFace(eCullFace::NONE);
@@ -846,7 +800,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			vw_BindTexture(3, CurrentNormalMap);
 		}
 
-
 		int LightType1, LightType2;
 		// включаем источники света
 		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, GameConfig().MaxPointLights, Matrix);
@@ -874,7 +827,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				break;
 			}
 
-
 			if (CurrentGLSL.lock() != CurrentObject3DGLSL.lock()) {
 				if (!CurrentGLSL.expired())
 					vw_StopShaderProgram();
@@ -889,7 +841,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			if (auto sharedGLSL = CurrentObject3DGLSL.lock()) {
 				switch (ObjectBlocks[0].ShaderType) {
 				case 1: // только попиксельное освещение
-
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -901,21 +852,17 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 5), 3);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), NeedNormalMapping);
-
 					break;
 
 				case 2: // шейдеры взрывов
-
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), LightType1);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType2);
 					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 3), ObjectBlocks[0].ShaderData[0]);
 					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), ObjectBlocks[0].ShaderData[1]);
-
 					break;
 
 				case 3: // шадов меп
-
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -931,13 +878,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 8), 3);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 9), NeedNormalMapping);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 10), PCFMode);
-
 					break;
 				}
 			}
 		}
 
-		int GlobalVertexCount = 0;
+		int GlobalVertexCount{0};
 		for (auto &tmpObjectBlock : ObjectBlocks) {
 			GlobalVertexCount += tmpObjectBlock.VertexQuantity;
 		}
@@ -982,7 +928,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					continue;
 			}
 
-
 			// работа с текстурами
 			if (CurrentTexture != Texture[i]) {
 				vw_BindTexture(0, Texture[i]);
@@ -996,9 +941,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_MatrixMode(eMatrixMode::MODELVIEW);
 				}
 
-
 				// включаем вторую текстуру
-				if ((TextureIllum.size() > (unsigned)i) && TextureIllum[i]) {
+				if ((TextureIllum.size() > static_cast<unsigned>(i)) && TextureIllum[i]) {
 					// свечение
 					vw_BindTexture(1, TextureIllum[i]);
 					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
@@ -1014,12 +958,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						NeedNormalMapping = 1;
 						CurrentNormalMap = NormalMap[i];
 						vw_BindTexture(3, CurrentNormalMap);
-					} else {
-						// если нет, но был установлен - нужно сделать сброс установки
-						if (CurrentNormalMap) {
-							vw_BindTexture(3, 0);
-							CurrentNormalMap = 0;
-						}
+					} else if (CurrentNormalMap) { // если нет, но был установлен - нужно сделать сброс установки
+						vw_BindTexture(3, 0);
+						CurrentNormalMap = 0;
 					}
 				}
 
@@ -1035,14 +976,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			vw_Rotate(ObjectBlocks[i].Rotation.y, 0.0f, 1.0f, 0.0f);
 			vw_Rotate(ObjectBlocks[i].Rotation.x, 1.0f, 0.0f, 0.0f);
 
-
 			// если нужна дополнительная анимация геометрией
 			if (ObjectBlocks[i].NeedGeometryAnimation) {
 				vw_Rotate(ObjectBlocks[i].GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
 				vw_Rotate(ObjectBlocks[i].GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
 				vw_Rotate(ObjectBlocks[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
 			}
-
 
 			int LightType1, LightType2;
 			// включаем источники света
@@ -1051,12 +990,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			else
 				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius * Radius, 2, GameConfig().MaxPointLights, Matrix);
 
-
 			// если нужно рисовать прозрачным
 			// для корректной прорисовки на всех видеокартах атмосферы планеты ...
-			if (N1) {
+			if (N1)
 				vw_PolygonOffset(true, 2.0f, 2.0f);
-			}
+
 			if (ObjectBlocks[i].DrawType == eObjectDrawType::Blend) {
 				vw_SetTextureAlphaTest(true, eCompareFunc::GREATER, 0.01f);
 				vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
@@ -1087,7 +1025,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					break;
 				}
 
-
 				if (CurrentGLSL.lock() != CurrentObject3DGLSL.lock()) {
 					if (!CurrentGLSL.expired())
 						vw_StopShaderProgram();
@@ -1102,7 +1039,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				if (auto sharedGLSL = CurrentObject3DGLSL.lock()) {
 					switch (ObjectBlocks[i].ShaderType) {
 					case 1: // только попиксельное освещение
-
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -1114,21 +1050,17 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 5), 3);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), NeedNormalMapping);
-
 						break;
 
 					case 2: // шейдеры взрывов
-
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), LightType1);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType2);
 						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 3), ObjectBlocks[0].ShaderData[0]);
 						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), ObjectBlocks[0].ShaderData[1]);
-
 						break;
 
 					case 3: // шадов меп
-
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -1144,18 +1076,14 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 8), 3);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 9), NeedNormalMapping);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 10), PCFMode);
-
 						break;
 					}
 				}
 			}
 
-
 			vw_Draw3D(ePrimitiveType::TRIANGLES, ObjectBlocks[i].VertexQuantity, ObjectBlocks[i].VertexFormat, ObjectBlocks[i].VertexArray.get(),
 				  ObjectBlocks[i].VertexStride * sizeof(float), ObjectBlocks[i].VBO,
 				  ObjectBlocks[i].RangeStart, ObjectBlocks[i].IndexArray.get(), ObjectBlocks[i].IBO, ObjectBlocks[i].VAO);
-
-
 
 			if (ObjectBlocks[i].DrawType == eObjectDrawType::Blend) {
 				vw_SetTextureAlphaTest(false, eCompareFunc::ALWAYS, 0);
@@ -1178,7 +1106,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 	}
 
-
 	// останавливаем шейдер, если был запущен
 	if (GameConfig().UseGLSL120)
 		vw_StopShaderProgram();
@@ -1194,64 +1121,40 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_CullFace(eCullFace::BACK);
 	vw_PopMatrix();
 
-
-
-
-
-
 #ifndef NDEBUG
 	// debug info, line number in script file
 	if (!ScriptLineNumberUTF32.empty())
 		vw_DrawText3DUTF32(Location.x, Location.y + AABB[0].y, Location.z, ScriptLineNumberUTF32);
 #endif // NDEBUG
 
-
-
-
-
-
-/////////////////////
-// рисуем боксы
-
 	if (NeedShowBB >= 1)
 		// AABB объекта
 		DrawBoxLines(AABB, Location, 1.0f, 0.0f, 0.0f, 1.0f);
-
 	if (NeedShowBB >= 2)
 		// OBB объекта
 		DrawBoxLines(OBB, Location+OBBLocation, 0.0f, 1.0f, 0.0f, 1.0f);
-
 	if ((NeedShowBB >= 3) && !HitBox.empty()) {
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 			DrawBoxLines(HitBox[i].HitBB, Location + HitBox[i].Location, 0.0f, 0.0f, 1.0f, 1.0f);
 		}
 	}
 
-///////////////////////
-
-
-
-
-
-
-
 	// выводим "жизнь", если нужно
-	if (!ShowStrength) return;
-	if (StrengthStart <= 0.0f) return;
-	if (Strength == StrengthStart && ShieldStrength == ShieldStrengthStart && !NeedShowStrengthNow) return;
+	if (!ShowStrength ||
+	    (StrengthStart <= 0.0f) ||
+	    ((Strength == StrengthStart) && (ShieldStrength == ShieldStrengthStart) && !NeedShowStrengthNow))
+		return;
 
 	// раз тут, значит показали, и нужно теперь и дальше всегда показывать, даже если щит перезарядили
 	NeedShowStrengthNow = true;
 
-
-
 	// буфер для последовательности TRIANGLE_STRIP
 	// войдет RI_3f_XYZ | RI_4f_COLOR
-	float *tmpDATA = new float[4*(3+4)];
-	int k=0;
+	float *tmpDATA = new float[4 * (3 + 4)];
+	int k = 0;
 
 	// рисуем заднюю часть - основу
-	float SizeX = Width/2.5f+0.1f;
+	float SizeX = Width / 2.5f + 0.1f;
 	float SizeY = 0.35f;
 	float ColorR = 0.0f;
 	float ColorG = 0.0f;
@@ -1291,25 +1194,21 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	tmpDATA[k++] = ColorB;
 	tmpDATA[k] = ColorA;
 
-
 	vw_PushMatrix();
 	sVECTOR3D CurrentCameraRotation;
 	vw_GetCameraRotation(&CurrentCameraRotation);
 	// поднимаем
-	vw_Translate(sVECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*2.0f, Location.z));
+	vw_Translate(sVECTOR3D(Location.x, Location.y + AABB[0].y + SizeY * 2.0f, Location.z));
 	// поворачиваем к камере
 	vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
-
-
 	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
 
-
 	// рисуем вывод кол-ва жизни
-	k=0;
-	float SizeXStart = Width/2.5f - (2.0f*Width/2.5f)*Strength/StrengthStart;
-	float SizeXEnd = Width/2.5f;
+	k = 0;
+	float SizeXStart = Width / 2.5f - (2.0f * Width / 2.5f) * Strength / StrengthStart;
+	float SizeXEnd = Width / 2.5f;
 	SizeY = 0.25f;
 	ColorR = 1.0f;
 	ColorG = 0.0f;
@@ -1352,14 +1251,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	vw_PopMatrix();
 
-
-
 	// выводим щит, если он есть
 	if (ShieldStrengthStart > 0.0f) {
-		k=0;
+		k = 0;
 
 		// рисуем заднюю часть - основу
-		SizeX = Width/2.5f+0.1f;
+		SizeX = Width / 2.5f + 0.1f;
 		SizeY = 0.35f;
 		ColorR = 0.0f;
 		ColorG = 0.0f;
@@ -1399,22 +1296,19 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		tmpDATA[k++] = ColorB;
 		tmpDATA[k] = ColorA;
 
-
 		vw_PushMatrix();
 		// поднимаем
-		vw_Translate(sVECTOR3D(Location.x, Location.y+AABB[0].y+SizeY*5.0f, Location.z));
+		vw_Translate(sVECTOR3D(Location.x, Location.y + AABB[0].y + SizeY * 5.0f, Location.z));
 		// поворачиваем к камере
 		vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 		vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
 
-
 		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
-
 
 		// рисуем вывод кол-ва жизни
 		k=0;
-		SizeXStart = Width/2.5f - (2.0f*Width/2.5f)*ShieldStrength/ShieldStrengthStart;
-		SizeXEnd = Width/2.5f;
+		SizeXStart = Width / 2.5f - (2.0f * Width / 2.5f) * ShieldStrength / ShieldStrengthStart;
+		SizeXEnd = Width / 2.5f;
 		SizeY = 0.25f;
 		ColorR = 0.1f;
 		ColorG = 0.7f;
@@ -1458,34 +1352,21 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_PopMatrix();
 	}
 
-
-
 	delete [] tmpDATA;
 
 	vw_BindTexture(0, 0);
 }
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Обновление данных объектa Object3D
 //-----------------------------------------------------------------------------
 bool cObject3D::Update(float Time)
 {
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// начальные проверки-действия
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
 	// если еще ни разу не обновляли - просто запоминаем время
 	if (TimeLastUpdate == -1.0f) {
 		TimeLastUpdate = Time;
 		return true;
 	}
-
 
 	// нужно удалить объект - он вышел из зоны видемости
 	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::need_delete) {
@@ -1493,11 +1374,11 @@ bool cObject3D::Update(float Time)
 		DeleteAfterLeaveScene = eDeleteAfterLeaveScene::wait_delay;
 	}
 
-
 	// находим дельту по времени, и запоминаем время вызова
 	TimeDelta = Time - TimeLastUpdate;
 	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
-	if (TimeDelta == 0.0f) return true;
+	if (TimeDelta == 0.0f)
+		return true;
 
 	TimeLastUpdate = Time;
 
@@ -1506,19 +1387,17 @@ bool cObject3D::Update(float Time)
 		// считаем, сколько осталось жить
 		Lifetime -= TimeDelta;
 		// если уже ничего не осталось - его нужно уничтожить
-		if (Lifetime <= 0.0f) return false;
+		if (Lifetime <= 0.0f)
+			return false;
 	}
 
-
-
 	// проверка, зарядка щита если он есть
-	if (ShieldStrengthStart > 0.0f)
-		if (ShieldStrength < ShieldStrengthStart) {
-			ShieldStrength += ShieldRecharge*TimeDelta;
-			if (ShieldStrength > ShieldStrengthStart) ShieldStrength = ShieldStrengthStart;
-		}
-
-
+	if ((ShieldStrengthStart > 0.0f) &&
+	    (ShieldStrength < ShieldStrengthStart)) {
+		ShieldStrength += ShieldRecharge * TimeDelta;
+		if (ShieldStrength > ShieldStrengthStart)
+			ShieldStrength = ShieldStrengthStart;
+	}
 
 	// if we have TimeSheet with actions and this is not a cycled entry
 	if (!TimeSheetList.empty() &&

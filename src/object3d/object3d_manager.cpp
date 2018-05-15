@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../game.h"
 #include "../config/config.h"
 #include "space_ship/space_ship.h"
@@ -40,24 +42,13 @@
 //-----------------------------------------------------------------------------
 void ReleaseAllObject3D()
 {
-	// корабли
 	ReleaseAllSpaceShip();
-	// оружие
 	ReleaseAllWeapon();
-	// наземные объекты
 	ReleaseAllGroundObject();
-	// снаряды
 	ReleaseAllProjectile();
-	// космические объекты
 	ReleaseAllSpaceObject();
-	// взрывы
 	ReleaseAllExplosion();
 }
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
@@ -67,8 +58,7 @@ void DrawAllObject3D(eDrawType DrawType)
 	// ставим всегда меньше или равно!
 	vw_DepthTest(true, eCompareFunc::LEQUAL);
 
-
-	bool ShadowMap = false;
+	bool ShadowMap{false};
 
 	if (GameConfig().ShadowMap > 0) {
 		switch (DrawType) {
@@ -81,9 +71,6 @@ void DrawAllObject3D(eDrawType DrawType)
 			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,160), 600.0f, 800.0f);
 			break;
 		}
-		// since some 3D models don't have 'back' sides - tank's tracks, covers elements for tires
-		// and tracks, etc., we are forced to disable face's culling during shadows map generation
-		vw_CullFace(eCullFace::NONE);
 
 		DrawAllSpaceShip(true, 0);
 		DrawAllWeapon(true, 0);
@@ -92,7 +79,6 @@ void DrawAllObject3D(eDrawType DrawType)
 		DrawAllExplosion(true);
 		DrawAllSpaceObject(true, 0);
 
-		vw_CullFace(eCullFace::BACK);
 		ShadowMap_EndRenderToFBO();
 
 		// работаем с 3-м стейджем текстур (первые два у нас заняты)
@@ -100,18 +86,11 @@ void DrawAllObject3D(eDrawType DrawType)
 		ShadowMap_StartFinalRender();
 	}
 
-
-	// космические объекты
 	DrawAllSpaceObject(false, ShadowMap);
-	// корабли
 	DrawAllSpaceShip(false, ShadowMap);
-	// оружие
 	DrawAllWeapon(false, ShadowMap);
-	// наземные объекты
 	DrawAllGroundObject(false, ShadowMap);
-	// снаряды
 	DrawAllProjectile(false, ShadowMap);
-
 
 	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();
@@ -119,24 +98,15 @@ void DrawAllObject3D(eDrawType DrawType)
 	// взрывы
 	DrawAllExplosion(false);
 
-
 	// эффекты - самые последние в прорисовке!
 	vw_DrawAllParticleSystems();
-
-
-
-
-
-
 
 	// второй слой тайловой анимации "пыли"
 	StarSystemDrawThirdLayer(DrawType);
 
 	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
 	if(GameConfig().Brightness != 5) {
-
 		float *buff = new float[4*4]; // RI_2f_XY | RI_1_TEX
-
 		int k=0;
 
 		buff[k++] = 0.0f;
@@ -159,13 +129,12 @@ void DrawAllObject3D(eDrawType DrawType)
 		buff[k++] = 0.0f;
 		buff[k++] = 1.0f;
 
-
 		GLtexture TileTexture = vw_FindTextureByName("menu/whitepoint.tga");
 		vw_BindTexture(0, TileTexture);
 
 		float BrightnessF = 1.0f + (GameConfig().Brightness - 5) / 5.0f;
 
-		if( BrightnessF > 1.0f ) {
+		if( BrightnessF > 1.0f) {
 			vw_SetTextureBlend(true, eTextureBlendFactor::DST_COLOR, eTextureBlendFactor::ONE);
 			vw_SetColor(BrightnessF-1.0f, BrightnessF-1.0f, BrightnessF-1.0f, 1.0f);
 		} else {
@@ -179,41 +148,20 @@ void DrawAllObject3D(eDrawType DrawType)
 
 		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 		vw_BindTexture(0, 0);
-		if (buff != nullptr)
+		if (buff)
 			delete [] buff;
 	}
 }
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------
 void UpdateAllObject3D(float Time)
 {
-	// проверяем корабли
 	UpdateAllSpaceShip(Time);
-	// проверяем все оружие
 	UpdateAllWeapon(Time);
-	// наземные объекты
 	UpdateAllGroundObject(Time);
-	// снаряды
 	UpdateAllProjectile(Time);
-	// космические объекты
 	UpdateAllSpaceObject(Time);
-	// взрывы
 	UpdateAllExplosion(Time);
 }
-
-
-
-
-
-
-

@@ -108,8 +108,7 @@ struct sHitBox {
 	sVECTOR3D Size{0.0f, 0.0f, 0.0f}; // HitBB's size
 };
 
-class cObject3D
-{
+class cObject3D {
 protected:
 	// don't allow object of this class creation
 	cObject3D() = default;
