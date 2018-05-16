@@ -560,17 +560,17 @@ bool cModel3D::LoadVW3D(const std::string &FileName)
 		tmpObjectBlock.RangeStart = GlobalIndexArrayCount;
 
 		// VertexFormat
-		File->fread(&(tmpObjectBlock.VertexFormat), sizeof(ObjectBlocks[0].VertexFormat), 1);
+		File->fread(&tmpObjectBlock.VertexFormat, sizeof(ObjectBlocks[0].VertexFormat), 1);
 		// VertexStride
-		File->fread(&(tmpObjectBlock.VertexStride), sizeof(ObjectBlocks[0].VertexStride), 1);
+		File->fread(&tmpObjectBlock.VertexStride, sizeof(ObjectBlocks[0].VertexStride), 1);
 		// VertexQuantity
-		File->fread(&(tmpObjectBlock.VertexQuantity), sizeof(ObjectBlocks[0].VertexQuantity), 1);
+		File->fread(&tmpObjectBlock.VertexQuantity, sizeof(ObjectBlocks[0].VertexQuantity), 1);
 		GlobalIndexArrayCount += tmpObjectBlock.VertexQuantity;
 
 		// Location
-		File->fread(&(tmpObjectBlock.Location), sizeof(ObjectBlocks[0].Location.x) * 3, 1);
+		File->fread(&tmpObjectBlock.Location, sizeof(ObjectBlocks[0].Location.x) * 3, 1);
 		// Rotation
-		File->fread(&(tmpObjectBlock.Rotation), sizeof(ObjectBlocks[0].Rotation.x) * 3, 1);
+		File->fread(&tmpObjectBlock.Rotation, sizeof(ObjectBlocks[0].Rotation.x) * 3, 1);
 
 		tmpObjectBlock.DrawType = eObjectDrawType::Normal;
 		// vertex array-related
@@ -580,6 +580,8 @@ bool cModel3D::LoadVW3D(const std::string &FileName)
 		tmpObjectBlock.IBO = 0;
 		// vao-related
 		tmpObjectBlock.VAO = 0;
+
+		assert(tmpObjectBlock.VertexQuantity != 0);
 	}
 
 	File->fread(&GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
