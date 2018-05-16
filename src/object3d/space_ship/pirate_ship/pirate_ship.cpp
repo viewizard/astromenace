@@ -93,7 +93,7 @@ void cPirateShip::Create(int PirateShipNum)
 	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
 
 
-	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, this, 0, 2.0f, PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120);
+	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, this, 2.0f, PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {

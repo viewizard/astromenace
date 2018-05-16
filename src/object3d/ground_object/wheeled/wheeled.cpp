@@ -68,7 +68,7 @@ void cWheeled::Create(int WheeledNum)
 	MaxSpeedRotate = 20.0f;
 
 
-	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this, 0, 2.0f);
+	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this, 2.0f);
 
 	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName(PresetWheeledData[WheeledNum - 1].TextureName);

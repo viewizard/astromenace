@@ -51,7 +51,7 @@ void cAsteroid::Create(int SpaceObjectNum)
 	strcat(NameTMP, buffer.c_str());
 	strcat(NameTMP, ".vw3d");
 
-	LoadObjectData(NameTMP, this, 0, -1.0f);
+	LoadObjectData(NameTMP, this, -1.0f);
 	// находим все данные по геометрии
 	::cObject3D::InitByDrawObjectList();
 
