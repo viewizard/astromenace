@@ -83,11 +83,10 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
 		for (unsigned int i = 0; i < Object->ObjectBlocks.size(); i++) {
-			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
-			// или это гусеница, тоже ее пропускаем
-			if (Object->ObjectBlocks[i].VertexQuantity == 0 || Object->TrackObjectNum == (int)i) {
+			// трак, пропускаем
+			if (Object->TrackObjectNum == static_cast<int>(i))
 				continue;
-			} else {
+			else {
 				// создаем часть
 				cShipPart *ShipPart;
 				ShipPart = new cShipPart;

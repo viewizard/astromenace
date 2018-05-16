@@ -62,28 +62,21 @@ void cObject3D::InitByDrawObjectList()
 		float MaxY = -10000.0f;
 		float MinZ = 10000.0f;
 		float MaxZ = -10000.0f;
-		if (ObjectBlocks[i].VertexQuantity > 0) {
-			int j{0};
-			int j2;
-			if (ObjectBlocks[i].IndexArray)
-				j2 = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
-			else
-				j2 = (ObjectBlocks[i].RangeStart + j) * ObjectBlocks[i].VertexStride;
 
-			sVECTOR3D tmp;
-			tmp.x = ObjectBlocks[i].VertexArray.get()[j2 + 0];
-			tmp.y = ObjectBlocks[i].VertexArray.get()[j2 + 1];
-			tmp.z = ObjectBlocks[i].VertexArray.get()[j2 + 2];
-			vw_Matrix33CalcPoint(tmp, Matrix);
-			MinX = MaxX = tmp.x;
-			MinY = MaxY = tmp.y;
-			MinZ = MaxZ = tmp.z;
-		} else {
-			// пустой объект
-			MinX = MaxX = 0.0f;
-			MinY = MaxY = 0.0f;
-			MinZ = MaxZ = 0.0f;
-		}
+		int tmpOffset;
+		if (ObjectBlocks[i].IndexArray)
+			tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart] * ObjectBlocks[i].VertexStride;
+		else
+			tmpOffset = ObjectBlocks[i].RangeStart * ObjectBlocks[i].VertexStride;
+
+		sVECTOR3D tmp;
+		tmp.x = ObjectBlocks[i].VertexArray.get()[tmpOffset + 0];
+		tmp.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
+		tmp.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
+		vw_Matrix33CalcPoint(tmp, Matrix);
+		MinX = MaxX = tmp.x;
+		MinY = MaxY = tmp.y;
+		MinZ = MaxZ = tmp.z;
 
 		for (unsigned int j = 0; j < ObjectBlocks[i].VertexQuantity; j++) {
 			int j2;

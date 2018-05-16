@@ -428,10 +428,6 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
 		for (unsigned int i = 0; i < Object->ObjectBlocks.size(); i++) {
-			// могут быть пустые группы, убираем их и идем смотрим на следующую группу
-			if (Object->ObjectBlocks[i].VertexQuantity == 0)
-				continue;
-
 			cShipPart *ShipPart;
 			ShipPart = new cShipPart;
 			ShipPart->ObjectType = eObjectType::ShipPart;
@@ -650,7 +646,6 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 		// для каждого треугольника - свои данные
 		int Count = 0;
-		sVECTOR3D TMP;
 		ExplosionPieceData = new sExplosionPiece[TotalCount/3];
 		for (auto &tmpObjectBlock : ObjectBlocks) {
 			for (unsigned int i = 0; i < tmpObjectBlock.VertexQuantity; i+=3) {
