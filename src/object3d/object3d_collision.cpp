@@ -180,7 +180,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 							    Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
 				   vw_SphereAABBCollision(Object->AABB, Object->Location,
 							  Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
-				   vw_SphereOBBCollision(Object->OBB, Object->OBBLocation, Object->Location, Object->CurrentRotationMat,
+				   vw_SphereOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
 							 Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
 				   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 
@@ -235,11 +235,11 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 				   // это ракета, просто проверяем, что она близко - и взрываем
 				   vw_SphereAABBCollision(Object->AABB, Object->Location,
 							  Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
-				   vw_SphereOBBCollision(Object->OBB, Object->OBBLocation, Object->Location, Object->CurrentRotationMat,
+				   vw_SphereOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
 							 Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
 				// ставим так, т.к.на больших кораблях плохо
-				   vw_OBBOBBCollision(Object->OBB, Object->OBBLocation, Object->Location, Object->CurrentRotationMat,
-						      Projectile->OBB, Projectile->OBBLocation, Projectile->Location, Projectile->CurrentRotationMat) &&
+				   vw_OBBOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
+						      Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat) &&
 				   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
 
 				// если это не убиваемый объект, должны столкнуться с геометрией
@@ -276,10 +276,10 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 		case 2:
 			if (vw_AABBAABBCollision(Object->AABB, Object->Location, Projectile->AABB, Projectile->Location) &&
 			// в данном случае именно Projectile на первом месте!!!
-			    vw_SphereOBBCollision(Projectile->OBB, Projectile->OBBLocation, Projectile->Location, Projectile->CurrentRotationMat,
+			    vw_SphereOBBCollision(Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat,
 						  Object->Radius, Object->Location, Object->PrevLocation) &&
-			    vw_OBBOBBCollision(Projectile->OBB, Projectile->OBBLocation, Projectile->Location, Projectile->CurrentRotationMat,
-					       Object->OBB, Object->OBBLocation, Object->Location, Object->CurrentRotationMat) &&
+			    vw_OBBOBBCollision(Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat,
+					       Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat) &&
 			    CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
 				*IntercPoint = Object->Location;
 
@@ -585,7 +585,7 @@ void DetectCollisionAllObject3D()
 						     tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
 			    vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
 						   tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    vw_SphereOBBCollision(tmpShip->OBB, tmpShip->OBBLocation, tmpShip->Location, tmpShip->CurrentRotationMat,
+			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
 						  tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
 			    CheckHitBBOBBCollisionDetection(tmpShip, tmpS, &ObjectPieceNum)) {
 
@@ -682,7 +682,7 @@ exitN1:
 						     tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
 			    vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
 						   tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
-			    vw_SphereOBBCollision(tmpShip->OBB, tmpShip->OBBLocation, tmpShip->Location, tmpShip->CurrentRotationMat,
+			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
 						  tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
 			    CheckHitBBHitBBCollisionDetection(tmpShip, tmpG, &ObjectPieceNum1, &ObjectPieceNum2)) {
 
@@ -778,8 +778,8 @@ exitN2:
 			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
 						     tmpCollisionShip1->Radius, tmpCollisionShip1->Location, tmpCollisionShip1->PrevLocation) &&
 			    vw_AABBAABBCollision(tmpShip->AABB, tmpShip->Location, tmpCollisionShip1->AABB, tmpCollisionShip1->Location) &&
-			    vw_OBBOBBCollision(tmpShip->OBB, tmpShip->OBBLocation, tmpShip->Location, tmpShip->CurrentRotationMat,
-					       tmpCollisionShip1->OBB, tmpCollisionShip1->OBBLocation, tmpCollisionShip1->Location, tmpCollisionShip1->CurrentRotationMat) &&
+			    vw_OBBOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
+					       tmpCollisionShip1->OBB.Box, tmpCollisionShip1->OBB.Location, tmpCollisionShip1->Location, tmpCollisionShip1->CurrentRotationMat) &&
 			    CheckHitBBHitBBCollisionDetection(tmpShip, tmpCollisionShip1, &ObjectPieceNum1, &ObjectPieceNum2)) {
 
 				float StrTMP = tmpShip->Strength;
@@ -947,7 +947,7 @@ exitN2:
 						    tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
 			    vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
 						   tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    vw_SphereOBBCollision(tmpG->OBB, tmpG->OBBLocation, tmpG->Location, tmpG->CurrentRotationMat,
+			    vw_SphereOBBCollision(tmpG->OBB.Box, tmpG->OBB.Location, tmpG->Location, tmpG->CurrentRotationMat,
 						  tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
 			    CheckHitBBOBBCollisionDetection(tmpG, tmpS, &ObjectPieceNum)) {
 
@@ -1070,8 +1070,8 @@ exitN2:
 			if ((NeedCheckCollision(tmpCollisionSpace1) || NeedCheckCollision(tmpS)) &&
 			    vw_SphereSphereCollision(tmpS->Radius, tmpS->Location,
 						     tmpCollisionSpace1->Radius, tmpCollisionSpace1->Location, tmpCollisionSpace1->PrevLocation) &&
-			    vw_OBBOBBCollision(tmpS->OBB, tmpS->OBBLocation, tmpS->Location, tmpS->CurrentRotationMat,
-					       tmpCollisionSpace1->OBB, tmpCollisionSpace1->OBBLocation, tmpCollisionSpace1->Location, tmpCollisionSpace1->CurrentRotationMat)) {
+			    vw_OBBOBBCollision(tmpS->OBB.Box, tmpS->OBB.Location, tmpS->Location, tmpS->CurrentRotationMat,
+					       tmpCollisionSpace1->OBB.Box, tmpCollisionSpace1->OBB.Location, tmpCollisionSpace1->Location, tmpCollisionSpace1->CurrentRotationMat)) {
 				// если попали в часть базы - просто летим в другую сторону,
 				// если это обломок корабля или модели
 				// и если большой астероид
@@ -1177,15 +1177,15 @@ exitN4:
 							     tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation) &&
 				    vw_SphereAABBCollision(tmpProjectile->AABB, tmpProjectile->Location,
 							   tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation) &&
-				    vw_SphereOBBCollision(tmpProjectile->OBB, tmpProjectile->OBBLocation, tmpProjectile->Location, tmpProjectile->CurrentRotationMat,
+				    vw_SphereOBBCollision(tmpProjectile->OBB.Box, tmpProjectile->OBB.Location, tmpProjectile->Location, tmpProjectile->CurrentRotationMat,
 							  tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation)) {
 
 					// если оба - ракеты, их можно уничтожить, надо проверить по OBB-OBB
 					bool NeedCheck = true;
 					if ((tmpProjectile->ProjectileType == 1) &&
 					    (tmpProject1->ProjectileType == 1) &&
-					    !vw_OBBOBBCollision(tmpProjectile->OBB, tmpProjectile->OBBLocation, tmpProjectile->Location, tmpProjectile->CurrentRotationMat,
-								tmpProject1->OBB, tmpProject1->OBBLocation, tmpProject1->Location, tmpProject1->CurrentRotationMat))
+					    !vw_OBBOBBCollision(tmpProjectile->OBB.Box, tmpProjectile->OBB.Location, tmpProjectile->Location, tmpProjectile->CurrentRotationMat,
+								tmpProject1->OBB.Box, tmpProject1->OBB.Location, tmpProject1->Location, tmpProject1->CurrentRotationMat))
 						NeedCheck = false;
 
 					if (NeedCheck) {
@@ -1226,14 +1226,14 @@ exitN4:
 							      tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation) &&
 				    vw_SphereAABBCollision(tmpProject1->AABB, tmpProject1->Location,
 							    tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation) &&
-				    vw_SphereOBBCollision(tmpProject1->OBB, tmpProject1->OBBLocation, tmpProject1->Location, tmpProject1->CurrentRotationMat,
+				    vw_SphereOBBCollision(tmpProject1->OBB.Box, tmpProject1->OBB.Location, tmpProject1->Location, tmpProject1->CurrentRotationMat,
 							   tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation)) {
 
 					// если оба - ракеты, их можно уничтожить, надо проверить по OBB-OBB
 					bool NeedCheck{true};
 					if ((tmpProjectile->ProjectileType == 1) && (tmpProject1->ProjectileType == 1) &&
-					    !vw_OBBOBBCollision(tmpProject1->OBB, tmpProject1->OBBLocation, tmpProject1->Location, tmpProject1->CurrentRotationMat,
-								tmpProjectile->OBB, tmpProjectile->OBBLocation, tmpProjectile->Location, tmpProjectile->CurrentRotationMat))
+					    !vw_OBBOBBCollision(tmpProject1->OBB.Box, tmpProject1->OBB.Location, tmpProject1->Location, tmpProject1->CurrentRotationMat,
+								tmpProjectile->OBB.Box, tmpProjectile->OBB.Location, tmpProjectile->Location, tmpProjectile->CurrentRotationMat))
 						NeedCheck = false;
 
 					if (NeedCheck) {

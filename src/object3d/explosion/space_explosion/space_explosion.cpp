@@ -456,12 +456,12 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 
 			// резервируем память для HitBB
-			ShipPart->HitBox.resize(ShipPart->ObjectBlocks.size());
+			ShipPart->HitBB.resize(ShipPart->ObjectBlocks.size());
 
 			// находим точку локального положения объекта в моделе
 			sVECTOR3D LocalLocation = Object->ObjectBlocks[i].Location;
 			vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
-			LocalLocation = Object->HitBox[i].Location - LocalLocation;
+			LocalLocation = Object->HitBB[i].Location - LocalLocation;
 			vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 			// и меняем внутрее положение
 			ShipPart->ObjectBlocks[0].Location = LocalLocation^(-1.0f);
@@ -470,7 +470,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			ShipPart->InitByDrawObjectList();
 
 			// установка текущего положения и поворота
-			ShipPart->SetLocation(Object->Location + Object->HitBox[i].Location);
+			ShipPart->SetLocation(Object->Location + Object->HitBB[i].Location);
 			ShipPart->SetRotation(Object->Rotation);
 
 

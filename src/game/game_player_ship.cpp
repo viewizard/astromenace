@@ -300,7 +300,7 @@ void InitGamePlayerShip()
 			sharedShild1->MagnetFactor = -3.0f;
 			sharedShild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
 			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		}
 
 		ShildStartHitStatus = 100.0f;
@@ -333,7 +333,7 @@ void InitGamePlayerShip()
 			sharedShild1->MagnetFactor = 2.5f;
 			sharedShild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
 			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
-			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		}
 
 		Shild2 = vw_CreateParticleSystem();
@@ -515,7 +515,7 @@ void GamePlayerShip()
 							     tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
 					if (vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
 								   PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
-						if (vw_SphereOBBCollision(tmpG->OBB, tmpG->OBBLocation, tmpG->Location, tmpG->CurrentRotationMat,
+						if (vw_SphereOBBCollision(tmpG->OBB.Box, tmpG->OBB.Location, tmpG->Location, tmpG->CurrentRotationMat,
 									  PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation)) {
 							CollisionDetected = true;
 						}
@@ -1137,14 +1137,14 @@ void GamePlayerShip()
 	// управление визуализацией щитов-дефлекторов
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (auto sharedShild1 = Shild1.lock()) {
-		sharedShild1->MoveSystem(PlayerFighter->Location + PlayerFighter->OBBLocation);
-		sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		sharedShild1->MoveSystem(PlayerFighter->Location + PlayerFighter->OBB.Location);
+		sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		sharedShild1->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);
 		sharedShild1->ParticlesPerSec = (int)(40 * ShildEnergyStatus * ShildRadius);
 	}
 	if (auto sharedShild2 = Shild2.lock()) {
-		sharedShild2->MoveSystem(PlayerFighter->Location + PlayerFighter->OBBLocation);
-		sharedShild2->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBBLocation);
+		sharedShild2->MoveSystem(PlayerFighter->Location + PlayerFighter->OBB.Location);
+		sharedShild2->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		sharedShild2->RotateSystemAndParticlesByAngle(PlayerFighter->Rotation);
 		sharedShild2->ParticlesPerSec = (int)(5 * ShildEnergyStatus * ShildRadius);
 	}

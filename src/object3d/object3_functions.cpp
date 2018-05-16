@@ -135,7 +135,7 @@ void LoadObjectData(const char *Name, cObject3D *Object3D, float TriangleSizeLim
 	Object3D->NormalMap.resize(Object3D->ObjectBlocks.size(), 0);
 
 	// резервируем память для HitBB
-	Object3D->HitBox.resize(Object3D->ObjectBlocks.size());
+	Object3D->HitBB.resize(Object3D->ObjectBlocks.size());
 }
 
 //-----------------------------------------------------------------------------
@@ -216,14 +216,14 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 
 			// проверяем, если с одной стороны все точки - значит мимо, если нет - попали :)
 			// + учитываем тут Width
-			float tmp1 = A * (RealLocation.x + tmp->OBB[0].x) + B * (RealLocation.y + tmp->OBB[0].y) + C * (RealLocation.z + tmp->OBB[0].z) + D;
-			float tmp2 = A * (RealLocation.x + tmp->OBB[1].x) + B * (RealLocation.y + tmp->OBB[1].y) + C * (RealLocation.z + tmp->OBB[1].z) + D;
-			float tmp3 = A * (RealLocation.x + tmp->OBB[2].x) + B * (RealLocation.y + tmp->OBB[2].y) + C * (RealLocation.z + tmp->OBB[2].z) + D;
-			float tmp4 = A * (RealLocation.x + tmp->OBB[3].x) + B * (RealLocation.y + tmp->OBB[3].y) + C * (RealLocation.z + tmp->OBB[3].z) + D;
-			float tmp5 = A * (RealLocation.x + tmp->OBB[4].x) + B * (RealLocation.y + tmp->OBB[4].y) + C * (RealLocation.z + tmp->OBB[4].z) + D;
-			float tmp6 = A * (RealLocation.x + tmp->OBB[5].x) + B * (RealLocation.y + tmp->OBB[5].y) + C * (RealLocation.z + tmp->OBB[5].z) + D;
-			float tmp7 = A * (RealLocation.x + tmp->OBB[6].x) + B * (RealLocation.y + tmp->OBB[6].y) + C * (RealLocation.z + tmp->OBB[6].z) + D;
-			float tmp8 = A * (RealLocation.x + tmp->OBB[7].x) + B * (RealLocation.y + tmp->OBB[7].y) + C * (RealLocation.z + tmp->OBB[7].z) + D;
+			float tmp1 = A * (RealLocation.x + tmp->OBB.Box[0].x) + B * (RealLocation.y + tmp->OBB.Box[0].y) + C * (RealLocation.z + tmp->OBB.Box[0].z) + D;
+			float tmp2 = A * (RealLocation.x + tmp->OBB.Box[1].x) + B * (RealLocation.y + tmp->OBB.Box[1].y) + C * (RealLocation.z + tmp->OBB.Box[1].z) + D;
+			float tmp3 = A * (RealLocation.x + tmp->OBB.Box[2].x) + B * (RealLocation.y + tmp->OBB.Box[2].y) + C * (RealLocation.z + tmp->OBB.Box[2].z) + D;
+			float tmp4 = A * (RealLocation.x + tmp->OBB.Box[3].x) + B * (RealLocation.y + tmp->OBB.Box[3].y) + C * (RealLocation.z + tmp->OBB.Box[3].z) + D;
+			float tmp5 = A * (RealLocation.x + tmp->OBB.Box[4].x) + B * (RealLocation.y + tmp->OBB.Box[4].y) + C * (RealLocation.z + tmp->OBB.Box[4].z) + D;
+			float tmp6 = A * (RealLocation.x + tmp->OBB.Box[5].x) + B * (RealLocation.y + tmp->OBB.Box[5].y) + C * (RealLocation.z + tmp->OBB.Box[5].z) + D;
+			float tmp7 = A * (RealLocation.x + tmp->OBB.Box[6].x) + B * (RealLocation.y + tmp->OBB.Box[6].y) + C * (RealLocation.z + tmp->OBB.Box[6].z) + D;
+			float tmp8 = A * (RealLocation.x + tmp->OBB.Box[7].x) + B * (RealLocation.y + tmp->OBB.Box[7].y) + C * (RealLocation.z + tmp->OBB.Box[7].z) + D;
 
 
 			if (!(((tmp1 > Width2) && (tmp2 > Width2) && (tmp3 > Width2) && (tmp4 > Width2) &&
@@ -231,14 +231,14 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 			      ((tmp1 < -Width2) && (tmp2 < -Width2) && (tmp3 < -Width2) && (tmp4 < -Width2) &&
 			       (tmp5 < -Width2) && (tmp6 < -Width2) && (tmp7 < -Width2) && (tmp8 < -Width2)))) {
 				// проверяем, спереди или сзади стоит противник
-				tmp1 = A2 * (RealLocation.x + tmp->OBB[0].x) + B2 * (RealLocation.y + tmp->OBB[0].y) + C2 * (RealLocation.z + tmp->OBB[0].z) + D2;
-				tmp2 = A2 * (RealLocation.x + tmp->OBB[1].x) + B2 * (RealLocation.y + tmp->OBB[1].y) + C2 * (RealLocation.z + tmp->OBB[1].z) + D2;
-				tmp3 = A2 * (RealLocation.x + tmp->OBB[2].x) + B2 * (RealLocation.y + tmp->OBB[2].y) + C2 * (RealLocation.z + tmp->OBB[2].z) + D2;
-				tmp4 = A2 * (RealLocation.x + tmp->OBB[3].x) + B2 * (RealLocation.y + tmp->OBB[3].y) + C2 * (RealLocation.z + tmp->OBB[3].z) + D2;
-				tmp5 = A2 * (RealLocation.x + tmp->OBB[4].x) + B2 * (RealLocation.y + tmp->OBB[4].y) + C2 * (RealLocation.z + tmp->OBB[4].z) + D2;
-				tmp6 = A2 * (RealLocation.x + tmp->OBB[5].x) + B2 * (RealLocation.y + tmp->OBB[5].y) + C2 * (RealLocation.z + tmp->OBB[5].z) + D2;
-				tmp7 = A2 * (RealLocation.x + tmp->OBB[6].x) + B2 * (RealLocation.y + tmp->OBB[6].y) + C2 * (RealLocation.z + tmp->OBB[6].z) + D2;
-				tmp8 = A2 * (RealLocation.x + tmp->OBB[7].x) + B2 * (RealLocation.y + tmp->OBB[7].y) + C2 * (RealLocation.z + tmp->OBB[7].z) + D2;
+				tmp1 = A2 * (RealLocation.x + tmp->OBB.Box[0].x) + B2 * (RealLocation.y + tmp->OBB.Box[0].y) + C2 * (RealLocation.z + tmp->OBB.Box[0].z) + D2;
+				tmp2 = A2 * (RealLocation.x + tmp->OBB.Box[1].x) + B2 * (RealLocation.y + tmp->OBB.Box[1].y) + C2 * (RealLocation.z + tmp->OBB.Box[1].z) + D2;
+				tmp3 = A2 * (RealLocation.x + tmp->OBB.Box[2].x) + B2 * (RealLocation.y + tmp->OBB.Box[2].y) + C2 * (RealLocation.z + tmp->OBB.Box[2].z) + D2;
+				tmp4 = A2 * (RealLocation.x + tmp->OBB.Box[3].x) + B2 * (RealLocation.y + tmp->OBB.Box[3].y) + C2 * (RealLocation.z + tmp->OBB.Box[3].z) + D2;
+				tmp5 = A2 * (RealLocation.x + tmp->OBB.Box[4].x) + B2 * (RealLocation.y + tmp->OBB.Box[4].y) + C2 * (RealLocation.z + tmp->OBB.Box[4].z) + D2;
+				tmp6 = A2 * (RealLocation.x + tmp->OBB.Box[5].x) + B2 * (RealLocation.y + tmp->OBB.Box[5].y) + C2 * (RealLocation.z + tmp->OBB.Box[5].z) + D2;
+				tmp7 = A2 * (RealLocation.x + tmp->OBB.Box[6].x) + B2 * (RealLocation.y + tmp->OBB.Box[6].y) + C2 * (RealLocation.z + tmp->OBB.Box[6].z) + D2;
+				tmp8 = A2 * (RealLocation.x + tmp->OBB.Box[7].x) + B2 * (RealLocation.y + tmp->OBB.Box[7].y) + C2 * (RealLocation.z + tmp->OBB.Box[7].z) + D2;
 
 				if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
 				    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
@@ -339,28 +339,28 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 			}
 
 			// проверяем, если с одной стороны все точки - значит мимо, если нет - попали :)
-			float tmp1 = A * (tmpG->Location.x + tmpG->OBB[0].x) + B * (tmpG->Location.y + tmpG->OBB[0].y) + C * (tmpG->Location.z + tmpG->OBB[0].z) + D;
-			float tmp2 = A * (tmpG->Location.x + tmpG->OBB[1].x) + B * (tmpG->Location.y + tmpG->OBB[1].y) + C * (tmpG->Location.z + tmpG->OBB[1].z) + D;
-			float tmp3 = A * (tmpG->Location.x + tmpG->OBB[2].x) + B * (tmpG->Location.y + tmpG->OBB[2].y) + C * (tmpG->Location.z + tmpG->OBB[2].z) + D;
-			float tmp4 = A * (tmpG->Location.x + tmpG->OBB[3].x) + B * (tmpG->Location.y + tmpG->OBB[3].y) + C * (tmpG->Location.z + tmpG->OBB[3].z) + D;
-			float tmp5 = A * (tmpG->Location.x + tmpG->OBB[4].x) + B * (tmpG->Location.y + tmpG->OBB[4].y) + C * (tmpG->Location.z + tmpG->OBB[4].z) + D;
-			float tmp6 = A * (tmpG->Location.x + tmpG->OBB[5].x) + B * (tmpG->Location.y + tmpG->OBB[5].y) + C * (tmpG->Location.z + tmpG->OBB[5].z) + D;
-			float tmp7 = A * (tmpG->Location.x + tmpG->OBB[6].x) + B * (tmpG->Location.y + tmpG->OBB[6].y) + C * (tmpG->Location.z + tmpG->OBB[6].z) + D;
-			float tmp8 = A * (tmpG->Location.x + tmpG->OBB[7].x) + B * (tmpG->Location.y + tmpG->OBB[7].y) + C * (tmpG->Location.z + tmpG->OBB[7].z) + D;
+			float tmp1 = A * (tmpG->Location.x + tmpG->OBB.Box[0].x) + B * (tmpG->Location.y + tmpG->OBB.Box[0].y) + C * (tmpG->Location.z + tmpG->OBB.Box[0].z) + D;
+			float tmp2 = A * (tmpG->Location.x + tmpG->OBB.Box[1].x) + B * (tmpG->Location.y + tmpG->OBB.Box[1].y) + C * (tmpG->Location.z + tmpG->OBB.Box[1].z) + D;
+			float tmp3 = A * (tmpG->Location.x + tmpG->OBB.Box[2].x) + B * (tmpG->Location.y + tmpG->OBB.Box[2].y) + C * (tmpG->Location.z + tmpG->OBB.Box[2].z) + D;
+			float tmp4 = A * (tmpG->Location.x + tmpG->OBB.Box[3].x) + B * (tmpG->Location.y + tmpG->OBB.Box[3].y) + C * (tmpG->Location.z + tmpG->OBB.Box[3].z) + D;
+			float tmp5 = A * (tmpG->Location.x + tmpG->OBB.Box[4].x) + B * (tmpG->Location.y + tmpG->OBB.Box[4].y) + C * (tmpG->Location.z + tmpG->OBB.Box[4].z) + D;
+			float tmp6 = A * (tmpG->Location.x + tmpG->OBB.Box[5].x) + B * (tmpG->Location.y + tmpG->OBB.Box[5].y) + C * (tmpG->Location.z + tmpG->OBB.Box[5].z) + D;
+			float tmp7 = A * (tmpG->Location.x + tmpG->OBB.Box[6].x) + B * (tmpG->Location.y + tmpG->OBB.Box[6].y) + C * (tmpG->Location.z + tmpG->OBB.Box[6].z) + D;
+			float tmp8 = A * (tmpG->Location.x + tmpG->OBB.Box[7].x) + B * (tmpG->Location.y + tmpG->OBB.Box[7].y) + C * (tmpG->Location.z + tmpG->OBB.Box[7].z) + D;
 
 			if (!(((tmp1 > Width2) && (tmp2 > Width2) && (tmp3 > Width2) && (tmp4 > Width2) &&
 			       (tmp5 > Width2) && (tmp6 > Width2) && (tmp7 > Width2) && (tmp8 > Width2)) ||
 			      ((tmp1 < -Width2) && (tmp2 < -Width2) && (tmp3 < -Width2) && (tmp4 < -Width2) &&
 			       (tmp5 < -Width2) && (tmp6 < -Width2) && (tmp7 < -Width2) && (tmp8 < -Width2)))) {
 				// проверяем, спереди или сзади стоит противник
-				tmp1 = A2 * (tmpG->Location.x + tmpG->OBB[0].x) + B2 * (tmpG->Location.y + tmpG->OBB[0].y) + C2 * (tmpG->Location.z + tmpG->OBB[0].z) + D2;
-				tmp2 = A2 * (tmpG->Location.x + tmpG->OBB[1].x) + B2 * (tmpG->Location.y + tmpG->OBB[1].y) + C2 * (tmpG->Location.z + tmpG->OBB[1].z) + D2;
-				tmp3 = A2 * (tmpG->Location.x + tmpG->OBB[2].x) + B2 * (tmpG->Location.y + tmpG->OBB[2].y) + C2 * (tmpG->Location.z + tmpG->OBB[2].z) + D2;
-				tmp4 = A2 * (tmpG->Location.x + tmpG->OBB[3].x) + B2 * (tmpG->Location.y + tmpG->OBB[3].y) + C2 * (tmpG->Location.z + tmpG->OBB[3].z) + D2;
-				tmp5 = A2 * (tmpG->Location.x + tmpG->OBB[4].x) + B2 * (tmpG->Location.y + tmpG->OBB[4].y) + C2 * (tmpG->Location.z + tmpG->OBB[4].z) + D2;
-				tmp6 = A2 * (tmpG->Location.x + tmpG->OBB[5].x) + B2 * (tmpG->Location.y + tmpG->OBB[5].y) + C2 * (tmpG->Location.z + tmpG->OBB[5].z) + D2;
-				tmp7 = A2 * (tmpG->Location.x + tmpG->OBB[6].x) + B2 * (tmpG->Location.y + tmpG->OBB[6].y) + C2 * (tmpG->Location.z + tmpG->OBB[6].z) + D2;
-				tmp8 = A2 * (tmpG->Location.x + tmpG->OBB[7].x) + B2 * (tmpG->Location.y + tmpG->OBB[7].y) + C2 * (tmpG->Location.z + tmpG->OBB[7].z) + D2;
+				tmp1 = A2 * (tmpG->Location.x + tmpG->OBB.Box[0].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[0].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[0].z) + D2;
+				tmp2 = A2 * (tmpG->Location.x + tmpG->OBB.Box[1].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[1].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[1].z) + D2;
+				tmp3 = A2 * (tmpG->Location.x + tmpG->OBB.Box[2].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[2].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[2].z) + D2;
+				tmp4 = A2 * (tmpG->Location.x + tmpG->OBB.Box[3].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[3].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[3].z) + D2;
+				tmp5 = A2 * (tmpG->Location.x + tmpG->OBB.Box[4].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[4].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[4].z) + D2;
+				tmp6 = A2 * (tmpG->Location.x + tmpG->OBB.Box[5].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[5].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[5].z) + D2;
+				tmp7 = A2 * (tmpG->Location.x + tmpG->OBB.Box[6].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[6].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[6].z) + D2;
+				tmp8 = A2 * (tmpG->Location.x + tmpG->OBB.Box[7].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[7].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[7].z) + D2;
 
 				if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
 				    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
@@ -466,28 +466,28 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 			}
 
 			// проверяем, если с одной стороны все точки - значит мимо, если нет - попали :)
-			float tmp1 = A * (RealLocation.x + tmpS->OBB[0].x) + B * (RealLocation.y + tmpS->OBB[0].y) + C * (RealLocation.z + tmpS->OBB[0].z) + D;
-			float tmp2 = A * (RealLocation.x + tmpS->OBB[1].x) + B * (RealLocation.y + tmpS->OBB[1].y) + C * (RealLocation.z + tmpS->OBB[1].z) + D;
-			float tmp3 = A * (RealLocation.x + tmpS->OBB[2].x) + B * (RealLocation.y + tmpS->OBB[2].y) + C * (RealLocation.z + tmpS->OBB[2].z) + D;
-			float tmp4 = A * (RealLocation.x + tmpS->OBB[3].x) + B * (RealLocation.y + tmpS->OBB[3].y) + C * (RealLocation.z + tmpS->OBB[3].z) + D;
-			float tmp5 = A * (RealLocation.x + tmpS->OBB[4].x) + B * (RealLocation.y + tmpS->OBB[4].y) + C * (RealLocation.z + tmpS->OBB[4].z) + D;
-			float tmp6 = A * (RealLocation.x + tmpS->OBB[5].x) + B * (RealLocation.y + tmpS->OBB[5].y) + C * (RealLocation.z + tmpS->OBB[5].z) + D;
-			float tmp7 = A * (RealLocation.x + tmpS->OBB[6].x) + B * (RealLocation.y + tmpS->OBB[6].y) + C * (RealLocation.z + tmpS->OBB[6].z) + D;
-			float tmp8 = A * (RealLocation.x + tmpS->OBB[7].x) + B * (RealLocation.y + tmpS->OBB[7].y) + C * (RealLocation.z + tmpS->OBB[7].z) + D;
+			float tmp1 = A * (RealLocation.x + tmpS->OBB.Box[0].x) + B * (RealLocation.y + tmpS->OBB.Box[0].y) + C * (RealLocation.z + tmpS->OBB.Box[0].z) + D;
+			float tmp2 = A * (RealLocation.x + tmpS->OBB.Box[1].x) + B * (RealLocation.y + tmpS->OBB.Box[1].y) + C * (RealLocation.z + tmpS->OBB.Box[1].z) + D;
+			float tmp3 = A * (RealLocation.x + tmpS->OBB.Box[2].x) + B * (RealLocation.y + tmpS->OBB.Box[2].y) + C * (RealLocation.z + tmpS->OBB.Box[2].z) + D;
+			float tmp4 = A * (RealLocation.x + tmpS->OBB.Box[3].x) + B * (RealLocation.y + tmpS->OBB.Box[3].y) + C * (RealLocation.z + tmpS->OBB.Box[3].z) + D;
+			float tmp5 = A * (RealLocation.x + tmpS->OBB.Box[4].x) + B * (RealLocation.y + tmpS->OBB.Box[4].y) + C * (RealLocation.z + tmpS->OBB.Box[4].z) + D;
+			float tmp6 = A * (RealLocation.x + tmpS->OBB.Box[5].x) + B * (RealLocation.y + tmpS->OBB.Box[5].y) + C * (RealLocation.z + tmpS->OBB.Box[5].z) + D;
+			float tmp7 = A * (RealLocation.x + tmpS->OBB.Box[6].x) + B * (RealLocation.y + tmpS->OBB.Box[6].y) + C * (RealLocation.z + tmpS->OBB.Box[6].z) + D;
+			float tmp8 = A * (RealLocation.x + tmpS->OBB.Box[7].x) + B * (RealLocation.y + tmpS->OBB.Box[7].y) + C * (RealLocation.z + tmpS->OBB.Box[7].z) + D;
 
 			if (!(((tmp1 > Width2) && (tmp2 > Width2) && (tmp3 > Width2) && (tmp4 > Width2) &&
 			       (tmp5 > Width2) && (tmp6 > Width2) && (tmp7 > Width2) && (tmp8 > Width2)) ||
 			      ((tmp1 < -Width2) && (tmp2 < -Width2) && (tmp3 < -Width2) && (tmp4 < -Width2) &&
 			       (tmp5 < -Width2) && (tmp6 < -Width2) && (tmp7 < -Width2) && (tmp8 < -Width2)))) {
 				// проверяем, спереди или сзади стоит противник
-				tmp1 = A2 * (RealLocation.x + tmpS->OBB[0].x) + B2 * (RealLocation.y + tmpS->OBB[0].y) + C2 * (RealLocation.z + tmpS->OBB[0].z)  + D2;
-				tmp2 = A2 * (RealLocation.x + tmpS->OBB[1].x) + B2 * (RealLocation.y + tmpS->OBB[1].y) + C2 * (RealLocation.z + tmpS->OBB[1].z)  + D2;
-				tmp3 = A2 * (RealLocation.x + tmpS->OBB[2].x) + B2 * (RealLocation.y + tmpS->OBB[2].y) + C2 * (RealLocation.z + tmpS->OBB[2].z)  + D2;
-				tmp4 = A2 * (RealLocation.x + tmpS->OBB[3].x) + B2 * (RealLocation.y + tmpS->OBB[3].y) + C2 * (RealLocation.z + tmpS->OBB[3].z)  + D2;
-				tmp5 = A2 * (RealLocation.x + tmpS->OBB[4].x) + B2 * (RealLocation.y + tmpS->OBB[4].y) + C2 * (RealLocation.z + tmpS->OBB[4].z)  + D2;
-				tmp6 = A2 * (RealLocation.x + tmpS->OBB[5].x) + B2 * (RealLocation.y + tmpS->OBB[5].y) + C2 * (RealLocation.z + tmpS->OBB[5].z)  + D2;
-				tmp7 = A2 * (RealLocation.x + tmpS->OBB[6].x) + B2 * (RealLocation.y + tmpS->OBB[6].y) + C2 * (RealLocation.z + tmpS->OBB[6].z)  + D2;
-				tmp8 = A2 * (RealLocation.x + tmpS->OBB[7].x) + B2 * (RealLocation.y + tmpS->OBB[7].y) + C2 * (RealLocation.z + tmpS->OBB[7].z)  + D2;
+				tmp1 = A2 * (RealLocation.x + tmpS->OBB.Box[0].x) + B2 * (RealLocation.y + tmpS->OBB.Box[0].y) + C2 * (RealLocation.z + tmpS->OBB.Box[0].z)  + D2;
+				tmp2 = A2 * (RealLocation.x + tmpS->OBB.Box[1].x) + B2 * (RealLocation.y + tmpS->OBB.Box[1].y) + C2 * (RealLocation.z + tmpS->OBB.Box[1].z)  + D2;
+				tmp3 = A2 * (RealLocation.x + tmpS->OBB.Box[2].x) + B2 * (RealLocation.y + tmpS->OBB.Box[2].y) + C2 * (RealLocation.z + tmpS->OBB.Box[2].z)  + D2;
+				tmp4 = A2 * (RealLocation.x + tmpS->OBB.Box[3].x) + B2 * (RealLocation.y + tmpS->OBB.Box[3].y) + C2 * (RealLocation.z + tmpS->OBB.Box[3].z)  + D2;
+				tmp5 = A2 * (RealLocation.x + tmpS->OBB.Box[4].x) + B2 * (RealLocation.y + tmpS->OBB.Box[4].y) + C2 * (RealLocation.z + tmpS->OBB.Box[4].z)  + D2;
+				tmp6 = A2 * (RealLocation.x + tmpS->OBB.Box[5].x) + B2 * (RealLocation.y + tmpS->OBB.Box[5].y) + C2 * (RealLocation.z + tmpS->OBB.Box[5].z)  + D2;
+				tmp7 = A2 * (RealLocation.x + tmpS->OBB.Box[6].x) + B2 * (RealLocation.y + tmpS->OBB.Box[6].y) + C2 * (RealLocation.z + tmpS->OBB.Box[6].z)  + D2;
+				tmp8 = A2 * (RealLocation.x + tmpS->OBB.Box[7].x) + B2 * (RealLocation.y + tmpS->OBB.Box[7].y) + C2 * (RealLocation.z + tmpS->OBB.Box[7].z)  + D2;
 
 				if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
 				    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
@@ -785,14 +785,14 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 			RealLocation = RealLocation + FutureLocation + CamPosTTT;
 
 			// проверяем, если все точки выше
-			float tmp1 = A * (RealLocation.x + tmp->OBB[0].x) + B * (RealLocation.y + tmp->OBB[0].y) + C * (RealLocation.z + tmp->OBB[0].z) + D;
-			float tmp2 = A * (RealLocation.x + tmp->OBB[1].x) + B * (RealLocation.y + tmp->OBB[1].y) + C * (RealLocation.z + tmp->OBB[1].z) + D;
-			float tmp3 = A * (RealLocation.x + tmp->OBB[2].x) + B * (RealLocation.y + tmp->OBB[2].y) + C * (RealLocation.z + tmp->OBB[2].z) + D;
-			float tmp4 = A * (RealLocation.x + tmp->OBB[3].x) + B * (RealLocation.y + tmp->OBB[3].y) + C * (RealLocation.z + tmp->OBB[3].z) + D;
-			float tmp5 = A * (RealLocation.x + tmp->OBB[4].x) + B * (RealLocation.y + tmp->OBB[4].y) + C * (RealLocation.z + tmp->OBB[4].z) + D;
-			float tmp6 = A * (RealLocation.x + tmp->OBB[5].x) + B * (RealLocation.y + tmp->OBB[5].y) + C * (RealLocation.z + tmp->OBB[5].z) + D;
-			float tmp7 = A * (RealLocation.x + tmp->OBB[6].x) + B * (RealLocation.y + tmp->OBB[6].y) + C * (RealLocation.z + tmp->OBB[6].z) + D;
-			float tmp8 = A * (RealLocation.x + tmp->OBB[7].x) + B * (RealLocation.y + tmp->OBB[7].y) + C * (RealLocation.z + tmp->OBB[7].z) + D;
+			float tmp1 = A * (RealLocation.x + tmp->OBB.Box[0].x) + B * (RealLocation.y + tmp->OBB.Box[0].y) + C * (RealLocation.z + tmp->OBB.Box[0].z) + D;
+			float tmp2 = A * (RealLocation.x + tmp->OBB.Box[1].x) + B * (RealLocation.y + tmp->OBB.Box[1].y) + C * (RealLocation.z + tmp->OBB.Box[1].z) + D;
+			float tmp3 = A * (RealLocation.x + tmp->OBB.Box[2].x) + B * (RealLocation.y + tmp->OBB.Box[2].y) + C * (RealLocation.z + tmp->OBB.Box[2].z) + D;
+			float tmp4 = A * (RealLocation.x + tmp->OBB.Box[3].x) + B * (RealLocation.y + tmp->OBB.Box[3].y) + C * (RealLocation.z + tmp->OBB.Box[3].z) + D;
+			float tmp5 = A * (RealLocation.x + tmp->OBB.Box[4].x) + B * (RealLocation.y + tmp->OBB.Box[4].y) + C * (RealLocation.z + tmp->OBB.Box[4].z) + D;
+			float tmp6 = A * (RealLocation.x + tmp->OBB.Box[5].x) + B * (RealLocation.y + tmp->OBB.Box[5].y) + C * (RealLocation.z + tmp->OBB.Box[5].z) + D;
+			float tmp7 = A * (RealLocation.x + tmp->OBB.Box[6].x) + B * (RealLocation.y + tmp->OBB.Box[6].y) + C * (RealLocation.z + tmp->OBB.Box[6].z) + D;
+			float tmp8 = A * (RealLocation.x + tmp->OBB.Box[7].x) + B * (RealLocation.y + tmp->OBB.Box[7].y) + C * (RealLocation.z + tmp->OBB.Box[7].z) + D;
 
 			if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
 			    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {

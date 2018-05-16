@@ -93,16 +93,29 @@ enum class eDeleteAfterLeaveScene {
 // delay before object delete, since object could back to the scene
 #define DeleteAfterLeaveSceneDelay 1.0f
 
-struct sHitBox {
-	// Hit Bounding Box, coordinates are related to object's center
-	sVECTOR3D HitBB[8]{{0.0f, 0.0f, 0.0f},
-			   {0.0f, 0.0f, 0.0f},
-			   {0.0f, 0.0f, 0.0f},
-			   {0.0f, 0.0f, 0.0f},
-			   {0.0f, 0.0f, 0.0f},
-			   {0.0f, 0.0f, 0.0f},
-			   {0.0f, 0.0f, 0.0f},
-			   {0.0f, 0.0f, 0.0f}};
+// Oriented Bounding Box, coordinates are related to object's center
+struct sOBB {
+	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f}};
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+};
+
+// Hit Bounding Box, coordinates are related to object's center
+struct sHitBB {
+	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f}};
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	float Radius2{0.0f}; // square of the radius of HitBB
 	sVECTOR3D Size{0.0f, 0.0f, 0.0f}; // HitBB's size
@@ -168,17 +181,9 @@ public:
 			  {0.0f, 0.0f, 0.0f},
 			  {0.0f, 0.0f, 0.0f}};
 	// Oriented Bounding Box, coordinates are related to object's center
-	sVECTOR3D OBB[8]{{0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f}};
-	sVECTOR3D OBBLocation{0.0f, 0.0f, 0.0f};
+	sOBB OBB{};
 	// Hit Bounding Box, same as OBB, but for each objects in the 3D model
-	std::vector<sHitBox> HitBox{};
+	std::vector<sHitBB> HitBB{};
 	// Radius, for fast collisions check
 	float Radius{0.0f};
 

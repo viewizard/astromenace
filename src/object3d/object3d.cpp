@@ -112,82 +112,82 @@ void cObject3D::InitByDrawObjectList()
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		HitBox[i].HitBB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		HitBox[i].HitBB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		HitBox[i].HitBB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		HitBox[i].HitBB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		HitBox[i].HitBB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		HitBox[i].HitBB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		HitBox[i].HitBB[6] = sVECTOR3D(MinX, MinY, MinZ);
-		HitBox[i].HitBB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		HitBB[i].Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		HitBB[i].Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		HitBB[i].Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		HitBB[i].Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		HitBB[i].Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		HitBB[i].Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		HitBB[i].Box[6] = sVECTOR3D(MinX, MinY, MinZ);
+		HitBB[i].Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 		// находим координаты центра HitBB относительно координат модели
-		HitBox[i].Location.x = (MaxX + MinX) / 2.0f;
-		HitBox[i].Location.y = (MaxY + MinY) / 2.0f;
-		HitBox[i].Location.z = (MaxZ + MinZ) / 2.0f;
+		HitBB[i].Location.x = (MaxX + MinX) / 2.0f;
+		HitBB[i].Location.y = (MaxY + MinY) / 2.0f;
+		HitBB[i].Location.z = (MaxZ + MinZ) / 2.0f;
 
 		// находим размеры коробки
-		HitBox[i].Size.x = fabsf(MaxX - MinX);
-		HitBox[i].Size.y = fabsf(MaxY - MinY);
-		HitBox[i].Size.z = fabsf(MaxZ - MinZ);
+		HitBB[i].Size.x = fabsf(MaxX - MinX);
+		HitBB[i].Size.y = fabsf(MaxY - MinY);
+		HitBB[i].Size.z = fabsf(MaxZ - MinZ);
 
 		// находим квадрат радиуса
-		HitBox[i].Radius2 = (HitBox[i].Size.x / 2.0f) * (HitBox[i].Size.x / 2.0f) +
-				    (HitBox[i].Size.y / 2.0f) * (HitBox[i].Size.y / 2.0f) +
-				    (HitBox[i].Size.z / 2.0f) * (HitBox[i].Size.z / 2.0f);
+		HitBB[i].Radius2 = (HitBB[i].Size.x / 2.0f) * (HitBB[i].Size.x / 2.0f) +
+				   (HitBB[i].Size.y / 2.0f) * (HitBB[i].Size.y / 2.0f) +
+				   (HitBB[i].Size.z / 2.0f) * (HitBB[i].Size.z / 2.0f);
 
 		// переносим данные HitBB чтобы центр стал геометрическим центром
 		for (int k = 0; k < 8; k++) {
-			HitBox[i].HitBB[k] -= HitBox[i].Location;
+			HitBB[i].Box[k] -= HitBB[i].Location;
 		}
 
 		// учитываем положение самого объекта в моделе
-		HitBox[i].Location += ObjectBlocks[i].Location;
+		HitBB[i].Location += ObjectBlocks[i].Location;
 	}
 
 	// находим AABB, OBB... первоначально без учета текущего положения и поворота - их нет
 	// 1-й HitBB всегда есть... фактически это OBB
-	float MinX = HitBox[0].HitBB[6].x + HitBox[0].Location.x;
-	float MaxX = HitBox[0].HitBB[0].x + HitBox[0].Location.x;
-	float MinY = HitBox[0].HitBB[6].y + HitBox[0].Location.y;
-	float MaxY = HitBox[0].HitBB[0].y + HitBox[0].Location.y;
-	float MinZ = HitBox[0].HitBB[6].z + HitBox[0].Location.z;
-	float MaxZ = HitBox[0].HitBB[0].z + HitBox[0].Location.z;
+	float MinX = HitBB[0].Box[6].x + HitBB[0].Location.x;
+	float MaxX = HitBB[0].Box[0].x + HitBB[0].Location.x;
+	float MinY = HitBB[0].Box[6].y + HitBB[0].Location.y;
+	float MaxY = HitBB[0].Box[0].y + HitBB[0].Location.y;
+	float MinZ = HitBB[0].Box[6].z + HitBB[0].Location.z;
+	float MaxZ = HitBB[0].Box[0].z + HitBB[0].Location.z;
 
 	// берем то по HitBB, причем со 2-го сразу, т.к. первый учли выше
 	for (unsigned int i = 1; i < ObjectBlocks.size(); i++) {
-		if (MinX > HitBox[i].HitBB[6].x + HitBox[i].Location.x)
-			MinX = HitBox[i].HitBB[6].x + HitBox[i].Location.x;
-		if (MaxX < HitBox[i].HitBB[0].x + HitBox[i].Location.x)
-			MaxX = HitBox[i].HitBB[0].x + HitBox[i].Location.x;
-		if (MinY > HitBox[i].HitBB[6].y + HitBox[i].Location.y)
-			MinY = HitBox[i].HitBB[6].y + HitBox[i].Location.y;
-		if (MaxY < HitBox[i].HitBB[0].y + HitBox[i].Location.y)
-			MaxY = HitBox[i].HitBB[0].y + HitBox[i].Location.y;
-		if (MinZ > HitBox[i].HitBB[6].z + HitBox[i].Location.z)
-			MinZ = HitBox[i].HitBB[6].z + HitBox[i].Location.z;
-		if (MaxZ < HitBox[i].HitBB[0].z + HitBox[i].Location.z)
-			MaxZ = HitBox[i].HitBB[0].z + HitBox[i].Location.z;
+		if (MinX > HitBB[i].Box[6].x + HitBB[i].Location.x)
+			MinX = HitBB[i].Box[6].x + HitBB[i].Location.x;
+		if (MaxX < HitBB[i].Box[0].x + HitBB[i].Location.x)
+			MaxX = HitBB[i].Box[0].x + HitBB[i].Location.x;
+		if (MinY > HitBB[i].Box[6].y + HitBB[i].Location.y)
+			MinY = HitBB[i].Box[6].y + HitBB[i].Location.y;
+		if (MaxY < HitBB[i].Box[0].y + HitBB[i].Location.y)
+			MaxY = HitBB[i].Box[0].y + HitBB[i].Location.y;
+		if (MinZ > HitBB[i].Box[6].z + HitBB[i].Location.z)
+			MinZ = HitBB[i].Box[6].z + HitBB[i].Location.z;
+		if (MaxZ < HitBB[i].Box[0].z + HitBB[i].Location.z)
+			MaxZ = HitBB[i].Box[0].z + HitBB[i].Location.z;
 	}
 
 	// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-	OBB[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-	OBB[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-	OBB[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-	OBB[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-	OBB[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-	OBB[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-	OBB[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-	OBB[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+	OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+	OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+	OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+	OBB.Box[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+	OBB.Box[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+	OBB.Box[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+	OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+	OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 	// находим координаты центра OBB относительно координат модели
-	OBBLocation.x = (MaxX + MinX) / 2.0f;
-	OBBLocation.y = (MaxY + MinY) / 2.0f;
-	OBBLocation.z = (MaxZ + MinZ) / 2.0f;
+	OBB.Location.x = (MaxX + MinX) / 2.0f;
+	OBB.Location.y = (MaxY + MinY) / 2.0f;
+	OBB.Location.z = (MaxZ + MinZ) / 2.0f;
 
 	// переносим данные OBB чтобы центр стал центром
 	for (int k = 0; k < 8; k++) {
-		OBB[k] -= OBBLocation;
+		OBB.Box[k] -= OBB.Location;
 	}
 
 	// габариты
@@ -229,15 +229,15 @@ void cObject3D::InitByDrawObjectList()
 void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 {
 	// пересчет HitBB
-	if (!HitBox.empty()) {
+	if (!HitBB.empty()) {
 		// делаем временную обратную матрицу модели
 		float OldInvRotationMatTmp[9];
 		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
 
-		vw_Matrix33CalcPoint(HitBox[ObjectNum].Location, OldInvRotationMatTmp);
-		HitBox[ObjectNum].Location -= ObjectBlocks[ObjectNum].Location - NewLocation;
-		vw_Matrix33CalcPoint(HitBox[ObjectNum].Location, CurrentRotationMat);
+		vw_Matrix33CalcPoint(HitBB[ObjectNum].Location, OldInvRotationMatTmp);
+		HitBB[ObjectNum].Location -= ObjectBlocks[ObjectNum].Location - NewLocation;
+		vw_Matrix33CalcPoint(HitBB[ObjectNum].Location, CurrentRotationMat);
 
 		// нужно подкорректировать OBB и ABB
 		float MinX = 10000.0f;
@@ -249,38 +249,38 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 
 		// проверяем данные
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
-			vw_Matrix33CalcPoint(HitBox[i].Location, OldInvRotationMatTmp);
+			vw_Matrix33CalcPoint(HitBB[i].Location, OldInvRotationMatTmp);
 
 			for (int j = 0; j < 8; j++) {
-				vw_Matrix33CalcPoint(HitBox[i].HitBB[j], OldInvRotationMatTmp);
+				vw_Matrix33CalcPoint(HitBB[i].Box[j], OldInvRotationMatTmp);
 
-				if (MinX > HitBox[i].HitBB[j].x + HitBox[i].Location.x)
-					MinX = HitBox[i].HitBB[j].x + HitBox[i].Location.x;
-				if (MaxX < HitBox[i].HitBB[j].x + HitBox[i].Location.x)
-					MaxX = HitBox[i].HitBB[j].x + HitBox[i].Location.x;
-				if (MinY > HitBox[i].HitBB[j].y + HitBox[i].Location.y)
-					MinY = HitBox[i].HitBB[j].y + HitBox[i].Location.y;
-				if (MaxY < HitBox[i].HitBB[j].y + HitBox[i].Location.y)
-					MaxY = HitBox[i].HitBB[j].y + HitBox[i].Location.y;
-				if (MinZ > HitBox[i].HitBB[j].z + HitBox[i].Location.z)
-					MinZ = HitBox[i].HitBB[j].z + HitBox[i].Location.z;
-				if (MaxZ < HitBox[i].HitBB[j].z + HitBox[i].Location.z)
-					MaxZ = HitBox[i].HitBB[j].z + HitBox[i].Location.z;
+				if (MinX > HitBB[i].Box[j].x + HitBB[i].Location.x)
+					MinX = HitBB[i].Box[j].x + HitBB[i].Location.x;
+				if (MaxX < HitBB[i].Box[j].x + HitBB[i].Location.x)
+					MaxX = HitBB[i].Box[j].x + HitBB[i].Location.x;
+				if (MinY > HitBB[i].Box[j].y + HitBB[i].Location.y)
+					MinY = HitBB[i].Box[j].y + HitBB[i].Location.y;
+				if (MaxY < HitBB[i].Box[j].y + HitBB[i].Location.y)
+					MaxY = HitBB[i].Box[j].y + HitBB[i].Location.y;
+				if (MinZ > HitBB[i].Box[j].z + HitBB[i].Location.z)
+					MinZ = HitBB[i].Box[j].z + HitBB[i].Location.z;
+				if (MaxZ < HitBB[i].Box[j].z + HitBB[i].Location.z)
+					MaxZ = HitBB[i].Box[j].z + HitBB[i].Location.z;
 
-				vw_Matrix33CalcPoint(HitBox[i].HitBB[j], CurrentRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i].Box[j], CurrentRotationMat);
 			}
-			vw_Matrix33CalcPoint(HitBox[i].Location, CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBB[i].Location, CurrentRotationMat);
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		OBB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		OBB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		OBB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		OBB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		OBB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		OBB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		OBB[6] = sVECTOR3D(MinX, MinY, MinZ);
-		OBB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		OBB.Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		OBB.Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		OBB.Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		OBB.Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		OBB.Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		OBB.Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		OBB.Box[6] = sVECTOR3D(MinX, MinY, MinZ);
+		OBB.Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
 		Width = fabsf(MaxX - MinX);
@@ -294,35 +294,35 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 		Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 
 		// находим координаты центра OBB относительно координат модели
-		OBBLocation.x = (MaxX + MinX) / 2.0f;
-		OBBLocation.y = (MaxY + MinY) / 2.0f;
-		OBBLocation.z = (MaxZ + MinZ) / 2.0f;
+		OBB.Location.x = (MaxX + MinX) / 2.0f;
+		OBB.Location.y = (MaxY + MinY) / 2.0f;
+		OBB.Location.z = (MaxZ + MinZ) / 2.0f;
 
 		// переносим данные OBB чтобы центр стал центром
 		for (int k = 0; k < 8; k++) {
-			OBB[k] -= OBBLocation;
-			vw_Matrix33CalcPoint(OBB[k], CurrentRotationMat);
+			OBB.Box[k] -= OBB.Location;
+			vw_Matrix33CalcPoint(OBB.Box[k], CurrentRotationMat);
 		}
-		vw_Matrix33CalcPoint(OBBLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(OBB.Location, CurrentRotationMat);
 
 		// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
-		MinX = MaxX = OBB[0].x + OBBLocation.x;
-		MinY = MaxY = OBB[0].y + OBBLocation.y;
-		MinZ = MaxZ = OBB[0].z + OBBLocation.z;
+		MinX = MaxX = OBB.Box[0].x + OBB.Location.x;
+		MinY = MaxY = OBB.Box[0].y + OBB.Location.y;
+		MinZ = MaxZ = OBB.Box[0].z + OBB.Location.z;
 		// берем и проверяем
 		for (int j = 0; j < 8; j++) {
-			if (MinX > OBB[j].x + OBBLocation.x)
-				MinX = OBB[j].x + OBBLocation.x;
-			if (MinY > OBB[j].y + OBBLocation.y)
-				MinY = OBB[j].y + OBBLocation.y;
-			if (MinZ > OBB[j].z + OBBLocation.z)
-				MinZ = OBB[j].z + OBBLocation.z;
-			if (MaxX < OBB[j].x + OBBLocation.x)
-				MaxX = OBB[j].x + OBBLocation.x;
-			if (MaxY < OBB[j].y + OBBLocation.y)
-				MaxY = OBB[j].y + OBBLocation.y;
-			if (MaxZ < OBB[j].z + OBBLocation.z)
-				MaxZ = OBB[j].z + OBBLocation.z;
+			if (MinX > OBB.Box[j].x + OBB.Location.x)
+				MinX = OBB.Box[j].x + OBB.Location.x;
+			if (MinY > OBB.Box[j].y + OBB.Location.y)
+				MinY = OBB.Box[j].y + OBB.Location.y;
+			if (MinZ > OBB.Box[j].z + OBB.Location.z)
+				MinZ = OBB.Box[j].z + OBB.Location.z;
+			if (MaxX < OBB.Box[j].x + OBB.Location.x)
+				MaxX = OBB.Box[j].x + OBB.Location.x;
+			if (MaxY < OBB.Box[j].y + OBB.Location.y)
+				MaxY = OBB.Box[j].y + OBB.Location.y;
+			if (MaxZ < OBB.Box[j].z + OBB.Location.z)
+				MaxZ = OBB.Box[j].z + OBB.Location.z;
 		}
 		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -344,7 +344,7 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 {
 	// пересчет HitBB
-	if (!HitBox.empty()) {
+	if (!HitBB.empty()) {
 		// создаем матрицу поворота объекта
 		float CurrentRotationMatTmp2[9];
 		vw_Matrix33CreateRotate(CurrentRotationMatTmp2, NewRotation);
@@ -359,17 +359,17 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
 
 		// собственно меняем данные в геометрии
-		vw_Matrix33CalcPoint(HitBox[ObjectNum].Location, OldInvRotationMatTmp);
-		HitBox[ObjectNum].Location -= ObjectBlocks[ObjectNum].Location;
-		vw_Matrix33CalcPoint(HitBox[ObjectNum].Location, OldInvRotationMatTmp2);
-		vw_Matrix33CalcPoint(HitBox[ObjectNum].Location, CurrentRotationMatTmp2);
-		HitBox[ObjectNum].Location += ObjectBlocks[ObjectNum].Location;
-		vw_Matrix33CalcPoint(HitBox[ObjectNum].Location, CurrentRotationMat);
+		vw_Matrix33CalcPoint(HitBB[ObjectNum].Location, OldInvRotationMatTmp);
+		HitBB[ObjectNum].Location -= ObjectBlocks[ObjectNum].Location;
+		vw_Matrix33CalcPoint(HitBB[ObjectNum].Location, OldInvRotationMatTmp2);
+		vw_Matrix33CalcPoint(HitBB[ObjectNum].Location, CurrentRotationMatTmp2);
+		HitBB[ObjectNum].Location += ObjectBlocks[ObjectNum].Location;
+		vw_Matrix33CalcPoint(HitBB[ObjectNum].Location, CurrentRotationMat);
 		for (int j = 0; j < 8; j++) {
-			vw_Matrix33CalcPoint(HitBox[ObjectNum].HitBB[j], OldInvRotationMatTmp);
-			vw_Matrix33CalcPoint(HitBox[ObjectNum].HitBB[j], OldInvRotationMatTmp2);
-			vw_Matrix33CalcPoint(HitBox[ObjectNum].HitBB[j], CurrentRotationMatTmp2);
-			vw_Matrix33CalcPoint(HitBox[ObjectNum].HitBB[j], CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum].Box[j], OldInvRotationMatTmp);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum].Box[j], OldInvRotationMatTmp2);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum].Box[j], CurrentRotationMatTmp2);
+			vw_Matrix33CalcPoint(HitBB[ObjectNum].Box[j], CurrentRotationMat);
 		}
 
 		// нужно подкорректировать OBB и ABB
@@ -382,38 +382,38 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 
 		// проверяем данные
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
-			vw_Matrix33CalcPoint(HitBox[i].Location, OldInvRotationMatTmp);
+			vw_Matrix33CalcPoint(HitBB[i].Location, OldInvRotationMatTmp);
 
 			for (int j = 0; j < 8; j++) {
-				vw_Matrix33CalcPoint(HitBox[i].HitBB[j], OldInvRotationMatTmp);
+				vw_Matrix33CalcPoint(HitBB[i].Box[j], OldInvRotationMatTmp);
 
-				if (MinX > HitBox[i].HitBB[j].x + HitBox[i].Location.x)
-					MinX = HitBox[i].HitBB[j].x + HitBox[i].Location.x;
-				if (MaxX < HitBox[i].HitBB[j].x + HitBox[i].Location.x)
-					MaxX = HitBox[i].HitBB[j].x + HitBox[i].Location.x;
-				if (MinY > HitBox[i].HitBB[j].y + HitBox[i].Location.y)
-					MinY = HitBox[i].HitBB[j].y + HitBox[i].Location.y;
-				if (MaxY < HitBox[i].HitBB[j].y + HitBox[i].Location.y)
-					MaxY = HitBox[i].HitBB[j].y + HitBox[i].Location.y;
-				if (MinZ > HitBox[i].HitBB[j].z + HitBox[i].Location.z)
-					MinZ = HitBox[i].HitBB[j].z + HitBox[i].Location.z;
-				if (MaxZ < HitBox[i].HitBB[j].z + HitBox[i].Location.z)
-					MaxZ = HitBox[i].HitBB[j].z + HitBox[i].Location.z;
+				if (MinX > HitBB[i].Box[j].x + HitBB[i].Location.x)
+					MinX = HitBB[i].Box[j].x + HitBB[i].Location.x;
+				if (MaxX < HitBB[i].Box[j].x + HitBB[i].Location.x)
+					MaxX = HitBB[i].Box[j].x + HitBB[i].Location.x;
+				if (MinY > HitBB[i].Box[j].y + HitBB[i].Location.y)
+					MinY = HitBB[i].Box[j].y + HitBB[i].Location.y;
+				if (MaxY < HitBB[i].Box[j].y + HitBB[i].Location.y)
+					MaxY = HitBB[i].Box[j].y + HitBB[i].Location.y;
+				if (MinZ > HitBB[i].Box[j].z + HitBB[i].Location.z)
+					MinZ = HitBB[i].Box[j].z + HitBB[i].Location.z;
+				if (MaxZ < HitBB[i].Box[j].z + HitBB[i].Location.z)
+					MaxZ = HitBB[i].Box[j].z + HitBB[i].Location.z;
 
-				vw_Matrix33CalcPoint(HitBox[i].HitBB[j], CurrentRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i].Box[j], CurrentRotationMat);
 			}
-			vw_Matrix33CalcPoint(HitBox[i].Location, CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBB[i].Location, CurrentRotationMat);
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		OBB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		OBB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		OBB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		OBB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		OBB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		OBB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		OBB[6] = sVECTOR3D(MinX, MinY, MinZ);
-		OBB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		OBB.Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		OBB.Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		OBB.Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		OBB.Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		OBB.Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		OBB.Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		OBB.Box[6] = sVECTOR3D(MinX, MinY, MinZ);
+		OBB.Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
 		Width = fabsf(MaxX - MinX);
@@ -427,35 +427,35 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 		Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 
 		// находим координаты центра OBB относительно координат модели
-		OBBLocation.x = (MaxX + MinX) / 2.0f;
-		OBBLocation.y = (MaxY + MinY) / 2.0f;
-		OBBLocation.z = (MaxZ + MinZ) / 2.0f;
+		OBB.Location.x = (MaxX + MinX) / 2.0f;
+		OBB.Location.y = (MaxY + MinY) / 2.0f;
+		OBB.Location.z = (MaxZ + MinZ) / 2.0f;
 
 		// переносим данные OBB чтобы центр стал центром
 		for (int k = 0; k < 8; k++) {
-			OBB[k] -= OBBLocation;
-			vw_Matrix33CalcPoint(OBB[k], CurrentRotationMat);
+			OBB.Box[k] -= OBB.Location;
+			vw_Matrix33CalcPoint(OBB.Box[k], CurrentRotationMat);
 		}
-		vw_Matrix33CalcPoint(OBBLocation, CurrentRotationMat);
+		vw_Matrix33CalcPoint(OBB.Location, CurrentRotationMat);
 
 		// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
-		MinX = MaxX = OBB[0].x + OBBLocation.x;
-		MinY = MaxY = OBB[0].y + OBBLocation.y;
-		MinZ = MaxZ = OBB[0].z + OBBLocation.z;
+		MinX = MaxX = OBB.Box[0].x + OBB.Location.x;
+		MinY = MaxY = OBB.Box[0].y + OBB.Location.y;
+		MinZ = MaxZ = OBB.Box[0].z + OBB.Location.z;
 		// берем и проверяем
 		for (int j = 0; j < 8; j++) {
-			if (MinX > OBB[j].x + OBBLocation.x)
-				MinX = OBB[j].x + OBBLocation.x;
-			if (MinY > OBB[j].y + OBBLocation.y)
-				MinY = OBB[j].y + OBBLocation.y;
-			if (MinZ > OBB[j].z + OBBLocation.z)
-				MinZ = OBB[j].z + OBBLocation.z;
-			if (MaxX < OBB[j].x + OBBLocation.x)
-				MaxX = OBB[j].x + OBBLocation.x;
-			if (MaxY < OBB[j].y + OBBLocation.y)
-				MaxY = OBB[j].y + OBBLocation.y;
-			if (MaxZ < OBB[j].z + OBBLocation.z)
-				MaxZ = OBB[j].z + OBBLocation.z;
+			if (MinX > OBB.Box[j].x + OBB.Location.x)
+				MinX = OBB.Box[j].x + OBB.Location.x;
+			if (MinY > OBB.Box[j].y + OBB.Location.y)
+				MinY = OBB.Box[j].y + OBB.Location.y;
+			if (MinZ > OBB.Box[j].z + OBB.Location.z)
+				MinZ = OBB.Box[j].z + OBB.Location.z;
+			if (MaxX < OBB.Box[j].x + OBB.Location.x)
+				MaxX = OBB.Box[j].x + OBB.Location.x;
+			if (MaxY < OBB.Box[j].y + OBB.Location.y)
+				MaxY = OBB.Box[j].y + OBB.Location.y;
+			if (MaxZ < OBB.Box[j].z + OBB.Location.z)
+				MaxZ = OBB.Box[j].z + OBB.Location.z;
 		}
 		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -501,24 +501,24 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 	vw_Matrix33CalcPoint(Orientation, CurrentRotationMat);
 
 	// пересчет HitBB
-	if (!HitBox.empty()) {
+	if (!HitBB.empty()) {
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
-			vw_Matrix33CalcPoint(HitBox[i].Location, OldInvRotationMat);
-			vw_Matrix33CalcPoint(HitBox[i].Location, CurrentRotationMat);
+			vw_Matrix33CalcPoint(HitBB[i].Location, OldInvRotationMat);
+			vw_Matrix33CalcPoint(HitBB[i].Location, CurrentRotationMat);
 
 			for (int j = 0; j < 8; j++) {
-				vw_Matrix33CalcPoint(HitBox[i].HitBB[j], OldInvRotationMat);
-				vw_Matrix33CalcPoint(HitBox[i].HitBB[j], CurrentRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i].Box[j], OldInvRotationMat);
+				vw_Matrix33CalcPoint(HitBB[i].Box[j], CurrentRotationMat);
 			}
 		}
 	}
 
 	// Пересчитываем OBB, просто поворачиваем его как и модель
-	vw_Matrix33CalcPoint(OBBLocation, OldInvRotationMat);
-	vw_Matrix33CalcPoint(OBBLocation, CurrentRotationMat);
+	vw_Matrix33CalcPoint(OBB.Location, OldInvRotationMat);
+	vw_Matrix33CalcPoint(OBB.Location, CurrentRotationMat);
 	for (int j = 0; j < 8; j++) {
-		vw_Matrix33CalcPoint(OBB[j], OldInvRotationMat);
-		vw_Matrix33CalcPoint(OBB[j], CurrentRotationMat);
+		vw_Matrix33CalcPoint(OBB.Box[j], OldInvRotationMat);
+		vw_Matrix33CalcPoint(OBB.Box[j], CurrentRotationMat);
 	}
 
 	// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
@@ -530,18 +530,18 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 	float MaxZ = -10000.0f;
 	// берем и проверяем
 	for (int j = 0; j < 8; j++) {
-		if (MinX > OBB[j].x + OBBLocation.x)
-			MinX = OBB[j].x + OBBLocation.x;
-		if (MinY > OBB[j].y + OBBLocation.y)
-			MinY = OBB[j].y + OBBLocation.y;
-		if (MinZ > OBB[j].z + OBBLocation.z)
-			MinZ = OBB[j].z + OBBLocation.z;
-		if (MaxX < OBB[j].x + OBBLocation.x)
-			MaxX = OBB[j].x + OBBLocation.x;
-		if (MaxY < OBB[j].y + OBBLocation.y)
-			MaxY = OBB[j].y + OBBLocation.y;
-		if (MaxZ < OBB[j].z + OBBLocation.z)
-			MaxZ = OBB[j].z + OBBLocation.z;
+		if (MinX > OBB.Box[j].x + OBB.Location.x)
+			MinX = OBB.Box[j].x + OBB.Location.x;
+		if (MinY > OBB.Box[j].y + OBB.Location.y)
+			MinY = OBB.Box[j].y + OBB.Location.y;
+		if (MinZ > OBB.Box[j].z + OBB.Location.z)
+			MinZ = OBB.Box[j].z + OBB.Location.z;
+		if (MaxX < OBB.Box[j].x + OBB.Location.x)
+			MaxX = OBB.Box[j].x + OBB.Location.x;
+		if (MaxY < OBB.Box[j].y + OBB.Location.y)
+			MaxY = OBB.Box[j].y + OBB.Location.y;
+		if (MaxZ < OBB.Box[j].z + OBB.Location.z)
+			MaxZ = OBB.Box[j].z + OBB.Location.z;
 	}
 	AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 	AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
@@ -903,25 +903,25 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 
 			// небольшая проверка для конкретной части
-			if (!HitBox.empty()) {
+			if (!HitBB.empty()) {
 				sVECTOR3D Min, Max;
-				Min.x = Max.x = HitBox[i].HitBB[0].x + HitBox[i].Location.x;
-				Min.y = Max.y = HitBox[i].HitBB[0].y + HitBox[i].Location.y;
-				Min.z = Max.z = HitBox[i].HitBB[0].z + HitBox[i].Location.z;
+				Min.x = Max.x = HitBB[i].Box[0].x + HitBB[i].Location.x;
+				Min.y = Max.y = HitBB[i].Box[0].y + HitBB[i].Location.y;
+				Min.z = Max.z = HitBB[i].Box[0].z + HitBB[i].Location.z;
 				// берем и проверяем
 				for (int j = 0; j < 8; j++) {
-					if (Min.x > HitBox[i].HitBB[j].x + HitBox[i].Location.x)
-						Min.x = HitBox[i].HitBB[j].x + HitBox[i].Location.x;
-					if (Min.y > HitBox[i].HitBB[j].y + HitBox[i].Location.y)
-						Min.y = HitBox[i].HitBB[j].y + HitBox[i].Location.y;
-					if (Min.z > HitBox[i].HitBB[j].z + HitBox[i].Location.z)
-						Min.z = HitBox[i].HitBB[j].z + HitBox[i].Location.z;
-					if (Max.x < HitBox[i].HitBB[j].x + HitBox[i].Location.x)
-						Max.x = HitBox[i].HitBB[j].x + HitBox[i].Location.x;
-					if (Max.y < HitBox[i].HitBB[j].y + HitBox[i].Location.y)
-						Max.y = HitBox[i].HitBB[j].y + HitBox[i].Location.y;
-					if (Max.z < HitBox[i].HitBB[j].z + HitBox[i].Location.z)
-						Max.z = HitBox[i].HitBB[j].z + HitBox[i].Location.z;
+					if (Min.x > HitBB[i].Box[j].x + HitBB[i].Location.x)
+						Min.x = HitBB[i].Box[j].x + HitBB[i].Location.x;
+					if (Min.y > HitBB[i].Box[j].y + HitBB[i].Location.y)
+						Min.y = HitBB[i].Box[j].y + HitBB[i].Location.y;
+					if (Min.z > HitBB[i].Box[j].z + HitBB[i].Location.z)
+						Min.z = HitBB[i].Box[j].z + HitBB[i].Location.z;
+					if (Max.x < HitBB[i].Box[j].x + HitBB[i].Location.x)
+						Max.x = HitBB[i].Box[j].x + HitBB[i].Location.x;
+					if (Max.y < HitBB[i].Box[j].y + HitBB[i].Location.y)
+						Max.y = HitBB[i].Box[j].y + HitBB[i].Location.y;
+					if (Max.z < HitBB[i].Box[j].z + HitBB[i].Location.z)
+						Max.z = HitBB[i].Box[j].z + HitBB[i].Location.z;
 				}
 
 				if (!vw_BoxInFrustum(Location + Min, Location + Max))
@@ -985,8 +985,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			int LightType1, LightType2;
 			// включаем источники света
-			if (!HitBox.empty())
-				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBox[i].Location, HitBox[i].Radius2, 2, GameConfig().MaxPointLights, Matrix);
+			if (!HitBB.empty())
+				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBB[i].Location, HitBB[i].Radius2, 2, GameConfig().MaxPointLights, Matrix);
 			else
 				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius * Radius, 2, GameConfig().MaxPointLights, Matrix);
 
@@ -1132,10 +1132,10 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		DrawBoxLines(AABB, Location, 1.0f, 0.0f, 0.0f, 1.0f);
 	if (NeedShowBB >= 2)
 		// OBB объекта
-		DrawBoxLines(OBB, Location+OBBLocation, 0.0f, 1.0f, 0.0f, 1.0f);
-	if ((NeedShowBB >= 3) && !HitBox.empty()) {
+		DrawBoxLines(OBB.Box, Location + OBB.Location, 0.0f, 1.0f, 0.0f, 1.0f);
+	if ((NeedShowBB >= 3) && !HitBB.empty()) {
 		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
-			DrawBoxLines(HitBox[i].HitBB, Location + HitBox[i].Location, 0.0f, 0.0f, 1.0f, 1.0f);
+			DrawBoxLines(HitBB[i].Box, Location + HitBB[i].Location, 0.0f, 0.0f, 1.0f, 1.0f);
 		}
 	}
 
