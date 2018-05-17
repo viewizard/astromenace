@@ -47,14 +47,14 @@ struct sVECTOR3D {
 	}
 
 	// Equal
-	bool operator == (const sVECTOR3D &A)
+	bool operator == (const sVECTOR3D &A) const
 	{
 		return ((A.x == x) &&
 			(A.y == y) &&
 			(A.z == z));
 	}
 	// Not equal
-	bool operator != (const sVECTOR3D &A)
+	bool operator != (const sVECTOR3D &A) const
 	{
 		return ((A.x != x) ||
 			(A.y != y) ||
@@ -66,14 +66,14 @@ struct sVECTOR3D {
 		return A.x * B.x + A.y * B.y + A.z * B.z;
 	}
 
-	sVECTOR3D operator ^ (const float C)
+	sVECTOR3D operator ^ (const float C) const
 	{
-		return sVECTOR3D(x*C, y*C, z*C);
+		return sVECTOR3D{x * C, y * C, z * C};
 	}
 
-	sVECTOR3D operator / (const float C)
+	sVECTOR3D operator / (const float C) const
 	{
-		return sVECTOR3D(x/C, y/C, z/C);
+		return sVECTOR3D{x / C, y / C, z / C};
 	}
 
 	void operator () (const float _x, const float _y, const float _z)
@@ -91,9 +91,9 @@ struct sVECTOR3D {
 	}
 
 	// Add
-	sVECTOR3D operator + (const sVECTOR3D &A)
+	sVECTOR3D operator + (const sVECTOR3D &A) const
 	{
-		return sVECTOR3D(x + A.x, y + A.y, z + A.z);
+		return sVECTOR3D{x + A.x, y + A.y, z + A.z};
 	}
 	void operator += (const sVECTOR3D &A)
 	{
@@ -102,9 +102,9 @@ struct sVECTOR3D {
 		z += A.z;
 	}
 	// Subtract
-	sVECTOR3D operator - (const sVECTOR3D &A)
+	sVECTOR3D operator - (const sVECTOR3D &A) const
 	{
-		return sVECTOR3D(x - A.x, y - A.y, z - A.z);
+		return sVECTOR3D{x - A.x, y - A.y, z - A.z};
 	}
 	void operator -= (const sVECTOR3D &A)
 	{
@@ -113,7 +113,7 @@ struct sVECTOR3D {
 		z -= A.z;
 	}
 
-	float Length();
+	float Length() const;
 	void Normalize();
 	void NormalizeHi();
 	void Multiply(const sVECTOR3D &A);

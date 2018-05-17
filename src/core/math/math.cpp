@@ -202,7 +202,7 @@ float vw_sqrtf(float x)
 /*
  * sVECTOR3D Vector
  */
-float sVECTOR3D::Length()
+float sVECTOR3D::Length() const
 {
 	return vw_sqrtf(x * x + y * y + z * z);
 }
