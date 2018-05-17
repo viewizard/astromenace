@@ -29,30 +29,32 @@
 #define COLLISIONDETECTION_H
 
 #include "../base.h"
+#include "../model3d/model3d.h"
 
 struct sObjectBlock;
 
 // AABB-AABB collision detection.
-bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Object1Location,
-			  const sVECTOR3D Object2AABB[8], const sVECTOR3D &Object2Location);
+bool vw_AABBAABBCollision(const bounding_box &Object1AABB, const sVECTOR3D &Object1Location,
+			  const bounding_box &Object2AABB, const sVECTOR3D &Object2Location);
 // OBB-OBB collision detection.
-bool vw_OBBOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
-			float (&Object1RotationMatrix)[9], sVECTOR3D (&Object2OBB)[8], sVECTOR3D Object2OBBLocation,
-			sVECTOR3D Object2Location, float (&Object2RotationMatrix)[9]);
+bool vw_OBBOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Object1OBBLocation,
+			const sVECTOR3D &Object1Location, const float (&Object1RotationMatrix)[9],
+			const bounding_box &Object2OBB, const sVECTOR3D &Object2OBBLocation,
+			const sVECTOR3D &Object2Location, const float (&Object2RotationMatrix)[9]);
 // Sphere-Sphere collision detection.
 bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Location,
 			      float Object2Radius, const sVECTOR3D &Object2Location,
 			      const sVECTOR3D &Object2PrevLocation);
 // Sphere-AABB collision detection.
-bool vw_SphereAABBCollision(sVECTOR3D Object1AABB[8], sVECTOR3D Object1Location,
-			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation);
+bool vw_SphereAABBCollision(const bounding_box &Object1AABB, const sVECTOR3D &Object1Location,
+			    float Object2Radius, const sVECTOR3D &Object2Location, const sVECTOR3D &Object2PrevLocation);
 // Sphere-OBB collision detection.
-bool vw_SphereOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation,
-			   sVECTOR3D Object1Location, float (&Object1RotationMatrix)[9],
-			   float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation);
+bool vw_SphereOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Object1OBBLocation,
+			   const sVECTOR3D &Object1Location, const float (&Object1RotationMatrix)[9],
+			   float Object2Radius, const sVECTOR3D &Object2Location, const sVECTOR3D &Object2PrevLocation);
 // Sphere-Mesh collision detection.
-bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1DrawObjectList, float (&Object1RotationMatrix)[9],
-			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation,
-			    sVECTOR3D *CollisionLocation);
+bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sObjectBlock &Object1DrawObjectList,
+			    const float (&Object1RotationMatrix)[9], float Object2Radius, const sVECTOR3D &Object2Location,
+			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D *CollisionLocation);
 
 #endif // COLLISIONDETECTION_H

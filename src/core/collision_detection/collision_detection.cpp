@@ -52,8 +52,8 @@ static bool PointInTriangle(const sVECTOR3D &point, const sVECTOR3D &pa,
 /*
  * AABB-AABB collision detection.
  */
-bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Object1Location,
-			  const sVECTOR3D Object2AABB[8], const sVECTOR3D &Object2Location)
+bool vw_AABBAABBCollision(const bounding_box &Object1AABB, const sVECTOR3D &Object1Location,
+			  const bounding_box &Object2AABB, const sVECTOR3D &Object2Location)
 {
 	// check projection's collisions
 	if (fabsf(Object1Location.x - Object2Location.x) > fabsf(Object1AABB[0].x + Object2AABB[0].x))
@@ -69,9 +69,10 @@ bool vw_AABBAABBCollision(const sVECTOR3D Object1AABB[8], const sVECTOR3D &Objec
 /*
  * OBB-OBB collision detection.
  */
-bool vw_OBBOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation, sVECTOR3D Object1Location,
-			float (&Object1RotationMatrix)[9], sVECTOR3D (&Object2OBB)[8], sVECTOR3D Object2OBBLocation,
-			sVECTOR3D Object2Location, float (&Object2RotationMatrix)[9])
+bool vw_OBBOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Object1OBBLocation,
+			const sVECTOR3D &Object1Location, const float (&Object1RotationMatrix)[9],
+			const bounding_box &Object2OBB, const sVECTOR3D &Object2OBBLocation,
+			const sVECTOR3D &Object2Location, const float (&Object2RotationMatrix)[9])
 {
 	// calcuate rotation matrix
 	float TMPInvObject1RotationMatrix[9]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2],
@@ -91,7 +92,7 @@ bool vw_OBBOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation
 	vw_Matrix33CalcPoint(b, TMPInvObject2RotationMatrix);
 	// calcuate offset in global coordinate systems
 	sVECTOR3D T{(Object2Location + Object2OBBLocation) -
-		   (Object1Location + Object1OBBLocation)};
+		    (Object1Location + Object1OBBLocation)};
 	vw_Matrix33CalcPoint(T, TMPInvObject1RotationMatrix);
 	// calcuate transformation matrix
 	vw_Matrix33Mult(TMPInvObject1RotationMatrix, Object2RotationMatrix);
@@ -238,8 +239,8 @@ bool vw_SphereSphereCollision(float Object1Radius, const sVECTOR3D &Object1Locat
 /*
  * Sphere-AABB collision detection.
  */
-bool vw_SphereAABBCollision(sVECTOR3D Object1AABB[8], sVECTOR3D Object1Location,
-			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation)
+bool vw_SphereAABBCollision(const bounding_box &Object1AABB, const sVECTOR3D &Object1Location,
+			    float Object2Radius, const sVECTOR3D &Object2Location, const sVECTOR3D &Object2PrevLocation)
 {
 	bool Result{true};
 
@@ -292,9 +293,9 @@ bool vw_SphereAABBCollision(sVECTOR3D Object1AABB[8], sVECTOR3D Object1Location,
 /*
  * Sphere-OBB collision detection.
  */
-bool vw_SphereOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocation,
-			   sVECTOR3D Object1Location, float (&Object1RotationMatrix)[9],
-			   float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation)
+bool vw_SphereOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Object1OBBLocation,
+			   const sVECTOR3D &Object1Location, const float (&Object1RotationMatrix)[9],
+			   float Object2Radius, const sVECTOR3D &Object2Location, const sVECTOR3D &Object2PrevLocation)
 {
 	sVECTOR3D TMPMax{Object1OBB[0]};
 	sVECTOR3D TMPMin{Object1OBB[6]};
@@ -365,13 +366,10 @@ bool vw_SphereOBBCollision(sVECTOR3D (&Object1OBB)[8], sVECTOR3D Object1OBBLocat
 /*
  * Sphere-Mesh collision detection.
  */
-bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1DrawObjectList, float (&Object1RotationMatrix)[9],
-			    float Object2Radius, sVECTOR3D Object2Location, sVECTOR3D Object2PrevLocation,
-			    sVECTOR3D *CollisionLocation)
+bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sObjectBlock &Object1DrawObjectList,
+			    const float (&Object1RotationMatrix)[9], float Object2Radius, const sVECTOR3D &Object2Location,
+			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D *CollisionLocation)
 {
-	if (!Object1DrawObjectList)
-		return false;
-
 	// translation matrix
 	float TransMat[16]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2], 0.0f,
 			   Object1RotationMatrix[3], Object1RotationMatrix[4], Object1RotationMatrix[5], 0.0f,
@@ -379,55 +377,55 @@ bool vw_SphereMeshCollision(sVECTOR3D Object1Location, sObjectBlock *Object1Draw
 			   Object1Location.x, Object1Location.y, Object1Location.z, 1.0f};
 
 	// calculate local position
-	sVECTOR3D LocalLocation{Object1DrawObjectList->Location};
+	sVECTOR3D LocalLocation{Object1DrawObjectList.Location};
 	vw_Matrix33CalcPoint(LocalLocation, Object1RotationMatrix);
 
 	// care about rotation and generate final translation matrix
-	if ((Object1DrawObjectList->Rotation.x != 0.0f) ||
-	    (Object1DrawObjectList->Rotation.y != 0.0f) ||
-	    (Object1DrawObjectList->Rotation.z != 0.0f)) {
+	if ((Object1DrawObjectList.Rotation.x != 0.0f) ||
+	    (Object1DrawObjectList.Rotation.y != 0.0f) ||
+	    (Object1DrawObjectList.Rotation.z != 0.0f)) {
 		float TransMatTMP[16];
 		vw_Matrix44Identity(TransMatTMP);
-		vw_Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList->Rotation);
+		vw_Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList.Rotation);
 		vw_Matrix44Translate(TransMatTMP, LocalLocation);
 		vw_Matrix44Mult(TransMat, TransMatTMP);
 	} else
 		vw_Matrix44Translate(TransMat, LocalLocation);
 
 	// detect collision with mesh triangles
-	for (unsigned int i = 0; i < Object1DrawObjectList->VertexQuantity; i += 3) {
+	for (unsigned int i = 0; i < Object1DrawObjectList.VertexQuantity; i += 3) {
 		// we use index buffer here in order to find triangle's vertices in mesh
-		unsigned int IndexPos = Object1DrawObjectList->RangeStart + i; // index buffer position
+		unsigned int IndexPos = Object1DrawObjectList.RangeStart + i; // index buffer position
 		unsigned int VertexPos{0}; // vertex buffer position
-		if (Object1DrawObjectList->IndexArray)
-			VertexPos = Object1DrawObjectList->IndexArray.get()[IndexPos] * Object1DrawObjectList->VertexStride;
+		if (Object1DrawObjectList.IndexArray)
+			VertexPos = Object1DrawObjectList.IndexArray.get()[IndexPos] * Object1DrawObjectList.VertexStride;
 		else
-			VertexPos = (IndexPos) * Object1DrawObjectList->VertexStride;
+			VertexPos = (IndexPos) * Object1DrawObjectList.VertexStride;
 
 		// translate triangle's vertices in proper coordinates for collision detection
-		sVECTOR3D Point1{Object1DrawObjectList->VertexArray.get()[VertexPos],
-				 Object1DrawObjectList->VertexArray.get()[VertexPos + 1],
-				 Object1DrawObjectList->VertexArray.get()[VertexPos + 2]};
+		sVECTOR3D Point1{Object1DrawObjectList.VertexArray.get()[VertexPos],
+				 Object1DrawObjectList.VertexArray.get()[VertexPos + 1],
+				 Object1DrawObjectList.VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point1, TransMat);
 
-		if (Object1DrawObjectList->IndexArray)
-			VertexPos = Object1DrawObjectList->IndexArray.get()[IndexPos + 1] * Object1DrawObjectList->VertexStride;
+		if (Object1DrawObjectList.IndexArray)
+			VertexPos = Object1DrawObjectList.IndexArray.get()[IndexPos + 1] * Object1DrawObjectList.VertexStride;
 		else
-			VertexPos = (IndexPos + 1) * Object1DrawObjectList->VertexStride;
+			VertexPos = (IndexPos + 1) * Object1DrawObjectList.VertexStride;
 
-		sVECTOR3D Point2{Object1DrawObjectList->VertexArray.get()[VertexPos],
-				 Object1DrawObjectList->VertexArray.get()[VertexPos + 1],
-				 Object1DrawObjectList->VertexArray.get()[VertexPos + 2]};
+		sVECTOR3D Point2{Object1DrawObjectList.VertexArray.get()[VertexPos],
+				 Object1DrawObjectList.VertexArray.get()[VertexPos + 1],
+				 Object1DrawObjectList.VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point2, TransMat);
 
-		if (Object1DrawObjectList->IndexArray)
-			VertexPos = Object1DrawObjectList->IndexArray.get()[IndexPos + 2] * Object1DrawObjectList->VertexStride;
+		if (Object1DrawObjectList.IndexArray)
+			VertexPos = Object1DrawObjectList.IndexArray.get()[IndexPos + 2] * Object1DrawObjectList.VertexStride;
 		else
-			VertexPos = (IndexPos + 2) * Object1DrawObjectList->VertexStride;
+			VertexPos = (IndexPos + 2) * Object1DrawObjectList.VertexStride;
 
-		sVECTOR3D Point3{Object1DrawObjectList->VertexArray.get()[VertexPos],
-				 Object1DrawObjectList->VertexArray.get()[VertexPos + 1],
-				 Object1DrawObjectList->VertexArray.get()[VertexPos + 2]};
+		sVECTOR3D Point3{Object1DrawObjectList.VertexArray.get()[VertexPos],
+				 Object1DrawObjectList.VertexArray.get()[VertexPos + 1],
+				 Object1DrawObjectList.VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point3, TransMat);
 
 		// calculate 2 vectors for plane

@@ -140,14 +140,7 @@ public:
 	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
 	// Axis-Aligned Bounding Box, coordinates are absolute
-	sVECTOR3D AABB[8]{{0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f}};
+	bounding_box AABB{};
 	// Oriented Bounding Box, coordinates are related to object's center
 	sOBB OBB{};
 	// Hit Bounding Box, same as OBB, but for each objects in the 3D model

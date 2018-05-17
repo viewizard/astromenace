@@ -85,7 +85,7 @@ bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, s
 		}
 
 		// дальше работаем с геометрией
-		if(vw_SphereMeshCollision(Object1->Location, &(Object1->ObjectBlocks[j]),
+		if(vw_SphereMeshCollision(Object1->Location, Object1->ObjectBlocks[j],
 					  Object1->CurrentRotationMat, Object2->Radius, Object2->Location,
 					  Object2->PrevLocation, NewLoc)) {
 			*Object1PieceNum = j;

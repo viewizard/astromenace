@@ -33,29 +33,17 @@
 
 struct sVECTOR3D;
 
+using bounding_box = std::array<sVECTOR3D, 8>;
+
 // Oriented Bounding Box, coordinates are related to object's center
 struct sOBB {
-	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f}};
+	bounding_box Box{};
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 };
 
 // Hit Bounding Box, coordinates are related to object's center
 struct sHitBB {
-	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f}};
+	bounding_box Box{};
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 	float Radius2{0.0f}; // square of the radius of HitBB
 	sVECTOR3D Size{0.0f, 0.0f, 0.0f}; // HitBB's size
@@ -138,14 +126,7 @@ public:
 	GLuint GlobalVAO{0};
 
 	// Axis-Aligned Bounding Box, coordinates are absolute
-	sVECTOR3D AABB[8]{{0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f},
-			  {0.0f, 0.0f, 0.0f}};
+	bounding_box AABB{};
 	// Oriented Bounding Box, coordinates are related to object's center
 	sOBB OBB{};
 	// Hit Bounding Box, same as OBB, but for each objects in the 3D model

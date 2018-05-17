@@ -376,7 +376,8 @@ void cObject3D::SetRotation(sVECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Прорисовка одной линии
 //-----------------------------------------------------------------------------
-void DrawLine(sVECTOR3D Point1, sVECTOR3D Point2, float ColorR, float ColorG, float ColorB, float ColorA)
+void DrawLine(const sVECTOR3D &Point1, const sVECTOR3D &Point2,
+	      float ColorR, float ColorG, float ColorB, float ColorA)
 {
 	// буфер для последовательности RI_LINES
 	// войдет RI_3f_XYZ | RI_4f_COLOR
@@ -407,25 +408,26 @@ void DrawLine(sVECTOR3D Point1, sVECTOR3D Point2, float ColorR, float ColorG, fl
 //-----------------------------------------------------------------------------
 // Прорисовка сетки бокса
 //-----------------------------------------------------------------------------
-void DrawBoxLines(sVECTOR3D Point[8], sVECTOR3D LocalLocation, float ColorR, float ColorG, float ColorB, float ColorA)
+void DrawBoxLines(const bounding_box &Box, const sVECTOR3D &LocalLocation,
+		  float ColorR, float ColorG, float ColorB, float ColorA)
 {
 	vw_PushMatrix();
 	vw_Translate(LocalLocation);
 
-	DrawLine(Point[0], Point[1], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[1], Point[2], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[2], Point[3], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[3], Point[0], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[0], Box[1], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[1], Box[2], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[2], Box[3], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[3], Box[0], ColorR, ColorG, ColorB, ColorA);
 
-	DrawLine(Point[4], Point[5], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[5], Point[6], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[6], Point[7], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[7], Point[4], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[4], Box[5], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[5], Box[6], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[6], Box[7], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[7], Box[4], ColorR, ColorG, ColorB, ColorA);
 
-	DrawLine(Point[0], Point[4], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[1], Point[5], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[2], Point[6], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Point[3], Point[7], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[0], Box[4], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[1], Box[5], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[2], Box[6], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[3], Box[7], ColorR, ColorG, ColorB, ColorA);
 
 	vw_PopMatrix();
 }
