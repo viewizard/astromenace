@@ -300,9 +300,6 @@ void cWeapon::Create(int WeaponNum)
 				TextureIllum[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
 		}
 
-		// находим все данные по геометрии
-		::cObject3D::InitByDrawObjectList();
-
 	}
 	// 101-199 - это оружие пришельцев
 	else if (WeaponNum >= 101 && WeaponNum <= 199) {
@@ -353,9 +350,6 @@ void cWeapon::Create(int WeaponNum)
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
-
-			// находим все данные по геометрии
-			::cObject3D::InitByDrawObjectList();
 		}
 		break;
 
@@ -372,9 +366,6 @@ void cWeapon::Create(int WeaponNum)
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
-
-			// находим все данные по геометрии
-			::cObject3D::InitByDrawObjectList();
 		}
 		break;
 		}

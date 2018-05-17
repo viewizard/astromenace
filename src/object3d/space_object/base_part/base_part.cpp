@@ -234,13 +234,4 @@ case8next:
 		break;
 
 	}
-
-
-
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
-
 }
-
-
-

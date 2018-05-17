@@ -724,9 +724,4 @@ void cPirateShip::Create(int PirateShipNum)
 				InternalLights++;
 		}
 	}
-
-
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
 }
-

@@ -636,9 +636,6 @@ void cTracked::Create(int TrackedNum)
 	}
 
 
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
-
 
 	// установка остальных параметров девиации
 	DeviationOn = false;

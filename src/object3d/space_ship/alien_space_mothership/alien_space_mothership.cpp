@@ -960,11 +960,4 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 				InternalLights++;
 		}
 	}
-
-
-
-
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
 }
-

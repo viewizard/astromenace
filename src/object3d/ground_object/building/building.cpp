@@ -55,7 +55,7 @@ static sBuildingData PresetBuildingData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cBuilding::Create(int	BuildingNum)
+void cBuilding::Create(int BuildingNum)
 {
 	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount)) {
 		std::cerr << __func__ << "(): " << "Could not init cBuilding object with Number " << BuildingNum << "\n";
@@ -80,9 +80,5 @@ void cBuilding::Create(int	BuildingNum)
 	ResistanceSystems = 1.0f;
 
 	Strength = StrengthStart = PresetBuildingData[BuildingNum-1].Strength/GameNPCArmorPenalty;
-
-
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
 }
 

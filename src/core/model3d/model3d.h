@@ -33,6 +33,34 @@
 
 struct sVECTOR3D;
 
+// Oriented Bounding Box, coordinates are related to object's center
+struct sOBB {
+	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f}};
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+};
+
+// Hit Bounding Box, coordinates are related to object's center
+struct sHitBB {
+	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f},
+			 {0.0f, 0.0f, 0.0f}};
+	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	float Radius2{0.0f}; // square of the radius of HitBB
+	sVECTOR3D Size{0.0f, 0.0f, 0.0f}; // HitBB's size
+};
+
 enum class eObjectDrawType {
 	Normal,
 	Blend	// with blend (for planet's sky)
@@ -109,11 +137,34 @@ public:
 	// vao-related
 	GLuint GlobalVAO{0};
 
+	// Axis-Aligned Bounding Box, coordinates are absolute
+	sVECTOR3D AABB[8]{{0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f},
+			  {0.0f, 0.0f, 0.0f}};
+	// Oriented Bounding Box, coordinates are related to object's center
+	sOBB OBB{};
+	// Hit Bounding Box, same as OBB, but for each objects in the 3D model
+	std::vector<sHitBB> HitBB{};
+	// geometry center of all vertices in the model, related to object's center
+	sVECTOR3D GeometryCenter{0.0f, 0.0f, 0.0f};
+	float Radius{0.0f}; // Radius, for fast collisions check
+	float Width{1.0f}; // calculated from 3D model actual size
+	float Length{1.0f}; // calculated from 3D model actual size
+	float Height{1.0f}; // calculated from 3D model actual size
+
 private:
 	// Don't allow direct new/delete usage in code, only vw_LoadModel3D()
 	// allowed for Model3D creation and release setup (deleter must be provided).
 	cModel3D() = default;
 	~cModel3D();
+
+	// 3D model's metadata initialization (AABB, OBB, HitBB, size, etc).
+	void MetadataInitialization();
 };
 
 

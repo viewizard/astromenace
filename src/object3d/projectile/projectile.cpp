@@ -496,7 +496,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 16:
 		LoadObjectData("models/earthfighter/missile.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 13);
@@ -512,7 +511,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 17:
 		LoadObjectData("models/earthfighter/swarm.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 16);
@@ -530,7 +528,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 18:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 14);
@@ -546,7 +543,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 19:
 		LoadObjectData("models/earthfighter/nuke.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 15);
@@ -711,7 +707,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 205:
 		LoadObjectData("models/earthfighter/missile.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 27);
@@ -727,7 +722,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 206:
 		LoadObjectData("models/earthfighter/swarm.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 31);
@@ -761,7 +755,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 209:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 32);
@@ -777,7 +770,6 @@ void cProjectile::Create(int ProjectileNum)
 	case 210:
 		LoadObjectData("models/earthfighter/nuke.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
-		::cObject3D::InitByDrawObjectList();
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 33);
@@ -823,7 +815,6 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-01.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine1.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine1i.tga");
-		::cObject3D::InitByDrawObjectList();
 		break;
 	// мина2 (наведение по высоте + приближение)
 	case 215:
@@ -832,7 +823,6 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-02.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine2.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine2i.tga");
-		::cObject3D::InitByDrawObjectList();
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -848,7 +838,6 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-03.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine3.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine3i.tga");
-		::cObject3D::InitByDrawObjectList();
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -864,7 +853,6 @@ void cProjectile::Create(int ProjectileNum)
 		LoadObjectData("models/mine/mine-04.vw3d", this, 2.0f);
 		Texture[0] = vw_FindTextureByName("models/mine/mine4.tga");
 		TextureIllum[0] = vw_FindTextureByName("models/mine/mine4i.tga");
-		::cObject3D::InitByDrawObjectList();
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())

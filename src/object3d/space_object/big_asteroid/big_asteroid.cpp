@@ -104,12 +104,4 @@ case10next:
 		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
 		break;
 	}
-
-
-
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
 }
-
-
-

@@ -935,11 +935,6 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 		}
 	}
 
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
-
-
 	// делаем предварительную уснановку брони-текстур
 	SetEarthSpaceFighterArmour(this, 0);
 }
-

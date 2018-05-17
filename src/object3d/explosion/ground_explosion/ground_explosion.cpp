@@ -113,9 +113,6 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 					ShipPart->ObjectBlocks[0].NeedDestroyDataInObjectBlock = true;
 				}
 
-				// резервируем память для HitBB
-				ShipPart->HitBB.resize(ShipPart->ObjectBlocks.size());
-
 				// находим точку локального положения объекта в моделе
 				sVECTOR3D LocalLocation = Object->ObjectBlocks[i].Location;
 				vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);

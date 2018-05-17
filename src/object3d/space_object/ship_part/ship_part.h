@@ -45,7 +45,8 @@ public:
 	// Создание нужного объекта
 	virtual void	Create(int ShipPartNum);
 
-
+	// Установка AABB, OBB и габаритов по геометрии объекта
+	virtual void InitByDrawObjectList();
 };
 
 

@@ -93,34 +93,6 @@ enum class eDeleteAfterLeaveScene {
 // delay before object delete, since object could back to the scene
 #define DeleteAfterLeaveSceneDelay 1.0f
 
-// Oriented Bounding Box, coordinates are related to object's center
-struct sOBB {
-	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f}};
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-};
-
-// Hit Bounding Box, coordinates are related to object's center
-struct sHitBB {
-	sVECTOR3D Box[8]{{0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f},
-			 {0.0f, 0.0f, 0.0f}};
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	float Radius2{0.0f}; // square of the radius of HitBB
-	sVECTOR3D Size{0.0f, 0.0f, 0.0f}; // HitBB's size
-};
-
 class cObject3D {
 protected:
 	// don't allow object of this class creation
@@ -128,9 +100,6 @@ protected:
 	virtual ~cObject3D() = default;
 
 public:
-
-	// Установка AABB, OBB и габаритов по геометрии объекта
-	virtual void InitByDrawObjectList();
 	// Прорисовка объектa Object3D
 	virtual void Draw(bool VertexOnlyPass, bool ShadowMap=false);
 	bool NeedCullFaces{true}; // нужно резать бэк фейсы

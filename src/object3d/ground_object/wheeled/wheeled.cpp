@@ -323,9 +323,6 @@ void cWheeled::Create(int WheeledNum)
 	}
 
 
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
-
 
 	// установка остальных параметров девиации
 	DeviationOn = false;

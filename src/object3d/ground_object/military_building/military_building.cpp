@@ -287,11 +287,5 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 				WeaponBound[i] = WeaponLocation[i];
 		}
 	}
-
-
-
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
-
 }
 

@@ -807,10 +807,5 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 				InternalLights++;
 		}
 	}
-
-
-
-	// находим все данные по геометрии
-	::cObject3D::InitByDrawObjectList();
 }
 
