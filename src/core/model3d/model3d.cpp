@@ -760,8 +760,10 @@ void cModel3D::MetadataInitialization()
 	}
 
 	// calculate 3D model's geometry center
-	if (AllVertexCounted > 0)
-		GeometryCenter = GeometryCenter / AllVertexCounted;
+	if (AllVertexCounted > 0) {
+		// we are safe with static_cast here, since AllVertexCounted will not exceed limits
+		GeometryCenter = GeometryCenter / static_cast<float>(AllVertexCounted);
+	}
 
 	// first HitBB's data as initial data for calculation
 	float MinX = HitBB[0].Box[6].x + HitBB[0].Location.x;
