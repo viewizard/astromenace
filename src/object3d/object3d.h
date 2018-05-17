@@ -167,7 +167,6 @@ public:
 	sVECTOR3D OldRotationInv{0.0f, 0.0f, 0.0f};
 	// положение объекта
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	sVECTOR3D GeometryCenterLocation{0.0f, 0.0f, 0.0f}; // точка "центра геометрии" внутри модели
 	// предыдущее положение объекта
 	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
@@ -184,8 +183,12 @@ public:
 	sOBB OBB{};
 	// Hit Bounding Box, same as OBB, but for each objects in the 3D model
 	std::vector<sHitBB> HitBB{};
-	// Radius, for fast collisions check
-	float Radius{0.0f};
+	// geometry center of all vertices in the model, related to object's center
+	sVECTOR3D GeometryCenter{0.0f, 0.0f, 0.0f};
+	float Radius{0.0f}; // Radius, for fast collisions check
+	float Width{1.0f}; // calculated from 3D model actual size
+	float Length{1.0f}; // calculated from 3D model actual size
+	float Height{1.0f}; // calculated from 3D model actual size
 
 	// последнее время, когда проверяли-обновляли объект
 	float TimeLastUpdate{-1.0f};
@@ -216,12 +219,6 @@ public:
 
 	// вес объекта
 	float Weight{1.0f};
-	// ширина
-	float Width{1.0f};
-	// длина
-	float Length{1.0f};
-	// высота
-	float Height{1.0f};
 	// прочность
 	float Strength{0.0f};
 	float StrengthStart{0.0f};

@@ -47,64 +47,67 @@ extern std::weak_ptr<cGLSL> GLSLShaderType3;
 //-----------------------------------------------------------------------------
 void cObject3D::InitByDrawObjectList()
 {
-	// нет самой геометрии, работать не можем
 	if (ObjectBlocks.empty())
 		return;
 
-	// создаем HitBB
+	int AllVertexCounted{0};
+
+	// HitBB calculation
 	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
 		float Matrix[9];
 		vw_Matrix33CreateRotate(Matrix, ObjectBlocks[i].Rotation);
 
-		float MinX = 10000.0f;
-		float MaxX = -10000.0f;
-		float MinY = 10000.0f;
-		float MaxY = -10000.0f;
-		float MinZ = 10000.0f;
-		float MaxZ = -10000.0f;
-
+		// first vertex's data as initial data for calculation
 		int tmpOffset;
 		if (ObjectBlocks[i].IndexArray)
-			tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart] * ObjectBlocks[i].VertexStride;
+			tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart] *
+				    ObjectBlocks[i].VertexStride;
 		else
 			tmpOffset = ObjectBlocks[i].RangeStart * ObjectBlocks[i].VertexStride;
 
-		sVECTOR3D tmp;
-		tmp.x = ObjectBlocks[i].VertexArray.get()[tmpOffset + 0];
-		tmp.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
-		tmp.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
-		vw_Matrix33CalcPoint(tmp, Matrix);
-		MinX = MaxX = tmp.x;
-		MinY = MaxY = tmp.y;
-		MinZ = MaxZ = tmp.z;
+		sVECTOR3D tmpVertex;
+		tmpVertex.x = ObjectBlocks[i].VertexArray.get()[tmpOffset];
+		tmpVertex.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
+		tmpVertex.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
+		vw_Matrix33CalcPoint(tmpVertex, Matrix);
+		float MinX = tmpVertex.x;
+		float MaxX = tmpVertex.x;
+		float MinY = tmpVertex.y;
+		float MaxY = tmpVertex.y;
+		float MinZ = tmpVertex.z;
+		float MaxZ = tmpVertex.z;
 
-		for (unsigned int j = 0; j < ObjectBlocks[i].VertexQuantity; j++) {
-			int j2;
+		GeometryCenter += ObjectBlocks[i].Location + tmpVertex;
+
+		// starts from second vertex, check all vertices
+		for (unsigned int j = 1; j < ObjectBlocks[i].VertexQuantity; j++) {
 			if (ObjectBlocks[i].IndexArray)
-				j2 = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] * ObjectBlocks[i].VertexStride;
+				tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] *
+					    ObjectBlocks[i].VertexStride;
 			else
-				j2 = (ObjectBlocks[i].RangeStart + j) * ObjectBlocks[i].VertexStride;
+				tmpOffset = (ObjectBlocks[i].RangeStart + j) * ObjectBlocks[i].VertexStride;
 
-			sVECTOR3D v;
-			v.x = ObjectBlocks[i].VertexArray.get()[j2];
-			v.y = ObjectBlocks[i].VertexArray.get()[j2 + 1];
-			v.z = ObjectBlocks[i].VertexArray.get()[j2 + 2];
-			vw_Matrix33CalcPoint(v, Matrix);
-			if (MinX > v.x)
-				MinX = v.x;
-			if (MinY > v.y)
-				MinY = v.y;
-			if (MinZ > v.z)
-				MinZ = v.z;
-			if (MaxX < v.x)
-				MaxX = v.x;
-			if (MaxY < v.y)
-				MaxY = v.y;
-			if (MaxZ < v.z)
-				MaxZ = v.z;
+			tmpVertex.x = ObjectBlocks[i].VertexArray.get()[tmpOffset];
+			tmpVertex.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
+			tmpVertex.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
+			vw_Matrix33CalcPoint(tmpVertex, Matrix);
+			if (MinX > tmpVertex.x)
+				MinX = tmpVertex.x;
+			if (MinY > tmpVertex.y)
+				MinY = tmpVertex.y;
+			if (MinZ > tmpVertex.z)
+				MinZ = tmpVertex.z;
+			if (MaxX < tmpVertex.x)
+				MaxX = tmpVertex.x;
+			if (MaxY < tmpVertex.y)
+				MaxY = tmpVertex.y;
+			if (MaxZ < tmpVertex.z)
+				MaxZ = tmpVertex.z;
+
+			GeometryCenter += ObjectBlocks[i].Location + tmpVertex;
 		}
 
-		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
+		// store data to the HitBB
 		HitBB[i].Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 		HitBB[i].Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
 		HitBB[i].Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
@@ -114,32 +117,37 @@ void cObject3D::InitByDrawObjectList()
 		HitBB[i].Box[6] = sVECTOR3D(MinX, MinY, MinZ);
 		HitBB[i].Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
-		// находим координаты центра HitBB относительно координат модели
+		// calculate HitBB geometry center
 		HitBB[i].Location.x = (MaxX + MinX) / 2.0f;
 		HitBB[i].Location.y = (MaxY + MinY) / 2.0f;
 		HitBB[i].Location.z = (MaxZ + MinZ) / 2.0f;
 
-		// находим размеры коробки
+		// calculate HitBB size
 		HitBB[i].Size.x = fabsf(MaxX - MinX);
 		HitBB[i].Size.y = fabsf(MaxY - MinY);
 		HitBB[i].Size.z = fabsf(MaxZ - MinZ);
 
-		// находим квадрат радиуса
+		// calculate HitBB radius square
 		HitBB[i].Radius2 = (HitBB[i].Size.x / 2.0f) * (HitBB[i].Size.x / 2.0f) +
 				   (HitBB[i].Size.y / 2.0f) * (HitBB[i].Size.y / 2.0f) +
 				   (HitBB[i].Size.z / 2.0f) * (HitBB[i].Size.z / 2.0f);
 
-		// переносим данные HitBB чтобы центр стал геометрическим центром
+		// calculate HitBB points accordingly to HitBB geometry center location
 		for (int k = 0; k < 8; k++) {
 			HitBB[i].Box[k] -= HitBB[i].Location;
 		}
 
-		// учитываем положение самого объекта в моделе
+		// correct HitBB geometry center location accordingly to object location
 		HitBB[i].Location += ObjectBlocks[i].Location;
+
+		AllVertexCounted += ObjectBlocks[i].VertexQuantity;
 	}
 
-	// находим AABB, OBB... первоначально без учета текущего положения и поворота - их нет
-	// 1-й HitBB всегда есть... фактически это OBB
+	// calculate 3D model's geometry center
+	if (AllVertexCounted > 0)
+		GeometryCenter = GeometryCenter / AllVertexCounted;
+
+	// first HitBB's data as initial data for calculation
 	float MinX = HitBB[0].Box[6].x + HitBB[0].Location.x;
 	float MaxX = HitBB[0].Box[0].x + HitBB[0].Location.x;
 	float MinY = HitBB[0].Box[6].y + HitBB[0].Location.y;
@@ -147,7 +155,7 @@ void cObject3D::InitByDrawObjectList()
 	float MinZ = HitBB[0].Box[6].z + HitBB[0].Location.z;
 	float MaxZ = HitBB[0].Box[0].z + HitBB[0].Location.z;
 
-	// берем то по HitBB, причем со 2-го сразу, т.к. первый учли выше
+	// starts from second HitBB, check all HitBBs
 	for (unsigned int i = 1; i < ObjectBlocks.size(); i++) {
 		if (MinX > HitBB[i].Box[6].x + HitBB[i].Location.x)
 			MinX = HitBB[i].Box[6].x + HitBB[i].Location.x;
@@ -163,7 +171,7 @@ void cObject3D::InitByDrawObjectList()
 			MaxZ = HitBB[i].Box[0].z + HitBB[i].Location.z;
 	}
 
-	// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
+	// store data to OBB and AABB, since on this stage they are identical
 	OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
 	OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
 	OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
@@ -173,47 +181,26 @@ void cObject3D::InitByDrawObjectList()
 	OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
 	OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
 
-	// находим координаты центра OBB относительно координат модели
+	// calculate OBB geometry center
 	OBB.Location.x = (MaxX + MinX) / 2.0f;
 	OBB.Location.y = (MaxY + MinY) / 2.0f;
 	OBB.Location.z = (MaxZ + MinZ) / 2.0f;
 
-	// переносим данные OBB чтобы центр стал центром
+	// calculate OBB points accordingly to OBB geometry center location
 	for (int k = 0; k < 8; k++) {
 		OBB.Box[k] -= OBB.Location;
 	}
 
-	// габариты
+	// calculate 3D model's size
 	Width = fabsf(MaxX - MinX);
 	Height = fabsf(MaxY - MinY);
 	Length = fabsf(MaxZ - MinZ);
 
+	// calculate 3D model's radius square
 	float Width2 = Width / 2.0f;
 	float Length2 = Length / 2.0f;
 	float Height2 = Height / 2.0f;
-	// находим радиус
 	Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
-
-	// находим "центр массы", в базовом режиме считаем всю геометрию
-	int AllVertexCounted = 0;
-	for (auto &tmpObjectBlock : ObjectBlocks) {
-		for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j++) {
-			AllVertexCounted++;
-
-			unsigned int tmpIndex{0};
-			if (tmpObjectBlock.IndexArray.get())
-				tmpIndex = tmpObjectBlock.IndexArray.get()[j] * tmpObjectBlock.VertexStride;
-			else
-				tmpIndex = tmpObjectBlock.VertexStride * j;
-
-			GeometryCenterLocation += tmpObjectBlock.Location +
-						  sVECTOR3D{tmpObjectBlock.VertexArray.get()[tmpIndex],
-							    tmpObjectBlock.VertexArray.get()[tmpIndex + 1],
-							    tmpObjectBlock.VertexArray.get()[tmpIndex + 2]};
-		}
-	}
-	if (AllVertexCounted > 0)
-		GeometryCenterLocation = GeometryCenterLocation / AllVertexCounted;
 }
 
 //-----------------------------------------------------------------------------

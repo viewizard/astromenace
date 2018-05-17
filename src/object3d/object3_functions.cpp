@@ -190,7 +190,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 			// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
-			sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+			sVECTOR3D tmpLocation = tmp->GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
 			sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
@@ -314,7 +314,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)))) {
 
-			sVECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
+			sVECTOR3D tmpLocation = tmpG->GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
 			sVECTOR3D RealLocation = tmpG->Location + tmpLocation;
 
@@ -440,7 +440,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy)))) {
 
-			sVECTOR3D tmpLocation = tmpS->GeometryCenterLocation;
+			sVECTOR3D tmpLocation = tmpS->GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpS->CurrentRotationMat); // поворачиваем в плоскость объекта
 			sVECTOR3D RealLocation = tmpS->Location + tmpLocation;
 
@@ -599,7 +599,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 
-			sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+			sVECTOR3D tmpLocation = tmp->GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
 			sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
@@ -750,7 +750,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 
-			sVECTOR3D tmpLocation = tmp->GeometryCenterLocation;
+			sVECTOR3D tmpLocation = tmp->GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
 			sVECTOR3D RealLocation = tmp->Location + tmpLocation;
 
@@ -992,7 +992,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 		if (NeedCheckCollision(tmpG) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)))) {
-			sVECTOR3D tmpLocation = tmpG->GeometryCenterLocation;
+			sVECTOR3D tmpLocation = tmpG->GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
 			TargetLocation = tmpG->Location + tmpLocation;
 
@@ -1242,7 +1242,7 @@ bool GetMissileOnTargetOrientateion(sVECTOR3D Location, // положение т
 	// проверяем, спереди или сзади стоит противник
 	float tmp1 = A2 * TargetObject->Location.x + B2 * TargetObject->Location.y + C2 * TargetObject->Location.z + D2;
 	if (tmp1 > 0.0f) {
-		sVECTOR3D tmpLocation = TargetObject->GeometryCenterLocation;
+		sVECTOR3D tmpLocation = TargetObject->GeometryCenter;
 		vw_Matrix33CalcPoint(tmpLocation, TargetObject->CurrentRotationMat); // поворачиваем в плоскость объекта
 		TargetLocation = TargetObject->Location + tmpLocation;
 
