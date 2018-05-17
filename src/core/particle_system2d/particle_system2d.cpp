@@ -412,8 +412,7 @@ void cParticleSystem2D::Draw()
  */
 void cParticleSystem2D::MoveSystem(const sVECTOR3D &NewLocation)
 {
-	sVECTOR3D tmpLocateion = NewLocation;
-	tmpLocateion -= Location;
+	sVECTOR3D tmpLocateion{NewLocation - Location};
 	Location = NewLocation;
 
 	for (auto &tmpParticle : ParticlesList) {

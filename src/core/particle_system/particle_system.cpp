@@ -714,8 +714,7 @@ void cParticleSystem::MoveSystem(const sVECTOR3D &NewLocation)
 	if (Location == NewLocation)
 		return;
 
-	sVECTOR3D tmpLocation = NewLocation;
-	tmpLocation -= Location;
+	sVECTOR3D tmpLocation{NewLocation - Location};
 	Location = NewLocation;
 
 	for (auto &tmpParticle : ParticlesList) {
