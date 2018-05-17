@@ -119,8 +119,6 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VisualEffectsQuality"), "value",
 				  Config.VisualEffectsQuality);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AnisotropyLevel"), "value", Config.AnisotropyLevel);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "TexturesCompressionType"), "value",
-				  Config.TexturesCompressionType);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "UseGLSL120"), "value", Config.UseGLSL120);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "ShadowMap"), "value", Config.ShadowMap);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MaxPointLights"), "value", Config.MaxPointLights);
@@ -344,9 +342,6 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "AnisotropyLevel"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AnisotropyLevel"), "value",
 					   Config.AnisotropyLevel);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesCompressionType"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "TexturesCompressionType"), "value",
-					   Config.TexturesCompressionType);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL120"))
 		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "UseGLSL120"), "value",
 					   Config.UseGLSL120);

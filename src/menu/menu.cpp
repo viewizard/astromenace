@@ -215,7 +215,6 @@ void SetOptionsMenu(eMenuStatus Menu)
 		break;
 
 	case eMenuStatus::OPTIONS_ADVANCED:
-		Options_TexturesCompressionType = GameConfig().TexturesCompressionType;
 		Options_UseGLSL120 = GameConfig().UseGLSL120;
 		Options_MSAA = GameConfig().MSAA;
 		Options_CSAA = GameConfig().CSAA;

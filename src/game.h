@@ -296,7 +296,6 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 // Menu_OptionsAdvMenu.cpp
 //------------------------------------------------------------------------------------
 extern int Options_TexturesAnisotropyLevel;
-extern int Options_TexturesCompressionType;
 extern int Options_UseGLSL120;
 extern int Options_MSAA;
 extern int Options_CSAA;

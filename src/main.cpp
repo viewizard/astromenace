@@ -817,11 +817,6 @@ ReCreate:
 		ChangeGameConfig().CSAA = 0;
 	}
 
-	// проверка режима сжатия текстур
-	if (!vw_GetDevCaps().EXT_texture_compression_s3tc)
-		ChangeGameConfig().TexturesCompressionType = 0;
-	if (!vw_GetDevCaps().ARB_texture_compression_bptc && (GameConfig().TexturesCompressionType > 1))
-		ChangeGameConfig().TexturesCompressionType = 0;
 
 
 

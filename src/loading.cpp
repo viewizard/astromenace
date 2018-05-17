@@ -939,7 +939,6 @@ void LoadGameData(eLoading LoadType)
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
 
-	eTextureCompressionType tmpCompress{eTextureCompressionType::NONE};
 	for (unsigned i = 0; i < LoadListCount; i++) {
 		switch (LoadList[i].FileType) {
 		// 2d текстуры
@@ -949,14 +948,7 @@ void LoadGameData(eLoading LoadType)
 			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * GameConfig().AnisotropyLevel,
 					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
-			tmpCompress = eTextureCompressionType::NONE;
-			if (LoadList[i].NeedCompression) {
-				if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
-					tmpCompress = eTextureCompressionType::S3TC;
-				else if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
-					tmpCompress = eTextureCompressionType::BPTC;
-			}
-			vw_LoadTexture(LoadList[i].FileName, tmpCompress);
+			vw_LoadTexture(LoadList[i].FileName);
 			break;
 
 		// текстуры
@@ -972,14 +964,7 @@ void LoadGameData(eLoading LoadType)
 			    (LoadList[i].FileName.find("models/normalmap") != std::string::npos))
 				break;
 
-			tmpCompress = eTextureCompressionType::NONE;
-			if (LoadList[i].NeedCompression) {
-				if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::S3TC))
-					tmpCompress = eTextureCompressionType::S3TC;
-				else if (GameConfig().TexturesCompressionType == static_cast<int>(eTextureCompressionType::BPTC))
-					tmpCompress = eTextureCompressionType::BPTC;
-			}
-			vw_LoadTexture(LoadList[i].FileName, tmpCompress);
+			vw_LoadTexture(LoadList[i].FileName);
 			break;
 
 		// предварит. загрузка моделей

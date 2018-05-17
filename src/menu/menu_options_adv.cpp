@@ -31,7 +31,6 @@
 
 // временные данные для изменения и восстановления
 int Options_TexturesAnisotropyLevel;
-int Options_TexturesCompressionType;
 int Options_UseGLSL120;
 int Options_MSAA;
 int Options_CSAA;
@@ -172,28 +171,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 		}
 	}
-
-
-
-
-	// вкл-выкл компрессии текстур
-	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::green, ContentTransp, vw_GetText("Textures Compression"));
-	int MaxCompressionCount = 1;
-	if (vw_GetDevCaps().ARB_texture_compression_bptc)
-		MaxCompressionCount = 2;
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, !vw_GetDevCaps().EXT_texture_compression_s3tc || (Options_TexturesCompressionType <= 0))) {
-		Options_TexturesCompressionType--;
-		if (Options_TexturesCompressionType < 0) Options_TexturesCompressionType = 0;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, !vw_GetDevCaps().EXT_texture_compression_s3tc || (Options_TexturesCompressionType >= MaxCompressionCount))) {
-		Options_TexturesCompressionType++;
-		if (Options_TexturesCompressionType > MaxCompressionCount) Options_TexturesCompressionType = MaxCompressionCount;
-	}
-	Size = vw_TextWidth(vw_GetText(ButtonTextCompression[Options_TexturesCompressionType]));
-	SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ButtonTextCompression[Options_TexturesCompressionType]));
-
 
 
 
@@ -385,7 +362,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 
 
 	if (Options_TexturesAnisotropyLevel == GameConfig().AnisotropyLevel &&
-	    Options_TexturesCompressionType == GameConfig().TexturesCompressionType &&
 	    Options_MSAA == GameConfig().MSAA &&
 	    Options_CSAA == GameConfig().CSAA &&
 	    Options_UseGLSL120 == GameConfig().UseGLSL120 &&
@@ -413,7 +389,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		if (DrawButton256(X,Y, vw_GetText("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
 			// проверяем, нужно перегружать или нет
 			if (Options_TexturesAnisotropyLevel != GameConfig().AnisotropyLevel ||
-			    Options_TexturesCompressionType != GameConfig().TexturesCompressionType ||
 			    Options_MSAA != GameConfig().MSAA ||
 			    Options_CSAA != GameConfig().CSAA ||
 			    Options_UseGLSL120 != GameConfig().UseGLSL120 ||
@@ -436,7 +411,6 @@ void SaveOptionsAdvMenuTmpData()
 {
 	ChangeGameConfig().UseGLSL120 = Options_UseGLSL120;
 	ChangeGameConfig().AnisotropyLevel = Options_TexturesAnisotropyLevel;
-	ChangeGameConfig().TexturesCompressionType = Options_TexturesCompressionType;
 	ChangeGameConfig().MSAA = Options_MSAA;
 	ChangeGameConfig().CSAA = Options_CSAA;
 	ChangeGameConfig().ShadowMap = Options_ShadowMap;
