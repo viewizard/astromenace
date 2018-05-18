@@ -376,21 +376,18 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sObjectBlock
 			   Object1RotationMatrix[6], Object1RotationMatrix[7], Object1RotationMatrix[8], 0.0f,
 			   Object1Location.x, Object1Location.y, Object1Location.z, 1.0f};
 
-	// calculate local position
-	sVECTOR3D LocalLocation{Object1DrawObjectList.Location};
-	vw_Matrix33CalcPoint(LocalLocation, Object1RotationMatrix);
+	float TransMatTMP[16];
+	vw_Matrix44Identity(TransMatTMP);
 
-	// care about rotation and generate final translation matrix
+	// care about rotation
 	if ((Object1DrawObjectList.Rotation.x != 0.0f) ||
 	    (Object1DrawObjectList.Rotation.y != 0.0f) ||
-	    (Object1DrawObjectList.Rotation.z != 0.0f)) {
-		float TransMatTMP[16];
-		vw_Matrix44Identity(TransMatTMP);
+	    (Object1DrawObjectList.Rotation.z != 0.0f))
 		vw_Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList.Rotation);
-		vw_Matrix44Translate(TransMatTMP, LocalLocation);
-		vw_Matrix44Mult(TransMat, TransMatTMP);
-	} else
-		vw_Matrix44Translate(TransMat, LocalLocation);
+
+	// generate final translation matrix
+	vw_Matrix44Translate(TransMatTMP, Object1DrawObjectList.Location);
+	vw_Matrix44Mult(TransMat, TransMatTMP);
 
 	// detect collision with mesh triangles
 	for (unsigned int i = 0; i < Object1DrawObjectList.VertexQuantity; i += 3) {
