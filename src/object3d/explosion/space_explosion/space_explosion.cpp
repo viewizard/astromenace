@@ -460,7 +460,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			ShipPart->ObjectBlocks[0].Location = LocalLocation^(-1.0f);
 
 			// находим все данные по геометрии
-			ShipPart->InitByDrawObjectList();
+			vw_Model3DMetadataInitialization(*ShipPart);
 
 			// установка текущего положения и поворота
 			ShipPart->SetLocation(Object->Location + Object->HitBB[i].Location);
