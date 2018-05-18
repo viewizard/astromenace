@@ -574,21 +574,37 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 							  std::default_delete<float[]>());
 
 
-
 			// матрица для учета внутреннего состояния объекта
+			float TransMat[16]{Object->CurrentRotationMat[0], Object->CurrentRotationMat[1], Object->CurrentRotationMat[2], 0.0f,
+					   Object->CurrentRotationMat[3], Object->CurrentRotationMat[4], Object->CurrentRotationMat[5], 0.0f,
+					   Object->CurrentRotationMat[6], Object->CurrentRotationMat[7], Object->CurrentRotationMat[8], 0.0f,
+					   0.0f, 0.0f, 0.0f, 1.0f};
+
 			float TransMatTMP[16];
 			vw_Matrix44Identity(TransMatTMP);
-			float TransMatTMPNorm[9];
-			vw_Matrix33Identity(TransMatTMPNorm);
-			// если нужно - создаем матрицу, иначе - копируем ее
+			float TransMatNorm[9];
+			vw_Matrix33Identity(TransMatNorm);
+
 			if (Object->ObjectBlocks[i].Rotation.x != 0.0f ||
 			    Object->ObjectBlocks[i].Rotation.y != 0.0f ||
 			    Object->ObjectBlocks[i].Rotation.z != 0.0f) {
 				vw_Matrix44CreateRotate(TransMatTMP, Object->ObjectBlocks[i].Rotation);
-				vw_Matrix33CreateRotate(TransMatTMPNorm, Object->ObjectBlocks[i].Rotation);
+				vw_Matrix33CreateRotate(TransMatNorm, Object->ObjectBlocks[i].Rotation);
 			}
+			if (Object->ObjectBlocks[i].GeometryAnimation.x != 0.0f ||
+			    Object->ObjectBlocks[i].GeometryAnimation.y != 0.0f ||
+			    Object->ObjectBlocks[i].GeometryAnimation.z != 0.0f) {
+				float TransMatAnimTMP[16];
+				vw_Matrix44CreateRotate(TransMatAnimTMP, Object->ObjectBlocks[i].GeometryAnimation);
+				vw_Matrix44Mult(TransMatTMP, TransMatAnimTMP);
+				float TransMatAnimTMPNorm[9];
+				vw_Matrix33CreateRotate(TransMatAnimTMPNorm, Object->ObjectBlocks[i].GeometryAnimation);
+				vw_Matrix33Mult(TransMatNorm, TransMatAnimTMPNorm);
+			}
+
 			vw_Matrix44Translate(TransMatTMP, ObjectBlocks[i].Location);
-			vw_Matrix33Mult(TransMatTMPNorm, Object->CurrentRotationMat);
+			vw_Matrix44Mult(TransMat, TransMatTMP);
+			vw_Matrix33Mult(TransMatNorm, Object->CurrentRotationMat);
 
 
 			sVECTOR3D TMP;
@@ -600,8 +616,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					TMP.x = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2];
 					TMP.y = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 1];
 					TMP.z = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 2];
-					vw_Matrix44CalcPoint(TMP, TransMatTMP);
-					vw_Matrix33CalcPoint(TMP, Object->CurrentRotationMat);
+					vw_Matrix44CalcPoint(TMP, TransMat);
 					// координаты
 					ObjectBlocks[i].VertexArray.get()[j1] = TMP.x;
 					ObjectBlocks[i].VertexArray.get()[j1 + 1] = TMP.y;
@@ -610,7 +625,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					TMP.x = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 3];
 					TMP.y = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 4];
 					TMP.z = Object->ObjectBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 5];
-					vw_Matrix33CalcPoint(TMP, TransMatTMPNorm);
+					vw_Matrix33CalcPoint(TMP, TransMatNorm);
 					ObjectBlocks[i].VertexArray.get()[j1 + 3] = TMP.x;
 					ObjectBlocks[i].VertexArray.get()[j1 + 4] = TMP.y;
 					ObjectBlocks[i].VertexArray.get()[j1 + 5] = TMP.z;
@@ -633,6 +648,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			ObjectBlocks[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
 			ObjectBlocks[i].Rotation = sVECTOR3D(0.0f,0.0f,0.0f);
+			ObjectBlocks[i].GeometryAnimation = sVECTOR3D(0.0f,0.0f,0.0f);
 
 			TotalCount += ObjectBlocks[i].VertexQuantity;
 		}

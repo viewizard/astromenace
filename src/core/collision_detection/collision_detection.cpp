@@ -385,6 +385,8 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sObjectBlock
 	    (Object1DrawObjectList.Rotation.z != 0.0f))
 		vw_Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList.Rotation);
 
+	// don't care about GeometryAnimation here, for more speed
+
 	// generate final translation matrix
 	vw_Matrix44Translate(TransMatTMP, Object1DrawObjectList.Location);
 	vw_Matrix44Mult(TransMat, TransMatTMP);
