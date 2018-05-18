@@ -27,6 +27,9 @@
 
 // TODO translate comments
 
+// TODO since HitBB is OBB, "collision_detection" functions should be used
+//      all code duplication should be removed
+
 #include "object3d.h"
 
 

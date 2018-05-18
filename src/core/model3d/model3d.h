@@ -125,7 +125,7 @@ public:
 	// vao-related
 	GLuint GlobalVAO{0};
 
-	// Axis-Aligned Bounding Box, coordinates are absolute
+	// Axis-Aligned Bounding Box, coordinates are related to object's location
 	bounding_box AABB{};
 	// Oriented Bounding Box, coordinates are related to object's center
 	sOBB OBB{};

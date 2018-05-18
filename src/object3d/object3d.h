@@ -139,7 +139,7 @@ public:
 	// предыдущее положение объекта
 	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
-	// Axis-Aligned Bounding Box, coordinates are absolute
+	// Axis-Aligned Bounding Box, coordinates are related to object's location
 	bounding_box AABB{};
 	// Oriented Bounding Box, coordinates are related to object's center
 	sOBB OBB{};
