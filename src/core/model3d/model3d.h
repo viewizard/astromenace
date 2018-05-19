@@ -101,16 +101,7 @@ struct sObjectBlock {
 	unsigned int VertexArrayWithSmallTrianglesCount{0};
 };
 
-class cModel3D {
-	friend std::weak_ptr<cModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit,
-						      bool NeedTangentAndBinormal);
-
-public:
-	// Load VW3D 3D models format.
-	bool LoadVW3D(const std::string &FileName);
-	// Save VW3D 3D models format.
-	bool SaveVW3D(const std::string &FileName);
-
+struct sModel3D {
 	// attached objects
 	std::vector<sObjectBlock> ObjectBlocks{};
 
@@ -138,182 +129,13 @@ public:
 	float Length{1.0f}; // calculated from 3D model actual size
 	float Height{1.0f}; // calculated from 3D model actual size
 
-private:
-	// Don't allow direct new/delete usage in code, only vw_LoadModel3D()
-	// allowed for Model3D creation and release setup (deleter must be provided).
-	cModel3D() = default;
-	~cModel3D();
+	// 3D model's metadata initialization (AABB, OBB, HitBB, size, etc).
+	void MetadataInitialization();
 };
 
-
 // Load 3D model.
-std::weak_ptr<cModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
+std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
 // Release all 3D models.
 void vw_ReleaseAllModel3D();
-
-/*
- * 3D model's metadata initialization (AABB, OBB, HitBB, size, etc).
- */
-template <typename T>
-inline void vw_Model3DMetadataInitialization(T &Model)
-{
-	if (Model.ObjectBlocks.empty())
-		return;
-
-	int AllVertexCounted{0};
-
-	// HitBB calculation
-	Model.HitBB.resize(Model.ObjectBlocks.size());
-	for (unsigned int i = 0; i < Model.ObjectBlocks.size(); i++) {
-		float Matrix[9];
-		vw_Matrix33CreateRotate(Matrix, Model.ObjectBlocks[i].Rotation);
-
-		// first vertex's data as initial data for calculation
-		int tmpOffset;
-		if (Model.ObjectBlocks[i].IndexArray)
-			tmpOffset = Model.ObjectBlocks[i].IndexArray.get()[Model.ObjectBlocks[i].RangeStart] *
-				    Model.ObjectBlocks[i].VertexStride;
-		else
-			tmpOffset = Model.ObjectBlocks[i].RangeStart * Model.ObjectBlocks[i].VertexStride;
-
-		sVECTOR3D tmpVertex;
-		tmpVertex.x = Model.ObjectBlocks[i].VertexArray.get()[tmpOffset];
-		tmpVertex.y = Model.ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
-		tmpVertex.z = Model.ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
-		vw_Matrix33CalcPoint(tmpVertex, Matrix);
-		float MinX = tmpVertex.x;
-		float MaxX = tmpVertex.x;
-		float MinY = tmpVertex.y;
-		float MaxY = tmpVertex.y;
-		float MinZ = tmpVertex.z;
-		float MaxZ = tmpVertex.z;
-
-		Model.GeometryCenter += Model.ObjectBlocks[i].Location + tmpVertex;
-
-		// starts from second vertex, check all vertices
-		for (unsigned int j = 1; j < Model.ObjectBlocks[i].VertexQuantity; j++) {
-			if (Model.ObjectBlocks[i].IndexArray)
-				tmpOffset = Model.ObjectBlocks[i].IndexArray.get()[Model.ObjectBlocks[i].RangeStart + j] *
-					    Model.ObjectBlocks[i].VertexStride;
-			else
-				tmpOffset = (Model.ObjectBlocks[i].RangeStart + j) * Model.ObjectBlocks[i].VertexStride;
-
-			tmpVertex.x = Model.ObjectBlocks[i].VertexArray.get()[tmpOffset];
-			tmpVertex.y = Model.ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
-			tmpVertex.z = Model.ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
-			vw_Matrix33CalcPoint(tmpVertex, Matrix);
-			if (MinX > tmpVertex.x)
-				MinX = tmpVertex.x;
-			if (MinY > tmpVertex.y)
-				MinY = tmpVertex.y;
-			if (MinZ > tmpVertex.z)
-				MinZ = tmpVertex.z;
-			if (MaxX < tmpVertex.x)
-				MaxX = tmpVertex.x;
-			if (MaxY < tmpVertex.y)
-				MaxY = tmpVertex.y;
-			if (MaxZ < tmpVertex.z)
-				MaxZ = tmpVertex.z;
-
-			Model.GeometryCenter += Model.ObjectBlocks[i].Location + tmpVertex;
-		}
-
-		// store data to the HitBB
-		Model.HitBB[i].Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		Model.HitBB[i].Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		Model.HitBB[i].Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		Model.HitBB[i].Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		Model.HitBB[i].Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		Model.HitBB[i].Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		Model.HitBB[i].Box[6] = sVECTOR3D(MinX, MinY, MinZ);
-		Model.HitBB[i].Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
-
-		// calculate HitBB geometry center
-		Model.HitBB[i].Location.x = (MaxX + MinX) / 2.0f;
-		Model.HitBB[i].Location.y = (MaxY + MinY) / 2.0f;
-		Model.HitBB[i].Location.z = (MaxZ + MinZ) / 2.0f;
-
-		// calculate HitBB size
-		Model.HitBB[i].Size.x = fabsf(MaxX - MinX);
-		Model.HitBB[i].Size.y = fabsf(MaxY - MinY);
-		Model.HitBB[i].Size.z = fabsf(MaxZ - MinZ);
-
-		// calculate HitBB radius square
-		Model.HitBB[i].Radius2 = (Model.HitBB[i].Size.x / 2.0f) * (Model.HitBB[i].Size.x / 2.0f) +
-					 (Model.HitBB[i].Size.y / 2.0f) * (Model.HitBB[i].Size.y / 2.0f) +
-					 (Model.HitBB[i].Size.z / 2.0f) * (Model.HitBB[i].Size.z / 2.0f);
-
-		// calculate HitBB points accordingly to HitBB geometry center location
-		for (int k = 0; k < 8; k++) {
-			Model.HitBB[i].Box[k] -= Model.HitBB[i].Location;
-		}
-
-		// correct HitBB geometry center location accordingly to object location
-		Model.HitBB[i].Location += Model.ObjectBlocks[i].Location;
-
-		AllVertexCounted += Model.ObjectBlocks[i].VertexQuantity;
-	}
-
-	// calculate 3D model's geometry center
-	if (AllVertexCounted > 0) {
-		// we are safe with static_cast here, since AllVertexCounted will not exceed limits
-		Model.GeometryCenter = Model.GeometryCenter / static_cast<float>(AllVertexCounted);
-	}
-
-	// first HitBB's data as initial data for calculation
-	float MinX = Model.HitBB[0].Box[6].x + Model.HitBB[0].Location.x;
-	float MaxX = Model.HitBB[0].Box[0].x + Model.HitBB[0].Location.x;
-	float MinY = Model.HitBB[0].Box[6].y + Model.HitBB[0].Location.y;
-	float MaxY = Model.HitBB[0].Box[0].y + Model.HitBB[0].Location.y;
-	float MinZ = Model.HitBB[0].Box[6].z + Model.HitBB[0].Location.z;
-	float MaxZ = Model.HitBB[0].Box[0].z + Model.HitBB[0].Location.z;
-
-	// starts from second HitBB, check all HitBBs
-	for (unsigned int i = 1; i < Model.ObjectBlocks.size(); i++) {
-		if (MinX > Model.HitBB[i].Box[6].x + Model.HitBB[i].Location.x)
-			MinX = Model.HitBB[i].Box[6].x + Model.HitBB[i].Location.x;
-		if (MaxX < Model.HitBB[i].Box[0].x + Model.HitBB[i].Location.x)
-			MaxX = Model.HitBB[i].Box[0].x + Model.HitBB[i].Location.x;
-		if (MinY > Model.HitBB[i].Box[6].y + Model.HitBB[i].Location.y)
-			MinY = Model.HitBB[i].Box[6].y + Model.HitBB[i].Location.y;
-		if (MaxY < Model.HitBB[i].Box[0].y + Model.HitBB[i].Location.y)
-			MaxY = Model.HitBB[i].Box[0].y + Model.HitBB[i].Location.y;
-		if (MinZ > Model.HitBB[i].Box[6].z + Model.HitBB[i].Location.z)
-			MinZ = Model.HitBB[i].Box[6].z + Model.HitBB[i].Location.z;
-		if (MaxZ < Model.HitBB[i].Box[0].z + Model.HitBB[i].Location.z)
-			MaxZ = Model.HitBB[i].Box[0].z + Model.HitBB[i].Location.z;
-	}
-
-	// store data to OBB and AABB, since on this stage they are identical
-	Model.OBB.Box[0] = Model.AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-	Model.OBB.Box[1] = Model.AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-	Model.OBB.Box[2] = Model.AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-	Model.OBB.Box[3] = Model.AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-	Model.OBB.Box[4] = Model.AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-	Model.OBB.Box[5] = Model.AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-	Model.OBB.Box[6] = Model.AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-	Model.OBB.Box[7] = Model.AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
-
-	// calculate OBB geometry center
-	Model.OBB.Location.x = (MaxX + MinX) / 2.0f;
-	Model.OBB.Location.y = (MaxY + MinY) / 2.0f;
-	Model.OBB.Location.z = (MaxZ + MinZ) / 2.0f;
-
-	// calculate OBB points accordingly to OBB geometry center location
-	for (int k = 0; k < 8; k++) {
-		Model.OBB.Box[k] -= Model.OBB.Location;
-	}
-
-	// calculate 3D model's size
-	Model.Width = fabsf(MaxX - MinX);
-	Model.Height = fabsf(MaxY - MinY);
-	Model.Length = fabsf(MaxZ - MinZ);
-
-	// calculate 3D model's radius square
-	float Width2 = Model.Width / 2.0f;
-	float Length2 = Model.Length / 2.0f;
-	float Height2 = Model.Height / 2.0f;
-	Model.Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
-}
 
 #endif // MODEL3D_H

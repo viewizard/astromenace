@@ -116,7 +116,7 @@ bool NeedCheckCollision(cObject3D *Object3D)
 void LoadObjectData(const char *Name, cObject3D *Object3D, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	// получение геометрии модели
-	std::weak_ptr<cModel3D> Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
+	std::weak_ptr<sModel3D> Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
 	auto sharedModel = Model.lock();
 	if (!sharedModel)
 		return;
@@ -128,6 +128,7 @@ void LoadObjectData(const char *Name, cObject3D *Object3D, float TriangleSizeLim
 	Object3D->GlobalIBO = sharedModel->GlobalIBO;
 	Object3D->GlobalVAO = sharedModel->GlobalVAO;
 	Object3D->ObjectBlocks = sharedModel->ObjectBlocks;
+	// GlobalVertexArrayCount and GlobalIndexArrayCount not in use
 
 	// резервируем память для текстур
 	Object3D->Texture.resize(Object3D->ObjectBlocks.size(), 0);

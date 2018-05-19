@@ -30,10 +30,27 @@
 #include "../vfs/vfs.h"
 #include "model3d.h"
 
+class cModel3DWrapper : public sModel3D {
+	friend std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit,
+						      bool NeedTangentAndBinormal);
+
+public:
+	// Load VW3D 3D models format.
+	bool LoadVW3D(const std::string &FileName);
+	// Save VW3D 3D models format.
+	bool SaveVW3D(const std::string &FileName);
+
+private:
+	// Don't allow direct new/delete usage in code, only vw_LoadModel3D()
+	// allowed for cModel3DWrapper creation and release setup (deleter must be provided).
+	cModel3DWrapper() = default;
+	~cModel3DWrapper();
+};
+
 namespace {
 
 // All loaded models.
-std::unordered_map<std::string, std::shared_ptr<cModel3D>> ModelsMap;
+std::unordered_map<std::string, std::shared_ptr<cModel3DWrapper>> ModelsMap;
 
 } // unnamed namespace
 
@@ -50,7 +67,7 @@ std::unordered_map<std::string, std::shared_ptr<cModel3D>> ModelsMap;
  * Return vertex array with fixed vertex format:
  * RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD
  */
-static void CreateTangentAndBinormal(cModel3D *Model)
+static void CreateTangentAndBinormal(cModel3DWrapper *Model)
 {
 	int New_VertexFormat = RI_3f_XYZ | RI_3f_NORMAL | RI_3_TEX | RI_2f_TEX | RI_SEPARATE_TEX_COORD;
 	int New_VertexStride = 3 + 3 + 6;
@@ -169,7 +186,7 @@ static void CreateTangentAndBinormal(cModel3D *Model)
 /*
  * Create vertex and index arrays for all objects.
  */
-static void CreateObjectsBuffers(cModel3D *Model)
+static void CreateObjectsBuffers(cModel3DWrapper *Model)
 {
 	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
 		// vertex array
@@ -196,7 +213,7 @@ static void CreateObjectsBuffers(cModel3D *Model)
 /*
  * Create all OpenGL-related hardware buffers.
  */
-static void CreateHardwareBuffers(cModel3D *Model)
+static void CreateHardwareBuffers(cModel3DWrapper *Model)
 {
 	// global vertex buffer object
 	if (!vw_BuildBufferObject(eBufferObject::Vertex,
@@ -331,7 +348,7 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
  * We use second and third textures coordinates for explosion shader in game code, so,
  * we stay with VertexFormat and VertexStride and could point to object's VertexArray.
  */
-static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float TriangleSizeLimit)
+static void CreateVertexArrayLimitedBySizeTriangles(cModel3DWrapper *Model, float TriangleSizeLimit)
 {
 	if (TriangleSizeLimit <= 0.0f) {
 		for (auto &tmpObjectBlock : Model->ObjectBlocks) {
@@ -449,29 +466,29 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3D *Model, float Trian
  * should be internal only. Caller should operate with weak_ptr and use lock()
  * (shared_ptr) only during access to object.
  */
-std::weak_ptr<cModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
 	if (FileName.empty())
-		return std::weak_ptr<cModel3D>{};
+		return std::weak_ptr<sModel3D>{};
 
 	// if we already have it, just return a pointer.
 	auto FoundModel = ModelsMap.find(FileName);
 	if (FoundModel != ModelsMap.end())
 		return FoundModel->second;
 
-	ModelsMap.emplace(FileName, std::shared_ptr<cModel3D>{new cModel3D, [](cModel3D *p) {delete p;}});
+	ModelsMap.emplace(FileName, std::shared_ptr<cModel3DWrapper>{new cModel3DWrapper, [](cModel3DWrapper *p) {delete p;}});
 
 	// check extension
 	if (vw_CheckFileExtension(FileName, ".vw3d")) {
 		if (!ModelsMap[FileName]->LoadVW3D(FileName)) {
 			std::cout << "Can't load file ... " << FileName << "\n";
 			ModelsMap.erase(FileName);
-			return std::weak_ptr<cModel3D>{};
+			return std::weak_ptr<sModel3D>{};
 		}
 	} else {
 		std::cerr << __func__ << "(): " << "Format not supported " << FileName << "\n";
 		ModelsMap.erase(FileName);
-		return std::weak_ptr<cModel3D>{};
+		return std::weak_ptr<sModel3D>{};
 	}
 
 	if (NeedTangentAndBinormal)
@@ -509,9 +526,9 @@ sObjectBlock::~sObjectBlock()
 }
 
 /*
- * Destructor cModel3D.
+ * Destructor cModel3DWrapper.
  */
-cModel3D::~cModel3D()
+cModel3DWrapper::~cModel3DWrapper()
 {
 	if (!ObjectBlocks.empty()) {
 		for (auto &tmpObjectBlock : ObjectBlocks) {
@@ -534,7 +551,7 @@ cModel3D::~cModel3D()
 /*
  * Load VW3D 3D models format.
  */
-bool cModel3D::LoadVW3D(const std::string &FileName)
+bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
 {
 	if (FileName.empty())
 		return false;
@@ -604,7 +621,7 @@ bool cModel3D::LoadVW3D(const std::string &FileName)
 
 	vw_fclose(File);
 
-	vw_Model3DMetadataInitialization(*this);
+	MetadataInitialization();
 
 	return true;
 }
@@ -612,7 +629,7 @@ bool cModel3D::LoadVW3D(const std::string &FileName)
 /*
  * Save VW3D 3D models format.
  */
-bool cModel3D::SaveVW3D(const std::string &FileName)
+bool cModel3DWrapper::SaveVW3D(const std::string &FileName)
 {
 	if (!GlobalVertexArray || !GlobalIndexArray || ObjectBlocks.empty()) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
@@ -655,4 +672,168 @@ bool cModel3D::SaveVW3D(const std::string &FileName)
 
 	std::cout << "VW3D Write: " << FileName << "\n";
 	return true;
+}
+
+/*
+ * 3D model's metadata initialization (AABB, OBB, HitBB, size, etc).
+ */
+void sModel3D::MetadataInitialization()
+{
+	if (ObjectBlocks.empty())
+		return;
+
+	int AllVertexCounted{0};
+
+	// HitBB calculation
+	HitBB.resize(ObjectBlocks.size());
+	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+		float Matrix[9];
+		vw_Matrix33CreateRotate(Matrix, ObjectBlocks[i].Rotation);
+
+		// first vertex's data as initial data for calculation
+		int tmpOffset;
+		if (ObjectBlocks[i].IndexArray)
+			tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart] *
+				    ObjectBlocks[i].VertexStride;
+		else
+			tmpOffset = ObjectBlocks[i].RangeStart * ObjectBlocks[i].VertexStride;
+
+		sVECTOR3D tmpVertex;
+		tmpVertex.x = ObjectBlocks[i].VertexArray.get()[tmpOffset];
+		tmpVertex.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
+		tmpVertex.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
+		vw_Matrix33CalcPoint(tmpVertex, Matrix);
+		float MinX = tmpVertex.x;
+		float MaxX = tmpVertex.x;
+		float MinY = tmpVertex.y;
+		float MaxY = tmpVertex.y;
+		float MinZ = tmpVertex.z;
+		float MaxZ = tmpVertex.z;
+
+		GeometryCenter += ObjectBlocks[i].Location + tmpVertex;
+
+		// starts from second vertex, check all vertices
+		for (unsigned int j = 1; j < ObjectBlocks[i].VertexQuantity; j++) {
+			if (ObjectBlocks[i].IndexArray)
+				tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] *
+					    ObjectBlocks[i].VertexStride;
+			else
+				tmpOffset = (ObjectBlocks[i].RangeStart + j) * ObjectBlocks[i].VertexStride;
+
+			tmpVertex.x = ObjectBlocks[i].VertexArray.get()[tmpOffset];
+			tmpVertex.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
+			tmpVertex.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
+			vw_Matrix33CalcPoint(tmpVertex, Matrix);
+			if (MinX > tmpVertex.x)
+				MinX = tmpVertex.x;
+			if (MinY > tmpVertex.y)
+				MinY = tmpVertex.y;
+			if (MinZ > tmpVertex.z)
+				MinZ = tmpVertex.z;
+			if (MaxX < tmpVertex.x)
+				MaxX = tmpVertex.x;
+			if (MaxY < tmpVertex.y)
+				MaxY = tmpVertex.y;
+			if (MaxZ < tmpVertex.z)
+				MaxZ = tmpVertex.z;
+
+			GeometryCenter += ObjectBlocks[i].Location + tmpVertex;
+		}
+
+		// store data to the HitBB
+		HitBB[i].Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+		HitBB[i].Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+		HitBB[i].Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
+		HitBB[i].Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+		HitBB[i].Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+		HitBB[i].Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
+		HitBB[i].Box[6] = sVECTOR3D(MinX, MinY, MinZ);
+		HitBB[i].Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
+
+		// calculate HitBB geometry center
+		HitBB[i].Location.x = (MaxX + MinX) / 2.0f;
+		HitBB[i].Location.y = (MaxY + MinY) / 2.0f;
+		HitBB[i].Location.z = (MaxZ + MinZ) / 2.0f;
+
+		// calculate HitBB size
+		HitBB[i].Size.x = fabsf(MaxX - MinX);
+		HitBB[i].Size.y = fabsf(MaxY - MinY);
+		HitBB[i].Size.z = fabsf(MaxZ - MinZ);
+
+		// calculate HitBB radius square
+		HitBB[i].Radius2 = (HitBB[i].Size.x / 2.0f) * (HitBB[i].Size.x / 2.0f) +
+				   (HitBB[i].Size.y / 2.0f) * (HitBB[i].Size.y / 2.0f) +
+				   (HitBB[i].Size.z / 2.0f) * (HitBB[i].Size.z / 2.0f);
+
+		// calculate HitBB points accordingly to HitBB geometry center location
+		for (int k = 0; k < 8; k++) {
+			HitBB[i].Box[k] -= HitBB[i].Location;
+		}
+
+		// correct HitBB geometry center location accordingly to object location
+		HitBB[i].Location += ObjectBlocks[i].Location;
+
+		AllVertexCounted += ObjectBlocks[i].VertexQuantity;
+	}
+
+	// calculate 3D model's geometry center
+	if (AllVertexCounted > 0) {
+		// we are safe with static_cast here, since AllVertexCounted will not exceed limits
+		GeometryCenter = GeometryCenter / static_cast<float>(AllVertexCounted);
+	}
+
+	// first HitBB's data as initial data for calculation
+	float MinX = HitBB[0].Box[6].x + HitBB[0].Location.x;
+	float MaxX = HitBB[0].Box[0].x + HitBB[0].Location.x;
+	float MinY = HitBB[0].Box[6].y + HitBB[0].Location.y;
+	float MaxY = HitBB[0].Box[0].y + HitBB[0].Location.y;
+	float MinZ = HitBB[0].Box[6].z + HitBB[0].Location.z;
+	float MaxZ = HitBB[0].Box[0].z + HitBB[0].Location.z;
+
+	// starts from second HitBB, check all HitBBs
+	for (unsigned int i = 1; i < ObjectBlocks.size(); i++) {
+		if (MinX > HitBB[i].Box[6].x + HitBB[i].Location.x)
+			MinX = HitBB[i].Box[6].x + HitBB[i].Location.x;
+		if (MaxX < HitBB[i].Box[0].x + HitBB[i].Location.x)
+			MaxX = HitBB[i].Box[0].x + HitBB[i].Location.x;
+		if (MinY > HitBB[i].Box[6].y + HitBB[i].Location.y)
+			MinY = HitBB[i].Box[6].y + HitBB[i].Location.y;
+		if (MaxY < HitBB[i].Box[0].y + HitBB[i].Location.y)
+			MaxY = HitBB[i].Box[0].y + HitBB[i].Location.y;
+		if (MinZ > HitBB[i].Box[6].z + HitBB[i].Location.z)
+			MinZ = HitBB[i].Box[6].z + HitBB[i].Location.z;
+		if (MaxZ < HitBB[i].Box[0].z + HitBB[i].Location.z)
+			MaxZ = HitBB[i].Box[0].z + HitBB[i].Location.z;
+	}
+
+	// store data to OBB and AABB, since on this stage they are identical
+	OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
+	OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
+	OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
+	OBB.Box[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
+	OBB.Box[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
+	OBB.Box[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
+	OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
+	OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+
+	// calculate OBB geometry center
+	OBB.Location.x = (MaxX + MinX) / 2.0f;
+	OBB.Location.y = (MaxY + MinY) / 2.0f;
+	OBB.Location.z = (MaxZ + MinZ) / 2.0f;
+
+	// calculate OBB points accordingly to OBB geometry center location
+	for (int k = 0; k < 8; k++) {
+		OBB.Box[k] -= OBB.Location;
+	}
+
+	// calculate 3D model's size
+	Width = fabsf(MaxX - MinX);
+	Height = fabsf(MaxY - MinY);
+	Length = fabsf(MaxZ - MinZ);
+
+	// calculate 3D model's radius square
+	float Width2 = Width / 2.0f;
+	float Length2 = Length / 2.0f;
+	float Height2 = Height / 2.0f;
+	Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 }

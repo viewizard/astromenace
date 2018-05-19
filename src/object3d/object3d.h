@@ -93,7 +93,7 @@ enum class eDeleteAfterLeaveScene {
 // delay before object delete, since object could back to the scene
 #define DeleteAfterLeaveSceneDelay 1.0f
 
-class cObject3D {
+class cObject3D : public sModel3D {
 protected:
 	// don't allow object of this class creation
 	cObject3D() = default;
@@ -139,19 +139,6 @@ public:
 	// предыдущее положение объекта
 	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
-	// Axis-Aligned Bounding Box, coordinates are related to object's location
-	bounding_box AABB{};
-	// Oriented Bounding Box, coordinates are related to object's center
-	sOBB OBB{};
-	// Hit Bounding Box, same as OBB, but for each objects in the 3D model
-	std::vector<sHitBB> HitBB{};
-	// geometry center of all vertices in the model, related to object's center
-	sVECTOR3D GeometryCenter{0.0f, 0.0f, 0.0f};
-	float Radius{0.0f}; // Radius, for fast collisions check
-	float Width{1.0f}; // calculated from 3D model actual size
-	float Length{1.0f}; // calculated from 3D model actual size
-	float Height{1.0f}; // calculated from 3D model actual size
-
 	// последнее время, когда проверяли-обновляли объект
 	float TimeLastUpdate{-1.0f};
 	// время между апдейтами
@@ -162,13 +149,6 @@ public:
 	std::vector<GLtexture> TextureIllum{};
 	std::vector<GLtexture> NormalMap{};
 
-	// список с геометрией модели, объекты для прорисовки
-	std::vector<sObjectBlock> ObjectBlocks{};
-	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
-	GLuint GlobalVBO{0};
-	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
-	GLuint GlobalIBO{0};
-	GLuint GlobalVAO{0};
 	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно
 	float PromptDrawDist2{-1.0f};
 	int InternalLights{0}; // кол-во внутренних источников света
