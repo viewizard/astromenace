@@ -198,8 +198,13 @@ bool cParticleSystem::Update(float Time)
 void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 {
 	// care about particle system movements (need this for low FPS)
-	sVECTOR3D LocationCorrection = (PrevLocation - Location) / static_cast<float>(Quantity);
-	float TimeDeltaCorrection = TimeDelta / static_cast<float>(Quantity);
+	sVECTOR3D LocationCorrection{};
+	float TimeDeltaCorrection{0.0f};
+	// don't calculate correction for 1, since the last one should be created in current location and current time
+	if (Quantity > 1) {
+		LocationCorrection = (PrevLocation - Location) / static_cast<float>(Quantity);
+		TimeDeltaCorrection = TimeDelta / static_cast<float>(Quantity);
+	}
 
 	while (Quantity > 0) {
 		// create new particle
@@ -282,14 +287,18 @@ void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 			NewSpeed = 0.0f;
 		NewParticle.Velocity *= NewSpeed;
 
-		// care about particle system movements (need this for low FPS)
-		NewParticle.Location += (LocationCorrection ^ static_cast<float>(Quantity));
-		if (!NewParticle.Update(TimeDeltaCorrection * static_cast<float>(Quantity), Location, IsMagnet, MagnetFactor)) {
-			ParticlesList.pop_front();
-			ParticlesCountInList--;
-		}
-
 		Quantity--;
+
+		// care about particle system movements (need this for low FPS)
+		// don't change the last one, it should be created in current location and current time
+		if (Quantity > 0) {
+			NewParticle.Location += (LocationCorrection ^ static_cast<float>(Quantity));
+			if (!NewParticle.Update(TimeDeltaCorrection * static_cast<float>(Quantity),
+						Location, IsMagnet, MagnetFactor)) {
+				ParticlesList.pop_front();
+				ParticlesCountInList--;
+			}
+		}
 	}
 }
 
