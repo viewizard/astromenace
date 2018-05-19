@@ -96,7 +96,7 @@ void cPirateShip::Create(int PirateShipNum)
 	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, this, 2.0f, PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120);
 
 	// всегда только эти текстуры
-	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].TextureName);
 		if (PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120)
 			NormalMap[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].NormalMapName);

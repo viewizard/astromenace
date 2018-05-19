@@ -122,21 +122,21 @@ public:
 	// коэф. преобразования скорость в скорость вращения колес
 	float	SpeedToRotate{0.0f};
 
-	// набор указателей на номера объектов, которыми нацеливаемся по горизонтале
-	int	TargetHorizObjectQuantity{0};
-	int	*TargetHorizObject{nullptr};
-	float	TargetHorizObjectCurrentAngle{0.0f};
-	float	TargetHorizObjectNeedAngle{0.0f};
-	// набор указателей на номера объектов, которыми нацеливаемся по вертикали
-	int	TargetVertObjectQuantity{0};
-	int	*TargetVertObject{nullptr};
-	float	TargetVertObjectMaxAngle{80.0f};
-	float	TargetVertObjectMinAngle{0.0f};
-	float	TargetVertObjectCurrentAngle{0.0f};
-	float	TargetVertObjectNeedAngle{0.0f};
+	// набор указателей на номера частей, которыми нацеливаемся по горизонтале
+	int	TargetHorizBlocksQuantity{0};
+	int	*TargetHorizBlocks{nullptr};
+	float	TargetHorizBlocksCurrentAngle{0.0f};
+	float	TargetHorizBlocksNeedAngle{0.0f};
+	// набор указателей на номера частей, которыми нацеливаемся по вертикали
+	int	TargetVertBlocksQuantity{0};
+	int	*TargetVertBlocks{nullptr};
+	float	TargetVertBlocksMaxAngle{80.0f};
+	float	TargetVertBlocksMinAngle{0.0f};
+	float	TargetVertBlocksCurrentAngle{0.0f};
+	float	TargetVertBlocksNeedAngle{0.0f};
 	// если нужно вращать ствол (многоствольный пулемет)
-	int	BarrelObjectQuantity{0};
-	int	*BarrelObject{nullptr};
+	int	BarrelBlocksQuantity{0};
+	int	*BarrelBlocks{nullptr};
 
 	// небольшая девиация-болтание колес
 	bool DeviationOn{false};

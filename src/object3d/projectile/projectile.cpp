@@ -1506,9 +1506,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		ObjectBlocks[0].Rotation.y += 90.0f * TimeDelta;
-		while (ObjectBlocks[0].Rotation.y > 360.0f) {
-			ObjectBlocks[0].Rotation.y -= 360.0f;
+		Model3DBlocks[0].Rotation.y += 90.0f * TimeDelta;
+		while (Model3DBlocks[0].Rotation.y > 360.0f) {
+			Model3DBlocks[0].Rotation.y -= 360.0f;
 		}
 	// мина пришельцев, энергетическая (1-й тип)
 	case 106: {
@@ -1550,9 +1550,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		ObjectBlocks[0].Rotation.y += 90.0f * TimeDelta;
-		while (ObjectBlocks[0].Rotation.y > 360.0f) {
-			ObjectBlocks[0].Rotation.y -= 360.0f;
+		Model3DBlocks[0].Rotation.y += 90.0f * TimeDelta;
+		while (Model3DBlocks[0].Rotation.y > 360.0f) {
+			Model3DBlocks[0].Rotation.y -= 360.0f;
 		}
 	// мина пришельцев, энергетическая (2-й тип)
 	case 107:
@@ -1625,9 +1625,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		ObjectBlocks[0].Rotation.y += 120.0f * TimeDelta;
-		while (ObjectBlocks[0].Rotation.y > 360.0f) {
-			ObjectBlocks[0].Rotation.y -= 360.0f;
+		Model3DBlocks[0].Rotation.y += 120.0f * TimeDelta;
+		while (Model3DBlocks[0].Rotation.y > 360.0f) {
+			Model3DBlocks[0].Rotation.y -= 360.0f;
 		}
 
 		RotationSpeed = 180.0f;
@@ -1726,9 +1726,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		ObjectBlocks[0].Rotation.y += 90.0f * TimeDelta;
-		while (ObjectBlocks[0].Rotation.y > 360.0f) {
-			ObjectBlocks[0].Rotation.y -= 360.0f;
+		Model3DBlocks[0].Rotation.y += 90.0f * TimeDelta;
+		while (Model3DBlocks[0].Rotation.y > 360.0f) {
+			Model3DBlocks[0].Rotation.y -= 360.0f;
 		}
 
 		RotationSpeed = 180.0f;

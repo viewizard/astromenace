@@ -66,7 +66,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum-1].Name, this, 2.0f);
 
 
-	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureName);
 	}
 
@@ -102,19 +102,19 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
-		TargetHorizObjectQuantity = 4;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 1;
-		TargetHorizObject[1] = 2;
-		TargetHorizObject[2] = 3;
-		TargetHorizObject[3] = 4;
+		TargetHorizBlocksQuantity = 4;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 1;
+		TargetHorizBlocks[1] = 2;
+		TargetHorizBlocks[2] = 3;
+		TargetHorizBlocks[3] = 4;
 
-		TargetVertObjectQuantity = 3;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 2;
-		TargetVertObject[1] = 3;
-		TargetVertObject[2] = 4;
-		TargetVertObjectMaxAngle = 60.0f;
+		TargetVertBlocksQuantity = 3;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 2;
+		TargetVertBlocks[1] = 3;
+		TargetVertBlocks[2] = 4;
+		TargetVertBlocksMaxAngle = 60.0f;
 		break;
 
 	case 2:
@@ -124,23 +124,23 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
 		WeaponFireType = 2;
 
-		TargetHorizObjectQuantity = 4;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 1;
-		TargetHorizObject[1] = 2;
-		TargetHorizObject[2] = 3;
-		TargetHorizObject[3] = 4;
+		TargetHorizBlocksQuantity = 4;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 1;
+		TargetHorizBlocks[1] = 2;
+		TargetHorizBlocks[2] = 3;
+		TargetHorizBlocks[3] = 4;
 
-		TargetVertObjectQuantity = 3;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 2;
-		TargetVertObject[1] = 3;
-		TargetVertObject[2] = 4;
-		TargetVertObjectMaxAngle = 60.0f;
+		TargetVertBlocksQuantity = 3;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 2;
+		TargetVertBlocks[1] = 3;
+		TargetVertBlocks[2] = 4;
+		TargetVertBlocksMaxAngle = 60.0f;
 
-		BarrelObjectQuantity = 1;
-		BarrelObject = new int[BarrelObjectQuantity];
-		BarrelObject[0] = 4;
+		BarrelBlocksQuantity = 1;
+		BarrelBlocks = new int[BarrelBlocksQuantity];
+		BarrelBlocks[0] = 4;
 		break;
 
 	case 3:
@@ -154,15 +154,15 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
 		WeaponFireType = 3;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 1;
-		TargetHorizObject[1] = 2;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 1;
+		TargetHorizBlocks[1] = 2;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 2;
-		TargetVertObjectMaxAngle = 60.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 2;
+		TargetVertBlocksMaxAngle = 60.0f;
 		break;
 
 	case 4:
@@ -176,24 +176,24 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
-		TargetHorizObjectQuantity = 4;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 1;
-		TargetHorizObject[1] = 2;
-		TargetHorizObject[2] = 3;
-		TargetHorizObject[3] = 4;
+		TargetHorizBlocksQuantity = 4;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 1;
+		TargetHorizBlocks[1] = 2;
+		TargetHorizBlocks[2] = 3;
+		TargetHorizBlocks[3] = 4;
 
-		TargetVertObjectQuantity = 3;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 2;
-		TargetVertObject[1] = 3;
-		TargetVertObject[2] = 4;
-		TargetVertObjectMaxAngle = 60.0f;
+		TargetVertBlocksQuantity = 3;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 2;
+		TargetVertBlocks[1] = 3;
+		TargetVertBlocks[2] = 4;
+		TargetVertBlocksMaxAngle = 60.0f;
 
-		BarrelObjectQuantity = 2;
-		BarrelObject = new int[BarrelObjectQuantity];
-		BarrelObject[0] = 3;
-		BarrelObject[1] = 4;
+		BarrelBlocksQuantity = 2;
+		BarrelBlocks = new int[BarrelBlocksQuantity];
+		BarrelBlocks[0] = 3;
+		BarrelBlocks[1] = 4;
 		break;
 
 	case 5:
@@ -207,15 +207,15 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 1;
-		TargetHorizObject[1] = 2;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 1;
+		TargetHorizBlocks[1] = 2;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 2;
-		TargetVertObjectMaxAngle = 60.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 2;
+		TargetVertBlocksMaxAngle = 60.0f;
 		break;
 
 	case 6:
@@ -224,15 +224,15 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		Weapon[0]->Create(204);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.5f;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 2;
-		TargetHorizObject[1] = 1;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 2;
+		TargetHorizBlocks[1] = 1;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 1;
-		TargetVertObjectMaxAngle = 80.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 1;
+		TargetVertBlocksMaxAngle = 80.0f;
 		break;
 
 	case 7:
@@ -241,23 +241,23 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 		Weapon[0]->Create(211);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime;
 
-		TargetHorizObjectQuantity = 4;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 4;
-		TargetHorizObject[1] = 2;
-		TargetHorizObject[2] = 3;
-		TargetHorizObject[3] = 1;
+		TargetHorizBlocksQuantity = 4;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 4;
+		TargetHorizBlocks[1] = 2;
+		TargetHorizBlocks[2] = 3;
+		TargetHorizBlocks[3] = 1;
 
-		TargetVertObjectQuantity = 3;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 3;
-		TargetVertObject[1] = 2;
-		TargetVertObject[2] = 1;
-		TargetVertObjectMaxAngle = 60.0f;
+		TargetVertBlocksQuantity = 3;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 3;
+		TargetVertBlocks[1] = 2;
+		TargetVertBlocks[2] = 1;
+		TargetVertBlocksMaxAngle = 60.0f;
 
-		BarrelObjectQuantity = 1;
-		BarrelObject = new int[BarrelObjectQuantity];
-		BarrelObject[0] = 1;
+		BarrelBlocksQuantity = 1;
+		BarrelBlocks = new int[BarrelBlocksQuantity];
+		BarrelBlocks[0] = 1;
 		break;
 
 	}
@@ -266,23 +266,23 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizObject != nullptr) {
-		BaseBound = ObjectBlocks[TargetHorizObject[0]].Location;
+	if (TargetHorizBlocks != nullptr) {
+		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 	}
 
-	if (TargetVertObject != nullptr) {
-		if (TargetHorizObject != nullptr)
-			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location - ObjectBlocks[TargetHorizObject[0]].Location;
+	if (TargetVertBlocks != nullptr) {
+		if (TargetHorizBlocks != nullptr)
+			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
-			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location;
+			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
 	}
 
 	if (WeaponBound != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++) {
-			if (TargetVertObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetVertObject[0]].Location;
-			else if (TargetHorizObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetHorizObject[0]].Location;
+			if (TargetVertBlocks != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetVertBlocks[0]].Location;
+			else if (TargetHorizBlocks != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetHorizBlocks[0]].Location;
 			else
 				WeaponBound[i] = WeaponLocation[i];
 		}

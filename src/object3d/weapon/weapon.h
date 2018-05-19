@@ -85,15 +85,15 @@ public:
 	sVECTOR3D WeaponBound{0.0f, 0.0f, 0.0f};
 
 	// набор указателей на номера объектов, которыми нацеливаемся по горизонтале
-	int TargetHorizObject{-1};
-	float TargetHorizObjectCurrentAngle{0.0f};
-	float TargetHorizObjectNeedAngle{0.0f};
+	int TargetHorizBlocks{-1};
+	float TargetHorizBlocksCurrentAngle{0.0f};
+	float TargetHorizBlocksNeedAngle{0.0f};
 	// набор указателей на номера объектов, которыми нацеливаемся по вертикали
-	int TargetVertObject{-1};
-	float TargetVertObjectMaxAngle{80.0f};
-	float TargetVertObjectMinAngle{0.0f};
-	float TargetVertObjectCurrentAngle{0.0f};
-	float TargetVertObjectNeedAngle{0.0f};
+	int TargetVertBlocks{-1};
+	float TargetVertBlocksMaxAngle{80.0f};
+	float TargetVertBlocksMinAngle{0.0f};
+	float TargetVertBlocksCurrentAngle{0.0f};
+	float TargetVertBlocksNeedAngle{0.0f};
 
 	// выстрел - вылет частиц (засветка возле ствола)
 	std::weak_ptr<cParticleSystem> Fire{};

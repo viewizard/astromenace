@@ -127,13 +127,12 @@ void LoadObjectData(const char *Name, cObject3D *Object3D, float TriangleSizeLim
 	Object3D->GlobalIndexArray = sharedModel->GlobalIndexArray;
 	Object3D->GlobalIBO = sharedModel->GlobalIBO;
 	Object3D->GlobalVAO = sharedModel->GlobalVAO;
-	Object3D->ObjectBlocks = sharedModel->ObjectBlocks;
-	// GlobalVertexArrayCount and GlobalIndexArrayCount not in use
+	Object3D->Model3DBlocks = sharedModel->Model3DBlocks;
 
 	// резервируем память для текстур
-	Object3D->Texture.resize(Object3D->ObjectBlocks.size(), 0);
-	Object3D->TextureIllum.resize(Object3D->ObjectBlocks.size(), 0);
-	Object3D->NormalMap.resize(Object3D->ObjectBlocks.size(), 0);
+	Object3D->Texture.resize(Object3D->Model3DBlocks.size(), 0);
+	Object3D->TextureIllum.resize(Object3D->Model3DBlocks.size(), 0);
+	Object3D->NormalMap.resize(Object3D->Model3DBlocks.size(), 0);
 
 	// metadata
 	Object3D->AABB = sharedModel->AABB;

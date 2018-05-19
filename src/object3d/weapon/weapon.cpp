@@ -294,7 +294,7 @@ void cWeapon::Create(int WeaponNum)
 
 		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, this, 2.0f);
 
-		for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+		for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 			Texture[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureName);
 			if (WeaponNum < 16)
 				TextureIllum[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
@@ -340,13 +340,13 @@ void cWeapon::Create(int WeaponNum)
 		switch (WeaponNum) {
 		case 201: {
 			WeaponTurret = true;
-			TargetHorizObject = 0;
-			TargetVertObject = 1;
-			TargetVertObjectMaxAngle = 89.0f;
-			TargetVertObjectMinAngle = 0.0f;
+			TargetHorizBlocks = 0;
+			TargetVertBlocks = 1;
+			TargetVertBlocksMaxAngle = 89.0f;
+			TargetVertBlocksMinAngle = 0.0f;
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 2.0f);
-			for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+			for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
@@ -356,13 +356,13 @@ void cWeapon::Create(int WeaponNum)
 
 		case 202: {
 			WeaponTurret = true;
-			TargetHorizObject = 0;
-			TargetVertObject = 1;
-			TargetVertObjectMaxAngle = 89.0f;
-			TargetVertObjectMinAngle = 20.0f;
+			TargetHorizBlocks = 0;
+			TargetVertBlocks = 1;
+			TargetVertBlocksMaxAngle = 89.0f;
+			TargetVertBlocksMinAngle = 20.0f;
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this, 2.0f);
-			for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+			for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
@@ -372,23 +372,23 @@ void cWeapon::Create(int WeaponNum)
 
 		if (WeaponNum == 201 || WeaponNum == 202) {
 			// вычисляем данные для нахождения точки стрельбы
-			if (TargetHorizObject != -1) {
-				BaseBound = ObjectBlocks[TargetHorizObject].Location;
+			if (TargetHorizBlocks != -1) {
+				BaseBound = Model3DBlocks[TargetHorizBlocks].Location;
 			}
 
-			if (TargetVertObject != -1) {
-				if (TargetHorizObject != -1)
-					MiddleBound = ObjectBlocks[TargetVertObject].Location -
-						      ObjectBlocks[TargetHorizObject].Location;
+			if (TargetVertBlocks != -1) {
+				if (TargetHorizBlocks != -1)
+					MiddleBound = Model3DBlocks[TargetVertBlocks].Location -
+						      Model3DBlocks[TargetHorizBlocks].Location;
 				else
-					MiddleBound = ObjectBlocks[TargetVertObject].Location;
+					MiddleBound = Model3DBlocks[TargetVertBlocks].Location;
 			}
 
 
-			if (TargetVertObject != -1)
-				WeaponBound = FireLocation - ObjectBlocks[TargetVertObject].Location;
-			else if (TargetHorizObject != -1)
-				WeaponBound = FireLocation - ObjectBlocks[TargetHorizObject].Location;
+			if (TargetVertBlocks != -1)
+				WeaponBound = FireLocation - Model3DBlocks[TargetVertBlocks].Location;
+			else if (TargetHorizBlocks != -1)
+				WeaponBound = FireLocation - Model3DBlocks[TargetHorizBlocks].Location;
 			else
 				WeaponBound = FireLocation;
 
@@ -719,19 +719,19 @@ bool cWeapon::Update(float Time)
 			//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 			// находимся в начальном состоянии поворота ствола
-			sVECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
+			sVECTOR3D NeedAngle(TargetVertBlocksNeedAngle,TargetHorizBlocksNeedAngle,0);
 			GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
 						      CurrentRotationMat, &NeedAngle, InternalType);
 
 			// наводим на цель
-			TargetHorizObjectNeedAngle = NeedAngle.y;
-			TargetVertObjectNeedAngle = NeedAngle.x;
+			TargetHorizBlocksNeedAngle = NeedAngle.y;
+			TargetVertBlocksNeedAngle = NeedAngle.x;
 		}
 		/*else
 		{
 			// устанавливаем в начальное положение
-			TargetHorizObjectNeedAngle = 0.0f;
-			TargetVertObjectNeedAngle = 0.0f;
+			TargetHorizBlocksNeedAngle = 0.0f;
+			TargetVertBlocksNeedAngle = 0.0f;
 		}*/
 
 
@@ -744,38 +744,38 @@ bool cWeapon::Update(float Time)
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот башни по горизонтале
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (TargetHorizObject != -1)
-			if (TargetHorizObjectNeedAngle != TargetHorizObjectCurrentAngle) {
-				if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f) {
-					if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f) TargetHorizObjectCurrentAngle -= 360.0f;
-					if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f) TargetHorizObjectCurrentAngle += 360.0f;
+		if (TargetHorizBlocks != -1)
+			if (TargetHorizBlocksNeedAngle != TargetHorizBlocksCurrentAngle) {
+				if (fabsf(TargetHorizBlocksNeedAngle-TargetHorizBlocksCurrentAngle) > 180.0f) {
+					if (TargetHorizBlocksCurrentAngle - TargetHorizBlocksNeedAngle > 180.0f) TargetHorizBlocksCurrentAngle -= 360.0f;
+					if (TargetHorizBlocksNeedAngle - TargetHorizBlocksCurrentAngle > 180.0f) TargetHorizBlocksCurrentAngle += 360.0f;
 				}
 
 				// находим угол, на который нужно повернуть
-				float NeedRotate = TargetHorizObjectCurrentAngle;
+				float NeedRotate = TargetHorizBlocksCurrentAngle;
 
-				if (TargetHorizObjectNeedAngle>TargetHorizObjectCurrentAngle) {
+				if (TargetHorizBlocksNeedAngle>TargetHorizBlocksCurrentAngle) {
 					NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-					if (NeedRotate > TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
+					if (NeedRotate > TargetHorizBlocksNeedAngle) NeedRotate = TargetHorizBlocksNeedAngle;
 				} else {
 					NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-					if (NeedRotate < TargetHorizObjectNeedAngle) NeedRotate = TargetHorizObjectNeedAngle;
+					if (NeedRotate < TargetHorizBlocksNeedAngle) NeedRotate = TargetHorizBlocksNeedAngle;
 				}
 
 				// устанавливаем текущий поворот
-				TargetHorizObjectCurrentAngle = NeedRotate;
+				TargetHorizBlocksCurrentAngle = NeedRotate;
 
 				// поворачиваем все объекты
-				for (auto &tmpObjectBlock : ObjectBlocks) {
-					sVECTOR3D tmp = tmpObjectBlock.Location - ObjectBlocks[TargetHorizObject].Location;
+				for (auto &tmpModel3DBlock : Model3DBlocks) {
+					sVECTOR3D tmp = tmpModel3DBlock.Location - Model3DBlocks[TargetHorizBlocks].Location;
 
-					vw_RotatePointInv(tmp, tmpObjectBlock.Rotation ^ (-1.0f));
+					vw_RotatePointInv(tmp, tmpModel3DBlock.Rotation ^ (-1.0f));
 
-					tmpObjectBlock.Rotation.y = -NeedRotate;
+					tmpModel3DBlock.Rotation.y = -NeedRotate;
 
-					vw_RotatePoint(tmp, tmpObjectBlock.Rotation);
+					vw_RotatePoint(tmp, tmpModel3DBlock.Rotation);
 
-					tmpObjectBlock.Location = tmp + ObjectBlocks[TargetHorizObject].Location;
+					tmpModel3DBlock.Location = tmp + Model3DBlocks[TargetHorizBlocks].Location;
 				}
 			}
 
@@ -787,34 +787,34 @@ bool cWeapon::Update(float Time)
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот стволов по вертикали
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (TargetVertObject != -1)
-			if (TargetVertObjectNeedAngle != TargetVertObjectCurrentAngle) {
+		if (TargetVertBlocks != -1)
+			if (TargetVertBlocksNeedAngle != TargetVertBlocksCurrentAngle) {
 
 				// находим угол, на который нужно повернуть
-				float NeedRotate = TargetVertObjectCurrentAngle;
-				if (TargetVertObjectNeedAngle>TargetVertObjectCurrentAngle) {
+				float NeedRotate = TargetVertBlocksCurrentAngle;
+				if (TargetVertBlocksNeedAngle>TargetVertBlocksCurrentAngle) {
 					NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-					if (NeedRotate > TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
-					if (NeedRotate > TargetVertObjectMaxAngle) NeedRotate = TargetVertObjectMaxAngle;
+					if (NeedRotate > TargetVertBlocksNeedAngle) NeedRotate = TargetVertBlocksNeedAngle;
+					if (NeedRotate > TargetVertBlocksMaxAngle) NeedRotate = TargetVertBlocksMaxAngle;
 				} else {
 					NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-					if (NeedRotate < TargetVertObjectNeedAngle) NeedRotate = TargetVertObjectNeedAngle;
-					if (NeedRotate < TargetVertObjectMinAngle) NeedRotate = TargetVertObjectMinAngle;
+					if (NeedRotate < TargetVertBlocksNeedAngle) NeedRotate = TargetVertBlocksNeedAngle;
+					if (NeedRotate < TargetVertBlocksMinAngle) NeedRotate = TargetVertBlocksMinAngle;
 				}
 
 				// устанавливаем текущий поворот
-				TargetVertObjectCurrentAngle = NeedRotate;
+				TargetVertBlocksCurrentAngle = NeedRotate;
 
 				// поворачиваем все объекты
-				sVECTOR3D tmp = ObjectBlocks[TargetVertObject].Location - ObjectBlocks[TargetVertObject].Location;
+				sVECTOR3D tmp = Model3DBlocks[TargetVertBlocks].Location - Model3DBlocks[TargetVertBlocks].Location;
 
-				vw_RotatePointInv(tmp, ObjectBlocks[TargetVertObject].Rotation ^ (-1.0f));
+				vw_RotatePointInv(tmp, Model3DBlocks[TargetVertBlocks].Rotation ^ (-1.0f));
 
-				ObjectBlocks[TargetVertObject].Rotation.x = -NeedRotate;
+				Model3DBlocks[TargetVertBlocks].Rotation.x = -NeedRotate;
 
-				vw_RotatePoint(tmp, ObjectBlocks[TargetVertObject].Rotation);
+				vw_RotatePoint(tmp, Model3DBlocks[TargetVertBlocks].Rotation);
 
-				ObjectBlocks[TargetVertObject].Location = tmp + ObjectBlocks[TargetVertObject].Location;
+				Model3DBlocks[TargetVertBlocks].Location = tmp + Model3DBlocks[TargetVertBlocks].Location;
 			}
 
 
@@ -825,13 +825,13 @@ bool cWeapon::Update(float Time)
 
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
-		if (TargetHorizObject != -1)
-			RotationMiddle = ObjectBlocks[TargetHorizObject].Rotation + Rotation;
+		if (TargetHorizBlocks != -1)
+			RotationMiddle = Model3DBlocks[TargetHorizBlocks].Rotation + Rotation;
 		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		sVECTOR3D RotationWeapon = Rotation;
-		if (TargetVertObject != -1)
-			RotationWeapon = ObjectBlocks[TargetVertObject].Rotation + Rotation;
+		if (TargetVertBlocks != -1)
+			RotationWeapon = Model3DBlocks[TargetVertBlocks].Rotation + Rotation;
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
 		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
@@ -840,8 +840,8 @@ bool cWeapon::Update(float Time)
 
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-		if ((TargetHorizObject == -1) && (TargetVertObject == -1))
-			RotationWeapon = sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
+		if ((TargetHorizBlocks == -1) && (TargetVertBlocks == -1))
+			RotationWeapon = sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f)+Rotation;
 
 		Orientation = sVECTOR3D(0.0f, 0.0f, 1.0f);
 		vw_RotatePoint(Orientation, RotationWeapon);
@@ -895,13 +895,13 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
-		if (TargetHorizObject != -1)
-			RotationMiddle = ObjectBlocks[TargetHorizObject].Rotation + Rotation;
+		if (TargetHorizBlocks != -1)
+			RotationMiddle = Model3DBlocks[TargetHorizBlocks].Rotation + Rotation;
 		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 		sVECTOR3D RotationWeapon = Rotation;
-		if (TargetVertObject != -1)
-			RotationWeapon = ObjectBlocks[TargetVertObject].Rotation + Rotation;
+		if (TargetVertBlocks != -1)
+			RotationWeapon = Model3DBlocks[TargetVertBlocks].Rotation + Rotation;
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
 		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
@@ -909,8 +909,8 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 		FireLocation = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-		if ((TargetHorizObject == -1) && (TargetVertObject == -1))
-			RotationWeapon = sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
+		if ((TargetHorizBlocks == -1) && (TargetVertBlocks == -1))
+			RotationWeapon = sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f)+Rotation;
 
 		Orientation = sVECTOR3D(0.0f, 0.0f, 1.0f);
 		vw_RotatePoint(Orientation, RotationWeapon);
@@ -1123,12 +1123,12 @@ bool cWeapon::WeaponFire(float Time)
 
 		sVECTOR3D RotationMiddle = Rotation;
 		sVECTOR3D MiddleBoundTMP = MiddleBound;
-		if (TargetHorizObject != -1)
-			RotationMiddle = ObjectBlocks[TargetHorizObject].Rotation + Rotation;
+		if (TargetHorizBlocks != -1)
+			RotationMiddle = Model3DBlocks[TargetHorizBlocks].Rotation + Rotation;
 		vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
-		if (TargetVertObject != -1)
-			RotationWeapon = ObjectBlocks[TargetVertObject].Rotation + Rotation;
+		if (TargetVertBlocks != -1)
+			RotationWeapon = Model3DBlocks[TargetVertBlocks].Rotation + Rotation;
 
 		sVECTOR3D WeaponBoundTMP = WeaponBound;
 		vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
@@ -1137,8 +1137,8 @@ bool cWeapon::WeaponFire(float Time)
 
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-		if (TargetHorizObject == -1 && TargetVertObject == -1) {
-			RotationWeapon = sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f)+Rotation;
+		if (TargetHorizBlocks == -1 && TargetVertBlocks == -1) {
+			RotationWeapon = sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f)+Rotation;
 		}
 
 	}

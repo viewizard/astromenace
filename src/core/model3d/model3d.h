@@ -35,13 +35,13 @@ struct sVECTOR3D;
 
 using bounding_box = std::array<sVECTOR3D, 8>;
 
-// Oriented Bounding Box, coordinates are related to object's center
+// Oriented Bounding Box, coordinates are related to model's center
 struct sOBB {
 	bounding_box Box{};
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 };
 
-// Hit Bounding Box, coordinates are related to object's center
+// Hit Bounding Box, coordinates are related to model block's center
 struct sHitBB {
 	bounding_box Box{};
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
@@ -49,13 +49,13 @@ struct sHitBB {
 	sVECTOR3D Size{0.0f, 0.0f, 0.0f}; // HitBB's size
 };
 
-enum class eObjectDrawType {
+enum class eModel3DDrawType {
 	Normal,
 	Blend	// with blend (for planet's sky)
 };
 
-struct sObjectBlock {
-	~sObjectBlock();
+struct sModel3DBlock {
+	~sModel3DBlock();
 
 	// GLSL-related
 	int ShaderType{1};
@@ -72,14 +72,14 @@ struct sObjectBlock {
 	bool NeedTextureAnimation{false};
 	sVECTOR3D TextureAnimation{0.0f, 0.0f, 0.0f};
 
-	eObjectDrawType DrawType{eObjectDrawType::Normal};
+	eModel3DDrawType DrawType{eModel3DDrawType::Normal};
 
 	// initial index in global/local index array/indexbo, if we don't have
 	// indexes at all, initial vertex in global/local vertex array/vertexbo
 	unsigned int RangeStart{0};
 
-	// if we allocate memory, bind vbo/ibo/vao personally for this object - release/delete this resources
-	bool NeedDestroyDataInObjectBlock{false};
+	// if we allocate memory, bind vbo/ibo/vao personally for this block - release/delete this resources
+	bool NeedDestroyDataInModel3DBlock{false};
 
 	// vertex quantity, that should be rendered
 	unsigned int VertexQuantity{0};
@@ -102,27 +102,25 @@ struct sObjectBlock {
 };
 
 struct sModel3D {
-	// attached objects
-	std::vector<sObjectBlock> ObjectBlocks{};
+	// attached blocks
+	std::vector<sModel3DBlock> Model3DBlocks{};
 
 	// vertex-related
 	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
-	unsigned int GlobalVertexArrayCount{0}; // vertex quantity in GlobalVertexArray
 	GLuint GlobalVBO{0};
 	// index-related
 	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
-	unsigned int GlobalIndexArrayCount{0}; // GlobalIndexArray's size
 	GLuint GlobalIBO{0};
 	// vao-related
 	GLuint GlobalVAO{0};
 
-	// Axis-Aligned Bounding Box, coordinates are related to object's location
+	// Axis-Aligned Bounding Box, coordinates are related to model's location
 	bounding_box AABB{};
-	// Oriented Bounding Box, coordinates are related to object's center
+	// Oriented Bounding Box, coordinates are related to model's center
 	sOBB OBB{};
-	// Hit Bounding Box, same as OBB, but for each objects in the 3D model
+	// Hit Bounding Box, same as OBB, but for each model block's in the 3D model
 	std::vector<sHitBB> HitBB{};
-	// geometry center of all vertices in the model, related to object's center
+	// geometry center of all vertices in the model, related to model's location
 	sVECTOR3D GeometryCenter{0.0f, 0.0f, 0.0f};
 	float Radius{0.0f}; // Radius, for fast collisions check
 	float Width{1.0f}; // calculated from 3D model actual size

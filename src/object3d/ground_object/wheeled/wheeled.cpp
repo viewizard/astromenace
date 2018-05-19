@@ -70,7 +70,7 @@ void cWheeled::Create(int WheeledNum)
 
 	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this, 2.0f);
 
-	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName(PresetWheeledData[WheeledNum - 1].TextureName);
 	}
 	ResistanceHull = 1.0f;
@@ -124,10 +124,10 @@ void cWheeled::Create(int WheeledNum)
 		WheelRotateObjectsNum[1] = 4;
 		MaxWheelRotateAngle = 30.0f;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 5;
-		TargetVertObjectMaxAngle = 30.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 5;
+		TargetVertBlocksMaxAngle = 30.0f;
 		break;
 
 	case 2:
@@ -176,15 +176,15 @@ void cWheeled::Create(int WheeledNum)
 		WheelRotateObjectsNum[1] = 1;
 		MaxWheelRotateAngle = 20.0f;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 3;
-		TargetHorizObject[1] = 6;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 3;
+		TargetHorizBlocks[1] = 6;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 6;
-		TargetVertObjectMaxAngle = 60.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 6;
+		TargetVertBlocksMaxAngle = 60.0f;
 		break;
 
 	case 4:
@@ -243,15 +243,15 @@ void cWheeled::Create(int WheeledNum)
 		WheelRotateObjectsNum[1] = 4;
 		MaxWheelRotateAngle = 30.0f;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 5;
-		TargetHorizObject[1] = 6;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 5;
+		TargetHorizBlocks[1] = 6;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 6;
-		TargetVertObjectMaxAngle = 40.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 6;
+		TargetVertBlocksMaxAngle = 40.0f;
 		break;
 
 	case 7:
@@ -276,15 +276,15 @@ void cWheeled::Create(int WheeledNum)
 		WheelRotateObjectsNum[1] = 4;
 		MaxWheelRotateAngle = 20.0f;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 5;
-		TargetHorizObject[1] = 6;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 5;
+		TargetHorizBlocks[1] = 6;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 6;
-		TargetVertObjectMaxAngle = 40.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 6;
+		TargetVertBlocksMaxAngle = 40.0f;
 		break;
 
 	case 8:
@@ -315,10 +315,10 @@ void cWheeled::Create(int WheeledNum)
 		WheelRotateObjectsNum[3] = 7;
 		MaxWheelRotateAngle = 20.0f;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 2;
-		TargetVertObjectMaxAngle = 90.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 2;
+		TargetVertBlocksMaxAngle = 90.0f;
 		break;
 	}
 
@@ -342,28 +342,28 @@ void cWheeled::Create(int WheeledNum)
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (int i = 0; i < WheelQuantity; i++)
-		ObjectBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
+		Model3DBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
 
 
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizObject != nullptr)
-		BaseBound = ObjectBlocks[TargetHorizObject[0]].Location;
+	if (TargetHorizBlocks != nullptr)
+		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 
-	if (TargetVertObject != nullptr) {
-		if (TargetHorizObject != nullptr) {
-			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location - ObjectBlocks[TargetHorizObject[0]].Location;
+	if (TargetVertBlocks != nullptr) {
+		if (TargetHorizBlocks != nullptr) {
+			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		} else {
-			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location;
+			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
 		}
 	}
 
 	if (WeaponBound != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++) {
-			if (TargetVertObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetVertObject[0]].Location;
-			else if (TargetHorizObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetHorizObject[0]].Location;
+			if (TargetVertBlocks != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetVertBlocks[0]].Location;
+			else if (TargetHorizBlocks != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetHorizBlocks[0]].Location;
 			else
 				WeaponBound[i] = WeaponLocation[i];
 		}

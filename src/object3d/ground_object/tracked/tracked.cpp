@@ -79,7 +79,7 @@ void cTracked::Create(int TrackedNum)
 
 	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this, 2.0f);
 
-	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName(PresetTrackedData[TrackedNum - 1].TextureName);
 	}
 	ResistanceHull = 1.0f;
@@ -128,15 +128,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 17;
 		WheelObjectsNum[15] = 18;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 1;
-		TargetHorizObject[1] = 5;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 1;
+		TargetHorizBlocks[1] = 5;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 5;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 5;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
 		Texture[19] = vw_FindTextureByName("models/track.vw2d");
@@ -165,15 +165,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[8] = 9;
 		WheelObjectsNum[9] = 10;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 11;
-		TargetHorizObject[1] = 12;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 11;
+		TargetHorizBlocks[1] = 12;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 12;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 12;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 13;
 		Texture[13] = vw_FindTextureByName("models/track.vw2d");
@@ -202,15 +202,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[12] = 15;
 		WheelObjectsNum[13] = 16;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 8;
-		TargetHorizObject[1] = 9;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 8;
+		TargetHorizBlocks[1] = 9;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 9;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 9;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 17;
 		Texture[17] = vw_FindTextureByName("models/track.vw2d");
@@ -240,19 +240,19 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 15;
 		WheelObjectsNum[15] = 16;
 
-		TargetHorizObjectQuantity = 3;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 17;
-		TargetHorizObject[1] = 18;
-		TargetHorizObject[2] = 19;
+		TargetHorizBlocksQuantity = 3;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 17;
+		TargetHorizBlocks[1] = 18;
+		TargetHorizBlocks[2] = 19;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 18;
-		//TargetVertObject[1] = 19; // пулемет
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 18;
+		//TargetVertBlocks[1] = 19; // пулемет
+		TargetVertBlocksMaxAngle = 50.0f;
 
-		ObjectBlocks[19].Location.z -= 1.0f;
+		Model3DBlocks[19].Location.z -= 1.0f;
 
 		TrackObjectNum = 20;
 		Texture[20] = vw_FindTextureByName("models/track.vw2d");
@@ -280,15 +280,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[12] = 15;
 		WheelObjectsNum[13] = 16;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 9;
-		TargetHorizObject[1] = 8;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 9;
+		TargetHorizBlocks[1] = 8;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 8;
-		TargetVertObjectMaxAngle = 30.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 8;
+		TargetVertBlocksMaxAngle = 30.0f;
 
 		TrackObjectNum = 17;
 		Texture[17] = vw_FindTextureByName("models/track.vw2d");
@@ -318,15 +318,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 16;
 		WheelObjectsNum[15] = 17;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 1;
-		TargetHorizObject[1] = 18;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 1;
+		TargetHorizBlocks[1] = 18;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 18;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 18;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
 		Texture[19] = vw_FindTextureByName("models/track.vw2d");
@@ -356,15 +356,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 17;
 		WheelObjectsNum[15] = 18;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 12;
-		TargetHorizObject[1] = 11;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 12;
+		TargetHorizBlocks[1] = 11;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 11;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 11;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
 		Texture[19] = vw_FindTextureByName("models/track.vw2d");
@@ -394,15 +394,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 15;
 		WheelObjectsNum[15] = 16;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 17;
-		TargetHorizObject[1] = 18;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 17;
+		TargetHorizBlocks[1] = 18;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 18;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 18;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
 		Texture[19] = vw_FindTextureByName("models/track.vw2d");
@@ -433,15 +433,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 15;
 		WheelObjectsNum[15] = 16;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 18;
-		TargetHorizObject[1] = 0;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 18;
+		TargetHorizBlocks[1] = 0;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 0;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 0;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
 		Texture[19] = vw_FindTextureByName("models/track.vw2d");
@@ -472,15 +472,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 15;
 		WheelObjectsNum[15] = 16;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 18;
-		TargetHorizObject[1] = 0;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 18;
+		TargetHorizBlocks[1] = 0;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 0;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 0;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
 		Texture[19] = vw_FindTextureByName("models/track.vw2d");
@@ -514,10 +514,10 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[14] = 15;
 		WheelObjectsNum[15] = 16;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 0;
-		TargetVertObjectMaxAngle = 55.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 0;
+		TargetVertBlocksMaxAngle = 55.0f;
 
 		TrackObjectNum = 18;
 		Texture[18] = vw_FindTextureByName("models/track.vw2d");
@@ -562,11 +562,11 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[15] = 16;
 
 
-		TargetVertObjectQuantity = 2;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 18;
-		TargetVertObject[1] = 0;
-		TargetVertObjectMaxAngle = 40.0f;
+		TargetVertBlocksQuantity = 2;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 18;
+		TargetVertBlocks[1] = 0;
+		TargetVertBlocksMaxAngle = 40.0f;
 
 		TrackObjectNum = 19;
 		Texture[19] = vw_FindTextureByName("models/track.vw2d");
@@ -600,15 +600,15 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[12] = 14;
 		WheelObjectsNum[13] = 15;
 
-		TargetHorizObjectQuantity = 2;
-		TargetHorizObject = new int[TargetHorizObjectQuantity];
-		TargetHorizObject[0] = 0;
-		TargetHorizObject[1] = 16;
+		TargetHorizBlocksQuantity = 2;
+		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks[0] = 0;
+		TargetHorizBlocks[1] = 16;
 
-		TargetVertObjectQuantity = 1;
-		TargetVertObject = new int[TargetVertObjectQuantity];
-		TargetVertObject[0] = 16;
-		TargetVertObjectMaxAngle = 50.0f;
+		TargetVertBlocksQuantity = 1;
+		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks[0] = 16;
+		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 17;
 		Texture[17] = vw_FindTextureByName("models/track.vw2d");
@@ -655,28 +655,28 @@ void cTracked::Create(int TrackedNum)
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (int i = 0; i < WheelQuantity; i++)
-		ObjectBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
+		Model3DBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
 
 
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizObject != nullptr) {
-		BaseBound = ObjectBlocks[TargetHorizObject[0]].Location;
+	if (TargetHorizBlocks != nullptr) {
+		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 	}
 
-	if (TargetVertObject != nullptr) {
-		if (TargetHorizObject != nullptr)
-			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location - ObjectBlocks[TargetHorizObject[0]].Location;
+	if (TargetVertBlocks != nullptr) {
+		if (TargetHorizBlocks != nullptr)
+			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
-			MiddleBound = ObjectBlocks[TargetVertObject[0]].Location;
+			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
 	}
 
 	if (WeaponBound != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++) {
-			if (TargetVertObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetVertObject[0]].Location;
-			else if (TargetHorizObject != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - ObjectBlocks[TargetHorizObject[0]].Location;
+			if (TargetVertBlocks != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetVertBlocks[0]].Location;
+			else if (TargetHorizBlocks != nullptr)
+				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetHorizBlocks[0]].Location;
 			else
 				WeaponBound[i] = WeaponLocation[i];
 		}

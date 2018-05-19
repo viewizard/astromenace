@@ -61,18 +61,18 @@ cGroundObject::~cGroundObject()
 		WeaponBound = nullptr;
 	};
 
-	if (TargetHorizObject != nullptr) {
-		delete [] TargetHorizObject;
-		TargetHorizObject = nullptr;
+	if (TargetHorizBlocks != nullptr) {
+		delete [] TargetHorizBlocks;
+		TargetHorizBlocks = nullptr;
 	};
-	if (TargetVertObject != nullptr) {
-		delete [] TargetVertObject;
-		TargetVertObject = nullptr;
+	if (TargetVertBlocks != nullptr) {
+		delete [] TargetVertBlocks;
+		TargetVertBlocks = nullptr;
 	};
 
-	if (BarrelObject != nullptr) {
-		delete [] BarrelObject;
-		BarrelObject = nullptr;
+	if (BarrelBlocks != nullptr) {
+		delete [] BarrelBlocks;
+		BarrelBlocks = nullptr;
 	};
 
 	if (DeviationObjQuantity != 0) {
@@ -134,13 +134,13 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 
 	sVECTOR3D RotationMiddle = Rotation;
 	sVECTOR3D MiddleBoundTMP = MiddleBound;
-	if (TargetHorizObject != nullptr)
-		RotationMiddle = ObjectBlocks[TargetHorizObject[0]].Rotation + Rotation;
+	if (TargetHorizBlocks != nullptr)
+		RotationMiddle = Model3DBlocks[TargetHorizBlocks[0]].Rotation + Rotation;
 	vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 	sVECTOR3D RotationWeapon = Rotation;
-	if (TargetVertObject != nullptr)
-		RotationWeapon = ObjectBlocks[TargetVertObject[0]].Rotation + Rotation;
+	if (TargetVertBlocks != nullptr)
+		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
 
 
 	if (Weapon != nullptr)
@@ -153,10 +153,10 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 
 
 				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-				if ((TargetHorizObject == nullptr) &&
-				    (TargetVertObject == nullptr) &&
+				if ((TargetHorizBlocks == nullptr) &&
+				    (TargetVertBlocks == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
-					RotationWeapon = sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f) + Rotation;
+					RotationWeapon = sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f) + Rotation;
 				Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1.0f));
 				Weapon[i]->SetRotation(RotationWeapon);
 
@@ -244,20 +244,20 @@ bool cGroundObject::Update(float Time)
 			}
 			FirePos = FirePos^(1.0f/Count);
 		}
-		sVECTOR3D NeedAngle(TargetVertObjectNeedAngle,TargetHorizObjectNeedAngle,0);
+		sVECTOR3D NeedAngle(TargetVertBlocksNeedAngle,TargetHorizBlocksNeedAngle,0);
 		if (GetTurretOnTargetOrientateion(ObjectStatus, Location+FirePos, Rotation,
 						  CurrentRotationMat,	&NeedAngle, WeapNum)) {
 			// наводим на цель
-			TargetHorizObjectNeedAngle = NeedAngle.y;
-			TargetVertObjectNeedAngle = NeedAngle.x;
+			TargetHorizBlocksNeedAngle = NeedAngle.y;
+			TargetVertBlocksNeedAngle = NeedAngle.x;
 		} else {
 			// врагов нет, нужно просто поднять ствол
-			TargetVertObjectNeedAngle = TargetVertObjectMaxAngle*0.5f;
+			TargetVertBlocksNeedAngle = TargetVertBlocksMaxAngle*0.5f;
 		}
 	} else {
 		// устанавливаем в начальное положение
-		TargetHorizObjectNeedAngle = 0.0f;
-		TargetVertObjectNeedAngle = 0.0f;
+		TargetHorizBlocksNeedAngle = 0.0f;
+		TargetVertBlocksNeedAngle = 0.0f;
 
 	}
 
@@ -267,46 +267,46 @@ bool cGroundObject::Update(float Time)
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот башни по горизонтале
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if ((TargetHorizObject != nullptr) &&
-		    (TargetHorizObjectNeedAngle != TargetHorizObjectCurrentAngle)) {
-			if (fabsf(TargetHorizObjectNeedAngle-TargetHorizObjectCurrentAngle) > 180.0f) {
-				if (TargetHorizObjectCurrentAngle - TargetHorizObjectNeedAngle > 180.0f)
-					TargetHorizObjectCurrentAngle -= 360.0f;
-				if (TargetHorizObjectNeedAngle - TargetHorizObjectCurrentAngle > 180.0f)
-					TargetHorizObjectCurrentAngle += 360.0f;
+		if ((TargetHorizBlocks != nullptr) &&
+		    (TargetHorizBlocksNeedAngle != TargetHorizBlocksCurrentAngle)) {
+			if (fabsf(TargetHorizBlocksNeedAngle-TargetHorizBlocksCurrentAngle) > 180.0f) {
+				if (TargetHorizBlocksCurrentAngle - TargetHorizBlocksNeedAngle > 180.0f)
+					TargetHorizBlocksCurrentAngle -= 360.0f;
+				if (TargetHorizBlocksNeedAngle - TargetHorizBlocksCurrentAngle > 180.0f)
+					TargetHorizBlocksCurrentAngle += 360.0f;
 			}
 
 			// находим угол, на который нужно повернуть
-			float NeedRotateCalculation = TargetHorizObjectCurrentAngle;
+			float NeedRotateCalculation = TargetHorizBlocksCurrentAngle;
 
-			if (TargetHorizObjectNeedAngle>TargetHorizObjectCurrentAngle) {
+			if (TargetHorizBlocksNeedAngle>TargetHorizBlocksCurrentAngle) {
 				NeedRotateCalculation += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotateCalculation > TargetHorizObjectNeedAngle)
-					NeedRotateCalculation = TargetHorizObjectNeedAngle;
+				if (NeedRotateCalculation > TargetHorizBlocksNeedAngle)
+					NeedRotateCalculation = TargetHorizBlocksNeedAngle;
 			} else {
 				NeedRotateCalculation -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotateCalculation < TargetHorizObjectNeedAngle)
-					NeedRotateCalculation = TargetHorizObjectNeedAngle;
+				if (NeedRotateCalculation < TargetHorizBlocksNeedAngle)
+					NeedRotateCalculation = TargetHorizBlocksNeedAngle;
 			}
 
 			// устанавливаем текущий поворот
-			TargetHorizObjectCurrentAngle = NeedRotateCalculation;
+			TargetHorizBlocksCurrentAngle = NeedRotateCalculation;
 
 			// поворачиваем все объекты
-			for (int i=0; i<TargetHorizObjectQuantity; i++) {
+			for (int i=0; i<TargetHorizBlocksQuantity; i++) {
 
-				sVECTOR3D tmp = ObjectBlocks[TargetHorizObject[i]].Location -
-						ObjectBlocks[TargetHorizObject[0]].Location;
+				sVECTOR3D tmp = Model3DBlocks[TargetHorizBlocks[i]].Location -
+						Model3DBlocks[TargetHorizBlocks[0]].Location;
 
-				vw_RotatePointInv(tmp, ObjectBlocks[TargetHorizObject[i]].Rotation ^ (-1.0f));
+				vw_RotatePointInv(tmp, Model3DBlocks[TargetHorizBlocks[i]].Rotation ^ (-1.0f));
 
-				SetObjectRotation(sVECTOR3D(ObjectBlocks[TargetHorizObject[i]].Rotation.x,
+				SetObjectRotation(sVECTOR3D(Model3DBlocks[TargetHorizBlocks[i]].Rotation.x,
 							    -NeedRotateCalculation,
-							    ObjectBlocks[TargetHorizObject[i]].Rotation.z), TargetHorizObject[i]);
+							    Model3DBlocks[TargetHorizBlocks[i]].Rotation.z), TargetHorizBlocks[i]);
 
-				vw_RotatePoint(tmp, ObjectBlocks[TargetHorizObject[i]].Rotation);
+				vw_RotatePoint(tmp, Model3DBlocks[TargetHorizBlocks[i]].Rotation);
 
-				SetObjectLocation(tmp + ObjectBlocks[TargetHorizObject[0]].Location, TargetHorizObject[i]);
+				SetObjectLocation(tmp + Model3DBlocks[TargetHorizBlocks[0]].Location, TargetHorizBlocks[i]);
 			}
 		}
 
@@ -317,43 +317,43 @@ bool cGroundObject::Update(float Time)
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот стволов по вертикали
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if ((TargetVertObject != nullptr) &&
-		    (TargetVertObjectNeedAngle != TargetVertObjectCurrentAngle)) {
+		if ((TargetVertBlocks != nullptr) &&
+		    (TargetVertBlocksNeedAngle != TargetVertBlocksCurrentAngle)) {
 
 			// находим угол, на который нужно повернуть
-			float NeedRotateCalculation = TargetVertObjectCurrentAngle;
-			if (TargetVertObjectNeedAngle>TargetVertObjectCurrentAngle) {
+			float NeedRotateCalculation = TargetVertBlocksCurrentAngle;
+			if (TargetVertBlocksNeedAngle>TargetVertBlocksCurrentAngle) {
 				NeedRotateCalculation += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotateCalculation > TargetVertObjectNeedAngle)
-					NeedRotateCalculation = TargetVertObjectNeedAngle;
-				if (NeedRotateCalculation > TargetVertObjectMaxAngle)
-					NeedRotateCalculation = TargetVertObjectMaxAngle;
+				if (NeedRotateCalculation > TargetVertBlocksNeedAngle)
+					NeedRotateCalculation = TargetVertBlocksNeedAngle;
+				if (NeedRotateCalculation > TargetVertBlocksMaxAngle)
+					NeedRotateCalculation = TargetVertBlocksMaxAngle;
 			} else {
 				NeedRotateCalculation -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
-				if (NeedRotateCalculation < TargetVertObjectNeedAngle)
-					NeedRotateCalculation = TargetVertObjectNeedAngle;
-				if (NeedRotateCalculation < TargetVertObjectMinAngle)
-					NeedRotateCalculation = TargetVertObjectMinAngle;
+				if (NeedRotateCalculation < TargetVertBlocksNeedAngle)
+					NeedRotateCalculation = TargetVertBlocksNeedAngle;
+				if (NeedRotateCalculation < TargetVertBlocksMinAngle)
+					NeedRotateCalculation = TargetVertBlocksMinAngle;
 			}
 
 			// устанавливаем текущий поворот
-			TargetVertObjectCurrentAngle = NeedRotateCalculation;
+			TargetVertBlocksCurrentAngle = NeedRotateCalculation;
 
 			// поворачиваем все объекты
-			for (int i = 0; i < TargetVertObjectQuantity; i++) {
+			for (int i = 0; i < TargetVertBlocksQuantity; i++) {
 
-				sVECTOR3D tmp = ObjectBlocks[TargetVertObject[i]].Location -
-						ObjectBlocks[TargetVertObject[0]].Location;
+				sVECTOR3D tmp = Model3DBlocks[TargetVertBlocks[i]].Location -
+						Model3DBlocks[TargetVertBlocks[0]].Location;
 
-				vw_RotatePointInv(tmp, ObjectBlocks[TargetVertObject[i]].Rotation ^ (-1.0f));
+				vw_RotatePointInv(tmp, Model3DBlocks[TargetVertBlocks[i]].Rotation ^ (-1.0f));
 
 				SetObjectRotation(sVECTOR3D(-NeedRotateCalculation,
-							    ObjectBlocks[TargetVertObject[i]].Rotation.y,
-							    ObjectBlocks[TargetVertObject[i]].Rotation.z), TargetVertObject[i]);
+							    Model3DBlocks[TargetVertBlocks[i]].Rotation.y,
+							    Model3DBlocks[TargetVertBlocks[i]].Rotation.z), TargetVertBlocks[i]);
 
-				vw_RotatePoint(tmp, ObjectBlocks[TargetVertObject[i]].Rotation);
+				vw_RotatePoint(tmp, Model3DBlocks[TargetVertBlocks[i]].Rotation);
 
-				SetObjectLocation(tmp + ObjectBlocks[TargetVertObject[0]].Location, TargetVertObject[i]);
+				SetObjectLocation(tmp + Model3DBlocks[TargetVertBlocks[0]].Location, TargetVertBlocks[i]);
 			}
 		}
 	}
@@ -371,13 +371,13 @@ bool cGroundObject::Update(float Time)
 
 	sVECTOR3D RotationMiddle = Rotation;
 	sVECTOR3D MiddleBoundTMP = MiddleBound;
-	if (TargetHorizObject != nullptr)
-		RotationMiddle = ObjectBlocks[TargetHorizObject[0]].Rotation + Rotation;
+	if (TargetHorizBlocks != nullptr)
+		RotationMiddle = Model3DBlocks[TargetHorizBlocks[0]].Rotation + Rotation;
 	vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
 	sVECTOR3D RotationWeapon = Rotation;
-	if (TargetVertObject != nullptr)
-		RotationWeapon = ObjectBlocks[TargetVertObject[0]].Rotation + Rotation;
+	if (TargetVertBlocks != nullptr)
+		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
 
 
 	if (Weapon != nullptr)
@@ -389,10 +389,10 @@ bool cGroundObject::Update(float Time)
 				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
 				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-				if ((TargetHorizObject == nullptr) &&
-				    (TargetVertObject == nullptr) &&
+				if ((TargetHorizBlocks == nullptr) &&
+				    (TargetVertBlocks == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
-					RotationWeapon = Rotation - sVECTOR3D(TargetVertObjectNeedAngle, TargetHorizObjectNeedAngle, 0.0f);
+					RotationWeapon = Rotation - sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f);
 
 
 				Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1.0f));
@@ -537,13 +537,13 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вращение стволов пулемета
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((BarrelObjectQuantity != 0) &&
-	    (BarrelObject != nullptr)) {
-		for (int i = 0; i < BarrelObjectQuantity; i++) {
-			ObjectBlocks[BarrelObject[i]].NeedGeometryAnimation = true;
-			ObjectBlocks[BarrelObject[i]].GeometryAnimation += sVECTOR3D(0.0f, 0.0f, 500.0f * TimeDelta);
-			if (ObjectBlocks[BarrelObject[i]].GeometryAnimation.z > 360.0f)
-				ObjectBlocks[BarrelObject[i]].GeometryAnimation.z -= 360.0f;
+	if ((BarrelBlocksQuantity != 0) &&
+	    (BarrelBlocks != nullptr)) {
+		for (int i = 0; i < BarrelBlocksQuantity; i++) {
+			Model3DBlocks[BarrelBlocks[i]].NeedGeometryAnimation = true;
+			Model3DBlocks[BarrelBlocks[i]].GeometryAnimation += sVECTOR3D(0.0f, 0.0f, 500.0f * TimeDelta);
+			if (Model3DBlocks[BarrelBlocks[i]].GeometryAnimation.z > 360.0f)
+				Model3DBlocks[BarrelBlocks[i]].GeometryAnimation.z -= 360.0f;
 		}
 	}
 
@@ -558,12 +558,12 @@ bool cGroundObject::Update(float Time)
 	    ((WheelTrackSpeed >= 0.00001f) || (WheelTrackSpeed <= -0.00001f)))) {
 		// перебираем все и ув. их угол вращения
 		for (int i = 0; i < WheelQuantity; i++) {
-			ObjectBlocks[WheelObjectsNum[i]].Rotation.x += WheelTrackSpeed * TimeDelta;
+			Model3DBlocks[WheelObjectsNum[i]].Rotation.x += WheelTrackSpeed * TimeDelta;
 
-			if (ObjectBlocks[WheelObjectsNum[i]].Rotation.x > 360.0f)
-				ObjectBlocks[WheelObjectsNum[i]].Rotation.x -= 360.0f;
-			if (ObjectBlocks[WheelObjectsNum[i]].Rotation.x < -360.0f)
-				ObjectBlocks[WheelObjectsNum[i]].Rotation.x += 360.0f;
+			if (Model3DBlocks[WheelObjectsNum[i]].Rotation.x > 360.0f)
+				Model3DBlocks[WheelObjectsNum[i]].Rotation.x -= 360.0f;
+			if (Model3DBlocks[WheelObjectsNum[i]].Rotation.x < -360.0f)
+				Model3DBlocks[WheelObjectsNum[i]].Rotation.x += 360.0f;
 		}
 	}
 
@@ -572,13 +572,13 @@ bool cGroundObject::Update(float Time)
 	// тайловая анимация для траков
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if ((TrackObjectNum != -1) && ((WheelTrackSpeed >= 0.00001f) || (WheelTrackSpeed <= -0.00001f))) {
-		ObjectBlocks[TrackObjectNum].NeedTextureAnimation = true;
-		ObjectBlocks[TrackObjectNum].TextureAnimation.x +=
+		Model3DBlocks[TrackObjectNum].NeedTextureAnimation = true;
+		Model3DBlocks[TrackObjectNum].TextureAnimation.x +=
 				(WheelTrackSpeed / 500.0f) * TimeDelta * TrackRotationDirection;
-		if (ObjectBlocks[TrackObjectNum].TextureAnimation.x > 1.0f)
-			ObjectBlocks[TrackObjectNum].TextureAnimation.x -= 1.0f;
-		if (ObjectBlocks[TrackObjectNum].TextureAnimation.x < -1.0f)
-			ObjectBlocks[TrackObjectNum].TextureAnimation.x += 1.0f;
+		if (Model3DBlocks[TrackObjectNum].TextureAnimation.x > 1.0f)
+			Model3DBlocks[TrackObjectNum].TextureAnimation.x -= 1.0f;
+		if (Model3DBlocks[TrackObjectNum].TextureAnimation.x < -1.0f)
+			Model3DBlocks[TrackObjectNum].TextureAnimation.x += 1.0f;
 	}
 
 
@@ -670,12 +670,12 @@ bool cGroundObject::Update(float Time)
 		if (WheelRotateObjectsNum != nullptr) {
 			// перебираем все и ув. их угол вращения
 			for (int i = 0; i < WheelRotateQuantity; i++) {
-				float NeedRotateY = ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.y;
-				if (ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.y > NeedRotate.y) {
+				float NeedRotateY = Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.y;
+				if (Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.y > NeedRotate.y) {
 					NeedRotateY -= 90.0f * TimeDelta;
 					if (NeedRotateY < NeedRotate.y)
 						NeedRotateY = NeedRotate.y;
-				} else if (ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.y < NeedRotate.y) {
+				} else if (Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.y < NeedRotate.y) {
 					NeedRotateY += 90.0f * TimeDelta;
 					if (NeedRotateY > NeedRotate.y)
 						NeedRotateY = NeedRotate.y;
@@ -687,9 +687,9 @@ bool cGroundObject::Update(float Time)
 					NeedRotateY = -MaxWheelRotateAngle;
 
 
-				SetObjectRotation(sVECTOR3D(ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.x,
+				SetObjectRotation(sVECTOR3D(Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.x,
 							    NeedRotateY,
-							    ObjectBlocks[WheelRotateObjectsNum[i]].Rotation.z),
+							    Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.z),
 						  WheelRotateObjectsNum[i]);
 
 			}
@@ -785,7 +785,7 @@ bool cGroundObject::Update(float Time)
 			}
 
 			sVECTOR3D Tmp = Deviation[i] ^ CurentDeviation[i];
-			SetObjectLocation(ObjectBlocks[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
+			SetObjectLocation(Model3DBlocks[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
 		}
 
 

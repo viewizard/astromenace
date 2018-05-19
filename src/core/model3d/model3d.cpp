@@ -40,6 +40,9 @@ public:
 	// Save VW3D 3D models format.
 	bool SaveVW3D(const std::string &FileName);
 
+	unsigned int GlobalVertexArrayCount{0}; // vertex quantity in GlobalVertexArray
+	unsigned int GlobalIndexArrayCount{0}; // GlobalIndexArray's size
+
 private:
 	// Don't allow direct new/delete usage in code, only vw_LoadModel3D()
 	// allowed for cModel3DWrapper creation and release setup (deleter must be provided).
@@ -82,14 +85,14 @@ static void CreateTangentAndBinormal(cModel3DWrapper *Model)
 		for (unsigned int j = 0; j < Model->GlobalIndexArrayCount; j++) {
 			memcpy(New_VertexBuffer.get() + New_VertexStride * j,
 			       Model->GlobalVertexArray.get() + Model->GlobalIndexArray.get()[j] *
-								Model->ObjectBlocks[0].VertexStride,
-			       Model->ObjectBlocks[0].VertexStride * sizeof(float));
+								Model->Model3DBlocks[0].VertexStride,
+			       Model->Model3DBlocks[0].VertexStride * sizeof(float));
 		}
 		Model->GlobalVertexArray = New_VertexBuffer;
 		Model->GlobalVertexArrayCount = Model->GlobalIndexArrayCount;
-		for (auto &tmpObjectBlock : Model->ObjectBlocks) {
-			if (tmpObjectBlock.IndexArray == Model->GlobalIndexArray)
-				tmpObjectBlock.IndexArray.reset();
+		for (auto &tmpModel3DBlock : Model->Model3DBlocks) {
+			if (tmpModel3DBlock.IndexArray == Model->GlobalIndexArray)
+				tmpModel3DBlock.IndexArray.reset();
 		}
 		Model->GlobalIndexArrayCount = 0;
 		Model->GlobalIndexArray.reset();
@@ -98,8 +101,8 @@ static void CreateTangentAndBinormal(cModel3DWrapper *Model)
 							std::default_delete<float[]>()};
 		for (unsigned int j = 0; j < Model->GlobalVertexArrayCount; j++) {
 			memcpy(New_VertexBuffer.get() + New_VertexStride * j,
-			       Model->GlobalVertexArray.get() + j * Model->ObjectBlocks[0].VertexStride,
-			       Model->ObjectBlocks[0].VertexStride * sizeof(float));
+			       Model->GlobalVertexArray.get() + j * Model->Model3DBlocks[0].VertexStride,
+			       Model->Model3DBlocks[0].VertexStride * sizeof(float));
 		}
 		Model->GlobalVertexArray = New_VertexBuffer;
 	}
@@ -176,37 +179,37 @@ static void CreateTangentAndBinormal(cModel3DWrapper *Model)
 	}
 
 	// store new vertex data
-	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
-		tmpObjectBlock.VertexArray = Model->GlobalVertexArray;
-		tmpObjectBlock.VertexFormat = New_VertexFormat;
-		tmpObjectBlock.VertexStride = New_VertexStride;
+	for (auto &tmpModel3DBlock : Model->Model3DBlocks) {
+		tmpModel3DBlock.VertexArray = Model->GlobalVertexArray;
+		tmpModel3DBlock.VertexFormat = New_VertexFormat;
+		tmpModel3DBlock.VertexStride = New_VertexStride;
 	}
 }
 
 /*
- * Create vertex and index arrays for all objects.
+ * Create vertex arrays for all blocks.
  */
-static void CreateObjectsBuffers(cModel3DWrapper *Model)
+static void CreateModel3DBlocksBuffers(cModel3DWrapper *Model)
 {
-	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
+	for (auto &tmpModel3DBlock : Model->Model3DBlocks) {
 		// vertex array
-		tmpObjectBlock.VertexArray.reset(new float[tmpObjectBlock.VertexStride * tmpObjectBlock.VertexQuantity],
+		tmpModel3DBlock.VertexArray.reset(new float[tmpModel3DBlock.VertexStride * tmpModel3DBlock.VertexQuantity],
 						 std::default_delete<float[]>());
-		for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j++) {
+		for (unsigned int j = 0; j < tmpModel3DBlock.VertexQuantity; j++) {
 			unsigned int Offset{0};
-			if (tmpObjectBlock.IndexArray)
-				Offset = tmpObjectBlock.IndexArray.get()[tmpObjectBlock.RangeStart + j] *
-					 tmpObjectBlock.VertexStride;
+			if (tmpModel3DBlock.IndexArray)
+				Offset = tmpModel3DBlock.IndexArray.get()[tmpModel3DBlock.RangeStart + j] *
+					 tmpModel3DBlock.VertexStride;
 			else
-				Offset = (tmpObjectBlock.RangeStart + j) * tmpObjectBlock.VertexStride;
-			memcpy(tmpObjectBlock.VertexArray.get() + tmpObjectBlock.VertexStride * j,
+				Offset = (tmpModel3DBlock.RangeStart + j) * tmpModel3DBlock.VertexStride;
+			memcpy(tmpModel3DBlock.VertexArray.get() + tmpModel3DBlock.VertexStride * j,
 			       Model->GlobalVertexArray.get() + Offset,
-			       tmpObjectBlock.VertexStride * sizeof(tmpObjectBlock.VertexArray.get()[0]));
+			       tmpModel3DBlock.VertexStride * sizeof(tmpModel3DBlock.VertexArray.get()[0]));
 		}
 
 		// index array
-		tmpObjectBlock.IndexArray.reset();
-		tmpObjectBlock.RangeStart = 0;
+		tmpModel3DBlock.IndexArray.reset();
+		tmpModel3DBlock.RangeStart = 0;
 	}
 }
 
@@ -217,7 +220,7 @@ static void CreateHardwareBuffers(cModel3DWrapper *Model)
 {
 	// global vertex buffer object
 	if (!vw_BuildBufferObject(eBufferObject::Vertex,
-				  Model->GlobalVertexArrayCount * Model->ObjectBlocks[0].VertexStride * sizeof(float),
+				  Model->GlobalVertexArrayCount * Model->Model3DBlocks[0].VertexStride * sizeof(float),
 				  Model->GlobalVertexArray.get(), Model->GlobalVBO))
 		Model->GlobalVBO = 0;
 
@@ -227,30 +230,30 @@ static void CreateHardwareBuffers(cModel3DWrapper *Model)
 		Model->GlobalIBO = 0;
 
 	// global vertex array object
-	if (!vw_BuildVAO(Model->GlobalVAO, Model->ObjectBlocks[0].VertexFormat,
-			 Model->ObjectBlocks[0].VertexStride * static_cast<GLsizei>(sizeof(float)),
+	if (!vw_BuildVAO(Model->GlobalVAO, Model->Model3DBlocks[0].VertexFormat,
+			 Model->Model3DBlocks[0].VertexStride * static_cast<GLsizei>(sizeof(float)),
 			 Model->GlobalVBO, Model->GlobalIBO))
 		Model->GlobalVAO = 0;
 
-	// and same for all objects
-	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
+	// and same for all blocks
+	for (auto &tmpModel3DBlock : Model->Model3DBlocks) {
 		// vertex buffer object
 		if (!vw_BuildBufferObject(eBufferObject::Vertex,
-					  tmpObjectBlock.VertexQuantity * tmpObjectBlock.VertexStride * sizeof(float),
-					  tmpObjectBlock.VertexArray.get(), tmpObjectBlock.VBO))
-			tmpObjectBlock.VBO = 0;
+					  tmpModel3DBlock.VertexQuantity * tmpModel3DBlock.VertexStride * sizeof(float),
+					  tmpModel3DBlock.VertexArray.get(), tmpModel3DBlock.VBO))
+			tmpModel3DBlock.VBO = 0;
 
 		// index buffer object
-		if (!vw_BuildBufferObject(eBufferObject::Index, tmpObjectBlock.VertexQuantity * sizeof(unsigned),
-					  tmpObjectBlock.IndexArray.get(), tmpObjectBlock.IBO))
-			tmpObjectBlock.IBO = 0;
+		if (!vw_BuildBufferObject(eBufferObject::Index, tmpModel3DBlock.VertexQuantity * sizeof(unsigned),
+					  tmpModel3DBlock.IndexArray.get(), tmpModel3DBlock.IBO))
+			tmpModel3DBlock.IBO = 0;
 
 		// vertex array object
-		if (!vw_BuildVAO(tmpObjectBlock.VAO, tmpObjectBlock.VertexFormat,
-				 tmpObjectBlock.VertexStride *
-						static_cast<GLsizei>(sizeof(tmpObjectBlock.VertexArray.get()[0])),
-				 tmpObjectBlock.VBO, tmpObjectBlock.IBO))
-			tmpObjectBlock.VAO = 0;
+		if (!vw_BuildVAO(tmpModel3DBlock.VAO, tmpModel3DBlock.VertexFormat,
+				 tmpModel3DBlock.VertexStride *
+						static_cast<GLsizei>(sizeof(tmpModel3DBlock.VertexArray.get()[0])),
+				 tmpModel3DBlock.VBO, tmpModel3DBlock.IBO))
+			tmpModel3DBlock.VAO = 0;
 	}
 }
 
@@ -346,114 +349,114 @@ static int RecursiveTrianglesLimitedBySize(float (&Point1)[8], float (&Point2)[8
  * For result, we don't copy tangent (second and third textures coordinates).
  * This is why we operate with Point[8], but not Point[12].
  * We use second and third textures coordinates for explosion shader in game code, so,
- * we stay with VertexFormat and VertexStride and could point to object's VertexArray.
+ * we stay with VertexFormat and VertexStride and could point to block's VertexArray.
  */
 static void CreateVertexArrayLimitedBySizeTriangles(cModel3DWrapper *Model, float TriangleSizeLimit)
 {
 	if (TriangleSizeLimit <= 0.0f) {
-		for (auto &tmpObjectBlock : Model->ObjectBlocks) {
-			tmpObjectBlock.VertexArrayWithSmallTrianglesCount = tmpObjectBlock.VertexQuantity;
-			tmpObjectBlock.VertexArrayWithSmallTriangles = tmpObjectBlock.VertexArray;
+		for (auto &tmpModel3DBlock : Model->Model3DBlocks) {
+			tmpModel3DBlock.VertexArrayWithSmallTrianglesCount = tmpModel3DBlock.VertexQuantity;
+			tmpModel3DBlock.VertexArrayWithSmallTriangles = tmpModel3DBlock.VertexArray;
 		}
 		return;
 	}
 
 	// calculate, how many memory we need for new vertex array
-	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
-		tmpObjectBlock.VertexArrayWithSmallTrianglesCount = 0;
+	for (auto &tmpModel3DBlock : Model->Model3DBlocks) {
+		tmpModel3DBlock.VertexArrayWithSmallTrianglesCount = 0;
 
 		// prepare 3 points (triangle)
-		for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j += 3) {
-			// CreateObjectsBuffers() already 'unpacked' indexed arrays for ObjectBlocks,
+		for (unsigned int j = 0; j < tmpModel3DBlock.VertexQuantity; j += 3) {
+			// CreateModel3DBlocksBuffers() already 'unpacked' indexed arrays for Model3DBlocks,
 			// so, we could use VertexArray directly here
-			unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
-			unsigned int tmpOffset1 = tmpOffset0 + tmpObjectBlock.VertexStride;	// j + 1
-			unsigned int tmpOffset2 = tmpOffset1 + tmpObjectBlock.VertexStride;	// j + 2
+			unsigned int tmpOffset0 = tmpModel3DBlock.VertexStride * j;		// j
+			unsigned int tmpOffset1 = tmpOffset0 + tmpModel3DBlock.VertexStride;	// j + 1
+			unsigned int tmpOffset2 = tmpOffset1 + tmpModel3DBlock.VertexStride;	// j + 2
 
-			float Point1[8]{tmpObjectBlock.VertexArray.get()[tmpOffset0],
-					tmpObjectBlock.VertexArray.get()[tmpOffset0 + 1],
-					tmpObjectBlock.VertexArray.get()[tmpOffset0 + 2],
-					tmpObjectBlock.VertexArray.get()[tmpOffset0 + 3],
-					tmpObjectBlock.VertexArray.get()[tmpOffset0 + 4],
-					tmpObjectBlock.VertexArray.get()[tmpOffset0 + 5],
-					tmpObjectBlock.VertexArray.get()[tmpOffset0 + 6],
-					tmpObjectBlock.VertexArray.get()[tmpOffset0 + 7]};
+			float Point1[8]{tmpModel3DBlock.VertexArray.get()[tmpOffset0],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 1],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 2],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 3],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 4],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 5],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 6],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 7]};
 
-			float Point2[8]{tmpObjectBlock.VertexArray.get()[tmpOffset1],
-					tmpObjectBlock.VertexArray.get()[tmpOffset1 + 1],
-					tmpObjectBlock.VertexArray.get()[tmpOffset1 + 2],
-					tmpObjectBlock.VertexArray.get()[tmpOffset1 + 3],
-					tmpObjectBlock.VertexArray.get()[tmpOffset1 + 4],
-					tmpObjectBlock.VertexArray.get()[tmpOffset1 + 5],
-					tmpObjectBlock.VertexArray.get()[tmpOffset1 + 6],
-					tmpObjectBlock.VertexArray.get()[tmpOffset1 + 7]};
+			float Point2[8]{tmpModel3DBlock.VertexArray.get()[tmpOffset1],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 1],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 2],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 3],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 4],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 5],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 6],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 7]};
 
-			float Point3[8]{tmpObjectBlock.VertexArray.get()[tmpOffset2],
-					tmpObjectBlock.VertexArray.get()[tmpOffset2 + 1],
-					tmpObjectBlock.VertexArray.get()[tmpOffset2 + 2],
-					tmpObjectBlock.VertexArray.get()[tmpOffset2 + 3],
-					tmpObjectBlock.VertexArray.get()[tmpOffset2 + 4],
-					tmpObjectBlock.VertexArray.get()[tmpOffset2 + 5],
-					tmpObjectBlock.VertexArray.get()[tmpOffset2 + 6],
-					tmpObjectBlock.VertexArray.get()[tmpOffset2 + 7]};
+			float Point3[8]{tmpModel3DBlock.VertexArray.get()[tmpOffset2],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 1],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 2],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 3],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 4],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 5],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 6],
+					tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 7]};
 
 			// recursively check, how many triangles we could receive
-			tmpObjectBlock.VertexArrayWithSmallTrianglesCount +=
+			tmpModel3DBlock.VertexArrayWithSmallTrianglesCount +=
 				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, 0,
 								nullptr, nullptr, TriangleSizeLimit) * 3;
 		}
 	}
 
 	// generate VertexArrayWithSmallTriangles
-	for (auto &tmpObjectBlock : Model->ObjectBlocks) {
+	for (auto &tmpModel3DBlock : Model->Model3DBlocks) {
 		// nothing to do
-		if (tmpObjectBlock.VertexArrayWithSmallTrianglesCount == tmpObjectBlock.VertexQuantity)
-			tmpObjectBlock.VertexArrayWithSmallTriangles = tmpObjectBlock.VertexArray;
+		if (tmpModel3DBlock.VertexArrayWithSmallTrianglesCount == tmpModel3DBlock.VertexQuantity)
+			tmpModel3DBlock.VertexArrayWithSmallTriangles = tmpModel3DBlock.VertexArray;
 		else {
 			// allocate memory
-			tmpObjectBlock.VertexArrayWithSmallTriangles.reset(
-				new float[tmpObjectBlock.VertexArrayWithSmallTrianglesCount * tmpObjectBlock.VertexStride],
+			tmpModel3DBlock.VertexArrayWithSmallTriangles.reset(
+				new float[tmpModel3DBlock.VertexArrayWithSmallTrianglesCount * tmpModel3DBlock.VertexStride],
 				std::default_delete<float[]>());
 			int CurrentPosition = 0;
 
 			// prepare 3 points (triangle)
-			for (unsigned int j = 0; j < tmpObjectBlock.VertexQuantity; j += 3) {
-				// CreateObjectsBuffers() already 'unpacked' indexed arrays for ObjectBlocks,
+			for (unsigned int j = 0; j < tmpModel3DBlock.VertexQuantity; j += 3) {
+				// CreateModel3DBlocksBuffers() already 'unpacked' indexed arrays for Model3DBlocks,
 				// so, we could use VertexArray directly here
-				unsigned int tmpOffset0 = tmpObjectBlock.VertexStride * j;		// j
-				unsigned int tmpOffset1 = tmpOffset0 + tmpObjectBlock.VertexStride;	// j + 1
-				unsigned int tmpOffset2 = tmpOffset1 + tmpObjectBlock.VertexStride;	// j + 2
+				unsigned int tmpOffset0 = tmpModel3DBlock.VertexStride * j;		// j
+				unsigned int tmpOffset1 = tmpOffset0 + tmpModel3DBlock.VertexStride;	// j + 1
+				unsigned int tmpOffset2 = tmpOffset1 + tmpModel3DBlock.VertexStride;	// j + 2
 
-				float Point1[8]{tmpObjectBlock.VertexArray.get()[tmpOffset0],
-						tmpObjectBlock.VertexArray.get()[tmpOffset0 + 1],
-						tmpObjectBlock.VertexArray.get()[tmpOffset0 + 2],
-						tmpObjectBlock.VertexArray.get()[tmpOffset0 + 3],
-						tmpObjectBlock.VertexArray.get()[tmpOffset0 + 4],
-						tmpObjectBlock.VertexArray.get()[tmpOffset0 + 5],
-						tmpObjectBlock.VertexArray.get()[tmpOffset0 + 6],
-						tmpObjectBlock.VertexArray.get()[tmpOffset0 + 7]};
+				float Point1[8]{tmpModel3DBlock.VertexArray.get()[tmpOffset0],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 1],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 2],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 3],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 4],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 5],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 6],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset0 + 7]};
 
-				float Point2[8]{tmpObjectBlock.VertexArray.get()[tmpOffset1],
-						tmpObjectBlock.VertexArray.get()[tmpOffset1 + 1],
-						tmpObjectBlock.VertexArray.get()[tmpOffset1 + 2],
-						tmpObjectBlock.VertexArray.get()[tmpOffset1 + 3],
-						tmpObjectBlock.VertexArray.get()[tmpOffset1 + 4],
-						tmpObjectBlock.VertexArray.get()[tmpOffset1 + 5],
-						tmpObjectBlock.VertexArray.get()[tmpOffset1 + 6],
-						tmpObjectBlock.VertexArray.get()[tmpOffset1 + 7]};
+				float Point2[8]{tmpModel3DBlock.VertexArray.get()[tmpOffset1],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 1],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 2],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 3],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 4],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 5],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 6],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset1 + 7]};
 
-				float Point3[8]{tmpObjectBlock.VertexArray.get()[tmpOffset2],
-						tmpObjectBlock.VertexArray.get()[tmpOffset2 + 1],
-						tmpObjectBlock.VertexArray.get()[tmpOffset2 + 2],
-						tmpObjectBlock.VertexArray.get()[tmpOffset2 + 3],
-						tmpObjectBlock.VertexArray.get()[tmpOffset2 + 4],
-						tmpObjectBlock.VertexArray.get()[tmpOffset2 + 5],
-						tmpObjectBlock.VertexArray.get()[tmpOffset2 + 6],
-						tmpObjectBlock.VertexArray.get()[tmpOffset2 + 7]};
+				float Point3[8]{tmpModel3DBlock.VertexArray.get()[tmpOffset2],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 1],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 2],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 3],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 4],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 5],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 6],
+						tmpModel3DBlock.VertexArray.get()[tmpOffset2 + 7]};
 
 				// recursively generate VertexArrayWithSmallTriangles
-				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, tmpObjectBlock.VertexStride,
-								tmpObjectBlock.VertexArrayWithSmallTriangles.get(),
+				RecursiveTrianglesLimitedBySize(Point1, Point2, Point3, tmpModel3DBlock.VertexStride,
+								tmpModel3DBlock.VertexArrayWithSmallTriangles.get(),
 								&CurrentPosition, TriangleSizeLimit);
 			}
 		}
@@ -464,7 +467,7 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3DWrapper *Model, floa
  * Load 3D model.
  * Note, we don't provide shared_ptr, only weak_ptr, since all memory management
  * should be internal only. Caller should operate with weak_ptr and use lock()
- * (shared_ptr) only during access to object.
+ * (shared_ptr) only during access to model's data.
  */
 std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
@@ -493,7 +496,7 @@ std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float Triang
 
 	if (NeedTangentAndBinormal)
 		CreateTangentAndBinormal(ModelsMap[FileName].get());
-	CreateObjectsBuffers(ModelsMap[FileName].get());
+	CreateModel3DBlocksBuffers(ModelsMap[FileName].get());
 	CreateHardwareBuffers(ModelsMap[FileName].get());
 	CreateVertexArrayLimitedBySizeTriangles(ModelsMap[FileName].get(), TriangleSizeLimit);
 
@@ -511,11 +514,11 @@ void vw_ReleaseAllModel3D()
 }
 
 /*
- * Destructor sObjectBlock.
+ * Destructor sModel3DBlock.
  */
-sObjectBlock::~sObjectBlock()
+sModel3DBlock::~sModel3DBlock()
 {
-	if (NeedDestroyDataInObjectBlock) {
+	if (NeedDestroyDataInModel3DBlock) {
 		if (VBO)
 			vw_DeleteBufferObject(VBO);
 		if (IBO)
@@ -530,14 +533,14 @@ sObjectBlock::~sObjectBlock()
  */
 cModel3DWrapper::~cModel3DWrapper()
 {
-	if (!ObjectBlocks.empty()) {
-		for (auto &tmpObjectBlock : ObjectBlocks) {
-			if (tmpObjectBlock.VBO && (tmpObjectBlock.VBO != GlobalVBO))
-				vw_DeleteBufferObject(tmpObjectBlock.VBO);
-			if (tmpObjectBlock.IBO && (tmpObjectBlock.IBO != GlobalIBO))
-				vw_DeleteBufferObject(tmpObjectBlock.IBO);
-			if (tmpObjectBlock.VAO && (tmpObjectBlock.VAO != GlobalVAO))
-				vw_DeleteVAO(tmpObjectBlock.VAO);
+	if (!Model3DBlocks.empty()) {
+		for (auto &tmpModel3DBlock : Model3DBlocks) {
+			if (tmpModel3DBlock.VBO && (tmpModel3DBlock.VBO != GlobalVBO))
+				vw_DeleteBufferObject(tmpModel3DBlock.VBO);
+			if (tmpModel3DBlock.IBO && (tmpModel3DBlock.IBO != GlobalIBO))
+				vw_DeleteBufferObject(tmpModel3DBlock.IBO);
+			if (tmpModel3DBlock.VAO && (tmpModel3DBlock.VAO != GlobalVAO))
+				vw_DeleteVAO(tmpModel3DBlock.VAO);
 		}
 	}
 	if (GlobalVBO)
@@ -567,46 +570,46 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
 	if (strncmp(Sign, "VW3D", 4) != 0)
 		return false;
 
-	std::uint32_t ObjectsListCount;
-	File->fread(&ObjectsListCount, sizeof(ObjectsListCount), 1);
+	std::uint32_t BlocksListCount;
+	File->fread(&BlocksListCount, sizeof(BlocksListCount), 1);
 
-	ObjectBlocks.resize(ObjectsListCount);
+	Model3DBlocks.resize(BlocksListCount);
 	GlobalIndexArrayCount = 0;
 
-	for (auto &tmpObjectBlock : ObjectBlocks) {
-		tmpObjectBlock.RangeStart = GlobalIndexArrayCount;
+	for (auto &tmpModel3DBlock : Model3DBlocks) {
+		tmpModel3DBlock.RangeStart = GlobalIndexArrayCount;
 
 		// VertexFormat
-		File->fread(&tmpObjectBlock.VertexFormat, sizeof(ObjectBlocks[0].VertexFormat), 1);
+		File->fread(&tmpModel3DBlock.VertexFormat, sizeof(Model3DBlocks[0].VertexFormat), 1);
 		// VertexStride
-		File->fread(&tmpObjectBlock.VertexStride, sizeof(ObjectBlocks[0].VertexStride), 1);
+		File->fread(&tmpModel3DBlock.VertexStride, sizeof(Model3DBlocks[0].VertexStride), 1);
 		// VertexQuantity
-		File->fread(&tmpObjectBlock.VertexQuantity, sizeof(ObjectBlocks[0].VertexQuantity), 1);
-		GlobalIndexArrayCount += tmpObjectBlock.VertexQuantity;
+		File->fread(&tmpModel3DBlock.VertexQuantity, sizeof(Model3DBlocks[0].VertexQuantity), 1);
+		GlobalIndexArrayCount += tmpModel3DBlock.VertexQuantity;
 
 		// Location
-		File->fread(&tmpObjectBlock.Location, sizeof(ObjectBlocks[0].Location.x) * 3, 1);
+		File->fread(&tmpModel3DBlock.Location, sizeof(Model3DBlocks[0].Location.x) * 3, 1);
 		// Rotation
-		File->fread(&tmpObjectBlock.Rotation, sizeof(ObjectBlocks[0].Rotation.x) * 3, 1);
+		File->fread(&tmpModel3DBlock.Rotation, sizeof(Model3DBlocks[0].Rotation.x) * 3, 1);
 
-		tmpObjectBlock.DrawType = eObjectDrawType::Normal;
+		tmpModel3DBlock.DrawType = eModel3DDrawType::Normal;
 		// vertex array-related
-		tmpObjectBlock.NeedDestroyDataInObjectBlock = false;
-		tmpObjectBlock.VBO = 0;
+		tmpModel3DBlock.NeedDestroyDataInModel3DBlock = false;
+		tmpModel3DBlock.VBO = 0;
 		// index array-related
-		tmpObjectBlock.IBO = 0;
+		tmpModel3DBlock.IBO = 0;
 		// vao-related
-		tmpObjectBlock.VAO = 0;
+		tmpModel3DBlock.VAO = 0;
 
-		assert(tmpObjectBlock.VertexQuantity != 0);
+		assert(tmpModel3DBlock.VertexQuantity != 0);
 	}
 
 	File->fread(&GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
 
-	GlobalVertexArray.reset(new float[GlobalVertexArrayCount * ObjectBlocks[0].VertexStride],
+	GlobalVertexArray.reset(new float[GlobalVertexArrayCount * Model3DBlocks[0].VertexStride],
 				std::default_delete<float[]>());
 	File->fread(GlobalVertexArray.get(),
-		    GlobalVertexArrayCount * ObjectBlocks[0].VertexStride * sizeof(GlobalVertexArray.get()[0]),
+		    GlobalVertexArrayCount * Model3DBlocks[0].VertexStride * sizeof(GlobalVertexArray.get()[0]),
 		    1);
 
 	// index array
@@ -614,9 +617,9 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
 	File->fread(GlobalIndexArray.get(), GlobalIndexArrayCount * sizeof(GlobalIndexArray.get()[0]), 1);
 
 	// setup points to global arrays
-	for (auto &tmpObjectBlock : ObjectBlocks) {
-		tmpObjectBlock.VertexArray = GlobalVertexArray;
-		tmpObjectBlock.IndexArray = GlobalIndexArray;
+	for (auto &tmpModel3DBlock : Model3DBlocks) {
+		tmpModel3DBlock.VertexArray = GlobalVertexArray;
+		tmpModel3DBlock.IndexArray = GlobalIndexArray;
 	}
 
 	vw_fclose(File);
@@ -631,7 +634,7 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
  */
 bool cModel3DWrapper::SaveVW3D(const std::string &FileName)
 {
-	if (!GlobalVertexArray || !GlobalIndexArray || ObjectBlocks.empty()) {
+	if (!GlobalVertexArray || !GlobalIndexArray || Model3DBlocks.empty()) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file for empty Model3D.\n";
 		return false;
 	}
@@ -647,25 +650,25 @@ bool cModel3DWrapper::SaveVW3D(const std::string &FileName)
 	constexpr char Sign[4]{'V','W','3','D'};
 	SDL_RWwrite(FileVW3D, Sign, 4, 1);
 
-	std::uint32_t ObjectsListCount = static_cast<std::uint32_t>(ObjectBlocks.size());
-	SDL_RWwrite(FileVW3D, &ObjectsListCount, sizeof(ObjectsListCount), 1);
+	std::uint32_t BlocksListCount = static_cast<std::uint32_t>(Model3DBlocks.size());
+	SDL_RWwrite(FileVW3D, &BlocksListCount, sizeof(BlocksListCount), 1);
 
-	for (auto &tmpObjectBlock : ObjectBlocks) {
+	for (auto &tmpModel3DBlock : Model3DBlocks) {
 		// VertexFormat
-		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexFormat, sizeof(ObjectBlocks[0].VertexFormat), 1);
+		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.VertexFormat, sizeof(Model3DBlocks[0].VertexFormat), 1);
 		// VertexStride
-		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexStride, sizeof(ObjectBlocks[0].VertexStride), 1);
+		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.VertexStride, sizeof(Model3DBlocks[0].VertexStride), 1);
 		// VertexQuantity
-		SDL_RWwrite(FileVW3D, &tmpObjectBlock.VertexQuantity, sizeof(ObjectBlocks[0].VertexQuantity), 1);
+		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.VertexQuantity, sizeof(Model3DBlocks[0].VertexQuantity), 1);
 		// Location
-		SDL_RWwrite(FileVW3D, &tmpObjectBlock.Location, sizeof(ObjectBlocks[0].Location.x) * 3, 1);
+		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.Location, sizeof(Model3DBlocks[0].Location.x) * 3, 1);
 		// Rotation
-		SDL_RWwrite(FileVW3D, &tmpObjectBlock.Rotation, sizeof(ObjectBlocks[0].Rotation.x) * 3, 1);
+		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.Rotation, sizeof(Model3DBlocks[0].Rotation.x) * 3, 1);
 	}
 
 	SDL_RWwrite(FileVW3D, &GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
 	SDL_RWwrite(FileVW3D, GlobalVertexArray.get(),
-		    ObjectBlocks[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray.get()[0]),
+		    Model3DBlocks[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray.get()[0]),
 		    1);
 	SDL_RWwrite(FileVW3D, GlobalIndexArray.get(), GlobalIndexArrayCount * sizeof(GlobalIndexArray.get()[0]), 1);
 	SDL_RWclose(FileVW3D);
@@ -679,29 +682,29 @@ bool cModel3DWrapper::SaveVW3D(const std::string &FileName)
  */
 void sModel3D::MetadataInitialization()
 {
-	if (ObjectBlocks.empty())
+	if (Model3DBlocks.empty())
 		return;
 
 	int AllVertexCounted{0};
 
 	// HitBB calculation
-	HitBB.resize(ObjectBlocks.size());
-	for (unsigned int i = 0; i < ObjectBlocks.size(); i++) {
+	HitBB.resize(Model3DBlocks.size());
+	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		float Matrix[9];
-		vw_Matrix33CreateRotate(Matrix, ObjectBlocks[i].Rotation);
+		vw_Matrix33CreateRotate(Matrix, Model3DBlocks[i].Rotation);
 
 		// first vertex's data as initial data for calculation
 		int tmpOffset;
-		if (ObjectBlocks[i].IndexArray)
-			tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart] *
-				    ObjectBlocks[i].VertexStride;
+		if (Model3DBlocks[i].IndexArray)
+			tmpOffset = Model3DBlocks[i].IndexArray.get()[Model3DBlocks[i].RangeStart] *
+				    Model3DBlocks[i].VertexStride;
 		else
-			tmpOffset = ObjectBlocks[i].RangeStart * ObjectBlocks[i].VertexStride;
+			tmpOffset = Model3DBlocks[i].RangeStart * Model3DBlocks[i].VertexStride;
 
 		sVECTOR3D tmpVertex;
-		tmpVertex.x = ObjectBlocks[i].VertexArray.get()[tmpOffset];
-		tmpVertex.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
-		tmpVertex.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
+		tmpVertex.x = Model3DBlocks[i].VertexArray.get()[tmpOffset];
+		tmpVertex.y = Model3DBlocks[i].VertexArray.get()[tmpOffset + 1];
+		tmpVertex.z = Model3DBlocks[i].VertexArray.get()[tmpOffset + 2];
 		vw_Matrix33CalcPoint(tmpVertex, Matrix);
 		float MinX = tmpVertex.x;
 		float MaxX = tmpVertex.x;
@@ -710,19 +713,19 @@ void sModel3D::MetadataInitialization()
 		float MinZ = tmpVertex.z;
 		float MaxZ = tmpVertex.z;
 
-		GeometryCenter += ObjectBlocks[i].Location + tmpVertex;
+		GeometryCenter += Model3DBlocks[i].Location + tmpVertex;
 
 		// starts from second vertex, check all vertices
-		for (unsigned int j = 1; j < ObjectBlocks[i].VertexQuantity; j++) {
-			if (ObjectBlocks[i].IndexArray)
-				tmpOffset = ObjectBlocks[i].IndexArray.get()[ObjectBlocks[i].RangeStart + j] *
-					    ObjectBlocks[i].VertexStride;
+		for (unsigned int j = 1; j < Model3DBlocks[i].VertexQuantity; j++) {
+			if (Model3DBlocks[i].IndexArray)
+				tmpOffset = Model3DBlocks[i].IndexArray.get()[Model3DBlocks[i].RangeStart + j] *
+					    Model3DBlocks[i].VertexStride;
 			else
-				tmpOffset = (ObjectBlocks[i].RangeStart + j) * ObjectBlocks[i].VertexStride;
+				tmpOffset = (Model3DBlocks[i].RangeStart + j) * Model3DBlocks[i].VertexStride;
 
-			tmpVertex.x = ObjectBlocks[i].VertexArray.get()[tmpOffset];
-			tmpVertex.y = ObjectBlocks[i].VertexArray.get()[tmpOffset + 1];
-			tmpVertex.z = ObjectBlocks[i].VertexArray.get()[tmpOffset + 2];
+			tmpVertex.x = Model3DBlocks[i].VertexArray.get()[tmpOffset];
+			tmpVertex.y = Model3DBlocks[i].VertexArray.get()[tmpOffset + 1];
+			tmpVertex.z = Model3DBlocks[i].VertexArray.get()[tmpOffset + 2];
 			vw_Matrix33CalcPoint(tmpVertex, Matrix);
 			if (MinX > tmpVertex.x)
 				MinX = tmpVertex.x;
@@ -737,7 +740,7 @@ void sModel3D::MetadataInitialization()
 			if (MaxZ < tmpVertex.z)
 				MaxZ = tmpVertex.z;
 
-			GeometryCenter += ObjectBlocks[i].Location + tmpVertex;
+			GeometryCenter += Model3DBlocks[i].Location + tmpVertex;
 		}
 
 		// store data to the HitBB
@@ -770,10 +773,10 @@ void sModel3D::MetadataInitialization()
 			HitBB[i].Box[k] -= HitBB[i].Location;
 		}
 
-		// correct HitBB geometry center location accordingly to object location
-		HitBB[i].Location += ObjectBlocks[i].Location;
+		// correct HitBB geometry center location accordingly to block location
+		HitBB[i].Location += Model3DBlocks[i].Location;
 
-		AllVertexCounted += ObjectBlocks[i].VertexQuantity;
+		AllVertexCounted += Model3DBlocks[i].VertexQuantity;
 	}
 
 	// calculate 3D model's geometry center
@@ -791,7 +794,7 @@ void sModel3D::MetadataInitialization()
 	float MaxZ = HitBB[0].Box[0].z + HitBB[0].Location.z;
 
 	// starts from second HitBB, check all HitBBs
-	for (unsigned int i = 1; i < ObjectBlocks.size(); i++) {
+	for (unsigned int i = 1; i < Model3DBlocks.size(); i++) {
 		if (MinX > HitBB[i].Box[6].x + HitBB[i].Location.x)
 			MinX = HitBB[i].Box[6].x + HitBB[i].Location.x;
 		if (MaxX < HitBB[i].Box[0].x + HitBB[i].Location.x)

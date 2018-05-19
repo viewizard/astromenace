@@ -82,7 +82,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (unsigned int i = 0; i < Object->ObjectBlocks.size(); i++) {
+		for (unsigned int i = 0; i < Object->Model3DBlocks.size(); i++) {
 			// трак, пропускаем
 			if (Object->TrackObjectNum == static_cast<int>(i))
 				continue;
@@ -102,24 +102,24 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				}
 
 				// берем то, что нужно
-				ShipPart->ObjectBlocks.resize(1);
+				ShipPart->Model3DBlocks.resize(1);
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-				ShipPart->ObjectBlocks[0] = Object->ObjectBlocks[i];
+				ShipPart->Model3DBlocks[0] = Object->Model3DBlocks[i];
 				// берем стандартные шейдеры
-				ShipPart->ObjectBlocks[0].ShaderType = 1;
+				ShipPart->Model3DBlocks[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-				if (Object->ObjectBlocks[i].NeedDestroyDataInObjectBlock) {
-					Object->ObjectBlocks[i].NeedDestroyDataInObjectBlock = false;
-					ShipPart->ObjectBlocks[0].NeedDestroyDataInObjectBlock = true;
+				if (Object->Model3DBlocks[i].NeedDestroyDataInModel3DBlock) {
+					Object->Model3DBlocks[i].NeedDestroyDataInModel3DBlock = false;
+					ShipPart->Model3DBlocks[0].NeedDestroyDataInModel3DBlock = true;
 				}
 
 				// находим точку локального положения объекта в моделе
-				sVECTOR3D LocalLocation = Object->ObjectBlocks[i].Location;
+				sVECTOR3D LocalLocation = Object->Model3DBlocks[i].Location;
 				vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
 				LocalLocation = Object->HitBB[i].Location - LocalLocation;
 				vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
-				ShipPart->ObjectBlocks[0].Location = LocalLocation ^ (-1.0f);
+				ShipPart->Model3DBlocks[0].Location = LocalLocation ^ (-1.0f);
 
 				// находим все данные по геометрии
 				ShipPart->MetadataInitialization();

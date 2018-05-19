@@ -366,7 +366,7 @@ bool vw_SphereOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Obje
 /*
  * Sphere-Mesh collision detection.
  */
-bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sObjectBlock &Object1DrawObjectList,
+bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBlock &Object1DrawObjectList,
 			    const float (&Object1RotationMatrix)[9], float Object2Radius, const sVECTOR3D &Object2Location,
 			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D *CollisionLocation)
 {
