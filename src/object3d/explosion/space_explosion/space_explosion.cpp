@@ -85,7 +85,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->Speed = 1.5f * Object->Radius;
 			sharedGFX->SpeedVar = vw_Randf0;
 			sharedGFX->MoveSystem(Object->Location);
-			sharedGFX->ParticlesPerSec = (int)(10 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(20 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 			sharedGFX->CreationType = eParticleCreationType::Sphere;
 			sharedGFX->CreationSize = sVECTOR3D(tRadius, tRadius, tRadius);
@@ -148,7 +148,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 3);
 			sharedGFX->MoveSystem(Object->Location);
-			sharedGFX->ParticlesPerSec = (int)(2.5f * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(5 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 			sharedGFX->CreationSize = sVECTOR3D(Object->Radius / 4, Object->Radius / 4, Object->Radius / 4);
 		}
@@ -161,7 +161,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(2.5 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(5 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 			sharedGFX->NeedStop = false;
 		}
@@ -251,7 +251,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 		}
 
@@ -263,7 +263,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 		}
 	}
@@ -302,7 +302,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 		}
 
@@ -314,7 +314,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 		}
 	}
@@ -344,7 +344,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 		}
 
@@ -356,7 +356,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(7 * Object->Radius);
+			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
 		}
 

@@ -128,11 +128,6 @@ void cParticleSystem2D::Update(float Time)
 	if (ParticlesCreated < 1)
 		return;
 
-	// prevent 'time's lags' issue, when we need emit huge number of particles
-	// that more than our ParticlesPerSec value
-	if (ParticlesCreated > ParticlesPerSec)
-		ParticlesCreated = ParticlesPerSec;
-
 	// emit particles
 	EmitParticles(ParticlesCreated);
 

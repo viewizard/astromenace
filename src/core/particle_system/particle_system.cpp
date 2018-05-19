@@ -96,8 +96,11 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 		}
 
 		Color.r += ColorDelta.r * TimeDelta;
+		vw_Clamp(Color.r, 0.0f, 1.0f);
 		Color.g += ColorDelta.g * TimeDelta;
+		vw_Clamp(Color.g, 0.0f, 1.0f);
 		Color.b += ColorDelta.b * TimeDelta;
+		vw_Clamp(Color.b, 0.0f, 1.0f);
 
 		if (!AlphaShowHide)
 			Alpha += AlphaDelta * TimeDelta;
@@ -111,7 +114,7 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 			} else
 				Alpha -= AlphaDelta * TimeDelta;
 
-			vw_Clamp( Alpha, 0.0f, 1.0f );
+			vw_Clamp(Alpha, 0.0f, 1.0f);
 		}
 
 		Size += SizeDelta * TimeDelta;
@@ -173,7 +176,7 @@ bool cParticleSystem::Update(float Time)
 
 	// emit new particles
 	if (ParticlesCreated > 0)
-		EmitParticles(ParticlesCreated);
+		EmitParticles(ParticlesCreated, TimeDelta);
 
 	if (DestroyIfNoParticles &&
 	    ParticlesList.empty())
@@ -192,12 +195,11 @@ bool cParticleSystem::Update(float Time)
 /*
  * Emit particles.
  */
-void cParticleSystem::EmitParticles(unsigned int Quantity)
+void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 {
-	// prevent 'time's lags' issue, when we need emit huge number of particles
-	// that more than our ParticlesPerSec value
-	if (Quantity > ParticlesPerSec)
-		Quantity = ParticlesPerSec;
+	// care about particle system movements (need this for low FPS)
+	sVECTOR3D LocationCorrection = (PrevLocation - Location) / static_cast<float>(Quantity);
+	float TimeDeltaCorrection = TimeDelta / static_cast<float>(Quantity);
 
 	while (Quantity > 0) {
 		// create new particle
@@ -279,6 +281,13 @@ void cParticleSystem::EmitParticles(unsigned int Quantity)
 		if (NewSpeed < 0.0f)
 			NewSpeed = 0.0f;
 		NewParticle.Velocity *= NewSpeed;
+
+		// care about particle system movements (need this for low FPS)
+		NewParticle.Location += (LocationCorrection ^ static_cast<float>(Quantity));
+		if (!NewParticle.Update(TimeDeltaCorrection * static_cast<float>(Quantity), Location, IsMagnet, MagnetFactor)) {
+			ParticlesList.pop_front();
+			ParticlesCountInList--;
+		}
 
 		Quantity--;
 	}
@@ -701,6 +710,7 @@ void cParticleSystem::Draw(GLtexture &CurrentTexture)
 void cParticleSystem::SetStartLocation(const sVECTOR3D &NewLocation)
 {
 	Location = NewLocation;
+	PrevLocation = Location;
 
 	if (auto sharedLight = Light.lock())
 		sharedLight->SetLocation(Location);
@@ -716,6 +726,7 @@ void cParticleSystem::MoveSystem(const sVECTOR3D &NewLocation)
 
 	sVECTOR3D tmpLocation{NewLocation - Location};
 	Location = NewLocation;
+	PrevLocation = Location;
 
 	for (auto &tmpParticle : ParticlesList) {
 		tmpParticle.Location += tmpLocation;
@@ -733,6 +744,7 @@ void cParticleSystem::MoveSystemLocation(const sVECTOR3D &NewLocation)
 	if (Location == NewLocation)
 		return;
 
+	PrevLocation = Location;
 	Location = NewLocation;
 
 	if (auto sharedLight = Light.lock())

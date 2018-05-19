@@ -42,7 +42,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 
 	switch(GFXNum) {
 	case 0:	// разлет снаряда
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -63,7 +62,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->NeedStop = true;
 		break;
 	case 1:	// малый взрыв, астероид
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -85,7 +83,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
 	case 2:	// средний взрыв, пришельцы
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -106,7 +103,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->NeedStop = true;
 		break;
 	case 3:	// средний взрыв, пришельцы
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -129,7 +125,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->NeedStop = true;
 		break;
 	case 4:	// средний взрыв
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -151,7 +146,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.002f);
 		break;
 	case 5:	// средний взрыв, земляне
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -173,7 +167,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.003f);
 		break;
 	case 6:	// средний взрыв, земляне
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -295,7 +288,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 
 
 	case 11:	// взрыв осколка босса, как средний взрыв, земляне
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -317,7 +309,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.001f);
 		break;
 	case 12:	// взрыв осколка босса, как средний взрыв, земляне
-		ParticleSystem->TimeLastUpdate = 1;// чтобы сделать один проход
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;

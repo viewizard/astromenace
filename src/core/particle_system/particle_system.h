@@ -189,9 +189,11 @@ private:
 
 	// current location
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	// previous system location
+	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
 	// Emit particles.
-	void EmitParticles(unsigned int Quantity);
+	void EmitParticles(unsigned int Quantity, float TimeDelta);
 	// Particle size correction by camera distance.
 	void SizeCorrectionByCameraDist(cParticle &NewParticle);
 	// Generate location for new particle (point type).
