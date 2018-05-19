@@ -123,8 +123,10 @@ void LoadObjectData(const char *Name, cObject3D *Object3D, float TriangleSizeLim
 
 	// берем то, что нужно
 	Object3D->GlobalVertexArray = sharedModel->GlobalVertexArray;
+	Object3D->GlobalVertexArrayCount = sharedModel->GlobalVertexArrayCount;
 	Object3D->GlobalVBO = sharedModel->GlobalVBO;
 	Object3D->GlobalIndexArray = sharedModel->GlobalIndexArray;
+	Object3D->GlobalIndexArrayCount = sharedModel->GlobalIndexArrayCount;
 	Object3D->GlobalIBO = sharedModel->GlobalIBO;
 	Object3D->GlobalVAO = sharedModel->GlobalVAO;
 	Object3D->Model3DBlocks = sharedModel->Model3DBlocks;

@@ -484,13 +484,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_Rotate(Rotation.x, 1.0f, 0.0f, 0.0f);
 
 		if (NeedOnePieceDraw) {
-			int GlobalVertexCount{0};
-			for (auto &tmpModel3DBlock : Model3DBlocks) {
-				GlobalVertexCount += tmpModel3DBlock.VertexQuantity;
-			}
+			unsigned DrawVertexCount{GlobalIndexArrayCount};
+			if (!DrawVertexCount)
+				DrawVertexCount = GlobalVertexArrayCount;
 
 			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-			vw_Draw3D(ePrimitiveType::TRIANGLES, GlobalVertexCount, RI_3f_XYZ, GlobalVertexArray.get(),
+			vw_Draw3D(ePrimitiveType::TRIANGLES, DrawVertexCount, RI_3f_XYZ, GlobalVertexArray.get(),
 				  Model3DBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
 				  GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 		} else {
@@ -704,13 +703,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 		}
 
-		int GlobalVertexCount{0};
-		for (auto &tmpModel3DBlock : Model3DBlocks) {
-			GlobalVertexCount += tmpModel3DBlock.VertexQuantity;
-		}
+		unsigned DrawVertexCount{GlobalIndexArrayCount};
+		if (!DrawVertexCount)
+			DrawVertexCount = GlobalVertexArrayCount;
 
 		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
-		vw_Draw3D(ePrimitiveType::TRIANGLES, GlobalVertexCount, Model3DBlocks[0].VertexFormat, GlobalVertexArray.get(),
+		vw_Draw3D(ePrimitiveType::TRIANGLES, DrawVertexCount, Model3DBlocks[0].VertexFormat, GlobalVertexArray.get(),
 			  Model3DBlocks[0].VertexStride * sizeof(float), GlobalVBO, 0,
 			  GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 

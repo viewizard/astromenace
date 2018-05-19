@@ -446,9 +446,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
 			ShipPart->Model3DBlocks[0] = Object->Model3DBlocks[i];
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-			if (Object->Model3DBlocks[i].NeedDestroyDataInModel3DBlock) {
-				Object->Model3DBlocks[i].NeedDestroyDataInModel3DBlock = false;
-				ShipPart->Model3DBlocks[0].NeedDestroyDataInModel3DBlock = true;
+			if (Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
+				Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
+				ShipPart->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
 			}
 
 			// находим точку локального положения объекта в моделе
@@ -540,7 +540,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			Model3DBlocks[i].VBO = 0;
 			Model3DBlocks[i].IBO = 0;
 			Model3DBlocks[i].VAO = 0;
-			Model3DBlocks[i].NeedDestroyDataInModel3DBlock = true; // удалять в объекте
+			Model3DBlocks[i].NeedReleaseOpenGLBuffers = true; // удалять в объекте
 			Model3DBlocks[i].RangeStart = 0;
 			Model3DBlocks[i].IndexArray.reset();
 			Model3DBlocks[i].VertexArrayWithSmallTriangles.reset();

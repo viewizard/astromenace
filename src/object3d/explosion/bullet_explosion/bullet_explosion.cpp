@@ -821,7 +821,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			Model3DBlocks[i].VBO = 0;
 			Model3DBlocks[i].IBO = 0;
 			Model3DBlocks[i].VAO = 0;
-			Model3DBlocks[i].NeedDestroyDataInModel3DBlock = true; // удалять в объекте
+			Model3DBlocks[i].NeedReleaseOpenGLBuffers = true; // удалять в объекте
 			Model3DBlocks[i].RangeStart = 0;
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг

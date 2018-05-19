@@ -78,8 +78,8 @@ struct sModel3DBlock {
 	// indexes at all, initial vertex in global/local vertex array/vertexbo
 	unsigned int RangeStart{0};
 
-	// if we allocate memory, bind vbo/ibo/vao personally for this block - release/delete this resources
-	bool NeedDestroyDataInModel3DBlock{false};
+	// if vbo/ibo/vao was built personally for this block - release this resources
+	bool NeedReleaseOpenGLBuffers{false};
 
 	// vertex quantity, that should be rendered
 	unsigned int VertexQuantity{0};
@@ -107,9 +107,11 @@ struct sModel3D {
 
 	// vertex-related
 	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
+	unsigned int GlobalVertexArrayCount{0}; // vertex quantity in GlobalVertexArray
 	GLuint GlobalVBO{0};
 	// index-related
 	std::shared_ptr<unsigned> GlobalIndexArray{}; // unsigned[], make sure, that custom deleter are used
+	unsigned int GlobalIndexArrayCount{0}; // GlobalIndexArray's size
 	GLuint GlobalIBO{0};
 	// vao-related
 	GLuint GlobalVAO{0};

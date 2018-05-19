@@ -108,9 +108,9 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				// берем стандартные шейдеры
 				ShipPart->Model3DBlocks[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-				if (Object->Model3DBlocks[i].NeedDestroyDataInModel3DBlock) {
-					Object->Model3DBlocks[i].NeedDestroyDataInModel3DBlock = false;
-					ShipPart->Model3DBlocks[0].NeedDestroyDataInModel3DBlock = true;
+				if (Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
+					Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
+					ShipPart->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
 				}
 
 				// находим точку локального положения объекта в моделе

@@ -40,9 +40,6 @@ public:
 	// Save VW3D 3D models format.
 	bool SaveVW3D(const std::string &FileName);
 
-	unsigned int GlobalVertexArrayCount{0}; // vertex quantity in GlobalVertexArray
-	unsigned int GlobalIndexArrayCount{0}; // GlobalIndexArray's size
-
 private:
 	// Don't allow direct new/delete usage in code, only vw_LoadModel3D()
 	// allowed for cModel3DWrapper creation and release setup (deleter must be provided).
@@ -206,6 +203,12 @@ static void CreateModel3DBlocksBuffers(cModel3DWrapper *Model)
 			       Model->GlobalVertexArray.get() + Offset,
 			       tmpModel3DBlock.VertexStride * sizeof(tmpModel3DBlock.VertexArray.get()[0]));
 		}
+
+		// FIXME this code should be revised, we need index and vertex arrays with proper values here,
+		//       for all models without binormals
+		//       care about index and vertex counters for vbo/ibo in CreateHardwareBuffers()
+		//       CreateVertexArrayLimitedBySizeTriangles() should be also revised, since we will be not able
+		//       use block's vertex array 'as is' without unpacking
 
 		// index array
 		tmpModel3DBlock.IndexArray.reset();
@@ -518,7 +521,7 @@ void vw_ReleaseAllModel3D()
  */
 sModel3DBlock::~sModel3DBlock()
 {
-	if (NeedDestroyDataInModel3DBlock) {
+	if (NeedReleaseOpenGLBuffers) {
 		if (VBO)
 			vw_DeleteBufferObject(VBO);
 		if (IBO)
@@ -593,8 +596,8 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
 		File->fread(&tmpModel3DBlock.Rotation, sizeof(Model3DBlocks[0].Rotation.x) * 3, 1);
 
 		tmpModel3DBlock.DrawType = eModel3DDrawType::Normal;
+		tmpModel3DBlock.NeedReleaseOpenGLBuffers = false;
 		// vertex array-related
-		tmpModel3DBlock.NeedDestroyDataInModel3DBlock = false;
 		tmpModel3DBlock.VBO = 0;
 		// index array-related
 		tmpModel3DBlock.IBO = 0;
