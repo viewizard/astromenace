@@ -72,7 +72,6 @@ sVECTOR3D	Point(1000,-1000,0);
 sVECTOR3D	ObjectBaseLocation(0,0,0);
 int			CreateNum = 1;
 float		RotationSumY =0.0f;
-float		RotationSumX =0.0f;
 float		InfoObjectWidth = 0.0f;
 float		InfoObjectLength = 0.0f;
 float		InfoObjectHeight = 0.0f;
@@ -322,7 +321,6 @@ void CreateInfoObject()
 	GameNPCArmorPenalty = 1;
 
 	RotationSumY = 140;
-	RotationSumX = 0;
 
 	Point = sVECTOR3D(1000,-1000,0);
 
@@ -355,7 +353,7 @@ void CreateInfoObject()
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoFighter->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoFighter->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
@@ -377,7 +375,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoWeapon->Height;
 		InfoObjectStrength = InfoWeapon->StrengthStart;
 
-		InfoWeapon->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoWeapon->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 
 		InfoObjectEnergyUse = InfoWeapon->EnergyUse;
 		InfoObjectAmmo = InfoWeapon->AmmoStart;
@@ -411,7 +409,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoMine->Height;
 		InfoObjectStrength = InfoMine->StrengthStart;
 
-		InfoMine->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoMine->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
@@ -441,7 +439,7 @@ void CreateInfoObject()
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoAlien->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoAlien->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
@@ -470,7 +468,7 @@ void CreateInfoObject()
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoAlienMotherShip->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoAlienMotherShip->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
@@ -509,7 +507,7 @@ void CreateInfoObject()
 			}
 		}
 
-		InfoPirateShip->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoPirateShip->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
@@ -532,7 +530,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoBuilding->Height;
 		InfoObjectStrength = InfoBuilding->StrengthStart;
 
-		InfoBuilding->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoBuilding->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoMilitaryBuildingStart+1;
@@ -555,7 +553,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoMilitaryBuilding->Height;
 		InfoObjectStrength = InfoMilitaryBuilding->StrengthStart;
 
-		InfoMilitaryBuilding->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoMilitaryBuilding->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		int tmpCreateNum = CreateNum-InfoWheeledStart+1;
@@ -580,7 +578,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoWheeled->Height;
 		InfoObjectStrength = InfoWheeled->StrengthStart;
 
-		InfoWheeled->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoWheeled->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		int tmpCreateNum = CreateNum-InfoTrackedStart+1;
@@ -605,7 +603,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoTracked->Height;
 		InfoObjectStrength = InfoTracked->StrengthStart;
 
-		InfoTracked->SetRotation(sVECTOR3D(RotationSumX,RotationSumY,0.0f));
+		InfoTracked->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 
 	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
@@ -1364,125 +1362,41 @@ void InformationMenu()
 //------------------------------------------------------------------------------------
 void InformationDrawObject()
 {
-
 	int MouseX, MouseY;
 	vw_GetMousePos(MouseX, MouseY);
 
 	float tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight;
 	vw_GetViewport(&tmpViewportX, &tmpViewportY, &tmpViewportWidth, &tmpViewportHeight);
 
-	vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 432) / (GameConfig().InternalWidth / tmpViewportWidth)), (GLint)(80+80 / (GameConfig().InternalHeight / tmpViewportHeight)),
-		       (GLsizei)(444 / (GameConfig().InternalWidth / tmpViewportWidth)), (GLsizei)(333 / (GameConfig().InternalHeight / tmpViewportHeight)));
-	vw_ResizeScene(45.0f, 444.0f/333.0f, 1.0f, 2000.0f);
+	vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 432) * (tmpViewportWidth / GameConfig().InternalWidth)),
+		       (GLint)(160 * (tmpViewportHeight / GameConfig().InternalHeight)),
+		       (GLsizei)(444 * (tmpViewportWidth / GameConfig().InternalWidth)),
+		       (GLsizei)(333 * (tmpViewportHeight / GameConfig().InternalHeight)));
+	vw_ResizeScene(45.0f, 444.0f / 333.0f, 1.0f, 2000.0f);
 	vw_Clear(RI_DEPTH_BUFFER);
 
 
 	vw_LoadIdentity();
-	vw_SetCameraLocation(sVECTOR3D(1000+PointCamera.x,-1000+PointCamera.y,PointCamera.z));
+	vw_SetCameraLocation(sVECTOR3D(1000 + PointCamera.x, -1000 + PointCamera.y, PointCamera.z));
 	vw_SetCameraMoveAroundPoint(Point, 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
 	vw_CameraLookAt();
 
 
-
-
-
-
 	// вращение объекта
 
-	float RotateInfoObjectY = 15.0f*(vw_GetTimeThread(0) - LastRotateInfoObject);
-	float tmpRotateInfoObjectX = 15.0f*(vw_GetTimeThread(0) - LastRotateInfoObject);
-	float RotateInfoObjectX = 0;
+	float RotateInfoObjectY = 15.0f * (vw_GetTimeThread(0) - LastRotateInfoObject);
 	LastRotateInfoObject = vw_GetTimeThread(0);
 
-	sRECT DstRectLeft, DstRectRight, DstRectUp, DstRectDown;
-	float fLeft, fRight, fUp, fDown;
-	fLeft = fRight = fUp = fDown = 0.15f;
-
-
-	DstRectLeft((GameConfig().InternalWidth/2-432)+10,
-		80+80+(333-32)/2,
-		(GameConfig().InternalWidth/2-432)+32+10,
-		80+80+(333+32)/2);
-	DstRectRight((GameConfig().InternalWidth/2-432)+444-32-10,
-		80+80+(333-32)/2,
-		(GameConfig().InternalWidth/2-432)+444-10,
-		80+80+(333+32)/2);
-	DstRectUp((GameConfig().InternalWidth/2-432)+(444-32)/2,
-		80+80+333-32-10,
-		(GameConfig().InternalWidth/2-432)+(444+32)/2,
-		80+80+333-10);
-	DstRectDown((GameConfig().InternalWidth/2-432)+(444-32)/2,
-		80+80+10,
-		(GameConfig().InternalWidth/2-432)+(444+32)/2,
-		80+80+32+10);
-
-	// для вращения объекта, только если мышка стоит над выводом 3д модели
-	sRECT DstRect;
-	DstRect((GameConfig().InternalWidth/2-432),
-		80+80,
-		(GameConfig().InternalWidth/2-432)+444,
-		80+80+333);
-	if  (((DstRect.right  >= MouseX) &&
-	      (DstRect.left<= MouseX) &&
-	      (DstRect.bottom >= MouseY) &&
-	      (DstRect.top<= MouseY)) && !isDialogBoxDrawing()) {
-		fLeft = fRight = fUp = fDown = 0.35f;
-
-		if  (((DstRectLeft.right  >= MouseX) &&
-		      (DstRectLeft.left<= MouseX) &&
-		      (DstRectLeft.bottom >= MouseY) &&
-		      (DstRectLeft.top<= MouseY)) && !isDialogBoxDrawing()) {
-			fLeft = 0.8f;
-			RotateInfoObjectY = RotateInfoObjectY*3;
-		} else if  (((DstRectRight.right  >= MouseX) &&
-			     (DstRectRight.left<= MouseX) &&
-			     (DstRectRight.bottom >= MouseY) &&
-			     (DstRectRight.top<= MouseY)) && !isDialogBoxDrawing()) {
-			fRight = 0.8f;
-			RotateInfoObjectY = -RotateInfoObjectY*3;
-		} else if  (((DstRectUp.right  >= MouseX) &&
-			     (DstRectUp.left<= MouseX) &&
-			     (DstRectUp.bottom >= MouseY) &&
-			     (DstRectUp.top<= MouseY)) && !isDialogBoxDrawing()) {
-			fUp = 0.8f;
-			RotateInfoObjectX = -tmpRotateInfoObjectX*3;
-			RotateInfoObjectY = 0.0f;
-		} else if  (((DstRectDown.right  >= MouseX) &&
-			     (DstRectDown.left<= MouseX) &&
-			     (DstRectDown.bottom >= MouseY) &&
-			     (DstRectDown.top<= MouseY)) && !isDialogBoxDrawing()) {
-			fDown = 0.8f;
-			RotateInfoObjectX = tmpRotateInfoObjectX*3;
-			RotateInfoObjectY = 0.0f;
-		} else
-			RotateInfoObjectY = 0;
-
-		if (vw_GetMouseLeftClick(true)) {
-			RotateInfoObjectY = -RotationSumY+140; // 140 -базовый угол разворота при создании
-			RotateInfoObjectX = -RotationSumX;
-		}
-	}
-
-
 	RotationSumY += RotateInfoObjectY;
-	if (RotationSumY >= 360.0f) RotationSumY -= 360.0f;
-	else if (RotationSumY <= -360.0f) RotationSumY += 360.0f;
-	RotationSumX += RotateInfoObjectX;
-	if (RotationSumX >= 360.0f) RotationSumX -= 360.0f;
-	else if (RotationSumX <= -360.0f) RotationSumX += 360.0f;
+	if (RotationSumY >= 360.0f)
+		RotationSumY -= 360.0f;
 
-
-	// корректируем положение (у нас объекты стоят не в нулевой точке, а со смещением
+	// корректируем положение (у нас объекты стоят не в нулевой точке, а со смещением, например - оружие землян)
 	sVECTOR3D TMPLocation = ObjectBaseLocation;
 	float tmp_matrix[9];
-	vw_Matrix33CreateRotate(tmp_matrix, sVECTOR3D(RotationSumX, RotationSumY, 0));
+	vw_Matrix33CreateRotate(tmp_matrix, sVECTOR3D(0, RotationSumY, 0));
 	vw_Matrix33CalcPoint(TMPLocation, tmp_matrix);
 	TMPLocation += sVECTOR3D(1000,-1000,0);
-
-
-
-
-
 
 
 	// рисуем линии
@@ -1491,14 +1405,15 @@ void InformationDrawObject()
 	float *tmpDATA = new float[4*(3+2)];
 
 
-	int SizeCell = (int)(vw_sqrtf((InfoObjectLength*InfoObjectLength/4.0f+
-				       InfoObjectWidth*InfoObjectWidth/4.0f+
-				       InfoObjectHeight*InfoObjectHeight/4.0f)));
+	int SizeCell = static_cast<int>(vw_sqrtf((InfoObjectLength * InfoObjectLength / 4.0f +
+					InfoObjectWidth * InfoObjectWidth / 4.0f +
+					InfoObjectHeight * InfoObjectHeight / 4.0f)));
 
-	float LineSize = 0.004f * vw_sqrtf(PointCamera.x*PointCamera.x+PointCamera.y*PointCamera.y+
-					   PointCamera.z*PointCamera.z);
+	float LineSize = 0.004f * vw_sqrtf(PointCamera.x * PointCamera.x + PointCamera.y * PointCamera.y +
+					   PointCamera.z * PointCamera.z);
 
-	if (SizeCell<2) SizeCell = 2;
+	if (SizeCell < 2)
+		SizeCell = 2;
 
 
 	vw_PushMatrix();
@@ -1506,12 +1421,11 @@ void InformationDrawObject()
 
 	vw_Translate(sVECTOR3D(1000.0f, -1000.0f, 0.0f));
 	vw_Rotate(RotationSumY, 0.0f, 1.0f, 0.0f);
-	vw_Rotate(RotationSumX, 1.0f, 0.0f, 0.0f);
 
-	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f*MenuContentTransp);
+	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f * MenuContentTransp);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 	vw_BindTexture(0, vw_FindTextureByName("menu/line.tga"));
-	for (int i=-SizeCell; i<SizeCell+2; i+=2) {
+	for (int i = -SizeCell; i < SizeCell + 2; i += 2) {
 		// номер float'а в последовательности
 		int k=0;
 
@@ -1581,10 +1495,50 @@ void InformationDrawObject()
 
 
 
+	if (InfoFighter) {
+		InfoFighter->SetLocation(TMPLocation);
+		InfoFighter->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoWeapon) {
+		InfoWeapon->SetLocation(TMPLocation);
+		InfoWeapon->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoMine) {
+		InfoMine->SetLocation(TMPLocation);
+		InfoMine->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoAlien) {
+		InfoAlien->SetLocation(TMPLocation);
+		InfoAlien->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoAlienMotherShip) {
+		InfoAlienMotherShip->SetLocation(TMPLocation);
+		InfoAlienMotherShip->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoPirateShip) {
+		InfoPirateShip->SetLocation(TMPLocation);
+		InfoPirateShip->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoBuilding) {
+		InfoBuilding->SetLocation(TMPLocation);
+		InfoBuilding->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoMilitaryBuilding) {
+		InfoMilitaryBuilding->SetLocation(TMPLocation);
+		InfoMilitaryBuilding->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoWheeled) {
+		InfoWheeled->SetLocation(TMPLocation);
+		InfoWheeled->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
+	if (InfoTracked) {
+		InfoTracked->SetLocation(TMPLocation);
+		InfoTracked->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	}
 
 
 
-	bool ShadowMap = false;
+	bool ShadowMap{false};
 
 	if (GameConfig().ShadowMap > 0) {
 		float EffectiveDistance = PointCamera.Length();
@@ -1594,51 +1548,41 @@ void InformationDrawObject()
 		// and tracks, etc., we are forced to disable face's culling during shadows map generation
 		vw_CullFace(eCullFace::NONE);
 
-		if (InfoFighter != nullptr) {
-			InfoFighter->SetLocation(TMPLocation);
+		if (InfoFighter) {
 			InfoFighter->Draw(true);
 		}
-		if (InfoWeapon != nullptr) {
-			InfoWeapon->SetLocation(TMPLocation);
+		if (InfoWeapon) {
 			InfoWeapon->Draw(true);
 		}
-		if (InfoMine != nullptr) {
-			InfoMine->SetLocation(TMPLocation);
+		if (InfoMine) {
 			InfoMine->Draw(true);
 		}
-		if (InfoAlien != nullptr) {
-			InfoAlien->SetLocation(TMPLocation);
+		if (InfoAlien) {
 			InfoAlien->Draw(true);
 		}
-		if (InfoAlienMotherShip != nullptr) {
-			InfoAlienMotherShip->SetLocation(TMPLocation);
+		if (InfoAlienMotherShip) {
 			InfoAlienMotherShip->Draw(true);
 		}
-		if (InfoPirateShip != nullptr) {
-			InfoPirateShip->SetLocation(TMPLocation);
+		if (InfoPirateShip) {
 			InfoPirateShip->Draw(true);
 			// рисуем оружие
-			if (InfoPirateShip->Weapon != nullptr) {
+			if (InfoPirateShip->Weapon) {
 				for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
-					if (InfoPirateShip->Weapon[i] != nullptr)
+					if (InfoPirateShip->Weapon[i])
 						InfoPirateShip->Weapon[i]->Draw(true);
 				}
 			}
 		}
-		if (InfoBuilding != nullptr) {
-			InfoBuilding->SetLocation(TMPLocation);
+		if (InfoBuilding) {
 			InfoBuilding->Draw(true);
 		}
-		if (InfoMilitaryBuilding != nullptr) {
-			InfoMilitaryBuilding->SetLocation(TMPLocation);
+		if (InfoMilitaryBuilding) {
 			InfoMilitaryBuilding->Draw(true);
 		}
-		if (InfoWheeled != nullptr) {
-			InfoWheeled->SetLocation(TMPLocation);
+		if (InfoWheeled) {
 			InfoWheeled->Draw(true);
 		}
-		if (InfoTracked != nullptr) {
-			InfoTracked->SetLocation(TMPLocation);
+		if (InfoTracked) {
 			InfoTracked->Draw(true);
 		}
 
@@ -1650,80 +1594,57 @@ void InformationDrawObject()
 	}
 
 
-	if (InfoFighter != nullptr) {
-		InfoFighter->SetLocation(TMPLocation);
-		InfoFighter->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+
+	if (InfoFighter) {
 		InfoFighter->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoFighter->Engines);
 	}
-	if (InfoWeapon != nullptr) {
-		InfoWeapon->SetLocation(TMPLocation);
-		InfoWeapon->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoWeapon) {
 		InfoWeapon->Draw(false, ShadowMap);
 	}
-	if (InfoMine != nullptr) {
-		InfoMine->SetLocation(TMPLocation);
-		InfoMine->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoMine) {
 		InfoMine->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoMine->GraphicFX);
 	}
-	if (InfoAlien != nullptr) {
-		InfoAlien->SetLocation(TMPLocation);
-		InfoAlien->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoAlien) {
 		InfoAlien->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlien->Engines);
 	}
-	if (InfoAlienMotherShip != nullptr) {
-		InfoAlienMotherShip->SetLocation(TMPLocation);
-		InfoAlienMotherShip->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoAlienMotherShip) {
 		InfoAlienMotherShip->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoAlienMotherShip->Engines);
 	}
-	if (InfoPirateShip != nullptr) {
-		InfoPirateShip->SetLocation(TMPLocation);
-		InfoPirateShip->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoPirateShip) {
 		InfoPirateShip->Draw(false, ShadowMap);
 		// рисуем оружие
-		if (InfoPirateShip->Weapon != nullptr) {
+		if (InfoPirateShip->Weapon) {
 			for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
-				if (InfoPirateShip->Weapon[i] != nullptr)
+				if (InfoPirateShip->Weapon[i])
 					InfoPirateShip->Weapon[i]->Draw(false, ShadowMap);
 			}
 		}
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoPirateShip->Engines);
 	}
-	if (InfoBuilding != nullptr) {
-		InfoBuilding->SetLocation(TMPLocation);
-		InfoBuilding->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoBuilding) {
 		InfoBuilding->Draw(false, ShadowMap);
 	}
-	if (InfoMilitaryBuilding != nullptr) {
-		InfoMilitaryBuilding->SetLocation(TMPLocation);
-		InfoMilitaryBuilding->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoMilitaryBuilding) {
 		InfoMilitaryBuilding->Draw(false, ShadowMap);
 	}
-	if (InfoWheeled != nullptr) {
-		InfoWheeled->SetLocation(TMPLocation);
-		InfoWheeled->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoWheeled) {
 		InfoWheeled->Draw(false, ShadowMap);
 	}
-	if (InfoTracked != nullptr) {
-		InfoTracked->SetLocation(TMPLocation);
-		InfoTracked->SetRotation(sVECTOR3D(RotateInfoObjectX,RotateInfoObjectY,0.0f));
+	if (InfoTracked) {
 		InfoTracked->Draw(false, ShadowMap);
 	}
 
-
-	if (GameConfig().ShadowMap > 0) {
+	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();
-	}
-
-
 
 
 
@@ -1731,27 +1652,12 @@ void InformationDrawObject()
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
 	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 
-
 	// бордюр с тенью
 	vw_Start2DMode(-1,1);
 	sRECT SrcRect;
 	SrcRect(2,2,482,371);
-	DstRect(GameConfig().InternalWidth/2-450, 80-18+80, GameConfig().InternalWidth/2+30, 80+351+80);
+	sRECT DstRect(GameConfig().InternalWidth/2-450, 80-18+80, GameConfig().InternalWidth/2+30, 80+351+80);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, MenuContentTransp);
 
-	// отрисовка стрелок
-	SrcRect(32,0,64,32);
-	vw_Draw2D(DstRectLeft, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fLeft*MenuContentTransp);
-	SrcRect(96,0,128,32);
-	vw_Draw2D(DstRectRight, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fRight*MenuContentTransp);
-	SrcRect(0,0,32,32);
-	vw_Draw2D(DstRectUp, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fUp*MenuContentTransp);
-	SrcRect(64,0,96,32);
-	vw_Draw2D(DstRectDown, SrcRect, vw_FindTextureByName("menu/arrows_blue.tga"), true, fDown*MenuContentTransp);
-
 	vw_End2DMode();
-
 }
-
-
-

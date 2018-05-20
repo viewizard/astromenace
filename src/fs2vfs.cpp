@@ -245,7 +245,6 @@ const std::string GameData[] = {
 	"menu/weapon2_icon.tga",
 	"menu/button_dialog128_in.tga",
 	"menu/weapon6_icon.tga",
-	"menu/arrows_blue.tga",
 	"menu/arrow_list_up.tga",
 	"menu/arrow_list_down.tga",
 	"menu/workshop_panel5.tga",

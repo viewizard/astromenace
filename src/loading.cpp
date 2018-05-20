@@ -136,7 +136,6 @@ static sLoadList LoadList[] = {
 	{"menu/button_dialog128_out.tga",	0, 39, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"menu/button_dialog128_in.tga",	0, 39, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"menu/button_dialog128_off.tga",	0, 39, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/arrows_blue.tga",		0, 69, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"menu/arrow_list_up.tga",		0, 69, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 	{"menu/arrow_list_down.tga",		0, 69, true,  0,0,0, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
 // иконки отображения в меню выбора миссий
