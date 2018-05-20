@@ -684,7 +684,7 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним 2д часть, эмблемы
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	EnergyParticleSystem2D = vw_CreateParticleSystem2D();
+	EnergyParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
 	if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
 		sharedEnergyParticleSystem2D->ColorStart.r = 0.70f;
 		sharedEnergyParticleSystem2D->ColorStart.g = 0.80f;
@@ -709,7 +709,7 @@ void InitGame()
 		sharedEnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f, 29.0f, 0.0f));
 	}
 
-	Life3ParticleSystem2D = vw_CreateParticleSystem2D();
+	Life3ParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
 	if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
 		sharedLife3ParticleSystem2D->ColorStart.r = 1.00f;
 		sharedLife3ParticleSystem2D->ColorStart.g = 0.40f;
@@ -735,7 +735,7 @@ void InitGame()
 		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 	}
 
-	Life2ParticleSystem2D = vw_CreateParticleSystem2D();
+	Life2ParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
 	if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
 		sharedLife2ParticleSystem2D->ColorStart.r = 1.00f;
 		sharedLife2ParticleSystem2D->ColorStart.g = 0.40f;
@@ -761,7 +761,7 @@ void InitGame()
 		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 	}
 
-	LifeParticleSystem2D = vw_CreateParticleSystem2D();
+	LifeParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
 	if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
 		sharedLifeParticleSystem2D->ColorStart.r = 1.00f;
 		sharedLifeParticleSystem2D->ColorStart.g = 0.60f;

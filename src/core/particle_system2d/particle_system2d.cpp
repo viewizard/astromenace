@@ -94,12 +94,6 @@ bool cParticle2D::Update(float TimeDelta, const sVECTOR3D &ParentLocation, bool 
  */
 void cParticleSystem2D::Update(float Time)
 {
-	// on first update, only change TimeLastUpdate value
-	if (TimeLastUpdate == -1.0f) {
-		TimeLastUpdate = Time;
-		return;
-	}
-
 	float TimeDelta = Time - TimeLastUpdate;
 	TimeLastUpdate = Time;
 
@@ -129,16 +123,23 @@ void cParticleSystem2D::Update(float Time)
 		return;
 
 	// emit particles
-	EmitParticles(ParticlesCreated);
-
-	return;
+	EmitParticles(ParticlesCreated, TimeDelta);
 }
 
 /*
  * Emit particles.
  */
-void cParticleSystem2D::EmitParticles(unsigned int Quantity)
+void cParticleSystem2D::EmitParticles(unsigned int Quantity, float TimeDelta)
 {
+	// care about particle system movements (need this for low FPS)
+	sVECTOR3D LocationCorrection{};
+	float TimeDeltaCorrection{0.0f};
+	// don't calculate correction for 1, since the last one should be created in current location and current time
+	if (Quantity > 1) {
+		LocationCorrection = (PrevLocation - Location) / static_cast<float>(Quantity);
+		TimeDeltaCorrection = TimeDelta / static_cast<float>(Quantity);
+	}
+
 	while (Quantity > 0) {
 		// create new particle
 		ParticlesList.emplace_back();
@@ -197,6 +198,15 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity)
 		NewParticle.Velocity *= NewSpeed;
 
 		Quantity--;
+
+		// care about particle system movements (need this for low FPS)
+		// don't change the last one, it should be created in current location and current time
+		if (Quantity > 0) {
+			NewParticle.Location += (LocationCorrection ^ static_cast<float>(Quantity));
+			if (!NewParticle.Update(TimeDeltaCorrection * static_cast<float>(Quantity),
+						Location, IsMagnet, MagnetFactor))
+				ParticlesList.pop_back();
+		}
 	}
 }
 
@@ -409,6 +419,7 @@ void cParticleSystem2D::MoveSystem(const sVECTOR3D &NewLocation)
 {
 	sVECTOR3D tmpLocateion{NewLocation - Location};
 	Location = NewLocation;
+	PrevLocation = Location;
 
 	for (auto &tmpParticle : ParticlesList) {
 		tmpParticle.Location += tmpLocateion;
@@ -420,6 +431,7 @@ void cParticleSystem2D::MoveSystem(const sVECTOR3D &NewLocation)
  */
 void cParticleSystem2D::MoveSystemLocation(const sVECTOR3D &NewLocation)
 {
+	PrevLocation = Location;
 	Location = NewLocation;
 }
 
@@ -439,11 +451,12 @@ void cParticleSystem2D::SetRotation(const sVECTOR3D &NewAngle)
  * should be internal only. Caller should operate with weak_ptr and use lock()
  * (shared_ptr) only during access to object.
  */
-std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D()
+std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D(float Time)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
 	ParticleSystemsList.emplace_front(new cParticleSystem2D, [](cParticleSystem2D *p) {delete p;});
+	ParticleSystemsList.front()->TimeLastUpdate = Time;
 	return ParticleSystemsList.front();
 }
 

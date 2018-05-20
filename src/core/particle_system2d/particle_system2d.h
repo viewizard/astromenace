@@ -62,7 +62,7 @@ private:
 };
 
 class cParticleSystem2D {
-	friend std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D();
+	friend std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D(float Time);
 
 public:
 	// Update all particles.
@@ -118,7 +118,7 @@ private:
 	~cParticleSystem2D() = default;
 
 	// Emit particles.
-	void EmitParticles(unsigned int Quantity);
+	void EmitParticles(unsigned int Quantity, float TimeDelta);
 	// Setup new particle direction.
 	void SetupNewParticleDirection(cParticle2D &NewParticle);
 	// Generate location for new particle (point type).
@@ -133,9 +133,10 @@ private:
 				0.0f, 0.0f, 1.0f};
 
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Angle{0.0f, 0.0f, 0.0f};
 
-	float TimeLastUpdate{-1.0f};
+	float TimeLastUpdate{0.0f};
 	float EmissionResidue{0.0f};	// emission residue, for next update cycle
 
 	std::list<cParticle2D> ParticlesList;
@@ -143,7 +144,7 @@ private:
 
 
 // Create new particle system 2D.
-std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D();
+std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D(float Time);
 // Update all particle systems 2D.
 void vw_UpdateAllParticleSystems2D(float Time);
 // Draw all particle systems 2D.
