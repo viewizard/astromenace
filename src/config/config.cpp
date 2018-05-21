@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// TODO we need store previous versions Top Scores and Pilots Proviles,
+//      in case player will back to old game version by some reason
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../game.h"
@@ -161,14 +164,16 @@ void SaveXMLConfigFile()
 					  Config.NeedShowHint[i]);
 	}
 
+	std::string tmpTopScores{std::string{"TopScores_"} + std::string{CONFIG_VERSION}};
 	std::vector<unsigned char> TopScoresXOR{};
 	PackWithXOR(TopScoresXOR, sizeof(sTopScores) * 10, reinterpret_cast<unsigned char *>(Config.TopScores));
-	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, "TopScores"),
+	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, tmpTopScores),
 				reinterpret_cast<char *>(TopScoresXOR.data()));
 
+	std::string tmpPilotsProfiles{std::string{"PilotsProfiles_"} + std::string{CONFIG_VERSION}};
 	std::vector<unsigned char> ProfileXOR{};
 	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
-	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, "PilotsProfiles"),
+	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, tmpPilotsProfiles),
 				reinterpret_cast<char *>(ProfileXOR.data()));
 
 	XMLdoc->Save(ConfigFileName);
@@ -453,17 +458,19 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 						    Config.NeedShowHint[i]);
 	}
 
-	if ((XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")) &&
-	    !XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content.empty())
+	std::string tmpTopScores{std::string{"TopScores_"} + std::string{CONFIG_VERSION}};
+	if ((XMLdoc->FindEntryByName(*RootXMLEntry, tmpTopScores)) &&
+	    !XMLdoc->FindEntryByName(*RootXMLEntry, tmpTopScores)->Content.empty())
 		UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.TopScores),
 			      sizeof(sTopScores) * 10,
-			      XMLdoc->FindEntryByName(*RootXMLEntry, "TopScores")->Content);
+			      XMLdoc->FindEntryByName(*RootXMLEntry, tmpTopScores)->Content);
 
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles") &&
-	    !XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.empty())
+	std::string tmpPilotsProfiles{std::string{"PilotsProfiles_"} + std::string{CONFIG_VERSION}};
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpPilotsProfiles) &&
+	    !XMLdoc->FindEntryByName(*RootXMLEntry, tmpPilotsProfiles)->Content.empty())
 		UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile),
 			      sizeof(sPilotProfile) * 5,
-			      XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content);
+			      XMLdoc->FindEntryByName(*RootXMLEntry, tmpPilotsProfiles)->Content);
 
 	CheckConfig();
 	SetupCurrentProfileAndMission();

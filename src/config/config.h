@@ -30,6 +30,11 @@
 
 #include "../core/base.h"
 
+// since we have POD structures that could be changed in new version,
+// make sure we load proper profiles and top scores
+// note, xml tag can't contain space characters, use underline instead
+#define CONFIG_VERSION "1.4"
+
 namespace config {
 
 // (!) changes make previous game configuration file incompatible
