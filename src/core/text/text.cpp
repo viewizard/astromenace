@@ -41,8 +41,6 @@ std::unordered_map<unsigned int, std::unordered_map<std::string, std::string>> T
 std::unordered_map<unsigned int, std::unordered_map<std::string, std::u32string>> TextTableUTF32;
 // Current default language. English, by default.
 unsigned int CurrentLanguage{0};
-// Error text for UTF32, if we can't use TextTableUTF32 by some reason
-const std::u32string TextTableUTF32Error{ConvertUTF8.from_bytes("Error")};
 // all characters used in text for current language
 std::unordered_set<char32_t> CharsSetForLanguage;
 
@@ -256,6 +254,8 @@ const char *vw_GetText(const std::string &ItemID, unsigned int Language)
  */
 const std::u32string &vw_GetTextUTF32(const std::string &ItemID, unsigned int Language)
 {
+	static const std::u32string TextTableUTF32Error{ConvertUTF8.from_bytes("Error")};
+
 	if (ItemID.empty())
 		return TextTableUTF32Error;
 
