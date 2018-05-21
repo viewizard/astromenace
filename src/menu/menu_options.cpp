@@ -186,7 +186,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	if (Options_BPP != 0) CurrentPos = 0;
 	else CurrentPos = 1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Full Screen"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, !CanSwitchToFullScreen) || DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, !CanSwitchToFullScreen)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !CanSwitchToFullScreen || !Options_BPP) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, !CanSwitchToFullScreen || Options_BPP)) {
 		if (Options_BPP != 0) {
 			Options_BPP = 0;
 		} else {
@@ -328,10 +329,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Sync to VBlank"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !Options_VSync) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, Options_VSync))
 		if (NeedCheck == 0) {
-			if (Options_VSync == 1) Options_VSync = 0;
-			else Options_VSync = 1;
+			if (Options_VSync == 1)
+				Options_VSync = 0;
+			else
+				Options_VSync = 1;
 		}
 	Size = vw_TextWidth(Options_VSync ? vw_GetText("On") : vw_GetText("Off"));
 	SizeI = (170-Size)/2;

@@ -168,7 +168,8 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// вкл-выкл отображения счетчика фпс
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("FPS Сounter"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false) || DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !ChangeGameConfig().ShowFPS) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, ChangeGameConfig().ShowFPS)) {
 		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 	}
 	Size = vw_TextWidth(GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));

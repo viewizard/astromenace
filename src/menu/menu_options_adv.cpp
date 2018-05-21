@@ -264,8 +264,8 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::red, ContentTransp, vw_GetText("OpenGL Shading Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported || !Options_UseGLSL120) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, !vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported || Options_UseGLSL120)) {
 		Options_UseGLSL120 = !Options_UseGLSL120;
 		// если выключены шейдеры - выключаем и тени
 		if (!Options_UseGLSL120)
