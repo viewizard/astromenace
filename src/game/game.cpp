@@ -619,9 +619,8 @@ void InitGame()
 	// убираем данные этого уровня
 	GameExperience = (GameConfig().Profile[CurrentProfile].Experience - GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission]) * 1.0f;
 
-	// забираем эксклюзивное управление мышкой и клавой, если оконный режим
-	if (GameConfig().BPP == 0)
-		SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_TRUE);
+	// grab mouse control for both - windows and fullscren mode (need this for multi-monitor systems)
+	SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_TRUE);
 
 
 	// сбрасываем все кнопки мыши
@@ -893,9 +892,8 @@ void RealExitGame()
 	vw_ReleaseParticleSystem(Shild1);
 	vw_ReleaseParticleSystem(Shild2);
 
-	// отдаем управление
-	if (GameConfig().BPP == 0)
-		SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
+	// release mouse control
+	SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
 }
 
 //------------------------------------------------------------------------------------
@@ -1467,10 +1465,10 @@ void DrawGame()
 			GameContentTransp = 1.0f;
 			NeedShowGameMenu = false;
 			DrawGameCursor = true;
-			if (GameConfig().BPP == 0) {
-				SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_FALSE);
-				SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
-			}
+
+			// release mouse control
+			SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
+			SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 		}
 		// плавно возвращаем игре сокрость
 		if (GameContentTransp != 0.0f)
@@ -1483,10 +1481,10 @@ void DrawGame()
 			GameContentTransp = 0.0f;
 			NeedHideGameMenu = false;
 			GameMenuStatus = eGameMenuStatus::GAME_MENU;
-			if (GameConfig().BPP == 0) {
-				SDL_SetWindowGrab(vw_GetSDLWindow(),SDL_TRUE);
-				SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
-			}
+
+			// grab mouse control for both - windows and fullscren mode (need this for multi-monitor systems)
+			SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_TRUE);
+			SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 		}
 		// останавливаем игру
 		vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp) * GameConfig().GameSpeed);
