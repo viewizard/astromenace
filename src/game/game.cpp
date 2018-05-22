@@ -31,6 +31,9 @@
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
 
+// TODO DrawGameCursor and SDL_SetWindowGrab() should be changed in the same code blocks
+//      probably we could use SDL_GetWindowGrab() instead of DrawGameCursor
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../core/core.h"

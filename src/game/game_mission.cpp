@@ -229,6 +229,8 @@ void GameSetMissionFailedData(float ShowTime)
 	DrawGameCursor = true;
 	// сброс кнопки мышки, чтобы случайно не нажали
 	vw_GetMouseLeftClick(true);
+	// release mouse control
+	SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
 }
 
 
