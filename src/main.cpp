@@ -63,7 +63,7 @@ sVideoModes CurrentVideoMode;
 #define SD_APPDATA                   0x001a
 #define SD_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
 typedef bool (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, bool fCreate);
-SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = 0;
+SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = nullptr;
 #endif // WIN32
 
 
@@ -156,7 +156,6 @@ int main( int argc, char **argv )
 	const char *Fi = "\\";
 	strcat( ProgrammDir, Fi );
 
-	ZeroMemory(VFSFileNamePath, sizeof(VFSFileNamePath));
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
 
 	// Получаем данные, где папка пользователя
@@ -209,8 +208,8 @@ int main( int argc, char **argv )
 		strcat(ScreenshotDir, "AstroMenaceScreenshot");
 	}
 
-	strcpy(VFSFileNamePath, ProgrammDir);
-	strcat(VFSFileNamePath, "gamedata.vfs");
+	VFSFileNamePath = ProgrammDir;
+	VFSFileNamePath += "gamedata.vfs";
 #elif defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 	// иним пути для юникса-линукса
 	// если передали параметр-путь

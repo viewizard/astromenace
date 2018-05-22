@@ -84,7 +84,6 @@ static bool ExtensionSupported(const char *Extension)
 {
 	char *extensions;
 	extensions = (char *) glGetString(GL_EXTENSIONS); // WARNING fix conversion
-	// если можем получить указатель, значит это расширение есть
 	if (strstr(extensions, Extension) != nullptr)
 		return true;
 	return false;
@@ -363,9 +362,9 @@ bool vw_GetInternalResolution(float *Width, float *Height)
 /*
  * Set depth range.
  */
-void vw_DepthRange(GLdouble near, GLdouble far)
+void vw_DepthRange(GLdouble zNear, GLdouble zFar)
 {
-	glDepthRange(near, far);
+	glDepthRange(zNear, zFar);
 }
 
 /*

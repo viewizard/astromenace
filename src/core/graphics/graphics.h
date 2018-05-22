@@ -355,7 +355,7 @@ void vw_GetViewport(float *x = nullptr, float *y = nullptr, float *width = nullp
 // Get viewport data.
 void vw_GetViewport(int *x = nullptr, int *y = nullptr, int *width = nullptr, int *height = nullptr);
 // Set depth range.
-void vw_DepthRange(GLdouble near, GLdouble far);
+void vw_DepthRange(GLdouble zNear, GLdouble zFar);
 // Resize scene.
 void vw_ResizeScene(float FieldOfViewAngle, float AspectRatio, float zNearClip, float zFarClip);
 
