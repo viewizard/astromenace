@@ -4,25 +4,33 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(AstroMenace)
 
 IF(CMAKE_HOST_WIN32)
-    SET(WINDOWS 1)
+	SET(WINDOWS 1)
 ELSEIF(CMAKE_HOST_APPLE)
-    SET(MACOS 1)
+	# make sure, that CMAKE_HOST_APPLE called before CMAKE_HOST_UNIX
+	SET(MACOS 1)
 ELSEIF(CMAKE_HOST_UNIX)
-    SET(LINUX 1)
+	SET(LINUX 1)
 ENDIF()
 
-set(CMAKE_PREFIX_PATH "C:\\Users\\user\\Desktop\\AstroMenace\\deps")
 
-# depends
+IF(WINDOWS)
+	# all libs should be in 'C:\deps\lib' folder
+	# all headers should be in 'C:\deps\include' folder
+	SET(CMAKE_PREFIX_PATH "C:\\deps")
+ENDIF(WINDOWS)
+
+
+# X11 (for Linux/BSD only)
+
 IF(LINUX)
 FIND_PACKAGE(X11 REQUIRED)
 SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${X11_LIBRARIES})
 ENDIF(LINUX)
 
 
-# includes ./share/cmake/FindSDL2.cmake
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/share/cmake)
+# libSDL2 (./share/cmake/FindSDL2.cmake)
 
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/share/cmake)
 FIND_PACKAGE(SDL2 REQUIRED)
 IF(SDL2_FOUND)
 	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIR})
