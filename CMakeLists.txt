@@ -53,7 +53,7 @@ SET(ALL_LIBRARIES ${ALL_LIBRARIES} ${OPENAL_LIBRARY})
 
 # GLU lib + header (GLU - part of OpenGL framework in MacOSX)
 
-IF(LINUX)
+IF(NOT MACOS)
 FIND_LIBRARY(GLU_LIBRARY GLU)
 IF(GLU_LIBRARY)
 	MESSAGE(STATUS "Found GLU: ${GLU_LIBRARY}")
@@ -73,7 +73,7 @@ IF(GLU_INCLUDE_DIR)
 ELSE(GLU_INCLUDE_DIR)
 	MESSAGE(FATAL_ERROR "GLU headers not found")
 ENDIF(GLU_INCLUDE_DIR)
-ENDIF(LINUX)
+ENDIF(NOT MACOS)
 
 
 # alut lib + header
@@ -206,9 +206,9 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion")
 
 #  AppleClang 8.1.0.8020042 don't support this flag
-IF(NOT (APPLE AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
+IF(NOT (MACOS AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
-ENDIF(NOT (APPLE AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
+ENDIF(NOT (MACOS AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
 
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
@@ -233,14 +233,30 @@ IF(DATADIR)
 	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
 ENDIF(DATADIR)
 
+
+SET(astromenace_BIN "astromenace")
+IF(WINDOWS)
+	ADD_DEFINITIONS(-D__GNUWIN32__)
+	ADD_DEFINITIONS(-DWIN32)
+	ADD_DEFINITIONS(-DOV_EXCLUDE_STATIC_CALLBACKS)
+	SET(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+	SET(astromenace_BIN "astromenace.exe")
+ENDIF(WINDOWS)
+
+
 ADD_DEFINITIONS(-DNDEBUG)
 ADD_DEFINITIONS("-O2")
-ADD_EXECUTABLE(astromenace ${astromenace_SRCS})
+IF(WINDOWS)
+	# WIN32 - suppress terminal
+	ADD_EXECUTABLE(astromenace WIN32 ${astromenace_SRCS})
+ELSE(WINDOWS)
+	ADD_EXECUTABLE(astromenace ${astromenace_SRCS})
+ENDIF(WINDOWS)
 TARGET_LINK_LIBRARIES(astromenace ${ALL_LIBRARIES})
 
 # generate game data file (gamedata.vfs)
 ADD_CUSTOM_COMMAND(
 	TARGET astromenace
 	POST_BUILD
-	COMMAND ${CMAKE_BINARY_DIR}/astromenace --pack --rawdata=${astromenace_DATA}
+	COMMAND ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA}
 )
