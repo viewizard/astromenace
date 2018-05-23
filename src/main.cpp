@@ -164,18 +164,18 @@ int main( int argc, char **argv )
 	HMODULE hShellDLL = LoadLibrary("shell32.dll");
 	if (hShellDLL) {
 		pSHGetSpecialFolderPath = (SHGETSPECIALFOLDERPATH) GetProcAddress(hShellDLL, "SHGetSpecialFolderPathA");
-		char UserPath[MAX_PATH];
-		ZeroMemory(UserPath, sizeof(UserPath));
+		char tmpUserPath[MAX_PATH];
+		ZeroMemory(tmpUserPath, sizeof(tmpUserPath));
 
 		if (pSHGetSpecialFolderPath != nullptr) {
 			if(SUCCEEDED(pSHGetSpecialFolderPath(nullptr,
-							     UserPath,
+							     tmpUserPath,
 							     SD_APPDATA, //CSIDL_APPDATA
 							     true))) {
-				strcat(UserPath, "\\AstroMenace\\");
-				CreateDirectory(UserPath, nullptr);
+				strcat(tmpUserPath, "\\AstroMenace\\");
+				CreateDirectory(tmpUserPath, nullptr);
 
-				ConfigFileName = std::string(UserPath) + ConfigName;
+				ConfigFileName = std::string(tmpUserPath) + ConfigName;
 
 				// уже проинили, дальше не нужно
 				InitWithoutDLL = false;

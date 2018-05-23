@@ -53,7 +53,6 @@ enum class eOrigin {
 };
 
 enum class ePrimitiveType : GLenum {
-	POINTS = GL_POINTS,
 	LINES = GL_LINES,
 	TRIANGLES = GL_TRIANGLES,
 	TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
