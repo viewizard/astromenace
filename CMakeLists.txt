@@ -228,24 +228,24 @@ FILE(GLOB_RECURSE astromenace_SRCS src/*.cpp src/*.h)
 SET(astromenace_DATA "${CMAKE_CURRENT_LIST_DIR}/gamedata/")
 MESSAGE("Game data dir: ${astromenace_DATA}")
 
-# targets
+
+# custom game data sources location
 IF(DATADIR)
 	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
 ENDIF(DATADIR)
 
-
-SET(astromenace_BIN "astromenace")
 IF(WINDOWS)
 	ADD_DEFINITIONS(-D__GNUWIN32__)
 	ADD_DEFINITIONS(-DWIN32)
 	ADD_DEFINITIONS(-DOV_EXCLUDE_STATIC_CALLBACKS)
 	SET(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
-	SET(astromenace_BIN "astromenace.exe")
 ENDIF(WINDOWS)
 
-
+# by default, cmake should create only 'release' build with optimization and without debug routines
 ADD_DEFINITIONS(-DNDEBUG)
-ADD_DEFINITIONS("-O2")
+ADD_DEFINITIONS(-O2)
+
+
 IF(WINDOWS)
 	# WIN32 - suppress terminal
 	ADD_EXECUTABLE(astromenace WIN32 ${astromenace_SRCS})
@@ -254,9 +254,17 @@ ELSE(WINDOWS)
 ENDIF(WINDOWS)
 TARGET_LINK_LIBRARIES(astromenace ${ALL_LIBRARIES})
 
+
 # generate game data file (gamedata.vfs)
-ADD_CUSTOM_COMMAND(
-	TARGET astromenace
-	POST_BUILD
-	COMMAND ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA}
-)
+IF(NOT DONTCREATEVFS)
+	SET(astromenace_BIN "astromenace")
+	IF(WINDOWS)
+		SET(astromenace_BIN "astromenace.exe")
+	ENDIF(WINDOWS)
+
+	ADD_CUSTOM_COMMAND(
+		TARGET astromenace
+		POST_BUILD
+		COMMAND ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA}
+	)
+ENDIF(NOT DONTCREATEVFS)
