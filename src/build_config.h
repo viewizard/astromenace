@@ -33,7 +33,7 @@
 
 
 
-// joystick support, required SDL compilled with "joystick" flag
+// joystick support, required SDL compiled with "joystick" flag
 #define joystick
 
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file.
