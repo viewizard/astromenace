@@ -418,12 +418,6 @@ int main( int argc, char **argv )
 
 ReCreate:
 
-
-#ifdef __unix
-	// для TwinView и Xinerama выбираем нулевой, но не меняем если передали
-	setenv("SDL_VIDEO_FULLSCREEN_DISPLAY","0",0);
-#endif //unix
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// иним SDL
 	// это нужно сделать сразу, чтобы правильно поставить разрешение
@@ -446,15 +440,6 @@ ReCreate:
 	CurrentVideoMode.BPP = 16;
 	// пытаемся получить данные
 	int iScreen = 0;
-#ifdef __unix
-	// смотрим, если передали параметр SDL_VIDEO_FULLSCREEN_DISPLAY, берем параметры нужного дисплея
-	char * pScreen;
-	pScreen = getenv("SDL_VIDEO_FULLSCREEN_DISPLAY");
-	if (pScreen != nullptr)
-		iScreen = atoi(pScreen);
-	if (iScreen > SDL_GetNumVideoDisplays() - 1)
-		iScreen = 0;
-#endif // unix
 	int CurrentVideoModeX = SDL_WINDOWPOS_CENTERED_DISPLAY(iScreen);
 	int CurrentVideoModeY = SDL_WINDOWPOS_CENTERED_DISPLAY(iScreen);
 	SDL_DisplayMode CurrentDisplayMode;
