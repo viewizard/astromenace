@@ -117,14 +117,6 @@ sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 //------------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
-	// should be initialized before any interaction with SDL functions
-	// for predictable SDL functions work on all platforms
-	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
-		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
-		return 1;
-	}
-	vw_InitTimeThread(0);
-
 	// флаг отображать ли системный курсор
 	bool NeedShowSystemCursor = false;
 	// флаг нужно ли сбрасывать настройки игры при старте
@@ -132,7 +124,7 @@ int main( int argc, char **argv )
 	// флаг перевода игры в режим упаковки gamedata.vfs файла
 	bool NeedPack = false;
 
-	for (int i=1; i<argc; i++) {
+	for (int i = 1; i < argc; i++) {
 		// проверка ключа "--help"
 		if (!strcmp(argv[i], "--help")) {
 			std::cout << "AstroMenace launch options:\n\n"
@@ -158,7 +150,13 @@ int main( int argc, char **argv )
 			NeedPack = true;
 	}
 
-
+	// should be initialized before any interaction with SDL functions
+	// for predictable SDL functions work on all platforms
+	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
+		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
+		return 1;
+	}
+	vw_InitTimeThread(0);
 
 #ifdef WIN32
 	// иним пути для винды
@@ -375,7 +373,10 @@ int main( int argc, char **argv )
 		}
 
 		std::cout << "Source Raw Folder: " << RawDataDir << "\n";
-		return ConvertFS2VFS(RawDataDir, VFSFileNamePath);
+		int rc = ConvertFS2VFS(RawDataDir, VFSFileNamePath);
+		vw_ReleaseAllTimeThread();
+		SDL_Quit();
+		return rc;
 	}
 
 
@@ -389,7 +390,9 @@ int main( int argc, char **argv )
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (vw_OpenVFS(VFSFileNamePath, GAME_VFS_BUILD) != 0) {
 		std::cerr << __func__ << "(): " << "gamedata.vfs file not found or corrupted.\n";
-		return 0;
+		vw_ReleaseAllTimeThread();
+		SDL_Quit();
+		return 1;
 	}
 	std::cout << "\n";
 
@@ -429,6 +432,16 @@ ReCreate:
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init SDL Video module: " << SDL_GetError() << "\n";
+		if (VideoModes != nullptr) {
+			delete [] VideoModes;
+			VideoModes = nullptr;
+		}
+		vw_ShutdownAudio();
+		vw_ShutdownFont();
+		vw_ReleaseText();
+		vw_ShutdownVFS();
+		vw_ReleaseAllTimeThread();
+		SDL_Quit();
 		return 1;
 	}
 	// if we change options during game mission with game restart, care about dialogs reset
@@ -737,8 +750,16 @@ ReCreate:
 		MessageBox(nullptr, "Wrong resolution. Please, install the newest video drivers from your video card vendor.",
 			   "Render system - Fatal Error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
 #endif // WIN32
-		SDL_Quit();
-		return 0; // Quit If Window Was Not Created
+		if (VideoModes != nullptr) {
+			delete [] VideoModes;
+			VideoModes = nullptr;
+		}
+		vw_ShutdownFont();
+		vw_ReleaseText();
+		vw_ShutdownAudio();
+		vw_ShutdownVFS();
+		vw_ReleaseAllTimeThread();
+		return 1; // Quit If Window Was Not Created
 	}
 	if (!Fullscreen)
 		ChangeGameConfig().BPP = 0;
@@ -828,13 +849,22 @@ ReCreate:
 
 	// hardware must support multtextures
 	if (!vw_GetDevCaps().OpenGL_1_3_supported) {
-		SDL_Quit();
 		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
 #ifdef WIN32
 		MessageBox(nullptr, "OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.",
 			   "Render system - Fatal Error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
 #endif // WIN32
-		return 0;
+		if (VideoModes != nullptr) {
+			delete [] VideoModes;
+			VideoModes = nullptr;
+		}
+		vw_ShutdownFont();
+		vw_ReleaseText();
+		vw_ShutdownAudio();
+		vw_ShutdownVFS();
+		vw_ReleaseAllTimeThread();
+		SDL_Quit();
+		return 1;
 	}
 
 	// сохраняем данные во время первого старта сразу после инициализации "железа"
@@ -1116,19 +1146,12 @@ GotoQuit:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// завершение, освобождение памяти...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// завершаем работу со звуком
-	if (GameConfig().Music_check || GameConfig().Sound_check)
-		vw_ShutdownAudio();
-	// освобождаем память выделенную под ттф шрифт
 	vw_ShutdownFont();
-	// освобождаем весь подготовленный текст из языкового файла
 	vw_ReleaseText();
-	// закрываем файловую систему
+	vw_ShutdownAudio();
 	vw_ShutdownVFS();
 	vw_ReleaseAllTimeThread();
-
-	// should be the last one
 	SDL_Quit();
+
 	return 0;
 }
