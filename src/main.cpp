@@ -112,6 +112,14 @@ sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 //------------------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
+	// should be initialized before any interaction with SDL functions
+	// for predictable SDL functions work on all platforms
+	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
+		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
+		return 1;
+	}
+	vw_InitTimeThread(0);
+
 	// флаг отображать ли системный курсор
 	bool NeedShowSystemCursor = false;
 	// флаг нужно ли сбрасывать настройки игры при старте
@@ -420,12 +428,10 @@ ReCreate:
 	// иним SDL
 	// это нужно сделать сразу, чтобы правильно поставить разрешение
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
-		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
+	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
+		std::cerr << __func__ << "(): " << "Couldn't init SDL Video module: " << SDL_GetError() << "\n";
 		return 1;
 	}
-	// Init on every SDL_Init(), since SDL_GetTicks() will start from 0.
-	vw_InitTimeThread(0);
 	// if we change options during game mission with game restart, care about dialogs reset
 	InitDialogBoxes();
 
@@ -1088,7 +1094,6 @@ GotoQuit:
 	vw_ReleaseAllTextures();
 	ShadowMap_Release();
 	vw_ShutdownRenderer();
-	vw_ReleaseAllTimeThread();
 
 #ifdef joystick
 	// закрываем джойстик, если он был
@@ -1096,10 +1101,12 @@ GotoQuit:
 	    (Joystick != nullptr) &&
 	    (SDL_JoystickGetAttached(Joystick)))
 		SDL_JoystickClose(Joystick);
+	// we could need restart game, not quit, so, quit from joystick subsystem only
+	SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
 #endif //joystick
 
-	// полностью выходим из SDL
-	SDL_Quit();
+	// we could need restart game, not quit, so, quit from video subsystem only
+	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	// сохраняем настройки игры
 	SaveXMLConfigFile();
 
@@ -1131,7 +1138,9 @@ GotoQuit:
 	vw_ReleaseText();
 	// закрываем файловую систему
 	vw_ShutdownVFS();
+	vw_ReleaseAllTimeThread();
 
-	// уходим из программы...
+	// should be the last one
+	SDL_Quit();
 	return 0;
 }
