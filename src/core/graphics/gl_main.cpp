@@ -92,15 +92,17 @@ static bool ExtensionSupported(const char *Extension)
 /*
  * Initialize windows with OpenGL context.
  */
-int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag,
-		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync)
+int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber, int VSync)
 {
 	Uint32 Flags{SDL_WINDOW_OPENGL};
 
 	if (FullScreenFlag)
 		Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-	SDLWindow = SDL_CreateWindow(Title, CurrentVideoModeX, CurrentVideoModeY, Width, Height, Flags);
+	SDLWindow = SDL_CreateWindow(Title,
+				     SDL_WINDOWPOS_CENTERED_DISPLAY(ScreenNumber),
+				     SDL_WINDOWPOS_CENTERED_DISPLAY(ScreenNumber),
+				     Width, Height, Flags);
 	if (!SDLWindow) {
 		std::cerr << __func__ << "(): " << "SDL Error: " << SDL_GetError() << "\n";
 		std::cerr << __func__ << "(): " << "Can't set video mode " <<  Width << " x " << Height << "\n\n";

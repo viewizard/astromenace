@@ -27,6 +27,11 @@
 
 // TODO move to SDL_GetBasePath(), SDL_GetPrefPath() + SDL_free() usage (libSDL2)
 
+// TODO check fullscreen modes with SDL_GetDisplayBounds() and windowed modes with SDL_GetDisplayUsableBounds()
+
+// TODO probably, we could provide option for screen number, where game's window should
+//      be created, see ScreenNumber
+
 #include "game.h"
 #include "config/config.h"
 #include "ui/font.h"
@@ -439,11 +444,9 @@ ReCreate:
 	CurrentVideoMode.H = 768;
 	CurrentVideoMode.BPP = 16;
 	// пытаемся получить данные
-	int iScreen = 0;
-	int CurrentVideoModeX = SDL_WINDOWPOS_CENTERED_DISPLAY(iScreen);
-	int CurrentVideoModeY = SDL_WINDOWPOS_CENTERED_DISPLAY(iScreen);
+	int ScreenNumber = 0; // should be less than SDL_GetNumVideoDisplays()
 	SDL_DisplayMode CurrentDisplayMode;
-	SDL_GetDesktopDisplayMode(iScreen, &CurrentDisplayMode);
+	SDL_GetDesktopDisplayMode(ScreenNumber, &CurrentDisplayMode);
 	CurrentVideoMode.BPP = SDL_BITSPERPIXEL(CurrentDisplayMode.format);
 	CurrentVideoMode.W = CurrentDisplayMode.w;
 	CurrentVideoMode.H = CurrentDisplayMode.h;
@@ -546,9 +549,9 @@ ReCreate:
 				int SkipPrevH = -1;
 				int SkipPrevW = -1;
 				// добавляем к полноэкранным режимам, если входит в список
-				for (int j = 0; j < SDL_GetNumDisplayModes(iScreen); j++) {
+				for (int j = 0; j < SDL_GetNumDisplayModes(ScreenNumber); j++) {
 					SDL_DisplayMode testDisplayMode;
-					SDL_GetDisplayMode(iScreen, j, &testDisplayMode);
+					SDL_GetDisplayMode(ScreenNumber, j, &testDisplayMode);
 					if (SkipPrevH == -1) {
 						SkipPrevH = testDisplayMode.h;
 						SkipPrevW = testDisplayMode.w;
@@ -585,9 +588,9 @@ ReCreate:
 				int SkipPrevH = -1;
 				int SkipPrevW = -1;
 				// добавляем к полноэкранным режимам, если входит в список
-				for (int j = 0; j < SDL_GetNumDisplayModes(iScreen); j++) {
+				for (int j = 0; j < SDL_GetNumDisplayModes(ScreenNumber); j++) {
 					SDL_DisplayMode testDisplayMode;
-					SDL_GetDisplayMode(iScreen, j, &testDisplayMode);
+					SDL_GetDisplayMode(ScreenNumber, j, &testDisplayMode);
 					if (SkipPrevH == -1) {
 						SkipPrevH = testDisplayMode.h;
 						SkipPrevW = testDisplayMode.w;
@@ -708,7 +711,7 @@ ReCreate:
 	// создаем окно и базовые опенжл контекст
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	bool Fullscreen = (GameConfig().BPP != 0);
-	int InitStatus = vw_InitWindow("AstroMenace", GameConfig().Width, GameConfig().Height, &ChangeGameConfig().BPP, Fullscreen, CurrentVideoModeX, CurrentVideoModeY, GameConfig().VSync);
+	int InitStatus = vw_InitWindow("AstroMenace", GameConfig().Width, GameConfig().Height, &ChangeGameConfig().BPP, Fullscreen, ScreenNumber, GameConfig().VSync);
 
 	// ошибка окна (размеры)
 	if (InitStatus == 1) {

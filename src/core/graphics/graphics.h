@@ -329,8 +329,7 @@ struct sDevCaps {
  */
 
 // Initialize windows with OpenGL context.
-int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag,
-		  int CurrentVideoModeX, int CurrentVideoModeY, int VSync);
+int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber, int VSync);
 // Get SDL window handle.
 SDL_Window *vw_GetSDLWindow();
 // OpenGL setup.
