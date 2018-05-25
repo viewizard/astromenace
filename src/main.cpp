@@ -306,12 +306,6 @@ int main( int argc, char **argv )
 #endif // unix
 
 
-#ifdef portable
-	ConfigFileName = std::string(ProgrammDir) + "/" + ConfigName;
-#endif // portable
-
-
-
 
 	// версия
 	std::cout << "AstroMenace " << GAME_VERSION << "\n";

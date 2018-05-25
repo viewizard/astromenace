@@ -40,7 +40,4 @@
 // Use cmake with DATADIR flag OR uncomment line below
 // #define DATADIR "/usr/share/astromenace"
 
-// game configuration file will be stored with game binary file
-// #define portable
-
 #endif // BUILD_CONFIG_H
