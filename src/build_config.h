@@ -32,10 +32,6 @@
 #define GAME_VFS_BUILD		180520
 
 
-
-// joystick support, required SDL compiled with "joystick" flag
-#define joystick
-
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file.
 // Use cmake with DATADIR flag OR uncomment line below
 // #define DATADIR "/usr/share/astromenace"

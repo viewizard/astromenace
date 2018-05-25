@@ -685,7 +685,6 @@ ReCreate:
 	// проверяем и иним джойстик
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// NOTE SDL2 also provide SDL_INIT_GAMECONTROLLER now and SDL_INIT_HAPTIC (force feedback)
-#ifdef joystick
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0) {
 		if (SDL_NumJoysticks()>0) {
 			std::cout << "Found Joystick(s):\n";
@@ -708,7 +707,6 @@ ReCreate:
 	} else {
 		std::cerr << __func__ << "(): " << "Can't init Joystick, SDL Error: " << SDL_GetError() << "\n";
 	}
-#endif
 
 
 
@@ -935,7 +933,6 @@ loop:
 	JoystickAxisY = 0;
 	float JoystickCurentTime = vw_GetTimeThread(0);
 	float JoystickTimeDelta = 0.0f;
-#ifdef joystick
 	if (Joystick != nullptr) {
 		JoystickAxisX = SDL_JoystickGetAxis(Joystick, 0);
 		JoystickAxisY = SDL_JoystickGetAxis(Joystick, 1);
@@ -944,7 +941,6 @@ loop:
 			JoysticButtons[i] = false;
 		}
 	}
-#endif
 
 	while(!Quit) {
 		SDL_Event event;
@@ -1029,8 +1025,6 @@ loop:
 
 		// если окно видемое - рисуем
 		if (NeedLoop) {
-
-#ifdef joystick
 			// управление джойстиком
 			if (Joystick != nullptr) {
 				int X = SDL_JoystickGetAxis(Joystick, 0);
@@ -1052,7 +1046,6 @@ loop:
 					vw_SetMousePosRel(Xsm, Ysm);
 				}
 			}
-#endif
 
 			// всегда включаем счет времени
 			vw_StartTimeThreads();
@@ -1107,7 +1100,6 @@ GotoQuit:
 	ShadowMap_Release();
 	vw_ShutdownRenderer();
 
-#ifdef joystick
 	// закрываем джойстик, если он был
 	if ((SDL_NumJoysticks() > 0) &&
 	    (Joystick != nullptr) &&
@@ -1115,7 +1107,6 @@ GotoQuit:
 		SDL_JoystickClose(Joystick);
 	// we could need restart game, not quit, so, quit from joystick subsystem only
 	SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-#endif //joystick
 
 	// we could need restart game, not quit, so, quit from video subsystem only
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);

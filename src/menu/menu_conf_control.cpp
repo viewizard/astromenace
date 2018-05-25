@@ -171,7 +171,6 @@ void CheckMouseKeybJState()
 			}
 
 
-#ifdef joystick
 			// джойстик
 			if (Joystick != nullptr)
 				if ((NeedCheck >= 9 && NeedCheck <= 10) || NeedCheck == 100) {
@@ -194,7 +193,6 @@ void CheckMouseKeybJState()
 							vw_GetMouseLeftClick(true);
 						}
 				}
-#endif
 
 
 			// если нажали Esc - возвращаем старые настройки выбора текущей кнопки

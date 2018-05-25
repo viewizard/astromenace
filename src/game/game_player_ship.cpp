@@ -615,7 +615,6 @@ void GamePlayerShip()
 		}
 
 
-#ifdef joystick
 		// джойстик
 		if (Joystick != nullptr && !NeedSkip) {
 			int X, Y;
@@ -650,7 +649,6 @@ void GamePlayerShip()
 				}
 			}
 		}
-#endif
 
 		// клавиатура
 		if (!NeedSkip) {
@@ -917,7 +915,6 @@ void GamePlayerShip()
 					}
 
 
-#ifdef joystick
 					// джойстик
 					if (Joystick != nullptr) {
 						// primary fire
@@ -961,7 +958,6 @@ void GamePlayerShip()
 							if (SDL_JoystickGetButton(Joystick, GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]) == 1)
 								PlayerFighter->WeaponSetFire[i] = true;
 					}
-#endif
 
 					// клавиатура
 
