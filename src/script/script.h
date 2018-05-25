@@ -63,7 +63,7 @@ class cMissionScript
 public:
 	cMissionScript();
 
-	bool RunScript(const char *FileName, float InitTime);
+	bool RunScript(const std::string &FileName, float InitTime);
 	bool Update(float Time);
 	void UpdateTimeLine();
 

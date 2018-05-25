@@ -59,18 +59,13 @@ bool SliderUnderMouseControl = false;
 
 
 // получаем имя файла миссии
-char MissionFileName[MAX_PATH];
-char *GetMissionFileName()
+std::string GetMissionFileName()
 {
-	for(int i = 0; i<MAX_PATH; i++) MissionFileName[i] = 0;
+	std::string MissionFileName{};
 
-	if (MissionFile != nullptr) {
-		if (MissionFile[CurrentMission] != nullptr)
-			strcpy(MissionFileName, MissionFile[CurrentMission]);
-		else
-			return nullptr;
-	} else
-		return nullptr;
+	if (MissionFile &&
+	    MissionFile[CurrentMission])
+		MissionFileName = MissionFile[CurrentMission];
 
 	return MissionFileName;
 }

@@ -379,7 +379,7 @@ extern int StartMission;
 extern int EndMission;
 
 void MissionMenu();
-char *GetMissionFileName();
+std::string GetMissionFileName();
 void MissionsListRelease();
 void MissionsListInit();
 

@@ -175,9 +175,9 @@ cMissionScript::cMissionScript()
 /*
  * Load and run script.
  */
-bool cMissionScript::RunScript(const char *FileName, float InitTime)
+bool cMissionScript::RunScript(const std::string &FileName, float InitTime)
 {
-	if (!FileName)
+	if (FileName.empty())
 		return false;
 
 	StartTime = TimeLastOp = InitTime;
