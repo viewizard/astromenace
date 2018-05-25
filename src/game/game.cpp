@@ -667,7 +667,7 @@ void InitGame()
 
 
 	MissionScript.reset(new cMissionScript);
-	if (!MissionScript->RunScript(GetMissionFileName(), vw_GetTimeThread(1)))
+	if (!MissionScript->RunScript(GetCurrentMissionFileName(), vw_GetTimeThread(1)))
 		MissionScript.reset();
 
 

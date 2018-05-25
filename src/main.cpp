@@ -891,7 +891,7 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	LoadGameData(eLoading::MenuWithLogo);
 	// загрузка списка миссий
-	MissionsListInit();
+	MissionsListInit(); // должен загружаться только 1 раз при запуске
 
 
 
@@ -1085,7 +1085,6 @@ GotoQuit:
 	if (!NeedShowSystemCursor)
 		SDL_ShowCursor(SDL_ENABLE);
 
-	MissionsListRelease();
 	DestroyInfoObject();
 	WorkshopDestroyData();
 

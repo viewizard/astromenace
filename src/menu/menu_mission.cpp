@@ -30,8 +30,24 @@
 #include "../game.h"
 #include "../config/config.h"
 
+namespace {
 
-int	SoundOnMissionID = -1;
+struct cMission {
+	std::string Title{};
+	std::string Descr{};
+	sRGBCOLOR TitleColor{eRGBCOLOR::orange};
+	sRGBCOLOR DescrColor{eRGBCOLOR::white};
+	std::string Icon{};
+	std::string File{};
+};
+
+std::vector<cMission> MissionsList{};
+
+} // unnamed namespace
+
+
+
+int SoundOnMissionID = -1;
 
 int CurrentMission = -1;
 // всего доступно миссий
@@ -40,34 +56,18 @@ int AllMission;
 int StartMission = 0;
 int EndMission = 4;
 
-// списки с данными для каждой миссии
-char **MissionTitle = nullptr;
-char **MissionDescr = nullptr;
-float *MissionTitleColorR = nullptr;
-float *MissionTitleColorG = nullptr;
-float *MissionTitleColorB = nullptr;
-float *MissionDescrColorR = nullptr;
-float *MissionDescrColorG = nullptr;
-float *MissionDescrColorB = nullptr;
-char **MissionIcon = nullptr;
-int *MissionTitleType = nullptr;
-int *MissionDescrType = nullptr;
-char **MissionFile = nullptr;
-
 bool SliderUnderMouseControl = false;
 
 
 
 // получаем имя файла миссии
-std::string GetMissionFileName()
+std::string GetCurrentMissionFileName()
 {
-	std::string MissionFileName{};
+	if ((CurrentMission >= 0) &&
+	    (MissionsList.size() > static_cast<unsigned>(CurrentMission)))
+		return MissionsList[CurrentMission].File;
 
-	if (MissionFile &&
-	    MissionFile[CurrentMission])
-		MissionFileName = MissionFile[CurrentMission];
-
-	return MissionFileName;
+	return std::string{};
 }
 
 
@@ -99,51 +99,12 @@ void MissionsListInit()
 		return;
 	}
 
+	if (!MissionsList.empty())
+		MissionsList.clear();
 
-	AllMission = 0;
 	for (const auto &xmlEntry : xmlDoc->GetRootEntry()->ChildrenList) {
-		// считаем, сколько миссий в файле
-		if (xmlEntry.Name == "Mission")
-			AllMission++;
-	}
+		MissionsList.emplace_back();
 
-	// резервируем память
-	MissionTitle = new char*[AllMission];
-	MissionDescr = new char*[AllMission];
-	MissionIcon = new char*[AllMission];
-	MissionFile = new char*[AllMission];
-	MissionTitleColorR = new float[AllMission];
-	MissionTitleColorG = new float[AllMission];
-	MissionTitleColorB = new float[AllMission];
-	MissionDescrColorR = new float[AllMission];
-	MissionDescrColorG = new float[AllMission];
-	MissionDescrColorB = new float[AllMission];
-	MissionTitleType = new int[AllMission];
-	MissionDescrType = new int[AllMission];
-	// зануляем данные, на всякий случай
-	for (int i=0; i<AllMission; i++) {
-		MissionTitle[i] = nullptr;
-		MissionDescr[i] = nullptr;
-		MissionIcon[i] = nullptr;
-		MissionFile[i] = nullptr;
-		// установка типа, название (не ссылка)
-		MissionTitleType[i] = 0;
-		MissionDescrType[i] = 0;
-		// установка цвета
-		MissionTitleColorR[i] = 1.0f;
-		MissionTitleColorG[i] = 0.5f;
-		MissionTitleColorB[i] = 0.0f;
-		MissionDescrColorR[i] = 1.0f;
-		MissionDescrColorG[i] = 1.0f;
-		MissionDescrColorB[i] = 1.0f;
-	}
-
-
-
-
-	// второй проход, заполняем массивы
-	int i = 0;
-	for (const auto &xmlEntry : xmlDoc->GetRootEntry()->ChildrenList) {
 		// берем каждую миссию и смотрим настройки
 		if (xmlEntry.Name == "Mission") {
 			for (const auto &TMission : xmlEntry.ChildrenList) {
@@ -152,196 +113,68 @@ void MissionsListInit()
 					int tmpColor{0};
 					if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
 						switch (tmpColor) {
-						default: // белый
-							MissionTitleColorR[i]=1.0f;
-							MissionTitleColorG[i]=1.0f;
-							MissionTitleColorB[i]=1.0f;
+						case 1:
+							MissionsList.back().TitleColor = eRGBCOLOR::yellow;
 							break;
-						case 1: // желтый
-							MissionTitleColorR[i]=1.0f;
-							MissionTitleColorG[i]=1.0f;
-							MissionTitleColorB[i]=0.0f;
+						case 2:
+							MissionsList.back().TitleColor = eRGBCOLOR::red;
 							break;
-						case 2: // красный
-							MissionTitleColorR[i]=1.0f;
-							MissionTitleColorG[i]=0.0f;
-							MissionTitleColorB[i]=0.0f;
+						case 3:
+							MissionsList.back().TitleColor = eRGBCOLOR::green;
 							break;
-						case 3: // зеленый
-							MissionTitleColorR[i]=0.0f;
-							MissionTitleColorG[i]=1.0f;
-							MissionTitleColorB[i]=0.0f;
+						case 4:
+							MissionsList.back().TitleColor = eRGBCOLOR::orange;
 							break;
-						case 4: // оранжевый
-							MissionTitleColorR[i]=1.0f;
-							MissionTitleColorG[i]=0.5f;
-							MissionTitleColorB[i]=0.0f;
+						case 5: // grey
+							MissionsList.back().TitleColor = {0.5f, 0.5f, 0.5f};
 							break;
-						case 5: // серый,
-							MissionTitleColorR[i]=0.5f;
-							MissionTitleColorG[i]=0.5f;
-							MissionTitleColorB[i]=0.5f;
+						case 6: // dark orange
+							MissionsList.back().TitleColor = {1.0f, 0.3f, 0.0f};
 							break;
-						case 6: // темно оранжевый
-							MissionTitleColorR[i]=1.0f;
-							MissionTitleColorG[i]=0.3f;
-							MissionTitleColorB[i]=0.0f;
+						default:
+							MissionsList.back().TitleColor = eRGBCOLOR::white;
 							break;
 						}
 					}
-					MissionTitleType[i] = xmlDoc->iGetEntryAttribute(TMission, "type", MissionTitleType[i]);
-
-					if (!TMission.Content.empty()) {
-						MissionTitle[i] = new char[TMission.Content.size() + 1];
-						strcpy(MissionTitle[i], TMission.Content.c_str());
+					MissionsList.back().Title = TMission.Content;
+				} else if (TMission.Name == "Descr") {
+					int tmpColor{0};
+					if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
+						switch (tmpColor) {
+						case 1:
+							MissionsList.back().DescrColor = eRGBCOLOR::yellow;
+							break;
+						case 2:
+							MissionsList.back().DescrColor = eRGBCOLOR::red;
+							break;
+						case 3:
+							MissionsList.back().DescrColor = eRGBCOLOR::green;
+							break;
+						case 4:
+							MissionsList.back().DescrColor = eRGBCOLOR::orange;
+							break;
+						case 5: // grey
+							MissionsList.back().DescrColor = {0.5f, 0.5f, 0.5f};
+							break;
+						case 6: // dark orange
+							MissionsList.back().DescrColor = {1.0f, 0.3f, 0.0f};
+							break;
+						default:
+							MissionsList.back().DescrColor = eRGBCOLOR::white;
+							break;
+						}
 					}
-				} else
-					// описание миссии
-					if (TMission.Name == "Descr") {
-						int tmpColor{0};
-						if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
-							switch (tmpColor) {
-							default: // белый
-								MissionDescrColorR[i]=1.0f;
-								MissionDescrColorG[i]=1.0f;
-								MissionDescrColorB[i]=1.0f;
-								break;
-							case 1: // желтый
-								MissionDescrColorR[i]=1.0f;
-								MissionDescrColorG[i]=1.0f;
-								MissionDescrColorB[i]=0.0f;
-								break;
-							case 2: // красный
-								MissionDescrColorR[i]=1.0f;
-								MissionDescrColorG[i]=0.0f;
-								MissionDescrColorB[i]=0.0f;
-								break;
-							case 3: // зеленый
-								MissionDescrColorR[i]=0.0f;
-								MissionDescrColorG[i]=1.0f;
-								MissionDescrColorB[i]=0.0f;
-								break;
-							case 4: // оранжевый
-								MissionDescrColorR[i]=1.0f;
-								MissionDescrColorG[i]=0.5f;
-								MissionDescrColorB[i]=0.0f;
-								break;
-							case 5: // серый,
-								MissionDescrColorR[i]=0.5f;
-								MissionDescrColorG[i]=0.5f;
-								MissionDescrColorB[i]=0.5f;
-								break;
-							case 6: // темно оранжевый
-								MissionDescrColorR[i]=0.8f;
-								MissionDescrColorG[i]=0.4f;
-								MissionDescrColorB[i]=0.0f;
-								break;
-							}
-						}
-						xmlDoc->iGetEntryAttribute(TMission, "type", MissionDescrType[i]);
-
-						if (!TMission.Content.empty()) {
-							MissionDescr[i] = new char[TMission.Content.size() + 1];
-							strcpy(MissionDescr[i], TMission.Content.c_str());
-						}
-					} else
-						// иконка миссии
-						if (TMission.Name == "Icon") {
-							if (!TMission.Content.empty()) {
-								MissionIcon[i] = new char[TMission.Content.size() + 1];
-								strcpy(MissionIcon[i], TMission.Content.c_str());
-							}
-						} else
-							// файл миссии
-							if (TMission.Name == "File") {
-								if (!TMission.Content.empty()) {
-									MissionFile[i] = new char[TMission.Content.size() + 1];
-									strcpy(MissionFile[i], TMission.Content.c_str());
-								}
-							}
+					MissionsList.back().Descr = TMission.Content;
+				} else if (TMission.Name == "Icon") {
+					MissionsList.back().Icon = TMission.Content;
+				} else if (TMission.Name == "File") {
+					MissionsList.back().File = TMission.Content;
+				}
 			}
-
-			i++;
 		}
 	}
-}
 
-
-
-
-//------------------------------------------------------------------------------------
-// удаление данных списка миссий
-//------------------------------------------------------------------------------------
-void MissionsListRelease()
-{
-	if (MissionFile != nullptr) {
-		for (int i = 0; i < AllMission; i++) {
-			delete [] MissionFile[i];
-			MissionFile[i] = nullptr;
-		}
-		delete [] MissionFile;
-		MissionFile = nullptr;
-	}
-
-	if (MissionTitle != nullptr) {
-		for (int i = 0; i < AllMission; i++) {
-			delete [] MissionTitle[i];
-			MissionTitle[i] = nullptr;
-		}
-		delete [] MissionTitle;
-		MissionTitle = nullptr;
-	}
-
-	if (MissionDescr != nullptr) {
-		for (int i = 0; i < AllMission; i++) {
-			delete [] MissionDescr[i];
-			MissionDescr[i] = nullptr;
-		}
-		delete [] MissionDescr;
-		MissionDescr = nullptr;
-	}
-
-	if (MissionIcon != nullptr) {
-		for (int i = 0; i < AllMission; i++) {
-			delete [] MissionIcon[i];
-			MissionIcon[i] = nullptr;
-		}
-		delete [] MissionIcon;
-		MissionIcon = nullptr;
-	}
-
-	if (MissionTitleColorR != nullptr) {
-		delete [] MissionTitleColorR;
-		MissionTitleColorR = nullptr;
-	}
-	if (MissionTitleColorG != nullptr) {
-		delete [] MissionTitleColorG;
-		MissionTitleColorG = nullptr;
-	}
-	if (MissionTitleColorB != nullptr) {
-		delete [] MissionTitleColorB;
-		MissionTitleColorB = nullptr;
-	}
-	if (MissionDescrColorR != nullptr) {
-		delete [] MissionDescrColorR;
-		MissionDescrColorR = nullptr;
-	}
-	if (MissionDescrColorG != nullptr) {
-		delete [] MissionDescrColorG;
-		MissionDescrColorG = nullptr;
-	}
-	if (MissionDescrColorB != nullptr) {
-		delete [] MissionDescrColorB;
-		MissionDescrColorB = nullptr;
-	}
-	if (MissionTitleType != nullptr) {
-		delete [] MissionTitleType;
-		MissionTitleType = nullptr;
-	}
-	if (MissionDescrType != nullptr) {
-		delete [] MissionDescrType;
-		MissionDescrType = nullptr;
-	}
+	AllMission = MissionsList.size();
 }
 
 
@@ -430,22 +263,9 @@ void MissionMenu()
 				SrcRect(0,0,64,64);
 				DstRect(X1+2,Y1+2,X1+62,Y1+62);
 
-				if (MissionIcon[i] != nullptr)
-					vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.3f*MenuContentTransp);
-
-
-				sRGBCOLOR tmpTitleColor{MissionTitleColorR[i], MissionTitleColorG[i], MissionTitleColorB[i]};
-				if (MissionTitleType[i] == 1)
-					vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, tmpTitleColor, 0.3f*MenuContentTransp, vw_GetText(MissionTitle[i]));
-				else
-					vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, tmpTitleColor, 0.3f*MenuContentTransp, MissionTitle[i]);
-
-				sRGBCOLOR tmpDescrColor{MissionDescrColorR[i], MissionDescrColorG[i], MissionDescrColorB[i]};
-				if (MissionDescrType[i] == 1)
-					vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, tmpDescrColor, 0.3f*MenuContentTransp, vw_GetText(MissionDescr[i]));
-				else
-					vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, tmpDescrColor, 0.3f*MenuContentTransp, MissionDescr[i]);
-
+				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionsList[i].Icon), true, 0.3f*MenuContentTransp);
+				vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, MissionsList[i].TitleColor, 0.3f*MenuContentTransp, vw_GetText(MissionsList[i].Title));
+				vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, MissionsList[i].DescrColor, 0.3f*MenuContentTransp, vw_GetText(MissionsList[i].Descr));
 			}
 
 
@@ -474,20 +294,9 @@ void MissionMenu()
 					// если стоим над ним...
 					SrcRect(0,0,64,64);
 					DstRect(X1,Y1,X1+64,Y1+64);
-					if (MissionIcon != nullptr)
-						vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionIcon[i]), true, MenuContentTransp);
-
-					sRGBCOLOR tmpTitleColor{MissionTitleColorR[i], MissionTitleColorG[i], MissionTitleColorB[i]};
-					if (MissionTitleType[i] == 1)
-						vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, tmpTitleColor, MenuContentTransp, vw_GetText(MissionTitle[i]));
-					else
-						vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, tmpTitleColor, MenuContentTransp, MissionTitle[i]);
-
-					sRGBCOLOR tmpDescrColor{MissionDescrColorR[i], MissionDescrColorG[i], MissionDescrColorB[i]};
-					if (MissionDescrType[i] == 1)
-						vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, tmpDescrColor, MenuContentTransp, vw_GetText(MissionDescr[i]));
-					else
-						vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, tmpDescrColor, MenuContentTransp, MissionDescr[i]);
+					vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionsList[i].Icon), true, MenuContentTransp);
+					vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, MissionsList[i].TitleColor, MenuContentTransp, vw_GetText(MissionsList[i].Title));
+					vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, MissionsList[i].DescrColor, MenuContentTransp, vw_GetText(MissionsList[i].Descr));
 
 
 					if (CurrentMission != i) {
@@ -528,28 +337,17 @@ void MissionMenu()
 					// если не стоим над ним, но можем выбирать
 					SrcRect(0,0,64,64);
 					DstRect(X1+2,Y1+2,X1+62,Y1+62);
-					if (MissionIcon != nullptr)
-						vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionIcon[i]), true, 0.8f*MenuContentTransp);
-
-					sRGBCOLOR tmpTitleColor{MissionTitleColorR[i], MissionTitleColorG[i], MissionTitleColorB[i]};
-					if (MissionTitleType[i] == 1)
-						vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, tmpTitleColor, 0.8f*MenuContentTransp, vw_GetText(MissionTitle[i]));
-					else
-						vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, tmpTitleColor, 0.8f*MenuContentTransp, MissionTitle[i]);
-
-					sRGBCOLOR tmpDescrColor{MissionDescrColorR[i], MissionDescrColorG[i], MissionDescrColorB[i]};
-					if (MissionDescrType[i] == 1)
-						vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, tmpDescrColor, 0.8f*MenuContentTransp, vw_GetText(MissionDescr[i]));
-					else
-						vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, tmpDescrColor, 0.8f*MenuContentTransp, MissionDescr[i]);
-
+					vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(MissionsList[i].Icon), true, 0.8f*MenuContentTransp);
+					vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, MissionsList[i].TitleColor, 0.8f*MenuContentTransp, vw_GetText(MissionsList[i].Title));
+					vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, MissionsList[i].DescrColor, 0.8f*MenuContentTransp, vw_GetText(MissionsList[i].Descr));
 				}
 			}
 
 			Y1 += 64;
 		}
 	// если не стоим над профилями - нужно сбросить флаг
-	if (TMPSoundOnMissionID == -1) SoundOnMissionID = -1;
+	if (TMPSoundOnMissionID == -1)
+		SoundOnMissionID = -1;
 
 
 
