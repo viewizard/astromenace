@@ -29,6 +29,19 @@
 #include "buffer.h"
 #include "audio.h"
 
+namespace {
+
+/*
+From freealut documentation:
+
+alutInit and alutInitWithoutContext put ALUT into the initialized state.
+Those functions must only be called when the state is uninitialized.
+...
+The following functions must only be called in an initialized state and with a current context: alutExit,...
+*/
+bool AlutInitStatus{false};
+
+} // unnamed namespace
 
 /*
  * Initialize audio.
@@ -43,15 +56,15 @@ bool vw_InitAudio()
 	// note, that these should be units of '1'
 	constexpr ALfloat ListenerOri[]{0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f};
 
+	if (AlutInitStatus)
+		return true;
+
 	alutInitWithoutContext(nullptr, nullptr);
 	if (!CheckALUTError(__func__))
 		return false;
 
-	ALCcontext *Context{nullptr};
-	ALCdevice *Device{nullptr};
-
 	// open default sound device
-	Device = alcOpenDevice(nullptr);
+	ALCdevice *Device = alcOpenDevice(nullptr);
 	// check for errors
 	if (!Device) {
 		std::cerr << __func__ << "(): " << "Default sound device not found.\n";
@@ -59,7 +72,7 @@ bool vw_InitAudio()
 	}
 
 	// creating rendering context
-	Context = alcCreateContext(Device, nullptr);
+	ALCcontext *Context = alcCreateContext(Device, nullptr);
 	if (!CheckALCError(Device, __func__))
 		return false;
 
@@ -100,6 +113,7 @@ bool vw_InitAudio()
 	alGetError();
 	alcGetError(Device);
 
+	AlutInitStatus = true;
 	return true;
 }
 
@@ -108,18 +122,18 @@ bool vw_InitAudio()
  */
 void vw_ShutdownAudio()
 {
+	if (!AlutInitStatus)
+		return;
+
 	vw_ReleaseAllSounds();
 	vw_ReleaseAllMusic();
 	vw_ReleaseAllStreamBuffers();
 	vw_ReleaseAllSoundBuffers();
 
-	ALCcontext *Context{nullptr};
-	ALCdevice *Device{nullptr};
-
 	// get active context
-	Context = alcGetCurrentContext();
+	ALCcontext *Context = alcGetCurrentContext();
 	// get device for active context
-	Device = alcGetContextsDevice(Context);
+	ALCdevice *Device = alcGetContextsDevice(Context);
 
 	// change current context (remove our context)
 	if (alcMakeContextCurrent(nullptr)) {
@@ -136,6 +150,7 @@ void vw_ShutdownAudio()
 	}
 
 	alutExit();
+	AlutInitStatus = false;
 	CheckALUTError(__func__);
 }
 
