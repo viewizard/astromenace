@@ -266,17 +266,7 @@ void SetMenu(eMenuStatus Menu)
 		break;
 
 	case eMenuStatus::TOP_SCORES:
-		// копируем исходные данные
-		for (int i = 0; i < 10; i++) {
-			strcpy(GameName[i], GameConfig().TopScores[i].Name);
-			GameScore[i] = GameConfig().TopScores[i].Score;
-		}
-
-		// проверяем профайлы
-		for (int j = 0; j < 5; j++) {
-			if (GameConfig().Profile[j].Used)
-				AddTopScores(GameConfig().Profile[j].Experience, GameConfig().Profile[j].Name, true);
-		}
+		InitTopScoresMenu();
 		break;
 
 	case eMenuStatus::MISSION:

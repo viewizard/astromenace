@@ -28,67 +28,71 @@
 #include "../game.h"
 #include "../config/config.h"
 
+namespace {
 
+struct sTopScore {
+	std::u32string NameUTF32{};
+	int Score{0};
+	std::u32string ScoreUTF32{};
 
-// информация о победителях, для вывода
-char	GameName[10][config::PROFILE_NAME_SIZE];
-int	GameScore[10];
-
-
-
-
-
-
-void AddTopScores(int Score, const char Name[config::PROFILE_NAME_SIZE], bool Type)
-{
-	// данные буфера
-	int ScoreBuffer = Score;
-	char NameBuffer[config::PROFILE_NAME_SIZE];
-	strcpy(NameBuffer, Name);
-
-	// сдвигаем...
-	if (Type) {
-		for(int i=0; i<10; i++) {
-			if (ScoreBuffer < GameScore[i]) continue;
-			else {
-				// сохраняем данные текущей строки
-				int ScoreBuffer2 = GameScore[i];
-				char NameBuffer2[config::PROFILE_NAME_SIZE];
-				strcpy(NameBuffer2, GameName[i]);
-
-				// записываем данные из буфера...
-				GameScore[i] = ScoreBuffer;
-				strcpy(GameName[i], NameBuffer);
-
-				// устанавливаем нужные значения в буфер поиска
-				ScoreBuffer = ScoreBuffer2;
-				strcpy(NameBuffer, NameBuffer2);
-			}
-		}
-	} else {
-		// если нужно установить в основную (удалили профайл)
-		for(int i = 0; i < 10; i++) {
-			if (ScoreBuffer >= GameConfig().TopScores[i].Score) {
-				// сохраняем данные текущей строки
-				int ScoreBuffer2 = GameConfig().TopScores[i].Score;
-				char NameBuffer2[config::PROFILE_NAME_SIZE];
-				strcpy(NameBuffer2, GameConfig().TopScores[i].Name);
-
-				// записываем данные из буфера...
-				ChangeGameConfig().TopScores[i].Score = ScoreBuffer;
-				strcpy(ChangeGameConfig().TopScores[i].Name, NameBuffer);
-
-				// устанавливаем нужные значения в буфер поиска
-				ScoreBuffer = ScoreBuffer2;
-				strcpy(NameBuffer, NameBuffer2);
-			}
-		}
+	sTopScore(const std::string &_Name, int _Score) :
+		Score{_Score}
+	{
+		NameUTF32 = ConvertUTF8.from_bytes(_Name);
+		ScoreUTF32 = ConvertUTF8.from_bytes(std::to_string(Score));
 	}
+
+	bool operator > (const sTopScore &B) const
+	{
+		return Score > B.Score;
+	}
+};
+
+std::list<sTopScore> DefaultTopScores{{"Viewizard", 100000},
+				      {"Alex", 90000},
+				      {"Michael", 80000},
+				      {"Jeffrey", 70000},
+				      {"Christopher", 60000},
+				      {"Becky", 40000},
+				      {"Greg", 20000},
+				      {"Jay", 10000},
+				      {"Kelvin", 5000},
+				      {"Stephan", 1000}};
+
+std::list<sTopScore> TopScoresList{};
+
+} // unnamed namespace
+
+
+/*
+ * Top Scores menu initialization.
+ */
+void InitTopScoresMenu()
+{
+	if (!TopScoresList.empty())
+		TopScoresList.clear();
+
+	TopScoresList = DefaultTopScores;
+
+	for (unsigned i = 0; i < config::MAX_PROFILES; i++) {
+		if (GameConfig().Profile[i].Used &&
+		    (GameConfig().Profile[i].Experience > 0))
+			TopScoresList.emplace_back(GameConfig().Profile[i].Name,
+						   GameConfig().Profile[i].Experience);
+	}
+
+	TopScoresList.sort(std::greater<sTopScore>());
+
+	std::list<sTopScore>::iterator iterEraseStart = TopScoresList.begin();
+	std::advance(iterEraseStart, DefaultTopScores.size());
+	// we don't check iterator here, since we know for sure, that TopScoresList
+	// have at least DefaultTopScores.size() of elements
+	TopScoresList.erase(iterEraseStart, TopScoresList.end());
 }
 
-
-
-
+/*
+ * Draw Top Scores menu.
+ */
 void TopScoresMenu()
 {
 	sRECT SrcRect, DstRect;
@@ -101,26 +105,20 @@ void TopScoresMenu()
 	int Y1 = 165;
 	int Prir1 = 42;
 
-	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "#");
-	vw_DrawText(X1+45, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("NAME"));
-	vw_DrawText(X1+650, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("SCORE"));
+	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("NAME"));
+	vw_DrawText(X1 + 650, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("SCORE"));
 
 	Y1 += 10;
 
-	for (int i=0; i<10; i++) {
+	for (auto &tmpTopScore : TopScoresList) {
 		Y1 += Prir1;
 
-		vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::white, 0.6f*MenuContentTransp, "%i", i+1);
-		vw_DrawText(X1+45, Y1, 0, 530, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameName[i]);
-		vw_DrawText(X1+650, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", GameScore[i]);
+		vw_DrawTextUTF32(X1, Y1, 0, 530, 1.0f, eRGBCOLOR::white, MenuContentTransp, tmpTopScore.NameUTF32.c_str());
+		vw_DrawTextUTF32(X1 + 650, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, tmpTopScore.ScoreUTF32.c_str());
 	}
 
-
-
-
 	int X = (GameConfig().InternalWidth - 384) / 2;
-	int Y = 165+100*5;
+	int Y = 165 + 100 * 5;
 	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
-
 }

@@ -121,12 +121,6 @@ void DeleteRecord()
 	if (CurrentProfile == -1)
 		return;
 
-
-	// проверяем, входит в таблицу рекордов или нет
-	if (GameConfig().Profile[CurrentProfile].Experience != 0)
-		AddTopScores(GameConfig().Profile[CurrentProfile].Experience, GameConfig().Profile[CurrentProfile].Name, false);
-
-
 	// если это последняя запись
 	if (CurrentProfile == 4) {
 		ChangeGameConfig().Profile[CurrentProfile].Used = false;

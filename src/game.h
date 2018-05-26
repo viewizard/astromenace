@@ -346,11 +346,9 @@ void DestroyInfoObject();
 //------------------------------------------------------------------------------------
 // Menu_TopScores.cpp
 //------------------------------------------------------------------------------------
-extern char GameName[10][1024];// PROFILE_NAME_SIZE
-extern int GameScore[10];
-
+// FIXME should be moved to separate header file
 void TopScoresMenu();
-void AddTopScores(int Score, const char Name[1024], bool Type);
+void InitTopScoresMenu();
 
 
 

@@ -164,12 +164,6 @@ void SaveXMLConfigFile()
 					  Config.NeedShowHint[i]);
 	}
 
-	std::string tmpTopScores{std::string{"TopScores_"} + std::string{CONFIG_VERSION}};
-	std::vector<unsigned char> TopScoresXOR{};
-	PackWithXOR(TopScoresXOR, sizeof(sTopScores) * 10, reinterpret_cast<unsigned char *>(Config.TopScores));
-	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, tmpTopScores),
-				reinterpret_cast<char *>(TopScoresXOR.data()));
-
 	std::string tmpPilotsProfiles{std::string{"PilotsProfiles_"} + std::string{CONFIG_VERSION}};
 	std::vector<unsigned char> ProfileXOR{};
 	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
@@ -457,13 +451,6 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()), "value",
 						    Config.NeedShowHint[i]);
 	}
-
-	std::string tmpTopScores{std::string{"TopScores_"} + std::string{CONFIG_VERSION}};
-	if ((XMLdoc->FindEntryByName(*RootXMLEntry, tmpTopScores)) &&
-	    !XMLdoc->FindEntryByName(*RootXMLEntry, tmpTopScores)->Content.empty())
-		UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.TopScores),
-			      sizeof(sTopScores) * 10,
-			      XMLdoc->FindEntryByName(*RootXMLEntry, tmpTopScores)->Content);
 
 	std::string tmpPilotsProfiles{std::string{"PilotsProfiles_"} + std::string{CONFIG_VERSION}};
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpPilotsProfiles) &&

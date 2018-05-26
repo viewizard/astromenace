@@ -132,13 +132,6 @@ struct sPilotProfile {
 	}
 };
 
-// This structure should be POD, since we "pack" it into the game config file
-// as memory block. Don't use std::string or any containers here.
-struct sTopScores {
-	char Name[config::PROFILE_NAME_SIZE];
-	int Score;
-};
-
 struct sGameConfig {
 	unsigned int MenuLanguage{0}; // en
 	unsigned int VoiceLanguage{0}; // en
@@ -167,17 +160,6 @@ struct sGameConfig {
 	bool UseGLSL120{false};		// 120 (OpenGL 2.1)
 	int ShadowMap{0};		// gfx (shadow map)
 	int MaxPointLights{3};		// lights point max quantity
-
-	sTopScores TopScores[10]{{"Viewizard", 100000},
-				 {"Alex", 90000},
-				 {"Michael", 80000},
-				 {"Jeffrey", 70000},
-				 {"Christopher Hughson", 60000},
-				 {"Becky", 40000},
-				 {"Greg", 20000},
-				 {"Jay Coleman", 10000},
-				 {"Kelvin", 5000},
-				 {"Stephan Gregory", 1000}};
 
 	// keyboard
 	int KeyBoardLeft{SDLK_LEFT};
