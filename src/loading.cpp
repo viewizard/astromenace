@@ -40,6 +40,9 @@
 #include "gfx/shadow_map.h"
 #include "ui/font.h"
 
+// FIXME should be fixed, don't allow global scope interaction for local variables
+extern std::string ConfigPath;
+
 struct sLoadList {
 	// имя файла
 	std::string FileName;
@@ -718,7 +721,7 @@ static void PreLoadGameData(eLoading LoadType)
 		break;
 	// переход меню-игра
 	case eLoading::Game:
-		SaveXMLConfigFile();
+		SaveXMLConfigFile(ConfigPath);
 		break;
 	default:
 		break;

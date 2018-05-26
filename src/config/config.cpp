@@ -37,6 +37,10 @@ namespace {
 
 sGameConfig Config;
 
+const std::string ConfigFileName{"config.xml"};
+const std::string ProfilesFileName{std::string{"PilotsProfiles_"} +
+				   std::string{CONFIG_VERSION} + std::string{".data"}};
+
 } // unnamed namespace
 
 
@@ -83,10 +87,31 @@ static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsig
 }
 
 /*
+ * Save game Pilots Profiles.
+ */
+static void SavePilotsProfiles(const std::string &ConfigPath)
+{
+	std::string tmpPilotsProfiles{ConfigPath + ProfilesFileName};
+	std::vector<unsigned char> ProfileXOR{};
+	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
+
+	SDL_RWops *File = SDL_RWFromFile(tmpPilotsProfiles.c_str(), "wb");
+	if (!File) {
+		std::cerr << __func__ << "(): " << "Can't create file " << tmpPilotsProfiles << "\n";
+		return;
+	}
+
+	SDL_RWwrite(File, ProfileXOR.data(), ProfileXOR.size(), 1);
+	SDL_RWclose(File);
+}
+
+/*
  * Save game configuration file.
  */
-void SaveXMLConfigFile()
+void SaveXMLConfigFile(const std::string &ConfigPath)
 {
+	SavePilotsProfiles(ConfigPath);
+
 	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument};
 
 	sXMLEntry *RootXMLEntry = XMLdoc->CreateRootEntry("AstroMenaceSettings");
@@ -158,25 +183,20 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "LastProfile"), "value", Config.LastProfile);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuScript"), "value", Config.MenuScript);
 
+	XMLdoc->AddComment(*RootXMLEntry, " Tips and Hints settings ");
 	for(int i = 0; i < 10; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, tmpString.c_str()), "value",
 					  Config.NeedShowHint[i]);
 	}
 
-	std::string tmpPilotsProfiles{std::string{"PilotsProfiles_"} + std::string{CONFIG_VERSION}};
-	std::vector<unsigned char> ProfileXOR{};
-	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
-	XMLdoc->AddEntryContent(XMLdoc->AddEntry(*RootXMLEntry, tmpPilotsProfiles),
-				reinterpret_cast<char *>(ProfileXOR.data()));
-
-	XMLdoc->Save(ConfigFileName);
+	XMLdoc->Save(ConfigPath + ConfigFileName);
 }
 
 /*
  * Unpack data with XOR.
  */
-static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std::string &DataXOR)
+static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std::vector<unsigned char> &DataXOR)
 {
 	if ((DataXOR.size() / 3) < DataSize) {
 		std::cerr << __func__ << "(): " << "DataXOR string less than expected.\n";
@@ -241,14 +261,46 @@ static void SetupCurrentProfileAndMission()
 }
 
 /*
+ * Load game Pilots Profiles.
+ */
+static void LoadPilotsProfiles(const std::string &ConfigPath)
+{
+	std::string tmpPilotsProfiles{ConfigPath + ProfilesFileName};
+	std::vector<unsigned char> ProfileXOR{};
+
+	SDL_RWops *File = SDL_RWFromFile(tmpPilotsProfiles.c_str(), "rb");
+	if (!File) {
+		std::cerr << __func__ << "(): " << "Can't open file " << tmpPilotsProfiles << "\n";
+		return;
+	}
+
+	SDL_RWseek(File, 0, SEEK_END);
+	int tmpSize = SDL_RWtell(File);
+	SDL_RWseek(File, 0, SEEK_SET);
+
+	ProfileXOR.resize(tmpSize);
+	// NOTE remove const_cast in future, (since C++17) "CharT* data();" also added.
+	SDL_RWread(File, const_cast<unsigned char *>(ProfileXOR.data()), tmpSize, 1);
+	SDL_RWclose(File);
+
+	UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile), sizeof(sPilotProfile) * 5, ProfileXOR);
+}
+
+/*
  * Load game configuration file.
  */
-bool LoadXMLConfigFile(bool NeedSafeMode)
+bool LoadXMLConfigFile(const std::string &ConfigPath, bool NeedSafeMode)
 {
-	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(ConfigFileName)};
+	LoadPilotsProfiles(ConfigPath);
+
+	// NeedSafeMode, only pilots profiles should be loaded
+	if (NeedSafeMode)
+		return false;
+
+	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(ConfigPath + ConfigFileName)};
 
 	if (!XMLdoc->GetRootEntry()) {
-		SaveXMLConfigFile();
+		SaveXMLConfigFile(ConfigPath);
 		return true;
 	}
 
@@ -256,27 +308,13 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 
 	if (!RootXMLEntry) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		SaveXMLConfigFile();
+		SaveXMLConfigFile(ConfigPath);
 		return true;
 	}
 	if ("AstroMenaceSettings" != RootXMLEntry->Name) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		SaveXMLConfigFile();
+		SaveXMLConfigFile(ConfigPath);
 		return true;
-	}
-
-	// NeedSafeMode, only pilots profiles should be loaded
-	if (NeedSafeMode) {
-		if (XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles") &&
-		    !XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content.empty())
-			UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile),
-				      sizeof(sPilotProfile) * 5,
-				      XMLdoc->FindEntryByName(*RootXMLEntry, "PilotsProfiles")->Content);
-
-		CheckConfig();
-		SetupCurrentProfileAndMission();
-
-		return false;
 	}
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MenuLanguage")) {
@@ -451,13 +489,6 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()), "value",
 						    Config.NeedShowHint[i]);
 	}
-
-	std::string tmpPilotsProfiles{std::string{"PilotsProfiles_"} + std::string{CONFIG_VERSION}};
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpPilotsProfiles) &&
-	    !XMLdoc->FindEntryByName(*RootXMLEntry, tmpPilotsProfiles)->Content.empty())
-		UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile),
-			      sizeof(sPilotProfile) * 5,
-			      XMLdoc->FindEntryByName(*RootXMLEntry, tmpPilotsProfiles)->Content);
 
 	CheckConfig();
 	SetupCurrentProfileAndMission();
