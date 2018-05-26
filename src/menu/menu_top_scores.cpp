@@ -66,12 +66,10 @@ std::list<sTopScore> TopScoresList{};
 
 /*
  * Top Scores menu initialization.
+ * Copy default scores list, add pilots profiles, sort, erase elements by draw limit (same as default scores list size).
  */
 void InitTopScoresMenu()
 {
-	if (!TopScoresList.empty())
-		TopScoresList.clear();
-
 	TopScoresList = DefaultTopScores;
 
 	for (unsigned i = 0; i < config::MAX_PROFILES; i++) {
