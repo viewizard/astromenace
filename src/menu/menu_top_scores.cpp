@@ -48,17 +48,6 @@ struct sTopScore {
 	}
 };
 
-std::list<sTopScore> DefaultTopScores{{"Viewizard", 100000},
-				      {"Alex", 90000},
-				      {"Michael", 80000},
-				      {"Jeffrey", 70000},
-				      {"Christopher", 60000},
-				      {"Becky", 40000},
-				      {"Greg", 20000},
-				      {"Jay", 10000},
-				      {"Kelvin", 5000},
-				      {"Stephan", 1000}};
-
 std::list<sTopScore> TopScoresList{};
 
 } // unnamed namespace
@@ -70,6 +59,18 @@ std::list<sTopScore> TopScoresList{};
  */
 void InitTopScoresMenu()
 {
+	static std::list<sTopScore> DefaultTopScores{
+		{"Viewizard", 100000},
+		{"Alex", 90000},
+		{"Michael", 80000},
+		{"Jeffrey", 70000},
+		{"Christopher", 60000},
+		{"Becky", 40000},
+		{"Greg", 20000},
+		{"Jay", 10000},
+		{"Kelvin", 5000},
+		{"Stephan", 1000}};
+
 	TopScoresList = DefaultTopScores;
 
 	for (unsigned i = 0; i < config::MAX_PROFILES; i++) {
