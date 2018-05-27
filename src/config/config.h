@@ -143,7 +143,7 @@ struct sGameConfig {
 	int VoiceVolume{10};	// in-game voice volume [0, 10]
 	bool Sound_check{true};	// general sfx switch (hardware/software related)
 
-	int Width{1228};	// game resolution's width
+	int Width{1280};	// game resolution's width
 	int Height{768};	// game resolution's height
 	int BPP{0};		// game resolution's color depth
 	float InternalWidth{1228.0f};	// internal resolution's width
