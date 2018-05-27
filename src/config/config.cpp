@@ -31,6 +31,7 @@
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../game.h"
+#include "../platform/platform.h"
 #include "config.h"
 
 namespace {
@@ -89,9 +90,9 @@ static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsig
 /*
  * Save game Pilots Profiles.
  */
-static void SavePilotsProfiles(const std::string &ConfigPath)
+static void SavePilotsProfiles()
 {
-	std::string tmpPilotsProfiles{ConfigPath + ProfilesFileName};
+	std::string tmpPilotsProfiles{GetConfigPath() + ProfilesFileName};
 	std::vector<unsigned char> ProfileXOR{};
 	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
 
@@ -108,9 +109,14 @@ static void SavePilotsProfiles(const std::string &ConfigPath)
 /*
  * Save game configuration file.
  */
-void SaveXMLConfigFile(const std::string &ConfigPath)
+void SaveXMLConfigFile()
 {
-	SavePilotsProfiles(ConfigPath);
+	if (GetConfigPath().empty()) {
+		std::cerr << __func__ << "(): config path not set.\n";
+		return;
+	}
+
+	SavePilotsProfiles();
 
 	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument};
 
@@ -190,7 +196,7 @@ void SaveXMLConfigFile(const std::string &ConfigPath)
 					  Config.NeedShowHint[i]);
 	}
 
-	XMLdoc->Save(ConfigPath + ConfigFileName);
+	XMLdoc->Save(GetConfigPath() + ConfigFileName);
 }
 
 /*
@@ -263,9 +269,9 @@ static void SetupCurrentProfileAndMission()
 /*
  * Load game Pilots Profiles.
  */
-static void LoadPilotsProfiles(const std::string &ConfigPath)
+static void LoadPilotsProfiles()
 {
-	std::string tmpPilotsProfiles{ConfigPath + ProfilesFileName};
+	std::string tmpPilotsProfiles{GetConfigPath() + ProfilesFileName};
 	std::vector<unsigned char> ProfileXOR{};
 
 	SDL_RWops *File = SDL_RWFromFile(tmpPilotsProfiles.c_str(), "rb");
@@ -289,18 +295,23 @@ static void LoadPilotsProfiles(const std::string &ConfigPath)
 /*
  * Load game configuration file.
  */
-bool LoadXMLConfigFile(const std::string &ConfigPath, bool NeedSafeMode)
+bool LoadXMLConfigFile(bool NeedSafeMode)
 {
-	LoadPilotsProfiles(ConfigPath);
+	if (GetConfigPath().empty()) {
+		std::cerr << __func__ << "(): config path not set.\n";
+		return false;
+	}
+
+	LoadPilotsProfiles();
 
 	// NeedSafeMode, only pilots profiles should be loaded
 	if (NeedSafeMode)
 		return false;
 
-	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(ConfigPath + ConfigFileName)};
+	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(GetConfigPath() + ConfigFileName)};
 
 	if (!XMLdoc->GetRootEntry()) {
-		SaveXMLConfigFile(ConfigPath);
+		SaveXMLConfigFile();
 		return true;
 	}
 
@@ -308,12 +319,12 @@ bool LoadXMLConfigFile(const std::string &ConfigPath, bool NeedSafeMode)
 
 	if (!RootXMLEntry) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		SaveXMLConfigFile(ConfigPath);
+		SaveXMLConfigFile();
 		return true;
 	}
 	if ("AstroMenaceSettings" != RootXMLEntry->Name) {
 		std::cerr << __func__ << "(): " << "Game configuration file corrupted: " << ConfigFileName << "\n";
-		SaveXMLConfigFile(ConfigPath);
+		SaveXMLConfigFile();
 		return true;
 	}
 

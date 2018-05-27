@@ -79,7 +79,6 @@ SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = nullptr;
 // полное путь к программе
 char ProgrammDir[MAX_PATH];
 std::string VFSFileNamePath;
-std::string ConfigPath{};
 // для сохранения скриншотов
 char ScreenshotDir[MAX_PATH];
 
@@ -168,28 +167,12 @@ int main( int argc, char **argv )
 	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
 
 	// Получаем данные, где папка пользователя
-	bool InitWithoutDLL = true;
 	bool InitScrWithoutDLL = true;
 	HMODULE hShellDLL = LoadLibrary("shell32.dll");
 	if (hShellDLL) {
 		pSHGetSpecialFolderPath = (SHGETSPECIALFOLDERPATH) GetProcAddress(hShellDLL, "SHGetSpecialFolderPathA");
-		char tmpUserPath[MAX_PATH];
-		ZeroMemory(tmpUserPath, sizeof(tmpUserPath));
 
 		if (pSHGetSpecialFolderPath != nullptr) {
-			if(SUCCEEDED(pSHGetSpecialFolderPath(nullptr,
-							     tmpUserPath,
-							     SD_APPDATA, //CSIDL_APPDATA
-							     true))) {
-				strcat(tmpUserPath, "\\AstroMenace\\");
-				CreateDirectory(tmpUserPath, nullptr);
-
-				ConfigPath = std::string(tmpUserPath);
-
-				// уже проинили, дальше не нужно
-				InitWithoutDLL = false;
-			}
-
 			if(SUCCEEDED(pSHGetSpecialFolderPath(nullptr,
 							     ScreenshotDir,
 							     SD_DESKTOPDIRECTORY, // SD_DESKTOPDIRECTORY
@@ -200,18 +183,11 @@ int main( int argc, char **argv )
 				// уже проинили, дальше не нужно
 				InitScrWithoutDLL = false;
 			}
-
 		}
-
 	}
 	// освобождаем библиотеку
 	FreeLibrary(hShellDLL);
 
-
-	// иним, если старая винда, или была ошибка
-	if (InitWithoutDLL) {
-		ConfigPath = std::string(ProgrammDir);
-	}
 	if (InitScrWithoutDLL) {
 		strcpy(ScreenshotDir, ProgrammDir);
 		strcat(ScreenshotDir, "AstroMenaceScreenshot");
@@ -279,26 +255,6 @@ int main( int argc, char **argv )
 			strcpy(ScreenshotDir, HomeEnv);
 			strcat(ScreenshotDir, "/Desktop/");
 		}
-
-
-		// first at all we need check XDG_CONFIG_HOME environment variable
-		const char* ConfigHomeEnv = getenv("XDG_CONFIG_HOME");
-		if (ConfigHomeEnv != nullptr) {
-			ConfigPath = std::string(ConfigHomeEnv) + "/astromenace";
-		} else {
-			// game config file will be stored in "~/.config/astromenace" folder
-			// if system have "~/.config" folder, otherwise in "~/.astromenace" folder
-			ConfigPath = HomeEnv;
-			std::string ConfigDirCheck{std::string(HomeEnv) + "/.config"};
-			struct stat tmpStat;
-			if (stat(ConfigDirCheck.c_str(), &tmpStat) == 0)
-				ConfigPath += "/.config/astromenace";
-			else
-				ConfigPath += "/.astromenace";
-		}
-
-		mkdir(ConfigPath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-		ConfigPath += "/";
 	}
 
 #endif // unix
@@ -396,7 +352,7 @@ int main( int argc, char **argv )
 	}
 
 	// работа с файлом данных... передаем базовый режим окна (обязательно после инициализации языков!)
-	bool FirstStart = LoadXMLConfigFile(ConfigPath, NeedSafeMode);
+	bool FirstStart = LoadXMLConfigFile(NeedSafeMode);
 
 	if (GameConfig().FontNumber > FontQuantity)
 		ChangeGameConfig().FontNumber = 0;
@@ -729,7 +685,7 @@ ReCreate:
 			ChangeGameConfig().InternalHeight = 768.0f;
 			ChangeGameConfig().MSAA = 0;
 			ChangeGameConfig().CSAA = 0;
-			SaveXMLConfigFile(ConfigPath);
+			SaveXMLConfigFile();
 			SDL_Quit();
 			FirstStart = false;
 			goto ReCreate;
@@ -860,7 +816,7 @@ ReCreate:
 	// сохраняем данные во время первого старта сразу после инициализации "железа"
 	// в случае некорректного завершения игры, файл настроек будет содержать актуальные параметры
 	if (FirstStart)
-		SaveXMLConfigFile(ConfigPath);
+		SaveXMLConfigFile();
 
 
 
@@ -1108,7 +1064,7 @@ GotoQuit:
 	// we could need restart game, not quit, so, quit from video subsystem only
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	// сохраняем настройки игры
-	SaveXMLConfigFile(ConfigPath);
+	SaveXMLConfigFile();
 
 	// если нужно перезагрузить игру с новыми параметрами
 	if (NeedReCreate) {
