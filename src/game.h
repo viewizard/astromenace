@@ -51,8 +51,6 @@ extern sVideoModes *VideoModes;
 extern int VideoModesNum;
 extern sVideoModes CurrentVideoMode;
 
-extern char ScreenshotDir[MAX_PATH];
-extern char UserPath[MAX_PATH];
 extern bool Quit;
 extern bool CanQuit;
 extern bool NeedReCreate;

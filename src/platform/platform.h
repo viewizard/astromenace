@@ -33,4 +33,13 @@
 // Get configuration path for current platform.
 const std::string &GetConfigPath();
 
+// Get binary location path for current platform.
+// For macOS bundle, return path to resources (see https://wiki.libsdl.org/SDL_GetBasePath).
+const std::string &GetBasePath();
+
+// Set data path for current platform by command line parameter.
+void SetDataPathByParameter(char *argv, const std::string &ParameterName);
+// Get data path for current platform.
+const std::string &GetDataPath();
+
 #endif // PLATFORM_RELATED_H

@@ -34,6 +34,21 @@
 #include <sys/stat.h> // mkdir
 #endif // unix
 
+namespace {
+
+std::string DataPath{
+#ifdef DATADIR
+	std::string(DATADIR) +
+#ifdef WIN32
+	std::string("\\")
+#else
+	std::string("/")
+#endif // WIN32
+#endif // DATADIR
+	};
+
+} // unnamed namespace
+
 
 /*
  * Get configuration path for current platform.
@@ -76,11 +91,65 @@ const std::string &GetConfigPath()
 
 	ConfigPath += "/";
 #else
-	if (char *base_path = SDL_GetPrefPath("Viewizard", "AstroMenace")) {
-		ConfigPath = base_path;
-		SDL_free(base_path);
+	char *pref_path = SDL_GetPrefPath("Viewizard", "AstroMenace");
+	if (pref_path) {
+		ConfigPath = pref_path;
+		SDL_free(pref_path);
 	}
 #endif // unix
 
 	return ConfigPath;
+}
+
+/*
+ * Get binary location path for current platform.
+ */
+const std::string &GetBasePath()
+{
+	static std::string BasePath{};
+
+	if (!BasePath.empty())
+		return BasePath;
+
+	char *base_path = SDL_GetBasePath();
+	if (base_path) {
+		BasePath = base_path;
+		SDL_free(base_path);
+	} else
+		BasePath = "./";
+
+	return BasePath;
+}
+
+/*
+ * Set data path for current platform by command line parameter.
+ */
+void SetDataPathByParameter(char *argv, const std::string &ParameterName)
+{
+	if (!argv ||
+	    (strlen(argv) <= ParameterName.size()))
+		return;
+
+	DataPath = argv + ParameterName.size();
+
+#ifdef WIN32
+	if (DataPath.back() != '\\')
+		DataPath += "\\";
+#else
+	if (DataPath.back() != '/')
+		DataPath += "/";
+#endif // WIN32
+}
+
+/*
+ * Get data path for current platform.
+ */
+const std::string &GetDataPath()
+{
+	if (!DataPath.empty())
+		return DataPath;
+
+	DataPath = GetBasePath();
+
+	return DataPath;
 }

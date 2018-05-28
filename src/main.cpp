@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO move to SDL_GetBasePath(), SDL_GetPrefPath() + SDL_free() usage (libSDL2)
-
 // TODO check fullscreen modes with SDL_GetDisplayBounds() and windowed modes with SDL_GetDisplayUsableBounds()
 
 // TODO probably, we could provide option for screen number, where game's window should
@@ -36,6 +34,7 @@
 #include "config/config.h"
 #include "ui/font.h"
 #include "gfx/shadow_map.h"
+#include "platform/platform.h"
 #include "object3d/object3d.h"
 #include <sys/stat.h> // stat
 
@@ -63,24 +62,8 @@ sVideoModes *VideoModes = nullptr;
 int VideoModesNum = 0;
 // текущие параметры десктопа
 sVideoModes CurrentVideoMode;
-// данные для определения папки пользователя
-#ifdef WIN32
-#define SD_APPDATA                   0x001a
-#define SD_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
-typedef bool (WINAPI *SHGETSPECIALFOLDERPATH)(HWND hwndOwner, LPTSTR lpszPath, int nFolder, bool fCreate);
-SHGETSPECIALFOLDERPATH pSHGetSpecialFolderPath = nullptr;
-#endif // WIN32
 
 
-
-//------------------------------------------------------------------------------------
-// пути к файлам
-//------------------------------------------------------------------------------------
-// полное путь к программе
-char ProgrammDir[MAX_PATH];
-std::string VFSFileNamePath;
-// для сохранения скриншотов
-char ScreenshotDir[MAX_PATH];
 
 
 //------------------------------------------------------------------------------------
@@ -112,7 +95,7 @@ sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 //------------------------------------------------------------------------------------
 // основная процедура...
 //------------------------------------------------------------------------------------
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
 	// флаг отображать ли системный курсор
 	bool NeedShowSystemCursor = false;
@@ -120,19 +103,42 @@ int main( int argc, char **argv )
 	bool NeedSafeMode = false;
 	// флаг перевода игры в режим упаковки gamedata.vfs файла
 	bool NeedPack = false;
+	// path to rawdata
+	std::string RawDataPath{};
 
 	for (int i = 1; i < argc; i++) {
 		// проверка ключа "--help"
 		if (!strcmp(argv[i], "--help")) {
 			std::cout << "AstroMenace launch options:\n\n"
-				  << "--dir=/game/data/folder/ - folder with gamedata.vfs file (Linux only);\n"
+				  << "--dir=/folder - folder with gamedata.vfs file;\n"
+				  << "--rawdata=/folder - folder with raw data for gamedata.vfs;\n"
+				  << "--pack - pack data to gamedata.vfs file;\n"
 				  << "--mouse - launch the game without system cursor hiding;\n"
 				  << "--safe-mode - reset all settings except Pilots Profiles at the game launch;\n"
-				  << "--pack - pack data to gamedata.vfs file;\n"
-				  << "--rawdata=/game/rawdata/folder/ - folder with game raw data for gamedata.vfs;\n"
 				  << "--help - info about all game launch options.\n";
 			return 0;
 		}
+
+		// проверка ключа "--dir"
+		if (!strncmp(argv[i], "--dir", strlen("--dir")))
+			SetDataPathByParameter(argv[i], "--dir=");
+
+		// проверка ключа "--rawdata"
+		if (!strncmp(argv[i], "--rawdata", strlen("--rawdata")) &&
+		    (strlen(argv[i]) > strlen("--rawdata="))) {
+			RawDataPath = argv[i] + strlen("--rawdata=");
+#ifdef WIN32
+			if (RawDataPath.back() != '\\')
+				RawDataPath += "\\";
+#else
+			if (RawDataPath.back() != '/')
+				RawDataPath += "/";
+#endif // WIN32
+		}
+
+		// проверка ключа "--pack"
+		if (!strcmp(argv[i], "--pack"))
+			NeedPack = true;
 
 		// проверка ключа "--mouse"
 		if (!strcmp(argv[i], "--mouse"))
@@ -141,10 +147,6 @@ int main( int argc, char **argv )
 		// проверка ключа "--safe-mode"
 		if (!strcmp(argv[i], "--safe-mode"))
 			NeedSafeMode = true;
-
-		// проверка ключа "--pack"
-		if (!strcmp(argv[i], "--pack"))
-			NeedPack = true;
 	}
 
 	// should be initialized before any interaction with SDL functions
@@ -153,119 +155,10 @@ int main( int argc, char **argv )
 		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
 	}
-	vw_InitTimeThread(0);
-
-#ifdef WIN32
-	// иним пути для винды
-	ZeroMemory(ProgrammDir, sizeof(ProgrammDir));
-	GetModuleFileName(nullptr, ProgrammDir, MAX_PATH);
-	char* s = strrchr(ProgrammDir,'\\');
-	if (s) s[0]=0x0;
-	const char *Fi = "\\";
-	strcat( ProgrammDir, Fi );
-
-	ZeroMemory(ScreenshotDir, sizeof(ScreenshotDir));
-
-	// Получаем данные, где папка пользователя
-	bool InitScrWithoutDLL = true;
-	HMODULE hShellDLL = LoadLibrary("shell32.dll");
-	if (hShellDLL) {
-		pSHGetSpecialFolderPath = (SHGETSPECIALFOLDERPATH) GetProcAddress(hShellDLL, "SHGetSpecialFolderPathA");
-
-		if (pSHGetSpecialFolderPath != nullptr) {
-			if(SUCCEEDED(pSHGetSpecialFolderPath(nullptr,
-							     ScreenshotDir,
-							     SD_DESKTOPDIRECTORY, // SD_DESKTOPDIRECTORY
-							     true))) {
-
-				strcat(ScreenshotDir, "\\AstroMenaceScreenshot");
-
-				// уже проинили, дальше не нужно
-				InitScrWithoutDLL = false;
-			}
-		}
-	}
-	// освобождаем библиотеку
-	FreeLibrary(hShellDLL);
-
-	if (InitScrWithoutDLL) {
-		strcpy(ScreenshotDir, ProgrammDir);
-		strcat(ScreenshotDir, "AstroMenaceScreenshot");
-	}
-
-	VFSFileNamePath = ProgrammDir;
-	VFSFileNamePath += "gamedata.vfs";
-#elif defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
-	// иним пути для юникса-линукса
-	// если передали параметр-путь
-
-	const char* HomeEnv = getenv("HOME");
-	if (HomeEnv == nullptr) {
-		std::cerr << __func__ << "(): "
-			  << "$HOME is not set, will use getpwuid() and getuid() for home folder detection.\n";
-		struct passwd *pw = getpwuid(getuid());
-		if (pw != nullptr)
-			HomeEnv = pw->pw_dir;
-		else
-			std::cerr << __func__ << "(): "
-				  << "Can't detect home folder. Note, this could occur segfault issue,\n"
-				  << "if yours distro don't support XDG Base Directory Specification.\n";
-	}
-
-	bool dirpresent = false;
-	for (int i=1; i<argc; i++) {
-		if (!strncmp(argv[i], "--dir=", sizeof("--dir"))) {
-			dirpresent = true;
-			// если передали относительный путь в папку пользователя с тильдой
-			if ((argv[i][sizeof("--dir")] != '~') || (HomeEnv == nullptr)) {
-				strcpy(ProgrammDir, argv[i]+strlen("--dir="));
-			} else {
-				strcpy(ProgrammDir, HomeEnv);
-				strcat(ProgrammDir, argv[i]+strlen("--dir=~"));
-			}
-			// если в конце нет слеша - ставим его
-			if (ProgrammDir[strlen(ProgrammDir)-1] != '/')
-				strncat(ProgrammDir, "/", strlen("/"));
-
-		}
-	}
-	if (!dirpresent) {
-#ifdef DATADIR
-		strcpy(ProgrammDir, DATADIR "/");
-#else
-		strcpy(ProgrammDir, argv[0]);
-		char* s = strrchr(ProgrammDir,'/');
-		if (s) s[0]=0x0;
-		const char *Fi = "/";
-		strcat( ProgrammDir, Fi );
-#endif // DATADIR
-	}
-
-
-	VFSFileNamePath = ProgrammDir;
-	VFSFileNamePath += "gamedata.vfs";
-
-
-	if (!NeedPack) {
-		// first at all we need check XDG_DESKTOP_DIR environment variable
-		const char* DesktopDirEnv = getenv("XDG_DESKTOP_DIR");
-		if (DesktopDirEnv != nullptr) {
-			strcpy(ScreenshotDir, DesktopDirEnv);
-		} else {
-			strcpy(ScreenshotDir, HomeEnv);
-			strcat(ScreenshotDir, "/Desktop/");
-		}
-	}
-
-#endif // unix
-
-
 
 	// версия
 	std::cout << "AstroMenace " << GAME_VERSION << "\n";
 	std::cout << "VFS version " << GAME_VFS_BUILD << "\n\n";
-
-
 
 
 	SDL_version compiled;
@@ -281,64 +174,26 @@ int main( int argc, char **argv )
 		  << "\n";
 
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// переводим в режим генерации gamedata.vfs файла
 	// генерируем файл данный gamedata.vfs учитывая текущее его расположение
 	// !!! всегда делаем только с одним открытым на запись VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (NeedPack) {
-		char RawDataDir[MAX_PATH];
-		// по умолчанию, считаем что рав данные прямо с нами лежат
-		strcpy(RawDataDir, ProgrammDir);
-		strcat(RawDataDir, "gamedata/");
-
-
-		// ищем, если передали ключем его расположение
-		for (int i=1; i<argc; i++) {
-			if (!strncmp(argv[i], "--rawdata=", sizeof("--rawdata"))) {
-#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
-				// если передали относительный путь в папку пользователя с тильдой
-				if ((argv[i][sizeof("--rawdata")] != '~') || (HomeEnv == nullptr))
-					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
-				else {
-					strcpy(RawDataDir, HomeEnv);
-					strcat(RawDataDir, argv[i]+strlen("--rawdata=~"));
-				}
-#elif defined(WIN32)
-				// если есть двоеточия после второго символа - это полный путь с указанием девайса
-				if (argv[i][sizeof("--rawdata=")] == ':') {
-					strcpy(RawDataDir, argv[i]+strlen("--rawdata="));
-				} else {
-					strcpy(RawDataDir, ProgrammDir);
-					strcat(RawDataDir, argv[i]+strlen("--rawdata="));
-				}
-#endif // WIN32
-				// если в конце нет слеша - ставим его
-				if (RawDataDir[strlen(RawDataDir)-1] != '/')
-					strncat(RawDataDir, "/", strlen("/"));
-			}
-		}
-
-		std::cout << "Source Raw Folder: " << RawDataDir << "\n";
-		int rc = ConvertFS2VFS(RawDataDir, VFSFileNamePath);
-		vw_ReleaseAllTimeThread();
+		if (RawDataPath.empty())
+			RawDataPath = GetBasePath() + "gamedata/";
+		int rc = ConvertFS2VFS(RawDataPath, GetDataPath() + "gamedata.vfs");
 		SDL_Quit();
 		return rc;
 	}
 
 
 
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// подключаем VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (vw_OpenVFS(VFSFileNamePath, GAME_VFS_BUILD) != 0) {
+	if (vw_OpenVFS(GetDataPath() + "gamedata.vfs", GAME_VFS_BUILD) != 0) {
 		std::cerr << __func__ << "(): " << "gamedata.vfs file not found or corrupted.\n";
-		vw_ReleaseAllTimeThread();
 		SDL_Quit();
 		return 1;
 	}
@@ -360,6 +215,7 @@ int main( int argc, char **argv )
 	// иним фонт
 	InitFont(FontList[GameConfig().FontNumber].FontFileName);
 
+	vw_InitTimeThread(0);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
@@ -369,8 +225,6 @@ int main( int argc, char **argv )
 		ChangeGameConfig().Sound_check = false;
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 	}
-
-
 
 ReCreate:
 
