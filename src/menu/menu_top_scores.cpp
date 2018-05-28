@@ -59,7 +59,7 @@ std::list<sTopScore> TopScoresList{};
  */
 void InitTopScoresMenu()
 {
-	static std::list<sTopScore> DefaultTopScores{
+	static const std::list<sTopScore> DefaultTopScores{
 		{"Viewizard", 100000},
 		{"Alex", 90000},
 		{"Michael", 80000},
