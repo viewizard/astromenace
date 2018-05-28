@@ -1482,8 +1482,6 @@ Dialogs with default type:
 		vw_DrawText(X+25, Y+140+k*7, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("F9 - change Primary weapon group fire mode."));
 		vw_DrawText(X+25, Y+140+k*8, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("F10 - change Secondary weapon group fire mode."));
 
-		vw_DrawText(X+25, Y+160+k*9, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("F12 - capture screenshot. (File will be saved on your Desktop.)"));
-
 		vw_DrawText(X+25, Y+180+k*10, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Esc - show/hide game menu. (Pause.)"));
 		vw_DrawText(X+25, Y+180+k*11, -716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Note: all changes will be saved in the game configuration file."));
 

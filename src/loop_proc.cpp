@@ -334,17 +334,6 @@ void Loop_Proc()
 		vw_SetKeyStatus(SDLK_F2, false);
 	}
 
-	// делаем на рабочем столе бмп скриншоты
-	if (vw_GetKeyStatus(SDLK_PRINTSCREEN) || vw_GetKeyStatus(SDLK_F12)) {
-		std::time_t RawTime = std::time(nullptr);
-		std::array<char, 128> tmpBuffer;
-		std::strftime(tmpBuffer.data(), tmpBuffer.size(), "/AstroMenaceScreenshot%Y-%m-%d_%H:%M:%S.bmp", std::localtime(&RawTime));
-
-		vw_Screenshot(GameConfig().Width, GameConfig().Height, ScreenshotDir + std::string{tmpBuffer.data()});
-		vw_SetKeyStatus(SDLK_PRINTSCREEN, false);
-		vw_SetKeyStatus(SDLK_F12, false);
-	}
-
 	// управление скоростью игры, только в самой игре!
 	if ((MenuStatus == eMenuStatus::GAME) &&
 	    (GameContentTransp<=0.0f) &&
