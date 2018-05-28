@@ -45,14 +45,17 @@ const std::string &GetConfigPath()
 	if (!ConfigPath.empty())
 		return ConfigPath;
 
-	// by some reason, SDL use XDG_CONFIG_DATA for preferences, so,
+	// by some reason, SDL use XDG_CONFIG_DATA for preferences/configs, so,
 	// we are forced to use own code instead of SDL_GetPrefPath() for unix
 #ifdef __unix
-	// XDG_CONFIG_HOME
-	if (const char *tmpEnvCH = std::getenv("XDG_CONFIG_HOME"))
+	// act accordingly to XDG Base Directory Specification
+	// "$XDG_CONFIG_HOME" > "$HOME/.config"
+	const char *tmpEnvCH = std::getenv("XDG_CONFIG_HOME");
+	if (tmpEnvCH)
 		ConfigPath = tmpEnvCH;
 	else {
-		if (const char *tmpEnvH = std::getenv("HOME")) {
+		const char *tmpEnvH = std::getenv("HOME");
+		if (tmpEnvH) {
 			ConfigPath = tmpEnvH;
 			ConfigPath += "/.config";
 

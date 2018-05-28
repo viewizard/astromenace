@@ -25,12 +25,12 @@
 
 *************************************************************************************/
 
-#ifndef PLATFORM_PATHS_H
-#define PLATFORM_PATHS_H
+#ifndef PLATFORM_RELATED_H
+#define PLATFORM_RELATED_H
 
 #include "../core/base.h"
 
 // Get configuration path for current platform.
 const std::string &GetConfigPath();
 
-#endif // PLATFORM_PATHS_H
+#endif // PLATFORM_RELATED_H
