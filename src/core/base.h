@@ -44,13 +44,6 @@
 #  define UNUSED(x) UNUSED_ ## x
 #endif
 
-#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
-#ifndef MAX_PATH
-#define MAX_PATH 1024
-#endif // MAX_PATH
-#endif // unix
-
-
 enum class eRGBCOLOR {
 	white,
 	black,
