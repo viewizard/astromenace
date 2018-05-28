@@ -103,8 +103,6 @@ int main(int argc, char **argv)
 	bool NeedSafeMode = false;
 	// флаг перевода игры в режим упаковки gamedata.vfs файла
 	bool NeedPack = false;
-	// path to rawdata
-	std::string RawDataPath{};
 
 	for (int i = 1; i < argc; i++) {
 		// проверка ключа "--help"
@@ -124,17 +122,8 @@ int main(int argc, char **argv)
 			SetDataPathByParameter(argv[i], "--dir=");
 
 		// проверка ключа "--rawdata"
-		if (!strncmp(argv[i], "--rawdata", strlen("--rawdata")) &&
-		    (strlen(argv[i]) > strlen("--rawdata="))) {
-			RawDataPath = argv[i] + strlen("--rawdata=");
-#ifdef WIN32
-			if (RawDataPath.back() != '\\')
-				RawDataPath += "\\";
-#else
-			if (RawDataPath.back() != '/')
-				RawDataPath += "/";
-#endif // WIN32
-		}
+		if (!strncmp(argv[i], "--rawdata", strlen("--rawdata")))
+			SetRawDataPathByParameter(argv[i], "--rawdata=");
 
 		// проверка ключа "--pack"
 		if (!strcmp(argv[i], "--pack"))
@@ -180,9 +169,7 @@ int main(int argc, char **argv)
 	// !!! всегда делаем только с одним открытым на запись VFS
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (NeedPack) {
-		if (RawDataPath.empty())
-			RawDataPath = GetBasePath() + "gamedata/";
-		int rc = ConvertFS2VFS(RawDataPath, GetDataPath() + "gamedata.vfs");
+		int rc = ConvertFS2VFS(GetRawDataPath(), GetDataPath() + "gamedata.vfs");
 		SDL_Quit();
 		return rc;
 	}

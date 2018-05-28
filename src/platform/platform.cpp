@@ -47,6 +47,8 @@ std::string DataPath{
 #endif // DATADIR
 	};
 
+std::string RawDataPath{};
+
 } // unnamed namespace
 
 
@@ -122,23 +124,31 @@ const std::string &GetBasePath()
 }
 
 /*
- * Set data path for current platform by command line parameter.
+ * Set path by command line parameter.
  */
-void SetDataPathByParameter(char *argv, const std::string &ParameterName)
+static void SetPathByParameter(std::string &Path, char *argv, const std::string &ParameterName)
 {
 	if (!argv ||
 	    (strlen(argv) <= ParameterName.size()))
 		return;
 
-	DataPath = argv + ParameterName.size();
+	Path = argv + ParameterName.size();
 
 #ifdef WIN32
-	if (DataPath.back() != '\\')
-		DataPath += "\\";
+	if (Path.back() != '\\')
+		Path += "\\";
 #else
-	if (DataPath.back() != '/')
-		DataPath += "/";
+	if (Path.back() != '/')
+		Path += "/";
 #endif // WIN32
+}
+
+/*
+ * Set data path for current platform by command line parameter.
+ */
+void SetDataPathByParameter(char *argv, const std::string &ParameterName)
+{
+	SetPathByParameter(DataPath, argv, ParameterName);
 }
 
 /*
@@ -152,4 +162,27 @@ const std::string &GetDataPath()
 	DataPath = GetBasePath();
 
 	return DataPath;
+}
+
+/*
+ * Set raw data path for current platform by command line parameter.
+ */
+void SetRawDataPathByParameter(char *argv, const std::string &ParameterName)
+{
+	SetPathByParameter(RawDataPath, argv, ParameterName);
+}
+
+/*
+ * Get raw data path for current platform.
+ */
+const std::string &GetRawDataPath()
+{
+	if (!RawDataPath.empty())
+		return RawDataPath;
+
+	RawDataPath = GetBasePath();
+	if (!RawDataPath.empty())
+		RawDataPath += "gamedata/";
+
+	return RawDataPath;
 }

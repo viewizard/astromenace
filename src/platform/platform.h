@@ -42,4 +42,9 @@ void SetDataPathByParameter(char *argv, const std::string &ParameterName);
 // Get data path for current platform.
 const std::string &GetDataPath();
 
+// Set raw data path for current platform by command line parameter.
+void SetRawDataPathByParameter(char *argv, const std::string &ParameterName);
+// Get raw data path for current platform.
+const std::string &GetRawDataPath();
+
 #endif // PLATFORM_RELATED_H
