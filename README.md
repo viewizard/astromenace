@@ -28,6 +28,9 @@ Installer for Windows and macOS bundle could be found at [release](https://githu
 
 Almost all popular Linux distros already have a stable version of the game in their repositories. Install the "astromenace" package with your distro's package manager. We do not provide compiled binary packages for Linux anymore, contact maintainers of your Linux distro in order to get binary package.
 
+[![latest packaged version(s)](https://repology.org/badge/latest-versions/astromenace.svg)](https://repology.org/metapackage/astromenace)
+[![Packaging status](https://repology.org/badge/tiny-repos/astromenace.svg)](https://repology.org/metapackage/astromenace)
+
 #### Debian/Ubuntu and derivatives
 ```
 sudo apt-get install astromenace
