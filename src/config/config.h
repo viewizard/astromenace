@@ -138,10 +138,8 @@ struct sGameConfig {
 	int FontNumber{0}; // first font from the list
 
 	int MusicVolume{8};	// in-game music volume [0, 10]
-	bool Music_check{true};	// general music switch (hardware/software related)
 	int SoundVolume{10};	// in-game sfx volume [0, 10]
 	int VoiceVolume{10};	// in-game voice volume [0, 10]
-	bool Sound_check{true};	// general sfx switch (hardware/software related)
 
 	int Width{1280};	// game resolution's width
 	int Height{768};	// game resolution's height

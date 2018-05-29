@@ -76,19 +76,19 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Music Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicVolume == 0))) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().MusicVolume == 0))) {
 		ChangeGameConfig().MusicVolume--;
 		if (GameConfig().MusicVolume < 0)
 			ChangeGameConfig().MusicVolume = 0;
 		vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Music_check || (GameConfig().MusicVolume == 10))) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().MusicVolume == 10))) {
 		ChangeGameConfig().MusicVolume++;
 		if (GameConfig().MusicVolume > 10)
 			ChangeGameConfig().MusicVolume = 10;
 		vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
 	}
-	if (!GameConfig().Music_check) {
+	if (!vw_GetAudioStatus()) {
 		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	} else {
@@ -109,21 +109,21 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Voice Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceVolume == 0), false)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 0), false)) {
 		ChangeGameConfig().VoiceVolume--;
 		if (GameConfig().VoiceVolume < 0)
 			ChangeGameConfig().VoiceVolume = 0;
 		Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().VoiceVolume == 10), false)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 10), false)) {
 		ChangeGameConfig().VoiceVolume++;
 		if (GameConfig().VoiceVolume > 10)
 			ChangeGameConfig().VoiceVolume = 10;
 		Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
 		Audio_PlayVoice(1, 1.0f);
 	}
-	if (!GameConfig().Sound_check) {
+	if (!vw_GetAudioStatus()) {
 		int SizeI = (170 - vw_TextWidth(vw_GetText("Not available"))) / 2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	} else {
@@ -143,19 +143,19 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Sound Effects Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundVolume == 0))) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().SoundVolume == 0))) {
 		ChangeGameConfig().SoundVolume--;
 		if (GameConfig().SoundVolume < 0)
 			ChangeGameConfig().SoundVolume = 0;
 		Audio_SetSound2DGlobalVolume(GameConfig().SoundVolume / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !GameConfig().Sound_check || (GameConfig().SoundVolume == 10))) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().SoundVolume == 10))) {
 		ChangeGameConfig().SoundVolume++;
 		if (GameConfig().SoundVolume > 10)
 			ChangeGameConfig().SoundVolume = 10;
 		Audio_SetSound2DGlobalVolume(GameConfig().SoundVolume / 10.0f);
 	}
-	if (!GameConfig().Sound_check) {
+	if (!vw_GetAudioStatus()) {
 		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
 		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
 	} else {

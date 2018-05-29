@@ -190,11 +190,8 @@ int main(int argc, char **argv)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!vw_InitAudio()) {
-		ChangeGameConfig().Music_check = false;
-		ChangeGameConfig().Sound_check = false;
+	if (!vw_InitAudio())
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
-	}
 
 ReCreate:
 

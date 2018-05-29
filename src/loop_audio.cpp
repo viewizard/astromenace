@@ -156,7 +156,7 @@ void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t F
 		break;
 	}
 
-	if (GameConfig().Music_check && //если можно играть
+	if (vw_GetAudioStatus() && //если можно играть
 	    GameConfig().MusicVolume && // и громкость не нулевая
 	    !CurrentPlayingMusicName.empty()) {
 
@@ -196,7 +196,7 @@ void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 //------------------------------------------------------------------------------------
 unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 {
-	if (!GameConfig().Sound_check ||
+	if (!vw_GetAudioStatus() ||
 	    !GameConfig().SoundVolume ||
 	    (SoundID > MenuSoundQuantity))
 		return 0;
@@ -222,7 +222,7 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 //------------------------------------------------------------------------------------
 unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 {
-	if (!GameConfig().Sound_check || /* this is correct, since we playing voice via sound */
+	if (!vw_GetAudioStatus() ||
 	    !GameConfig().VoiceVolume ||
 	    (VoiceID > VoiceQuantity))
 		return 0;
@@ -248,7 +248,7 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 //------------------------------------------------------------------------------------
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType)
 {
-	if (!GameConfig().Sound_check ||
+	if (!vw_GetAudioStatus() ||
 	    !GameConfig().SoundVolume)
 		return 0;
 
@@ -296,8 +296,8 @@ void Audio_LoopProc()
 
 	// запускаем нужную музыку... только включили громкость или выключили
 	if (!vw_IsAnyMusicPlaying()) {
-		if (GameConfig().MusicVolume && // если громкость не нулевая
-		    GameConfig().Music_check && // если можно вообще играть
+		if (vw_GetAudioStatus() && // если можно вообще играть
+		    GameConfig().MusicVolume && // если громкость не нулевая
 		    !CurrentPlayingMusicName.empty()) { // если установлен
 			// пытаемся загрузить и проиграть
 			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, GameConfig().MusicVolume / 10.0f,
@@ -309,8 +309,8 @@ void Audio_LoopProc()
 		}
 	} else {
 		// если что-то играем, но звук уже выключен, нужно все убрать...
-		if (!GameConfig().MusicVolume && // если громкость нулевая
-		    GameConfig().Music_check) { // но играть можно
+		if (vw_GetAudioStatus() && // играть можно
+		    !GameConfig().MusicVolume) { // но громкость нулевая
 			vw_ReleaseAllMusic();
 		}
 	}

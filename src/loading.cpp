@@ -976,7 +976,7 @@ void LoadGameData(eLoading LoadType)
 		// загрузка sfx
 		case 4:
 			// если вообще можем играть звуки
-			if (GameConfig().Sound_check)
+			if (vw_GetAudioStatus())
 				vw_LoadSoundBuffer(LoadList[i].FileName);
 			break;
 		}
