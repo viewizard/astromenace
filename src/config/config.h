@@ -206,7 +206,7 @@ const sGameConfig &GameConfig();
 // Get game configuration for read and write.
 sGameConfig &ChangeGameConfig();
 // Load game configuration file.
-bool LoadXMLConfigFile(bool NeedSafeMode);
+bool LoadXMLConfigFile(bool NeedResetConfig);
 // Save game configuration file.
 void SaveXMLConfigFile();
 

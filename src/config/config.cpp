@@ -295,7 +295,7 @@ static void LoadPilotsProfiles()
 /*
  * Load game configuration file.
  */
-bool LoadXMLConfigFile(bool NeedSafeMode)
+bool LoadXMLConfigFile(bool NeedResetConfig)
 {
 	if (GetConfigPath().empty()) {
 		std::cerr << __func__ << "(): config path not set.\n";
@@ -304,8 +304,8 @@ bool LoadXMLConfigFile(bool NeedSafeMode)
 
 	LoadPilotsProfiles();
 
-	// NeedSafeMode, only pilots profiles should be loaded
-	if (NeedSafeMode)
+	// NeedResetConfig, only pilots profiles should be loaded
+	if (NeedResetConfig)
 		return false;
 
 	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument(GetConfigPath() + ConfigFileName)};

@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 // TODO check fullscreen modes with SDL_GetDisplayBounds() and windowed modes with SDL_GetDisplayUsableBounds()
 
 // TODO probably, we could provide option for screen number, where game's window should
@@ -97,45 +99,37 @@ sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 //------------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-	// флаг отображать ли системный курсор
-	bool NeedShowSystemCursor = false;
-	// флаг нужно ли сбрасывать настройки игры при старте
-	bool NeedSafeMode = false;
-	// флаг перевода игры в режим упаковки gamedata.vfs файла
-	bool NeedPack = false;
+	bool NeedShowSystemCursor{false};
+	bool NeedResetConfig{false};
+	bool NeedPack{false};
 
+	// don't use getopt_long() here, since it could be not available (MSVC)
 	for (int i = 1; i < argc; i++) {
-		// проверка ключа "--help"
 		if (!strcmp(argv[i], "--help")) {
 			std::cout << "AstroMenace launch options:\n\n"
 				  << "--dir=/folder - folder with gamedata.vfs file;\n"
 				  << "--rawdata=/folder - folder with raw data for gamedata.vfs;\n"
 				  << "--pack - pack data to gamedata.vfs file;\n"
 				  << "--mouse - launch the game without system cursor hiding;\n"
-				  << "--safe-mode - reset all settings except Pilots Profiles at the game launch;\n"
+				  << "--reset-config - reset all settings except Pilots Profiles;\n"
 				  << "--help - info about all game launch options.\n";
 			return 0;
 		}
 
-		// проверка ключа "--dir"
 		if (!strncmp(argv[i], "--dir", strlen("--dir")))
 			SetDataPathByParameter(argv[i], "--dir=");
 
-		// проверка ключа "--rawdata"
 		if (!strncmp(argv[i], "--rawdata", strlen("--rawdata")))
 			SetRawDataPathByParameter(argv[i], "--rawdata=");
 
-		// проверка ключа "--pack"
 		if (!strcmp(argv[i], "--pack"))
 			NeedPack = true;
 
-		// проверка ключа "--mouse"
 		if (!strcmp(argv[i], "--mouse"))
 			NeedShowSystemCursor = true;
 
-		// проверка ключа "--safe-mode"
-		if (!strcmp(argv[i], "--safe-mode"))
-			NeedSafeMode = true;
+		if (!strcmp(argv[i], "--reset-config"))
+			NeedResetConfig = true;
 	}
 
 	// should be initialized before any interaction with SDL functions
@@ -145,56 +139,45 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	// версия
 	std::cout << "AstroMenace " << GAME_VERSION << "\n";
 	std::cout << "VFS version " << GAME_VFS_BUILD << "\n\n";
 
-
 	SDL_version compiled;
 	SDL_version linked;
-
 	SDL_VERSION(&compiled);
 	SDL_GetVersion(&linked);
 	std::cout << "Compiled against SDL version "
-		  << (int)compiled.major << "." << (int)compiled.minor << "." << (int)compiled.patch
+		  << static_cast<int>(compiled.major) << "."
+		  << static_cast<int>(compiled.minor) << "."
+		  << static_cast<int>(compiled.patch)
 		  << "\n";
 	std::cout << "Linking against SDL version "
-		  << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch
+		  << static_cast<int>(linked.major) << "."
+		  << static_cast<int>(linked.minor) << "."
+		  << static_cast<int>(linked.patch)
 		  << "\n";
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// переводим в режим генерации gamedata.vfs файла
-	// генерируем файл данный gamedata.vfs учитывая текущее его расположение
-	// !!! всегда делаем только с одним открытым на запись VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (NeedPack) {
 		int rc = ConvertFS2VFS(GetRawDataPath(), GetDataPath() + "gamedata.vfs");
 		SDL_Quit();
 		return rc;
 	}
 
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// подключаем VFS
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (vw_OpenVFS(GetDataPath() + "gamedata.vfs", GAME_VFS_BUILD) != 0) {
 		std::cerr << __func__ << "(): " << "gamedata.vfs file not found or corrupted.\n";
 		SDL_Quit();
 		return 1;
 	}
-	std::cout << "\n";
 
-
-	// загружаем все текстовые данные до инициализации шрифтов
 	if (vw_InitText("lang/text.csv", ';', '\n') != 0) {
 		std::cout << "lang/text.csv file not found or corrupted.\n";
 		// if file not loaded - it's ok, we will work with English only
 	}
 
+
+
 	// работа с файлом данных... передаем базовый режим окна (обязательно после инициализации языков!)
-	bool FirstStart = LoadXMLConfigFile(NeedSafeMode);
+	bool FirstStart = LoadXMLConfigFile(NeedResetConfig);
 
 	if (GameConfig().FontNumber > FontQuantity)
 		ChangeGameConfig().FontNumber = 0;
