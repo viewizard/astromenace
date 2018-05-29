@@ -27,10 +27,19 @@
 
 // NOTE in future, use std::filesystem::create_directory() instead of mkdir() (since C++17)
 
+// TODO (GetDesktopPath(), macOS) probably, we should use NSHomeDirectory() here (not tested)
+
+// TODO (GetDesktopPath(), Windows) for new Windows versions (since Vista), SHGetKnownFolderPath() should be used
+//      SHGetKnownFolderPath(FOLDERID_Desktop, KF_FLAG_DEFAULT, nullptr, &wszPath);
+
 #include "../core/base.h"
 #include "../build_config.h"
 
-#ifdef __unix
+#if defined(WIN32)
+#include <shlobj.h>
+#endif // WIN32
+
+#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
 #include <sys/stat.h> // mkdir
 #endif // unix
 
@@ -101,6 +110,62 @@ const std::string &GetConfigPath()
 #endif // unix
 
 	return ConfigPath;
+}
+
+/*
+ * Get desktop path for current platform.
+ */
+const std::string &GetDesktopPath()
+{
+	static std::string DesktopPath{};
+
+	if (!DesktopPath.empty())
+		return DesktopPath;
+
+#ifdef __unix
+	// act accordingly to XDG Base Directory Specification
+	// "$XDG_DESKTOP_DIR" > "$HOME/Desktop"
+	const char *tmpEnvDD = std::getenv("XDG_DESKTOP_DIR");
+	if (tmpEnvDD)
+		DesktopPath = tmpEnvDD;
+	else {
+		const char *tmpEnvH = std::getenv("HOME");
+		if (tmpEnvH) {
+			DesktopPath = tmpEnvH;
+			DesktopPath += "/Desktop";
+		}
+	}
+
+	// only check, that DesktopPath is available, don't create it
+	struct stat st;
+	if (stat(DesktopPath.c_str(), &st) == -1) {
+		DesktopPath.clear();
+	} else
+		DesktopPath += "/";
+#elif defined(__APPLE__) && defined(__MACH__)
+	const char *tmpEnvH = std::getenv("HOME");
+	if (tmpEnvH) {
+		DesktopPath = tmpEnvH;
+		DesktopPath += "/Desktop";
+	}
+
+	// only check, that DesktopPath is available, don't create it
+	struct stat st;
+	if (stat(DesktopPath.c_str(), &st) == -1) {
+		DesktopPath.clear();
+	} else
+		DesktopPath += "/";
+#elif defined(WIN32)
+	WCHAR tmpPath[MAX_PATH];
+	if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY, nullptr, 0, tmpPath))) {
+		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter_wchar;
+		DesktopPath = converter_wchar.to_bytes(tmpPath);
+		if (DesktopPath.back() != '\\')
+			DesktopPath += "\\";
+	}
+#endif
+
+	return DesktopPath;
 }
 
 /*

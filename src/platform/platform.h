@@ -33,6 +33,9 @@
 // Get configuration path for current platform.
 const std::string &GetConfigPath();
 
+// Get desktop path for current platform.
+const std::string &GetDesktopPath();
+
 // Get binary location path for current platform.
 // For macOS bundle, return path to resources (see https://wiki.libsdl.org/SDL_GetBasePath).
 const std::string &GetBasePath();
