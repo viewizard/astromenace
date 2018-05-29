@@ -27,6 +27,7 @@
 
 #include "game.h"
 #include "config/config.h"
+#include "platform/platform.h"
 
 
 // командный буфер
@@ -332,6 +333,17 @@ void Loop_Proc()
 	if (vw_GetKeyStatus(SDLK_F2)) {
 		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 		vw_SetKeyStatus(SDLK_F2, false);
+	}
+
+	// делаем на рабочем столе бмп скриншоты
+	if (vw_GetKeyStatus(SDLK_PRINTSCREEN) || vw_GetKeyStatus(SDLK_F12)) {
+		std::time_t RawTime = std::time(nullptr);
+		std::array<char, 128> tmpBuffer;
+		std::strftime(tmpBuffer.data(), tmpBuffer.size(), "AstroMenaceScreenshot%Y-%m-%d_%H-%M-%S.bmp", std::localtime(&RawTime));
+
+		vw_Screenshot(GameConfig().Width, GameConfig().Height, GetDesktopPath() + std::string{tmpBuffer.data()});
+		vw_SetKeyStatus(SDLK_PRINTSCREEN, false);
+		vw_SetKeyStatus(SDLK_F12, false);
 	}
 
 	// управление скоростью игры, только в самой игре!
