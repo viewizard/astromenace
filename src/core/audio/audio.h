@@ -87,6 +87,8 @@ void vw_ReleaseAllMusic();
 
 // Initialize audio.
 bool vw_InitAudio();
+// Get audio initialization status.
+bool vw_GetAudioStatus();
 // Shutdown audio.
 void vw_ShutdownAudio();
 // Setup listener in 3D space.

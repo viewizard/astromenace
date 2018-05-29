@@ -43,6 +43,15 @@ bool AlutInitStatus{false};
 
 } // unnamed namespace
 
+
+/*
+ * Get audio initialization status.
+ */
+bool vw_GetAudioStatus()
+{
+	return AlutInitStatus;
+}
+
 /*
  * Initialize audio.
  */
