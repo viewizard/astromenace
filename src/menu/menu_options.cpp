@@ -183,8 +183,6 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	Y1 += Prir1;
-	if (Options_BPP != 0) CurrentPos = 0;
-	else CurrentPos = 1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Full Screen"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !CanSwitchToFullScreen || !Options_BPP) ||
 	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, !CanSwitchToFullScreen || Options_BPP)) {

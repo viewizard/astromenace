@@ -615,7 +615,6 @@ void ShipSlotSetupWeapon(int Slot)
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-40, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Empty Weapon Slot"));
 	} else {
-		Xpos += 74+64;
 		Ypos += 33;
 		// выводим боекомплект   текущий/полный
 		Xpos = GameConfig().InternalWidth / 2 + 55 + 50;

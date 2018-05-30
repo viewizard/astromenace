@@ -626,7 +626,6 @@ void Workshop_Workshop()
 
 
 	// сбор данных
-	Current = 0.5f;
 	int Cost = 0;
 	bool CanSell = false;
 	bool CanBuy = true;
