@@ -506,3 +506,45 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 
 	return false;
 }
+
+/*
+ * Get game's difficulty, calculated by profile settings (value is cached).
+ * In case of UpdateCache is true, update particular ProfileNumber cache, if
+ * ProfileNumber is out of [0, config::MAX_PROFILES) - update all caches.
+ * For more speed, we don't check ProfileNumber for [0, config::MAX_PROFILES) range,
+ * in case of UpdateCache is false, caller should care about ProfileNumber range.
+ */
+int GetProfileDifficulty(int ProfileNumber, bool UpdateCache)
+{
+	auto CalculateDifficulty = [] (unsigned Num) {
+		return 100 - ((Config.Profile[Num].NPCWeaponPenalty - 1) * 6 +
+			      (Config.Profile[Num].NPCArmorPenalty - 1) * 6 +
+			      (Config.Profile[Num].NPCTargetingSpeedPenalty - 1) * 6 +
+			      Config.Profile[Num].LimitedAmmo * 14 +
+			      Config.Profile[Num].DestroyableWeapon * 11 +
+			      Config.Profile[Num].WeaponTargetingMode * 12 +
+			      Config.Profile[Num].SpaceShipControlMode * 15);
+	};
+
+	auto CalculateDifficulties = [&CalculateDifficulty] () {
+		std::array<int, config::MAX_PROFILES> tmpDifficulty{};
+		for (unsigned i = 0; i < config::MAX_PROFILES; i++) {
+			if (Config.Profile[i].Used)
+				tmpDifficulty[i] = CalculateDifficulty(i);
+		}
+		return tmpDifficulty;
+	};
+
+	static std::array<int, config::MAX_PROFILES> DifficultiesArray{CalculateDifficulties()};
+
+	if (UpdateCache) {
+		if ((ProfileNumber < 0) ||
+		    (ProfileNumber >= static_cast<int>(config::MAX_PROFILES))) {
+			DifficultiesArray = CalculateDifficulties();
+			return -1;
+		} else
+			DifficultiesArray[ProfileNumber] = CalculateDifficulty(ProfileNumber);
+	}
+
+	return DifficultiesArray[ProfileNumber];
+}

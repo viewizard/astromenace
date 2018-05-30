@@ -34,6 +34,7 @@
 // make sure we load proper profiles and top scores
 // note, xml tag can't contain space characters, use underline instead
 #define CONFIG_VERSION "1.4"
+// TODO remove "reserved" in sPilotProfile on CONFIG_VERSION's update
 
 namespace config {
 
@@ -67,7 +68,7 @@ struct sPilotProfile {
 	uint8_t DestroyableWeapon{1};		// 0 - destroyable, 1 - immortal
 	uint8_t WeaponTargetingMode{0};		// 0 - simulator, 1 - arcade
 	uint8_t SpaceShipControlMode{1};	// 0 - simulator, 1 - arcade
-	uint8_t Difficulty{50};			// default difficulty in %, this parameter based on all previous parameters
+	uint8_t reserved{0};
 
 	// default player's ship (first ship, without additional hull upgrades)
 	uint8_t Ship{1};
@@ -207,5 +208,12 @@ sGameConfig &ChangeGameConfig();
 bool LoadXMLConfigFile(bool NeedResetConfig);
 // Save game configuration file.
 void SaveXMLConfigFile();
+
+// Get game's difficulty, calculated by profile settings (value is cached).
+// In case of UpdateCache is true, update particular ProfileNumber cache, if
+// ProfileNumber is out of [0, config::MAX_PROFILES) - update all caches.
+// For more speed, we don't check ProfileNumber for [0, config::MAX_PROFILES) range,
+// in case of UpdateCache is false, caller should care about ProfileNumber range.
+int GetProfileDifficulty(int ProfileNumber, bool UpdateCache = false);
 
 #endif // GAME_CONFIG_H

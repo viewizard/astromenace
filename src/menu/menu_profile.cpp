@@ -79,6 +79,7 @@ void NewRecord()
 	// сразу ставим первую миссию все равно выбирать не из чего
 	CurrentMission = 0;
 	ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
+	GetProfileDifficulty(ProfileNum, true); // update cache
 }
 
 
@@ -108,6 +109,7 @@ void DuplicateRecord()
 	CurrentProfile = ProfileNum;
 	ChangeGameConfig().LastProfile = CurrentProfile;
 	CurrentMission = GameConfig().Profile[CurrentProfile].LastMission;
+	GetProfileDifficulty(ProfileNum, true); // update cache
 }
 
 
@@ -145,6 +147,7 @@ void DeleteRecord()
 		CurrentProfile = 0;
 
 	ChangeGameConfig().LastProfile = CurrentProfile;
+	GetProfileDifficulty(-1, true); // update all caches
 }
 
 
@@ -340,9 +343,9 @@ void ProfileMenu()
 			Size = vw_TextWidth("%i", GameConfig().Profile[i].Experience);
 			SizeI = GameConfig().InternalWidth/2+132 + (130 - Size)/2;
 			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i", GameConfig().Profile[i].Experience);
-			Size = vw_TextWidth("%i%%", GameConfig().Profile[i].Difficulty);
+			Size = vw_TextWidth("%i%%", GetProfileDifficulty(i));
 			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i%%", GameConfig().Profile[i].Difficulty);
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i%%", GetProfileDifficulty(i));
 
 
 			// работаем с клавиатурой
