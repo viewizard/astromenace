@@ -95,6 +95,15 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		for (int i = 0; i < 10; i++) {
 			SrcRect(0 ,0, 16, 32);
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+			if (vw_GetAudioStatus() &&
+			    vw_MouseOverRect(DstRect)) {
+				CurrentCursorStatus = 1;
+				if (vw_GetMouseLeftClick(true)) {
+					ChangeGameConfig().MusicVolume = i + 1;
+					vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
+					Audio_PlaySound2D(2, 1.0f);
+				}
+			}
 			if (GameConfig().MusicVolume > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
@@ -130,6 +139,16 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		for (int i = 0; i < 10; i++) {
 			SrcRect(0, 0, 16, 32);
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+			if (vw_GetAudioStatus() &&
+			    vw_MouseOverRect(DstRect)) {
+				CurrentCursorStatus = 1;
+				if (vw_GetMouseLeftClick(true)) {
+					ChangeGameConfig().VoiceVolume = i + 1;
+					Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
+					// play voice instead of 'click' here
+					Audio_PlayVoice(1, 1.0f);
+				}
+			}
 			if (GameConfig().VoiceVolume > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
@@ -162,6 +181,15 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		for (int i=0; i<10; i++) {
 			SrcRect(0,0,16,32);
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+			if (vw_GetAudioStatus() &&
+			    vw_MouseOverRect(DstRect)) {
+				CurrentCursorStatus = 1;
+				if (vw_GetMouseLeftClick(true)) {
+					ChangeGameConfig().SoundVolume = i + 1;
+					Audio_SetSound2DGlobalVolume(GameConfig().SoundVolume / 10.0f);
+					Audio_PlaySound2D(2, 1.0f);
+				}
+			}
 			if (GameConfig().SoundVolume > i)
 				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 			else
@@ -360,6 +388,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	for (int i = 0; i < 10; i++) {
 		SrcRect(0, 0, 16, 32);
 		DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
+		if (vw_MouseOverRect(DstRect)) {
+			CurrentCursorStatus = 1;
+			if (vw_GetMouseLeftClick(true)) {
+				ChangeGameConfig().Brightness = i + 1;
+				Audio_PlaySound2D(2, 1.0f);
+			}
+		}
 		if (GameConfig().Brightness > i)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else

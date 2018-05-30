@@ -279,6 +279,13 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	for (int i=0; i<10; i++) {
 		SrcRect(0,0,16,32);
 		DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+		if (vw_MouseOverRect(DstRect)) {
+			CurrentCursorStatus = 1;
+			if (vw_GetMouseLeftClick(true)) {
+				ChangeGameConfig().JoystickDeadZone = i + 1;
+				Audio_PlaySound2D(2, 1.0f);
+			}
+		}
 		if (GameConfig().JoystickDeadZone > i)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else
@@ -304,6 +311,13 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	for (int i=0; i<10; i++) {
 		SrcRect(0,0,16,32);
 		DstRect(X1+443+16*i,Y1-4,X1+443+16+16*i,Y1+32-4);
+		if (vw_MouseOverRect(DstRect)) {
+			CurrentCursorStatus = 1;
+			if (vw_GetMouseLeftClick(true)) {
+				ChangeGameConfig().ControlSensivity = i + 1;
+				Audio_PlaySound2D(2, 1.0f);
+			}
+		}
 		if (GameConfig().ControlSensivity > i)
 			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
 		else
