@@ -496,19 +496,19 @@ int sFILE::fseek(long offset, int origin)
 {
 	switch (origin) {
 	case SEEK_CUR:
-		if (Pos + offset > Size)
+		if ((Pos + offset) > Size)
 			return ERR_PARAMETERS;
 		Pos += offset;
 		break;
 
 	case SEEK_END:
-		if (Size - offset < 0)
+		if (offset > Size)
 			return ERR_PARAMETERS;
 		Pos = Size - offset;
 		break;
 
 	case SEEK_SET:
-		if (offset < 0 || offset > Size)
+		if ((offset < 0) || (offset > Size))
 			return ERR_PARAMETERS;
 		Pos = offset;
 		break;
@@ -516,7 +516,6 @@ int sFILE::fseek(long offset, int origin)
 	default:
 		std::cerr << __func__ << "(): " << "Error in fseek function call, wrong origin.\n";
 		return ERR_PARAMETERS;
-		break;
 	}
 
 	return 0;
