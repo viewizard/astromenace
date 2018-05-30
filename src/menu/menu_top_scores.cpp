@@ -42,6 +42,12 @@ struct sTopScore {
 		ScoreUTF32 = ConvertUTF8.from_bytes(std::to_string(Score));
 	}
 
+	sTopScore(const std::u32string &_NameUTF32, int _Score, const std::u32string &_ScoreUTF32) :
+		NameUTF32{_NameUTF32},
+		Score{_Score},
+		ScoreUTF32{_ScoreUTF32}
+	{}
+
 	bool operator > (const sTopScore &B) const
 	{
 		return Score > B.Score;
@@ -59,17 +65,18 @@ std::list<sTopScore> TopScoresList{};
  */
 void InitTopScoresMenu()
 {
+	// (!) check, that Score and ScoreUTF32 are the same value
 	static const std::list<sTopScore> DefaultTopScores{
-		{"Viewizard", 100000},
-		{"Alex", 90000},
-		{"Michael", 80000},
-		{"Jeffrey", 70000},
-		{"Christopher", 60000},
-		{"Becky", 40000},
-		{"Greg", 20000},
-		{"Jay", 10000},
-		{"Kelvin", 5000},
-		{"Stephan", 1000}};
+		{U"Viewizard", 100000, U"100000"},
+		{U"Alex", 90000, U"90000"},
+		{U"Michael", 80000, U"80000"},
+		{U"Jeffrey", 70000, U"70000"},
+		{U"Christopher", 60000, U"60000"},
+		{U"Becky", 40000, U"40000"},
+		{U"Greg", 20000, U"20000"},
+		{U"Jay", 10000, U"10000"},
+		{U"Kelvin", 5000, U"5000"},
+		{U"Stephan", 1000, U"1000"}};
 
 	TopScoresList = DefaultTopScores;
 
