@@ -191,7 +191,7 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned lon
 
 		// create new entry
 		sXMLEntry *XMLEntry{nullptr};
-		if (!RootXMLEntry.get() && !ParentXMLEntry) {
+		if (!ParentXMLEntry) {
 			RootXMLEntry.reset(new sXMLEntry);
 			XMLEntry = RootXMLEntry.get();
 		} else {
