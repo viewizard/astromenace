@@ -508,13 +508,10 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 }
 
 /*
- * Get game's difficulty, calculated by profile settings (value is cached).
- * In case of UpdateCache is true, update particular ProfileNumber cache, if
- * ProfileNumber is out of [0, config::MAX_PROFILES) - update all caches.
- * For more speed, we don't check ProfileNumber for [0, config::MAX_PROFILES) range,
- * in case of UpdateCache is false, caller should care about ProfileNumber range.
+ * Game's difficulty in %, calculated by profile settings (result is cached).
+ * For more speed, we don't check ProfileNumber for [0, config::MAX_PROFILES) range.
  */
-int GetProfileDifficulty(int ProfileNumber, bool UpdateCache)
+int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 {
 	auto CalculateDifficulty = [] (unsigned Num) {
 		return 100 - ((Config.Profile[Num].NPCWeaponPenalty - 1) * 6 +
@@ -527,24 +524,28 @@ int GetProfileDifficulty(int ProfileNumber, bool UpdateCache)
 	};
 
 	auto CalculateDifficulties = [&CalculateDifficulty] () {
-		std::array<int, config::MAX_PROFILES> tmpDifficulty{};
+		std::array<int, config::MAX_PROFILES> tmpDifficultiesArray{};
 		for (unsigned i = 0; i < config::MAX_PROFILES; i++) {
 			if (Config.Profile[i].Used)
-				tmpDifficulty[i] = CalculateDifficulty(i);
+				tmpDifficultiesArray[i] = CalculateDifficulty(i);
 		}
-		return tmpDifficulty;
+		return tmpDifficultiesArray;
 	};
 
 	static std::array<int, config::MAX_PROFILES> DifficultiesArray{CalculateDifficulties()};
 
-	if (UpdateCache) {
-		if ((ProfileNumber < 0) ||
-		    (ProfileNumber >= static_cast<int>(config::MAX_PROFILES))) {
-			DifficultiesArray = CalculateDifficulties();
-			return -1;
-		} else
-			DifficultiesArray[ProfileNumber] = CalculateDifficulty(ProfileNumber);
+	switch (Action) {
+	case eDifficultyAction::Get:
+		return DifficultiesArray[ProfileNumber];
+
+	case eDifficultyAction::Update:
+		DifficultiesArray[ProfileNumber] = CalculateDifficulty(ProfileNumber);
+		break;
+
+	case eDifficultyAction::UpdateAll:
+		DifficultiesArray = CalculateDifficulties();
+		break;
 	}
 
-	return DifficultiesArray[ProfileNumber];
+	return 0;
 }

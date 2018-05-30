@@ -63,7 +63,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty--;
 		if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty = 1;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty == 3)
@@ -72,7 +72,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty++;
 		if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty > 3)
 				ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty = 3;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty == 1) {
 		Size = vw_TextWidth(vw_GetText("None"));
@@ -96,7 +96,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].NPCArmorPenalty--;
 		if (GameConfig().Profile[CurrentProfile].NPCArmorPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].NPCArmorPenalty = 1;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].NPCArmorPenalty == 4)
@@ -105,7 +105,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].NPCArmorPenalty++;
 		if (GameConfig().Profile[CurrentProfile].NPCArmorPenalty > 4)
 			ChangeGameConfig().Profile[CurrentProfile].NPCArmorPenalty = 4;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	if (GameConfig().Profile[CurrentProfile].NPCArmorPenalty == 1) {
 		Size = vw_TextWidth(vw_GetText("None"));
@@ -129,7 +129,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty--;
 		if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty = 1;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty == 4)
@@ -138,7 +138,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty++;
 		if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty > 4)
 			ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty = 4;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty == 1) {
 		Size = vw_TextWidth(vw_GetText("None"));
@@ -159,7 +159,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].LimitedAmmo++;
 		if (GameConfig().Profile[CurrentProfile].LimitedAmmo > 1)
 			ChangeGameConfig().Profile[CurrentProfile].LimitedAmmo = 0;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 
 
@@ -171,7 +171,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].DestroyableWeapon++;
 		if (GameConfig().Profile[CurrentProfile].DestroyableWeapon > 1)
 			ChangeGameConfig().Profile[CurrentProfile].DestroyableWeapon = 0;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 
 
@@ -184,7 +184,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode++;
 		if (GameConfig().Profile[CurrentProfile].WeaponTargetingMode > 1)
 			ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 0;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 
 
@@ -196,7 +196,7 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode++;
 		if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode > 1)
 			ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 0;
-		GetProfileDifficulty(CurrentProfile, true);
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 
 
@@ -206,9 +206,9 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	Size = vw_TextWidth("%s: %i%%", vw_GetText("Current Profile Difficulty"), GetProfileDifficulty(CurrentProfile));
+	Size = vw_TextWidth("%s: %i%%", vw_GetText("Current Profile Difficulty"), ProfileDifficulty(CurrentProfile));
 	SizeI = (GameConfig().InternalWidth - Size) / 2;
-	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i%%", vw_GetText("Current Profile Difficulty"), GetProfileDifficulty(CurrentProfile));
+	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i%%", vw_GetText("Current Profile Difficulty"), ProfileDifficulty(CurrentProfile));
 
 
 

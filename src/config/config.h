@@ -209,11 +209,13 @@ bool LoadXMLConfigFile(bool NeedResetConfig);
 // Save game configuration file.
 void SaveXMLConfigFile();
 
-// Get game's difficulty, calculated by profile settings (value is cached).
-// In case of UpdateCache is true, update particular ProfileNumber cache, if
-// ProfileNumber is out of [0, config::MAX_PROFILES) - update all caches.
-// For more speed, we don't check ProfileNumber for [0, config::MAX_PROFILES) range,
-// in case of UpdateCache is false, caller should care about ProfileNumber range.
-int GetProfileDifficulty(int ProfileNumber, bool UpdateCache = false);
+// Game's difficulty in %, calculated by profile settings (result is cached).
+// For more speed, we don't check ProfileNumber for [0, config::MAX_PROFILES) range.
+enum class eDifficultyAction {
+	Get,
+	Update,
+	UpdateAll
+};
+int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action = eDifficultyAction::Get);
 
 #endif // GAME_CONFIG_H
