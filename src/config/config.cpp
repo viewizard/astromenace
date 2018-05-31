@@ -525,7 +525,7 @@ int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 
 	auto CalculateDifficulties = [&CalculateDifficulty] () {
 		std::array<int, config::MAX_PROFILES> tmpDifficultiesArray{};
-		for (unsigned i = 0; i < config::MAX_PROFILES; i++) {
+		for (int i = 0; i < config::MAX_PROFILES; i++) {
 			if (Config.Profile[i].Used)
 				tmpDifficultiesArray[i] = CalculateDifficulty(i);
 		}

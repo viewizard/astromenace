@@ -80,7 +80,7 @@ void InitTopScoresMenu()
 
 	TopScoresList = DefaultTopScores;
 
-	for (unsigned i = 0; i < config::MAX_PROFILES; i++) {
+	for (int i = 0; i < config::MAX_PROFILES; i++) {
 		if (GameConfig().Profile[i].Used &&
 		    (GameConfig().Profile[i].Experience > 0))
 			TopScoresList.emplace_back(GameConfig().Profile[i].Name,

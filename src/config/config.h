@@ -41,7 +41,7 @@ namespace config {
 // (!) changes make previous game configuration file incompatible
 
 // maximum profiles
-constexpr unsigned MAX_PROFILES{5};
+constexpr int MAX_PROFILES{5};
 // profile name size
 constexpr unsigned PROFILE_NAME_SIZE{1024};
 // maximum possible missions number for arrays in pilot profile
