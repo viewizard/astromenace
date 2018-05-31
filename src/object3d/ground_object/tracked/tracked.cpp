@@ -87,7 +87,7 @@ void cTracked::Create(int TrackedNum)
 	SpeedToRotate = PresetTrackedData[TrackedNum-1].SpeedToRotate;
 
 
-	Strength = StrengthStart = PresetTrackedData[TrackedNum-1].Strength/GameNPCArmorPenalty;
+	Strength = StrengthStart = PresetTrackedData[TrackedNum-1].Strength/GameEnemyArmorPenalty;
 
 
 	WeaponQuantity = PresetTrackedData[TrackedNum-1].WeaponQuantity;

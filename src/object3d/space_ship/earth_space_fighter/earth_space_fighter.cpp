@@ -524,7 +524,7 @@ void cEarthSpaceFighter::Create(int	SpaceShipNum)
 
 	// ставим нужные данные
 	Weight = PresetEarthSpaceFighterData[SpaceShipNum-1].Weight;
-	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum-1].Strength/GameNPCArmorPenalty;
+	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum-1].Strength/GameEnemyArmorPenalty;
 	WeaponQuantity = PresetEarthSpaceFighterData[SpaceShipNum-1].WeaponQuantity;
 	unsigned int EngineQuantity = PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
 	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum-1].Name, this, 2.0f);

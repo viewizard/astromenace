@@ -413,7 +413,7 @@ const char *GetWeaponIconName(int Num);
 extern cEarthSpaceFighter *PlayerFighter;
 
 extern int GameEnemyWeaponPenalty;
-extern int GameNPCArmorPenalty;
+extern int GameEnemyArmorPenalty;
 extern int GameNPCTargetingSpeedPenalty;
 extern int GameLimitedAmmo;
 extern int GameDestroyableWeapon;

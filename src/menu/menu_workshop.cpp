@@ -85,8 +85,8 @@ void WorkshopCreateShip(int Num)
 		WorkshopFighterGame = nullptr;
 	}
 
-	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
-	GameNPCArmorPenalty = 1;
+	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
+	GameEnemyArmorPenalty = 1;
 
 	WorkshopFighterGame = new cEarthSpaceFighter;
 	WorkshopFighterGame->Create(GameConfig().Profile[CurrentProfile].Ship);
@@ -125,7 +125,7 @@ void WorkshopCreateShip(int Num)
 	else
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 
-	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
+	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 	WorkshopFighterGame->SetLocation(sVECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
 
 	if (Num == 1)
@@ -152,8 +152,8 @@ void WorkshopCreateNewShip()
 		WorkshopNewFighter = nullptr;
 	}
 
-	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
-	GameNPCArmorPenalty = 1;
+	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
+	GameEnemyArmorPenalty = 1;
 
 	WorkshopNewFighter = new cEarthSpaceFighter;
 	WorkshopNewFighter->Create(CurrentWorkshopNewFighter);
@@ -162,7 +162,7 @@ void WorkshopCreateNewShip()
 	WorkshopNewFighter->ObjectStatus = eObjectStatus::none;
 	WorkshopNewFighter->EngineDestroyType = true;
 
-	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
+	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 	WorkshopNewFighter->SetLocation(sVECTOR3D(2000,-2000-(WorkshopNewFighter->Height/2.0f + WorkshopNewFighter->AABB[6].y), -(WorkshopNewFighter->Length/2.0f + WorkshopNewFighter->AABB[6].z)));
 
 	WorkshopNewFighter->SetRotation(sVECTOR3D(0.0f,-45.0f,0.0f));
@@ -182,14 +182,14 @@ void WorkshopCreateNewWeapon()
 		WorkshopNewWeapon = nullptr;
 	}
 
-	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
-	GameNPCArmorPenalty = 1;
+	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
+	GameEnemyArmorPenalty = 1;
 
 	WorkshopNewWeapon = new cWeapon;
 	WorkshopNewWeapon->Create(CurrentWorkshopNewWeapon);
 
 	WorkshopNewWeapon->ObjectStatus = eObjectStatus::none;
-	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
+	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 
 	sVECTOR3D Ptmp = sVECTOR3D(0,-(WorkshopNewWeapon->Height/2.0f + WorkshopNewWeapon->AABB[6].y), -(WorkshopNewWeapon->Length/2.0f + WorkshopNewWeapon->AABB[6].z)-0.5f);
 	vw_RotatePoint(Ptmp, sVECTOR3D(0.0f, -45.0f, 0.0f));

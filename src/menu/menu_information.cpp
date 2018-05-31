@@ -317,8 +317,8 @@ void CreateInfoObject()
 
 	DestroyInfoObject();
 
-	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
-	GameNPCArmorPenalty = 1;
+	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
+	GameEnemyArmorPenalty = 1;
 
 	RotationSumY = 140;
 
@@ -606,7 +606,7 @@ void CreateInfoObject()
 		InfoTracked->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 
-	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
+	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 
 	LastRotateInfoObject = vw_GetTimeThread(0);
 }

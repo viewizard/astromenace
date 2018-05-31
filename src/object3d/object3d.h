@@ -43,7 +43,7 @@
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern int GameEnemyWeaponPenalty;
-extern int GameNPCArmorPenalty;
+extern int GameEnemyArmorPenalty;
 extern int GameNPCTargetingSpeedPenalty;
 extern int GameLimitedAmmo;
 extern int GameDestroyableWeapon;

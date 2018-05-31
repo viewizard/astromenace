@@ -333,8 +333,8 @@ void WorkshopCreateBuyShip()
 	// создаем объект
 	delete WorkshopFighterGame;
 
-	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
-	GameNPCArmorPenalty = 1;
+	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
+	GameEnemyArmorPenalty = 1;
 
 	WorkshopFighterGame = new cEarthSpaceFighter;
 	WorkshopFighterGame->Create(GameConfig().Profile[CurrentProfile].Ship);
@@ -416,7 +416,7 @@ void WorkshopCreateBuyShip()
 	else
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 
-	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
+	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 	WorkshopFighterGame->SetLocation(sVECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
 	// чтобы оружие заняло свое место...
 	WorkshopFighterGame->Update(vw_GetTimeThread(0));

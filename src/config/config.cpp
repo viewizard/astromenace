@@ -517,7 +517,7 @@ int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 {
 	auto CalculateDifficulty = [] (unsigned Num) {
 		return 100 - ((Config.Profile[Num].EnemyWeaponPenalty - 1) * 6 +
-			      (Config.Profile[Num].NPCArmorPenalty - 1) * 6 +
+			      (Config.Profile[Num].EnemyArmorPenalty - 1) * 6 +
 			      (Config.Profile[Num].NPCTargetingSpeedPenalty - 1) * 6 +
 			      Config.Profile[Num].LimitedAmmo * 14 +
 			      Config.Profile[Num].DestroyableWeapon * 11 +

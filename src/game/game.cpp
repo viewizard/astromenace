@@ -60,7 +60,7 @@ std::unique_ptr<cMissionScript> MissionScript{};
 // замедление снарядов NPC ... 1-3...
 int	GameEnemyWeaponPenalty = 1;
 // ум. защиты NPC объектов
-int	GameNPCArmorPenalty = 1;
+int	GameEnemyArmorPenalty = 1;
 // "замедление" наведения NPC ... 1-4
 int	GameNPCTargetingSpeedPenalty = 1;
 // 0-ограничено, 1-нет
@@ -601,7 +601,7 @@ void InitGame()
 
 
 	GameEnemyWeaponPenalty = GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty;
-	GameNPCArmorPenalty = GameConfig().Profile[CurrentProfile].NPCArmorPenalty;
+	GameEnemyArmorPenalty = GameConfig().Profile[CurrentProfile].EnemyArmorPenalty;
 	GameNPCTargetingSpeedPenalty = GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty;
 	GameLimitedAmmo = GameConfig().Profile[CurrentProfile].LimitedAmmo;
 	GameDestroyableWeapon = GameConfig().Profile[CurrentProfile].DestroyableWeapon;

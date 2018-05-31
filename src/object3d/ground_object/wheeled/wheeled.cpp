@@ -78,7 +78,7 @@ void cWheeled::Create(int WheeledNum)
 	SpeedToRotate = PresetWheeledData[WheeledNum-1].SpeedToRotate;
 
 
-	Strength = StrengthStart = PresetWheeledData[WheeledNum-1].Strength/GameNPCArmorPenalty;
+	Strength = StrengthStart = PresetWheeledData[WheeledNum-1].Strength/GameEnemyArmorPenalty;
 
 
 	WeaponQuantity = PresetWheeledData[WheeledNum-1].WeaponQuantity;

@@ -75,7 +75,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 	ResistanceSystems = 1.0f;
 
 
-	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum-1].Strength/GameNPCArmorPenalty;
+	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum-1].Strength/GameEnemyArmorPenalty;
 
 
 	WeaponQuantity = PresetMilitaryBuildingData[MilitaryBuildingNum-1].WeaponQuantity;

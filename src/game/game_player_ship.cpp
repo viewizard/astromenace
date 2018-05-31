@@ -225,8 +225,8 @@ void InitGamePlayerShip()
 	VoiceWeaponMalfunction = 0;
 	SoundLowLife = 0;
 
-	int TMPGameNPCArmorPenalty = GameNPCArmorPenalty;
-	GameNPCArmorPenalty = 1;
+	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
+	GameEnemyArmorPenalty = 1;
 
 	// если не создано, здесь будет ноль скорее всего
 	if (GameConfig().Profile[CurrentProfile].Ship == 0)
@@ -261,7 +261,7 @@ void InitGamePlayerShip()
 		// установка защитного слоя (синяя броня), который снижает наносимые повреждения
 		SetEarthSpaceFighterArmour(PlayerFighter, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 
-	GameNPCArmorPenalty = TMPGameNPCArmorPenalty;
+	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 
 
 

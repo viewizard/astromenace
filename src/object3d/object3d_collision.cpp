@@ -358,45 +358,45 @@ void AddPlayerBonus(cObject3D *Object, eObjectStatus KilledByObjectStatus)
 			break;
 
 		case eObjectType::AlienFighter:
-			AlienShipsKillBonus += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
+			AlienShipsKillBonus += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
 			AlienShipsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			TTTExperience += (Object->StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
 			break;
 
 		case eObjectType::AlienMotherShip:
-			AlienMotherShipsKillBonus += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
+			AlienMotherShipsKillBonus += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
 			AlienMotherShipsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			TTTExperience += (Object->StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
 			break;
 
 		case eObjectType::PirateShip:
-			PirateShipsKillBonus += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
+			PirateShipsKillBonus += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
 			PirateShipsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			TTTExperience += (Object->StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
 			break;
 
 		case eObjectType::PirateVehicle:
-			PirateVehiclesKillBonus += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
+			PirateVehiclesKillBonus += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
 			PirateVehiclesKillQuant += 1;
-			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			TTTExperience += (Object->StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
 			break;
 
 		case eObjectType::PirateBuilding:
-			PirateBuildingsKillBonus += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object->StrengthStart * GameNPCArmorPenalty) / 1.8f) / BonusDiv;
+			PirateBuildingsKillBonus += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object->StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
 			PirateBuildingsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			TTTExperience += (Object->StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
 			break;
 
 		case eObjectType::Asteroids:
-			AsteroidsKillBonus += ((Object->StrengthStart*GameNPCArmorPenalty)/8.0f)/BonusDiv;
-			GameMoney += ((Object->StrengthStart * GameNPCArmorPenalty) / 8.0f) / BonusDiv;
+			AsteroidsKillBonus += ((Object->StrengthStart*GameEnemyArmorPenalty)/8.0f)/BonusDiv;
+			GameMoney += ((Object->StrengthStart * GameEnemyArmorPenalty) / 8.0f) / BonusDiv;
 			AsteroidsKillQuant += 1;
-			TTTExperience += (Object->StrengthStart * GameNPCArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 8.0f;
+			TTTExperience += (Object->StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 8.0f;
 			break;
 		}
 

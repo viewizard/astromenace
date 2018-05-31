@@ -79,6 +79,6 @@ void cBuilding::Create(int BuildingNum)
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
 
-	Strength = StrengthStart = PresetBuildingData[BuildingNum-1].Strength/GameNPCArmorPenalty;
+	Strength = StrengthStart = PresetBuildingData[BuildingNum-1].Strength/GameEnemyArmorPenalty;
 }
 

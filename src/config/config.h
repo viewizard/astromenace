@@ -62,7 +62,7 @@ struct sPilotProfile {
 
 	// game difficulty related settings
 	uint8_t EnemyWeaponPenalty{3};		// Enemy weapon fire penalty [1, 3]
-	uint8_t NPCArmorPenalty{2};		// NPC armor strength penalty [1, 4]
+	uint8_t EnemyArmorPenalty{2};		// Enemy armor strength penalty [1, 4]
 	uint8_t NPCTargetingSpeedPenalty{2};	// NPC targeting speed penalty [1, 4]
 	uint8_t LimitedAmmo{0};			// 0 - on, 1 - off
 	uint8_t DestroyableWeapon{1};		// 0 - destroyable, 1 - immortal
