@@ -258,9 +258,11 @@ static void CheckConfig()
  */
 static void SetupCurrentProfileAndMission()
 {
-	if ((Config.LastProfile >= 0) &&
-	    (Config.LastProfile <= 4) &&
-	    Config.Profile[Config.LastProfile].Used)
+	if ((Config.LastProfile < 0) ||
+	    (Config.LastProfile >= config::MAX_PROFILES))
+		return;
+
+	if (Config.Profile[Config.LastProfile].Used)
 		CurrentProfile = Config.LastProfile;
 	if (CurrentProfile != -1)
 		CurrentMission = Config.Profile[Config.LastProfile].LastMission;
