@@ -1310,14 +1310,9 @@ bool cProjectile::Update(float Time)
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// общий - пенальти, если не игрок
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
-	// если игрок или свои - ничего не надо...
-	if ((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player))
-		CurrentPenalty = 1.0f;
-
+	float CurrentPenalty{1.0f};
+	if (ObjectStatus == eObjectStatus::Enemy)
+		CurrentPenalty = static_cast<float>(GameNPCWeaponPenalty);
 
 
 

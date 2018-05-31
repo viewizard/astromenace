@@ -571,13 +571,12 @@ bool cWeapon::Update(float Time)
 				LastFireTime = Time;
 
 				// ум. кол-во боеприпасов, если нужно
-				if (GameLimitedAmmo == 0)	Ammo -= 1;
+				if (GameLimitedAmmo == 0)
+					Ammo -= 1;
 
-				// общий - пенальти, если не игрок
-				float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
-				// если игрок - ничего не надо...
-				if ((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player))
-					CurrentPenalty = 1.0f;
+				float CurrentPenalty{1.0f};
+				if (ObjectStatus == eObjectStatus::Enemy)
+					CurrentPenalty = static_cast<float>(GameNPCWeaponPenalty);
 
 				switch (SwampNum) {
 				case 9:
@@ -995,11 +994,9 @@ bool cWeapon::WeaponFire(float Time)
 		return false;
 
 
-	// общий - пенальти, если не игрок
-	float CurrentPenalty = GameNPCWeaponPenalty*1.0f;
-	// если игрок или свои - ничего не надо...
-	if ((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player))
-		CurrentPenalty = 1.0f;
+	float CurrentPenalty{1.0f};
+	if (ObjectStatus == eObjectStatus::Enemy)
+		CurrentPenalty = static_cast<float>(GameNPCWeaponPenalty);
 
 
 	// если фларес - тоже ничего не надо

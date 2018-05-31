@@ -617,7 +617,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 				// находим, за какое время снаряд долетит до объекта сейчас
 				sVECTOR3D TTT = Location - RealLocation;
 				float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-				if (ObjectStatus != eObjectStatus::Player)
+				if (ObjectStatus == eObjectStatus::Enemy)
 					ProjectileSpeed = ProjectileSpeed / GameNPCWeaponPenalty;
 				float CurrentDist = TTT.Length();
 				float ObjCurrentTime = CurrentDist / ProjectileSpeed;
@@ -766,7 +766,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 			// находим, за какое время снаряд долетит до объекта сейчас
 			sVECTOR3D TTT = Location - RealLocation;
 			float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-			if (ObjectStatus != eObjectStatus::Player)
+			if (ObjectStatus == eObjectStatus::Enemy)
 				ProjectileSpeed = ProjectileSpeed / GameNPCWeaponPenalty;
 			float CurrentDist = TTT.Length();
 			float ObjCurrentTime = CurrentDist / ProjectileSpeed;

@@ -1126,7 +1126,6 @@ void Workshop_Weaponry()
 		DialogWeapon = WorkshopNewWeapon;
 	}
 
-	// поставить GameNPCWeaponPenalty=1!!!
 	vw_DrawText(GameConfig().InternalWidth/2-438, 110, -170, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s:", vw_GetText("Weapon Type"));
 	vw_DrawText(GameConfig().InternalWidth/2-438+175, 110, -184, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
 
