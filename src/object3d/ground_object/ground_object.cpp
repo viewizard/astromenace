@@ -451,7 +451,7 @@ bool cGroundObject::Update(float Time)
 						    WeaponGroupCurrentFireDelay <= 0.0f) {
 							Weapon[i]->WeaponFire(Time);
 
-							WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameNPCWeaponPenalty)/2.0f);
+							WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameEnemyWeaponPenalty)/2.0f);
 							WeaponGroupCurrentFireNum++;
 							if (WeaponGroupCurrentFireNum > LastWeapon)
 								WeaponGroupCurrentFireNum = FirstWeapon;

@@ -576,7 +576,7 @@ bool cWeapon::Update(float Time)
 
 				float CurrentPenalty{1.0f};
 				if (ObjectStatus == eObjectStatus::Enemy)
-					CurrentPenalty = static_cast<float>(GameNPCWeaponPenalty);
+					CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty);
 
 				switch (SwampNum) {
 				case 9:
@@ -996,7 +996,7 @@ bool cWeapon::WeaponFire(float Time)
 
 	float CurrentPenalty{1.0f};
 	if (ObjectStatus == eObjectStatus::Enemy)
-		CurrentPenalty = static_cast<float>(GameNPCWeaponPenalty);
+		CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty);
 
 
 	// если фларес - тоже ничего не надо

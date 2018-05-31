@@ -1312,7 +1312,7 @@ bool cProjectile::Update(float Time)
 
 	float CurrentPenalty{1.0f};
 	if (ObjectStatus == eObjectStatus::Enemy)
-		CurrentPenalty = static_cast<float>(GameNPCWeaponPenalty);
+		CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty);
 
 
 

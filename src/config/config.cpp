@@ -516,7 +516,7 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 {
 	auto CalculateDifficulty = [] (unsigned Num) {
-		return 100 - ((Config.Profile[Num].NPCWeaponPenalty - 1) * 6 +
+		return 100 - ((Config.Profile[Num].EnemyWeaponPenalty - 1) * 6 +
 			      (Config.Profile[Num].NPCArmorPenalty - 1) * 6 +
 			      (Config.Profile[Num].NPCTargetingSpeedPenalty - 1) * 6 +
 			      Config.Profile[Num].LimitedAmmo * 14 +

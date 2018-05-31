@@ -57,31 +57,31 @@ void DifficultyMenu()
 
 	vw_DrawText(X1, Y1, -340, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy Weapon Penalty"));
 	bool ButOff = false;
-	if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty == 1)
+	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 1)
 		ButOff = true;
 	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Decrease"), MenuContentTransp, ButOff)) {
-		ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty--;
-		if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty < 1)
-			ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty = 1;
+		ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty--;
+		if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty < 1)
+			ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = false;
-	if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty == 3)
+	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 3)
 		ButOff = true;
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), MenuContentTransp, ButOff)) {
-		ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty++;
-		if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty > 3)
-				ChangeGameConfig().Profile[CurrentProfile].NPCWeaponPenalty = 3;
+		ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty++;
+		if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty > 3)
+				ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty = 3;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-	if (GameConfig().Profile[CurrentProfile].NPCWeaponPenalty == 1) {
+	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 1) {
 		Size = vw_TextWidth(vw_GetText("None"));
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].NPCWeaponPenalty);
+		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty);
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].NPCWeaponPenalty);
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty);
 	}
 
 

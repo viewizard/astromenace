@@ -48,7 +48,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 	float CurrentPenalty{1.0f};
 	if (ObjectStatus == eObjectStatus::Enemy)
-		CurrentPenalty = static_cast<float>(GameNPCWeaponPenalty) + 1.0f; // чуть больше убираем...
+		CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty) + 1.0f; // чуть больше убираем...
 
 	// сохраняем статус объекта, чтобы правильно создавать части-снаряды и обломки
 	ObjectStatus = Object->ObjectStatus;

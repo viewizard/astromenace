@@ -113,7 +113,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 		// обычные снаряды
 		case 0:
 			// если игрок со щитом или дифлектором, и щит заряжен
-			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameNPCWeaponPenalty)) &&
+			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameEnemyWeaponPenalty)) &&
 			    (Object->ObjectStatus == eObjectStatus::Player) &&
 				// у игрока есть щит, просто проверяем, если снаряд приблизился
 				// на расстояние =< радиуса - уничтожаем его
@@ -126,16 +126,16 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 
 					for (auto tmpGFX : Projectile->GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
-							sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameNPCWeaponPenalty);
-							sharedGFX->Speed = sharedGFX->Speed * GameNPCWeaponPenalty;
-							sharedGFX->Life = sharedGFX->Life / GameNPCWeaponPenalty;
-							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor * GameNPCWeaponPenalty * GameNPCWeaponPenalty;
+							sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameEnemyWeaponPenalty);
+							sharedGFX->Speed = sharedGFX->Speed * GameEnemyWeaponPenalty;
+							sharedGFX->Life = sharedGFX->Life / GameEnemyWeaponPenalty;
+							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor * GameEnemyWeaponPenalty * GameEnemyWeaponPenalty;
 						}
 					}
-					Projectile->SpeedStart = Projectile->Speed * GameNPCWeaponPenalty;
-					Projectile->SpeedEnd = (Projectile->Speed * GameNPCWeaponPenalty) / 4.0f;
-					Projectile->Age = Projectile->Age / GameNPCWeaponPenalty;
-					Projectile->Lifetime = Projectile->Lifetime / GameNPCWeaponPenalty;
+					Projectile->SpeedStart = Projectile->Speed * GameEnemyWeaponPenalty;
+					Projectile->SpeedEnd = (Projectile->Speed * GameEnemyWeaponPenalty) / 4.0f;
+					Projectile->Age = Projectile->Age / GameEnemyWeaponPenalty;
+					Projectile->Lifetime = Projectile->Lifetime / GameEnemyWeaponPenalty;
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
@@ -148,8 +148,8 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 					// и вычисляем сколько осталось в щите
 					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
 
-					Projectile->DamageHull = Projectile->DamageHull * GameNPCWeaponPenalty;
-					Projectile->DamageSystems = Projectile->DamageSystems * GameNPCWeaponPenalty;
+					Projectile->DamageHull = Projectile->DamageHull * GameEnemyWeaponPenalty;
+					Projectile->DamageSystems = Projectile->DamageSystems * GameEnemyWeaponPenalty;
 
 					// здесь только так! иначе уничтожим снаряд
 					return false;
@@ -203,7 +203,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 		// ракеты-торпеды-бомбы
 		case 1:
 			// если игрок со щитом или дифлектором, и щит заряжен
-			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameNPCWeaponPenalty)) &&
+			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameEnemyWeaponPenalty)) &&
 			    (Object->ObjectStatus == eObjectStatus::Player)) {
 				// у игрока есть щит, просто проверяем, если снаряд приблизился
 				// на расстояние =< радиуса - уничтожаем его

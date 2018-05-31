@@ -42,7 +42,7 @@
 #include "../script/script.h"
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-extern int GameNPCWeaponPenalty;
+extern int GameEnemyWeaponPenalty;
 extern int GameNPCArmorPenalty;
 extern int GameNPCTargetingSpeedPenalty;
 extern int GameLimitedAmmo;
