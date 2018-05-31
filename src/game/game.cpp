@@ -62,7 +62,7 @@ int	GameEnemyWeaponPenalty = 1;
 // ум. защиты NPC объектов
 int	GameEnemyArmorPenalty = 1;
 // "замедление" наведения NPC ... 1-4
-int	GameNPCTargetingSpeedPenalty = 1;
+int	GameEnemyTargetingSpeedPenalty = 1;
 // 0-ограничено, 1-нет
 int	GameLimitedAmmo = 0;
 // 0-может быть уничтожено, 1-нет
@@ -602,7 +602,7 @@ void InitGame()
 
 	GameEnemyWeaponPenalty = GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty;
 	GameEnemyArmorPenalty = GameConfig().Profile[CurrentProfile].EnemyArmorPenalty;
-	GameNPCTargetingSpeedPenalty = GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty;
+	GameEnemyTargetingSpeedPenalty = GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty;
 	GameLimitedAmmo = GameConfig().Profile[CurrentProfile].LimitedAmmo;
 	GameDestroyableWeapon = GameConfig().Profile[CurrentProfile].DestroyableWeapon;
 	GameWeaponTargetingMode = GameConfig().Profile[CurrentProfile].WeaponTargetingMode;

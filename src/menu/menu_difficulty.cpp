@@ -123,31 +123,31 @@ void DifficultyMenu()
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -340, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy Targeting Penalty"));
 	ButOff = false;
-	if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty == 1)
+	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 1)
 		ButOff = true;
 	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Decrease"), MenuContentTransp, ButOff)) {
-		ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty--;
-		if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty < 1)
-			ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty = 1;
+		ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty--;
+		if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty < 1)
+			ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = false;
-	if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty == 4)
+	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 4)
 		ButOff = true;
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), MenuContentTransp, ButOff)) {
-		ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty++;
-		if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty > 4)
-			ChangeGameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty = 4;
+		ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty++;
+		if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty > 4)
+			ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty = 4;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-	if (GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty == 1) {
+	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 1) {
 		Size = vw_TextWidth(vw_GetText("None"));
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty);
+		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty);
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].NPCTargetingSpeedPenalty);
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty);
 	}
 
 

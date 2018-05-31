@@ -754,10 +754,10 @@ bool cWeapon::Update(float Time)
 				float NeedRotate = TargetHorizBlocksCurrentAngle;
 
 				if (TargetHorizBlocksNeedAngle>TargetHorizBlocksCurrentAngle) {
-					NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					NeedRotate += 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 					if (NeedRotate > TargetHorizBlocksNeedAngle) NeedRotate = TargetHorizBlocksNeedAngle;
 				} else {
-					NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					NeedRotate -= 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 					if (NeedRotate < TargetHorizBlocksNeedAngle) NeedRotate = TargetHorizBlocksNeedAngle;
 				}
 
@@ -792,11 +792,11 @@ bool cWeapon::Update(float Time)
 				// находим угол, на который нужно повернуть
 				float NeedRotate = TargetVertBlocksCurrentAngle;
 				if (TargetVertBlocksNeedAngle>TargetVertBlocksCurrentAngle) {
-					NeedRotate += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					NeedRotate += 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 					if (NeedRotate > TargetVertBlocksNeedAngle) NeedRotate = TargetVertBlocksNeedAngle;
 					if (NeedRotate > TargetVertBlocksMaxAngle) NeedRotate = TargetVertBlocksMaxAngle;
 				} else {
-					NeedRotate -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+					NeedRotate -= 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 					if (NeedRotate < TargetVertBlocksNeedAngle) NeedRotate = TargetVertBlocksNeedAngle;
 					if (NeedRotate < TargetVertBlocksMinAngle) NeedRotate = TargetVertBlocksMinAngle;
 				}

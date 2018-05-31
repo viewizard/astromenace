@@ -280,11 +280,11 @@ bool cGroundObject::Update(float Time)
 			float NeedRotateCalculation = TargetHorizBlocksCurrentAngle;
 
 			if (TargetHorizBlocksNeedAngle>TargetHorizBlocksCurrentAngle) {
-				NeedRotateCalculation += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				NeedRotateCalculation += 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation > TargetHorizBlocksNeedAngle)
 					NeedRotateCalculation = TargetHorizBlocksNeedAngle;
 			} else {
-				NeedRotateCalculation -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				NeedRotateCalculation -= 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation < TargetHorizBlocksNeedAngle)
 					NeedRotateCalculation = TargetHorizBlocksNeedAngle;
 			}
@@ -323,13 +323,13 @@ bool cGroundObject::Update(float Time)
 			// находим угол, на который нужно повернуть
 			float NeedRotateCalculation = TargetVertBlocksCurrentAngle;
 			if (TargetVertBlocksNeedAngle>TargetVertBlocksCurrentAngle) {
-				NeedRotateCalculation += 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				NeedRotateCalculation += 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation > TargetVertBlocksNeedAngle)
 					NeedRotateCalculation = TargetVertBlocksNeedAngle;
 				if (NeedRotateCalculation > TargetVertBlocksMaxAngle)
 					NeedRotateCalculation = TargetVertBlocksMaxAngle;
 			} else {
-				NeedRotateCalculation -= 80.0f*TimeDelta/GameNPCTargetingSpeedPenalty;
+				NeedRotateCalculation -= 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation < TargetVertBlocksNeedAngle)
 					NeedRotateCalculation = TargetVertBlocksNeedAngle;
 				if (NeedRotateCalculation < TargetVertBlocksMinAngle)
