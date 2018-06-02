@@ -787,9 +787,8 @@ void GamePlayerShip()
 
 
 
-		// если стандартный аспект рейшен, надо смещать камеру
-		if ((GameConfig().InternalWidth == 1024) &&
-		    (GameConfig().CameraModeWithStandardAspectRatio == 0)) {
+		// если стандартный аспект рейшен, надо перемещать камеру в дополнении к перемещению корабля
+		if (GameConfig().InternalWidth == 1024) {
 			float DeviationSize = 14.55f;
 
 			if (PlayerFighter->Location.x < 0.0f) {

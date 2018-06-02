@@ -147,7 +147,6 @@ struct sGameConfig {
 	int BPP{0};		// game resolution's color depth
 	float InternalWidth{1228.0f};	// internal resolution's width
 	float InternalHeight{768.0f};	// internal resolution's height
-	int CameraModeWithStandardAspectRatio{0}; // camera mode
 
 	int VSync{0};
 	int Brightness{5};
