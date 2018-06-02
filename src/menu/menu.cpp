@@ -211,7 +211,6 @@ void SetOptionsMenu(eMenuStatus Menu)
 		Options_Height = GameConfig().Height;
 		Options_BPP = GameConfig().BPP;
 		Options_VSync = GameConfig().VSync;
-		Options_iAspectRatioWidth = GameConfig().InternalWidth;
 		break;
 
 	case eMenuStatus::OPTIONS_ADVANCED:

@@ -34,7 +34,6 @@ int Options_Width;
 int Options_Height;
 int Options_BPP;
 int Options_VSync;
-int Options_iAspectRatioWidth;
 
 
 const char *ButtonScreenModeTitle[2] = {
@@ -286,10 +285,6 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		Options_Width = VideoModes[CurrentListNum].W;
 		Options_Height = VideoModes[CurrentListNum].H;
 		Options_BPP = VideoModes[CurrentListNum].BPP;
-		if ((Options_Width*1.0f)/(Options_Height*1.0f) < 1.4f)
-			Options_iAspectRatioWidth = 1024;
-		else
-			Options_iAspectRatioWidth = 1228;
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
 		CurrentListNum++;
@@ -311,10 +306,6 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		Options_Width = VideoModes[CurrentListNum].W;
 		Options_Height = VideoModes[CurrentListNum].H;
 		Options_BPP = VideoModes[CurrentListNum].BPP;
-		if ((Options_Width*1.0f)/(Options_Height*1.0f) < 1.4f)
-			Options_iAspectRatioWidth = 1024;
-		else
-			Options_iAspectRatioWidth = 1228;
 	}
 
 	std::string VideoModeTitle{std::to_string(VideoModes[CurrentListNum].W) + "x" +
@@ -325,28 +316,6 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	Size = vw_TextWidth(VideoModeTitle.c_str());
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, VideoModeTitle.c_str());
-
-
-
-	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Aspect Ratio"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
-		if (Options_iAspectRatioWidth == 1228) Options_iAspectRatioWidth = 1024;
-		else Options_iAspectRatioWidth = 1228;
-	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
-		if (Options_iAspectRatioWidth == 1024) Options_iAspectRatioWidth = 1228;
-		else Options_iAspectRatioWidth = 1024;
-	}
-	if (Options_iAspectRatioWidth == 1024) {
-		Size = vw_TextWidth(vw_GetText("Standard"));
-		SizeI = (170-Size)/2;
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Standard"));
-	} else {
-		Size = vw_TextWidth(vw_GetText("Widescreen"));
-		SizeI = (170-Size)/2;
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Widescreen"));
-	}
 
 
 
@@ -461,8 +430,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	if ((Options_Width == GameConfig().Width &&
 	     Options_Height == GameConfig().Height &&
 	     Options_BPP == GameConfig().BPP &&
-	     Options_VSync == GameConfig().VSync &&
-	     Options_iAspectRatioWidth == GameConfig().InternalWidth)) {
+	     Options_VSync == GameConfig().VSync)) {
 		X = (GameConfig().InternalWidth - 384) / 2;
 		Y = Y + Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
@@ -488,8 +456,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			if (Options_Width != GameConfig().Width ||
 			    Options_Height != GameConfig().Height ||
 			    Options_BPP != GameConfig().BPP ||
-			    Options_VSync != GameConfig().VSync ||
-			    Options_iAspectRatioWidth != GameConfig().InternalWidth) {
+			    Options_VSync != GameConfig().VSync) {
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnOptionsChanged);
 				else {
@@ -503,14 +470,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 }
 
-
 void SaveOptionsMenuTmpData()
 {
 	ChangeGameConfig().Width = Options_Width;
 	ChangeGameConfig().Height = Options_Height;
 
 	// пока своего управление нет- делаем автоматическую установку
-	if (Options_iAspectRatioWidth == 1024) {
+	if ((static_cast<float>(Options_Width) / static_cast<float>(Options_Height)) < 1.4f) {
 		ChangeGameConfig().InternalWidth = 1024.0f;
 		ChangeGameConfig().InternalHeight = 768.0f;
 	} else {
@@ -521,9 +487,3 @@ void SaveOptionsMenuTmpData()
 	ChangeGameConfig().BPP = Options_BPP;
 	ChangeGameConfig().VSync = Options_VSync;
 }
-
-
-
-
-
-
