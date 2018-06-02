@@ -644,7 +644,13 @@ ReCreate:
 
 
 
-
+	if ((static_cast<float>(GameConfig().Width) / static_cast<float>(GameConfig().Height)) < 1.4f) {
+		ChangeGameConfig().InternalWidth = 1024.0f;
+		ChangeGameConfig().InternalHeight = 768.0f;
+	} else {
+		ChangeGameConfig().InternalWidth = 1228.0f;
+		ChangeGameConfig().InternalHeight = 768.0f;
+	}
 
 	// setup internal game resolution
 	vw_SetInternalResolution(GameConfig().InternalWidth, GameConfig().InternalHeight, true);

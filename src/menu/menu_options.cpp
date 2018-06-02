@@ -475,8 +475,8 @@ void SaveOptionsMenuTmpData()
 	ChangeGameConfig().Width = Options_Width;
 	ChangeGameConfig().Height = Options_Height;
 
-	// пока своего управление нет- делаем автоматическую установку
-	if ((static_cast<float>(Options_Width) / static_cast<float>(Options_Height)) < 1.4f) {
+	// (?) do we really need this here? we restart game and (re)check this in main()
+	if ((static_cast<float>(GameConfig().Width) / static_cast<float>(GameConfig().Height)) < 1.4f) {
 		ChangeGameConfig().InternalWidth = 1024.0f;
 		ChangeGameConfig().InternalHeight = 768.0f;
 	} else {

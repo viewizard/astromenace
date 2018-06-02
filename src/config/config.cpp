@@ -139,11 +139,7 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Height"), "value", Config.Height);
 	XMLdoc->AddComment(*RootXMLEntry, " Window (BPP = 0) or Full Screen (BPP = 16, 24 or 32) ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "BPP"), "value", Config.BPP);
-	XMLdoc->AddComment(*RootXMLEntry, " Aspect Ratio must be 4:3 or 16:10 ");
-	if (Config.InternalWidth == 1024.0f)
-		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AspectRatio"), "value", "4:3");
-	else
-		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "AspectRatio"), "value", "16:10");
+
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "CameraModeWithStandardAspectRatio"), "value",
 				  Config.CameraModeWithStandardAspectRatio);
 
@@ -365,19 +361,6 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "BPP"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "BPP"), "value", Config.BPP);
 
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "AspectRatio")) {
-		std::string tmpAspectRatio{};
-		if (XMLdoc->GetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "AspectRatio"), "value",
-					      tmpAspectRatio)) {
-			if (tmpAspectRatio == "16:10") {
-				Config.InternalWidth = 1228.0f;
-				Config.InternalHeight = 768.0f;
-			} else {
-				Config.InternalWidth = 1024.0f;
-				Config.InternalHeight = 768.0f;
-			}
-		}
-	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "CameraModeWithStandardAspectRatio"),
 					   "value", Config.CameraModeWithStandardAspectRatio);
