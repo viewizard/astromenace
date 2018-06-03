@@ -16,10 +16,10 @@
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <http://www.gnu.org/licenses/>.
+	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
 
 
-	Web Site: http://www.viewizard.com/
+	Web Site: https://www.viewizard.com/
 	Project: https://github.com/viewizard/astromenace
 	E-mail: viewizard@viewizard.com
 
