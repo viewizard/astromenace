@@ -59,7 +59,7 @@ void DifficultyMenu()
 	bool ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 1)
 		ButOff = true;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Decrease"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty--;
 		if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty = 1;
@@ -68,7 +68,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 3)
 		ButOff = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty++;
 		if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty > 3)
 				ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty = 3;
@@ -92,7 +92,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty == 1)
 		ButOff = true;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Decrease"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty--;
 		if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty = 1;
@@ -101,7 +101,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty == 4)
 		ButOff = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty++;
 		if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty > 4)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty = 4;
@@ -125,7 +125,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 1)
 		ButOff = true;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Decrease"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty--;
 		if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty = 1;
@@ -134,7 +134,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 4)
 		ButOff = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty++;
 		if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty > 4)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty = 4;
