@@ -567,11 +567,11 @@ bool cWeapon::Update(float Time)
 	// если это swamp - запуск других ракет
 	if (InternalType == 17 && SwampNum > 0)
 		if (LastFireTime + 0.15f < Time)
-			if (Ammo > 0 || GameLimitedAmmo != 1) {
+			if (Ammo > 0 || !GameUnlimitedAmmo) {
 				LastFireTime = Time;
 
 				// ум. кол-во боеприпасов, если нужно
-				if (GameLimitedAmmo == 0)
+				if (!GameUnlimitedAmmo)
 					Ammo -= 1;
 
 				float CurrentPenalty{1.0f};
@@ -654,11 +654,12 @@ bool cWeapon::Update(float Time)
 	// SwampNum в этом случае используем с другой целью
 	if (InternalType == 203 && SwampNum > 0)
 		if (LastFireTime + 0.4f < Time)
-			if (Ammo > 0 || GameLimitedAmmo != 1) {
+			if (Ammo > 0 || !GameUnlimitedAmmo) {
 				LastFireTime = Time;
 
 				// ум. кол-во боеприпасов, если нужно
-				if (GameLimitedAmmo == 0)	Ammo -= 1;
+				if (!GameUnlimitedAmmo)
+					Ammo -= 1;
 
 				// общий - пенальти, если не игрок
 				float CurrentPenalty = 1.0f;
@@ -1090,7 +1091,7 @@ bool cWeapon::WeaponFire(float Time)
 		}
 
 		// ум. кол-во боеприпасов, если нужно
-		if (GameLimitedAmmo == 0)
+		if (!GameUnlimitedAmmo)
 			Ammo -= 1;
 
 

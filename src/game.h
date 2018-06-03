@@ -414,7 +414,7 @@ extern cEarthSpaceFighter *PlayerFighter;
 extern int GameEnemyWeaponPenalty;
 extern int GameEnemyArmorPenalty;
 extern int GameEnemyTargetingSpeedPenalty;
-extern int GameLimitedAmmo;
+extern int GameUnlimitedAmmo;
 extern int GameDestroyableWeapon;
 extern int GameWeaponTargetingMode;
 extern int GameSpaceShipControlMode;

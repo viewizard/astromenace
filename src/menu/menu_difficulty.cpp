@@ -153,14 +153,23 @@ void DifficultyMenu()
 
 
 
+	// note, we use "Limited Ammo" option in menu, but UnlimitedAmmo variable
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -340, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Limited Ammo"));
-	if (DrawButton128_2(X1+360+128, Y1-6, vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].LimitedAmmo]), MenuContentTransp, false)) {
-		ChangeGameConfig().Profile[CurrentProfile].LimitedAmmo++;
-		if (GameConfig().Profile[CurrentProfile].LimitedAmmo > 1)
-			ChangeGameConfig().Profile[CurrentProfile].LimitedAmmo = 0;
+	ButOff = !ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
+	ButOff = ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo;
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo = 1;
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
+	}
+	Size = vw_TextWidth(vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UnlimitedAmmo]));
+	SizeI = (110-Size)/2;
+	// OnOff[] = 0 - on (limited ammo), 1 - off (unlimited ammo)
+	vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UnlimitedAmmo]));
 
 
 

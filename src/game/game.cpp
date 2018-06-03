@@ -64,7 +64,7 @@ int	GameEnemyArmorPenalty = 1;
 // "замедление" наведения NPC ... 1-4
 int	GameEnemyTargetingSpeedPenalty = 1;
 // 0-ограничено, 1-нет
-int	GameLimitedAmmo = 0;
+int	GameUnlimitedAmmo = 0;
 // 0-может быть уничтожено, 1-нет
 int	GameDestroyableWeapon = 0;
 // 1-аркада, 0-симулятор
@@ -603,7 +603,7 @@ void InitGame()
 	GameEnemyWeaponPenalty = GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty;
 	GameEnemyArmorPenalty = GameConfig().Profile[CurrentProfile].EnemyArmorPenalty;
 	GameEnemyTargetingSpeedPenalty = GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty;
-	GameLimitedAmmo = GameConfig().Profile[CurrentProfile].LimitedAmmo;
+	GameUnlimitedAmmo = GameConfig().Profile[CurrentProfile].UnlimitedAmmo;
 	GameDestroyableWeapon = GameConfig().Profile[CurrentProfile].DestroyableWeapon;
 	GameWeaponTargetingMode = GameConfig().Profile[CurrentProfile].WeaponTargetingMode;
 	GameSpaceShipControlMode = GameConfig().Profile[CurrentProfile].SpaceShipControlMode;
