@@ -194,29 +194,51 @@ void DifficultyMenu()
 
 
 
+
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -340, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon Targeting Mode"));
-	if (DrawButton128_2(X1+360+128, Y1-6, vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].WeaponTargetingMode]), MenuContentTransp, false)) {
-		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode++;
-		if (GameConfig().Profile[CurrentProfile].WeaponTargetingMode > 1)
-			ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 0;
+	ButOff = !ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
+	ButOff = ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode;
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 1;
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
+	}
+	Size = vw_TextWidth(vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].WeaponTargetingMode]));
+	float WScale = 0;
+	if (Size > 110) {
+		Size = 110;
+		WScale = -110;
+	}
+	SizeI = (110 - Size) / 2;
+	vw_DrawText(X1+498+SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].WeaponTargetingMode]));
 
 
 
 
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -340, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("SpaceShip Control Mode"));
-	if (DrawButton128_2(X1+360+128, Y1-6, vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].SpaceShipControlMode]), MenuContentTransp, false)) {
-		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode++;
-		if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode > 1)
-			ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 0;
+	ButOff = !ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-
-
-
+	ButOff = ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode;
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 1;
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
+	}
+	Size = vw_TextWidth(vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].SpaceShipControlMode]));
+	WScale = 0;
+	if (Size > 110) {
+		Size = 110;
+		WScale = -110;
+	}
+	SizeI = (110 - Size) / 2;
+	vw_DrawText(X1+498+SizeI, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].SpaceShipControlMode]));
 
 
 
@@ -227,18 +249,8 @@ void DifficultyMenu()
 	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s: %i%%", vw_GetText("Current Profile Difficulty"), ProfileDifficulty(CurrentProfile));
 
 
-
-
-
-
-
-
 	int X = GameConfig().InternalWidth / 2 - 192;
 	int Y = 175+95*5;
 	if (DrawButton384(X,Y, vw_GetText("BACK"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_PROFILE;
-
-
-
-
 }
