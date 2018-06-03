@@ -46,7 +46,7 @@ extern int GameEnemyWeaponPenalty;
 extern int GameEnemyArmorPenalty;
 extern int GameEnemyTargetingSpeedPenalty;
 extern int GameUnlimitedAmmo;
-extern int GameDestroyableWeapon;
+extern int GameUndestroyableWeapon;
 extern int GameWeaponTargetingMode;
 extern int GameSpaceShipControlMode;
 extern int GameEngineSystem;

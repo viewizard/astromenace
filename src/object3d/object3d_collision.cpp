@@ -534,7 +534,7 @@ void DetectCollisionAllObject3D()
 			if (tmpShip && tmpProjectile &&
 			    (tmpShip->ObjectStatus == eObjectStatus::Player) &&
 			    (tmpProjectile->ObjectStatus == eObjectStatus::Enemy) &&
-			    (GameDestroyableWeapon == 0) && tmpShip->Weapon) {
+			    !GameUndestroyableWeapon && tmpShip->Weapon) {
 				for (int i = 0; i < tmpShip->WeaponQuantity; i++) {
 					if (tmpProjectile &&
 					    tmpShip->Weapon[i] &&

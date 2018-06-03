@@ -496,7 +496,7 @@ int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 			      (Config.Profile[Num].EnemyArmorPenalty - 1) * 6 +
 			      (Config.Profile[Num].EnemyTargetingSpeedPenalty - 1) * 6 +
 			      Config.Profile[Num].UnlimitedAmmo * 14 +
-			      Config.Profile[Num].DestroyableWeapon * 11 +
+			      Config.Profile[Num].UndestroyableWeapon * 11 +
 			      Config.Profile[Num].WeaponTargetingMode * 12 +
 			      Config.Profile[Num].SpaceShipControlMode * 15);
 	};

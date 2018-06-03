@@ -174,16 +174,23 @@ void DifficultyMenu()
 
 
 
+	// note, we use "Destroyable Weapon" option in menu, but UndestroyableWeapon variable
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -340, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Destroyable Weapon"));
-	if (DrawButton128_2(X1+360+128, Y1-6, vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].DestroyableWeapon]), MenuContentTransp, false)) {
-		ChangeGameConfig().Profile[CurrentProfile].DestroyableWeapon++;
-		if (GameConfig().Profile[CurrentProfile].DestroyableWeapon > 1)
-			ChangeGameConfig().Profile[CurrentProfile].DestroyableWeapon = 0;
+	ButOff = !ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-
-
+	ButOff = ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon;
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+		ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon = 1;
+		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
+	}
+	Size = vw_TextWidth(vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UndestroyableWeapon]));
+	SizeI = (110-Size)/2;
+	// OnOff[] = 0 - on (destroyable weapon), 1 - off (undestroyable weapon)
+	vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UndestroyableWeapon]));
 
 
 

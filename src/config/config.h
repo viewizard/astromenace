@@ -66,7 +66,8 @@ struct sPilotProfile {
 	uint8_t EnemyTargetingSpeedPenalty{2};	// Enemy targeting speed penalty [1, 4]
 	uint8_t UnlimitedAmmo{0};		// 0 - limited ammo, 1 - unlimited ammo
 						// note, we use "Limited Ammo" option in menu, but UnlimitedAmmo variable
-	uint8_t DestroyableWeapon{1};		// 0 - destroyable, 1 - immortal
+	uint8_t UndestroyableWeapon{1};		// 0 - destroyable, 1 - undestroyable
+						// note, we use "Destroyable Weapon" option, but UndestroyableWeapon variable
 	uint8_t WeaponTargetingMode{0};		// 0 - simulator, 1 - arcade
 	uint8_t SpaceShipControlMode{1};	// 0 - simulator, 1 - arcade
 	uint8_t reserved{0};
