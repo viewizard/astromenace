@@ -702,9 +702,6 @@ static void PreLoadGameData(eLoading LoadType)
 	vw_StopAllSoundsIfAllowed();
 
 	// FIXME should be moved to proper sources
-	vw_StartTimeThreads();
-
-	// FIXME should be moved to proper sources
 	switch(LoadType) {
 	// меню, загрузка в самом начале
 	case eLoading::MenuWithLogo:

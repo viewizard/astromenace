@@ -828,14 +828,10 @@ loop:
 				}
 			}
 
-			// всегда включаем счет времени
-			vw_StartTimeThreads();
 			// переход на основную программу
 			Loop_Proc();
 
 		} else {
-			// всегда выключаем счет времени и считаем новый лаг
-			vw_StopTimeThreads();
 			// выключаем музыку
 			if (vw_IsAnyMusicPlaying())
 				vw_ReleaseAllMusic();
@@ -849,8 +845,9 @@ loop:
 				DrawGameCursor = true;
 			}
 
-			// ждем пока не поступит команда
+			vw_PauseTimeThreads();
 			SDL_WaitEvent(nullptr);
+			vw_ResumeTimeThreads();
 		}
 	}
 GotoQuit:

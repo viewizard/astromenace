@@ -121,27 +121,27 @@ float vw_GetTimeThread(int TimeThread)
 }
 
 /*
- * Start all time threads.
+ * Pause all time threads.
  */
-void vw_StartTimeThreads()
-{
-	for (auto &TimeThread : TimeThreadsMap) {
-		if (!TimeThread.second.Status) {
-			TimeThread.second.DiffGetTicks += SDL_GetTicks() - TimeThread.second.LastGetTicks;
-			TimeThread.second.Status = true;
-		}
-	}
-}
-
-/*
- * Stop all time threads.
- */
-void vw_StopTimeThreads()
+void vw_PauseTimeThreads()
 {
 	for (auto &TimeThread : TimeThreadsMap) {
 		if (TimeThread.second.Status) {
 			TimeThread.second.LastGetTicks = SDL_GetTicks();
 			TimeThread.second.Status = false;
+		}
+	}
+}
+
+/*
+ * Resume all previously paused time threads.
+ */
+void vw_ResumeTimeThreads()
+{
+	for (auto &TimeThread : TimeThreadsMap) {
+		if (!TimeThread.second.Status) {
+			TimeThread.second.DiffGetTicks += SDL_GetTicks() - TimeThread.second.LastGetTicks;
+			TimeThread.second.Status = true;
 		}
 	}
 }

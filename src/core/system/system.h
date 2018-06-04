@@ -42,10 +42,10 @@ void vw_InitTimeThread(int TimeThread);
 void vw_ReleaseAllTimeThread();
 // Get time for particular thread.
 float vw_GetTimeThread(int TimeThread);
-// Start all time threads.
-void vw_StartTimeThreads();
-// Stop all time threads.
-void vw_StopTimeThreads();
+// Pause all time threads.
+void vw_PauseTimeThreads();
+// Resume all previously paused time threads.
+void vw_ResumeTimeThreads();
 // Set time thread speed for particular thread.
 void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed = 1.0f);
 // Get time thread speed for particular thread.
