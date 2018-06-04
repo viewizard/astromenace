@@ -55,8 +55,8 @@ same functionality.
 namespace {
 
 struct sTimeThread {
-	// current time thread status (active/paused)
-	bool Status{false};
+	// current time thread pause status
+	bool Paused{true};
 	// last ticks, in order to care about time thread pause
 	uint32_t LastGetTicks{0};
 	// "time point", ticks of last speed change
@@ -80,7 +80,7 @@ std::unordered_map<int, sTimeThread> TimeThreadsMap;
  */
 void vw_InitTimeThread(int TimeThread)
 {
-	TimeThreadsMap[TimeThread].Status = true;
+	TimeThreadsMap[TimeThread].Paused = false;
 	TimeThreadsMap[TimeThread].LastGetTicks = 0;
 	TimeThreadsMap[TimeThread].DiffGetTicks = 0;
 	TimeThreadsMap[TimeThread].Speed = 1.0f;
@@ -105,6 +105,8 @@ float vw_GetTimeThread(int TimeThread)
 		return 0.0f;
 	}
 
+	assert(!TimeThreadsMap[TimeThread].Paused);
+
 	// time manipulations
 	if (TimeThreadsMap[TimeThread].Speed != 1.0f) {
 		// calculate time from "time point" (DiffGetTicks), when speed was changed last time, till now
@@ -126,9 +128,9 @@ float vw_GetTimeThread(int TimeThread)
 void vw_PauseTimeThreads()
 {
 	for (auto &TimeThread : TimeThreadsMap) {
-		if (TimeThread.second.Status) {
+		if (!TimeThread.second.Paused) {
 			TimeThread.second.LastGetTicks = SDL_GetTicks();
-			TimeThread.second.Status = false;
+			TimeThread.second.Paused = true;
 		}
 	}
 }
@@ -139,9 +141,9 @@ void vw_PauseTimeThreads()
 void vw_ResumeTimeThreads()
 {
 	for (auto &TimeThread : TimeThreadsMap) {
-		if (!TimeThread.second.Status) {
+		if (TimeThread.second.Paused) {
 			TimeThread.second.DiffGetTicks += SDL_GetTicks() - TimeThread.second.LastGetTicks;
-			TimeThread.second.Status = true;
+			TimeThread.second.Paused = false;
 		}
 	}
 }
