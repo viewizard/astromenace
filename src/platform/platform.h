@@ -30,6 +30,10 @@
 
 #include "../core/base.h"
 
+/*
+ * Paths.
+ */
+
 // Get configuration path for current platform.
 const std::string &GetConfigPath();
 
@@ -49,5 +53,26 @@ const std::string &GetDataPath();
 void SetRawDataPathByParameter(char *argv, const std::string &ParameterName);
 // Get raw data path for current platform.
 const std::string &GetRawDataPath();
+
+/*
+ * Joystick.
+ */
+
+// Joystick initialization.
+bool JoystickInit(float Time);
+// Close joystick.
+void JoystickClose();
+// Check current joystick status (opened or not).
+bool isJoystickAvailable();
+// Get current opened joystick buttons quantity.
+int GetJoystickButtonsQuantity();
+// Set joystick button status.
+void SetJoystickButton(int ButtonNumber, bool ButtonStatus);
+// Get joystick button status.
+bool GetJoystickButton(int ButtonNumber);
+// Emulate mouse movements.
+void JoystickEmulateMouseMovement(float Time);
+// Provide joystick's button name - "JoystickN", where N is number.
+const std::string JoystickButtonName(int Num);
 
 #endif // PLATFORM_RELATED_H

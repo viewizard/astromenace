@@ -27,6 +27,7 @@
 
 #include "../game.h"
 #include "../config/config.h"
+#include "../platform/platform.h"
 #include "../ui/font.h"
 #include "../object3d/explosion/space_explosion/space_explosion.h"
 #include "../object3d/space_object/space_object.h"
@@ -584,7 +585,7 @@ void GamePlayerShip()
 		// уже получили данные, нужно игнорировать остальные источникик
 		bool NeedSkip = false;
 
-		// мышка
+		// mouse + joystick (since we emulate mouse movements)
 		if (GameConfig().MouseControl) {
 			SDL_GetMouseState(&LastMouseXR, &LastMouseYR);
 
@@ -612,42 +613,6 @@ void GamePlayerShip()
 				LastMouseY = Y;
 			}
 
-		}
-
-
-		// джойстик
-		if (Joystick != nullptr && !NeedSkip) {
-			int X, Y;
-			X = SDL_JoystickGetAxis(Joystick, 0);
-			Y = SDL_JoystickGetAxis(Joystick, 1);
-
-
-			if (JoystickAxisX != X || JoystickAxisY != Y) {
-				JoystickAxisX = 0;
-				JoystickAxisY = 0;
-
-				// скорость изменения
-				float AccMoveFB = fabsf(Y/32768.0f);
-				float AccMoveLR = fabsf(X/32768.0f);
-
-				// -3000 3000 мертвая зона
-				if (Y > 3000) {
-					MoveFB -= 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveFB * PlayerFighter->TimeDelta;
-					NeedSkip = true;
-				}
-				if (Y < -3000) {
-					MoveFB += 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveFB * PlayerFighter->TimeDelta;
-					NeedSkip = true;
-				}
-				if (X < -3000) {
-					MoveLR -= 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveLR * PlayerFighter->TimeDelta;
-					NeedSkip = true;
-				}
-				if (X > 3000) {
-					MoveLR += 2.0f * (GameConfig().ControlSensivity / 10.0f) * AccMoveLR * PlayerFighter->TimeDelta;
-					NeedSkip = true;
-				}
-			}
 		}
 
 		// клавиатура
@@ -915,10 +880,10 @@ void GamePlayerShip()
 
 
 					// джойстик
-					if (Joystick != nullptr) {
+					if (isJoystickAvailable()) {
 						// primary fire
 						if (primary_fire)
-							if (SDL_JoystickGetButton(Joystick, GameConfig().JoystickPrimary) == 1) {
+							if (GetJoystickButton(GameConfig().JoystickPrimary)) {
 								if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
@@ -936,7 +901,7 @@ void GamePlayerShip()
 
 						// secondary fire
 						if (secondary_fire)
-							if (SDL_JoystickGetButton(Joystick, GameConfig().JoystickSecondary) == 1) {
+							if (GetJoystickButton(GameConfig().JoystickSecondary)) {
 								if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
@@ -954,7 +919,7 @@ void GamePlayerShip()
 
 						// альтернативное управление
 						if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 3)
-							if (SDL_JoystickGetButton(Joystick, GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]) == 1)
+							if (GetJoystickButton(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]))
 								PlayerFighter->WeaponSetFire[i] = true;
 					}
 

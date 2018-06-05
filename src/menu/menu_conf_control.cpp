@@ -25,8 +25,11 @@
 
 *************************************************************************************/
 
+// TODO NeedCheck in CheckMouseKeybJState() should be moved to enumeration
+
 #include "../game.h"
 #include "../config/config.h"
+#include "../platform/platform.h"
 
 
 const char * MouseCodeName(char Num)
@@ -77,23 +80,6 @@ const char * MouseCodeName(char Num)
 
 	return nullptr;
 }
-
-
-
-// can't use SDL_JoystickName() or SDL_JoystickNameForIndex(), too long names
-std::string JoystickCodeNameText; /*"JoystickXXX"*/
-const char *JoystickCodeName(int Num)
-{
-	// кнопки еще нет
-	if (Num == -1)
-		return "?";
-
-	// Num+1 т.к. начинается счет с 0
-	JoystickCodeNameText = "Joystick" + std::to_string(Num + 1);
-	return JoystickCodeNameText.c_str();
-}
-
-
 
 
 int ButQuant = 10;
@@ -172,10 +158,10 @@ void CheckMouseKeybJState()
 
 
 			// джойстик
-			if (Joystick != nullptr)
+			if (isJoystickAvailable())
 				if ((NeedCheck >= 9 && NeedCheck <= 10) || NeedCheck == 100) {
-					for (int i=0; i<SDL_JoystickNumButtons(Joystick); i++)
-						if (JoysticButtons[i]) {
+					for (int i = 0; i < GetJoystickButtonsQuantity(); i++)
+						if (GetJoystickButton(i)) {
 							switch(NeedCheck) {
 							case 9:
 								ChangeGameConfig().JoystickPrimary = i;
@@ -189,7 +175,7 @@ void CheckMouseKeybJState()
 								break;
 							}
 							NeedCheck = 0;
-							JoysticButtons[i] = false;
+							SetJoystickButton(i, false);
 							vw_GetMouseLeftClick(true);
 						}
 				}
@@ -380,17 +366,17 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = JoystickCodeName(GameConfig().JoystickPrimary);
+	ButtonName = JoystickButtonName(GameConfig().JoystickPrimary).c_str();
 	if (NeedCheck == 9) {
 		Transp = But[8];
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ButtonName, Transp*ContentTransp, (Joystick == nullptr) || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ButtonName, Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 9;
-			for (int i = 0; i < 100; i++) {
-				JoysticButtons[i] = false;
+			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
+				SetJoystickButton(i, false);
 			}
 		}
 
@@ -428,17 +414,17 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = JoystickCodeName(GameConfig().JoystickSecondary);
+	ButtonName = JoystickButtonName(GameConfig().JoystickSecondary).c_str();
 	if (NeedCheck == 10) {
 		Transp = But[9];
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ButtonName, Transp*ContentTransp, (Joystick == nullptr) || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ButtonName, Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 10;
-			for (int i = 0; i < 100; i++) {
-				JoysticButtons[i] = false;
+			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
+				SetJoystickButton(i, false);
 			}
 		}
 

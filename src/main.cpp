@@ -73,13 +73,7 @@ sVideoModes CurrentVideoMode;
 //------------------------------------------------------------------------------------
 // состояние кнопок мышки
 bool SDL_MouseCurrentStatus[8];
-// джойстик
-SDL_Joystick *Joystick = nullptr;
-// базовые параметры, или параметры блокировки управления (нет сигнала, нули)
-int JoystickAxisX = 0;
-int JoystickAxisY = 0;
-// кнопки джойстика (текущего)
-bool JoysticButtons[100];
+
 
 
 //------------------------------------------------------------------------------------
@@ -134,7 +128,7 @@ int main(int argc, char **argv)
 
 	// should be initialized before any interaction with SDL functions
 	// for predictable SDL functions work on all platforms
-	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
+	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK) != 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
 	}
@@ -187,6 +181,8 @@ int main(int argc, char **argv)
 
 	vw_InitTimeThread(0);
 
+	JoystickInit(vw_GetTimeThread(0)); // should be after vw_InitTimeThread(0)
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// установка звука, всегда до LoadGameData
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -209,6 +205,7 @@ ReCreate:
 		vw_ShutdownFont();
 		vw_ReleaseText();
 		vw_ShutdownVFS();
+		JoystickClose();
 		vw_ReleaseAllTimeThread();
 		SDL_Quit();
 		return 1;
@@ -456,32 +453,6 @@ ReCreate:
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем и иним джойстик
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// NOTE SDL2 also provide SDL_INIT_GAMECONTROLLER now and SDL_INIT_HAPTIC (force feedback)
-	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) == 0) {
-		if (SDL_NumJoysticks()>0) {
-			std::cout << "Found Joystick(s):\n";
-			for (int i=0; i<SDL_NumJoysticks(); i++) {
-				std::cout << "Joystick Name " << i << ": " << SDL_JoystickNameForIndex(i) << "\n";
-			}
-
-			Joystick = SDL_JoystickOpen(GameConfig().JoystickNum);
-
-			if(Joystick) {
-				std::cout << "Opened Joystick " << GameConfig().JoystickNum << "\n"
-					  << "Joystick Name: " << SDL_JoystickNameForIndex(GameConfig().JoystickNum) << "\n"
-					  << "Joystick Number of Axes: " << SDL_JoystickNumAxes(Joystick) << "\n"
-					  << "Joystick Number of Buttons: " << SDL_JoystickNumButtons(Joystick) << "\n"
-					  << "Joystick Number of Balls: " << SDL_JoystickNumBalls(Joystick) << "\n\n";
-			} else {
-				std::cout << "Couldn't open Joystick 0\n\n";
-			}
-		}
-	} else {
-		std::cerr << __func__ << "(): " << "Can't init Joystick, SDL Error: " << SDL_GetError() << "\n";
-	}
 
 
 
@@ -525,6 +496,7 @@ ReCreate:
 		vw_ReleaseText();
 		vw_ShutdownAudio();
 		vw_ShutdownVFS();
+		JoystickClose();
 		vw_ReleaseAllTimeThread();
 		return 1; // Quit If Window Was Not Created
 	}
@@ -629,6 +601,7 @@ ReCreate:
 		vw_ReleaseText();
 		vw_ShutdownAudio();
 		vw_ShutdownVFS();
+		JoystickClose();
 		vw_ReleaseAllTimeThread();
 		SDL_Quit();
 		return 1;
@@ -709,20 +682,6 @@ loop:
 	bool NeedLoop = true;
 
 
-	// начальные установки джойстика
-	JoystickAxisX = 0;
-	JoystickAxisY = 0;
-	float JoystickCurentTime = vw_GetTimeThread(0);
-	float JoystickTimeDelta = 0.0f;
-	if (Joystick != nullptr) {
-		JoystickAxisX = SDL_JoystickGetAxis(Joystick, 0);
-		JoystickAxisY = SDL_JoystickGetAxis(Joystick, 1);
-
-		for (int i=0; i<100; i++) {
-			JoysticButtons[i] = false;
-		}
-	}
-
 	while(!Quit) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -761,12 +720,14 @@ loop:
 				break;
 
 			case SDL_JOYBUTTONDOWN:
+				// FIXME only opened joystick events should be allowed
 				vw_SetMouseLeftClick(true);
-				JoysticButtons[event.jbutton.button] = true;
+				SetJoystickButton(event.jbutton.button, true);
 				break;
 			case SDL_JOYBUTTONUP:
+				// FIXME only opened joystick events should be allowed
 				vw_SetMouseLeftClick(false);
-				JoysticButtons[event.jbutton.button] = false;
+				SetJoystickButton(event.jbutton.button, false);
 				break;
 
 			case SDL_WINDOWEVENT:
@@ -798,39 +759,9 @@ loop:
 			}
 		}
 
-		// если есть джойстик, считаем для него время
-		if (Joystick != nullptr) {
-			JoystickTimeDelta = vw_GetTimeThread(0) - JoystickCurentTime;
-			JoystickCurentTime = vw_GetTimeThread(0);
-		}
-
-		// если окно видемое - рисуем
 		if (NeedLoop) {
-			// управление джойстиком
-			if (Joystick != nullptr) {
-				int X = SDL_JoystickGetAxis(Joystick, 0);
-				int Y = SDL_JoystickGetAxis(Joystick, 1);
-
-				// учитываем "мертвую зону" хода ручки джойстика
-				if (abs(X) < (GameConfig().JoystickDeadZone * 3000))
-					X = 0;
-				if (abs(Y) < (GameConfig().JoystickDeadZone * 3000))
-					Y = 0;
-
-				if ((JoystickAxisX != X) || (JoystickAxisY != Y)) {
-					JoystickAxisX = 0;
-					JoystickAxisY = 0;
-
-					int Xsm{static_cast<int>(1000 * (X / 32768.0f) * JoystickTimeDelta)};
-					int Ysm{static_cast<int>(1000 * (Y / 32768.0f) * JoystickTimeDelta)};
-
-					vw_SetMousePosRel(Xsm, Ysm);
-				}
-			}
-
-			// переход на основную программу
+			JoystickEmulateMouseMovement(vw_GetTimeThread(0));
 			Loop_Proc();
-
 		} else {
 			// выключаем музыку
 			if (vw_IsAnyMusicPlaying())
@@ -877,14 +808,6 @@ GotoQuit:
 	ShadowMap_Release();
 	vw_ShutdownRenderer();
 
-	// закрываем джойстик, если он был
-	if ((SDL_NumJoysticks() > 0) &&
-	    (Joystick != nullptr) &&
-	    (SDL_JoystickGetAttached(Joystick)))
-		SDL_JoystickClose(Joystick);
-	// we could need restart game, not quit, so, quit from joystick subsystem only
-	SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-
 	// we could need restart game, not quit, so, quit from video subsystem only
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	// сохраняем настройки игры
@@ -912,6 +835,7 @@ GotoQuit:
 	vw_ReleaseText();
 	vw_ShutdownAudio();
 	vw_ShutdownVFS();
+	JoystickClose();
 	vw_ReleaseAllTimeThread();
 	SDL_Quit();
 

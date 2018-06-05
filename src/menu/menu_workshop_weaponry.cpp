@@ -27,6 +27,7 @@
 
 #include "../game.h"
 #include "../config/config.h"
+#include "../platform/platform.h"
 #include "../ui/font.h"
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
@@ -705,7 +706,7 @@ void ShipSlotSetupWeapon(int Slot)
 				if (GameConfig().Profile[CurrentProfile].WeaponAltControl[Slot] == 2)
 					TextTmp = MouseCodeName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (GameConfig().Profile[CurrentProfile].WeaponAltControl[Slot] == 3)
-					TextTmp = JoystickCodeName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]);
+					TextTmp = JoystickButtonName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]).c_str();
 
 			} else TextTmp = (char*)vw_GetText("Click to setup");
 		}

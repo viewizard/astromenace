@@ -43,7 +43,6 @@ class cEarthSpaceFighter;
 // Main.cpp
 //------------------------------------------------------------------------------------
 extern eMenuStatus MenuStatus;
-extern SDL_Joystick *Joystick;
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
 
@@ -55,9 +54,6 @@ extern bool Quit;
 extern bool CanQuit;
 extern bool NeedReCreate;
 extern bool SDL_MouseCurrentStatus[8];
-extern int JoystickAxisX;
-extern int JoystickAxisY;
-extern bool JoysticButtons[100];
 
 void SaveGameData();
 void CodeXOR(char *Text, char *Key, int Count);
@@ -265,7 +261,6 @@ extern float But[10];
 
 void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
 const char * MouseCodeName(char Num);
-const char * JoystickCodeName(int Num);
 void CheckMouseKeybJState();
 
 
