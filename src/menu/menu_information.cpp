@@ -1218,7 +1218,7 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset+Offset+5;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Engineer"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Not combatant"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Non-combatant"));
 		Y1 += Offset;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", 0, vw_GetText("units"));
 		break;

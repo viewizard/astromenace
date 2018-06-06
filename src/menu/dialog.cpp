@@ -1435,14 +1435,14 @@ Dialogs with default type:
 		vw_DrawText(X+25, Y+100+k*7, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("in the right part of the weapon slot panel."));
 
 		vw_DrawText(X+25, Y+120+k*8, -716, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Main types of weapons by their projectiles:"));
-		SizeI = vw_TextWidth(vw_GetText("Projectile - small projectiles based on billets or energy beams."));
-		vw_DrawText(X+25, Y+120+k*9, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Projectile - small projectiles based on billets or energy beams."));
+		SizeI = vw_TextWidth(vw_GetText("Projectile - small projectiles based on bullets or energy beams."));
+		vw_DrawText(X+25, Y+120+k*9, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Projectile - small projectiles based on bullets or energy beams."));
 		vw_DrawText(X+40, Y+120+k*10, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("It is the main and most widespread weapon in the game."));
 		SizeI = vw_TextWidth(vw_GetText("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
 		vw_DrawText(X+25, Y+120+k*11, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
 		SizeI = vw_TextWidth(vw_GetText("The disadvantages of these weapons include the low speed"));
 		vw_DrawText(X+40, Y+120+k*12, SizeI > 701 ? -701 : 701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("The disadvantages of these weapons include the low speed"));
-		vw_DrawText(X+40, Y+120+k*13, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("of the projectile and the possibility of bring it down."));
+		vw_DrawText(X+40, Y+120+k*13, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("of the projectile and the possibility of bringing it down."));
 		SizeI = vw_TextWidth(vw_GetText("Beam - Lasers and Masers. Short-range highly energy-"));
 		vw_DrawText(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Beam - Lasers and Masers. Short-range highly energy-"));
 		vw_DrawText(X+40, Y+120+k*15, -701, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("consuming weapons."));
