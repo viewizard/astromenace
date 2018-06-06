@@ -12,7 +12,7 @@
 
 ## Specifications
 
-  - Operation System (with version, if you know it):
+  - Operating System (with version, if you know it):
     * For example: Windows 10 Home / macOS 10.9 / Ubuntu 18.04
   - Hardware Specifications (optional, if you know it):
     * For example: Intel i7 8500, 8GB memory, Nvidia 760 GTX with 2GB memory
@@ -24,13 +24,13 @@
 
 ## Game Configuration (optional)
 
-Please, provide your AstroMenace game configuration (config.xml and PilotsProfiles_N.N.data, where N is number).
+Please provide your AstroMenace game configuration (config.xml and PilotsProfiles_N.N.data, where N is number).
 
 Files location:
   - Windows: C:\\Users\\{user name}\\AppData\\Roaming\\Viewizard\\AstroMenace\\
   - Linux: ~/.config/astromenace/
 
-Note, this is plane text files, you could use https://gist.github.com/ (or any other services) and provide links or change files extensions to '.txt' in order to attach them dirrectly to the Issue.
+Note, these are plain text files, you could use https://gist.github.com/ (or any other service) and provide links, or change the files' extensions to '.txt' in order to attach them directly to the Issue.
 
 Please, DO NOT copy files content to the Issue itself.
 
@@ -42,6 +42,6 @@ Launch AstroMenace from terminal with logging into file. For example:
 
 log.txt on your Desktop is the result.
 
-You could use https://gist.github.com/ (or any other services) and provide link or attach file dirrectly to the Issue.
+You could use https://gist.github.com/ (or any other service) and provide a link, or attach the file directly to the Issue.
 
 Please, DO NOT copy file content to the Issue itself.
