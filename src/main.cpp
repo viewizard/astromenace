@@ -126,28 +126,14 @@ int main(int argc, char **argv)
 			NeedResetConfig = true;
 	}
 
-	// should be initialized before any interaction with SDL functions
-	// for predictable SDL functions work on all platforms
-	Uint32 SDL_Init_Flags = SDL_INIT_TIMER |
-				SDL_INIT_EVENTS |
-				SDL_INIT_JOYSTICK |
-				SDL_INIT_VIDEO;
-
-	// no reason init all around for vfs creation only
-	if (NeedPack)
-		SDL_Init_Flags = SDL_INIT_TIMER | SDL_INIT_EVENTS;
-
-	if (SDL_Init(SDL_Init_Flags) != 0) {
-		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
-		return 1;
-	}
-
 	std::cout << "AstroMenace " << GAME_VERSION << "\n";
 	std::cout << "VFS version " << GAME_VFS_BUILD << "\n\n";
 
 	SDL_version compiled;
 	SDL_version linked;
 	SDL_VERSION(&compiled);
+	// This function may be called safely at any time, even before SDL_Init().
+	// https://wiki.libsdl.org/SDL_GetVersion
 	SDL_GetVersion(&linked);
 	std::cout << "Compiled against SDL version "
 		  << static_cast<int>(compiled.major) << "."
@@ -160,10 +146,21 @@ int main(int argc, char **argv)
 		  << static_cast<int>(linked.patch)
 		  << "\n";
 
-	if (NeedPack) {
-		int rc = ConvertFS2VFS(GetRawDataPath(), GetDataPath() + "gamedata.vfs");
-		SDL_Quit();
-		return rc;
+	// the file I/O are initialized by default (https://wiki.libsdl.org/SDL_Init)
+	// since VFS use only file I/O, we are safe to call this one before SDL_Init()
+	if (NeedPack)
+		return ConvertFS2VFS(GetRawDataPath(), GetDataPath() + "gamedata.vfs");
+
+	// subsystems, that should be initialized before any interactions
+	// for predictable work on all platforms
+	Uint32 SDL_Init_Flags = SDL_INIT_TIMER |
+				SDL_INIT_EVENTS |
+				SDL_INIT_JOYSTICK |
+				SDL_INIT_VIDEO;
+
+	if (SDL_Init(SDL_Init_Flags) != 0) {
+		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
+		return 1;
 	}
 
 	if (vw_OpenVFS(GetDataPath() + "gamedata.vfs", GAME_VFS_BUILD) != 0) {
@@ -177,24 +174,19 @@ int main(int argc, char **argv)
 		// if file not loaded - it's ok, we will work with English only
 	}
 
-
-
-	// работа с файлом данных... передаем базовый режим окна (обязательно после инициализации языков!)
+	// should be called after vw_InitText()
 	bool FirstStart = LoadXMLConfigFile(NeedResetConfig);
 
 	if (GameConfig().FontNumber > FontQuantity)
 		ChangeGameConfig().FontNumber = 0;
 
-	// иним фонт
 	InitFont(FontList[GameConfig().FontNumber].FontFileName);
 
 	vw_InitTimeThread(0);
 
-	JoystickInit(vw_GetTimeThread(0)); // should be after vw_InitTimeThread(0)
+	// should be called after vw_InitTimeThread(0)
+	JoystickInit(vw_GetTimeThread(0));
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// установка звука, всегда до LoadGameData
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!vw_InitAudio())
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 
