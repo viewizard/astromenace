@@ -132,6 +132,11 @@ int main(int argc, char **argv)
 				SDL_INIT_EVENTS |
 				SDL_INIT_JOYSTICK |
 				SDL_INIT_VIDEO;
+
+	// no reason init all around for vfs creation only
+	if (NeedPack)
+		SDL_Init_Flags = SDL_INIT_TIMER | SDL_INIT_EVENTS;
+
 	if (SDL_Init(SDL_Init_Flags) != 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
