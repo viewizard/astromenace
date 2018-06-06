@@ -128,7 +128,11 @@ int main(int argc, char **argv)
 
 	// should be initialized before any interaction with SDL functions
 	// for predictable SDL functions work on all platforms
-	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK) != 0) {
+	Uint32 SDL_Init_Flags = SDL_INIT_TIMER |
+				SDL_INIT_EVENTS |
+				SDL_INIT_JOYSTICK |
+				SDL_INIT_VIDEO;
+	if (SDL_Init(SDL_Init_Flags) != 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init SDL: " << SDL_GetError() << "\n";
 		return 1;
 	}
@@ -189,29 +193,7 @@ int main(int argc, char **argv)
 	if (!vw_InitAudio())
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 
-ReCreate:
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// иним SDL
-	// это нужно сделать сразу, чтобы правильно поставить разрешение
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		std::cerr << __func__ << "(): " << "Couldn't init SDL Video module: " << SDL_GetError() << "\n";
-		if (VideoModes != nullptr) {
-			delete [] VideoModes;
-			VideoModes = nullptr;
-		}
-		vw_ShutdownAudio();
-		vw_ShutdownFont();
-		vw_ReleaseText();
-		vw_ShutdownVFS();
-		JoystickClose();
-		vw_ReleaseAllTimeThread();
-		SDL_Quit();
-		return 1;
-	}
-	// if we change options during game mission with game restart, care about dialogs reset
-	InitDialogBoxes();
 
 
 
@@ -452,7 +434,10 @@ ReCreate:
 
 
 
+ReCreate:
 
+	// if we change options during game mission with game restart, care about dialogs reset
+	InitDialogBoxes();
 
 
 
@@ -462,10 +447,9 @@ ReCreate:
 	// создаем окно и базовые опенжл контекст
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	bool Fullscreen = (GameConfig().BPP != 0);
-	int InitStatus = vw_InitWindow("AstroMenace", GameConfig().Width, GameConfig().Height, &ChangeGameConfig().BPP, Fullscreen, ScreenNumber, GameConfig().VSync);
 
-	// ошибка окна (размеры)
-	if (InitStatus == 1) {
+	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
+			     &ChangeGameConfig().BPP, Fullscreen, ScreenNumber)) {
 		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
 		if ((640 != GameConfig().Width) ||
 		    (480 != GameConfig().Height) ||
@@ -478,16 +462,11 @@ ReCreate:
 			ChangeGameConfig().MSAA = 0;
 			ChangeGameConfig().CSAA = 0;
 			SaveXMLConfigFile();
-			SDL_Quit();
 			FirstStart = false;
 			goto ReCreate;
 		}
 
 		std::cerr << __func__ << "(): " << "Wrong resolution. Fatal error.\n";
-#ifdef WIN32
-		MessageBox(nullptr, "Wrong resolution. Please, install the newest video drivers from your video card vendor.",
-			   "Render system - Fatal Error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
-#endif // WIN32
 		if (VideoModes != nullptr) {
 			delete [] VideoModes;
 			VideoModes = nullptr;
@@ -498,13 +477,27 @@ ReCreate:
 		vw_ShutdownVFS();
 		JoystickClose();
 		vw_ReleaseAllTimeThread();
-		return 1; // Quit If Window Was Not Created
+		SDL_Quit();
+		return 1;
 	}
 	if (!Fullscreen)
 		ChangeGameConfig().BPP = 0;
 
 
-
+	if (!vw_CreateOpenGLContext(GameConfig().VSync)) {
+		if (VideoModes != nullptr) {
+			delete [] VideoModes;
+			VideoModes = nullptr;
+		}
+		vw_ShutdownFont();
+		vw_ReleaseText();
+		vw_ShutdownAudio();
+		vw_ShutdownVFS();
+		JoystickClose();
+		vw_ReleaseAllTimeThread();
+		SDL_Quit();
+		return 1;
+	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -579,7 +572,8 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// завершаем инициализацию
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_InitOpenGL(GameConfig().Width, GameConfig().Height, &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
+	vw_InitOpenGLStuff(GameConfig().Width, GameConfig().Height,
+			   &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
 
 
 	// вторичная работа с настройками
@@ -806,10 +800,12 @@ GotoQuit:
 	vw_ReleaseAllFontChars(); /* call before vw_ReleaseAllTextures() */
 	vw_ReleaseAllTextures();
 	ShadowMap_Release();
-	vw_ShutdownRenderer();
 
-	// we could need restart game, not quit, so, quit from video subsystem only
-	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+	// gl stuff -> gl context -> window
+	vw_ReleaseOpenGLStuff();
+	vw_DeleteOpenGLContext();
+	vw_DestroyWindow();
+
 	// сохраняем настройки игры
 	SaveXMLConfigFile();
 

@@ -60,6 +60,8 @@ bool InternalResolution{false};
 
 // pointer to main window structure
 SDL_Window *SDLWindow{nullptr};
+// pointer to OpenGL context
+SDL_GLContext GLContext{nullptr};
 
 // main FBO
 std::shared_ptr<sFBO> MainFBO{};
@@ -90,9 +92,9 @@ static bool ExtensionSupported(const char *Extension)
 }
 
 /*
- * Initialize windows with OpenGL context.
+ * Create window.
  */
-int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber, int VSync)
+bool vw_CreateWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber)
 {
 	Uint32 Flags{SDL_WINDOW_OPENGL};
 
@@ -106,13 +108,45 @@ int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool Full
 	if (!SDLWindow) {
 		std::cerr << __func__ << "(): " << "SDL Error: " << SDL_GetError() << "\n";
 		std::cerr << __func__ << "(): " << "Can't set video mode " <<  Width << " x " << Height << "\n\n";
-		return 1;
+		return false;
 	}
-	SDL_GL_CreateContext(SDLWindow);
-	SDL_GL_SetSwapInterval(VSync);
+	std::cout << "Set video mode: " << Width << " x " << Height << " x " << *Bits << "\n\n";
+
 	SDL_DisableScreenSaver();
 
-	std::cout << "Set video mode: " << Width << " x " << Height << " x " << *Bits << "\n\n";
+	return true;
+}
+
+/*
+ * Destroy window.
+ */
+void vw_DestroyWindow()
+{
+	if (!SDLWindow)
+		return;
+
+	SDL_DestroyWindow(SDLWindow);
+	SDLWindow = nullptr;
+}
+
+/*
+ * Create OpenGL context.
+ */
+bool vw_CreateOpenGLContext(int VSync)
+{
+	if (!SDLWindow) {
+		std::cerr << __func__ << "(): " << "Can't create OpenGL context, create window first.\n";
+		return false;
+	}
+
+	GLContext = SDL_GL_CreateContext(SDLWindow);
+
+	if (!GLContext) {
+		std::cerr << __func__ << "(): " << "Can't create OpenGL context.\n";
+		return false;
+	}
+
+	SDL_GL_SetSwapInterval(VSync);
 
 	DevCaps.OpenGLmajorVersion = 1;
 	DevCaps.OpenGLminorVersion = 0;
@@ -193,13 +227,25 @@ int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool Full
 
 	std::cout << "\n";
 
-	return 0;
+	return true;
 }
 
 /*
- * OpenGL setup.
+ * Delete OpenGL context.
  */
-void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
+void vw_DeleteOpenGLContext()
+{
+	if (!GLContext)
+		return;
+
+	SDL_GL_DeleteContext(GLContext);
+	GLContext = nullptr;
+}
+
+/*
+ * Initialize and setup OpenGL related stuff.
+ */
+void vw_InitOpenGLStuff(int Width, int Height, int *MSAA, int *CSAA)
 {
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -235,6 +281,17 @@ void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA)
 }
 
 /*
+ * Release OpenGL related stuff.
+ */
+void vw_ReleaseOpenGLStuff()
+{
+	vw_ReleaseAllShaders();
+
+	MainFBO.reset();
+	ResolveFBO.reset();
+}
+
+/*
  * Get device capability.
  */
 const sDevCaps &vw_GetDevCaps()
@@ -248,17 +305,6 @@ const sDevCaps &vw_GetDevCaps()
 sDevCaps &__GetDevCaps()
 {
 	return DevCaps;
-}
-
-/*
- * Shutdown renderer.
- */
-void vw_ShutdownRenderer()
-{
-	vw_ReleaseAllShaders();
-
-	MainFBO.reset();
-	ResolveFBO.reset();
 }
 
 /*

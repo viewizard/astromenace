@@ -328,14 +328,20 @@ struct sDevCaps {
  * gl_main
  */
 
-// Initialize windows with OpenGL context.
-int vw_InitWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber, int VSync);
+// Create window.
+bool vw_CreateWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber);
+// Destroy window.
+void vw_DestroyWindow();
 // Get SDL window handle.
 SDL_Window *vw_GetSDLWindow();
-// OpenGL setup.
-void vw_InitOpenGL(int Width, int Height, int *MSAA, int *CSAA);
-// Shutdown renderer.
-void vw_ShutdownRenderer();
+// Create OpenGL context.
+bool vw_CreateOpenGLContext(int VSync);
+// Delete OpenGL context.
+void vw_DeleteOpenGLContext();
+// Initialize and setup OpenGL related stuff.
+void vw_InitOpenGLStuff(int Width, int Height, int *MSAA, int *CSAA);
+// Release OpenGL related stuff.
+void vw_ReleaseOpenGLStuff();
 // Get device capability.
 const sDevCaps &vw_GetDevCaps();
 
