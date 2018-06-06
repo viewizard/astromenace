@@ -87,11 +87,11 @@ bool cParticle::Update(float TimeDelta, const sVECTOR3D &ParentLocation,
 		if (Magnet) {
 			sVECTOR3D MagnetDir = ParentLocation;
 			MagnetDir -= Location;
+			MagnetDir.Normalize();
 
 			if (NeedStop)
 				MagnetFactor -= MagnetFactor * TimeDelta;
 
-			MagnetDir.Normalize();
 			Velocity += MagnetDir ^ (MagnetFactor * TimeDelta);
 		}
 
@@ -371,9 +371,8 @@ void cParticleSystem::GenerateLocationCubeType(cParticle &NewParticle)
 	while (ParticleDist2 < DeadZone * DeadZone) {
 		// increase radius
 		sVECTOR3D tmpPosInc = CreationPos;
-		tmpPosInc.Normalize();
-		tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
-		CreationPos += tmpPosInc;
+		tmpPosInc *= 0.01f; // calculate 1%
+		CreationPos += tmpPosInc; // increase distance on 1%
 	}
 
 	vw_Matrix33CalcPoint(CreationPos, CurrentRotationMat);
@@ -403,9 +402,8 @@ void cParticleSystem::GenerateLocationTubeType(cParticle &NewParticle)
 	while (ParticleDist2 < DeadZone * DeadZone) {
 		// increase radius
 		sVECTOR3D tmpPosInc = CreationPos;
-		tmpPosInc.Normalize();
-		tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
-		CreationPos += tmpPosInc;
+		tmpPosInc *= 0.01f; // calculate 1%
+		CreationPos += tmpPosInc; // increase distance on 1%
 	}
 
 	vw_Matrix33CalcPoint(CreationPos, CurrentRotationMat);
@@ -437,16 +435,14 @@ void cParticleSystem::GenerateLocationSphereType(cParticle &NewParticle)
 		if (ParticleDist2 > minDist2) {
 			// decrease radius
 			sVECTOR3D tmpPosDec = CreationPos;
-			tmpPosDec.Normalize();
-			tmpPosDec = tmpPosDec ^ (1 / 100.0f); // decrease distance on 1%
-			CreationPos -= tmpPosDec;
+			tmpPosDec *= 0.01f; // calculate 1%
+			CreationPos -= tmpPosDec; // decrease distance on 1%
 		}
 		if (ParticleDist2 < DeadZone2) {
 			// increase radius
-			sVECTOR3D tmp1 = CreationPos;
-			tmp1.Normalize();
-			tmp1 = tmp1 ^ (1 / 100.0f); // increase distance on 1%
-			CreationPos += tmp1;
+			sVECTOR3D tmpPosInc = CreationPos;
+			tmpPosInc *= 0.01f; // calculate 1%
+			CreationPos += tmpPosInc; // increase distance on 1%
 
 			vw_Clamp(CreationPos.x, -CreationSize.x, CreationSize.x);
 			vw_Clamp(CreationPos.y, -CreationSize.y, CreationSize.y);
