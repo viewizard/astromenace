@@ -720,12 +720,12 @@ loop:
 				break;
 
 			case SDL_JOYBUTTONDOWN:
-				// FIXME only opened joystick events should be allowed
+				// only events from opened joystick could be here, no checks are needed
 				vw_SetMouseLeftClick(true);
 				SetJoystickButton(event.jbutton.button, true);
 				break;
 			case SDL_JOYBUTTONUP:
-				// FIXME only opened joystick events should be allowed
+				// only events from opened joystick could be here, no checks are needed
 				vw_SetMouseLeftClick(false);
 				SetJoystickButton(event.jbutton.button, false);
 				break;

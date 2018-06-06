@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO move JoystickButtons to std::vector
-
 // TODO add support for SDL_INIT_HAPTIC (force feedback)
 
 // NOTE SDL2 also provide SDL_INIT_GAMECONTROLLER now
@@ -44,7 +42,8 @@ namespace {
 SDL_Joystick *Joystick{nullptr};
 int JoystickAxisX{0};
 int JoystickAxisY{0};
-bool JoystickButtons[100];
+int JoystickButtonsQuantity{0};
+std::vector<bool> JoystickButtons{};
 
 float JoystickCurentTime{0.0f};
 float JoystickTimeDelta{0.0f};
@@ -57,40 +56,37 @@ float JoystickTimeDelta{0.0f};
  */
 bool JoystickInit(float InitialTime)
 {
-	if (SDL_NumJoysticks() > 0) {
-		std::cout << "Found Joystick(s):\n";
-		for (int i = 0; i < SDL_NumJoysticks(); i++) {
-			std::cout << "Joystick Name " << i << ": " << SDL_JoystickNameForIndex(i) << "\n";
-		}
+	if (SDL_NumJoysticks() <= 0)
+		return false;
 
-		if (GameConfig().JoystickNum >= SDL_NumJoysticks())
-			ChangeGameConfig().JoystickNum = 0;
-
-		Joystick = SDL_JoystickOpen(GameConfig().JoystickNum);
-
-		if (Joystick) {
-			std::cout << "Opened Joystick " << GameConfig().JoystickNum << "\n"
-				  << "Joystick Name: " << SDL_JoystickNameForIndex(GameConfig().JoystickNum) << "\n"
-				  << "Joystick Number of Axes: " << SDL_JoystickNumAxes(Joystick) << "\n"
-				  << "Joystick Number of Buttons: " << SDL_JoystickNumButtons(Joystick) << "\n"
-				  << "Joystick Number of Balls: " << SDL_JoystickNumBalls(Joystick) << "\n\n";
-		} else {
-			std::cout << "Couldn't open Joystick " << GameConfig().JoystickNum << "\n\n";
-			return false;
-		}
+	std::cout << "Found Joystick(s):\n";
+	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		std::cout << "Joystick Name " << i << ": " << SDL_JoystickNameForIndex(i) << "\n";
 	}
 
-	JoystickAxisX = 0;
-	JoystickAxisY = 0;
+	if (GameConfig().JoystickNum >= SDL_NumJoysticks())
+		ChangeGameConfig().JoystickNum = 0;
+
+	Joystick = SDL_JoystickOpen(GameConfig().JoystickNum);
+
+	if (Joystick) {
+		std::cout << "Opened Joystick " << GameConfig().JoystickNum << "\n"
+			  << "Joystick Name: " << SDL_JoystickNameForIndex(GameConfig().JoystickNum) << "\n"
+			  << "Joystick Number of Axes: " << SDL_JoystickNumAxes(Joystick) << "\n"
+			  << "Joystick Number of Buttons: " << SDL_JoystickNumButtons(Joystick) << "\n"
+			  << "Joystick Number of Balls: " << SDL_JoystickNumBalls(Joystick) << "\n\n";
+	} else {
+		std::cout << "Couldn't open Joystick " << GameConfig().JoystickNum << "\n\n";
+		return false;
+	}
+
 	JoystickCurentTime = InitialTime;
 	JoystickTimeDelta = 0.0f;
 
 	JoystickAxisX = SDL_JoystickGetAxis(Joystick, 0);
 	JoystickAxisY = SDL_JoystickGetAxis(Joystick, 1);
-
-	for (int i = 0; i < 100; i++) {
-		JoystickButtons[i] = false;
-	}
+	JoystickButtonsQuantity = SDL_JoystickNumButtons(Joystick);
+	JoystickButtons.resize(JoystickButtonsQuantity, false);
 
 	return true;
 }
@@ -122,7 +118,7 @@ int GetJoystickButtonsQuantity()
 	if (!Joystick)
 		return 0;
 
-	return SDL_JoystickNumButtons(Joystick);
+	return JoystickButtonsQuantity;
 }
 
 /*
@@ -130,7 +126,11 @@ int GetJoystickButtonsQuantity()
  */
 void SetJoystickButton(int ButtonNumber, bool ButtonStatus)
 {
-	if (!Joystick)
+	if (!Joystick ||
+	    // we may have config that was made previously with another joystick
+	    // don't change game's config, just ignore this buttons check
+	    (ButtonNumber < 0) ||
+	    (ButtonNumber >= JoystickButtonsQuantity))
 		return;
 
 	JoystickButtons[ButtonNumber] = ButtonStatus;
@@ -141,7 +141,11 @@ void SetJoystickButton(int ButtonNumber, bool ButtonStatus)
  */
 bool GetJoystickButton(int ButtonNumber)
 {
-	if (!Joystick)
+	if (!Joystick ||
+	    // we may have config that was made previously with another joystick
+	    // don't change game's config, just ignore this buttons check
+	    (ButtonNumber < 0) ||
+	    (ButtonNumber >= JoystickButtonsQuantity))
 		return false;
 
 	return JoystickButtons[ButtonNumber];
