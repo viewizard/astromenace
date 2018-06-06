@@ -3,7 +3,7 @@
 
 	<!-- Mission 1 -->
 	<Mission>
-		<Title color="4">Mission 1 - First Contact with Unknown Enemy</Title>
+		<Title color="4">Mission 1 - First Contact with an Unknown Enemy</Title>
 		<Descr color="0">They are coming! They are everywhere!</Descr>
 		<Icon>script/mission1_icon.tga</Icon>
 		<File>script/mission1.xml</File>
@@ -60,7 +60,7 @@
 	<!-- Mission 8 -->
 	<Mission>
 		<Title color="6">Mission 8 - Stay Close, They Are Coming</Title>
-		<Descr color="0">Looks like the aliens got reinforcement!</Descr>
+		<Descr color="0">Looks like the aliens got reinforcements!</Descr>
 		<Icon>script/mission8_icon.tga</Icon>
 		<File>script/mission8.xml</File>
 	</Mission>
@@ -68,7 +68,7 @@
 	<!-- Mission 9 -->
 	<Mission>
 		<Title color="4">Mission 9 - One More Pirate Raiders Base</Title>
-		<Descr color="0">This should be piece of cake for you, do it quickly!</Descr>
+		<Descr color="0">This should be a piece of cake for you, do it quickly!</Descr>
 		<Icon>script/mission9_icon.tga</Icon>
 		<File>script/mission9.xml</File>
 	</Mission>
@@ -76,7 +76,7 @@
 	<!-- Mission 10 -->
 	<Mission>
 		<Title color="6">Mission 10 - Strange Slackness... Be Ready!</Title>
-		<Descr color="0">Our intelligence failed to find anything. It can be a trap!</Descr>
+		<Descr color="0">Our intelligence failed to find anything. It could be a trap!</Descr>
 		<Icon>script/mission10_icon.tga</Icon>
 		<File>script/mission10.xml</File>
 	</Mission>
@@ -84,7 +84,7 @@
 	<!-- Mission 11 -->
 	<Mission>
 		<Title color="4">Mission 11 - Do Not Let Them Destroy Our Base!</Title>
-		<Descr color="0">Do not panic! We got reinforcement! Regroup and attack!</Descr>
+		<Descr color="0">Do not panic! We've got reinforcements! Regroup and attack!</Descr>
 		<Icon>script/mission11_icon.tga</Icon>
 		<File>script/mission11.xml</File>
 	</Mission>
