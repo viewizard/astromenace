@@ -243,9 +243,8 @@ void cParticleSystem2D::GenerateLocationQuadType(cParticle2D &NewParticle)
 				CreationPos.z * CreationPos.z) < DeadZone2) {
 				// increase distance
 				sVECTOR3D tmpPosInc = CreationPos;
-				tmpPosInc.Normalize();
-				tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
-				CreationPos += tmpPosInc;
+				tmpPosInc *= 0.01f; // calculate 1%
+				CreationPos += tmpPosInc; // increase distance on 1%
 			}
 		}
 	}
@@ -278,16 +277,14 @@ void cParticleSystem2D::GenerateLocationCircleType(cParticle2D &NewParticle)
 		if (ParticleDist2 > tmpDist2) {
 			// decrease radius
 			sVECTOR3D tmpPosDec = CreationPos;
-			tmpPosDec.Normalize();
-			tmpPosDec = tmpPosDec ^ (1 / 100.0f); // decrease distance on 1%
-			CreationPos -= tmpPosDec;
+			tmpPosDec *= 0.01f; // calculate 1%
+			CreationPos -= tmpPosDec; // decrease distance on 1%
 		}
 		if (ParticleDist2 < DeadZone2) {
 			// increase radius
 			sVECTOR3D tmpPosInc = CreationPos;
-			tmpPosInc.Normalize();
-			tmpPosInc = tmpPosInc ^ (1 / 100.0f); // increase distance on 1%
-			CreationPos += tmpPosInc;
+			tmpPosInc *= 0.01f; // calculate 1%
+			CreationPos += tmpPosInc; // increase distance on 1%
 
 			vw_Clamp(CreationPos.x, -CreationSize.x, CreationSize.x);
 			vw_Clamp(CreationPos.y, -CreationSize.y, CreationSize.y);
