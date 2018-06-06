@@ -5,7 +5,9 @@
 * [Translators Wanted](https://github.com/viewizard/astromenace#translators-wanted)
 * [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
 * [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6)  [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)  [![patreon](https://img.shields.io/badge/donate-patreon-f96854.svg)](https://github.com/viewizard/astromenace#patreon-httpswwwpatreoncomviewizard)
-##
+
+---
+
 [AstroMenace on YouTube, a video is worth a thousand words.](https://www.youtube.com/watch?v=ysY9vKKisbo&index=1&list=PLrWi_GXhwHyznYT19oAQL4zNldlVXFlj2)
 
 Immerse into a decisive battle against tons of cunning foes, face the terrifying bosses and protect your homeland throughout 15 diverse levels of the game. The hardcore gameplay of AstroMenace, packed with pure non-stop action, will become a full scale test for your basic instinct of survival.
