@@ -84,7 +84,7 @@ void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Theta      = 20.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.7f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
@@ -129,7 +129,7 @@ void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Life       = 1.0f;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->IsMagnet = true;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.1f,0.9f,0.1f);
 		break;
 	case 5:
@@ -172,7 +172,7 @@ void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Theta      = 20.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.3f);
@@ -196,7 +196,7 @@ void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.1f,0.2f,0.1f);
 		ParticleSystem->IsMagnet = true;
 		break;

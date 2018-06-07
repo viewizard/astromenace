@@ -120,7 +120,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->LifeVar	 = vw_Randf0/10.0f;
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(2.8f,2.8f,2.8f);
 		ParticleSystem->NeedStop = true;
 		break;

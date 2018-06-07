@@ -509,18 +509,6 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedFire->CreationSize = sVECTOR3D(Width/2.0f,Width/2.0f,0.1f);
 			sharedDestroyedFire->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 			sharedDestroyedFire->SetStartLocation(DestroyedFireLocation);
-
-			// небольшая поправка для ракетных систем
-
-			if (InternalType == 16 || InternalType == 17) {
-				sharedDestroyedFire->DeadZone = Width/2.0f - 0.1f;
-			} else if (InternalType == 18) {
-				sharedDestroyedFire->CreationSize = sVECTOR3D(Width/3.5f,Width/3.5f,0.1f);
-				sharedDestroyedFire->DeadZone = Width/3.5f - 0.1f;
-			} else if (InternalType == 19) {
-				sharedDestroyedFire->CreationSize = sVECTOR3D(Width/3.0f,Width/3.0f,0.1f);
-				sharedDestroyedFire->DeadZone = Width/3.0f - 0.1f;
-			}
 		}
 	}
 

@@ -272,7 +272,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			if (Projectile->Speed != 0.0f)
 				sharedGFX->Theta = 360.00f;
 			sharedGFX->ParticlesPerSec = (int)(30 * Projectile->Radius);
-			sharedGFX->CreationType = eParticleCreationType::Cube;
+			sharedGFX->CreationType = eParticleCreationType::Sphere;
 			sharedGFX->CreationSize = sVECTOR3D(AABB[0].x, AABB[0].y, AABB[0].z);
 			// разварачиваем взрыв по объекту
 			sharedGFX->RotateSystemAndParticlesByAngle(Projectile->Rotation);

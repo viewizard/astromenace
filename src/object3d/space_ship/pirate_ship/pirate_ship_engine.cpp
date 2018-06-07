@@ -60,7 +60,7 @@ void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int E
 		ParticleSystem->Theta      = 5.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.4f,0.4f);
 		ParticleSystem->AlphaShowHide= true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
@@ -84,7 +84,7 @@ void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int E
 		ParticleSystem->Theta      = 5.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
 		ParticleSystem->AlphaShowHide= true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
@@ -108,7 +108,7 @@ void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int E
 		ParticleSystem->Theta      = 5.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(1.0f,0.1f,1.0f);
 		ParticleSystem->AlphaShowHide= true;
 		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
@@ -156,7 +156,7 @@ void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int E
 		ParticleSystem->Theta      = 5.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->CreationType = eParticleCreationType::Cube;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(1.0f,1.0f,1.0f);
 		ParticleSystem->AlphaShowHide= true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);

@@ -177,7 +177,7 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.30f;
-		ParticleSystem->CreationType       = eParticleCreationType::Cube;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.4f,0.4f,0.4f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
@@ -197,7 +197,7 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->CreationType       = eParticleCreationType::Cube;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
@@ -217,7 +217,7 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.50f;
-		ParticleSystem->CreationType       = eParticleCreationType::Cube;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
@@ -242,7 +242,7 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->CreationType       = eParticleCreationType::Cube;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);
 		break;
 	case 12:
@@ -263,7 +263,7 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->CreationType       = eParticleCreationType::Cube;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);
 		break;
 	case 13:
@@ -301,7 +301,7 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 200;
-		ParticleSystem->CreationType       = eParticleCreationType::Cube;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize       = sVECTOR3D(0.2f,0.2f,0.8f);
 		break;
 	case 15:
