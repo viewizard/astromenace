@@ -365,10 +365,10 @@ void cParticleSystem::GenerateLocationCubeType(cParticle &NewParticle)
 	sVECTOR3D CreationPos{vw_Randf0 * CreationSize.x,
 			      vw_Randf0 * CreationSize.y,
 			      vw_Randf0 * CreationSize.z};
-	float ParticleDist2 = CreationPos.x * CreationPos.x +
-			      CreationPos.y * CreationPos.y +
-			      CreationPos.z * CreationPos.z;
-	while (ParticleDist2 < DeadZone * DeadZone) {
+	float DeadZone2 = DeadZone * DeadZone;
+	while ((CreationPos.x * CreationPos.x +
+		CreationPos.y * CreationPos.y +
+		CreationPos.z * CreationPos.z) < DeadZone2) {
 		// increase radius
 		sVECTOR3D tmpPosInc = CreationPos;
 		tmpPosInc *= 0.01f; // calculate 1%
@@ -396,10 +396,10 @@ void cParticleSystem::GenerateLocationTubeType(cParticle &NewParticle)
 	sVECTOR3D CreationPos{(0.5f - vw_fRand()) * CreationSize.x,
 			      (0.5f - vw_fRand()) * CreationSize.y,
 			      (0.5f - vw_fRand()) * CreationSize.z};
-	float ParticleDist2 = CreationPos.x * CreationPos.x +
-			      CreationPos.y * CreationPos.y +
-			      CreationPos.z * CreationPos.z;
-	while (ParticleDist2 < DeadZone * DeadZone) {
+	float DeadZone2 = DeadZone * DeadZone;
+	while ((CreationPos.x * CreationPos.x +
+		CreationPos.y * CreationPos.y +
+		CreationPos.z * CreationPos.z) < DeadZone2) {
 		// increase radius
 		sVECTOR3D tmpPosInc = CreationPos;
 		tmpPosInc *= 0.01f; // calculate 1%
@@ -443,7 +443,7 @@ void cParticleSystem::GenerateLocationSphereType(cParticle &NewParticle)
 			sVECTOR3D tmpPosInc = CreationPos;
 			tmpPosInc *= 0.01f; // calculate 1%
 			CreationPos += tmpPosInc; // increase distance on 1%
-
+			// should be corrected on each iteration
 			vw_Clamp(CreationPos.x, -CreationSize.x, CreationSize.x);
 			vw_Clamp(CreationPos.y, -CreationSize.y, CreationSize.y);
 			vw_Clamp(CreationPos.z, -CreationSize.z, CreationSize.z);

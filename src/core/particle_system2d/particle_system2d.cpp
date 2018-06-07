@@ -285,7 +285,7 @@ void cParticleSystem2D::GenerateLocationCircleType(cParticle2D &NewParticle)
 			sVECTOR3D tmpPosInc = CreationPos;
 			tmpPosInc *= 0.01f; // calculate 1%
 			CreationPos += tmpPosInc; // increase distance on 1%
-
+			// should be corrected on each iteration
 			vw_Clamp(CreationPos.x, -CreationSize.x, CreationSize.x);
 			vw_Clamp(CreationPos.y, -CreationSize.y, CreationSize.y);
 			vw_Clamp(CreationPos.z, -CreationSize.z, CreationSize.z);
