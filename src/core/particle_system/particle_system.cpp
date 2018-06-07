@@ -343,6 +343,9 @@ void cParticleSystem::SizeCorrectionByCameraDist(cParticle &NewParticle)
  */
 void cParticleSystem::GenerateLocationPointType(cParticle &NewParticle)
 {
+	// FIXME this should be fixed, Point Type should return same location as system,
+	//       if particle system need CreationSize, Sphere Type should be used
+	//       since we have point type by default, not so easy now find related code
 	NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
 						    vw_Randf0 * CreationSize.y,
 						    vw_Randf0 * CreationSize.z);
