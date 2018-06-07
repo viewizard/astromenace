@@ -215,9 +215,7 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity, float TimeDelta)
  */
 void cParticleSystem2D::GenerateLocationPointType(cParticle2D &NewParticle)
 {
-	NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
-						    vw_Randf0 * CreationSize.y,
-						    vw_Randf0 * CreationSize.z);
+	NewParticle.Location = Location;
 }
 
 /*

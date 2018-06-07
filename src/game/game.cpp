@@ -707,6 +707,7 @@ void InitGame()
 		sharedEnergyParticleSystem2D->ParticlesPerSec = 50;
 		sharedEnergyParticleSystem2D->IsMagnet = true;
 		sharedEnergyParticleSystem2D->MagnetFactor = 150.0f;
+		sharedEnergyParticleSystem2D->CreationType = eParticle2DCreationType::Point;
 		sharedEnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
 		sharedEnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f, 29.0f, 0.0f));
 	}
