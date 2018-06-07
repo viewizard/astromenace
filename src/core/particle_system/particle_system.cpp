@@ -344,7 +344,7 @@ void cParticleSystem::SizeCorrectionByCameraDist(cParticle &NewParticle)
 void cParticleSystem::GenerateLocationPointType(cParticle &NewParticle)
 {
 	// FIXME this should be fixed, Point Type should return same location as system,
-	//       if particle system need CreationSize, Sphere Type should be used
+	//       if particle system need CreationSize, Sphere or Cube Type should be used
 	//       since we have point type by default, not so easy now find related code
 	NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
 						    vw_Randf0 * CreationSize.y,
@@ -393,12 +393,13 @@ void cParticleSystem::GenerateLocationSphereType(cParticle &NewParticle)
 				      CreationPos.y * CreationPos.y +
 				      CreationPos.z * CreationPos.z;
 
-		if (ParticleDist2 < DeadZone * DeadZone)
+		if (ParticleDist2 < DeadZone * DeadZone) {
 			CreationPos *= DeadZone / vw_sqrtf(ParticleDist2);
 
-		vw_Clamp(CreationPos.x, -CreationSize.x, CreationSize.x);
-		vw_Clamp(CreationPos.y, -CreationSize.y, CreationSize.y);
-		vw_Clamp(CreationPos.z, -CreationSize.z, CreationSize.z);
+			vw_Clamp(CreationPos.x, -CreationSize.x, CreationSize.x);
+			vw_Clamp(CreationPos.y, -CreationSize.y, CreationSize.y);
+			vw_Clamp(CreationPos.z, -CreationSize.z, CreationSize.z);
+		}
 	}
 
 	vw_Matrix33CalcPoint(CreationPos, CurrentRotationMat);
