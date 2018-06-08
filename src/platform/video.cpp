@@ -29,9 +29,9 @@
 #include "platform.h"
 
 /*
-Note, we use view size instead of window size (or screen size),
-in the meaning of game's rendering rectangle size.
-For fullscreen this will be also window size (and screen size),
+Note, we use view size instead of window size (or display size),
+in the meaning of game's rendering area size.
+For fullscreen this will be also window size (and display size),
 for windowed mode this will be internal size that don't include
 window's decor size.
 
@@ -45,9 +45,9 @@ In real, we allow any view size with aspect ratio from 5:4 to 16:9.
 
 namespace {
 
-// Default screen number. Make sure, you clear all related arrays on
-// change it during one session, since we use cached data for more speed.
-int ScreenNumber{0};
+// Default index of the display to query. Make sure, that you clear all related arrays
+// if this index changed during session, since we use cached data for more speed.
+int DisplayIndex{0};
 
 std::vector<sViewSize> FullScreenSizeArray{};
 
@@ -89,17 +89,17 @@ static bool AllowedAspectRatio(const sViewSize &ViewSize)
 static bool GetDisplaySize(sViewSize &ViewSize)
 {
 	SDL_Rect DisplayBounds;
-	if (SDL_GetDisplayBounds(ScreenNumber, &DisplayBounds) == 0) {
+	if (SDL_GetDisplayBounds(DisplayIndex, &DisplayBounds) == 0) {
 		ViewSize.Width = DisplayBounds.w;
 		ViewSize.Height = DisplayBounds.h;
 		return true;
 	} else
 		std::cerr << __func__ << "(): " << "SDL_GetDisplayBounds() failed: " << SDL_GetError() << "\n";
 
-	SDL_DisplayMode CurrentDisplayMode;
-	if (SDL_GetDesktopDisplayMode(ScreenNumber, &CurrentDisplayMode) == 0) {
-		ViewSize.Width = CurrentDisplayMode.w;
-		ViewSize.Height = CurrentDisplayMode.h;
+	SDL_DisplayMode DisplayMode;
+	if (SDL_GetDesktopDisplayMode(DisplayIndex, &DisplayMode) == 0) {
+		ViewSize.Width = DisplayMode.w;
+		ViewSize.Height = DisplayMode.h;
 		return true;
 	} else
 		std::cerr << __func__ << "(): " << "SDL_GetDesktopDisplayMode() failed: " << SDL_GetError() << "\n";
@@ -108,9 +108,9 @@ static bool GetDisplaySize(sViewSize &ViewSize)
 }
 
 /*
- * Detect current screen size for fullscreen mode.
- * Note, we work with one screen only now.
- * If current screen size is not appropriate, returned vector is empty.
+ * Detect current display size for fullscreen mode.
+ * Note, we work with one display only now.
+ * If current display size is not appropriate, returned vector is empty.
  */
 std::vector<sViewSize> &DetectFullScreenSize()
 {

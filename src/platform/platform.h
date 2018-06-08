@@ -76,7 +76,7 @@ void JoystickEmulateMouseMovement(float Time);
 const std::string JoystickButtonName(int Num);
 
 /*
- * Screen.
+ * Video.
  */
 
 struct sViewSize {
@@ -90,9 +90,11 @@ struct sViewSize {
 	{}
 };
 
-// Detect current screen size for fullscreen mode.
-// Note, we work with one screen only now.
-// If current screen size is not appropriate, returned vector is empty.
+// Detect current display size for fullscreen mode.
+// Note, we work with one display only now.
+// If current display size is not appropriate, returned vector is empty.
 std::vector<sViewSize> &DetectFullScreenSize();
+// Check for standard aspect ratio.
+bool StandardAspectRation(const sViewSize &ViewSize);
 
 #endif // PLATFORM_RELATED_H
