@@ -84,6 +84,30 @@ static bool AllowedAspectRatio(const sViewSize &ViewSize)
 }
 
 /*
+ * Get display size.
+ */
+static bool GetDisplaySize(sViewSize &ViewSize)
+{
+	SDL_Rect DisplayBounds;
+	if (SDL_GetDisplayBounds(ScreenNumber, &DisplayBounds) == 0) {
+		ViewSize.Width = DisplayBounds.w;
+		ViewSize.Height = DisplayBounds.h;
+		return true;
+	} else
+		std::cerr << __func__ << "(): " << "SDL_GetDisplayBounds() failed: " << SDL_GetError() << "\n";
+
+	SDL_DisplayMode CurrentDisplayMode;
+	if (SDL_GetDesktopDisplayMode(ScreenNumber, &CurrentDisplayMode) == 0) {
+		ViewSize.Width = CurrentDisplayMode.w;
+		ViewSize.Height = CurrentDisplayMode.h;
+		return true;
+	} else
+		std::cerr << __func__ << "(): " << "SDL_GetDesktopDisplayMode() failed: " << SDL_GetError() << "\n";
+
+	return false;
+}
+
+/*
  * Detect current screen size for fullscreen mode.
  * Note, we work with one screen only now.
  * If current screen size is not appropriate, returned vector is empty.
@@ -93,14 +117,10 @@ std::vector<sViewSize> &DetectFullScreenSize()
 	if (!FullScreenSizeArray.empty())
 		return FullScreenSizeArray;
 
-	// get current screen size
-	SDL_DisplayMode CurrentDisplayMode;
-	if (SDL_GetDesktopDisplayMode(ScreenNumber, &CurrentDisplayMode) != 0) {
-		std::cerr << __func__ << "(): " << "SDL_GetDesktopDisplayMode() failed: " << SDL_GetError() << "\n";
+	sViewSize tmpViewSize;
+	if (!GetDisplaySize(tmpViewSize))
 		return FullScreenSizeArray; // return empty vector
-	}
 
-	sViewSize tmpViewSize{CurrentDisplayMode.w, CurrentDisplayMode.h};
 	if (!AllowedAspectRatio(tmpViewSize))
 		return FullScreenSizeArray; // return empty vector
 

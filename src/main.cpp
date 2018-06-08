@@ -27,8 +27,6 @@
 
 // TODO translate comments
 
-// TODO check fullscreen modes with SDL_GetDisplayBounds() and windowed modes with SDL_GetDisplayUsableBounds()
-
 // TODO probably, we could provide option for screen number, where game's window should
 //      be created, see ScreenNumber
 
