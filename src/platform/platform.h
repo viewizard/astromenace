@@ -75,4 +75,24 @@ void JoystickEmulateMouseMovement(float Time);
 // Provide joystick's button name - "JoystickN", where N is number.
 const std::string JoystickButtonName(int Num);
 
+/*
+ * Screen.
+ */
+
+struct sViewSize {
+	int Width{0};
+	int Height{0};
+
+	sViewSize() = default;
+	sViewSize(int _Width, int _Height) :
+		Width{_Width},
+		Height{_Height}
+	{}
+};
+
+// Detect current screen size for fullscreen mode.
+// Note, we work with one screen only now.
+// If current screen size is not appropriate, returned vector is empty.
+std::vector<sViewSize> &DetectFullScreenSize();
+
 #endif // PLATFORM_RELATED_H
