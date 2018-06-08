@@ -55,6 +55,20 @@ std::vector<sViewSize> FullScreenSizeArray{};
 
 
 /*
+ * Check for standard aspect ratio.
+ */
+bool StandardAspectRation(const sViewSize &ViewSize)
+{
+	float tmpAspectRatio = static_cast<float>(ViewSize.Width) / static_cast<float>(ViewSize.Height);
+
+	if ((tmpAspectRatio > 1.24f) &&
+	    (tmpAspectRatio < 1.4f))
+		return true;
+
+	return false;
+}
+
+/*
  * Check view size's aspect ratio.
  */
 static bool AllowedAspectRatio(const sViewSize &ViewSize)
@@ -62,7 +76,7 @@ static bool AllowedAspectRatio(const sViewSize &ViewSize)
 	float tmpAspectRatio = static_cast<float>(ViewSize.Width) / static_cast<float>(ViewSize.Height);
 
 	// only aspect ratio from 5:4 to 16:9 are allowed
-	if ((tmpAspectRatio > 1.24f) ||
+	if ((tmpAspectRatio > 1.24f) &&
 	    (tmpAspectRatio < 1.78f))
 		return true;
 
