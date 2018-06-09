@@ -94,6 +94,8 @@ struct sViewSize {
 // Note, we work with one display only now.
 // If current display size is not appropriate, returned vector is empty.
 std::vector<sViewSize> &DetectFullScreenSize();
+// Detect allowed view size array for windowed mode.
+std::vector<sViewSize> &DetectWindowSizeArray();
 // Check for standard aspect ratio.
 bool StandardAspectRation(const sViewSize &ViewSize);
 
