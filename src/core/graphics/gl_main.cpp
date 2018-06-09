@@ -76,6 +76,8 @@ std::shared_ptr<sFBO> ResolveFBO{};
  */
 SDL_Window *vw_GetSDLWindow()
 {
+	assert(SDLWindow);
+
 	return SDLWindow;
 }
 
@@ -106,7 +108,7 @@ bool vw_CreateWindow(const char *Title, int Width, int Height, int *Bits, bool F
 				     SDL_WINDOWPOS_CENTERED_DISPLAY(ScreenNumber),
 				     Width, Height, Flags);
 	if (!SDLWindow) {
-		std::cerr << __func__ << "(): " << "SDL Error: " << SDL_GetError() << "\n";
+		std::cerr << __func__ << "(): " << "SDL_CreateWindow() failed: " << SDL_GetError() << "\n";
 		std::cerr << __func__ << "(): " << "Can't set video mode " <<  Width << " x " << Height << "\n\n";
 		return false;
 	}
@@ -142,6 +144,7 @@ bool vw_CreateOpenGLContext(int VSync)
 	GLContext = SDL_GL_CreateContext(SDLWindow);
 
 	if (!GLContext) {
+		std::cerr << __func__ << "(): " << "SDL_GL_CreateContext() failed: " << SDL_GetError() << "\n";
 		std::cerr << __func__ << "(): " << "Can't create OpenGL context.\n";
 		return false;
 	}
@@ -370,6 +373,8 @@ void vw_EndRendering()
 		}
 	}
 
+	assert(SDLWindow);
+
 	SDL_GL_SwapWindow(SDLWindow);
 }
 
@@ -420,6 +425,8 @@ void vw_DepthRange(GLdouble zNear, GLdouble zFar)
  */
 void vw_SetViewport(GLint x, GLint y, GLsizei width, GLsizei height, eOrigin Origin)
 {
+	assert(SDLWindow);
+
 	if (Origin == eOrigin::upper_left) {
 		int SDLWindowWidth, SDLWindowHeight;
 		SDL_GetWindowSize(SDLWindow, &SDLWindowWidth, &SDLWindowHeight);
