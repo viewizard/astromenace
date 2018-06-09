@@ -43,8 +43,10 @@
 void ReleaseAllObject3D()
 {
 	ReleaseAllSpaceShip();
-	ReleaseAllWeapon();
 	ReleaseAllGroundObject();
+	// until code refactored and moved to STL, make sure this called after SpaceShip and GroundObject,
+	// since we release all connected to SpaceShip and GroundObject weapons in their destructors
+	ReleaseAllWeapon();
 	ReleaseAllProjectile();
 	ReleaseAllSpaceObject();
 	ReleaseAllExplosion();

@@ -48,6 +48,24 @@ cGroundObject::cGroundObject()
 //-----------------------------------------------------------------------------
 cGroundObject::~cGroundObject()
 {
+	if (WeaponSetFire != nullptr) {
+		delete [] WeaponSetFire;
+		WeaponSetFire = nullptr;
+	}
+	if (WeaponLocation != nullptr) {
+		delete [] WeaponLocation;
+		WeaponLocation = nullptr;
+	}
+	if (Weapon != nullptr) {
+		for (int i = 0; i < WeaponQuantity; i++)
+			if (Weapon[i] != nullptr) {
+				delete Weapon[i];
+				Weapon[i] = nullptr;
+			}
+
+		delete [] Weapon;
+		Weapon = nullptr;
+	}
 	if (WheelObjectsNum != nullptr) {
 		delete [] WheelObjectsNum;
 		WheelObjectsNum = nullptr;
