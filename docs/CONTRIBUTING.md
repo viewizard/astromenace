@@ -1,3 +1,7 @@
+# Contribution License Agreement
+
+If you want/plan to contribute, we ask you to sign a [CLA](https://cla-assistant.io/viewizard/astromenace) (Contribution License Agreement). A friendly bot will remind you about it when you submit a pull-request.
+
 # AstroMenace Coding Standards & Guidelines
 
 This document defines the AstroMenace coding standards and style, all code contributions are expected to adhere to the rules described below.
