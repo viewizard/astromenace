@@ -56,6 +56,27 @@ std::vector<sViewSize> WindowSizeArray{};
 
 
 /*
+ * Change index of the display to query.
+ */
+void ChangeDisplayIndex(int NewDisplayIndex)
+{
+	if (DisplayIndex == NewDisplayIndex)
+		return;
+
+	// prevent out of range index usage
+	int DisplaysCount = SDL_GetNumVideoDisplays();
+	if (DisplaysCount >= 1) {
+		if (NewDisplayIndex >= DisplaysCount)
+			NewDisplayIndex = 0; // fallback to first display
+	} else
+		std::cerr << __func__ << "(): " << "SDL_GetNumVideoDisplays() failed: " << SDL_GetError() << "\n";
+
+	DisplayIndex = NewDisplayIndex;
+	FullScreenSizeArray.clear();
+	WindowSizeArray.clear();
+}
+
+/*
  * Check for standard aspect ratio.
  */
 bool StandardAspectRation(const sViewSize &ViewSize)

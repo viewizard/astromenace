@@ -96,6 +96,8 @@ struct sViewSize {
 std::vector<sViewSize> &DetectFullScreenSize();
 // Detect allowed view size array for windowed mode.
 std::vector<sViewSize> &DetectWindowSizeArray();
+// Change index of the display to query.
+void ChangeDisplayIndex(int NewDisplayIndex);
 // Check for standard aspect ratio.
 bool StandardAspectRation(const sViewSize &ViewSize);
 
