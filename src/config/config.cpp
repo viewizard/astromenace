@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO we need store previous versions Top Scores and Pilots Proviles,
+// TODO we need store previous versions Top Scores and Pilot Profiles,
 //      in case player will back to old game version by some reason
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
@@ -39,14 +39,14 @@ namespace {
 sGameConfig Config;
 
 const std::string ConfigFileName{"config.xml"};
-const std::string ProfilesFileName{std::string{"PilotsProfiles_"} +
+const std::string ProfilesFileName{std::string{"PilotProfiles_"} +
 				   std::string{CONFIG_VERSION} + std::string{".data"}};
 
 } // unnamed namespace
 
 
 /*
- * Get game configuration for read only.
+ * Get configuration for read only.
  */
 const sGameConfig &GameConfig()
 {
@@ -54,7 +54,7 @@ const sGameConfig &GameConfig()
 }
 
 /*
- * Get game configuration for read and write.
+ * Get configuration for read and write.
  */
 sGameConfig &ChangeGameConfig()
 {
@@ -88,17 +88,17 @@ static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsig
 }
 
 /*
- * Save game Pilots Profiles.
+ * Save Pilot Profiles.
  */
-static void SavePilotsProfiles()
+static void SavePilotProfiles()
 {
-	std::string tmpPilotsProfiles{GetConfigPath() + ProfilesFileName};
+	std::string tmpPilotProfiles{GetConfigPath() + ProfilesFileName};
 	std::vector<unsigned char> ProfileXOR{};
 	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
 
-	SDL_RWops *File = SDL_RWFromFile(tmpPilotsProfiles.c_str(), "wb");
+	SDL_RWops *File = SDL_RWFromFile(tmpPilotProfiles.c_str(), "wb");
 	if (!File) {
-		std::cerr << __func__ << "(): " << "Can't create file " << tmpPilotsProfiles << "\n";
+		std::cerr << __func__ << "(): " << "Can't create file " << tmpPilotProfiles << "\n";
 		return;
 	}
 
@@ -107,7 +107,7 @@ static void SavePilotsProfiles()
 }
 
 /*
- * Save game configuration file.
+ * Save configuration file.
  */
 void SaveXMLConfigFile()
 {
@@ -116,7 +116,7 @@ void SaveXMLConfigFile()
 		return;
 	}
 
-	SavePilotsProfiles();
+	SavePilotProfiles();
 
 	std::unique_ptr<cXMLDocument> XMLdoc{new cXMLDocument};
 
@@ -262,16 +262,16 @@ static void SetupCurrentProfileAndMission()
 }
 
 /*
- * Load game Pilots Profiles.
+ * Load Pilot Profiles.
  */
-static void LoadPilotsProfiles()
+static void LoadPilotProfiles()
 {
-	std::string tmpPilotsProfiles{GetConfigPath() + ProfilesFileName};
+	std::string tmpPilotProfiles{GetConfigPath() + ProfilesFileName};
 	std::vector<unsigned char> ProfileXOR{};
 
-	SDL_RWops *File = SDL_RWFromFile(tmpPilotsProfiles.c_str(), "rb");
+	SDL_RWops *File = SDL_RWFromFile(tmpPilotProfiles.c_str(), "rb");
 	if (!File) {
-		std::cerr << __func__ << "(): " << "Can't open file " << tmpPilotsProfiles << "\n";
+		std::cerr << __func__ << "(): " << "Can't open file " << tmpPilotProfiles << "\n";
 		return;
 	}
 
@@ -288,7 +288,7 @@ static void LoadPilotsProfiles()
 }
 
 /*
- * Load game configuration file.
+ * Load configuration file.
  */
 bool LoadXMLConfigFile(bool NeedResetConfig)
 {
@@ -297,9 +297,9 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 		return false;
 	}
 
-	LoadPilotsProfiles();
+	LoadPilotProfiles();
 
-	// NeedResetConfig, only pilots profiles should be loaded
+	// NeedResetConfig, only pilot profiles should be loaded
 	if (NeedResetConfig)
 		return false;
 

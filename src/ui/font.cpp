@@ -27,7 +27,7 @@
 
 /*
 All menu elements should be pre generated.
-Exceptions: profiles pilots name, players names in top scores.
+Exceptions: pilot profiles name, default names in top scores.
 Check game log for lines:
 ```
 Texture created from memory: fontsize_10_character_1103

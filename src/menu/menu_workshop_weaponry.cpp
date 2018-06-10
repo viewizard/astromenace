@@ -224,7 +224,7 @@ const char *GetWeaponName(int Num)
 	case 9:
 		return "Destabilizer";
 	case 10:
-		return "Anihilator";
+		return "Annihilator";
 
 	case 11:
 		return "Devastator";

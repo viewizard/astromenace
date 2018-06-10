@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 				  << "--rawdata=/folder - folder with raw data for gamedata.vfs;\n"
 				  << "--pack - pack data to gamedata.vfs file;\n"
 				  << "--mouse - launch the game without system cursor hiding;\n"
-				  << "--reset-config - reset all settings except Pilots Profiles;\n"
+				  << "--reset-config - reset all settings except Pilot Profiles;\n"
 				  << "--help - info about all game launch options.\n";
 			return 0;
 		}
@@ -634,7 +634,7 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	LoadGameData(eLoading::MenuWithLogo);
 	// загрузка списка миссий
-	MissionsListInit(); // должен загружаться только 1 раз при запуске
+	MissionListInit(); // должен загружаться только 1 раз при запуске
 
 
 

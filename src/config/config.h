@@ -38,7 +38,7 @@
 
 namespace config {
 
-// (!) changes make previous game configuration file incompatible
+// (!) changes make previous configuration file incompatible
 
 // maximum profiles
 constexpr int MAX_PROFILES{5};
@@ -46,21 +46,21 @@ constexpr int MAX_PROFILES{5};
 constexpr unsigned PROFILE_NAME_SIZE{1024};
 // maximum possible missions number for arrays in pilot profile
 constexpr unsigned MAX_MISSIONS{100};
-// maximum ships weapons slots
+// maximum ship's weapon slots
 constexpr unsigned MAX_WEAPONS{6};
 // maximum hints
 constexpr unsigned MAX_HINTS{10};
 
 } // config
 
-// This structure should be POD, since we "pack" it into the game config file
+// This structure should be POD, since we "pack" it into config file
 // as memory block. Don't use std::string or any containers here.
 struct sPilotProfile {
 	bool Used{false};
 
 	char Name[config::PROFILE_NAME_SIZE];
 
-	// game difficulty related settings
+	// difficulty related settings
 	uint8_t EnemyWeaponPenalty{3};		// Enemy weapon fire penalty [1, 3]
 	uint8_t EnemyArmorPenalty{2};		// Enemy armor strength penalty [1, 4]
 	uint8_t EnemyTargetingSpeedPenalty{2};	// Enemy targeting speed penalty [1, 4]
@@ -201,13 +201,13 @@ struct sGameConfig {
 };
 
 
-// Get game configuration for read only.
+// Get configuration for read only.
 const sGameConfig &GameConfig();
-// Get game configuration for read and write.
+// Get configuration for read and write.
 sGameConfig &ChangeGameConfig();
-// Load game configuration file.
+// Load configuration file.
 bool LoadXMLConfigFile(bool NeedResetConfig);
-// Save game configuration file.
+// Save configuration file.
 void SaveXMLConfigFile();
 
 // Game's difficulty in %, calculated by profile settings (result is cached).

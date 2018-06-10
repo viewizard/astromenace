@@ -636,13 +636,13 @@ Dialogs with default type:
 		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("REPAIR")))/2;
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("REPAIR"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Not enough money for the full hull repair."));
+		SizeI1 = vw_TextWidth(vw_GetText("Not enough money for a full hull repair."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Not enough money for the full hull repair."));
+			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Not enough money for a full hull repair."));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Not enough money for the full hull repair."));
+			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Not enough money for a full hull repair."));
 
 		SizeI1 = vw_TextWidth(vw_GetText("Note: Repair has been limited by money."));
 		SizeI = (W-SizeI1)/2;
@@ -856,10 +856,10 @@ Dialogs with default type:
 
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Weapons Slots:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Weapon Slots:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i %s", DialogSpaceShip->WeaponQuantity, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Slots Levels:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Slot Levels:"));
 		int SSS = 0;
 		if (DialogSpaceShip->WeaponQuantity>0) {
 			vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, "%i", DialogSpaceShip->WeaponType[0]);
@@ -1024,7 +1024,7 @@ Dialogs with default type:
 			}
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependences:"));
+			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, vw_GetText("SpaceShip Weight"));
 			Y1 += Offset;
@@ -1090,7 +1090,7 @@ Dialogs with default type:
 			}
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependences:"));
+			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, eRGBCOLOR::green, DialogContentTransp, vw_GetText("Weapon Recharge Rate"));
 			Y1 += Offset;
@@ -1147,7 +1147,7 @@ Dialogs with default type:
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, DialogContentTransp, vw_GetText("Yes"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependences:"));
+			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, vw_GetText("Power Source"));
 			Y1 += Offset;
@@ -1192,7 +1192,7 @@ Dialogs with default type:
 			}
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependences:"));
+			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, vw_GetText("Power Source"));
 			Y1 += Offset;
@@ -1266,7 +1266,7 @@ Dialogs with default type:
 			}
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependences:"));
+			vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, DialogContentTransp, vw_GetText("Power Source"));
 			Y1 += Offset;

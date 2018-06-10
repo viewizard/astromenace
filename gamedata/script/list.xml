@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AstroMenaceMissionsList name="AstroMenace Missions List">
+<AstroMenaceMissionList name="AstroMenace Mission List">
 
 	<!-- Mission 1 -->
 	<Mission>
@@ -19,7 +19,7 @@
 
 	<!-- Mission 3 -->
 	<Mission>
-		<Title color="4">Mission 3 - Counterattack Is The Best Defense</Title>
+		<Title color="4">Mission 3 - Counterattack Is The Best Defence</Title>
 		<Descr color="0">Our base is under attack! Stop the aliens` attack now!</Descr>
 		<Icon>script/mission3_icon.tga</Icon>
 		<File>script/mission3.xml</File>
@@ -122,4 +122,4 @@
 	</Mission>
 
 
-</AstroMenaceMissionsList>
+</AstroMenaceMissionList>

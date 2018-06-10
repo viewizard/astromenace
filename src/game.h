@@ -369,7 +369,7 @@ extern int EndMission;
 
 void MissionMenu();
 std::string GetCurrentMissionFileName();
-void MissionsListInit();
+void MissionListInit();
 
 
 

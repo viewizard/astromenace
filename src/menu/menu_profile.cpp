@@ -285,7 +285,7 @@ void ProfileMenu()
 
 	// список для выбора записи
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Pilots Profiles"));
+	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, MenuContentTransp, vw_GetText("Pilot Profiles"));
 	int Size = vw_TextWidth(vw_GetText("Money"));
 	float WScale = 0;
 	if (Size > 70) {
@@ -466,7 +466,7 @@ void ProfileMenu()
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = GameConfig().InternalWidth / 2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("MISSIONS LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+	if (DrawButton256(X,Y, vw_GetText("MISSION LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 		ComBuffer = eCommand::SWITCH_TO_MISSION;
 
 }

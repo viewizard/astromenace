@@ -575,17 +575,17 @@ void Workshop_Shipyard()
 
 	// находим смещение, чтобы было красиво
 	int SmSizeI = vw_TextWidth(vw_GetText("Armor:"));
-	int SmSizeI2 = vw_TextWidth(vw_GetText("Weapons Slots:"));
-	int SmSizeI3 = vw_TextWidth(vw_GetText("Slots Levels:"));
+	int SmSizeI2 = vw_TextWidth(vw_GetText("Weapon Slots:"));
+	int SmSizeI3 = vw_TextWidth(vw_GetText("Slot Levels:"));
 	SmSizeI = std::max({SmSizeI, SmSizeI2, SmSizeI3});
 
 	vw_DrawText(GameConfig().InternalWidth/2-440, 110, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
 	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 110, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", (int)WorkshopNewFighter->StrengthStart);
 
-	vw_DrawText(GameConfig().InternalWidth/2-440, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Weapons Slots:"));
+	vw_DrawText(GameConfig().InternalWidth/2-440, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
 	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponQuantity);
 
-	vw_DrawText(GameConfig().InternalWidth/2-440, 150, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Slots Levels:"));
+	vw_DrawText(GameConfig().InternalWidth/2-440, 150, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
 	int SSS = 0;
 	if (WorkshopNewFighter->WeaponQuantity>0) {
 		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponType[0]);
@@ -712,11 +712,11 @@ void Workshop_Shipyard()
 	}
 
 	SizeI = SizeI - vw_TextWidth("%i", WorkshopFighterGame->WeaponQuantity);
-	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Weapons Slots:"));
+	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
 	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponQuantity);
 
 
-	vw_DrawText(GameConfig().InternalWidth/2+74, 150, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Slots Levels:"));
+	vw_DrawText(GameConfig().InternalWidth/2+74, 150, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
 	SSS = 0;
 	if (WorkshopFighterGame->WeaponQuantity>0) {
 		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponType[0]);
