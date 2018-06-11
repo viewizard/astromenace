@@ -200,9 +200,14 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			Options_Width = DetectFullscreenSize().back().Width;
 			Options_Height = DetectFullscreenSize().back().Height;
 		} else {
-			// FIXME in case we switch windowed->fullscreen->windowed, we should back to old window size
-			Options_Width = DetectWindowSizeArray().back().Width;
-			Options_Height = DetectWindowSizeArray().back().Height;
+			// if current mode is windowed, restore to current window size
+			if (!GameConfig().Fullscreen) {
+				Options_Width = GameConfig().Width;
+				Options_Height = GameConfig().Height;
+			} else {
+				Options_Width = DetectWindowSizeArray().back().Width;
+				Options_Height = DetectWindowSizeArray().back().Height;
+			}
 		}
 	}
 	int Size = vw_TextWidth(Options_Fullscreen ? vw_GetText("On") : vw_GetText("Off"));
