@@ -134,7 +134,7 @@ static bool GetDisplaySize(sViewSize &ViewSize)
  * Note, we work with one display only now.
  * If current display size is not appropriate, returned vector is empty.
  */
-std::vector<sViewSize> &DetectFullscreenSize()
+const std::vector<sViewSize> &DetectFullscreenSize()
 {
 	if (!FullscreenSizeArray.empty())
 		return FullscreenSizeArray;
@@ -170,7 +170,7 @@ static bool GetDisplayUsableSize(sViewSize &ViewSize)
 /*
  * Detect allowed view size array for windowed mode.
  */
-std::vector<sViewSize> &DetectWindowSizeArray()
+const std::vector<sViewSize> &DetectWindowSizeArray()
 {
 	if (!WindowSizeArray.empty())
 		return WindowSizeArray;

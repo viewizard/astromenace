@@ -88,14 +88,20 @@ struct sViewSize {
 		Width{_Width},
 		Height{_Height}
 	{}
+
+	bool operator == (const sViewSize &A) const
+	{
+		return ((A.Width == Width) &&
+			(A.Height == Height));
+	}
 };
 
 // Detect current display size for fullscreen mode.
 // Note, we work with one display only now.
 // If current display size is not appropriate, returned vector is empty.
-std::vector<sViewSize> &DetectFullscreenSize();
+const std::vector<sViewSize> &DetectFullscreenSize();
 // Detect allowed view size array for windowed mode.
-std::vector<sViewSize> &DetectWindowSizeArray();
+const std::vector<sViewSize> &DetectWindowSizeArray();
 // Change index of the display to query.
 void ChangeDisplayIndex(int NewDisplayIndex);
 // Check for standard aspect ratio.
