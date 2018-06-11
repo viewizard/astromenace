@@ -25,11 +25,16 @@
 
 *************************************************************************************/
 
+// TODO Width, Height, Fullscreen and VSync should be altered without window/OpenGL context recreation
+
+// TODO translate comments
+
 #include "../game.h"
 #include "../config/config.h"
 #include "../platform/platform.h"
 
 
+// FIXME should be fixed, don't allow global scope interaction for local variables
 // временные данные для изменения и восстановления
 int Options_Width;
 int Options_Height;
