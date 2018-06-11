@@ -200,9 +200,9 @@ int main(int argc, char **argv)
 	CurrentVideoMode.H = 768;
 	CurrentVideoMode.BPP = 16;
 	// пытаемся получить данные
-	int ScreenNumber = 0; // should be less than SDL_GetNumVideoDisplays()
+	int DisplayIndex = 0; // should be less than SDL_GetNumVideoDisplays()
 	SDL_DisplayMode CurrentDisplayMode;
-	SDL_GetDesktopDisplayMode(ScreenNumber, &CurrentDisplayMode);
+	SDL_GetDesktopDisplayMode(DisplayIndex, &CurrentDisplayMode);
 	CurrentVideoMode.BPP = SDL_BITSPERPIXEL(CurrentDisplayMode.format);
 	CurrentVideoMode.W = CurrentDisplayMode.w;
 	CurrentVideoMode.H = CurrentDisplayMode.h;
@@ -305,9 +305,9 @@ int main(int argc, char **argv)
 				int SkipPrevH = -1;
 				int SkipPrevW = -1;
 				// добавляем к полноэкранным режимам, если входит в список
-				for (int j = 0; j < SDL_GetNumDisplayModes(ScreenNumber); j++) {
+				for (int j = 0; j < SDL_GetNumDisplayModes(DisplayIndex); j++) {
 					SDL_DisplayMode testDisplayMode;
-					SDL_GetDisplayMode(ScreenNumber, j, &testDisplayMode);
+					SDL_GetDisplayMode(DisplayIndex, j, &testDisplayMode);
 					if (SkipPrevH == -1) {
 						SkipPrevH = testDisplayMode.h;
 						SkipPrevW = testDisplayMode.w;
@@ -344,9 +344,9 @@ int main(int argc, char **argv)
 				int SkipPrevH = -1;
 				int SkipPrevW = -1;
 				// добавляем к полноэкранным режимам, если входит в список
-				for (int j = 0; j < SDL_GetNumDisplayModes(ScreenNumber); j++) {
+				for (int j = 0; j < SDL_GetNumDisplayModes(DisplayIndex); j++) {
 					SDL_DisplayMode testDisplayMode;
-					SDL_GetDisplayMode(ScreenNumber, j, &testDisplayMode);
+					SDL_GetDisplayMode(DisplayIndex, j, &testDisplayMode);
 					if (SkipPrevH == -1) {
 						SkipPrevH = testDisplayMode.h;
 						SkipPrevW = testDisplayMode.w;
@@ -444,7 +444,7 @@ ReCreate:
 	bool Fullscreen = (GameConfig().BPP != 0);
 
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
-			     Fullscreen, ScreenNumber)) {
+			     Fullscreen, DisplayIndex)) {
 		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
 		if ((640 != GameConfig().Width) ||
 		    (480 != GameConfig().Height) ||
