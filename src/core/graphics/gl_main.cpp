@@ -96,7 +96,7 @@ static bool ExtensionSupported(const char *Extension)
 /*
  * Create window.
  */
-bool vw_CreateWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber)
+bool vw_CreateWindow(const char *Title, int Width, int Height, bool FullScreenFlag, int DisplayIndex)
 {
 	Uint32 Flags{SDL_WINDOW_OPENGL};
 
@@ -104,15 +104,20 @@ bool vw_CreateWindow(const char *Title, int Width, int Height, int *Bits, bool F
 		Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 	SDLWindow = SDL_CreateWindow(Title,
-				     SDL_WINDOWPOS_CENTERED_DISPLAY(ScreenNumber),
-				     SDL_WINDOWPOS_CENTERED_DISPLAY(ScreenNumber),
+				     SDL_WINDOWPOS_CENTERED_DISPLAY(DisplayIndex),
+				     SDL_WINDOWPOS_CENTERED_DISPLAY(DisplayIndex),
 				     Width, Height, Flags);
 	if (!SDLWindow) {
 		std::cerr << __func__ << "(): " << "SDL_CreateWindow() failed: " << SDL_GetError() << "\n";
 		std::cerr << __func__ << "(): " << "Can't set video mode " <<  Width << " x " << Height << "\n\n";
 		return false;
 	}
-	std::cout << "Set video mode: " << Width << " x " << Height << " x " << *Bits << "\n\n";
+
+	if (FullScreenFlag)
+		std::cout << "Fullscreen mode: ";
+	else
+		std::cout << "Windowed mode: ";
+	std::cout << Width << " x " << Height << "\n\n";
 
 	SDL_DisableScreenSaver();
 

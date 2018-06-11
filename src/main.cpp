@@ -444,7 +444,7 @@ ReCreate:
 	bool Fullscreen = (GameConfig().BPP != 0);
 
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
-			     &ChangeGameConfig().BPP, Fullscreen, ScreenNumber)) {
+			     Fullscreen, ScreenNumber)) {
 		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
 		if ((640 != GameConfig().Width) ||
 		    (480 != GameConfig().Height) ||

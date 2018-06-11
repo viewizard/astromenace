@@ -329,7 +329,7 @@ struct sDevCaps {
  */
 
 // Create window.
-bool vw_CreateWindow(const char *Title, int Width, int Height, int *Bits, bool FullScreenFlag, int ScreenNumber);
+bool vw_CreateWindow(const char *Title, int Width, int Height, bool FullScreenFlag, int DisplayIndex);
 // Destroy window.
 void vw_DestroyWindow();
 // Get SDL window handle.
