@@ -293,15 +293,6 @@ ReCreateWindow:
 			ChangeGameConfig().CSAA = 4;
 			ChangeGameConfig().MaxPointLights = 6;
 		}
-
-		// устанавливаем соотношение сторон по установленному разрешению экрана
-		if ((GameConfig().Width * 1.0f) / (GameConfig().Height * 1.0f) < 1.4f) {
-			ChangeGameConfig().InternalWidth = 1024.0f;
-			ChangeGameConfig().InternalHeight = 768.0f;
-		} else {
-			ChangeGameConfig().InternalWidth = 1228.0f;
-			ChangeGameConfig().InternalHeight = 768.0f;
-		}
 	}
 
 	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
@@ -368,16 +359,14 @@ ReCreateWindow:
 
 
 
-
-	if ((static_cast<float>(GameConfig().Width) / static_cast<float>(GameConfig().Height)) < 1.4f) {
+	// setup internal game resolution
+	if (StandardAspectRation({GameConfig().Width, GameConfig().Height})) {
 		ChangeGameConfig().InternalWidth = 1024.0f;
 		ChangeGameConfig().InternalHeight = 768.0f;
 	} else {
 		ChangeGameConfig().InternalWidth = 1228.0f;
 		ChangeGameConfig().InternalHeight = 768.0f;
 	}
-
-	// setup internal game resolution
 	vw_SetInternalResolution(GameConfig().InternalWidth, GameConfig().InternalHeight, true);
 
 

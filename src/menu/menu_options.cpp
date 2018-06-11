@@ -408,18 +408,10 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 void SaveOptionsMenuTmpData()
 {
+	// note, we don't change InternalWidth and InternalHeight and don't call
+	// vw_SetInternalResolution(), since we recreate the window (see main())
 	ChangeGameConfig().Width = Options_Width;
 	ChangeGameConfig().Height = Options_Height;
-
-	// (?) do we really need this here? we restart game and (re)check this in main()
-	if ((static_cast<float>(GameConfig().Width) / static_cast<float>(GameConfig().Height)) < 1.4f) {
-		ChangeGameConfig().InternalWidth = 1024.0f;
-		ChangeGameConfig().InternalHeight = 768.0f;
-	} else {
-		ChangeGameConfig().InternalWidth = 1228.0f;
-		ChangeGameConfig().InternalHeight = 768.0f;
-	}
-
 	ChangeGameConfig().Fullscreen = Options_Fullscreen;
 	ChangeGameConfig().VSync = Options_VSync;
 }
