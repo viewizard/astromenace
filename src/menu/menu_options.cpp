@@ -226,9 +226,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		// we don't check iter, since we check array and this window size before, so,
 		// we know for sure, that the iter is not equal DetectWindowSizeArray().cend()
 		if (iter == DetectWindowSizeArray().cbegin())
-			iter = DetectWindowSizeArray().cend() - 1;
-		else
-			--iter;
+			iter = DetectWindowSizeArray().cend();
+		--iter;
 
 		Options_Width = iter->Width;
 		Options_Height = iter->Height;
