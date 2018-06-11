@@ -93,7 +93,7 @@ struct sViewSize {
 // Detect current display size for fullscreen mode.
 // Note, we work with one display only now.
 // If current display size is not appropriate, returned vector is empty.
-std::vector<sViewSize> &DetectFullScreenSize();
+std::vector<sViewSize> &DetectFullscreenSize();
 // Detect allowed view size array for windowed mode.
 std::vector<sViewSize> &DetectWindowSizeArray();
 // Change index of the display to query.

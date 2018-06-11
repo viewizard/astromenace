@@ -96,11 +96,11 @@ static bool ExtensionSupported(const char *Extension)
 /*
  * Create window.
  */
-bool vw_CreateWindow(const char *Title, int Width, int Height, bool FullScreenFlag, int DisplayIndex)
+bool vw_CreateWindow(const char *Title, int Width, int Height, bool Fullscreen, int DisplayIndex)
 {
 	Uint32 Flags{SDL_WINDOW_OPENGL};
 
-	if (FullScreenFlag)
+	if (Fullscreen)
 		Flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 	SDLWindow = SDL_CreateWindow(Title,
@@ -113,7 +113,7 @@ bool vw_CreateWindow(const char *Title, int Width, int Height, bool FullScreenFl
 		return false;
 	}
 
-	if (FullScreenFlag)
+	if (Fullscreen)
 		std::cout << "Fullscreen mode: ";
 	else
 		std::cout << "Windowed mode: ";

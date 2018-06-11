@@ -49,7 +49,7 @@ namespace {
 // if this index changed during session, since we use cached data for more speed.
 int DisplayIndex{0};
 
-std::vector<sViewSize> FullScreenSizeArray{};
+std::vector<sViewSize> FullscreenSizeArray{};
 std::vector<sViewSize> WindowSizeArray{};
 
 } // unnamed namespace
@@ -72,7 +72,7 @@ void ChangeDisplayIndex(int NewDisplayIndex)
 		std::cerr << __func__ << "(): " << "SDL_GetNumVideoDisplays() failed: " << SDL_GetError() << "\n";
 
 	DisplayIndex = NewDisplayIndex;
-	FullScreenSizeArray.clear();
+	FullscreenSizeArray.clear();
 	WindowSizeArray.clear();
 }
 
@@ -134,20 +134,20 @@ static bool GetDisplaySize(sViewSize &ViewSize)
  * Note, we work with one display only now.
  * If current display size is not appropriate, returned vector is empty.
  */
-std::vector<sViewSize> &DetectFullScreenSize()
+std::vector<sViewSize> &DetectFullscreenSize()
 {
-	if (!FullScreenSizeArray.empty())
-		return FullScreenSizeArray;
+	if (!FullscreenSizeArray.empty())
+		return FullscreenSizeArray;
 
 	sViewSize tmpViewSize;
 	if (!GetDisplaySize(tmpViewSize))
-		return FullScreenSizeArray; // return empty vector
+		return FullscreenSizeArray; // return empty vector
 
 	if (!AllowedAspectRatio(tmpViewSize))
-		return FullScreenSizeArray; // return empty vector
+		return FullscreenSizeArray; // return empty vector
 
-	FullScreenSizeArray.emplace_back(tmpViewSize);
-	return FullScreenSizeArray;
+	FullscreenSizeArray.emplace_back(tmpViewSize);
+	return FullscreenSizeArray;
 }
 
 /*
