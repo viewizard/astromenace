@@ -90,23 +90,28 @@ static void VideoConfig(bool FirstStart)
 			ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
 			ChangeGameConfig().Fullscreen = false;
 		}
-	} else {
-		// in case of Fullscreen we don't really care about saved Width and Height,
-		// since we need current display size for sure
-		if (GameConfig().Fullscreen &&
-		    !DetectFullscreenSize().empty()) {
-			ChangeGameConfig().Width = DetectFullscreenSize().back().Width;
-			ChangeGameConfig().Height = DetectFullscreenSize().back().Height;
-		} else {
-			ChangeGameConfig().Fullscreen = false;
+		return;
+	}
 
-			if (std::find(DetectWindowSizeArray().cbegin(),
-				      DetectWindowSizeArray().cend(),
-				      sViewSize{GameConfig().Width, GameConfig().Height}) == DetectWindowSizeArray().cend()) {
-				ChangeGameConfig().Width = DetectWindowSizeArray().back().Width;
-				ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
-			}
-		}
+	// check config's mode, note, we need check only one array here, since we know,
+	// if one is empty, second is not empty (we check this before VideoConfig() call)
+	if (GameConfig().Fullscreen &&
+	    DetectFullscreenSize().empty())
+		ChangeGameConfig().Fullscreen = false;
+	else if (!GameConfig().Fullscreen &&
+		 DetectWindowSizeArray().empty())
+		ChangeGameConfig().Fullscreen = true;
+
+	// in case of Fullscreen we don't really care about saved Width and Height,
+	// since we need current display size for sure
+	if (GameConfig().Fullscreen) {
+		ChangeGameConfig().Width = DetectFullscreenSize().back().Width;
+		ChangeGameConfig().Height = DetectFullscreenSize().back().Height;
+	} else if (std::find(DetectWindowSizeArray().cbegin(),
+			     DetectWindowSizeArray().cend(),
+			     sViewSize{GameConfig().Width, GameConfig().Height}) == DetectWindowSizeArray().cend()) {
+		ChangeGameConfig().Width = DetectWindowSizeArray().back().Width;
+		ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
 	}
 }
 
