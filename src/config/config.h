@@ -144,9 +144,9 @@ struct sGameConfig {
 	int SoundVolume{10};	// in-game sfx volume [0, 10]
 	int VoiceVolume{10};	// in-game voice volume [0, 10]
 
-	int Width{1280};	// game resolution's width
-	int Height{768};	// game resolution's height
-	bool Fullscreen{false};	// fullscreen mode (if false - windowed mode)
+	int Width{1280};	// view size width
+	int Height{768};	// view size height
+	bool Fullscreen{true};	// fullscreen mode (if false - windowed mode)
 	float InternalWidth{1228.0f};	// internal resolution's width
 	float InternalHeight{768.0f};	// internal resolution's height
 

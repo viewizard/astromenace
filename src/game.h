@@ -46,10 +46,6 @@ extern eMenuStatus MenuStatus;
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
 
-extern sVideoModes *VideoModes;
-extern int VideoModesNum;
-extern sVideoModes CurrentVideoMode;
-
 extern bool Quit;
 extern bool CanQuit;
 extern bool NeedReCreate;

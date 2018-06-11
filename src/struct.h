@@ -124,16 +124,4 @@ enum class eDialogBox {
 	RestartOnAdvOptChanged		// on mission (in-game menu), restart game on adv-option changes, warning that progress will be lost
 };
 
-//------------------------------------------------------------------------------------
-// для выбора в списке режимов разрешения
-//------------------------------------------------------------------------------------
-struct sVideoModes {
-	// ширина
-	int W;
-	// высота
-	int H;
-	// битность палитры
-	int BPP;
-};
-
 #endif // STRUCT_H

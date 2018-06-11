@@ -27,6 +27,7 @@
 
 #include "../game.h"
 #include "../config/config.h"
+#include "../platform/platform.h"
 
 
 // временные данные для изменения и восстановления
@@ -35,11 +36,6 @@ int Options_Height;
 int Options_Fullscreen;
 int Options_VSync;
 
-
-const char *ButtonScreenModeTitle[2] = {
-	"Screen Mode",
-	"Window Size"
-};
 
 
 
@@ -65,9 +61,6 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	SrcRect(0, 0, 2, 2);
 	DstRect(0 ,0, GameConfig().InternalWidth, 768);
 	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
-
-
-	int CurrentPos = 0;
 
 	int X1 = GameConfig().InternalWidth / 2 - 375;
 	int Y1 = 65;
@@ -198,48 +191,18 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 
-	// проверяем, есть ли вообще полноэкранные разрешения
-	bool CanSwitchToFullscreen = false;
-	for(int i=0; i<VideoModesNum; i++) {
-		if ((VideoModes[i].BPP == 16) |
-		    (VideoModes[i].BPP == 24)) {
-			CanSwitchToFullscreen = true;
-			break;
-		}
-	}
-
-
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Full Screen"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !CanSwitchToFullscreen || !Options_Fullscreen) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, !CanSwitchToFullscreen || Options_Fullscreen)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, DetectWindowSizeArray().empty() || !Options_Fullscreen) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, DetectFullscreenSize().empty() || Options_Fullscreen)) {
+		Options_Fullscreen = !Options_Fullscreen;
 		if (Options_Fullscreen) {
-			Options_Fullscreen = false;
+			Options_Width = DetectFullscreenSize().back().Width;
+			Options_Height = DetectFullscreenSize().back().Height;
 		} else {
-			Options_Fullscreen = true;
-
-			// пробуем просто переключить BPP, проверяем есть ли такое разрешение
-			bool NeedDetectResolution = true;
-			for(int i=0; i<VideoModesNum; i++) {
-				if ((VideoModes[i].W == Options_Width) &
-				    (VideoModes[i].H == Options_Height) &
-				    (VideoModes[i].BPP > 0)) {
-					NeedDetectResolution = false;
-					break;
-				}
-			}
-
-			// находим первый полноэкранный режим в списке
-			if (NeedDetectResolution)
-				for(int i=0; i<VideoModesNum; i++) {
-					if ((VideoModes[i].BPP == 16) |
-					    (VideoModes[i].BPP == 24)) {
-						Options_Width = VideoModes[i].W;
-						Options_Height = VideoModes[i].H;
-						Options_Fullscreen = true;
-						break;
-					}
-				}
+			// FIXME in case we switch windowed->fullscreen->windowed, we should back to old window size
+			Options_Width = DetectWindowSizeArray().back().Width;
+			Options_Height = DetectWindowSizeArray().back().Height;
 		}
 	}
 	int Size = vw_TextWidth(Options_Fullscreen ? vw_GetText("On") : vw_GetText("Off"));
@@ -249,75 +212,41 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 
-	// находим текущий номер режима в списке
-	int CurrentListNum = 0;
-	for(int i=0; i<VideoModesNum; i++) {
-		if (VideoModes[i].W == Options_Width &&
-		    VideoModes[i].H == Options_Height) {
-			if ((Options_Fullscreen && VideoModes[i].BPP > 0) ||
-			    (!Options_Fullscreen && VideoModes[i].BPP == 0)) {
-				CurrentListNum = i;
-				break;
-			}
-		}
-	}
-
-
-
 	Y1 += Prir1;
-	if (Options_Fullscreen)
-		CurrentPos = 0;
-	else
-		CurrentPos = 1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ButtonScreenModeTitle[CurrentPos]));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
-		CurrentListNum--;
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Window Size"));
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, DetectWindowSizeArray().empty() || Options_Fullscreen)) {
+		auto iter = std::find(DetectWindowSizeArray().cbegin(),
+				      DetectWindowSizeArray().cend(),
+				      sViewSize{Options_Width, Options_Height});
+		// we don't check iter, since we check array and this window size before, so,
+		// we know for sure, that the iter is not equal DetectWindowSizeArray().cend()
+		if (iter == DetectWindowSizeArray().cbegin())
+			iter = DetectWindowSizeArray().cend() - 1;
+		else
+			--iter;
 
-		// ставим правильный
-		bool check_next = true;
-		while (check_next) {
-			// вышли за предел
-			if (CurrentListNum < 0)
-				CurrentListNum = VideoModesNum-1;
-
-			if ((VideoModes[CurrentListNum].BPP > 0 && Options_Fullscreen) ||
-			    (VideoModes[CurrentListNum].BPP == 0 && !Options_Fullscreen))
-				check_next = false;
-			else
-				CurrentListNum--;
-		}
-		Options_Width = VideoModes[CurrentListNum].W;
-		Options_Height = VideoModes[CurrentListNum].H;
-		Options_Fullscreen = static_cast<bool>(VideoModes[CurrentListNum].BPP);
+		Options_Width = iter->Width;
+		Options_Height = iter->Height;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
-		CurrentListNum++;
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, DetectWindowSizeArray().empty() || Options_Fullscreen)) {
+		auto iter = std::find(DetectWindowSizeArray().cbegin(),
+				      DetectWindowSizeArray().cend(),
+				      sViewSize{Options_Width, Options_Height});
+		// we don't check iter, since we check array and this window size before, so,
+		// we know for sure, that the iter is not equal DetectWindowSizeArray().cend()
+		++iter;
+		if (iter == DetectWindowSizeArray().cend())
+			iter = DetectWindowSizeArray().cbegin();
 
-		// ставим правильный
-		bool check_next = true;
-		while (check_next) {
-			// вышли за предел
-			if (CurrentListNum >= VideoModesNum) CurrentListNum = 0;
-
-			if ((VideoModes[CurrentListNum].BPP > 0 && Options_Fullscreen) ||
-			    (VideoModes[CurrentListNum].BPP == 0 && !Options_Fullscreen)) {
-				check_next = false;
-			} else {
-				CurrentListNum++;
-			}
-		}
-
-		Options_Width = VideoModes[CurrentListNum].W;
-		Options_Height = VideoModes[CurrentListNum].H;
-		Options_Fullscreen = static_cast<bool>(VideoModes[CurrentListNum].BPP);
+		Options_Width = iter->Width;
+		Options_Height = iter->Height;
 	}
 
-	std::string VideoModeTitle{std::to_string(VideoModes[CurrentListNum].W) + "x" +
-				   std::to_string(VideoModes[CurrentListNum].H)};
-
+	std::string VideoModeTitle{std::to_string(Options_Width) + "x" + std::to_string(Options_Height)};
 	Size = vw_TextWidth(VideoModeTitle.c_str());
 	SizeI = (170-Size)/2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, VideoModeTitle.c_str());
+
 
 
 

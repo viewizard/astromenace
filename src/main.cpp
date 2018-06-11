@@ -27,9 +27,6 @@
 
 // TODO translate comments
 
-// TODO probably, we could provide option for screen number, where game's window should
-//      be created, see ScreenNumber
-
 #include "game.h"
 #include "config/config.h"
 #include "ui/font.h"
@@ -57,12 +54,6 @@ bool Quit = false;
 bool NeedReCreate = false;
 // выходим или нет
 bool CanQuit = true;
-// для выбора в списке режимов разрешения
-sVideoModes *VideoModes = nullptr;
-int VideoModesNum = 0;
-// текущие параметры десктопа
-sVideoModes CurrentVideoMode;
-
 
 
 
@@ -84,11 +75,44 @@ sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 
 
 
+/*
+ * Initial setup on first start and video configuration check.
+ */
+static void VideoConfig(bool FirstStart)
+{
+	if (FirstStart) {
+		if (!DetectFullscreenSize().empty()) {
+			ChangeGameConfig().Width = DetectFullscreenSize().back().Width;
+			ChangeGameConfig().Height = DetectFullscreenSize().back().Height;
+			ChangeGameConfig().Fullscreen = true;
+		} else { // we don't check DetectWindowSizeArray(), since we check it before
+			ChangeGameConfig().Width = DetectWindowSizeArray().back().Width;
+			ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
+			ChangeGameConfig().Fullscreen = false;
+		}
+	} else {
+		// in case of Fullscreen we don't really care about saved Width and Height,
+		// since we need current display size for sure
+		if (GameConfig().Fullscreen &&
+		    !DetectFullscreenSize().empty()) {
+			ChangeGameConfig().Width = DetectFullscreenSize().back().Width;
+			ChangeGameConfig().Height = DetectFullscreenSize().back().Height;
+		} else {
+			ChangeGameConfig().Fullscreen = false;
 
+			if (std::find(DetectWindowSizeArray().cbegin(),
+				      DetectWindowSizeArray().cend(),
+				      sViewSize{GameConfig().Width, GameConfig().Height}) == DetectWindowSizeArray().cend()) {
+				ChangeGameConfig().Width = DetectWindowSizeArray().back().Width;
+				ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
+			}
+		}
+	}
+}
 
-//------------------------------------------------------------------------------------
-// основная процедура...
-//------------------------------------------------------------------------------------
+/*
+ * Main.
+ */
 int main(int argc, char **argv)
 {
 	bool NeedShowSystemCursor{false};
@@ -161,6 +185,14 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
+	// check both arrays before VideoConfig(), we need at least one non empty array
+	if (DetectFullscreenSize().empty() &&
+	    DetectWindowSizeArray().empty()) {
+		std::cerr << __func__ << "(): " << "display does not support any appropriate screen resolutions.\n";
+		SDL_Quit();
+		return 1;
+	}
+
 	if (vw_OpenVFS(GetDataPath() + "gamedata.vfs", GAME_VFS_BUILD) != 0) {
 		std::cerr << __func__ << "(): " << "gamedata.vfs file not found or corrupted.\n";
 		SDL_Quit();
@@ -174,6 +206,7 @@ int main(int argc, char **argv)
 
 	// should be called after vw_InitText()
 	bool FirstStart = LoadXMLConfigFile(NeedResetConfig);
+	VideoConfig(FirstStart);
 
 	if (GameConfig().FontNumber > FontQuantity)
 		ChangeGameConfig().FontNumber = 0;
@@ -188,283 +221,17 @@ int main(int argc, char **argv)
 	if (!vw_InitAudio())
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// получаем текущее разрешение экрана
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// предварительно ставим по умолчанию
-	CurrentVideoMode.W = 1024;
-	CurrentVideoMode.H = 768;
-	CurrentVideoMode.BPP = 16;
-	// пытаемся получить данные
-	int DisplayIndex = 0; // should be less than SDL_GetNumVideoDisplays()
-	SDL_DisplayMode CurrentDisplayMode;
-	SDL_GetDesktopDisplayMode(DisplayIndex, &CurrentDisplayMode);
-	CurrentVideoMode.BPP = SDL_BITSPERPIXEL(CurrentDisplayMode.format);
-	CurrentVideoMode.W = CurrentDisplayMode.w;
-	CurrentVideoMode.H = CurrentDisplayMode.h;
-	std::cout << "Current Video Mode: "
-		  << CurrentVideoMode.W << "x" << CurrentVideoMode.H << " "
-		  << CurrentVideoMode.BPP << "bit \n";
-
-	std::cout << "Screen count: " << SDL_GetNumVideoDisplays() << "\n";
-	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++) {
-		SDL_DisplayMode testDisplayMode;
-		SDL_GetDesktopDisplayMode(i, &testDisplayMode);
-		std::cout << "Screen #" << i << ": " << testDisplayMode.w << " x " << testDisplayMode.h << "\n";
-	}
-
-
-
-
-
-	// детектим и составляем перечень всех возможных разрешений самостоятельно
-	sVideoModes AllSupportedModes[] = {
-		{640, 480, -1},
-		{768, 480, -1},
-		{800, 480, -1},
-		{800, 600, -1},
-		{832, 624, -1},
-		{854, 480, -1},
-		{960, 540, -1},
-		{960, 544, -1},
-		{960, 640, -1},
-		{960, 720, -1},
-		{1024, 576, -1},
-		{1024, 600, -1},
-		{1024, 640, -1},
-		{1024, 768, -1},
-		{1024, 800, -1},
-		{1120, 832, -1},
-		{1152, 720, -1},
-		{1152, 768, -1},
-		{1152, 864, -1},
-		{1152, 900, -1},
-		{1280, 720, -1},
-		{1280, 768, -1},
-		{1280, 800, -1},
-		{1280, 854, -1},
-		{1280, 960, -1},
-		{1280, 1024, -1},
-		{1366, 768, -1},
-		{1400, 1050, -1},
-		{1440, 900, -1},
-		{1440, 960, -1},
-		{1440, 1024, -1},
-		{1440, 1080, -1},
-		{1600, 900, -1},
-		{1600, 1024, -1},
-		{1600, 1200, -1},
-		{1680, 1050, -1},
-		{1792, 1344, -1},
-		{1856, 1392, -1},
-		{1800, 1440, -1},
-		{1920, 1080, -1},
-		{1920, 1200, -1},
-		{1920, 1400, -1},
-		{1920, 1440, -1},
-		{2048, 1280, -1},
-		{2048, 1536, -1},
-		{2304, 1440, -1},
-		{2304, 1728, -1},
-		{2560, 1440, -1},
-		{2560, 1600, -1},
-		{2560, 1920, -1},
-		{2560, 2048, -1},
-		{2800, 2100, -1},
-		{2880, 1800, -1},
-		{3200, 2048, -1},
-		{3200, 2400, -1},
-		{3840, 2160, -1},
-		{3840, 2400, -1},
-		{4096, 2304, -1},
-		{4096, 3072, -1},
-		{5120, 3200, -1},
-		{5120, 4096, -1},
-		{6400, 4096, -1},
-		{6400, 4800, -1},
-		{7680, 4320, -1},
-		{7680, 4800, -1},
-	};
-#define AllSupportedModesCount sizeof(AllSupportedModes)/sizeof(AllSupportedModes[0])
-
-	// если списка еще нет - создаем его
-	if (VideoModes == nullptr) {
-		VideoModesNum = 0;
-
-		for(unsigned int i = 0; i < AllSupportedModesCount; i++)
-			if ((AllSupportedModes[i].W <= CurrentVideoMode.W) &&
-			    (AllSupportedModes[i].H <= CurrentVideoMode.H)) {
-				// если мы подходим по размерам экрана для оконного режима - просто добавляем его
-				VideoModesNum++;
-
-				// пропускаем разрешение с одинаковыми параметрами и разной частотой
-				int SkipPrevH = -1;
-				int SkipPrevW = -1;
-				// добавляем к полноэкранным режимам, если входит в список
-				for (int j = 0; j < SDL_GetNumDisplayModes(DisplayIndex); j++) {
-					SDL_DisplayMode testDisplayMode;
-					SDL_GetDisplayMode(DisplayIndex, j, &testDisplayMode);
-					if (SkipPrevH == -1) {
-						SkipPrevH = testDisplayMode.h;
-						SkipPrevW = testDisplayMode.w;
-						if ((testDisplayMode.w == AllSupportedModes[i].W) &&
-						    (testDisplayMode.h == AllSupportedModes[i].H))
-							VideoModesNum++;
-					} else {
-						if ((SkipPrevH != testDisplayMode.h) ||
-						    (SkipPrevW != testDisplayMode.w)) {
-							if ((testDisplayMode.w == AllSupportedModes[i].W) &&
-							    (testDisplayMode.h == AllSupportedModes[i].H))
-								VideoModesNum++;
-							SkipPrevH = testDisplayMode.h;
-							SkipPrevW = testDisplayMode.w;
-						}
-					}
-				}
-			}
-
-
-		VideoModes = new sVideoModes[VideoModesNum];
-
-		int k=0;
-		for(unsigned int i = 0; i < AllSupportedModesCount; i++)
-			if ((AllSupportedModes[i].W <= CurrentVideoMode.W) &&
-			    (AllSupportedModes[i].H <= CurrentVideoMode.H)) {
-				// если мы подходим по размерам экрана для оконного режима - просто добавляем его
-				VideoModes[k].W = AllSupportedModes[i].W;
-				VideoModes[k].H = AllSupportedModes[i].H;
-				VideoModes[k].BPP = 0;
-				k++;
-
-				// пропускаем разрешение с одинаковыми параметрами и разной частотой
-				int SkipPrevH = -1;
-				int SkipPrevW = -1;
-				// добавляем к полноэкранным режимам, если входит в список
-				for (int j = 0; j < SDL_GetNumDisplayModes(DisplayIndex); j++) {
-					SDL_DisplayMode testDisplayMode;
-					SDL_GetDisplayMode(DisplayIndex, j, &testDisplayMode);
-					if (SkipPrevH == -1) {
-						SkipPrevH = testDisplayMode.h;
-						SkipPrevW = testDisplayMode.w;
-						if ((testDisplayMode.w == AllSupportedModes[i].W) &&
-						    (testDisplayMode.h == AllSupportedModes[i].H)) {
-							VideoModes[k].W = AllSupportedModes[i].W;
-							VideoModes[k].H = AllSupportedModes[i].H;
-							VideoModes[k].BPP = CurrentVideoMode.BPP;
-							k++;
-						}
-					} else {
-						if ((SkipPrevH != testDisplayMode.h) ||
-						    (SkipPrevW != testDisplayMode.w)) {
-							if ((testDisplayMode.w == AllSupportedModes[i].W) &&
-							    (testDisplayMode.h == AllSupportedModes[i].H)) {
-								VideoModes[k].W = AllSupportedModes[i].W;
-								VideoModes[k].H = AllSupportedModes[i].H;
-								VideoModes[k].BPP = CurrentVideoMode.BPP;
-								k++;
-							}
-							SkipPrevH = testDisplayMode.h;
-							SkipPrevW = testDisplayMode.w;
-						}
-					}
-				}
-			}
-		// выводим список поддерживаемых разрешений
-		std::cout << "\nSupported resolutions list:\n";
-		for(int i = 0; i < VideoModesNum; i++) {
-			std::cout << VideoModes[i].W << " " << VideoModes[i].H << " " << VideoModes[i].BPP << "bit \n";
-		}
-		std::cout << "\n";
-
-	}
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// устанавливаем и корректируем текущие настройки окна
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (FirstStart) {
-		ChangeGameConfig().Width = CurrentVideoMode.W;
-		ChangeGameConfig().Height = CurrentVideoMode.H;
-		ChangeGameConfig().Fullscreen = true;
-	}
-	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama, например)
-	if ((VideoModes[VideoModesNum-1].W < GameConfig().Width) ||
-	    (VideoModes[VideoModesNum-1].H < GameConfig().Height)) {
-		ChangeGameConfig().Width = VideoModes[VideoModesNum-1].W;
-		ChangeGameConfig().Height = VideoModes[VideoModesNum-1].H;
-		ChangeGameConfig().Fullscreen = true;
-	}
-	// делаем проверку по листу разрешений экрана, если входит - все ок, если нет - ставим оконный режим принудительно
-	bool NeedResetToWindowedMode = true;
-	for(int i = 0; i < VideoModesNum; i++) {
-		if ((VideoModes[i].W == GameConfig().Width) &&
-		    (VideoModes[i].H == GameConfig().Height) &&
-		    ((Options_Fullscreen && VideoModes[i].BPP > 0) ||
-		     (!Options_Fullscreen && VideoModes[i].BPP == 0))) {
-			NeedResetToWindowedMode = false;
-			break;
-		}
-	}
-	if (NeedResetToWindowedMode)
-		ChangeGameConfig().Fullscreen = false;
-
-
-
-
-
-
-
-
 	// устанавливаем язык текста
 	vw_SetTextLanguage(GameConfig().MenuLanguage);
 
-
-
-
-
-
-ReCreate:
+ReCreateWindow:
 
 	// if we change options during game mission with game restart, care about dialogs reset
 	InitDialogBoxes();
 
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// создаем окно и базовые опенжл контекст
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	int DisplayIndex{0}; // FIXME this should be allowed to configure in game's config file (and menu?)
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
 			     GameConfig().Fullscreen, DisplayIndex)) {
-		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
-		if ((640 != GameConfig().Width) ||
-		    (480 != GameConfig().Height) ||
-		    (false != GameConfig().Fullscreen)) {
-			ChangeGameConfig().Width = 640;
-			ChangeGameConfig().Height = 480;
-			ChangeGameConfig().Fullscreen = false;
-			ChangeGameConfig().InternalWidth = 1024.0f;
-			ChangeGameConfig().InternalHeight = 768.0f;
-			ChangeGameConfig().MSAA = 0;
-			ChangeGameConfig().CSAA = 0;
-			SaveXMLConfigFile();
-			FirstStart = false;
-			goto ReCreate;
-		}
-
-		std::cerr << __func__ << "(): " << "Wrong resolution. Fatal error.\n";
-		if (VideoModes != nullptr) {
-			delete [] VideoModes;
-			VideoModes = nullptr;
-		}
 		vw_ShutdownFont();
 		vw_ReleaseText();
 		vw_ShutdownAudio();
@@ -474,13 +241,8 @@ ReCreate:
 		SDL_Quit();
 		return 1;
 	}
-
 
 	if (!vw_CreateOpenGLContext(GameConfig().VSync)) {
-		if (VideoModes != nullptr) {
-			delete [] VideoModes;
-			VideoModes = nullptr;
-		}
 		vw_ShutdownFont();
 		vw_ReleaseText();
 		vw_ShutdownAudio();
@@ -490,6 +252,9 @@ ReCreate:
 		SDL_Quit();
 		return 1;
 	}
+
+
+
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -579,10 +344,6 @@ ReCreate:
 		MessageBox(nullptr, "OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.",
 			   "Render system - Fatal Error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
 #endif // WIN32
-		if (VideoModes != nullptr) {
-			delete [] VideoModes;
-			VideoModes = nullptr;
-		}
 		vw_ShutdownFont();
 		vw_ReleaseText();
 		vw_ShutdownAudio();
@@ -806,15 +567,8 @@ GotoQuit:
 		FirstStart = false;
 
 		// пересоздаем окно
-		goto ReCreate;
+		goto ReCreateWindow;
 	}
-
-
-	if (VideoModes != nullptr) {
-		delete [] VideoModes;
-		VideoModes = nullptr;
-	}
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// завершение, освобождение памяти...
