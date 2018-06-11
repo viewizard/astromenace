@@ -146,7 +146,7 @@ struct sGameConfig {
 
 	int Width{1280};	// game resolution's width
 	int Height{768};	// game resolution's height
-	int BPP{0};		// game resolution's color depth
+	bool Fullscreen{false};	// fullscreen mode (if false - windowed mode)
 	float InternalWidth{1228.0f};	// internal resolution's width
 	float InternalHeight{768.0f};	// internal resolution's height
 

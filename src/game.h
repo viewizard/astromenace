@@ -239,7 +239,7 @@ void CreditsMenu();
 //------------------------------------------------------------------------------------
 extern int Options_Width;
 extern int Options_Height;
-extern int Options_BPP;
+extern int Options_Fullscreen;
 extern int Options_VSync;
 
 void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);

@@ -392,27 +392,28 @@ int main(int argc, char **argv)
 	if (FirstStart) {
 		ChangeGameConfig().Width = CurrentVideoMode.W;
 		ChangeGameConfig().Height = CurrentVideoMode.H;
-		ChangeGameConfig().BPP = CurrentVideoMode.BPP;
+		ChangeGameConfig().Fullscreen = true;
 	}
 	// если загруженные параметры, больше чем максимальные, ставим максимальные (если Xinerama, например)
 	if ((VideoModes[VideoModesNum-1].W < GameConfig().Width) ||
 	    (VideoModes[VideoModesNum-1].H < GameConfig().Height)) {
 		ChangeGameConfig().Width = VideoModes[VideoModesNum-1].W;
 		ChangeGameConfig().Height = VideoModes[VideoModesNum-1].H;
-		ChangeGameConfig().BPP = CurrentVideoMode.BPP;
+		ChangeGameConfig().Fullscreen = true;
 	}
 	// делаем проверку по листу разрешений экрана, если входит - все ок, если нет - ставим оконный режим принудительно
 	bool NeedResetToWindowedMode = true;
 	for(int i = 0; i < VideoModesNum; i++) {
 		if ((VideoModes[i].W == GameConfig().Width) &&
 		    (VideoModes[i].H == GameConfig().Height) &&
-		    (VideoModes[i].BPP == GameConfig().BPP)) {
+		    ((Options_Fullscreen && VideoModes[i].BPP > 0) ||
+		     (!Options_Fullscreen && VideoModes[i].BPP == 0))) {
 			NeedResetToWindowedMode = false;
 			break;
 		}
 	}
 	if (NeedResetToWindowedMode)
-		ChangeGameConfig().BPP = 0;
+		ChangeGameConfig().Fullscreen = false;
 
 
 
@@ -441,17 +442,15 @@ ReCreate:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// создаем окно и базовые опенжл контекст
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	bool Fullscreen = (GameConfig().BPP != 0);
-
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
-			     Fullscreen, DisplayIndex)) {
+			     GameConfig().Fullscreen, DisplayIndex)) {
 		// не можем создать окно или включить полноэкранный режим - ставим минимальный оконный режим
 		if ((640 != GameConfig().Width) ||
 		    (480 != GameConfig().Height) ||
-		    (0 != GameConfig().BPP)) {
+		    (false != GameConfig().Fullscreen)) {
 			ChangeGameConfig().Width = 640;
 			ChangeGameConfig().Height = 480;
-			ChangeGameConfig().BPP = 0;
+			ChangeGameConfig().Fullscreen = false;
 			ChangeGameConfig().InternalWidth = 1024.0f;
 			ChangeGameConfig().InternalHeight = 768.0f;
 			ChangeGameConfig().MSAA = 0;
@@ -475,8 +474,6 @@ ReCreate:
 		SDL_Quit();
 		return 1;
 	}
-	if (!Fullscreen)
-		ChangeGameConfig().BPP = 0;
 
 
 	if (!vw_CreateOpenGLContext(GameConfig().VSync)) {

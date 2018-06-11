@@ -32,7 +32,7 @@
 // временные данные для изменения и восстановления
 int Options_Width;
 int Options_Height;
-int Options_BPP;
+int Options_Fullscreen;
 int Options_VSync;
 
 
@@ -199,11 +199,11 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	// проверяем, есть ли вообще полноэкранные разрешения
-	bool CanSwitchToFullScreen = false;
+	bool CanSwitchToFullscreen = false;
 	for(int i=0; i<VideoModesNum; i++) {
 		if ((VideoModes[i].BPP == 16) |
 		    (VideoModes[i].BPP == 24)) {
-			CanSwitchToFullScreen = true;
+			CanSwitchToFullscreen = true;
 			break;
 		}
 	}
@@ -211,19 +211,19 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Full Screen"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !CanSwitchToFullScreen || !Options_BPP) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, !CanSwitchToFullScreen || Options_BPP)) {
-		if (Options_BPP != 0) {
-			Options_BPP = 0;
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !CanSwitchToFullscreen || !Options_Fullscreen) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, !CanSwitchToFullscreen || Options_Fullscreen)) {
+		if (Options_Fullscreen) {
+			Options_Fullscreen = false;
 		} else {
-			Options_BPP = CurrentVideoMode.BPP;
+			Options_Fullscreen = true;
 
 			// пробуем просто переключить BPP, проверяем есть ли такое разрешение
 			bool NeedDetectResolution = true;
 			for(int i=0; i<VideoModesNum; i++) {
 				if ((VideoModes[i].W == Options_Width) &
 				    (VideoModes[i].H == Options_Height) &
-				    (VideoModes[i].BPP == Options_BPP)) {
+				    (VideoModes[i].BPP > 0)) {
 					NeedDetectResolution = false;
 					break;
 				}
@@ -236,15 +236,15 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 					    (VideoModes[i].BPP == 24)) {
 						Options_Width = VideoModes[i].W;
 						Options_Height = VideoModes[i].H;
-						Options_BPP = VideoModes[i].BPP;
+						Options_Fullscreen = true;
 						break;
 					}
 				}
 		}
 	}
-	int Size = vw_TextWidth(Options_BPP ? vw_GetText("On") : vw_GetText("Off"));
+	int Size = vw_TextWidth(Options_Fullscreen ? vw_GetText("On") : vw_GetText("Off"));
 	int SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, Options_BPP ? vw_GetText("On") : vw_GetText("Off"));
+	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, Options_Fullscreen ? vw_GetText("On") : vw_GetText("Off"));
 
 
 
@@ -253,18 +253,22 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	int CurrentListNum = 0;
 	for(int i=0; i<VideoModesNum; i++) {
 		if (VideoModes[i].W == Options_Width &&
-		    VideoModes[i].H == Options_Height &&
-		    VideoModes[i].BPP == Options_BPP) {
-			CurrentListNum = i;
-			break;
+		    VideoModes[i].H == Options_Height) {
+			if ((Options_Fullscreen && VideoModes[i].BPP > 0) ||
+			    (!Options_Fullscreen && VideoModes[i].BPP == 0)) {
+				CurrentListNum = i;
+				break;
+			}
 		}
 	}
 
 
 
 	Y1 += Prir1;
-	if (Options_BPP != 0) CurrentPos = 0;
-	else CurrentPos = 1;
+	if (Options_Fullscreen)
+		CurrentPos = 0;
+	else
+		CurrentPos = 1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText(ButtonScreenModeTitle[CurrentPos]));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
 		CurrentListNum--;
@@ -273,18 +277,18 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		bool check_next = true;
 		while (check_next) {
 			// вышли за предел
-			if (CurrentListNum < 0) CurrentListNum = VideoModesNum-1;
+			if (CurrentListNum < 0)
+				CurrentListNum = VideoModesNum-1;
 
-			if ((VideoModes[CurrentListNum].BPP > 0 && Options_BPP > 0) ||
-			    (VideoModes[CurrentListNum].BPP == 0 && Options_BPP == 0)) {
+			if ((VideoModes[CurrentListNum].BPP > 0 && Options_Fullscreen) ||
+			    (VideoModes[CurrentListNum].BPP == 0 && !Options_Fullscreen))
 				check_next = false;
-			} else {
+			else
 				CurrentListNum--;
-			}
 		}
 		Options_Width = VideoModes[CurrentListNum].W;
 		Options_Height = VideoModes[CurrentListNum].H;
-		Options_BPP = VideoModes[CurrentListNum].BPP;
+		Options_Fullscreen = static_cast<bool>(VideoModes[CurrentListNum].BPP);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
 		CurrentListNum++;
@@ -295,8 +299,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			// вышли за предел
 			if (CurrentListNum >= VideoModesNum) CurrentListNum = 0;
 
-			if ((VideoModes[CurrentListNum].BPP > 0 && Options_BPP > 0) ||
-			    (VideoModes[CurrentListNum].BPP == 0 && Options_BPP == 0)) {
+			if ((VideoModes[CurrentListNum].BPP > 0 && Options_Fullscreen) ||
+			    (VideoModes[CurrentListNum].BPP == 0 && !Options_Fullscreen)) {
 				check_next = false;
 			} else {
 				CurrentListNum++;
@@ -305,13 +309,11 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 		Options_Width = VideoModes[CurrentListNum].W;
 		Options_Height = VideoModes[CurrentListNum].H;
-		Options_BPP = VideoModes[CurrentListNum].BPP;
+		Options_Fullscreen = static_cast<bool>(VideoModes[CurrentListNum].BPP);
 	}
 
 	std::string VideoModeTitle{std::to_string(VideoModes[CurrentListNum].W) + "x" +
 				   std::to_string(VideoModes[CurrentListNum].H)};
-	if (VideoModes[CurrentListNum].BPP != 0)
-		VideoModeTitle += " " + std::to_string(VideoModes[CurrentListNum].BPP) + "bit";
 
 	Size = vw_TextWidth(VideoModeTitle.c_str());
 	SizeI = (170-Size)/2;
@@ -429,7 +431,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	if ((Options_Width == GameConfig().Width &&
 	     Options_Height == GameConfig().Height &&
-	     Options_BPP == GameConfig().BPP &&
+	     Options_Fullscreen == GameConfig().Fullscreen &&
 	     Options_VSync == GameConfig().VSync)) {
 		X = (GameConfig().InternalWidth - 384) / 2;
 		Y = Y + Prir;
@@ -455,7 +457,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			// проверяем, нужно перегружать или нет
 			if (Options_Width != GameConfig().Width ||
 			    Options_Height != GameConfig().Height ||
-			    Options_BPP != GameConfig().BPP ||
+			    Options_Fullscreen != GameConfig().Fullscreen ||
 			    Options_VSync != GameConfig().VSync) {
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnOptionsChanged);
@@ -484,6 +486,6 @@ void SaveOptionsMenuTmpData()
 		ChangeGameConfig().InternalHeight = 768.0f;
 	}
 
-	ChangeGameConfig().BPP = Options_BPP;
+	ChangeGameConfig().Fullscreen = Options_Fullscreen;
 	ChangeGameConfig().VSync = Options_VSync;
 }

@@ -137,8 +137,7 @@ void SaveXMLConfigFile()
 
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Width"), "value", Config.Width);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Height"), "value", Config.Height);
-	XMLdoc->AddComment(*RootXMLEntry, " Window (BPP = 0) or Full Screen (BPP = 16, 24 or 32) ");
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "BPP"), "value", Config.BPP);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Fullscreen"), "value", Config.Fullscreen);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Common settings ");
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MSAA"), "value", Config.MSAA);
@@ -355,8 +354,8 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Width"), "value", Config.Width);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Height"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Height"), "value", Config.Height);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "BPP"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "BPP"), "value", Config.BPP);
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Fullscreen"))
+		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Fullscreen"), "value", Config.Fullscreen);
 
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "MSAA"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MSAA"), "value", Config.MSAA);
