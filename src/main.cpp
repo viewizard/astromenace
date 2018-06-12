@@ -78,8 +78,27 @@ sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 /*
  * Initial setup on first start and video configuration check.
  */
-static void VideoConfig(bool FirstStart)
+static bool VideoConfig(bool FirstStart)
 {
+	// prevent out of range index usage
+	if (GameConfig().DisplayIndex) {
+		int tmpDisplaysCount = SDL_GetNumVideoDisplays();
+		if (tmpDisplaysCount >= 1) {
+			if (GameConfig().DisplayIndex >= tmpDisplaysCount)
+				ChangeGameConfig().DisplayIndex = 0; // fallback to first display
+		} else
+			std::cerr << __func__ << "(): " << "SDL_GetNumVideoDisplays() failed: " << SDL_GetError() << "\n";
+
+		ChangeDisplayIndex(GameConfig().DisplayIndex);
+	}
+
+	// check both arrays (with corrected display index), we need at least one non empty array
+	if (DetectFullscreenSize().empty() &&
+	    DetectWindowSizeArray().empty()) {
+		std::cerr << __func__ << "(): " << "display does not support any appropriate screen resolutions.\n";
+		return false;
+	}
+
 	if (FirstStart) {
 		if (!DetectFullscreenSize().empty()) {
 			ChangeGameConfig().Width = DetectFullscreenSize().back().Width;
@@ -90,16 +109,8 @@ static void VideoConfig(bool FirstStart)
 			ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
 			ChangeGameConfig().Fullscreen = false;
 		}
-		return;
+		return true;
 	}
-
-	// prevent out of range index usage
-	int tmpDisplaysCount = SDL_GetNumVideoDisplays();
-	if (tmpDisplaysCount >= 1) {
-		if (GameConfig().DisplayIndex >= tmpDisplaysCount)
-			ChangeGameConfig().DisplayIndex = 0; // fallback to first display
-	} else
-		std::cerr << __func__ << "(): " << "SDL_GetNumVideoDisplays() failed: " << SDL_GetError() << "\n";
 
 	// check config's mode, note, we need check only one array here, since we know,
 	// if one is empty, second is not empty (we check this before VideoConfig() call)
@@ -121,6 +132,8 @@ static void VideoConfig(bool FirstStart)
 		ChangeGameConfig().Width = DetectWindowSizeArray().back().Width;
 		ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
 	}
+
+	return true;
 }
 
 /*
@@ -198,14 +211,6 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	// check both arrays before VideoConfig(), we need at least one non empty array
-	if (DetectFullscreenSize().empty() &&
-	    DetectWindowSizeArray().empty()) {
-		std::cerr << __func__ << "(): " << "display does not support any appropriate screen resolutions.\n";
-		SDL_Quit();
-		return 1;
-	}
-
 	if (vw_OpenVFS(GetDataPath() + "gamedata.vfs", GAME_VFS_BUILD) != 0) {
 		std::cerr << __func__ << "(): " << "gamedata.vfs file not found or corrupted.\n";
 		SDL_Quit();
@@ -219,7 +224,13 @@ int main(int argc, char **argv)
 
 	// should be called after vw_InitText()
 	bool FirstStart = LoadXMLConfigFile(NeedResetConfig);
-	VideoConfig(FirstStart);
+
+	if (!VideoConfig(FirstStart)) {
+		vw_ReleaseText();
+		vw_ShutdownVFS();
+		SDL_Quit();
+		return 1;
+	}
 
 	if (GameConfig().FontNumber > FontQuantity)
 		ChangeGameConfig().FontNumber = 0;
