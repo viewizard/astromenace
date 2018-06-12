@@ -19,7 +19,7 @@
 
 	<!-- Mission 3 -->
 	<Mission>
-		<Title color="4">Mission 3 - Counterattack Is The Best Defence</Title>
+		<Title color="4">Mission 3 - Counterattack Is The Best Defense</Title>
 		<Descr color="0">Our base is under attack! Stop the aliens` attack now!</Descr>
 		<Icon>script/mission3_icon.tga</Icon>
 		<File>script/mission3.xml</File>
