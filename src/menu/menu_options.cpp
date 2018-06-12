@@ -27,6 +27,8 @@
 
 // TODO Width, Height, Fullscreen and VSync should be altered without window/OpenGL context recreation
 
+// TODO (?) DisplayIndex (display number) should be allowed to configure in menu
+
 // TODO translate comments
 
 #include "../game.h"

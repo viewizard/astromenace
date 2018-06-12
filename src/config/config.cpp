@@ -135,6 +135,7 @@ void SaveXMLConfigFile()
 				  vw_GetText("en", Config.VoiceLanguage));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "FontNumber"), "value", Config.FontNumber);
 
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "DisplayIndex"), "value", Config.DisplayIndex);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Width"), "value", Config.Width);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Height"), "value", Config.Height);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Fullscreen"), "value", Config.Fullscreen);
@@ -350,6 +351,8 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "FontNumber"), "value",
 					   Config.FontNumber);
 
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, "DisplayIndex"))
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "DisplayIndex"), "value", Config.DisplayIndex);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Width"))
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "Width"), "value", Config.Width);
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "Height"))

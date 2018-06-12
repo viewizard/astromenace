@@ -93,6 +93,14 @@ static void VideoConfig(bool FirstStart)
 		return;
 	}
 
+	// prevent out of range index usage
+	int tmpDisplaysCount = SDL_GetNumVideoDisplays();
+	if (tmpDisplaysCount >= 1) {
+		if (GameConfig().DisplayIndex >= tmpDisplaysCount)
+			ChangeGameConfig().DisplayIndex = 0; // fallback to first display
+	} else
+		std::cerr << __func__ << "(): " << "SDL_GetNumVideoDisplays() failed: " << SDL_GetError() << "\n";
+
 	// check config's mode, note, we need check only one array here, since we know,
 	// if one is empty, second is not empty (we check this before VideoConfig() call)
 	if (GameConfig().Fullscreen &&
@@ -234,9 +242,8 @@ ReCreateWindow:
 	// if we change options during game mission with game restart, care about dialogs reset
 	InitDialogBoxes();
 
-	int DisplayIndex{0}; // FIXME this should be allowed to configure in game's config file (and menu?)
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
-			     GameConfig().Fullscreen, DisplayIndex)) {
+			     GameConfig().Fullscreen, GameConfig().DisplayIndex)) {
 		vw_ShutdownFont();
 		vw_ReleaseText();
 		vw_ShutdownAudio();

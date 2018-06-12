@@ -144,6 +144,7 @@ struct sGameConfig {
 	int SoundVolume{10};	// in-game sfx volume [0, 10]
 	int VoiceVolume{10};	// in-game voice volume [0, 10]
 
+	int DisplayIndex{0};
 	int Width{1280};	// view size width
 	int Height{768};	// view size height
 	bool Fullscreen{true};	// fullscreen mode (if false - windowed mode)
