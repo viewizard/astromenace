@@ -104,7 +104,7 @@ static bool VideoConfig(bool FirstStart)
 			ChangeGameConfig().Width = DetectFullscreenSize().back().Width;
 			ChangeGameConfig().Height = DetectFullscreenSize().back().Height;
 			ChangeGameConfig().Fullscreen = true;
-		} else { // we don't check DetectWindowSizeArray(), since we check it before
+		} else { // we don't check DetectWindowSizeArray(), since we check it above
 			ChangeGameConfig().Width = DetectWindowSizeArray().back().Width;
 			ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
 			ChangeGameConfig().Fullscreen = false;
@@ -113,7 +113,7 @@ static bool VideoConfig(bool FirstStart)
 	}
 
 	// check config's mode, note, we need check only one array here, since we know,
-	// if one is empty, second is not empty (we check this before VideoConfig() call)
+	// if one is empty, second is not empty (we check this above)
 	if (GameConfig().Fullscreen &&
 	    DetectFullscreenSize().empty())
 		ChangeGameConfig().Fullscreen = false;
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
 		// if file not loaded - it's ok, we will work with English only
 	}
 
-	// should be called after vw_InitText()
+	// should be called after vw_InitText(), since we need check language index numbers
 	bool FirstStart = LoadXMLConfigFile(NeedResetConfig);
 
 	if (!VideoConfig(FirstStart)) {
