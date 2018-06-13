@@ -494,13 +494,13 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 {
 	auto CalculateDifficulty = [] (unsigned Num) {
-		return 150 - ((Config.Profile[Num].EnemyWeaponPenalty - 1) * 10 +
+		return 150 - ((Config.Profile[Num].EnemyWeaponPenalty - 1) * 12 +
 			      (Config.Profile[Num].EnemyArmorPenalty - 1) * 7 +
-			      (Config.Profile[Num].EnemyTargetingSpeedPenalty - 1) * 4 +
-			      Config.Profile[Num].UnlimitedAmmo * 18 +
-			      Config.Profile[Num].UndestroyableWeapon * 10 +
+			      (Config.Profile[Num].EnemyTargetingSpeedPenalty - 1) * 7 +
+			      Config.Profile[Num].UnlimitedAmmo * 10 +
+			      Config.Profile[Num].UndestroyableWeapon * 7 +
 			      Config.Profile[Num].WeaponTargetingMode * 10 +
-			      Config.Profile[Num].SpaceShipControlMode * 9);
+			      Config.Profile[Num].SpaceShipControlMode * 7);
 	};
 
 	auto CalculateDifficulties = [&CalculateDifficulty] () {

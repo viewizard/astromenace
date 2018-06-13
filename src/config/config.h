@@ -61,10 +61,10 @@ struct sPilotProfile {
 	char Name[config::PROFILE_NAME_SIZE];
 
 	// difficulty related settings
-	uint8_t EnemyWeaponPenalty{3};		// Enemy weapon fire penalty [1, 3]
+	uint8_t EnemyWeaponPenalty{2};		// Enemy weapon fire penalty [1, 3]
 	uint8_t EnemyArmorPenalty{2};		// Enemy armor strength penalty [1, 4]
 	uint8_t EnemyTargetingSpeedPenalty{2};	// Enemy targeting speed penalty [1, 4]
-	uint8_t UnlimitedAmmo{0};		// 0 - limited ammo, 1 - unlimited ammo
+	uint8_t UnlimitedAmmo{1};		// 0 - limited ammo, 1 - unlimited ammo
 						// note, we use "Limited Ammo" option in menu, but UnlimitedAmmo variable
 	uint8_t UndestroyableWeapon{1};		// 0 - destroyable, 1 - undestroyable
 						// note, we use "Destroyable Weapon" option, but UndestroyableWeapon variable
