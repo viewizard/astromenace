@@ -25,6 +25,10 @@
 
 *************************************************************************************/
 
+// TODO applying changes should be moved out from the vw_BeginRendering()/vw_EndRendering() block
+
+// TODO translate comments
+
 #include "../game.h"
 #include "../config/config.h"
 
@@ -387,10 +391,16 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		}
 		X = GameConfig().InternalWidth / 2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
+			if ((GameConfig().MSAA != Options_MSAA) ||
+			    (GameConfig().CSAA != Options_CSAA)) {
+				ChangeGameConfig().MSAA = Options_MSAA;
+				ChangeGameConfig().CSAA = Options_CSAA;
+				vw_InitOpenGLStuff(GameConfig().Width, GameConfig().Height,
+						   &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
+			}
+
 			// проверяем, нужно перегружать или нет
 			if (Options_TexturesAnisotropyLevel != GameConfig().AnisotropyLevel ||
-			    Options_MSAA != GameConfig().MSAA ||
-			    Options_CSAA != GameConfig().CSAA ||
 			    Options_UseGLSL120 != GameConfig().UseGLSL120 ||
 			    Options_ShadowMap != GameConfig().ShadowMap) {
 				if (MenuStatus == eMenuStatus::GAME)
@@ -406,18 +416,9 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	}
 }
 
-
 void SaveOptionsAdvMenuTmpData()
 {
 	ChangeGameConfig().UseGLSL120 = Options_UseGLSL120;
 	ChangeGameConfig().AnisotropyLevel = Options_TexturesAnisotropyLevel;
-	ChangeGameConfig().MSAA = Options_MSAA;
-	ChangeGameConfig().CSAA = Options_CSAA;
 	ChangeGameConfig().ShadowMap = Options_ShadowMap;
 }
-
-
-
-
-
-
