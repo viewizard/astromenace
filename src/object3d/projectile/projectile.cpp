@@ -1411,10 +1411,10 @@ bool cProjectile::Update(float Time)
 		RotationSpeed = 60.0f;
 		goto missile;
 	case 18:
-		RotationSpeed = 30.0f;
+		RotationSpeed = 35.0f;
 		goto missile;
 	case 19:
-		RotationSpeed = 10.0f;
+		RotationSpeed = 20.0f;
 		goto missile;
 	// ракеты пришельцев
 	case 102:
@@ -1431,10 +1431,10 @@ bool cProjectile::Update(float Time)
 		RotationSpeed = 60.0f;
 		goto missile;
 	case 209:
-		RotationSpeed = 30.0f;
+		RotationSpeed = 50.0f;
 		goto missile;
 	case 210:
-		RotationSpeed = 10.0f;
+		RotationSpeed = 30.0f;
 		{
 missile:
 			RotationSpeed /= CurrentPenalty;
