@@ -25,11 +25,11 @@
 
 *************************************************************************************/
 
-// TODO Width, Height, Fullscreen and VSync should be altered without window/OpenGL context recreation
-
 // TODO (?) DisplayIndex (display number) should be allowed to configure in menu
 
-// TODO SDL_GL_SetSwapInterval() allow now -1 for adaptive vsync
+// TODO SDL_GL_SetSwapInterval() also accept now -1 for adaptive vsync
+
+// TODO applying changes should be moved out from the vw_BeginRendering()/vw_EndRendering() block
 
 // TODO translate comments
 
