@@ -29,6 +29,8 @@
 
 // TODO (?) DisplayIndex (display number) should be allowed to configure in menu
 
+// TODO SDL_GL_SetSwapInterval() allow now -1 for adaptive vsync
+
 // TODO translate comments
 
 #include "../game.h"
@@ -394,30 +396,56 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		}
 		X = GameConfig().InternalWidth / 2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
-			// проверяем, нужно перегружать или нет
-			if (Options_Width != GameConfig().Width ||
-			    Options_Height != GameConfig().Height ||
-			    Options_Fullscreen != GameConfig().Fullscreen ||
-			    Options_VSync != GameConfig().VSync) {
-				if (MenuStatus == eMenuStatus::GAME)
-					SetCurrentDialogBox(eDialogBox::RestartOnOptionsChanged);
-				else {
-					CanQuit = false;
-					Quit = true;
-					NeedReCreate = true;
-					SaveOptionsMenuTmpData();
-				}
+			if (GameConfig().VSync != Options_VSync) {
+				if (SDL_GL_SetSwapInterval(Options_VSync) == -1) {
+					std::cerr << __func__ << "(): " << "SDL_GL_SetSwapInterval() failed: "
+						  << SDL_GetError() << "\n";
+					Options_VSync = GameConfig().VSync;
+				} else
+					ChangeGameConfig().VSync = Options_VSync;
+			}
+			// should be before size changes, since we could fallback to previous size
+			if (GameConfig().Fullscreen != Options_Fullscreen) {
+				Uint32 Flags{0};
+				if (Options_Fullscreen)
+					Flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+				if (SDL_SetWindowFullscreen(vw_GetSDLWindow(), Flags) != 0) {
+					std::cerr << __func__ << "(): " << "SDL_SetWindowFullscreen() failed: "
+						  << SDL_GetError() << "\n";
+					Options_Fullscreen = GameConfig().Fullscreen;
+					Options_Width = GameConfig().Width;
+					Options_Height = GameConfig().Height;
+				} else
+					ChangeGameConfig().Fullscreen = Options_Fullscreen;
+
+				// note, since size will be changed for sure, we don't need
+				// do anything here, code below will do all we need
+			}
+			if ((GameConfig().Width != Options_Width) ||
+			    (GameConfig().Height != Options_Height)) {
+				ChangeGameConfig().Width = Options_Width;
+				ChangeGameConfig().Height = Options_Height;
+
+				SDL_SetWindowSize(vw_GetSDLWindow(),
+						  GameConfig().Width,
+						  GameConfig().Height);
+
+				SDL_SetWindowPosition(vw_GetSDLWindow(),
+						      SDL_WINDOWPOS_CENTERED_DISPLAY(GameConfig().DisplayIndex),
+						      SDL_WINDOWPOS_CENTERED_DISPLAY(GameConfig().DisplayIndex));
+
+				vw_SetViewport(0, 0, GameConfig().Width, GameConfig().Height);
+				vw_InitOpenGLStuff(GameConfig().Width, GameConfig().Height,
+						   &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
+
+				if (StandardAspectRation({GameConfig().Width, GameConfig().Height}))
+					ChangeGameConfig().InternalWidth = 1024.0f;
+				else
+					ChangeGameConfig().InternalWidth = 1228.0f;
+				ChangeGameConfig().InternalHeight = 768.0f;
+				vw_SetInternalResolution(GameConfig().InternalWidth, GameConfig().InternalHeight, true);
 			}
 		}
 	}
-}
-
-void SaveOptionsMenuTmpData()
-{
-	// note, we don't change InternalWidth and InternalHeight and don't call
-	// vw_SetInternalResolution(), since we recreate the window (see main())
-	ChangeGameConfig().Width = Options_Width;
-	ChangeGameConfig().Height = Options_Height;
-	ChangeGameConfig().Fullscreen = Options_Fullscreen;
-	ChangeGameConfig().VSync = Options_VSync;
 }

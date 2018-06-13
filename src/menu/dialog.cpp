@@ -447,7 +447,6 @@ Dialogs with default type:
 	eDialogBox::QuitNoSave
 	eDialogBox::RestartLevelNoSave
 	eDialogBox::ChoseLanguage
-	eDialogBox::RestartOnOptionsChanged
 	eDialogBox::RestartOnAdvOptChanged
 */
 	case eDialogBox::ShowShipInfo:
@@ -1599,37 +1598,6 @@ Dialogs with default type:
 		break;
 	}
 
-	case eDialogBox::RestartOnOptionsChanged: // при изменении настроек в самой игре спрашиваем, с предупреждением, что не все сохраним
-		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("RESTART")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("RESTART"));
-		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to restart the game?"));
-		SizeI = (W-SizeI1)/2;
-		if (SizeI1 > 470) {
-			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
-		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, eRGBCOLOR::yellow, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
-
-		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
-		SizeI = (W-SizeI1)/2;
-		if (SizeI1 > 470) {
-			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
-		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, eRGBCOLOR::white, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
-
-		// кнопки
-		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			CloseDialog();
-			CanQuit = false;
-			Quit = true;
-			NeedReCreate = true;
-			SaveOptionsMenuTmpData();
-		}
-		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
-		break;
 	case eDialogBox::RestartOnAdvOptChanged: // при изменении продвинутых настроек в самой игре, с предупреждением, что не все сохраним
 		// название диалога
 		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("RESTART")))/2;
