@@ -144,6 +144,8 @@ void InitMenu()
 	// games levels do, we should reset game camera first
 	ResetGameCamera();
 
+	StarSystemInitByType(eDrawType::MENU); // should be before RunScript()
+
 	MenuScript.reset(new cMissionScript);
 
 	if (GameConfig().MenuScript > 2)
@@ -188,8 +190,6 @@ void InitMenu()
 	MenuStatus = eMenuStatus::MAIN_MENU;
 
 	DrawGameCursor = true;
-
-	StarSystemInitByType(eDrawType::MENU);
 }
 
 

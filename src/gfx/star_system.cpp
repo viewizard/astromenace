@@ -121,6 +121,11 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
  */
 void StarSystemInitByType(eDrawType DrawType)
 {
+	StarsTileStartTransparentLayer1 = 0.2f;
+	StarsTileEndTransparentLayer1 = 0.7f;
+	StarsTileStartTransparentLayer2 = 0.9f;
+	StarsTileEndTransparentLayer2 = 0.7f;
+
 	switch (DrawType) {
 	case eDrawType::MENU:
 		StarsTileUpdateTime = vw_GetTimeThread(0);

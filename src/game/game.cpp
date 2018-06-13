@@ -665,6 +665,7 @@ void InitGame()
 	// !!! пока загрузка идет полная на уровень, и наверно так и нужно оставить
 	// иначе нужно выносить перечень загружаемого в скрипт (менять не смогут уровни)
 
+	StarSystemInitByType(eDrawType::GAME); // should be before RunScript()
 
 	MissionScript.reset(new cMissionScript);
 	if (!MissionScript->RunScript(GetCurrentMissionFileName(), vw_GetTimeThread(1)))
@@ -845,8 +846,6 @@ void InitGame()
 
 	SoundShowHideMenu = 0;
 	CurrentGameSpeedShowTime = 2.0f;
-
-	StarSystemInitByType(eDrawType::GAME);
 
 	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 	GameBlackTransp = 1.0f;
