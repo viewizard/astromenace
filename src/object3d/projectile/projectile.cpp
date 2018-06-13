@@ -1409,17 +1409,17 @@ bool cProjectile::Update(float Time)
 		goto missile;
 	// ракеты пришельцев
 	case 102:
-		RotationSpeed = 20.0f;
+		RotationSpeed = 50.0f;
 		goto missile;
 	case 104:
-		RotationSpeed = 40.0f;
+		RotationSpeed = 60.0f;
 		goto missile;
 	// ракеты пиратов
 	case 205:
-		RotationSpeed = 35.0f;
+		RotationSpeed = 50.0f;
 		goto missile;
 	case 206:
-		RotationSpeed = 40.0f;
+		RotationSpeed = 60.0f;
 		goto missile;
 	case 209:
 		RotationSpeed = 30.0f;
@@ -1428,6 +1428,8 @@ bool cProjectile::Update(float Time)
 		RotationSpeed = 10.0f;
 		{
 missile:
+			RotationSpeed /= CurrentPenalty;
+
 			sVECTOR3D NeedAngle = Rotation;
 
 			float EffectiveRange = 1000000.0f;
