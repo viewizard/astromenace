@@ -154,7 +154,8 @@ bool vw_CreateOpenGLContext(int VSync)
 		return false;
 	}
 
-	SDL_GL_SetSwapInterval(VSync);
+	if (SDL_GL_SetSwapInterval(VSync) == -1)
+		std::cerr << __func__ << "(): " << "SDL_GL_SetSwapInterval() failed: " << SDL_GetError() << "\n";
 
 	DevCaps.OpenGLmajorVersion = 1;
 	DevCaps.OpenGLminorVersion = 0;
@@ -251,7 +252,7 @@ void vw_DeleteOpenGLContext()
 }
 
 /*
- * Initialize and setup OpenGL related stuff.
+ * Initialize (or reinitialize) and setup OpenGL related stuff.
  */
 void vw_InitOpenGLStuff(int Width, int Height, int *MSAA, int *CSAA)
 {

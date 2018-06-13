@@ -338,7 +338,7 @@ SDL_Window *vw_GetSDLWindow();
 bool vw_CreateOpenGLContext(int VSync);
 // Delete OpenGL context.
 void vw_DeleteOpenGLContext();
-// Initialize and setup OpenGL related stuff.
+// Initialize (or reinitialize) and setup OpenGL related stuff.
 void vw_InitOpenGLStuff(int Width, int Height, int *MSAA, int *CSAA);
 // Release OpenGL related stuff.
 void vw_ReleaseOpenGLStuff();
