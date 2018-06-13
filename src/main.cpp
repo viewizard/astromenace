@@ -245,7 +245,7 @@ int main(int argc, char **argv)
 	if (!vw_InitAudio())
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 
-	// устанавливаем язык текста
+	// TODO check user preferred locale first
 	vw_SetTextLanguage(GameConfig().MenuLanguage);
 
 ReCreateWindow:
@@ -424,7 +424,6 @@ ReCreateWindow:
 	}
 
 
-	// TODO check std::locale first
 	// show dialog with language setup during first game launch
 	if (FirstStart)
 		SetCurrentDialogBox(eDialogBox::ChoseLanguage);

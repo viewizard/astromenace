@@ -25,6 +25,15 @@
 
 *************************************************************************************/
 
+/*
+
+Note, all enemy's projectiles and missiles without penalty should be about 30% faster
+and maneuverable than player's projectiles and missiles. In this way, even x3 penalty
+will not kill their speed and maneuverability and we will have nice difficulty matrix.
+
+*/
+
+
 #include "projectile.h"
 #include "../explosion/bullet_explosion/bullet_explosion.h"
 
