@@ -52,8 +52,6 @@ eMenuStatus MenuStatus;
 // защелка на выход, когда нужно перегрузить, а когда просто поменять режим
 bool Quit = false;
 bool NeedReCreate = false;
-// выходим или нет
-bool CanQuit = true;
 
 
 
@@ -406,13 +404,6 @@ ReCreateWindow:
 
 
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// установка процедуры... основного цикла и переход на нее
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	CanQuit = true;
-
-
 	// первоначальная установка курсора
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -429,23 +420,21 @@ ReCreateWindow:
 		SetCurrentDialogBox(eDialogBox::ChoseLanguage);
 
 
-
-loop:
-
-
 	Quit = false;
 	NeedReCreate = false;
-	bool NeedLoop = true;
+	bool NeedLoop{true};
 
-
-	while(!Quit) {
+	while (!Quit) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			// если нажали закрыть окно
 			case SDL_QUIT:
-				Quit = true;
-				goto GotoQuit;
+				if (MenuStatus == eMenuStatus::GAME)
+					SetCurrentDialogBox(eDialogBox::QuitNoSave);
+				else
+					SetCurrentDialogBox(eDialogBox::QuitFromGame);
+				break;
 
 			// работаем с движением мышки
 			case SDL_MOUSEMOTION:
@@ -510,6 +499,7 @@ loop:
 				std::cout << "TextInput, Unicode: " << event.text.text << "\n";
 #endif // NDEBUG
 				break;
+
 			default:
 				break;
 			}
@@ -537,15 +527,6 @@ loop:
 			vw_ResumeTimeThreads();
 		}
 	}
-GotoQuit:
-
-	// если не выходим...
-	if (!NeedReCreate && !CanQuit && Quit) {
-		SetCurrentDialogBox(eDialogBox::QuitFromGame);
-		goto loop;
-	}
-
-
 
 	if (!NeedShowSystemCursor)
 		SDL_ShowCursor(SDL_ENABLE);

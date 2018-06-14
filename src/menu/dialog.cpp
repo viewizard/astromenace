@@ -565,7 +565,6 @@ Dialogs with default type:
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			CanQuit = true;
 			Quit = true;
 			CloseDialog();
 		}
@@ -679,7 +678,6 @@ Dialogs with default type:
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			CanQuit = true;
 			Quit = true;
 			CloseDialog();
 		}
@@ -1622,7 +1620,6 @@ Dialogs with default type:
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
 			CloseDialog();
-			CanQuit = false;
 			Quit = true;
 			NeedReCreate = true;
 			SaveOptionsAdvMenuTmpData();

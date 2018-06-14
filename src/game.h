@@ -47,7 +47,6 @@ extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
 
 extern bool Quit;
-extern bool CanQuit;
 extern bool NeedReCreate;
 extern bool SDL_MouseCurrentStatus[8];
 

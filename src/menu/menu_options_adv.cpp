@@ -413,7 +413,6 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnAdvOptChanged);
 				else {
-					CanQuit = false;
 					Quit = true;
 					NeedReCreate = true;
 					SaveOptionsAdvMenuTmpData();
