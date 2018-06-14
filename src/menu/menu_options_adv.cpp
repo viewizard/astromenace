@@ -405,10 +405,11 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 				ChangeGameConfig().AnisotropyLevel = Options_TexturesAnisotropyLevel;
 				ChangeTexturesAnisotropyLevel();
 			}
+			if (GameConfig().ShadowMap != Options_ShadowMap)
+				ChangeGameConfig().ShadowMap = Options_ShadowMap;
 
 			// проверяем, нужно перегружать или нет
-			if (Options_UseGLSL120 != GameConfig().UseGLSL120 ||
-			    Options_ShadowMap != GameConfig().ShadowMap) {
+			if (Options_UseGLSL120 != GameConfig().UseGLSL120) {
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnAdvOptChanged);
 				else {
@@ -425,5 +426,4 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 void SaveOptionsAdvMenuTmpData()
 {
 	ChangeGameConfig().UseGLSL120 = Options_UseGLSL120;
-	ChangeGameConfig().ShadowMap = Options_ShadowMap;
 }
