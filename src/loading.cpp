@@ -790,6 +790,20 @@ static void PostLoadGameData(eLoading LoadType)
 	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
+void ChangeTexturesAnisotropyLevel()
+{
+	for (unsigned i = 0; i < LoadListCount; i++) {
+		if (((LoadList[i].FileType == 0) || // "2D" texture
+		     (LoadList[i].FileType == 1)) && // "3D" texture
+		    LoadList[i].TextAnisotropy) {
+			GLtexture tmpTexture = vw_FindTextureByName(LoadList[i].FileName);
+			vw_BindTexture(0, tmpTexture);
+			vw_SetTextureAnisotropy(GameConfig().AnisotropyLevel);
+		}
+	}
+	vw_BindTexture(0, 0);
+}
+
 //------------------------------------------------------------------------------------
 // процедура загрузки данных
 //------------------------------------------------------------------------------------
@@ -815,7 +829,7 @@ void LoadGameData(eLoading LoadType)
 	    vw_GetDevCaps().OpenGL_2_1_supported &&
 	    GameConfig().UseGLSL120 &&
 	    vw_ShadersMapEmpty()) {
-		AllDrawLoading += GLSLLoadListCount*100;
+		AllDrawLoading += GLSLLoadListCount * 100;
 		NeedLoadShaders = true;
 	}
 
@@ -938,7 +952,7 @@ void LoadGameData(eLoading LoadType)
 
 	for (unsigned i = 0; i < LoadListCount; i++) {
 		switch (LoadList[i].FileType) {
-		// 2d текстуры
+		// "2D" texture
 		case 0:
 			// установки параметров
 			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
@@ -948,7 +962,7 @@ void LoadGameData(eLoading LoadType)
 			vw_LoadTexture(LoadList[i].FileName);
 			break;
 
-		// текстуры
+		// "3D" texture
 		case 1:
 			// установки параметров
 			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
@@ -964,13 +978,13 @@ void LoadGameData(eLoading LoadType)
 			vw_LoadTexture(LoadList[i].FileName);
 			break;
 
-		// предварит. загрузка моделей
+		// 3D model
 		case 2:
 			vw_LoadModel3D(LoadList[i].FileName, LoadList[i].TriangleSizeLimit,
 				       LoadList[i].NeedTangentAndBinormal && GameConfig().UseGLSL120);
 			break;
 
-		// загрузка sfx
+		// sfx
 		case 4:
 			// если вообще можем играть звуки
 			if (vw_GetAudioStatus())

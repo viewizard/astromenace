@@ -32,6 +32,9 @@
 #include "../game.h"
 #include "../config/config.h"
 
+// FIXME should be fixed, use 'include' instead
+void ChangeTexturesAnisotropyLevel();
+
 
 // временные данные для изменения и восстановления
 int Options_TexturesAnisotropyLevel;
@@ -398,10 +401,13 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 				vw_InitOpenGLStuff(GameConfig().Width, GameConfig().Height,
 						   &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
 			}
+			if (GameConfig().AnisotropyLevel != Options_TexturesAnisotropyLevel) {
+				ChangeGameConfig().AnisotropyLevel = Options_TexturesAnisotropyLevel;
+				ChangeTexturesAnisotropyLevel();
+			}
 
 			// проверяем, нужно перегружать или нет
-			if (Options_TexturesAnisotropyLevel != GameConfig().AnisotropyLevel ||
-			    Options_UseGLSL120 != GameConfig().UseGLSL120 ||
+			if (Options_UseGLSL120 != GameConfig().UseGLSL120 ||
 			    Options_ShadowMap != GameConfig().ShadowMap) {
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnAdvOptChanged);
@@ -419,6 +425,5 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 void SaveOptionsAdvMenuTmpData()
 {
 	ChangeGameConfig().UseGLSL120 = Options_UseGLSL120;
-	ChangeGameConfig().AnisotropyLevel = Options_TexturesAnisotropyLevel;
 	ChangeGameConfig().ShadowMap = Options_ShadowMap;
 }
