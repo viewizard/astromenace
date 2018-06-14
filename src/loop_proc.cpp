@@ -129,16 +129,15 @@ void Loop_Proc()
 	// рисуем курсор
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (DrawGameCursor) {
-		sRECT SrcRect, DstRect;
-		int mX,mY;
-		vw_GetMousePos(mX,mY);
+		int mX, mY;
+		vw_GetMousePos(mX, mY);
 
 		// если нужно, рисуем перетягиваемое оружие
 		if (MenuStatus == eMenuStatus::WORKSHOP)
 			DrawDragingWeaponIcon(mX, mY);
 
-		SrcRect(0,0,64,64 );
-		DstRect(mX-13,mY-13,mX+64-13,mY+64-13 );
+		sRECT SrcRect(0, 0, 64, 64);
+		sRECT DstRect(mX-12, mY-13, mX+64-12, mY+64-13);
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/cursor_shadow.tga"), true, 1.0f);
 		switch (CurrentCursorStatus) {
 		case 0:
