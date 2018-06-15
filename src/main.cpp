@@ -33,16 +33,6 @@
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
-#include <sys/stat.h> // stat
-
-
-#if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
-#include <unistd.h>
-#include <pwd.h>
-#endif // unix
-
-
-
 
 //------------------------------------------------------------------------------------
 // общие состояния и статусы
@@ -53,15 +43,11 @@ eMenuStatus MenuStatus;
 bool Quit = false;
 bool NeedReCreate = false;
 
-
-
 //------------------------------------------------------------------------------------
 // управление
 //------------------------------------------------------------------------------------
 // состояние кнопок мышки
 bool SDL_MouseCurrentStatus[8];
-
-
 
 //------------------------------------------------------------------------------------
 // камера
@@ -70,7 +56,6 @@ bool SDL_MouseCurrentStatus[8];
 sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
 // направление движения камеры
 sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
-
 
 
 /*
@@ -131,6 +116,70 @@ static bool VideoConfig(bool FirstStart)
 		ChangeGameConfig().Height = DetectWindowSizeArray().back().Height;
 	}
 
+	return true;
+}
+
+/*
+ * Check config settings and OpenGL capabilities.
+ */
+static bool CheckOpenGLCapabilities(bool FirstStart)
+{
+	// hardware must support multtextures (OpenGL 1.3)
+	if (!vw_GetDevCaps().OpenGL_1_3_supported) {
+		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
+#ifdef WIN32
+		MessageBox(nullptr,
+			   "OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.",
+			   "Render system - Fatal Error",
+			   MB_OK | MB_APPLMODAL | MB_ICONERROR);
+#endif // WIN32
+		return false;
+	}
+
+	if (FirstStart) {
+		if (vw_GetDevCaps().OpenGL_3_0_supported) {
+			ChangeGameConfig().UseGLSL120 = true;
+			ChangeGameConfig().ShadowMap = 1;
+			ChangeGameConfig().MSAA = 2;
+			ChangeGameConfig().CSAA = 2;
+			ChangeGameConfig().AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
+			ChangeGameConfig().MaxPointLights = 4;
+		}
+		if (vw_GetDevCaps().OpenGL_4_2_supported) {
+			ChangeGameConfig().ShadowMap = 1;
+			ChangeGameConfig().MSAA = 4;
+			ChangeGameConfig().CSAA = 4;
+			ChangeGameConfig().MaxPointLights = 6;
+		}
+	}
+
+	// since we need shaders version 120, check OpenGL 2.1 (and 2.0)
+	if (GameConfig().UseGLSL120 &&
+	    (!vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported))
+		ChangeGameConfig().UseGLSL120 = false;
+
+	// for shadowmap we need shaders and fbo support
+	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
+	    !vw_GetDevCaps().OpenGL_2_1_supported ||
+	    !vw_GetDevCaps().OpenGL_3_0_supported ||
+	    (vw_GetDevCaps().MaxTextureWidth < 2048))
+		ChangeGameConfig().ShadowMap = 0;
+
+	// check MSAA/CSAA mode from cofig
+	bool FoundAAMode{false};
+	for (auto &Sample : vw_GetDevCaps().MultisampleCoverageModes) {
+		if ((GameConfig().MSAA == Sample.ColorSamples) &&
+		    (GameConfig().CSAA == Sample.CoverageSamples)) {
+			FoundAAMode = true;
+			break;
+		}
+	}
+	if (!FoundAAMode) {
+		ChangeGameConfig().MSAA = 0;
+		ChangeGameConfig().CSAA = 0;
+	}
+
+	SaveXMLConfigFile();
 	return true;
 }
 
@@ -243,7 +292,13 @@ int main(int argc, char **argv)
 	if (!vw_InitAudio())
 		std::cerr << __func__ << "(): " << "Unable to open audio.\n\n";
 
-	// TODO check user preferred locale first
+	if (FirstStart) {
+		unsigned DetectedLanguage = FindPreferredLanguageByLocale(); // should be called after vw_InitText()
+		if (DetectedLanguage) {
+			ChangeGameConfig().MenuLanguage = DetectedLanguage;
+			ChangeGameConfig().VoiceLanguage = DetectedLanguage;
+		}
+	}
 	vw_SetTextLanguage(GameConfig().MenuLanguage);
 
 ReCreateWindow:
@@ -252,7 +307,11 @@ ReCreateWindow:
 	InitDialogBoxes();
 
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
-			     GameConfig().Fullscreen, GameConfig().DisplayIndex)) {
+			     GameConfig().Fullscreen, GameConfig().DisplayIndex) ||
+	    !vw_CreateOpenGLContext(GameConfig().VSync) ||
+	    !CheckOpenGLCapabilities(FirstStart)) {
+		vw_DeleteOpenGLContext();
+		vw_DestroyWindow();
 		vw_ShutdownFont();
 		vw_ReleaseText();
 		vw_ShutdownAudio();
@@ -263,117 +322,8 @@ ReCreateWindow:
 		return 1;
 	}
 
-	if (!vw_CreateOpenGLContext(GameConfig().VSync)) {
-		vw_ShutdownFont();
-		vw_ReleaseText();
-		vw_ShutdownAudio();
-		vw_ShutdownVFS();
-		JoystickClose();
-		vw_ReleaseAllTimeThread();
-		SDL_Quit();
-		return 1;
-	}
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем возможности железа
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// проверка поддержки шейдеров
-	// т.к. у нас шейдеры версии 120, проверяем версию OpenGL 2.0 и 2.1
-	if (GameConfig().UseGLSL120 &&
-	    (!vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported))
-		ChangeGameConfig().UseGLSL120 = false;
-
-	// анализ системы только если это первый запуск
-	if (FirstStart) {
-		// если железо поддерживает OpenGL 3.0
-		if (vw_GetDevCaps().OpenGL_3_0_supported) {
-			// 100% держит наши шейдеры
-			ChangeGameConfig().UseGLSL120 = true;
-			ChangeGameConfig().ShadowMap = 1;
-			// немного больше ставим другие опции
-			ChangeGameConfig().MSAA = 2;
-			ChangeGameConfig().CSAA = 2;
-			ChangeGameConfig().AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
-			ChangeGameConfig().MaxPointLights = 4;
-		}
-		// если железо поддерживает OpenGL 4.2
-		if (vw_GetDevCaps().OpenGL_4_2_supported) {
-			// немного больше ставим другие опции
-			ChangeGameConfig().ShadowMap = 1;
-			ChangeGameConfig().MSAA = 4;
-			ChangeGameConfig().CSAA = 4;
-			ChangeGameConfig().MaxPointLights = 6;
-		}
-	}
-
-	// если не поддерживает железо фбо или шейдеры, выключаем шадовмеп
-	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
-	    !vw_GetDevCaps().OpenGL_2_1_supported ||
-	    !vw_GetDevCaps().OpenGL_3_0_supported ||
-	    (vw_GetDevCaps().MaxTextureWidth < 2048))
-		ChangeGameConfig().ShadowMap = 0;
-
-	// check MSAA/CSAA mode
-	bool FoundAAMode{false};
-	for (auto &Sample : vw_GetDevCaps().MultisampleCoverageModes) {
-		if ((GameConfig().MSAA == Sample.ColorSamples) &&
-		    (GameConfig().CSAA == Sample.CoverageSamples)) {
-			FoundAAMode = true;
-			break;
-		}
-	}
-	if (!FoundAAMode) {
-		ChangeGameConfig().MSAA = 0;
-		ChangeGameConfig().CSAA = 0;
-	}
-
-
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// завершаем инициализацию
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_InitOpenGLStuff(GameConfig().Width, GameConfig().Height,
 			   &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
-
-
-	// вторичная работа с настройками
-	// в процессе инициализации opengl контекста мы подключаем указатели на функции, и данные могут измениться
-
-
-	// hardware must support multtextures
-	if (!vw_GetDevCaps().OpenGL_1_3_supported) {
-		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
-#ifdef WIN32
-		MessageBox(nullptr, "OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.",
-			   "Render system - Fatal Error", MB_OK | MB_APPLMODAL | MB_ICONERROR);
-#endif // WIN32
-		vw_ShutdownFont();
-		vw_ReleaseText();
-		vw_ShutdownAudio();
-		vw_ShutdownVFS();
-		JoystickClose();
-		vw_ReleaseAllTimeThread();
-		SDL_Quit();
-		return 1;
-	}
-
-	// сохраняем данные во время первого старта сразу после инициализации "железа"
-	// в случае некорректного завершения игры, файл настроек будет содержать актуальные параметры
-	if (FirstStart)
-		SaveXMLConfigFile();
-
-
-
-
 
 	// setup internal game resolution
 	if (StandardAspectRation({GameConfig().Width, GameConfig().Height}))
