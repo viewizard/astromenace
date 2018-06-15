@@ -107,4 +107,12 @@ void ChangeDisplayIndex(int NewDisplayIndex);
 // Check for standard aspect ratio.
 bool StandardAspectRation(const sViewSize &ViewSize);
 
+/*
+ * Locale
+ */
+
+// Find appropriate game language by user preferred locale.
+// Note, this function should be called after vw_InitText().
+unsigned int FindPreferredLanguageByLocale();
+
 #endif // PLATFORM_RELATED_H
