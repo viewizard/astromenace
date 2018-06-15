@@ -153,12 +153,18 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
 		}
 	}
 
-	// since we need shaders version 120, check OpenGL 2.1 (and 2.0)
-	if (GameConfig().UseGLSL120 &&
-	    (!vw_GetDevCaps().OpenGL_2_0_supported || !vw_GetDevCaps().OpenGL_2_1_supported))
+	// NOTE in future, use std::clamp (since C++17)
+	if (GameConfig().AnisotropyLevel > vw_GetDevCaps().MaxAnisotropyLevel)
+		ChangeGameConfig().AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
+	else if (GameConfig().AnisotropyLevel < 1)
+		ChangeGameConfig().AnisotropyLevel = 1;
+
+	// for shaders version 120, check OpenGL 2.0 and 2.1
+	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
+	    !vw_GetDevCaps().OpenGL_2_1_supported)
 		ChangeGameConfig().UseGLSL120 = false;
 
-	// for shadowmap we need shaders and fbo support
+	// for shadowmap we need shaders (OpenGL 2.0 and 2.1) and fbo (OpenGL 3.0) support
 	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
 	    !vw_GetDevCaps().OpenGL_2_1_supported ||
 	    !vw_GetDevCaps().OpenGL_3_0_supported ||
