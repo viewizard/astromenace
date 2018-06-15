@@ -47,9 +47,53 @@ language name, as distinct from "en-BZ" (English, Belize).
 /*
  * Get user preferred locale.
  */
-static std::string GetUserLocale()
+static bool GetUserLocale(std::string &NeutralLocale, std::string &RegionalLocale)
 {
-	return std::string{};
+	NeutralLocale.clear();
+	RegionalLocale.clear();
+
+#ifdef __unix
+	// LC_ALL overrides all other
+	const char *LangEnv = SDL_getenv("LC_ALL");
+
+	// LANG environment variable
+	if (!LangEnv)
+		LangEnv = SDL_getenv("LANG");
+
+	if (!LangEnv)
+		return false;
+
+	// C, POSIX
+	// en, cmn, ...
+	// en_US, en_GB, ...
+	// en@boldquot, ca@valencia, ca_ES@valencia, ...
+	// en_US.iso88591, en_US.utf8, ...
+	std::string tmpLangEnv{LangEnv};
+
+	if ((tmpLangEnv == "C") ||
+	    (tmpLangEnv == "POSIX"))
+		return false;
+
+	// chop off encoding, if specified
+	std::string::size_type tmpPos = tmpLangEnv.find('.');
+	if (tmpPos != std::string::npos)
+		tmpLangEnv.resize(tmpPos);
+
+	// chop off extra bits, if specified
+	tmpPos = tmpLangEnv.find('@');
+	if (tmpPos != std::string::npos)
+		tmpLangEnv.resize(tmpPos);
+
+	tmpPos = tmpLangEnv.find('_');
+	if (tmpPos != std::string::npos) {
+		NeutralLocale = tmpLangEnv.substr(0, tmpPos);
+		tmpLangEnv[tmpPos] = '-'; // en_US -> en-US
+		RegionalLocale = tmpLangEnv;
+	} else
+		NeutralLocale = tmpLangEnv;
+#endif
+
+	return (!NeutralLocale.empty() || !RegionalLocale.empty());
 }
 
 /*
@@ -62,9 +106,26 @@ unsigned int FindPreferredLanguageByLocale()
 	if (vw_GetLanguageListCount() < 2)
 		return 0;
 
-	std::string UserLocale =  GetUserLocale();
-	if (UserLocale.empty())
+	std::string NeutralLocale{}; // en, ru, de, ...
+	std::string RegionalLocale{}; // en-US, ru-RU, dv-MV, ...
+	if (!GetUserLocale(NeutralLocale, RegionalLocale))
 		return 0;
+
+	// check regional locale
+	if (!RegionalLocale.empty()) {
+		for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
+			if (vw_GetText("en", i) == RegionalLocale)
+				return i;
+		}
+	}
+
+	// fallback to "neutral" locale
+	if (!NeutralLocale.empty()) {
+		for (unsigned int i = 0; i < vw_GetLanguageListCount(); i++) {
+			if (vw_GetText("en", i) == NeutralLocale)
+				return i;
+		}
+	}
 
 	return 0;
 }
