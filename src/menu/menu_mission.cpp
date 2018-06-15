@@ -88,6 +88,9 @@ std::string GetCurrentMissionFileName()
 //------------------------------------------------------------------------------------
 void MissionListInit()
 {
+	if (!MissionList.empty())
+		return;
+
 	std::string ScriptName{"script/list.xml"};
 
 	// по скрипту, смотрим что загружать + считаем сколько позиций
@@ -98,9 +101,6 @@ void MissionListInit()
 		std::cerr << __func__ << "(): " << "Can't find AstroMenaceMissionList element in the: " << ScriptName << "\n";
 		return;
 	}
-
-	if (!MissionList.empty())
-		MissionList.clear();
 
 	for (const auto &xmlEntry : xmlDoc->GetRootEntry()->ChildrenList) {
 		MissionList.emplace_back();

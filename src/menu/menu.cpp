@@ -269,6 +269,7 @@ void SetMenu(eMenuStatus Menu)
 		break;
 
 	case eMenuStatus::MISSION:
+		MissionListInit();
 		vw_ResetWheelStatus();
 		// ставим нужный лист миссий
 		StartMission = 0;
