@@ -1555,7 +1555,7 @@ Dialogs with default type:
 		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, eRGBCOLOR::white, 0.7f*DialogContentTransp, vw_GetText("Language"));
 
 
-		if (DrawDialogButton128(X+34, Y+ButtonOffset-73, vw_GetText("Prev"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+34, Y+ButtonOffset-73, "<<<", DialogContentTransp)) {
 			if (GameConfig().MenuLanguage == 0)
 				ChangeGameConfig().MenuLanguage = vw_GetLanguageListCount() - 1;
 			else
@@ -1566,7 +1566,7 @@ Dialogs with default type:
 			vw_ReleaseAllFontChars();
 			GenerateFonts();
 		}
-		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, vw_GetText("Next"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, ">>>", DialogContentTransp)) {
 			if (GameConfig().MenuLanguage >= (vw_GetLanguageListCount() - 1))
 				ChangeGameConfig().MenuLanguage = 0;
 			else
