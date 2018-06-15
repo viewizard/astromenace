@@ -61,14 +61,14 @@ struct sFontList {
 
 constexpr int FontQuantity = 8;
 const sFontList FontList[FontQuantity] = {
-	{"Linux Biolinum", "font/LinBiolinumBold.ttf"},
-	{"Linux Libertine", "font/LinLibertineBold.ttf"},
+	{"Linux Biolinum", "font/LinBiolinum_RB.otf"},
+	{"Linux Libertine", "font/LinLibertine_RB.otf"},
 	{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
 	{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
 	{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
-	{"FreeFont Mono", "font/FreeMonoBold.ttf"},
-	{"FreeFont Sans", "font/FreeSansBold.ttf"},
-	{"FreeFont Serif", "font/FreeSerifBold.ttf"},
+	{"FreeFont Mono", "font/FreeMonoBold.otf"},
+	{"FreeFont Sans", "font/FreeSansBold.otf"},
+	{"FreeFont Serif", "font/FreeSerifBold.otf"},
 };
 
 
