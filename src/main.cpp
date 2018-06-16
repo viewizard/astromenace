@@ -25,6 +25,10 @@
 
 *************************************************************************************/
 
+// TODO revised shutdown/release resources code (implement hooks with dependencies list on init?)
+
+// FIXME after switch to OpenGL 2.1 (? v1.6), remove goto statement from main()
+
 #include "core/core.h"
 #include "config/config.h"
 #include "struct.h"
@@ -33,15 +37,13 @@
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
+#include "fs2vfs.h"
 #include "game.h"
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-eMenuStatus MenuStatus;
 bool Quit = false;
 bool NeedReCreate = false;
 bool SDL_MouseCurrentStatus[8]; // FIXME move to std::vector
-sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
-sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 
 
 /*

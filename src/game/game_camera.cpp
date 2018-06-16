@@ -29,6 +29,9 @@
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 
+sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
+sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
+
 
 //-----------------------------------------------------------------------------
 // локальные/защищенные переменные

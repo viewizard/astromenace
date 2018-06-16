@@ -42,17 +42,9 @@ class cEarthSpaceFighter;
 //------------------------------------------------------------------------------------
 // Main.cpp
 //------------------------------------------------------------------------------------
-extern eMenuStatus MenuStatus;
-extern sVECTOR3D GamePoint;
-extern sVECTOR3D GameCameraMovement;
-
 extern bool Quit;
 extern bool NeedReCreate;
 extern bool SDL_MouseCurrentStatus[8];
-
-void SaveGameData();
-void CodeXOR(char *Text, char *Key, int Count);
-
 
 struct sFontList {
 	const char *FontTitle;
@@ -70,14 +62,6 @@ const sFontList FontList[FontQuantity] = {
 	{"FreeFont Sans", "font/FreeSansBold.otf"},
 	{"FreeFont Serif", "font/FreeSerifBold.otf"},
 };
-
-
-
-
-//------------------------------------------------------------------------------------
-// MainFS2VFS.cpp
-//------------------------------------------------------------------------------------
-int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath);
 
 
 
@@ -199,6 +183,8 @@ extern float Button14Transp;
 extern float LastButton14UpdateTime;
 extern float MenuContentTransp;
 extern float LastMenuOnOffUpdateTime;
+
+extern eMenuStatus MenuStatus;
 
 void InitMenu();
 void SetOptionsMenu(eMenuStatus Menu);
@@ -428,7 +414,11 @@ void SetGameMissionComplete();
 
 
 
-
+//------------------------------------------------------------------------------------
+// game_camera.cpp
+//------------------------------------------------------------------------------------
+extern sVECTOR3D GamePoint;
+extern sVECTOR3D GameCameraMovement;
 
 
 

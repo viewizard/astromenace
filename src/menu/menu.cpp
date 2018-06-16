@@ -47,6 +47,7 @@ float MenuBlackTransp = 0.0f;
 bool NeedOnMenu = false;// если нужно выйти из черного
 bool NeedShowMenu = false;
 bool NeedHideMenu = false;
+eMenuStatus MenuStatus;
 eMenuStatus NextMenu;
 eMenuStatus PrevMenu{eMenuStatus::MAIN_MENU};
 
