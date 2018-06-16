@@ -39,6 +39,7 @@
 #include "gfx/star_system.h"
 #include "gfx/shadow_map.h"
 #include "ui/font.h"
+#include "main.h"
 
 
 struct sLoadList {
@@ -671,7 +672,7 @@ static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime,
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
-			Quit = true;
+			QuitFromMainLoop();
 			break;
 		default:
 			break;

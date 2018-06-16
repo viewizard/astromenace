@@ -39,11 +39,6 @@ class cEarthSpaceFighter;
 
 
 
-//------------------------------------------------------------------------------------
-// Main.cpp
-//------------------------------------------------------------------------------------
-extern bool Quit;
-extern bool NeedReCreate;
 
 struct sFontList {
 	const char *FontTitle;

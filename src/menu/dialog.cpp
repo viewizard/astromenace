@@ -28,6 +28,7 @@
 #include "../game.h"
 #include "../config/config.h"
 #include "../ui/font.h"
+#include "../main.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
@@ -565,7 +566,7 @@ Dialogs with default type:
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			Quit = true;
+			QuitFromMainLoop();
 			CloseDialog();
 		}
 		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
@@ -678,7 +679,7 @@ Dialogs with default type:
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			Quit = true;
+			QuitFromMainLoop();
 			CloseDialog();
 		}
 		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
@@ -1620,8 +1621,7 @@ Dialogs with default type:
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
 			CloseDialog();
-			Quit = true;
-			NeedReCreate = true;
+			RecreateGameWindow();
 			SaveOptionsAdvMenuTmpData();
 		}
 		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();

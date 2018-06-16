@@ -31,6 +31,7 @@
 
 #include "../game.h"
 #include "../config/config.h"
+#include "../main.h"
 
 // FIXME should be fixed, use 'include' instead
 void ChangeTexturesAnisotropyLevel();
@@ -413,8 +414,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::RestartOnAdvOptChanged);
 				else {
-					Quit = true;
-					NeedReCreate = true;
+					RecreateGameWindow();
 					SaveOptionsAdvMenuTmpData();
 				}
 			}

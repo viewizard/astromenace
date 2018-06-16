@@ -27,7 +27,9 @@
 
 // TODO revised shutdown/release resources code (implement hooks with dependencies list on init?)
 
-// FIXME after switch to OpenGL 2.1 (? v1.6), remove goto statement from main()
+// FIXME "game.h" should be replaced by individual headers
+
+// FIXME after switch to OpenGL 2.1 (? v1.5), remove goto statement from main()
 
 #include "core/core.h"
 #include "config/config.h"
@@ -40,10 +42,30 @@
 #include "fs2vfs.h"
 #include "game.h"
 
-// FIXME should be fixed, don't allow global scope interaction for local variables
-bool Quit = false;
-bool NeedReCreate = false;
+namespace {
 
+bool NeedQuitFromLoop{false};
+bool NeedRecreateWindow{false};
+
+} // unnamed namespace
+
+
+/*
+ * Quit from main loop.
+ */
+void QuitFromMainLoop()
+{
+	NeedQuitFromLoop = true;
+}
+
+/*
+ * Recreate game's window.
+ */
+void RecreateGameWindow()
+{
+	NeedQuitFromLoop = true;
+	NeedRecreateWindow = true;
+}
 
 /*
  * Initial setup on first start and video configuration check.
@@ -207,11 +229,11 @@ static void LogGameAndLibsVersion()
  */
 static void Loop()
 {
-	Quit = false;
-	NeedReCreate = false;
-	bool NeedLoop{true};
+	NeedQuitFromLoop = false;
+	NeedRecreateWindow = false;
+	bool NeedPause{false};
 
-	while (!Quit) {
+	while (!NeedQuitFromLoop) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -260,11 +282,11 @@ static void Loop()
 				switch (event.window.event) {
 				case SDL_WINDOWEVENT_FOCUS_LOST:
 				case SDL_WINDOWEVENT_MINIMIZED:
-					NeedLoop = false;
+					NeedPause = true;
 					break;
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
 				case SDL_WINDOWEVENT_RESTORED:
-					NeedLoop = true;
+					NeedPause = false;
 					break;
 				}
 				break;
@@ -286,7 +308,7 @@ static void Loop()
 			}
 		}
 
-		if (NeedLoop) {
+		if (!NeedPause) {
 			JoystickEmulateMouseMovement(vw_GetTimeThread(0));
 			Loop_Proc();
 			Audio_LoopProc();
@@ -412,7 +434,7 @@ int main(int argc, char **argv)
 	}
 	vw_SetTextLanguage(GameConfig().MenuLanguage);
 
-ReCreateWindow:
+RecreateWindow:
 
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
 			     GameConfig().Fullscreen, GameConfig().DisplayIndex) ||
@@ -473,12 +495,12 @@ ReCreateWindow:
 	// important, save config before game's window recreate
 	SaveXMLConfigFile();
 
-	if (NeedReCreate) {
+	if (NeedRecreateWindow) {
 		// if we change options during game mission with game restart, care about dialogs reset
 		InitDialogBoxes();
 		vw_ResetMouseButtons();
 		FirstStart = false;
-		goto ReCreateWindow;
+		goto RecreateWindow;
 	}
 
 	vw_ShutdownFont();
