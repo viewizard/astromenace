@@ -407,7 +407,7 @@ const std::string GameData[] = {
 	"lang/pl/menu/button_weaponry_in.tga",
 	"lang/pl/menu/button_weaponry_out.tga",
 };
-#define GameDataCount sizeof(GameData)/sizeof(GameData[0])
+constexpr unsigned GameDataCount = sizeof(GameData) / sizeof(GameData[0]);
 
 /*
  * Create game data VFS file (convert FS to VFS).
