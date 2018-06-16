@@ -202,6 +202,118 @@ static void LogGameAndLibsVersion()
 }
 
 /*
+ * Main loop.
+ */
+static void Loop()
+{
+	Quit = false;
+	NeedReCreate = false;
+	bool NeedLoop{true};
+
+	while (!Quit) {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+			case SDL_QUIT: // close window by ALT+F4 or click on window's 'close' button
+				if (MenuStatus == eMenuStatus::GAME)
+					SetCurrentDialogBox(eDialogBox::QuitNoSave);
+				else
+					SetCurrentDialogBox(eDialogBox::QuitFromGame);
+				break;
+
+			case SDL_MOUSEMOTION:
+				vw_SetMousePos(event.motion.x, event.motion.y);
+				// in case we have mouse movement, reset keyboard selected menu element
+				CurrentKeyboardSelectMenuElement = 0;
+				break;
+			case SDL_MOUSEWHEEL:
+				vw_ChangeWheelStatus(-event.wheel.y);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (event.button.button == SDL_BUTTON_LEFT) {
+					vw_SetMouseLeftClick(true);
+				}
+				if (event.button.button ==  SDL_BUTTON_RIGHT)
+					vw_SetMouseRightClick(true);
+				if (event.button.button < 8)
+					SDL_MouseCurrentStatus[event.button.button] = true;
+				break;
+			case SDL_MOUSEBUTTONUP:
+				if (event.button.button ==  SDL_BUTTON_LEFT)
+					vw_SetMouseLeftClick(false);
+				if (event.button.button ==  SDL_BUTTON_RIGHT)
+					vw_SetMouseRightClick(false);
+				if (event.button.button < 8)
+					SDL_MouseCurrentStatus[event.button.button] = false;
+				break;
+
+			case SDL_JOYBUTTONDOWN:
+				// only events from opened joystick could be here, no checks are needed
+				vw_SetMouseLeftClick(true);
+				SetJoystickButton(event.jbutton.button, true);
+				break;
+			case SDL_JOYBUTTONUP:
+				// only events from opened joystick could be here, no checks are needed
+				vw_SetMouseLeftClick(false);
+				SetJoystickButton(event.jbutton.button, false);
+				break;
+
+			case SDL_WINDOWEVENT:
+				switch (event.window.event) {
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+				case SDL_WINDOWEVENT_MINIMIZED:
+					NeedLoop = false;
+					break;
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+				case SDL_WINDOWEVENT_RESTORED:
+					NeedLoop = true;
+					break;
+				}
+				break;
+
+			case SDL_KEYUP:
+				vw_KeyStatusUpdate(event.key.keysym.sym);
+			break;
+
+			case SDL_TEXTINPUT:
+				// convert utf8 to utf32, that we need for taping
+				vw_SetCurrentUnicodeChar(event.text.text);
+#ifndef NDEBUG
+				std::cout << "TextInput, Unicode: " << event.text.text << "\n";
+#endif // NDEBUG
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		if (NeedLoop) {
+			JoystickEmulateMouseMovement(vw_GetTimeThread(0));
+			Loop_Proc();
+			Audio_LoopProc();
+		} else {
+			// turn off music
+			if (vw_IsAnyMusicPlaying())
+				vw_ReleaseAllMusic();
+
+			// pause, so, player don't lose anything
+			if ((MenuStatus == eMenuStatus::GAME) && (GameContentTransp < 1.0f)) {
+				NeedShowGameMenu = true;
+				NeedHideGameMenu = false;
+				GameContentTransp = 1.0f;
+				vw_SetTimeThreadSpeed(1, 0.0f);
+				DrawGameCursor = true;
+			}
+
+			vw_PauseTimeThreads();
+			SDL_WaitEvent(nullptr);
+			vw_ResumeTimeThreads();
+		}
+	}
+}
+
+/*
  * Main.
  */
 int main(int argc, char **argv)
@@ -341,111 +453,8 @@ ReCreateWindow:
 		SDL_MouseCurrentStatus[i] = false;
 	}
 
-	Quit = false;
-	NeedReCreate = false;
-	bool NeedLoop{true};
-
-	while (!Quit) {
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-			case SDL_QUIT: // close window by ALT+F4 or click on window's 'close' button
-				if (MenuStatus == eMenuStatus::GAME)
-					SetCurrentDialogBox(eDialogBox::QuitNoSave);
-				else
-					SetCurrentDialogBox(eDialogBox::QuitFromGame);
-				break;
-
-			case SDL_MOUSEMOTION:
-				vw_SetMousePos(event.motion.x, event.motion.y);
-				// in case we have mouse movement, reset keyboard selected menu element
-				CurrentKeyboardSelectMenuElement = 0;
-				break;
-			case SDL_MOUSEWHEEL:
-				vw_ChangeWheelStatus(-event.wheel.y);
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				if (event.button.button == SDL_BUTTON_LEFT) {
-					vw_SetMouseLeftClick(true);
-				}
-				if (event.button.button ==  SDL_BUTTON_RIGHT)
-					vw_SetMouseRightClick(true);
-				if (event.button.button < 8)
-					SDL_MouseCurrentStatus[event.button.button] = true;
-				break;
-			case SDL_MOUSEBUTTONUP:
-				if (event.button.button ==  SDL_BUTTON_LEFT)
-					vw_SetMouseLeftClick(false);
-				if (event.button.button ==  SDL_BUTTON_RIGHT)
-					vw_SetMouseRightClick(false);
-				if (event.button.button < 8)
-					SDL_MouseCurrentStatus[event.button.button] = false;
-				break;
-
-			case SDL_JOYBUTTONDOWN:
-				// only events from opened joystick could be here, no checks are needed
-				vw_SetMouseLeftClick(true);
-				SetJoystickButton(event.jbutton.button, true);
-				break;
-			case SDL_JOYBUTTONUP:
-				// only events from opened joystick could be here, no checks are needed
-				vw_SetMouseLeftClick(false);
-				SetJoystickButton(event.jbutton.button, false);
-				break;
-
-			case SDL_WINDOWEVENT:
-				switch (event.window.event) {
-				case SDL_WINDOWEVENT_FOCUS_LOST:
-				case SDL_WINDOWEVENT_MINIMIZED:
-					NeedLoop = false;
-					break;
-				case SDL_WINDOWEVENT_FOCUS_GAINED:
-				case SDL_WINDOWEVENT_RESTORED:
-					NeedLoop = true;
-					break;
-				}
-				break;
-
-			case SDL_KEYUP:
-				vw_KeyStatusUpdate(event.key.keysym.sym);
-			break;
-
-			case SDL_TEXTINPUT:
-				// convert utf8 to utf32, that we need for taping
-				vw_SetCurrentUnicodeChar(event.text.text);
-#ifndef NDEBUG
-				std::cout << "TextInput, Unicode: " << event.text.text << "\n";
-#endif // NDEBUG
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		if (NeedLoop) {
-			JoystickEmulateMouseMovement(vw_GetTimeThread(0));
-			Loop_Proc();
-			Audio_LoopProc();
-		} else {
-			// turn off music
-			if (vw_IsAnyMusicPlaying())
-				vw_ReleaseAllMusic();
-
-			// pause, so, player don't lose anything
-			if ((MenuStatus == eMenuStatus::GAME) && (GameContentTransp < 1.0f)) {
-				NeedShowGameMenu = true;
-				NeedHideGameMenu = false;
-				GameContentTransp = 1.0f;
-				vw_SetTimeThreadSpeed(1, 0.0f);
-				DrawGameCursor = true;
-			}
-
-			vw_PauseTimeThreads();
-			SDL_WaitEvent(nullptr);
-			vw_ResumeTimeThreads();
-		}
-	}
+	// Main loop.
+	Loop();
 
 	if (!NeedShowSystemCursor)
 		SDL_ShowCursor(SDL_ENABLE);
