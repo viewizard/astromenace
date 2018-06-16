@@ -304,13 +304,11 @@ int main(int argc, char **argv)
 			ChangeGameConfig().MenuLanguage = DetectedLanguage;
 			ChangeGameConfig().VoiceLanguage = DetectedLanguage;
 		}
+		SetCurrentDialogBox(eDialogBox::ChoseLanguage);
 	}
 	vw_SetTextLanguage(GameConfig().MenuLanguage);
 
 ReCreateWindow:
-
-	// if we change options during game mission with game restart, care about dialogs reset
-	InitDialogBoxes();
 
 	if (!vw_CreateWindow("AstroMenace", GameConfig().Width, GameConfig().Height,
 			     GameConfig().Fullscreen, GameConfig().DisplayIndex) ||
@@ -367,11 +365,6 @@ ReCreateWindow:
 	for (int i = 0; i < 8; i++) {
 		SDL_MouseCurrentStatus[i] = false;
 	}
-
-
-	// show dialog with language setup during first game launch
-	if (FirstStart)
-		SetCurrentDialogBox(eDialogBox::ChoseLanguage);
 
 
 	Quit = false;
@@ -510,7 +503,8 @@ ReCreateWindow:
 	// если нужно перезагрузить игру с новыми параметрами
 	if (NeedReCreate) {
 		FirstStart = false;
-
+		// if we change options during game mission with game restart, care about dialogs reset
+		InitDialogBoxes();
 		// пересоздаем окно
 		goto ReCreateWindow;
 	}
