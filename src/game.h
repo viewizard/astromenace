@@ -44,7 +44,6 @@ class cEarthSpaceFighter;
 //------------------------------------------------------------------------------------
 extern bool Quit;
 extern bool NeedReCreate;
-extern bool SDL_MouseCurrentStatus[8];
 
 struct sFontList {
 	const char *FontTitle;

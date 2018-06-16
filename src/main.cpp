@@ -43,7 +43,6 @@
 // FIXME should be fixed, don't allow global scope interaction for local variables
 bool Quit = false;
 bool NeedReCreate = false;
-bool SDL_MouseCurrentStatus[8]; // FIXME move to std::vector
 
 
 /*
@@ -232,21 +231,18 @@ static void Loop()
 				vw_ChangeWheelStatus(-event.wheel.y);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				if (event.button.button == SDL_BUTTON_LEFT) {
+				vw_SetMouseButtonStatus(event.button.button, true);
+				if (event.button.button == SDL_BUTTON_LEFT)
 					vw_SetMouseLeftClick(true);
-				}
 				if (event.button.button ==  SDL_BUTTON_RIGHT)
 					vw_SetMouseRightClick(true);
-				if (event.button.button < 8)
-					SDL_MouseCurrentStatus[event.button.button] = true;
 				break;
 			case SDL_MOUSEBUTTONUP:
+				vw_SetMouseButtonStatus(event.button.button, false);
 				if (event.button.button ==  SDL_BUTTON_LEFT)
 					vw_SetMouseLeftClick(false);
 				if (event.button.button ==  SDL_BUTTON_RIGHT)
 					vw_SetMouseRightClick(false);
-				if (event.button.button < 8)
-					SDL_MouseCurrentStatus[event.button.button] = false;
 				break;
 
 			case SDL_JOYBUTTONDOWN:
@@ -450,11 +446,6 @@ ReCreateWindow:
 
 	LoadGameData(eLoading::MenuWithLogo);
 
-	// reset mouse buttons status
-	for (int i = 0; i < 8; i++) {
-		SDL_MouseCurrentStatus[i] = false;
-	}
-
 	// Main loop.
 	Loop();
 
@@ -485,6 +476,7 @@ ReCreateWindow:
 	if (NeedReCreate) {
 		// if we change options during game mission with game restart, care about dialogs reset
 		InitDialogBoxes();
+		vw_ResetMouseButtons();
 		FirstStart = false;
 		goto ReCreateWindow;
 	}

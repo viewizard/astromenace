@@ -838,7 +838,7 @@ void GamePlayerShip()
 					if (GameConfig().MouseControl) {
 						// primary fire
 						if (primary_fire)
-							if (SDL_MouseCurrentStatus[GameConfig().MousePrimary]) {
+							if (vw_GetMouseButtonStatus(GameConfig().MousePrimary)) {
 								if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
@@ -856,7 +856,7 @@ void GamePlayerShip()
 
 						// secondary fire
 						if (secondary_fire)
-							if (SDL_MouseCurrentStatus[GameConfig().MouseSecondary]) {
+							if (vw_GetMouseButtonStatus(GameConfig().MouseSecondary)) {
 								if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
 									PlayerFighter->WeaponSetFire[i] = true;
 								} else {
@@ -874,7 +874,7 @@ void GamePlayerShip()
 
 						// альтернативное управление
 						if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 2)
-							if (SDL_MouseCurrentStatus[GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]])
+							if (vw_GetMouseButtonStatus(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]))
 								PlayerFighter->WeaponSetFire[i] = true;
 					}
 

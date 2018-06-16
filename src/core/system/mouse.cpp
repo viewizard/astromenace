@@ -34,6 +34,10 @@ namespace {
 bool MouseRightClick{false};
 // left mouse button status
 bool MouseLeftClick{false};
+// mouse button status array
+// SDL use Uint8 value type for mouse button status, that starts from 1,
+// so, this could be up to 255 buttons (in future)
+std::vector<bool> MouseButtonArray{};
 
 // X mouse pointer position
 int MouseX{0};
@@ -132,6 +136,7 @@ bool vw_GetMouseLeftClick(bool ResetStatus)
 	bool tmp = MouseLeftClick;
 	if (ResetStatus)
 		MouseLeftClick = false;
+
 	return tmp;
 }
 
@@ -151,7 +156,52 @@ bool vw_GetMouseRightClick(bool ResetStatus)
 	bool tmp = MouseRightClick;
 	if (ResetStatus)
 		MouseRightClick = false;
+
 	return tmp;
+}
+
+/*
+ * Set mouse button status.
+ */
+void vw_SetMouseButtonStatus(unsigned Button, bool NewStatus)
+{
+	assert(Button);
+
+	// note, SDL provide button's number that starts from 1
+	if (Button > MouseButtonArray.size())
+		MouseButtonArray.resize(Button, false);
+
+	MouseButtonArray[Button - 1] = NewStatus;
+}
+
+/*
+ * Get mouse button status.
+ */
+bool vw_GetMouseButtonStatus(unsigned Button)
+{
+	assert(Button);
+
+	// note, SDL provide button's number that starts from 1
+	if (Button > MouseButtonArray.size())
+		MouseButtonArray.resize(Button, false);
+
+	return MouseButtonArray[Button - 1];
+}
+
+/*
+ * Get maximum mouse button number.
+ */
+unsigned vw_GetMaxMouseButtonNum()
+{
+	return static_cast<unsigned>(MouseButtonArray.size());
+}
+
+/*
+ * Reset mouse buttons.
+ */
+void vw_ResetMouseButtons()
+{
+	std::fill(MouseButtonArray.begin(), MouseButtonArray.end(), false);
 }
 
 /*

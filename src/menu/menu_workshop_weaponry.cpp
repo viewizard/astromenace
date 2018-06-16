@@ -720,9 +720,7 @@ void ShipSlotSetupWeapon(int Slot)
 		}
 		if (DrawButton200_2(GameConfig().InternalWidth / 2+155, Ypos, TextTmp, Transp * MenuContentTransp, Off)) {
 			NeedCheck = 100;
-			for (int i = 0; i < 8; i++) {
-				SDL_MouseCurrentStatus[i] = false;
-			}
+			vw_ResetMouseButtons();
 			NewWeaponControlType = 0;
 			NewWeaponControlTypeData = 0;
 		}

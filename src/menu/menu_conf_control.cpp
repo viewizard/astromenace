@@ -137,8 +137,9 @@ void CheckMouseKeybJState()
 
 			// мышка
 			if ((NeedCheck >= 7 && NeedCheck <= 8) || NeedCheck == 100) {
-				for (int i = 0; i < 8; i++)
-					if (SDL_MouseCurrentStatus[i]) {
+				// note, SDL provide button's number that starts from 1
+				for (unsigned i = 1; i <= vw_GetMaxMouseButtonNum(); i++)
+					if (vw_GetMouseButtonStatus(i)) {
 						switch(NeedCheck) {
 						case 7:
 							ChangeGameConfig().MousePrimary = i;
@@ -347,9 +348,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	if (DrawButton128_2(X1+300, Y1-6, ButtonName, Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 7;
-			for (int i = 0; i < 8; i++) {
-				SDL_MouseCurrentStatus[i] = false;
-			}
+			vw_ResetMouseButtons();
 		}
 
 	Transp = 1.0f;
@@ -395,9 +394,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	if (DrawButton128_2(X1+300, Y1-6, ButtonName, Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 8;
-			for (int i = 0; i < 8; i++) {
-				SDL_MouseCurrentStatus[i] = false;
-			}
+			vw_ResetMouseButtons();
 		}
 
 	Transp = 1.0f;

@@ -627,8 +627,7 @@ void InitGame()
 
 
 	// сбрасываем все кнопки мыши
-	for (int i=0; i<8; i++)
-		SDL_MouseCurrentStatus[i] = false;
+	vw_ResetMouseButtons();
 	// установка мышки на центр
 	float tmpViewportWidth, tmpViewportHeight;
 	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);

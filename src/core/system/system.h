@@ -80,6 +80,14 @@ bool vw_GetMouseRightClick(bool ResetStatus);
 void vw_SetMouseLeftClick(bool NewStatus);
 // Set right mouse button status.
 void vw_SetMouseRightClick(bool NewStatus);
+// Set mouse button status.
+void vw_SetMouseButtonStatus(unsigned Button, bool NewStatus);
+// Get mouse button status.
+bool vw_GetMouseButtonStatus(unsigned Button);
+// Get maximum mouse button number.
+unsigned vw_GetMaxMouseButtonNum();
+// Reset mouse buttons.
+void vw_ResetMouseButtons();
 // Get left mouse button double click status.
 bool vw_GetMouseLeftDoubleClick(bool ResetStatus);
 // Change mouse wheel status.
