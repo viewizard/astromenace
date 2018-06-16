@@ -25,10 +25,8 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
-#ifndef STRUCT_H
-#define STRUCT_H
+#ifndef PROJ_ENUM_H
+#define PROJ_ENUM_H
 
 #include "core/base.h"
 
@@ -91,7 +89,7 @@ enum class eLoading {
 	Game
 };
 
-// music
+// music themes
 enum class eMusicTheme {
 	NONE,
 	MENU,
@@ -124,4 +122,4 @@ enum class eDialogBox {
 	RestartOnAdvOptChanged		// on mission (in-game menu), restart game on adv-option changes, warning that progress will be lost
 };
 
-#endif // STRUCT_H
+#endif // PROJ_ENUM_H

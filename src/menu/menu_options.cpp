@@ -33,9 +33,11 @@
 
 // TODO translate comments
 
-#include "../game.h"
+#include "../core/core.h"
+#include "../enum.h"
 #include "../config/config.h"
 #include "../platform/platform.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
 // FIXME should be fixed, don't allow global scope interaction for local variables

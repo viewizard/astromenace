@@ -25,7 +25,8 @@
 
 *************************************************************************************/
 
-#include "../game.h"
+#include "../core/core.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
 extern bool DragWeapon;

@@ -38,7 +38,7 @@
 #define OBJECT3D_H
 
 #include "../core/core.h"
-#include "../struct.h"
+#include "../enum.h"
 #include "../script/script.h"
 
 // FIXME should be fixed, don't allow global scope interaction for local variables

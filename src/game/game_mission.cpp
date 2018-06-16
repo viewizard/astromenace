@@ -25,9 +25,10 @@
 
 *************************************************************************************/
 
-#include "../game.h"
+#include "../core/core.h"
+#include "../enum.h"
 #include "../config/config.h"
-
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
 float MissionTitleLifeTime = 0.0f;

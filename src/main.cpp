@@ -27,20 +27,18 @@
 
 // TODO revised shutdown/release resources code (implement hooks with dependencies list on init?)
 
-// FIXME "game.h" should be replaced by individual headers
-
 // FIXME after switch to OpenGL 2.1 (? v1.5), remove goto statement from main()
 
 #include "core/core.h"
 #include "config/config.h"
-#include "struct.h"
+#include "enum.h"
 #include "build_config.h"
 #include "ui/font.h"
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
 #include "fs2vfs.h"
-#include "game.h"
+#include "game.h" // FIXME "game.h" should be replaced by individual headers
 
 namespace {
 

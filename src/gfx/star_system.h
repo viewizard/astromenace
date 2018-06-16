@@ -28,7 +28,7 @@
 #ifndef STARSYSTEM_H
 #define STARSYSTEM_H
 
-#include "../struct.h"
+#include "../enum.h"
 
 // Star system initialization.
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);

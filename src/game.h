@@ -30,14 +30,17 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "core/core.h"
-#include "struct.h"
-#include "build_config.h"
+#include "core/base.h"
 
+struct sVECTOR3D;
 class cSpaceStars;
 class cEarthSpaceFighter;
-
-
+enum class eCommand;
+enum class eMusicTheme;
+enum class eLoading;
+enum class eMenuStatus;
+enum class eGameMenuStatus;
+enum class eDialogBox;
 
 
 

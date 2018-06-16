@@ -27,12 +27,14 @@
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
-#include "../game.h"
+#include "../core/core.h"
+#include "../build_config.h"
 #include "../config/config.h"
 #include "../ui/font.h"
 #include "../script/script.h"
 #include "../object3d/object3d.h"
 #include "../gfx/star_system.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 namespace {
 

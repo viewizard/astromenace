@@ -25,8 +25,10 @@
 
 *************************************************************************************/
 
-#include "../game.h"
+#include "../core/core.h"
+#include "../enum.h"
 #include "../config/config.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
 // вот тут храним самый важный номер! - номер текущего профайла!!!

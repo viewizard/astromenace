@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// FIXME "game.h" should be replaced by individual headers
-
 // TODO we need store previous versions Top Scores and Pilot Profiles,
 //      in case player will back to old game version by some reason
 
@@ -36,7 +34,7 @@
 #include "../platform/platform.h"
 #include "../ui/font.h"
 #include "config.h"
-#include "../game.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 namespace {
 
