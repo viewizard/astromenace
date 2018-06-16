@@ -176,6 +176,32 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
 }
 
 /*
+ * Log info about game's and lib's versions.
+ */
+static void LogGameAndLibsVersion()
+{
+	std::cout << "AstroMenace " << GAME_VERSION << "\n";
+	std::cout << "VFS version " << GAME_VFS_BUILD << "\n\n";
+
+	SDL_version compiled;
+	SDL_version linked;
+	SDL_VERSION(&compiled);
+	// This function may be called safely at any time, even before SDL_Init().
+	// https://wiki.libsdl.org/SDL_GetVersion
+	SDL_GetVersion(&linked);
+	std::cout << "Compiled against SDL version "
+		  << static_cast<int>(compiled.major) << "."
+		  << static_cast<int>(compiled.minor) << "."
+		  << static_cast<int>(compiled.patch)
+		  << "\n";
+	std::cout << "Linking against SDL version "
+		  << static_cast<int>(linked.major) << "."
+		  << static_cast<int>(linked.minor) << "."
+		  << static_cast<int>(linked.patch)
+		  << "\n";
+}
+
+/*
  * Main.
  */
 int main(int argc, char **argv)
@@ -213,25 +239,7 @@ int main(int argc, char **argv)
 			NeedResetConfig = true;
 	}
 
-	std::cout << "AstroMenace " << GAME_VERSION << "\n";
-	std::cout << "VFS version " << GAME_VFS_BUILD << "\n\n";
-
-	SDL_version compiled;
-	SDL_version linked;
-	SDL_VERSION(&compiled);
-	// This function may be called safely at any time, even before SDL_Init().
-	// https://wiki.libsdl.org/SDL_GetVersion
-	SDL_GetVersion(&linked);
-	std::cout << "Compiled against SDL version "
-		  << static_cast<int>(compiled.major) << "."
-		  << static_cast<int>(compiled.minor) << "."
-		  << static_cast<int>(compiled.patch)
-		  << "\n";
-	std::cout << "Linking against SDL version "
-		  << static_cast<int>(linked.major) << "."
-		  << static_cast<int>(linked.minor) << "."
-		  << static_cast<int>(linked.patch)
-		  << "\n";
+	LogGameAndLibsVersion();
 
 	// the file I/O are initialized by default (https://wiki.libsdl.org/SDL_Init)
 	// since VFS use only file I/O, we are safe to call this one before SDL_Init()
@@ -261,7 +269,7 @@ int main(int argc, char **argv)
 		// if file not loaded - it's ok, we will work with English only
 	}
 
-	// should be called after vw_InitText(), since we need check language index numbers
+	// should be called after vw_InitText(), since we need find language index numbers
 	bool FirstStart = LoadXMLConfigFile(NeedResetConfig);
 
 	if (!VideoConfig(FirstStart)) {
