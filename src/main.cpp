@@ -25,36 +25,22 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
-#include "game.h"
+#include "core/core.h"
 #include "config/config.h"
+#include "struct.h"
+#include "build_config.h"
 #include "ui/font.h"
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
+#include "game.h"
 
-//------------------------------------------------------------------------------------
-// общие состояния и статусы
-//------------------------------------------------------------------------------------
-// текущий статус (текущее меню)
+// FIXME should be fixed, don't allow global scope interaction for local variables
 eMenuStatus MenuStatus;
-// защелка на выход, когда нужно перегрузить, а когда просто поменять режим
 bool Quit = false;
 bool NeedReCreate = false;
-
-//------------------------------------------------------------------------------------
-// управление
-//------------------------------------------------------------------------------------
-// состояние кнопок мышки
-bool SDL_MouseCurrentStatus[8];
-
-//------------------------------------------------------------------------------------
-// камера
-//------------------------------------------------------------------------------------
-// ближайшая точка, основная точка отсчета локальной системы координат игры
+bool SDL_MouseCurrentStatus[8]; // FIXME move to std::vector
 sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
-// направление движения камеры
 sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
 
 
@@ -337,35 +323,15 @@ ReCreateWindow:
 	ChangeGameConfig().InternalHeight = 768.0f;
 	vw_SetInternalResolution(GameConfig().InternalWidth, GameConfig().InternalHeight, true);
 
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// скрываем системный курсор
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!NeedShowSystemCursor)
 		SDL_ShowCursor(SDL_DISABLE);
 
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// загрузка текстур согласно моделе загрузки
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	LoadGameData(eLoading::MenuWithLogo);
 
-
-
-	// первоначальная установка курсора
-	int mouse_x, mouse_y;
-	SDL_GetMouseState(&mouse_x, &mouse_y);
-	vw_SetMousePos(mouse_x, mouse_y);
-
-	// первоначальный сброс кнопок мышки
+	// reset mouse buttons status
 	for (int i = 0; i < 8; i++) {
 		SDL_MouseCurrentStatus[i] = false;
 	}
-
 
 	Quit = false;
 	NeedReCreate = false;
@@ -375,31 +341,28 @@ ReCreateWindow:
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
-			// если нажали закрыть окно
-			case SDL_QUIT:
+			case SDL_QUIT: // close window by ALT+F4 or click on window's 'close' button
 				if (MenuStatus == eMenuStatus::GAME)
 					SetCurrentDialogBox(eDialogBox::QuitNoSave);
 				else
 					SetCurrentDialogBox(eDialogBox::QuitFromGame);
 				break;
 
-			// работаем с движением мышки
 			case SDL_MOUSEMOTION:
 				vw_SetMousePos(event.motion.x, event.motion.y);
-				// если есть перемещение мышкой - сразу убираем управление клавиатурой
+				// in case we have mouse movement, reset keyboard selected menu element
 				CurrentKeyboardSelectMenuElement = 0;
 				break;
 			case SDL_MOUSEWHEEL:
-				vw_ChangeWheelStatus(-1*event.wheel.y);
+				vw_ChangeWheelStatus(-event.wheel.y);
 				break;
-			// обрабатываем кнопки мыши
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_LEFT) {
 					vw_SetMouseLeftClick(true);
 				}
 				if (event.button.button ==  SDL_BUTTON_RIGHT)
 					vw_SetMouseRightClick(true);
-				if (event.button.button < 8) // на всякий случай небольшая проверка
+				if (event.button.button < 8)
 					SDL_MouseCurrentStatus[event.button.button] = true;
 				break;
 			case SDL_MOUSEBUTTONUP:
@@ -407,7 +370,7 @@ ReCreateWindow:
 					vw_SetMouseLeftClick(false);
 				if (event.button.button ==  SDL_BUTTON_RIGHT)
 					vw_SetMouseRightClick(false);
-				if (event.button.button < 8) // на всякий случай небольшая проверка
+				if (event.button.button < 8)
 					SDL_MouseCurrentStatus[event.button.button] = false;
 				break;
 
@@ -440,7 +403,7 @@ ReCreateWindow:
 			break;
 
 			case SDL_TEXTINPUT:
-				// устанавливаем текущий юникод нажатой клавиши
+				// convert utf8 to utf32, that we need for taping
 				vw_SetCurrentUnicodeChar(event.text.text);
 #ifndef NDEBUG
 				std::cout << "TextInput, Unicode: " << event.text.text << "\n";
@@ -457,11 +420,11 @@ ReCreateWindow:
 			Loop_Proc();
 			Audio_LoopProc();
 		} else {
-			// выключаем музыку
+			// turn off music
 			if (vw_IsAnyMusicPlaying())
 				vw_ReleaseAllMusic();
 
-			// если в игре, ставим паузу, т.е. открываем меню мгновенно
+			// pause, so, player don't lose anything
 			if ((MenuStatus == eMenuStatus::GAME) && (GameContentTransp < 1.0f)) {
 				NeedShowGameMenu = true;
 				NeedHideGameMenu = false;
@@ -488,7 +451,7 @@ ReCreateWindow:
 	vw_ReleaseAllParticleSystems();
 	vw_ReleaseAllLights();
 
-	vw_ReleaseAllFontChars(); /* call before vw_ReleaseAllTextures() */
+	vw_ReleaseAllFontChars();
 	vw_ReleaseAllTextures();
 	ShadowMap_Release();
 
@@ -497,21 +460,16 @@ ReCreateWindow:
 	vw_DeleteOpenGLContext();
 	vw_DestroyWindow();
 
-	// сохраняем настройки игры
+	// important, save config before game's window recreate
 	SaveXMLConfigFile();
 
-	// если нужно перезагрузить игру с новыми параметрами
 	if (NeedReCreate) {
-		FirstStart = false;
 		// if we change options during game mission with game restart, care about dialogs reset
 		InitDialogBoxes();
-		// пересоздаем окно
+		FirstStart = false;
 		goto ReCreateWindow;
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// завершение, освобождение памяти...
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_ShutdownFont();
 	vw_ReleaseText();
 	vw_ShutdownAudio();
@@ -519,6 +477,5 @@ ReCreateWindow:
 	JoystickClose();
 	vw_ReleaseAllTimeThread();
 	SDL_Quit();
-
 	return 0;
 }
