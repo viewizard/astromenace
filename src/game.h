@@ -40,30 +40,6 @@ class cEarthSpaceFighter;
 
 
 
-struct sFontList {
-	const char *FontTitle;
-	const char *FontFileName;
-};
-
-constexpr int FontQuantity = 8;
-const sFontList FontList[FontQuantity] = {
-	{"Linux Biolinum", "font/LinBiolinum_RB.otf"},
-	{"Linux Libertine", "font/LinLibertine_RB.otf"},
-	{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
-	{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
-	{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
-	{"FreeFont Mono", "font/FreeMonoBold.otf"},
-	{"FreeFont Sans", "font/FreeSansBold.otf"},
-	{"FreeFont Serif", "font/FreeSerifBold.otf"},
-};
-
-
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // loop_proc.cpp

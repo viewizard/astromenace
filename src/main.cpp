@@ -411,10 +411,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	if (GameConfig().FontNumber > FontQuantity)
-		ChangeGameConfig().FontNumber = 0;
-
-	InitFont(FontList[GameConfig().FontNumber].FontFileName);
+	InitFont(GetFontMetadata(GameConfig().FontNumber).FontFileName); // should be called after LoadXMLConfigFile()
 
 	vw_InitTimeThread(0);
 

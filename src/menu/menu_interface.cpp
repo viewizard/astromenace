@@ -116,32 +116,28 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Menu Font"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, GameConfig().FontNumber <= 0)) {
 		ChangeGameConfig().FontNumber--;
-		if (GameConfig().FontNumber < 0)
-			ChangeGameConfig().FontNumber = 0;
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		vw_InitFont(FontList[GameConfig().FontNumber].FontFileName);
+		vw_InitFont(GetFontMetadata(GameConfig().FontNumber).FontFileName);
 		GenerateFonts();
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, GameConfig().FontNumber >= (FontQuantity - 1))) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, (GameConfig().FontNumber + 1) >= GetFontQuantity())) {
 		ChangeGameConfig().FontNumber++;
-		if (GameConfig().FontNumber > (FontQuantity - 1))
-			ChangeGameConfig().FontNumber = FontQuantity - 1;
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
 		vw_ReleaseAllFontChars();
-		vw_InitFont(FontList[GameConfig().FontNumber].FontFileName);
+		vw_InitFont(GetFontMetadata(GameConfig().FontNumber).FontFileName);
 		GenerateFonts();
 	}
 	int Scale = 0;
-	Size = vw_TextWidth(FontList[GameConfig().FontNumber].FontTitle);
+	Size = vw_TextWidth(GetFontMetadata(GameConfig().FontNumber).FontTitle.c_str());
 	if (Size > 170) {
 		Scale = -170;
 		Size = 170;
 	}
 	SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, Scale, 0, 1.0f, eRGBCOLOR::white, ContentTransp, FontList[GameConfig().FontNumber].FontTitle);
+	vw_DrawText(X1+438+SizeI, Y1, Scale, 0, 1.0f, eRGBCOLOR::white, ContentTransp, GetFontMetadata(GameConfig().FontNumber).FontTitle.c_str());
 
 
 

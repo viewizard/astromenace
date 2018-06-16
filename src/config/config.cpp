@@ -25,14 +25,18 @@
 
 *************************************************************************************/
 
+// FIXME "game.h" should be replaced by individual headers
+
 // TODO we need store previous versions Top Scores and Pilot Profiles,
 //      in case player will back to old game version by some reason
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
-#include "../game.h"
+#include "../core/core.h"
 #include "../platform/platform.h"
+#include "../ui/font.h"
 #include "config.h"
+#include "../game.h"
 
 namespace {
 
@@ -236,7 +240,7 @@ static void CheckConfig()
 	if (Config.JoystickSecondary == -1)
 		Config.JoystickSecondary = 1;
 
-	if ((Config.FontNumber > (FontQuantity - 1)) || (Config.FontNumber < 0))
+	if ((Config.FontNumber < 0) || (Config.FontNumber >= GetFontQuantity()))
 		Config.FontNumber = 0;
 	if (Config.ControlSensivity > 10)
 		Config.ControlSensivity = 10;

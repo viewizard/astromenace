@@ -28,11 +28,26 @@
 #ifndef UI_FONT_H
 #define UI_FONT_H
 
+struct sFontMetadata {
+	std::string FontTitle{};
+	std::string FontFileName{};
+
+	sFontMetadata(const char *_FontTitle, const char *_FontFileName) :
+		FontTitle{_FontTitle},
+		FontFileName{_FontFileName}
+	{}
+};
+
 // Initialize font.
 void InitFont(const std::string &FontName);
 // Reset font size to main font size.
 void ResetFontSize();
 // Generate all in-game fonts for all sizes.
 void GenerateFonts();
+
+// Get font metadata by font number.
+const sFontMetadata &GetFontMetadata(int FontNumber);
+// Get fonts quantity.
+int GetFontQuantity();
 
 #endif // UI_FONT_H

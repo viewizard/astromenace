@@ -39,8 +39,21 @@ usage for fonts in menu elements.
 
 #include "../core/core.h"
 #include "../build_config.h"
+#include "font.h"
 
 namespace {
+
+const sFontMetadata FontList[] = {
+	{"Linux Biolinum", "font/LinBiolinum_RB.otf"},
+	{"Linux Libertine", "font/LinLibertine_RB.otf"},
+	{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
+	{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
+	{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
+	{"FreeFont Mono", "font/FreeMonoBold.otf"},
+	{"FreeFont Sans", "font/FreeSansBold.otf"},
+	{"FreeFont Serif", "font/FreeSerifBold.otf"},
+};
+constexpr int FontQuantity = sizeof(FontList) / sizeof(FontList[0]);
 
 constexpr unsigned MainFontSize{16};
 
@@ -120,4 +133,24 @@ void GenerateFonts()
 	tmpSymbols20 += vw_GetText("Money");
 	tmpSymbols20 += vw_GetText("Game Speed:");
 	GenerateFont(128, 128, 20, tmpSymbols20);
+}
+
+/*
+ * Get font metadata by font number.
+ */
+const sFontMetadata &GetFontMetadata(int FontNumber)
+{
+	if ((FontNumber < 0) ||
+	    (FontNumber >= FontQuantity))
+		FontNumber = 0;
+
+	return FontList[FontNumber];
+}
+
+/*
+ * Get fonts quantity.
+ */
+int GetFontQuantity()
+{
+	return FontQuantity;
 }
