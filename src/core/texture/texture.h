@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef Texture_H
-#define Texture_H
+#ifndef CORE_TEXTURE_TEXTURE_H
+#define CORE_TEXTURE_TEXTURE_H
 
 #include "../base.h"
 #include "../graphics/graphics.h"
@@ -70,4 +70,4 @@ bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width = nullptr, float *
 // Convert supported image file format to VW2D format.
 void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestName);
 
-#endif // Texture_H
+#endif // CORE_TEXTURE_TEXTURE_H

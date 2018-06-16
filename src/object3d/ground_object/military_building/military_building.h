@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef MILITARYBUILDING_H
-#define MILITARYBUILDING_H
+#ifndef OBJECT3D_GROUNDOBJECT_MILITARYBUILDING_MILITARYBUILDING_H
+#define OBJECT3D_GROUNDOBJECT_MILITARYBUILDING_MILITARYBUILDING_H
 
 #include "../ground_object.h"
 
@@ -51,4 +51,4 @@ public:
 
 
 
-#endif // MILITARYBUILDING_H
+#endif // OBJECT3D_GROUNDOBJECT_MILITARYBUILDING_MILITARYBUILDING_H

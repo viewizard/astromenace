@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef EXPLOSION_H
-#define EXPLOSION_H
+#ifndef OBJECT3D_EXPLOSION_EXPLOSION_H
+#define OBJECT3D_EXPLOSION_EXPLOSION_H
 
 #include "../object3d.h"
 #include "../projectile/projectile.h"
@@ -124,4 +124,4 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 
 
 
-#endif // EXPLOSION_H
+#endif // OBJECT3D_EXPLOSION_EXPLOSION_H

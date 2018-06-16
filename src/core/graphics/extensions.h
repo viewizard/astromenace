@@ -33,8 +33,8 @@ Rules for functions and variables naming:
 "_" prefix for variables.
 */
 
-#ifndef GraphicsExtensions_H
-#define GraphicsExtensions_H
+#ifndef CORE_GRAPHICS_EXTENSION_H
+#define CORE_GRAPHICS_EXTENSION_H
 
 #include "opengl.h"
 
@@ -136,4 +136,4 @@ bool __Initialize_OpenGL_3_0();
 bool __Initialize_OpenGL_4_2();
 bool __Initialize_GL_NV_framebuffer_multisample_coverage();
 
-#endif // GraphicsExtensions_H
+#endif // CORE_GRAPHICS_EXTENSION_H

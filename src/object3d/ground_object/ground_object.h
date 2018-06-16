@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef GROUNDOBJECT_H
-#define GROUNDOBJECT_H
+#ifndef OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
+#define OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
 
 #include "../object3d.h"
 #include "../weapon/weapon.h"
@@ -169,4 +169,4 @@ void	DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllGroundObject();
 
-#endif // GROUNDOBJECT_H
+#endif // OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H

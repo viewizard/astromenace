@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef BULLETEXPLOSION_H
-#define BULLETEXPLOSION_H
+#ifndef OBJECT3D_EXPLOSION_BULLETEXPLOSION_BULLETEXPLOSION_H
+#define OBJECT3D_EXPLOSION_BULLETEXPLOSION_BULLETEXPLOSION_H
 
 #include "../explosion.h"
 
@@ -42,4 +42,4 @@ public:
 	virtual ~cBulletExplosion() {};
 };
 
-#endif // BULLETEXPLOSION_H
+#endif // OBJECT3D_EXPLOSION_BULLETEXPLOSION_BULLETEXPLOSION_H

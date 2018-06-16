@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef PROJECTILE_H
-#define PROJECTILE_H
+#ifndef OBJECT3D_PROJECTILE_PROJECTILE_H
+#define OBJECT3D_PROJECTILE_PROJECTILE_H
 
 #include "../object3d.h"
 
@@ -126,4 +126,4 @@ void	DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllProjectile();
 
-#endif // PROJECTILE_H
+#endif // OBJECT3D_PROJECTILE_PROJECTILE_H

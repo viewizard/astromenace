@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef SHIPPART_H
-#define SHIPPART_H
+#ifndef OBJECT3D_SPACEOBJECT_SHIPPART_SHIPPART_H
+#define OBJECT3D_SPACEOBJECT_SHIPPART_SHIPPART_H
 
 #include "../space_object.h"
 
@@ -50,4 +50,4 @@ public:
 
 
 
-#endif // SHIPPART_H
+#endif // OBJECT3D_SPACEOBJECT_SHIPPART_SHIPPART_H

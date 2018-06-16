@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef Audio_H
-#define Audio_H
+#ifndef CORE_AUDIO_AUDIO_H
+#define CORE_AUDIO_AUDIO_H
 
 #include "../base.h"
 
@@ -94,4 +94,4 @@ void vw_ShutdownAudio();
 // Setup listener in 3D space.
 void vw_Listener(float (&ListenerPos)[3], float (&ListenerVel)[3], float (&ListenerOri)[6]);
 
-#endif // Audio_H
+#endif // CORE_AUDIO_AUDIO_H

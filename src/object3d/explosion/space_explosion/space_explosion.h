@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef SPACEEXPLOSION_H
-#define SPACEEXPLOSION_H
+#ifndef OBJECT3D_EXPLOSION_SPACEEXPLOSION_SPACEEXPLOSION_H
+#define OBJECT3D_EXPLOSION_SPACEEXPLOSION_SPACEEXPLOSION_H
 
 #include "../explosion.h"
 
@@ -43,4 +43,4 @@ public:
 };
 
 
-#endif // SPACEEXPLOSION_H
+#endif // OBJECT3D_EXPLOSION_SPACEEXPLOSION_SPACEEXPLOSION_H

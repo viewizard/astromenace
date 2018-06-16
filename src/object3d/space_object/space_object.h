@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef SPACEOBJECT_H
-#define SPACEOBJECT_H
+#ifndef OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
+#define OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
 
 #include "../object3d.h"
 #include "../explosion/space_explosion/space_explosion.h"
@@ -88,4 +88,4 @@ void	DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceObject();
 
-#endif // SPACEOBJECT_H
+#endif // OBJECT3D_SPACEOBJECT_SPACEOBJECT_H

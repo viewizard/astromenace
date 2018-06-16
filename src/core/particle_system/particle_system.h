@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef PARTICLESYSTEM_H
-#define PARTICLESYSTEM_H
+#ifndef CORE_PARTICLESYSTEM_PARTICLESYSTEM_H
+#define CORE_PARTICLESYSTEM_PARTICLESYSTEM_H
 
 #include "../base.h"
 
@@ -257,4 +257,4 @@ void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawPar
 // Update all particle systems.
 void vw_UpdateAllParticleSystems(float Time);
 
-#endif //PARTICLESYSTEM_H
+#endif // CORE_PARTICLESYSTEM_PARTICLESYSTEM_H

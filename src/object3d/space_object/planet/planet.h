@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef PLANET_H
-#define PLANET_H
+#ifndef OBJECT3D_SPACEOBJECT_PLANET_PLANET_H
+#define OBJECT3D_SPACEOBJECT_PLANET_PLANET_H
 
 #include "../space_object.h"
 
@@ -52,4 +52,4 @@ public:
 
 
 
-#endif // PLANET_H
+#endif // OBJECT3D_SPACEOBJECT_PLANET_PLANET_H

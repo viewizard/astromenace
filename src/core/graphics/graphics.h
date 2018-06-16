@@ -26,19 +26,19 @@
 *************************************************************************************/
 
 // TODO check sources, direct OpenGL usage outside 'graphics' are prohibited,
-//      for 'graphics' code - switch to "vw_*" functions-wrapers for OpenGL if possible.
+//      for 'graphics' code - switch to "vw_*" functions-wrappers for OpenGL if possible.
 
 /*
 Direct OpenGL usage outside 'graphics' are prohibited.
-'graphics' code should also use "vw_*" functions-wrapers for OpenGL if possible.
+'graphics' code should also use "vw_*" functions-wrappers for OpenGL if possible.
 
 Since OpenGL is evolving, more and more features allowed for new hardware.
-'graphics' provide "vw_*" functions-wrapers for OpenGL, that use best solutions
+'graphics' provide "vw_*" functions-wrappers for OpenGL, that use best solutions
 for current hardware (and supported by code at this moment).
 */
 
-#ifndef Graphics_H
-#define Graphics_H
+#ifndef CORE_GRAPHICS_GRAPHICS_H
+#define CORE_GRAPHICS_GRAPHICS_H
 
 #include "../base.h"
 #include "opengl.h"
@@ -584,4 +584,4 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 // Create screenshot from current OpenGL surface.
 int vw_Screenshot(int Width, int Height, const std::string &FileName);
 
-#endif // Graphics_H
+#endif // CORE_GRAPHICS_GRAPHICS_H

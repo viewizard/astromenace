@@ -29,8 +29,8 @@
 //      all glu functionality should be replaced:
 //      gluLookAt(), gluBuild2DMipmaps() and gluPerspective()
 
-#ifndef GraphicsOpenGL_H
-#define GraphicsOpenGL_H
+#ifndef CORE_GRAPHICS_OPENGL_H
+#define CORE_GRAPHICS_OPENGL_H
 
 #if defined(__APPLE__) && defined(__MACH__)
 	#define GL_GLEXT_LEGACY
@@ -69,4 +69,4 @@ using GLtexture = GLuint;
 using GLrenderbuffer = GLuint;
 using GLframebuffer = GLuint;
 
-#endif // GraphicsOpenGL_H
+#endif // CORE_GRAPHICS_OPENGL_H

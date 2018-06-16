@@ -25,12 +25,12 @@
 
 *************************************************************************************/
 
-#ifndef PROJ_MAIN_H
-#define PROJ_MAIN_H
+#ifndef MAIN_H
+#define MAIN_H
 
 // Quit from main loop.
 void QuitFromMainLoop();
 // Recreate game's window.
 void RecreateGameWindow();
 
-#endif // PROJ_MAIN_H
+#endif // MAIN_H

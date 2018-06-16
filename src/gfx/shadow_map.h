@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef SHADOWMAP_H
-#define SHADOWMAP_H
+#ifndef GFX_SHADOWMAP_H
+#define GFX_SHADOWMAP_H
 
 // Initialization.
 bool ShadowMap_Init(int Width, int Height);
@@ -45,4 +45,4 @@ float ShadowMap_Get_xPixelOffset();
 // Y offset for shader.
 float ShadowMap_Get_yPixelOffset();
 
-#endif // SHADOWMAP_H
+#endif // GFX_SHADOWMAP_H

@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef BUILD_CONFIG_H
-#define BUILD_CONFIG_H
+#ifndef BUILDCONFIG_H
+#define BUILDCONFIG_H
 
 #define GAME_VERSION		"1.3.9 git"
 #define GAME_VFS_BUILD		180615
@@ -36,4 +36,4 @@
 // Use cmake with DATADIR flag OR uncomment line below
 // #define DATADIR "/usr/share/astromenace"
 
-#endif // BUILD_CONFIG_H
+#endif // BUILDCONFIG_H

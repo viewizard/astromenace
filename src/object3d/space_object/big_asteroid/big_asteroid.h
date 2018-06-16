@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef BIGASTEROID_H
-#define BIGASTEROID_H
+#ifndef OBJECT3D_SPACEOBJECT_BIGASTEROID_BIGASTEROID_H
+#define OBJECT3D_SPACEOBJECT_BIGASTEROID_BIGASTEROID_H
 
 #include "../space_object.h"
 
@@ -51,4 +51,4 @@ public:
 
 
 
-#endif // BIGASTEROID_H
+#endif // OBJECT3D_SPACEOBJECT_BIGASTEROID_BIGASTEROID_H

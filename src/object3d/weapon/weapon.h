@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef WEAPON_H
-#define WEAPON_H
+#ifndef OBJECT3D_WEAPON_WEAPON_H
+#define OBJECT3D_WEAPON_WEAPON_H
 
 #include "../object3d.h"
 #include "../projectile/projectile.h"
@@ -133,4 +133,4 @@ void	DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllWeapon();
 
-#endif // WEAPON_H
+#endif // OBJECT3D_WEAPON_WEAPON_H

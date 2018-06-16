@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef WHEELED_H
-#define WHEELED_H
+#ifndef OBJECT3D_GROUNDOBJECT_WHEELED_WHEELED_H
+#define OBJECT3D_GROUNDOBJECT_WHEELED_WHEELED_H
 
 #include "../ground_object.h"
 
@@ -51,4 +51,4 @@ public:
 
 
 
-#endif // WHEELED_H
+#endif // OBJECT3D_GROUNDOBJECT_WHEELED_WHEELED_H

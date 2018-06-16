@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef BASEPART_H
-#define BASEPART_H
+#ifndef OBJECT3D_SPACEOBJECT_BASEPART_BASEPART_H
+#define OBJECT3D_SPACEOBJECT_BASEPART_BASEPART_H
 
 #include "../space_object.h"
 
@@ -52,4 +52,4 @@ public:
 
 
 
-#endif // BASEPART_H
+#endif // OBJECT3D_SPACEOBJECT_BASEPART_BASEPART_H

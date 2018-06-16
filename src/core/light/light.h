@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef LIGHT_H
-#define LIGHT_H
+#ifndef CORE_LIGHT_LIGHT_H
+#define CORE_LIGHT_LIGHT_H
 
 #include "../base.h"
 
@@ -103,4 +103,4 @@ std::weak_ptr<cLight> vw_CreatePointLight(const sVECTOR3D &Location,
 // Get main direct light. Usually, first one is the main.
 bool vw_GetMainDirectLight(std::weak_ptr<cLight> &Light);
 
-#endif // LIGHT_H
+#endif // CORE_LIGHT_LIGHT_H

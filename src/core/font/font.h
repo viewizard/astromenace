@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef FONT_H
-#define FONT_H
+#ifndef CORE_FONT_FONT_H
+#define CORE_FONT_FONT_H
 
 #include "../base.h"
 
@@ -58,4 +58,4 @@ int vw_TextWidth(const char *Text, ...);
 int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		const sRGBCOLOR &Color, float Transp, const char *Text, ...);
 
-#endif // FONT_H
+#endif // CORE_FONT_FONT_H

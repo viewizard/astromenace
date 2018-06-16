@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef TRACKED_H
-#define TRACKED_H
+#ifndef OBJECT3D_GROUNDOBJECT_TRACKED_TRACKED_H
+#define OBJECT3D_GROUNDOBJECT_TRACKED_TRACKED_H
 
 #include "../ground_object.h"
 
@@ -51,4 +51,4 @@ public:
 
 
 
-#endif // TRACKED_H
+#endif // OBJECT3D_GROUNDOBJECT_TRACKED_TRACKED_H

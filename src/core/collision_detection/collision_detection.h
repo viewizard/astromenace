@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef COLLISIONDETECTION_H
-#define COLLISIONDETECTION_H
+#ifndef CORE_COLLISIONDETECTION_COLLISIONDETECTION_H
+#define CORE_COLLISIONDETECTION_COLLISIONDETECTION_H
 
 #include "../base.h"
 #include "../model3d/model3d.h"
@@ -57,4 +57,4 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 			    const float (&Object1RotationMatrix)[9], float Object2Radius, const sVECTOR3D &Object2Location,
 			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D *CollisionLocation);
 
-#endif // COLLISIONDETECTION_H
+#endif // CORE_COLLISIONDETECTION_COLLISIONDETECTION_H

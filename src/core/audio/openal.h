@@ -30,8 +30,8 @@ Should be used for 'sound' system internal purposes only. Don't include into oth
 sources, you are free to change or add methods to sound.h header file instead.
 */
 
-#ifndef openal_H
-#define openal_H
+#ifndef CORE_AUDIO_OPENAL_H
+#define CORE_AUDIO_OPENAL_H
 
 #include "../base.h"
 
@@ -95,4 +95,4 @@ inline bool CheckALSourceState(ALuint Source, ALint State)
 	return (tmpState == State);
 }
 
-#endif // openal_H
+#endif // CORE_AUDIO_OPENAL_H

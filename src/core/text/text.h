@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef TEXT_H
-#define TEXT_H
+#ifndef CORE_TEXT_TEXT_H
+#define CORE_TEXT_TEXT_H
 
 #include "../base.h"
 
@@ -47,4 +47,4 @@ void vw_ReleaseText();
 // Get available languages count.
 unsigned int vw_GetLanguageListCount();
 
-#endif // TEXT_H
+#endif // CORE_TEXT_TEXT_H

@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef BUILDING_H
-#define BUILDING_H
+#ifndef OBJECT3D_GROUNDOBJECT_BUILDING_BUILDING_H
+#define OBJECT3D_GROUNDOBJECT_BUILDING_BUILDING_H
 
 #include "../ground_object.h"
 
@@ -51,4 +51,4 @@ public:
 
 
 
-#endif // BUILDING_H
+#endif // OBJECT3D_GROUNDOBJECT_BUILDING_BUILDING_H

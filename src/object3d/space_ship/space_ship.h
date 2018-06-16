@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef SPACESHIP_H
-#define SPACESHIP_H
+#ifndef OBJECT3D_SPACESHIP_SPACESHIP_H
+#define OBJECT3D_SPACESHIP_SPACESHIP_H
 
 #include "../object3d.h"
 #include "../weapon/weapon.h"
@@ -224,4 +224,4 @@ void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceShip();
 
-#endif // SPACESHIP_H
+#endif // OBJECT3D_SPACESHIP_SPACESHIP_H

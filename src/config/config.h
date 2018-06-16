@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef GAME_CONFIG_H
-#define GAME_CONFIG_H
+#ifndef CONFIG_CONFIG_H
+#define CONFIG_CONFIG_H
 
 #include "../core/base.h"
 
@@ -220,4 +220,4 @@ enum class eDifficultyAction {
 };
 int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action = eDifficultyAction::Get);
 
-#endif // GAME_CONFIG_H
+#endif // CONFIG_CONFIG_H

@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef EARTHSPACEFIGHTER_H
-#define EARTHSPACEFIGHTER_H
+#ifndef OBJECT3D_SPACESHIP_EARTHSPACEFIGHTER_EARTHSPACEFIGHTER_H
+#define OBJECT3D_SPACESHIP_EARTHSPACEFIGHTER_EARTHSPACEFIGHTER_H
 
 #include "../space_ship.h"
 
@@ -65,4 +65,4 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
 
 
 
-#endif // EARTHSPACEFIGHTER_H
+#endif // OBJECT3D_SPACESHIP_EARTHSPACEFIGHTER_EARTHSPACEFIGHTER_H

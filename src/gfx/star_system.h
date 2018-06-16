@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef STARSYSTEM_H
-#define STARSYSTEM_H
+#ifndef GFX_STARSYSTEM_H
+#define GFX_STARSYSTEM_H
 
 #include "../enum.h"
 
@@ -45,4 +45,4 @@ void StarSystemDrawThirdLayer(eDrawType DrawType);
 // Release star system.
 void StarSystemRelease();
 
-#endif // STARSYSTEM_H
+#endif // GFX_STARSYSTEM_H

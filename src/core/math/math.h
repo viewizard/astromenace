@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef CoreMath_H
-#define CoreMath_H
+#ifndef CORE_MATH_MATH_H
+#define CORE_MATH_MATH_H
 
 #include "../base.h"
 
@@ -251,4 +251,4 @@ void vw_Matrix33InverseRotate(float (&Matrix33)[9]);
 // Calculate point position by transformation matrix.
 void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float (&Matrix33)[9]);
 
-#endif // CoreMath_H
+#endif // CORE_MATH_MATH_H

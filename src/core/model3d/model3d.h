@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef MODEL3D_H
-#define MODEL3D_H
+#ifndef CORE_MODEL3D_MODEL3D_H
+#define CORE_MODEL3D_MODEL3D_H
 
 #include "../base.h"
 #include "../graphics/opengl.h"
@@ -138,4 +138,4 @@ std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float Triang
 // Release all 3D models.
 void vw_ReleaseAllModel3D();
 
-#endif // MODEL3D_H
+#endif // CORE_MODEL3D_MODEL3D_H

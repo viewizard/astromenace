@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef GROUNDEXPLOSION_H
-#define GROUNDEXPLOSION_H
+#ifndef OBJECT3D_EXPLOSION_GROUNDEXPLOSION_GROUNDEXPLOSION_H
+#define OBJECT3D_EXPLOSION_GROUNDEXPLOSION_GROUNDEXPLOSION_H
 
 #include "../explosion.h"
 #include "../../ground_object/ground_object.h"
@@ -43,4 +43,4 @@ public:
 	virtual ~cGroundExplosion() {};
 };
 
-#endif // GROUNDEXPLOSION_H
+#endif // OBJECT3D_EXPLOSION_GROUNDEXPLOSION_GROUNDEXPLOSION_H

@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef PROJ_ENUM_H
-#define PROJ_ENUM_H
+#ifndef ENUM_H
+#define ENUM_H
 
 #include "core/base.h"
 
@@ -122,4 +122,4 @@ enum class eDialogBox {
 	RestartOnAdvOptChanged		// on mission (in-game menu), restart game on adv-option changes, warning that progress will be lost
 };
 
-#endif // PROJ_ENUM_H
+#endif // ENUM_H

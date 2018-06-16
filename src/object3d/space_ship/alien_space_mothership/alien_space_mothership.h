@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef ALIENSPACEMOTHERSHIP_H
-#define ALIENSPACEMOTHERSHIP_H
+#ifndef OBJECT3D_SPACESHIP_ALIENSPACEMOTHERSHIP_ALIENSPACEMOTHERSHIP_H
+#define OBJECT3D_SPACESHIP_ALIENSPACEMOTHERSHIP_ALIENSPACEMOTHERSHIP_H
 
 #include "../space_ship.h"
 
@@ -59,4 +59,4 @@ void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSys
 
 
 
-#endif // ALIENSPACEMOTHERSHIP_H
+#endif // OBJECT3D_SPACESHIP_ALIENSPACEMOTHERSHIP_ALIENSPACEMOTHERSHIP_H

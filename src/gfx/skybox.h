@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef SKYBOX_H
-#define SKYBOX_H
+#ifndef GFX_SKYBOX_H
+#define GFX_SKYBOX_H
 
 enum class eSide : unsigned {
 	RIGHT,	// The RIGHT side
@@ -46,4 +46,4 @@ void SkyBoxCreate(float X, float Y, float Z, float Width, float Height, float Le
 // Draw initialized SkyBox sides.
 void SkyBoxDraw();
 
-#endif // SKYBOX_H
+#endif // GFX_SKYBOX_H

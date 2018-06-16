@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef Core_H
-#define Core_H
+#ifndef CORE_CORE_H
+#define CORE_CORE_H
 
 #include "math/math.h"
 #include "texture/texture.h"
@@ -44,4 +44,4 @@
 #include "model3d/model3d.h"
 #include "xml/xml.h"
 
-#endif // Core_H
+#endif // CORE_CORE_H

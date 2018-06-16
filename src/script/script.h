@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef SCRIPT_H
-#define SCRIPT_H
+#ifndef SCRIPT_SCRIPT_H
+#define SCRIPT_SCRIPT_H
 
 #include "../core/core.h"
 
@@ -104,4 +104,4 @@ private:
  */
 void InterAIMode(std::list<sTimeSheet> &TimeSheetList);
 
-#endif // SCRIPT_H
+#endif // SCRIPT_SCRIPT_H

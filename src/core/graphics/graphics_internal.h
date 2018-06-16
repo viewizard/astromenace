@@ -33,8 +33,8 @@ Rules for functions and variables naming:
 "_" prefix for variables.
 */
 
-#ifndef GraphicsInternal_H
-#define GraphicsInternal_H
+#ifndef CORE_GRAPHICS_GRAPHICSINTERNAL_H
+#define CORE_GRAPHICS_GRAPHICSINTERNAL_H
 
 #include "opengl.h"
 
@@ -55,4 +55,4 @@ void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
 			   GLsizei stride, GLuint VertexBO, GLuint IndexBO);
 void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO);
 
-#endif // GraphicsInternal_H
+#endif // CORE_GRAPHICS_GRAPHICSINTERNAL_H

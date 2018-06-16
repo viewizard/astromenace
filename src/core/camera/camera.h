@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef CORE_CAMERA_CAMERA_H
+#define CORE_CAMERA_CAMERA_H
 
 #include "../base.h"
 
@@ -62,4 +62,4 @@ bool vw_SphereInFrustum(const sVECTOR3D &Point, float Radius);
 // This checks if a box is in the frustum.
 bool vw_BoxInFrustum(const sVECTOR3D &MinPoint, const sVECTOR3D &MaxPoint);
 
-#endif // CAMERA_H
+#endif // CORE_CAMERA_CAMERA_H

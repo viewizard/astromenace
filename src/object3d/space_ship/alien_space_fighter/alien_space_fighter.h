@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef ALIENSPACEFIGHTER_H
-#define ALIENSPACEFIGHTER_H
+#ifndef OBJECT3D_SPACESHIP_ALIENSPACEFIGHTER_ALIENSPACEFIGHTER_H
+#define OBJECT3D_SPACESHIP_ALIENSPACEFIGHTER_ALIENSPACEFIGHTER_H
 
 #include "../space_ship.h"
 
@@ -59,4 +59,4 @@ void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 
 
 
-#endif // ALIENSPACEFIGHTER_H
+#endif // OBJECT3D_SPACESHIP_ALIENSPACEFIGHTER_ALIENSPACEFIGHTER_H

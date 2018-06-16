@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef PLATFORM_RELATED_H
-#define PLATFORM_RELATED_H
+#ifndef PLATFORM_PLATFORM_H
+#define PLATFORM_PLATFORM_H
 
 #include "../core/base.h"
 
@@ -115,4 +115,4 @@ bool StandardAspectRation(const sViewSize &ViewSize);
 // Note, this function should be called after vw_InitText().
 unsigned int FindPreferredLanguageByLocale();
 
-#endif // PLATFORM_RELATED_H
+#endif // PLATFORM_PLATFORM_H

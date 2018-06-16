@@ -27,8 +27,8 @@
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
-#ifndef XML_H
-#define XML_H
+#ifndef CORE_XML_XML_H
+#define CORE_XML_XML_H
 
 #include "../base.h"
 
@@ -244,4 +244,4 @@ private:
 	std::map<unsigned, std::string> HashCheckMap{};
 };
 
-#endif // XML_H
+#endif // CORE_XML_XML_H

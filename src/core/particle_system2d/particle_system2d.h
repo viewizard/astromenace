@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef PARTICLESYSTEM2D_H
-#define PARTICLESYSTEM2D_H
+#ifndef CORE_PARTICLESYSTEM2D_PARTICLESYSTEM2D_H
+#define CORE_PARTICLESYSTEM2D_PARTICLESYSTEM2D_H
 
 #include "../base.h"
 
@@ -152,4 +152,4 @@ void vw_DrawAllParticleSystems2D();
 // Release all particle systems 2D.
 void vw_ReleaseAllParticleSystems2D();
 
-#endif //PARTICLESYSTEM2D_H
+#endif // CORE_PARTICLESYSTEM2D_PARTICLESYSTEM2D_H

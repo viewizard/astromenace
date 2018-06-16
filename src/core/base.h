@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef Base_H
-#define Base_H
+#ifndef CORE_BASE_H
+#define CORE_BASE_H
 
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -182,4 +182,4 @@ private:
 	F __f;
 };
 
-#endif // Base_H
+#endif // CORE_BASE_H

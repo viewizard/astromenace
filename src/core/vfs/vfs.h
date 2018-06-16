@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef VFS_H
-#define VFS_H
+#ifndef CORE_VFS_VFS_H
+#define CORE_VFS_VFS_H
 
 #include "../base.h"
 
@@ -144,4 +144,4 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName);
 // part of code. Otherwise, it will be released automatically (see. unique_ptr).
 int vw_fclose(std::unique_ptr<sFILE> &stream);
 
-#endif // VFS_H
+#endif // CORE_VFS_VFS_H

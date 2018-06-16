@@ -30,8 +30,8 @@ Should be used for 'sound' system internal purposes only. Don't include into oth
 sources, you are free to change or add methods to sound.h header file instead.
 */
 
-#ifndef Buffer_H
-#define Buffer_H
+#ifndef CORE_AUDIO_BUFFER_H
+#define CORE_AUDIO_BUFFER_H
 
 #include "../base.h"
 #include "../vfs/vfs.h"
@@ -70,4 +70,4 @@ ALuint vw_FindSoundBufferIDByName(const std::string &Name);
 // Release all sound buffers.
 void vw_ReleaseAllSoundBuffers();
 
-#endif // Buffer_H
+#endif // CORE_AUDIO_BUFFER_H

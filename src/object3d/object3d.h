@@ -34,8 +34,8 @@
 // TODO in case DeleteAfterLeaveScene is 'enabled', also should be limited by time
 //      if object was never shown on the scene (during this time), should be deleted + warning output
 
-#ifndef OBJECT3D_H
-#define OBJECT3D_H
+#ifndef OBJECT3D_OBJECT3D_H
+#define OBJECT3D_OBJECT3D_H
 
 #include "../core/core.h"
 #include "../enum.h"
@@ -239,4 +239,4 @@ bool GetMissileTargetStatus(cObject3D *TargetObject, sVECTOR3D Location, float (
 // Получение положения ближайшего врага, для мин
 cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, sVECTOR3D Location);
 
-#endif // OBJECT3D_H
+#endif // OBJECT3D_OBJECT3D_H

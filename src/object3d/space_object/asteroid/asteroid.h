@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef ASTEROID_H
-#define ASTEROID_H
+#ifndef OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H
+#define OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H
 
 #include "../space_object.h"
 
@@ -51,4 +51,4 @@ public:
 
 
 
-#endif // ASTEROID_H
+#endif // OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H

@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef PIRATESHIP_H
-#define PIRATESHIP_H
+#ifndef OBJECT3D_SPACESHIP_PIRATESHIP_PIRATESHIP_H
+#define OBJECT3D_SPACESHIP_PIRATESHIP_PIRATESHIP_H
 
 #include "../space_ship.h"
 
@@ -59,4 +59,4 @@ void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int E
 
 
 
-#endif // PIRATESHIP_H
+#endif // OBJECT3D_SPACESHIP_PIRATESHIP_PIRATESHIP_H
