@@ -462,6 +462,7 @@ ReCreateWindow:
 		if (NeedLoop) {
 			JoystickEmulateMouseMovement(vw_GetTimeThread(0));
 			Loop_Proc();
+			Audio_LoopProc();
 		} else {
 			// выключаем музыку
 			if (vw_IsAnyMusicPlaying())
