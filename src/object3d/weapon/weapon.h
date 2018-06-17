@@ -98,7 +98,7 @@ public:
 	// выстрел - вылет частиц (засветка возле ствола)
 	std::weak_ptr<cParticleSystem> Fire{};
 	sVECTOR3D FireLocation{0.0f, 0.0f, 0.0f};
-	int SoundNum{0}; // нужный номер
+	eGameSFX SFX{eGameSFX::none};
 
 	// если оружие уничтожено, делаем вырывающийся огонь
 	std::weak_ptr<cParticleSystem> DestroyedFire{};

@@ -219,13 +219,13 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 		Weapon[0]->Create(101);
 		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(101);
-		Weapon[1]->SoundNum = 0;
+		Weapon[1]->SFX = eGameSFX::none;
 		Weapon[2] = new cWeapon;
 		Weapon[2]->Create(101);
-		Weapon[2]->SoundNum = 0;
+		Weapon[2]->SFX = eGameSFX::none;
 		Weapon[3] = new cWeapon;
 		Weapon[3]->Create(101);
-		Weapon[3]->SoundNum = 0;
+		Weapon[3]->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
 		// двигатели

@@ -96,47 +96,42 @@ const sSoundMetadata MenuSFXList[] = {
 constexpr unsigned MenuSFXQuantity = sizeof(MenuSFXList) / sizeof(MenuSFXList[0]);
 
 // game sfx
-const sSoundMetadata GameSFXList[] = {
-
-	{"sfx/weapon1probl.wav", 1.0f, true},	// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
-	{"sfx/weapon2probl.wav", 1.0f, true},	// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
-	{"sfx/weapon3probl.wav", 1.0f, true},	// оружие повреждено или нечем стрелять, "лучевое/среднее" энергетическое оружие (Maser, Laser)
-	{"sfx/weapon4probl.wav", 1.0f, true},	// оружие повреждено или нечем стрелять, "мощьное" энергетическое оружие (Antimatter, Gauss)
-	{"sfx/weapon5probl.wav", 1.0f, true},	// оружие повреждено или нечем стрелять, пусковые установки (ракеты, торпеды, бомбы)
-
-	{"sfx/explosion1.wav", 1.0f, true},	// малый взрыв: ракеты
-	{"sfx/explosion2.wav", 1.0f, true},	// взрыв (обычный): торпеды, истребители землян и пиратов
-	{"sfx/explosion3.wav", 1.0f, true},	// взрыв (энергетический): ядерные бомбы, корабли пришельцев
-
-	{"sfx/weaponfire1.wav", 0.7f, true},	// выстрел, Kinetic 1
-	{"sfx/weaponfire2.wav", 0.65f, true},	// выстрел, Kinetic 2
-	{"sfx/weaponfire3.wav", 0.7f, true},	// выстрел, Kinetic 3
-	{"sfx/weaponfire4.wav", 1.0f, true},	// выстрел, Kinetic 4
-	{"sfx/weaponfire5.wav", 1.0f, true},	// выстрел, Ion 1
-	{"sfx/weaponfire6.wav", 1.0f, true},	// выстрел, Ion 2
-	{"sfx/weaponfire7.wav", 0.7f, true},	// выстрел, Ion 3
-	{"sfx/weaponfire8.wav", 0.85f, true},	// выстрел, Plasma 1
-	{"sfx/weaponfire9.wav", 0.95f, true},	// выстрел, Plasma 2
-	{"sfx/weaponfire10.wav", 0.9f, true},	// выстрел, Plasma 3
-	{"sfx/weaponfire11.wav", 0.6f, true},	// выстрел, Maser 1 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-	{"sfx/weaponfire12.wav", 0.55f, true},	// выстрел, Maser 2 - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-	{"sfx/weaponfire13.wav", 0.9f, true},	// выстрел, Antimatter
-	{"sfx/weaponfire14.wav", 0.8f, true},	// выстрел, Laser - продолжительный, пока есть луч; приоритет выше, чтобы не останавливали
-	{"sfx/weaponfire15.wav", 0.8f, true},	// выстрел, Gauss
-	{"sfx/weaponfire16.wav", 1.0f, true},	// выстрел, одиночная ракета; приоритет выше, не красиво если снимаем "хвост" эффекта
-	{"sfx/weaponfire17.wav", 1.0f, true},	// выстрел, одна ракета из группы; приоритет выше, не красиво если снимаем "хвост" эффекта
-	{"sfx/weaponfire18.wav", 1.0f, true},	// выстрел, торпеда; приоритет выше, не красиво если снимаем "хвост" эффекта
-	{"sfx/weaponfire19.wav", 1.0f, true},	// выстрел, бомба; приоритет выше, не красиво если снимаем "хвост" эффекта
-
-	{"sfx/kinetichit.wav", 1.0f, true},	// попадание и "разваливание" снаряда о корпус объекта, для Kinetic снарядов
-	{"sfx/ionhit.wav", 1.0f, true},		// попадание и "разваливание" снаряда о корпус объекта, для Ion снарядов
-	{"sfx/plasmahit.wav", 1.0f, true},	// попадание и "разваливание" снаряда о корпус объекта, для Plasma снарядов
-	{"sfx/antimaterhit.wav", 1.0f, true},	// попадание и "разваливание" снаряда о корпус объекта, для Antimatter снарядов
-	{"sfx/gausshit.wav", 1.0f, true},	// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
-
-	{"sfx/explosion4.wav", 1.0f, true}	// small explosion for asteroids
+const std::unordered_map<eGameSFX, sSoundMetadata, sEnumHash> GameSFXMap{
+	// key					metadata
+	{eGameSFX::WeaponMalfunction_Kinetic,	{"sfx/weapon1probl.wav", 1.0f, true}},
+	{eGameSFX::WeaponMalfunction_Particle,	{"sfx/weapon2probl.wav", 1.0f, true}},
+	{eGameSFX::WeaponMalfunction_Beam,	{"sfx/weapon3probl.wav", 1.0f, true}},
+	{eGameSFX::WeaponMalfunction_Energy,	{"sfx/weapon4probl.wav", 1.0f, true}},
+	{eGameSFX::WeaponMalfunction_Launcher,	{"sfx/weapon5probl.wav", 1.0f, true}},
+	{eGameSFX::Explosion_Small,		{"sfx/explosion4.wav", 1.0f, true}},
+	{eGameSFX::Explosion_Medium,		{"sfx/explosion1.wav", 1.0f, true}},
+	{eGameSFX::Explosion_Big,		{"sfx/explosion2.wav", 1.0f, true}},
+	{eGameSFX::Explosion_Big_Energy,	{"sfx/explosion3.wav", 1.0f, true}},
+	{eGameSFX::WeaponFire_Kinetic1,		{"sfx/weaponfire1.wav", 0.7f, true}},
+	{eGameSFX::WeaponFire_Kinetic2,		{"sfx/weaponfire2.wav", 0.65f, true}},
+	{eGameSFX::WeaponFire_Kinetic3,		{"sfx/weaponfire3.wav", 0.7f, true}},
+	{eGameSFX::WeaponFire_Kinetic4,		{"sfx/weaponfire4.wav", 1.0f, true}},
+	{eGameSFX::WeaponFire_Ion1,		{"sfx/weaponfire5.wav", 1.0f, true}},
+	{eGameSFX::WeaponFire_Ion2,		{"sfx/weaponfire6.wav", 1.0f, true}},
+	{eGameSFX::WeaponFire_Ion3,		{"sfx/weaponfire7.wav", 0.7f, true}},
+	{eGameSFX::WeaponFire_Plasma1,		{"sfx/weaponfire8.wav", 0.85f, true}},
+	{eGameSFX::WeaponFire_Plasma2,		{"sfx/weaponfire9.wav", 0.95f, true}},
+	{eGameSFX::WeaponFire_Plasma3,		{"sfx/weaponfire10.wav", 0.9f, true}},
+	{eGameSFX::WeaponFire_Maser1,		{"sfx/weaponfire11.wav", 0.6f, true}},
+	{eGameSFX::WeaponFire_Maser2,		{"sfx/weaponfire12.wav", 0.55f, true}},
+	{eGameSFX::WeaponFire_Antimatter,	{"sfx/weaponfire13.wav", 0.9f, true}},
+	{eGameSFX::WeaponFire_Laser,		{"sfx/weaponfire14.wav", 0.8f, true}},
+	{eGameSFX::WeaponFire_Gauss,		{"sfx/weaponfire15.wav", 0.8f, true}},
+	{eGameSFX::WeaponFire_SmallMissile,	{"sfx/weaponfire16.wav", 1.0f, true}},
+	{eGameSFX::WeaponFire_NormalMissile,	{"sfx/weaponfire17.wav", 1.0f, true}},
+	{eGameSFX::WeaponFire_Torpedo,		{"sfx/weaponfire18.wav", 1.0f, true}},
+	{eGameSFX::WeaponFire_Bomb,		{"sfx/weaponfire19.wav", 1.0f, true}},
+	{eGameSFX::Hit_Kinetic,			{"sfx/kinetichit.wav", 1.0f, true}},
+	{eGameSFX::Hit_Ion,			{"sfx/ionhit.wav", 1.0f, true}},
+	{eGameSFX::Hit_Plasma,			{"sfx/plasmahit.wav", 1.0f, true}},
+	{eGameSFX::Hit_Antimatter,		{"sfx/antimaterhit.wav", 1.0f, true}},
+	{eGameSFX::Hit_Gauss,			{"sfx/gausshit.wav", 1.0f, true}}
 };
-constexpr unsigned GameSFXQuantity = sizeof(GameSFXList) / sizeof(GameSFXList[0]);
 
 const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
 	// key					metadata (note, 'en' here, since we use vw_GetText() for file name)
@@ -233,36 +228,35 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 	// т.к. у нас со смещением же в 1 идет
 	SoundID--;
 
-	LocalVolume = LocalVolume * MenuSFXList[SoundID].VolumeCorrection;
-
 	// если это звук меню и мы его уже проигрываем, его надо перезапустить
 	int ret = vw_ReplayFirstFoundSound(MenuSFXList[SoundID].FileName);
 	if (ret)
 		return ret;
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	return vw_PlaySound(MenuSFXList[SoundID].FileName, LocalVolume,
+	return vw_PlaySound(MenuSFXList[SoundID].FileName,
+			    LocalVolume * MenuSFXList[SoundID].VolumeCorrection,
 			    GameConfig().SoundVolume / 10.0f, sVECTOR3D{},
 			    true, MenuSFXList[SoundID].AllowStop, 1);
 }
 
 /*
- * Play "3D" sfx (game sfx).
+ * Play game sfx (3D).
  */
-unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, const sVECTOR3D &Location, int AtType)
+unsigned int PlayGameSFX(eGameSFX GameSFX, float LocalVolume, const sVECTOR3D &Location, int AtType)
 {
 	if (!vw_GetAudioStatus() ||
 	    !GameConfig().SoundVolume)
 		return 0;
 
-	// т.к. у нас со смещением же в 1 идет
-	SoundID--;
+	auto tmpSFX = GameSFXMap.find(GameSFX);
+	if (tmpSFX == GameSFXMap.end())
+		return 0;
 
-	LocalVolume = LocalVolume * GameSFXList[SoundID].VolumeCorrection;
-
-	return vw_PlaySound(GameSFXList[SoundID].FileName, LocalVolume,
+	return vw_PlaySound(tmpSFX->second.FileName,
+			    LocalVolume * tmpSFX->second.VolumeCorrection,
 			    GameConfig().SoundVolume / 10.0f, Location,
-			    false, GameSFXList[SoundID].AllowStop, AtType);
+			    false, tmpSFX->second.AllowStop, AtType);
 }
 
 /*

@@ -206,7 +206,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 		// постройки, транспорт
 		GameCameraSetExplosion(ExplLocation, 0.5f); // делаем сотрясание камеры, если нужно
 		if (NeedExplosionSFX)
-			Audio_PlaySound3D(8, 1.0f, ExplLocation, 2);
+			PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
 	}
 
 

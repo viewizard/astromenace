@@ -59,8 +59,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case -215:
 		case -216:
 		case -217:
-			// просто малый взрыв
-			Audio_PlaySound3D(6, fVol, Location);
+			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
 			break;
 
 
@@ -79,8 +78,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case 204:
 		case 211:
 		case 212:
-			// разваливание снарядов
-			Audio_PlaySound3D(28, fVol, Location);
+			PlayGameSFX(eGameSFX::Hit_Kinetic, fVol, Location);
 			break;
 
 
@@ -92,8 +90,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case 101:
 		// пираты (как Ion2)
 		case 207:
-			// разваливание снарядов
-			Audio_PlaySound3D(29, fVol, Location);
+			PlayGameSFX(eGameSFX::Hit_Ion, fVol, Location);
 			break;
 
 		// Plasma
@@ -110,8 +107,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case 109:
 		// пираты (как Plasma2)
 		case 213:
-			// разваливание снарядов
-			Audio_PlaySound3D(30, fVol, Location);
+			PlayGameSFX(eGameSFX::Hit_Plasma, fVol, Location);
 			break;
 
 
@@ -130,8 +126,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case 107:
 		// пираты (как Antimatter)
 		case 208:
-			// разваливание снарядов
-			Audio_PlaySound3D(31, fVol, Location);
+			PlayGameSFX(eGameSFX::Hit_Antimatter, fVol, Location);
 			break;
 
 		// Laser - у него луч, тут не учитываем
@@ -140,8 +135,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 
 		// Gauss
 		case 15:
-			// разваливание снарядов
-			Audio_PlaySound3D(32, fVol, Location);
+			PlayGameSFX(eGameSFX::Hit_Gauss, fVol, Location);
 			break;
 
 		// ракета
@@ -153,32 +147,28 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 		case 215:
 		case 216:
 		case 217:
-			// малый взрыв
-			Audio_PlaySound3D(6, fVol, Location);
+			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
 			break;
 
 		// рой
 		case 17:
 		// ракеты пиратов
 		case 206:
-			// малый взрыв
-			Audio_PlaySound3D(6, fVol, Location);
+			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
 			break;
 
 		// торпеда
 		case 18:
 		// торпеда пиратов
 		case 209:
-			// средний взрыв
-			Audio_PlaySound3D(7, fVol, Location, 2);
+			PlayGameSFX(eGameSFX::Explosion_Big, fVol, Location, 2);
 			break;
 
 		// бомба
 		case 19:
 		// бомба пиратов
 		case 210:
-			// большой взрыв
-			Audio_PlaySound3D(8, fVol, Location, 2);
+			PlayGameSFX(eGameSFX::Explosion_Big_Energy, fVol, Location, 2);
 			break;
 
 

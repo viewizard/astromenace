@@ -800,28 +800,28 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		// малый взрыв
 		case 1:
 			// астероид
-			Audio_PlaySound3D(33, fVol, ExplLocation, 2);
+			PlayGameSFX(eGameSFX::Explosion_Small, fVol, ExplLocation, 2);
 			break;
 
 		// взрыв
 		case 2:
 			// пришельцы
-			Audio_PlaySound3D(7, fVol, ExplLocation, 2);
+			PlayGameSFX(eGameSFX::Explosion_Big, fVol, ExplLocation, 2);
 			break;
 		case 3:
 			// земляне, пираты
-			Audio_PlaySound3D(8, fVol, ExplLocation, 2);
+			PlayGameSFX(eGameSFX::Explosion_Big_Energy, fVol, ExplLocation, 2);
 			break;
 		// case 31:
 		case 32:
 			// внутренняя часть (пираты, земляне)
 			//fVol = fVol/2; // ум. т.к. их там очень много
-			Audio_PlaySound3D(8, fVol, ExplLocation, 2);
+			PlayGameSFX(eGameSFX::Explosion_Big_Energy, fVol, ExplLocation, 2);
 			break;
 		//case 33:
 		case 34:
 			// внутренняя часть (босс пришельцев)
-			Audio_PlaySound3D(7, fVol, ExplLocation, 2);
+			PlayGameSFX(eGameSFX::Explosion_Big, fVol, ExplLocation, 2);
 			break;
 		}
 	}

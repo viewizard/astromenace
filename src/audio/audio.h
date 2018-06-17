@@ -30,6 +30,44 @@
 
 #include "../core/base.h"
 
+// game sfx
+enum class eGameSFX {
+	none,
+	WeaponMalfunction_Kinetic, // Kinetic
+	WeaponMalfunction_Particle, // Ion, Plasma
+	WeaponMalfunction_Beam, // Maser, Laser
+	WeaponMalfunction_Energy, // Antimatter, Gauss
+	WeaponMalfunction_Launcher, // Missile, Torpedo, Bomb
+	Explosion_Small, // Asteroid
+	Explosion_Medium, // Missiles
+	Explosion_Big, // Torpedo, Alien Ship
+	Explosion_Big_Energy, // Bomb, Ground Object, Earth Fighter, Pirate Ship
+	WeaponFire_Kinetic1,
+	WeaponFire_Kinetic2,
+	WeaponFire_Kinetic3,
+	WeaponFire_Kinetic4,
+	WeaponFire_Ion1,
+	WeaponFire_Ion2,
+	WeaponFire_Ion3,
+	WeaponFire_Plasma1,
+	WeaponFire_Plasma2,
+	WeaponFire_Plasma3,
+	WeaponFire_Maser1,
+	WeaponFire_Maser2,
+	WeaponFire_Antimatter,
+	WeaponFire_Laser,
+	WeaponFire_Gauss,
+	WeaponFire_SmallMissile,
+	WeaponFire_NormalMissile,
+	WeaponFire_Torpedo,
+	WeaponFire_Bomb,
+	Hit_Kinetic,
+	Hit_Ion,
+	Hit_Plasma,
+	Hit_Antimatter,
+	Hit_Gauss
+};
+
 // voice
 enum class eVoicePhrase {
 	Attention,
@@ -57,8 +95,8 @@ enum class eMusicTheme {
 
 // Play "2D" sfx (menu sfx).
 unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
-// Play "3D" sfx (game sfx).
-unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, const sVECTOR3D &Location, int AtType = 1);
+// Play game sfx (3D).
+unsigned int PlayGameSFX(eGameSFX GameSFX, float LocalVolume, const sVECTOR3D &Location, int AtType = 1);
 // Play voice phrase.
 unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume);
 // Play music theme with fade-in and fade-out previous music theme (if need).

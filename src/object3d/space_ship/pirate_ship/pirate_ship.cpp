@@ -148,7 +148,7 @@ void cPirateShip::Create(int PirateShipNum)
 		WeaponLocation[1] = sVECTOR3D(-1.8f, -1.2f, 6.0f);
 		Weapon[1] = new cWeapon;
 		Weapon[1]->Create(204);
-		Weapon[1]->SoundNum = 0;
+		Weapon[1]->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
 		// двигатели

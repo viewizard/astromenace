@@ -77,7 +77,7 @@ const char *GetWeaponGroupTitle(int Num)
 
 
 struct sWeaponData {
-	int		SoundNum;
+	eGameSFX SFX;
 	bool	NeedRotateOnTargeting;
 	float	Strength;
 	int		WeaponLevel;
@@ -95,32 +95,32 @@ struct sWeaponData {
 // оружие землян 1-99
 static sWeaponData PresetEarthWeaponData[] = {
 	// Kinetic
-	{9,  true, 25,	1,	1.5f,	3000,	0.4f, sVECTOR3D(0.0f, -0.613f, 2.0f), sVECTOR3D(0.0f, -0.65f, 1.0f), "models/earthfighter/weapon5.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-	{10, true, 25,	1,	3,	1500,	0.6f, sVECTOR3D(0.0f, -0.613f, 2.93f), sVECTOR3D(0.0f, -0.6f, 1.8f), "models/earthfighter/weapon11.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-	{11, true, 30,	2,	3.5,	1000,	0.7f, sVECTOR3D(0.0f, -0.613f, 3.33f), sVECTOR3D(0.0f, -0.6f, 2.2f), "models/earthfighter/weapon13.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-	{12, true, 30,	2,	5,	7000,	0.3f, sVECTOR3D(0.0f, -0.613f, 2.33f), sVECTOR3D(0.0f, -0.6f, 1.2f), "models/earthfighter/weapon8.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic1, true, 25,	1,	1.5f,	3000,	0.4f, sVECTOR3D(0.0f, -0.613f, 2.0f), sVECTOR3D(0.0f, -0.65f, 1.0f), "models/earthfighter/weapon5.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic2, true, 25,	1,	3,	1500,	0.6f, sVECTOR3D(0.0f, -0.613f, 2.93f), sVECTOR3D(0.0f, -0.6f, 1.8f), "models/earthfighter/weapon11.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic3, true, 30,	2,	3.5,	1000,	0.7f, sVECTOR3D(0.0f, -0.613f, 3.33f), sVECTOR3D(0.0f, -0.6f, 2.2f), "models/earthfighter/weapon13.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic4, true, 30,	2,	5,	7000,	0.3f, sVECTOR3D(0.0f, -0.613f, 2.33f), sVECTOR3D(0.0f, -0.6f, 1.2f), "models/earthfighter/weapon8.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
 	// Ion
-	{13, true, 10,	1,	7,	1000,	0.7f, sVECTOR3D(0.0f, -0.43f, 2.13f), sVECTOR3D(0.0f, -0.45f, 1.5f), "models/earthfighter/weapon1.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
-	{14, true, 10,	1,	10,	2000,	0.9f, sVECTOR3D(0.0f, -0.53f, 1.86f), sVECTOR3D(0.0f, -0.5f, 1.8f), "models/earthfighter/weapon4.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
-	{15, true, 15,	2,	11.5,	3000,	1.0f, sVECTOR3D(0.0f, -0.63f, 2.26f), sVECTOR3D(0.0f, -0.65f, 2.3f), "models/earthfighter/weapon6.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Ion1, true, 10,	1,	7,	1000,	0.7f, sVECTOR3D(0.0f, -0.43f, 2.13f), sVECTOR3D(0.0f, -0.45f, 1.5f), "models/earthfighter/weapon1.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Ion2, true, 10,	1,	10,	2000,	0.9f, sVECTOR3D(0.0f, -0.53f, 1.86f), sVECTOR3D(0.0f, -0.5f, 1.8f), "models/earthfighter/weapon4.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Ion3, true, 15,	2,	11.5,	3000,	1.0f, sVECTOR3D(0.0f, -0.63f, 2.26f), sVECTOR3D(0.0f, -0.65f, 2.3f), "models/earthfighter/weapon6.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
 	// Plasma
-	{16, true, 10,	2,	20,	2000,	0.6f, sVECTOR3D(0.0f, -0.613f, 2.0f), sVECTOR3D(0.0f, -0.65f, 1.8f), "models/earthfighter/weapon3.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-	{17, true, 15,	2,	30,	1000,	0.7f, sVECTOR3D(0.0f, -0.8f, 1.86f), sVECTOR3D(0.0f, -0.8f, 1.8f), "models/earthfighter/weapon2.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-	{18, true, 10,	3,	50,	800,	0.9f, sVECTOR3D(0.0f, -0.613f, 1.2f), sVECTOR3D(0.0f, -0.7f, 1.6f), "models/earthfighter/weapon7.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Plasma1, true, 10,	2,	20,	2000,	0.6f, sVECTOR3D(0.0f, -0.613f, 2.0f), sVECTOR3D(0.0f, -0.65f, 1.8f), "models/earthfighter/weapon3.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	30,	1000,	0.7f, sVECTOR3D(0.0f, -0.8f, 1.86f), sVECTOR3D(0.0f, -0.8f, 1.8f), "models/earthfighter/weapon2.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Plasma3, true, 10,	3,	50,	800,	0.9f, sVECTOR3D(0.0f, -0.613f, 1.2f), sVECTOR3D(0.0f, -0.7f, 1.6f), "models/earthfighter/weapon7.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Maser
-	{19, true, 10,	3,	50,	800,	3.0f, sVECTOR3D(0.0f, -0.55f, 2.1f), sVECTOR3D(0.0f, -0.55f, 1.4f), "models/earthfighter/weapon10.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-	{20, true, 15,	4,	80,	1000,	2.4f, sVECTOR3D(0.0f, -0.55f, 2.5f), sVECTOR3D(0.0f, -0.55f, 1.8f), "models/earthfighter/weapon9.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Maser1, true, 10,	3,	50,	800,	3.0f, sVECTOR3D(0.0f, -0.55f, 2.1f), sVECTOR3D(0.0f, -0.55f, 1.4f), "models/earthfighter/weapon10.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Maser2, true, 15,	4,	80,	1000,	2.4f, sVECTOR3D(0.0f, -0.55f, 2.5f), sVECTOR3D(0.0f, -0.55f, 1.8f), "models/earthfighter/weapon9.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Antimatter
-	{21, true, 20,	4,	50,	5000,	0.8f, sVECTOR3D(0.0f, -0.65f, 2.1f), sVECTOR3D(0.0f, -0.65f, 1.9f), "models/earthfighter/weapon12.vw3d", "models/earthfighter/sf-text09.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Antimatter, true, 20,	4,	50,	5000,	0.8f, sVECTOR3D(0.0f, -0.65f, 2.1f), sVECTOR3D(0.0f, -0.65f, 1.9f), "models/earthfighter/weapon12.vw3d", "models/earthfighter/sf-text09.vw2d", "models/earthfighter/sf-illum02.vw2d"},
 	// Laser
-	{22, true, 15,	5,	150,	800,	1.2f, sVECTOR3D(0.0f, -0.6f, 2.5f), sVECTOR3D(0.0f, -0.6f, 2.1f), "models/earthfighter/weapon14.vw3d", "models/earthfighter/sf-text05.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Laser, true, 15,	5,	150,	800,	1.2f, sVECTOR3D(0.0f, -0.6f, 2.5f), sVECTOR3D(0.0f, -0.6f, 2.1f), "models/earthfighter/weapon14.vw3d", "models/earthfighter/sf-text05.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Gauss
-	{23, true, 20,	5,	150,	2000,	0.7f, sVECTOR3D(0.0f, -0.65f, 3.6f), sVECTOR3D(0.0f, -0.55f, 2.2f), "models/earthfighter/weapon15.vw3d", "models/earthfighter/sf-text08.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Gauss, true, 20,	5,	150,	2000,	0.7f, sVECTOR3D(0.0f, -0.65f, 3.6f), sVECTOR3D(0.0f, -0.55f, 2.2f), "models/earthfighter/weapon15.vw3d", "models/earthfighter/sf-text08.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Missiles
-	{24, false, 30,	4,	5,	200,	3.0f, sVECTOR3D(0.0f, -0.8f, 4.7f), sVECTOR3D(0.0f, -0.9f, 1.5f), "models/earthfighter/lnch1.vw3d", "models/earthfighter/lnch12.tga", ""},
-	{25, false, 30,	4,	15,	400,	8.0f, sVECTOR3D(0.2f, -0.95f, 2.6f), sVECTOR3D(0.0f, -0.6f, 1.0f), "models/earthfighter/lnch2.vw3d", "models/earthfighter/lnch12.tga", ""},
-	{26, false, 25,	5,	10,	50,	8.0f, sVECTOR3D(0.0f, -0.95f, 4.0f), sVECTOR3D(0.0f, -0.9f, 1.5f), "models/earthfighter/lnch3.vw3d", "models/earthfighter/lnch34.tga", ""},
-	{27, false, 30,	5,	15,	25,	10.0f, sVECTOR3D(0.0f, -0.95f, 5.0f), sVECTOR3D(0.0f, -0.9f, 1.8f), "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""},
+	{eGameSFX::WeaponFire_SmallMissile, false, 30,	4,	5,	200,	3.0f, sVECTOR3D(0.0f, -0.8f, 4.7f), sVECTOR3D(0.0f, -0.9f, 1.5f), "models/earthfighter/lnch1.vw3d", "models/earthfighter/lnch12.tga", ""},
+	{eGameSFX::WeaponFire_NormalMissile, false, 30,	4,	15,	400,	8.0f, sVECTOR3D(0.2f, -0.95f, 2.6f), sVECTOR3D(0.0f, -0.6f, 1.0f), "models/earthfighter/lnch2.vw3d", "models/earthfighter/lnch12.tga", ""},
+	{eGameSFX::WeaponFire_Torpedo, false, 25,	5,	10,	50,	8.0f, sVECTOR3D(0.0f, -0.95f, 4.0f), sVECTOR3D(0.0f, -0.9f, 1.5f), "models/earthfighter/lnch3.vw3d", "models/earthfighter/lnch34.tga", ""},
+	{eGameSFX::WeaponFire_Bomb, false, 30,	5,	15,	25,	10.0f, sVECTOR3D(0.0f, -0.95f, 5.0f), sVECTOR3D(0.0f, -0.9f, 1.8f), "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""},
 };
 #define PresetEarthWeaponDataCount sizeof(PresetEarthWeaponData)/sizeof(PresetEarthWeaponData[0])
 
@@ -130,25 +130,25 @@ static sWeaponData PresetEarthWeaponData[] = {
 // оружие пришельцев 101-199
 static sWeaponData PresetAlienWeaponData[] = {
 	// оружие пришельцев (как Kinetic1)
-	{14, true, 1.0f,	1,	1,	5000,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Ion2, true, 1.0f,		1,	1,	5000,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (с наведением, как Kinetic2)
-	{16, false, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma1, false, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (как Kinetic3)
-	{17, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (с наведением, как Kinetic3)
-	{17, false, 1.0f,	1,	1,	2500,	2.5f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, false, 1.0f,	1,	1,	2500,	2.5f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (как Kinetic2)
-	{16, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma1, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев для выброса мин (1 типа)
-	{21, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев для выброса мин (2 типа)
-	{21, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (как Plasma3)
-	{18, true, 10,		3,	50,	800,	0.9f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma3, true, 10,	3,	50,	800,	0.9f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (как Plasma2)
-	{17, true, 15,		2,	25,	1000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (как Laser) для больших кораблей
-	{22, true, 15,		5,	150,	800,	1.2f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Laser, true, 15,		5,	150,	800,	1.2f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 
 
 
@@ -162,42 +162,42 @@ static sWeaponData PresetAlienWeaponData[] = {
 // оружие пиратов 201-299
 static sWeaponData PresetPirateWeaponData[] = {
 	// турель для кораблей пиратов
-	{9, false, 10,		1,	1,	3000,	0.7f, sVECTOR3D(0.0f, 1.5f, 1.0f), sVECTOR3D(0.0f, 1.5f, 1.0f), "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
+	{eGameSFX::WeaponFire_Kinetic1, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D(0.0f, 1.5f, 1.0f), sVECTOR3D(0.0f, 1.5f, 1.0f), "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
 	// турель для кораблей пиратов
-	{10, false, 10,		1,	1,	3000,	0.7f, sVECTOR3D(0.0f, 1.0f, 0.0f), sVECTOR3D(0.0f, 1.0f, 0.0f), "models/turret/turret-02.vw3d", "models/turret/turrets.tga", ""},
+	{eGameSFX::WeaponFire_Kinetic2, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D(0.0f, 1.0f, 0.0f), sVECTOR3D(0.0f, 1.0f, 0.0f), "models/turret/turret-02.vw3d", "models/turret/turrets.tga", ""},
 
 	// оружие пиратов - отстрел фларес для больших кораблей
-	{9, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic1, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 
 	// как Kinetic1
-	{9, true, 10,	1,	1.7f,		3000,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic1, true, 10,	1,	1.7f,	3000,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Missile1
-	{24, false, 80,	4,	5,		200,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_SmallMissile, false, 80,	4,	5,	200,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Missile2
-	{25, false, 30,	4,	5,		800,	8.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_NormalMissile, false, 30,	4,	5,	800,	8.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Ion2
-	{14, true, 10,	1,	10,		2000,	0.9f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Ion2, true, 10,	1,	10,		2000,	0.9f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Antimatter
-	{21, true, 20,	4,	50,		5000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Antimatter, true, 20,	4,	50,	5000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Missile3 (торпеда)
-	{26, false, 25,	5,	10,		200,	8.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Torpedo, false, 25,	5,	10,	200,	8.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Missile4 (бомба)
-	{27, false, 30,	5,	15,		100,	10.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Bomb, false, 30,	5,	15,		100,	10.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Kinetic2
-	{10, true, 25,	1,	3,		1500,	0.6f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic2, true, 25,	1,	3,	1500,	0.6f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Kinetic3
-	{11, true, 30,	2,	3.5,		500,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic3, true, 30,	2,	3.5,	500,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// как Plasma2
-	{17, true, 15,	2,	25,		1000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 
 	// мина1 (простое наведение по высоте)
-	{26, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// мина2 (наведение по высоте + приближение)
-	{26, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// мина3 (наведение по высоте + стрельба снарядами)
-	{27, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// мина4 (наведение по высоте + стрельба ракетами)
-	{27, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 
 
 };
@@ -278,7 +278,7 @@ void cWeapon::Create(int WeaponNum)
 		WeaponLevel = PresetEarthWeaponData[WeaponNum-1].WeaponLevel;
 		Ammo = AmmoStart =  PresetEarthWeaponData[WeaponNum-1].Ammo;
 		NextFireTime =  PresetEarthWeaponData[WeaponNum-1].NextFireTime;
-		SoundNum = PresetEarthWeaponData[WeaponNum-1].SoundNum;
+		SFX = PresetEarthWeaponData[WeaponNum-1].SFX;
 		NeedRotateOnTargeting = PresetEarthWeaponData[WeaponNum-1].NeedRotateOnTargeting;
 
 		CurrentEnergyAccumulated = EnergyUse = PresetEarthWeaponData[WeaponNum-1].EnergyUse;
@@ -312,7 +312,7 @@ void cWeapon::Create(int WeaponNum)
 		WeaponLevel = PresetAlienWeaponData[IntWeaponNum-1].WeaponLevel;
 		Ammo = AmmoStart =  PresetAlienWeaponData[IntWeaponNum-1].Ammo;
 		NextFireTime =  PresetAlienWeaponData[IntWeaponNum-1].NextFireTime;
-		SoundNum = PresetAlienWeaponData[IntWeaponNum-1].SoundNum;
+		SFX = PresetAlienWeaponData[IntWeaponNum-1].SFX;
 		NeedRotateOnTargeting = PresetAlienWeaponData[IntWeaponNum-1].NeedRotateOnTargeting;
 
 		CurrentEnergyAccumulated = EnergyUse = PresetAlienWeaponData[IntWeaponNum-1].EnergyUse;
@@ -330,7 +330,7 @@ void cWeapon::Create(int WeaponNum)
 		WeaponLevel = PresetPirateWeaponData[IntWeaponNum-1].WeaponLevel;
 		Ammo = AmmoStart =  PresetPirateWeaponData[IntWeaponNum-1].Ammo;
 		NextFireTime =  PresetPirateWeaponData[IntWeaponNum-1].NextFireTime;
-		SoundNum = PresetPirateWeaponData[IntWeaponNum-1].SoundNum;
+		SFX = PresetPirateWeaponData[IntWeaponNum-1].SFX;
 		NeedRotateOnTargeting = PresetPirateWeaponData[IntWeaponNum-1].NeedRotateOnTargeting;
 
 		CurrentEnergyAccumulated = EnergyUse = PresetPirateWeaponData[IntWeaponNum-1].EnergyUse;
@@ -625,9 +625,9 @@ bool cWeapon::Update(float Time)
 
 
 				// звук...
-				if (SoundNum != 0) {
+				if (SFX != eGameSFX::none) {
 					float fVol = 1.0f;
-					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location);
+					PlayGameSFX(SFX, fVol, Projectile->Location);
 				}
 
 
@@ -681,9 +681,9 @@ bool cWeapon::Update(float Time)
 
 
 				// звук...
-				if (SoundNum != 0) {
+				if (SFX != eGameSFX::none) {
 					float fVol = 1.0f;
-					Audio_PlaySound3D(SoundNum, fVol, Projectile->Location);
+					PlayGameSFX(SFX, fVol, Projectile->Location);
 				}
 
 				SwampNum--;
@@ -1023,7 +1023,7 @@ bool cWeapon::WeaponFire(float Time)
 			case 2:
 			case 3:
 			case 4:
-				Audio_PlaySound3D(1, fVol, Location);
+				PlayGameSFX(eGameSFX::WeaponMalfunction_Kinetic, fVol, Location);
 				break;
 
 			// Ion
@@ -1034,7 +1034,7 @@ bool cWeapon::WeaponFire(float Time)
 			case 8:
 			case 9:
 			case 10:
-				Audio_PlaySound3D(2, fVol, Location);
+				PlayGameSFX(eGameSFX::WeaponMalfunction_Particle, fVol, Location);
 				break;
 
 			// Maser
@@ -1042,14 +1042,14 @@ bool cWeapon::WeaponFire(float Time)
 			case 12:
 			// Laser
 			case 14:
-				Audio_PlaySound3D(3, fVol, Location);
+				PlayGameSFX(eGameSFX::WeaponMalfunction_Beam, fVol, Location);
 
 				break;
 			// Antimatter
 			case 13:
 			// Gauss
 			case 15:
-				Audio_PlaySound3D(4, fVol, Location);
+				PlayGameSFX(eGameSFX::WeaponMalfunction_Energy, fVol, Location);
 				break;
 
 			// ракета
@@ -1060,7 +1060,7 @@ bool cWeapon::WeaponFire(float Time)
 			case 18:
 			// бомба
 			case 19:
-				Audio_PlaySound3D(5, fVol, Location);
+				PlayGameSFX(eGameSFX::WeaponMalfunction_Launcher, fVol, Location);
 				break;
 			}
 
@@ -1212,9 +1212,9 @@ bool cWeapon::WeaponFire(float Time)
 
 
 	// звук...
-	if (SoundNum != 0) {
+	if (SFX != eGameSFX::none) {
 		float fVol = 1.0f;
-		LaserMaserSoundNum = Audio_PlaySound3D(SoundNum, fVol, Location+FireLocation);
+		LaserMaserSoundNum = PlayGameSFX(SFX, fVol, Location+FireLocation);
 		// если не надо сохранять
 		if (LaserMaser == nullptr)
 			LaserMaserSoundNum = 0;
