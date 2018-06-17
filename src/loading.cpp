@@ -780,8 +780,7 @@ static void PostLoadGameData(eLoading LoadType)
 	case eLoading::Game:
 		InitGame();
 		StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
-		// приготовиться к действию (речь)
-		Audio_PlayVoice(5, 1.0f);
+		PlayVoicePhrase(eVoicePhrase::PrepareForAction, 1.0f);
 		break;
 
 	default:

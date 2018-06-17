@@ -460,8 +460,7 @@ void GamePlayerShip()
 			// проверяем, действительно еще играем (играем только 1 раз!)
 			if (!vw_IsSoundAvailable(VoiceMissileDetected) &&
 			    !VoiceMissileDetectedStatus) {
-				// уже не играем, нужно запустить опять
-				VoiceMissileDetected = Audio_PlayVoice(3, 1.0f);
+				VoiceMissileDetected = PlayVoicePhrase(eVoicePhrase::MissileDetected, 1.0f);
 				VoiceMissileDetectedStatus = true;
 			}
 
@@ -527,10 +526,8 @@ void GamePlayerShip()
 		if (CollisionDetected) {
 			// голос, ворнинг, можем столкнуться с объектом
 			// проверяем, действительно еще играем
-			if (!vw_IsSoundAvailable(VoiceWarningCollisionDetected)) {
-				// уже не играем, нужно запустить опять
-				VoiceWarningCollisionDetected = Audio_PlayVoice(7, 1.0f);
-			}
+			if (!vw_IsSoundAvailable(VoiceWarningCollisionDetected))
+				VoiceWarningCollisionDetected = PlayVoicePhrase(eVoicePhrase::Warning, 1.0f);
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
@@ -554,10 +551,8 @@ void GamePlayerShip()
 				    (PlayerFighter->WeaponSetFire[i]) &&
 				    (PlayerFighter->Weapon[i]->Ammo <= 0)) {
 					// проверяем, действительно еще играем
-					if (!vw_IsSoundAvailable(VoiceWeaponMalfunction)) {
-						// уже не играем, нужно запустить опять
-						VoiceWeaponMalfunction = Audio_PlayVoice(10, 1.0f);
-					}
+					if (!vw_IsSoundAvailable(VoiceWeaponMalfunction))
+						VoiceWeaponMalfunction = PlayVoicePhrase(eVoicePhrase::WeaponMalfunction, 1.0f);
 				}
 
 			}

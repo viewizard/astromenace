@@ -607,10 +607,8 @@ void Workshop_Workshop()
 	// выводим информационную надпись + голосовое сообщение
 	if (NeedMoreEnergy) {
 		// запускаем голос...
-		if (!vw_IsSoundAvailable(VoiceNeedMoreEnergy)) {
-			// уже не играем, нужно запустить опять
-			VoiceNeedMoreEnergy = Audio_PlayVoice(6, 1.0f);
-		}
+		if (!vw_IsSoundAvailable(VoiceNeedMoreEnergy))
+			VoiceNeedMoreEnergy = PlayVoicePhrase(eVoicePhrase::ReactorMalfunction, 1.0f);
 
 		// вывод текста
 		int SizeI = (GameConfig().InternalWidth - vw_TextWidth(vw_GetText("Warning! Low energy recharge rate!"))) / 2;

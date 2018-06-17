@@ -348,7 +348,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	// запускаем голос...
 	if (WeaponAmmoOut &&
 	    !vw_IsSoundAvailable(VoiceAmmoOut)) // уже не играем, нужно запустить опять
-		VoiceAmmoOut = Audio_PlayVoice(10, 1.0f);
+		VoiceAmmoOut = PlayVoicePhrase(eVoicePhrase::WeaponMalfunction, 1.0f);
 
 
 	// кнопка Setup

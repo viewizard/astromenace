@@ -30,6 +30,20 @@
 
 #include "../core/base.h"
 
+// voice
+enum class eVoicePhrase {
+	Attention,
+	EngineMalfunction,
+	MissileDetected,
+	PowerSupplyReestablished,
+	PrepareForAction,
+	ReactorMalfunction,
+	Warning,
+	WeaponDamaged,
+	WeaponDestroyed,
+	WeaponMalfunction
+};
+
 // music themes
 enum class eMusicTheme {
 	NONE,
@@ -45,8 +59,8 @@ enum class eMusicTheme {
 unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
 // Play "3D" sfx (game sfx).
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
-// Play voice.
-unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume);
+// Play voice phrase.
+unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume);
 // Start music theme with fade.
 void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks);
 // Change "global" volume for "2D" (menu) sfx.

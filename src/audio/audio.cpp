@@ -27,7 +27,7 @@
 
 // TODO translate comments
 
-// TODO use enumeration for sfx and voice, fix this mess with numbers
+// TODO use enumeration for sfx, fix this mess with numbers
 
 #include "../core/core.h"
 #include "../config/config.h"
@@ -37,6 +37,13 @@ namespace {
 
 std::string CurrentPlayingMusicName;
 std::string CurrentPlayingMusicLoopPart;
+
+struct sEnumHash {
+	template <typename T>
+	std::size_t operator()(T t) const {
+		return static_cast<std::size_t>(t);
+	}
+};
 
 struct sSoundMetadata {
 	std::string FileName{};
@@ -115,20 +122,19 @@ const sSoundMetadata MenuSFXList[] = {
 };
 constexpr unsigned MenuSFXQuantity = sizeof(MenuSFXList) / sizeof(MenuSFXList[0]);
 
-// voice
-const sSoundMetadata VoiceList[] = {
-	{"lang/en/voice/Attention.wav", 1.0f, true}, // (?) not in use
-	{"lang/en/voice/EngineMalfunction.wav", 1.0f, true},  // (?) not in use
-	{"lang/en/voice/MissileDetected.wav", 1.0f, true},
-	{"lang/en/voice/PowerSupplyReestablished.wav", 1.0f, true},
-	{"lang/en/voice/PrepareForAction.wav", 1.0f, true},
-	{"lang/en/voice/ReactorMalfunction.wav", 1.0f, true},
-	{"lang/en/voice/Warning.wav", 1.0f, true},
-	{"lang/en/voice/WeaponDamaged.wav", 1.0f, true},
-	{"lang/en/voice/WeaponDestroyed.wav", 1.0f, true},
-	{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true},
+const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
+	// key					metadata (note, 'en' here, since we use vw_GetText() for file name)
+	{eVoicePhrase::Attention,		{"lang/en/voice/Attention.wav", 1.0f, true}},
+	{eVoicePhrase::EngineMalfunction,	{"lang/en/voice/EngineMalfunction.wav", 1.0f, true}},
+	{eVoicePhrase::MissileDetected,		{"lang/en/voice/MissileDetected.wav", 1.0f, true}},
+	{eVoicePhrase::PowerSupplyReestablished,{"lang/en/voice/PowerSupplyReestablished.wav", 1.0f, true}},
+	{eVoicePhrase::PrepareForAction,	{"lang/en/voice/PrepareForAction.wav", 1.0f, true}},
+	{eVoicePhrase::ReactorMalfunction,	{"lang/en/voice/ReactorMalfunction.wav", 1.0f, true}},
+	{eVoicePhrase::Warning,			{"lang/en/voice/Warning.wav", 1.0f, true}},
+	{eVoicePhrase::WeaponDamaged,		{"lang/en/voice/WeaponDamaged.wav", 1.0f, true}},
+	{eVoicePhrase::WeaponDestroyed,		{"lang/en/voice/WeaponDestroyed.wav", 1.0f, true}},
+	{eVoicePhrase::WeaponMalfunction,	{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true}},
 };
-constexpr unsigned VoiceQuantity = sizeof(VoiceList) / sizeof(VoiceList[0]);
 
 } // unnamed namespace
 
@@ -201,8 +207,8 @@ void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
  */
 void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 {
-	for (unsigned int i = 0; i < VoiceQuantity; i++) {
-		vw_SetSoundGlobalVolume(vw_GetText(VoiceList[i].FileName, GameConfig().VoiceLanguage), NewGlobalVolume);
+	for (auto &tmpVoice : VoiceMap) {
+		vw_SetSoundGlobalVolume(vw_GetText(tmpVoice.second.FileName, GameConfig().VoiceLanguage), NewGlobalVolume);
 	}
 }
 
@@ -233,19 +239,19 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 }
 
 /*
- * Play voice.
+ * Play voice phrase.
  */
-unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
+unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume)
 {
 	if (!vw_GetAudioStatus() ||
-	    !GameConfig().VoiceVolume ||
-	    (VoiceID > VoiceQuantity))
+	    !GameConfig().VoiceVolume)
 		return 0;
 
-	// т.к. у нас со смещением же в 1 идет
-	VoiceID--;
+	auto tmpVoice = VoiceMap.find(VoicePhrase);
+	if (tmpVoice == VoiceMap.end())
+		return 0;
 
-	LocalVolume = LocalVolume * VoiceList[VoiceID].VolumeCorrection;
+	LocalVolume = LocalVolume * tmpVoice->second.VolumeCorrection;
 
 	// FIXME should be connected to language code, not column number, that could be changed
 	// русский голос делаем немного тише
@@ -253,9 +259,9 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 		LocalVolume *= 0.6f;
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	return vw_PlaySound(vw_GetText(VoiceList[VoiceID].FileName, GameConfig().VoiceLanguage),
+	return vw_PlaySound(vw_GetText(tmpVoice->second.FileName, GameConfig().VoiceLanguage),
 			    LocalVolume, GameConfig().VoiceVolume / 10.0f, 0.0f, 0.0f, 0.0f,
-			    true, VoiceList[VoiceID].AllowStop, 1);
+			    true, tmpVoice->second.AllowStop, 1);
 }
 
 /*

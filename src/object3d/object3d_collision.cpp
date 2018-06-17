@@ -549,14 +549,11 @@ void DetectCollisionAllObject3D()
 							tmpShip->Weapon[i]->Strength -= DamagesDataWeapon.DamageHull / tmpShip->Weapon[i]->ResistanceHull;
 							if (tmpShip->Weapon[i]->Strength <= 0.0f) {
 								tmpShip->Weapon[i]->Strength = 0.0f;
-								// оружие уничтожено (речь)
-								Audio_PlayVoice(9, 1.0f);
+								PlayVoicePhrase(eVoicePhrase::WeaponDestroyed, 1.0f);
 								// убираем звук попадания-разбивания снаряда
 								tmpProjectile->NeedDeadSound = false;
-							} else {
-								// оружие повреждено (речь)
-								Audio_PlayVoice(8, 1.0f);
-							}
+							} else
+								PlayVoicePhrase(eVoicePhrase::WeaponDamaged, 1.0f);
 
 							// удаляем только те, которые разбились
 							if (tmpProjectile->ProjectileType != 2) {

@@ -127,14 +127,14 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		if (GameConfig().VoiceVolume < 0)
 			ChangeGameConfig().VoiceVolume = 0;
 		Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
-		Audio_PlayVoice(1, 1.0f);
+		PlayVoicePhrase(eVoicePhrase::Attention, 1.0f);
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 10), false)) {
 		ChangeGameConfig().VoiceVolume++;
 		if (GameConfig().VoiceVolume > 10)
 			ChangeGameConfig().VoiceVolume = 10;
 		Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
-		Audio_PlayVoice(1, 1.0f);
+		PlayVoicePhrase(eVoicePhrase::Attention, 1.0f);
 	}
 	if (!vw_GetAudioStatus()) {
 		int SizeI = (170 - vw_TextWidth(vw_GetText("Not available"))) / 2;
@@ -150,7 +150,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 					ChangeGameConfig().VoiceVolume = i + 1;
 					Audio_SetVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
 					// play voice instead of 'click' here
-					Audio_PlayVoice(1, 1.0f);
+					PlayVoicePhrase(eVoicePhrase::Attention, 1.0f);
 				}
 			}
 			if (GameConfig().VoiceVolume > i)
