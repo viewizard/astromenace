@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "audio.h"
@@ -45,7 +43,7 @@ struct sEnumHash {
 struct sSoundMetadata {
 	std::string FileName{};
 	float VolumeCorrection{0.0f};
-	bool AllowStop{true}; // allow stop during vw_StopAllSoundsIfAllowed() call
+	bool AllowStop{true}; // allow stop this sfx in vw_StopAllSoundsIfAllowed()
 
 	sSoundMetadata(const std::string &_FileName,
 		       float _VolumeCorrection,
@@ -174,20 +172,19 @@ void PlayMusicTheme(eMusicTheme MusicTheme, uint32_t FadeInTicks, uint32_t FadeO
 
 	CurrentPlayingMusicTheme = MusicTheme;
 
-	if (vw_GetAudioStatus() && //если можно играть
-	    GameConfig().MusicVolume) { // и громкость не нулевая
+	if (vw_GetAudioStatus() &&
+	    GameConfig().MusicVolume) {
 		vw_FadeOutAllMusicWithException(tmpMusic->second.FileName, FadeOutTicks, 1.0f, FadeInTicks);
 
 		if (vw_IsMusicPlaying(tmpMusic->second.FileName))
 			return;
 
-		// пытаемся загрузить и играть
 		if (!vw_PlayMusic(tmpMusic->second.FileName, 0.0f,
 				  tmpMusic->second.VolumeCorrection * (GameConfig().MusicVolume / 10.0f),
 				  tmpMusic->second.FileNameLoop.empty(), tmpMusic->second.FileNameLoop)) {
 			vw_ReleaseMusic(tmpMusic->second.FileName);
 			CurrentPlayingMusicTheme = eMusicTheme::NONE;
-		} else // we are playing new music theme, FadeIn it
+		} else // we are playing new music theme, fade-in it
 			vw_SetMusicFadeIn(tmpMusic->second.FileName, 1.0f, FadeInTicks);
 	}
 }
@@ -225,12 +222,11 @@ unsigned int PlayMenuSFX(eMenuSFX MenuSFX, float LocalVolume)
 	if (tmpSFX == MenuSFXMap.end())
 		return 0;
 
-	// если это звук меню и мы его уже проигрываем, его надо перезапустить
+	// restart, if already playing this SFX
 	int ret = vw_ReplayFirstFoundSound(tmpSFX->second.FileName);
 	if (ret)
 		return ret;
 
-	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(tmpSFX->second.FileName,
 			    LocalVolume * tmpSFX->second.VolumeCorrection,
 			    GameConfig().SoundVolume / 10.0f, sVECTOR3D{},
@@ -273,7 +269,6 @@ unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume)
 	if (GameConfig().VoiceLanguage == 2)
 		LocalVolume *= 0.6f;
 
-	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(vw_GetText(tmpVoice->second.FileName, GameConfig().VoiceLanguage),
 			    LocalVolume * tmpVoice->second.VolumeCorrection,
 			    GameConfig().VoiceVolume / 10.0f, sVECTOR3D{},
@@ -285,8 +280,6 @@ unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume)
  */
 void AudioLoop()
 {
-	// делаем установку слушателя (он в точке камеры)
-	// получаем текущее положение камеры
 	sVECTOR3D CurrentCameraLocation;
 	vw_GetCameraLocation(&CurrentCameraLocation);
 	sVECTOR3D CurrentCameraRotation;
@@ -297,33 +290,31 @@ void AudioLoop()
 	sVECTOR3D ListenerOriV2(0.0f, 1.0f, 0.0f);
 	vw_RotatePoint(ListenerOriV2, CurrentCameraRotation);
 
-	// Position of the Listener.
+	// position of the Listener
 	float ListenerPos[3] = {CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z};
-	// Velocity of the Listener.
+	// velocity of the Listener
 	float ListenerVel[3] = {0.0f, 0.0f, 0.0f};
-	// Orientation of the Listener. (first 3 elements are "at", second 3 are "up")
-	// Also note that these should be units of '1'.
+	// orientation of the Listener (first "look at", second "up")
 	float ListenerOri[6] = {ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
 				ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z};
 
 	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
 
-	// передаем управление, чтобы внутри ядра все сделали
+	// update buffers
 	vw_UpdateSound(SDL_GetTicks());
 	vw_UpdateMusic(SDL_GetTicks());
 
-	// запускаем нужную музыку... только включили громкость или выключили
 	if (!vw_IsAnyMusicPlaying()) {
-		if (vw_GetAudioStatus() && // если можно вообще играть
-		    GameConfig().MusicVolume && // если громкость не нулевая
-		    (CurrentPlayingMusicTheme != eMusicTheme::NONE)) { // если установлен
+		// start playing music
+		if (vw_GetAudioStatus() &&
+		    GameConfig().MusicVolume &&
+		    (CurrentPlayingMusicTheme != eMusicTheme::NONE)) {
 			auto tmpMusic = MusicMap.find(CurrentPlayingMusicTheme);
 			if (tmpMusic == MusicMap.end()) {
 				CurrentPlayingMusicTheme = eMusicTheme::NONE;
 				return;
 			}
 
-			// пытаемся загрузить и проиграть
 			if (!vw_PlayMusic(tmpMusic->second.FileName, 0.0f,
 					  tmpMusic->second.VolumeCorrection * (GameConfig().MusicVolume / 10.0f),
 					  tmpMusic->second.FileNameLoop.empty(), tmpMusic->second.FileNameLoop)) {
@@ -333,9 +324,9 @@ void AudioLoop()
 				vw_SetMusicFadeIn(tmpMusic->second.FileName, 1.0f, 2000);
 		}
 	} else {
-		// если что-то играем, но звук уже выключен, нужно все убрать...
-		if (vw_GetAudioStatus() && // играть можно
-		    !GameConfig().MusicVolume) { // но громкость нулевая
+		// turn off music, if music volume set to 0
+		if (vw_GetAudioStatus() &&
+		    !GameConfig().MusicVolume) {
 			vw_ReleaseAllMusic();
 		}
 	}
