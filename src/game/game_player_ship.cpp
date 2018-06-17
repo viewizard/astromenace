@@ -565,7 +565,7 @@ void GamePlayerShip()
 		if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
 			// если не играем, запускаем звук сирены
 			if (!vw_IsSoundAvailable(SoundLowLife))
-				SoundLowLife = Audio_PlaySound2D(14, 1.0f);
+				SoundLowLife = PlayMenuSFX(eMenuSFX::WarningLowLife, 1.0f);
 		}
 	}
 

@@ -291,7 +291,8 @@ void MissionMenu()
 					if (SoundOnMissionID != i) {
 						SoundOnMissionID = i;
 						// если задействуем клавиатуру - неиграем тут звук
-						if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
+						if (CurrentKeyboardSelectMenuElement == 0)
+							PlayMenuSFX(eMenuSFX::OverLine, 1.0f);
 					}
 
 					// если стоим над ним...
@@ -311,7 +312,7 @@ void MissionMenu()
 
 						CurrentMission = i;
 						ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
-						Audio_PlaySound2D(6,1.0f);
+						PlayMenuSFX(eMenuSFX::SelectLine, 1.0f);
 						if (InFocusByKeyboard) {
 							vw_SetKeyStatus(SDLK_KP_ENTER, false);
 							vw_SetKeyStatus(SDLK_RETURN, false);
@@ -398,7 +399,7 @@ void MissionMenu()
 	// если стоим на ползунком и нажали кнопку мышки - "захватываем"
 	if (!SliderUnderMouseControl && vw_MouseOverRect(DstRect) && vw_GetMouseLeftClick(false) && !isDialogBoxDrawing()) {
 		SliderUnderMouseControl = true;
-		Audio_PlaySound2D(2,1.0f);
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
 	}
 	// если ползунок был захвачен, но уже не над секцией где его можно перетягивать или отпустили мышку - отпускаем
 	sRECT DstRect2;
@@ -409,7 +410,7 @@ void MissionMenu()
 	// просто кликнули на зону перетягивания, не на ползунок
 	if (!vw_MouseOverRect(DstRect) && vw_MouseOverRect(DstRect2) && vw_GetMouseLeftClick(false) && !isDialogBoxDrawing()) {
 		SliderUnderMouseControl = true;
-		Audio_PlaySound2D(2,1.0f);
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		vw_SetMouseLeftClick(false);
 	}
 	// отображаем курсором, что можно кликать на полосе прокрутки

@@ -27,8 +27,6 @@
 
 // TODO translate comments
 
-// TODO use enumeration for sfx, fix this mess with numbers
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "audio.h"
@@ -76,24 +74,24 @@ struct sMusicMetadata {
 };
 
 // menu sfx
-const sSoundMetadata MenuSFXList[] = {
-	{"sfx/menu_onbutton.wav", 0.4f, false},		// навели на кнопку
-	{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
-	{"sfx/menu_new.wav", 1.0f, true},		// меняем меню
-	{"sfx/menu_taping.wav", 0.8f, true},		// набор текста-названия профайла
-	{"sfx/menu_online.wav", 0.75f, true},		// стоим над профайлом-миссией
-	{"sfx/menu_selectline.wav", 1.0f, true},	// выбрали профайл-миссию
-	{"sfx/menu_nclick.wav", 1.0f, false},		// не можем нажать на кнопку, но жмем
-	{"sfx/drag_error.wav", 1.0f, true},		// не можем установить в слот
-	{"sfx/drag_offslot.wav", 0.65f, true},		// снимаем со слота оружие
-	{"sfx/drag_onslot.wav", 0.82f, true},		// устанавливаем в слот оружие
-	{"sfx/drag_release.wav", 0.6f, true},		// освобождаем курсор от оружия, если тянули
-	{"sfx/game_showmenu.wav", 1.0f, false},		// проказываем меню в игре (звук во время его появления)
-	{"sfx/game_hidemenu.wav", 1.0f, false},		// скрываем меню в игре (звук во время его исчезновения)
-	{"sfx/lowlife.wav", 1.0f, true},		// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
-	{"sfx/menu_onbutton2.wav", 0.15f, false}	// навели на малую кнопку
+const std::unordered_map<eMenuSFX, sSoundMetadata, sEnumHash> MenuSFXMap{
+	// key					metadata
+	{eMenuSFX::OverSmallButton,		{"sfx/menu_onbutton2.wav", 0.15f, false}},
+	{eMenuSFX::OverBigButton,		{"sfx/menu_onbutton.wav", 0.4f, false}},
+	{eMenuSFX::Click,			{"sfx/menu_click.wav", 0.6f, false}},
+	{eMenuSFX::SwitchToAnotherMenu,		{"sfx/menu_new.wav", 1.0f, true}},
+	{eMenuSFX::TapingClick,			{"sfx/menu_taping.wav", 0.8f, true}},
+	{eMenuSFX::OverLine,			{"sfx/menu_online.wav", 0.75f, true}},
+	{eMenuSFX::SelectLine,			{"sfx/menu_selectline.wav", 1.0f, true}},
+	{eMenuSFX::CanNotClick,			{"sfx/menu_nclick.wav", 1.0f, false}},
+	{eMenuSFX::DragError,			{"sfx/drag_error.wav", 1.0f, true}},
+	{eMenuSFX::DragUninstallFromSlot,	{"sfx/drag_offslot.wav", 0.65f, true}},
+	{eMenuSFX::DragInstallToSlot,		{"sfx/drag_onslot.wav", 0.82f, true}},
+	{eMenuSFX::DragRelease,			{"sfx/drag_release.wav", 0.6f, true}},
+	{eMenuSFX::MissionShowMenu,		{"sfx/game_showmenu.wav", 1.0f, false}},
+	{eMenuSFX::MissionHideMenu,		{"sfx/game_hidemenu.wav", 1.0f, false}},
+	{eMenuSFX::WarningLowLife,		{"sfx/lowlife.wav", 1.0f, true}}
 };
-constexpr unsigned MenuSFXQuantity = sizeof(MenuSFXList) / sizeof(MenuSFXList[0]);
 
 // game sfx
 const std::unordered_map<eGameSFX, sSoundMetadata, sEnumHash> GameSFXMap{
@@ -147,7 +145,6 @@ const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
 	{eVoicePhrase::WeaponMalfunction,	{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true}}
 };
 
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap{
@@ -200,8 +197,8 @@ void PlayMusicTheme(eMusicTheme MusicTheme, uint32_t FadeInTicks, uint32_t FadeO
  */
 void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
 {
-	for (unsigned int i = 0; i < MenuSFXQuantity; i++) {
-		vw_SetSoundGlobalVolume(MenuSFXList[i].FileName, NewGlobalVolume);
+	for (auto &tmpSFX : MenuSFXMap) {
+		vw_SetSoundGlobalVolume(tmpSFX.second.FileName, NewGlobalVolume);
 	}
 }
 
@@ -216,28 +213,28 @@ void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
 }
 
 /*
- * Play "2D" sfx (menu sfx).
+ * Play menu sfx (2D).
  */
-unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
+unsigned int PlayMenuSFX(eMenuSFX MenuSFX, float LocalVolume)
 {
 	if (!vw_GetAudioStatus() ||
-	    !GameConfig().SoundVolume ||
-	    (SoundID > MenuSFXQuantity))
+	    !GameConfig().SoundVolume)
 		return 0;
 
-	// т.к. у нас со смещением же в 1 идет
-	SoundID--;
+	auto tmpSFX = MenuSFXMap.find(MenuSFX);
+	if (tmpSFX == MenuSFXMap.end())
+		return 0;
 
 	// если это звук меню и мы его уже проигрываем, его надо перезапустить
-	int ret = vw_ReplayFirstFoundSound(MenuSFXList[SoundID].FileName);
+	int ret = vw_ReplayFirstFoundSound(tmpSFX->second.FileName);
 	if (ret)
 		return ret;
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
-	return vw_PlaySound(MenuSFXList[SoundID].FileName,
-			    LocalVolume * MenuSFXList[SoundID].VolumeCorrection,
+	return vw_PlaySound(tmpSFX->second.FileName,
+			    LocalVolume * tmpSFX->second.VolumeCorrection,
 			    GameConfig().SoundVolume / 10.0f, sVECTOR3D{},
-			    true, MenuSFXList[SoundID].AllowStop, 1);
+			    true, tmpSFX->second.AllowStop, 1);
 }
 
 /*
@@ -272,17 +269,14 @@ unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume)
 	if (tmpVoice == VoiceMap.end())
 		return 0;
 
-	LocalVolume = LocalVolume * tmpVoice->second.VolumeCorrection;
-
-	// FIXME should be connected to language code, not column number, that could be changed
-	//       or it's better revise sfx files itself
-	// русский голос делаем немного тише
+	// FIXME revise Russian voice files for proper volume
 	if (GameConfig().VoiceLanguage == 2)
 		LocalVolume *= 0.6f;
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(vw_GetText(tmpVoice->second.FileName, GameConfig().VoiceLanguage),
-			    LocalVolume, GameConfig().VoiceVolume / 10.0f, sVECTOR3D{},
+			    LocalVolume * tmpVoice->second.VolumeCorrection,
+			    GameConfig().VoiceVolume / 10.0f, sVECTOR3D{},
 			    true, tmpVoice->second.AllowStop, 1);
 }
 

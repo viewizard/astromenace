@@ -176,7 +176,7 @@ void ProfileInputText()
 
 			if (vw_IsSoundAvailable(SoundTaping))
 				vw_StopSound(SoundTaping, 0);
-			SoundTaping = Audio_PlaySound2D(4,1.0f);
+			SoundTaping = PlayMenuSFX(eMenuSFX::TapingClick, 1.0f);
 		}
 		vw_SetCurrentUnicodeChar(nullptr); // сразу сбрасываем данные
 	}
@@ -190,7 +190,7 @@ void ProfileInputText()
 
 			if (vw_IsSoundAvailable(SoundTaping))
 				vw_StopSound(SoundTaping, 0);
-			SoundTaping = Audio_PlaySound2D(4,1.0f);
+			SoundTaping = PlayMenuSFX(eMenuSFX::TapingClick, 1.0f);
 
 			vw_SetKeyStatus(SDLK_BACKSPACE, false);
 		}
@@ -371,7 +371,8 @@ void ProfileMenu()
 					if (SoundOnProfileID != i) {
 						SoundOnProfileID = i;
 						// если задействуем клавиатуру - неиграем тут звук
-						if (CurrentKeyboardSelectMenuElement == 0) Audio_PlaySound2D(5,1.0f);
+						if (CurrentKeyboardSelectMenuElement == 0)
+							PlayMenuSFX(eMenuSFX::OverLine, 1.0f);
 					}
 
 					if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
@@ -381,7 +382,7 @@ void ProfileMenu()
 						CurrentProfile = i;
 						ChangeGameConfig().LastProfile = CurrentProfile;
 						// играем звук выбора
-						Audio_PlaySound2D(6,1.0f);
+						PlayMenuSFX(eMenuSFX::SelectLine, 1.0f);
 						if (InFocusByKeyboard) {
 							vw_SetKeyStatus(SDLK_KP_ENTER, false);
 							vw_SetKeyStatus(SDLK_RETURN, false);

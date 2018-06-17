@@ -254,7 +254,7 @@ void SetOptionsMenu(eMenuStatus Menu)
 }
 void SetMenu(eMenuStatus Menu)
 {
-	Audio_PlaySound2D(3,1.0f);
+	PlayMenuSFX(eMenuSFX::SwitchToAnotherMenu, 1.0f);
 
 	switch (Menu) {
 	case eMenuStatus::PROFILE:

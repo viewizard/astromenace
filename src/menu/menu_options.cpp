@@ -105,7 +105,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				if (vw_GetMouseLeftClick(true)) {
 					ChangeGameConfig().MusicVolume = i + 1;
 					vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
-					Audio_PlaySound2D(2, 1.0f);
+					PlayMenuSFX(eMenuSFX::Click, 1.0f);
 				}
 			}
 			if (GameConfig().MusicVolume > i)
@@ -191,7 +191,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				if (vw_GetMouseLeftClick(true)) {
 					ChangeGameConfig().SoundVolume = i + 1;
 					Audio_SetSound2DGlobalVolume(GameConfig().SoundVolume / 10.0f);
-					Audio_PlaySound2D(2, 1.0f);
+					PlayMenuSFX(eMenuSFX::Click, 1.0f);
 				}
 			}
 			if (GameConfig().SoundVolume > i)
@@ -308,7 +308,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			CurrentCursorStatus = 1;
 			if (vw_GetMouseLeftClick(true)) {
 				ChangeGameConfig().Brightness = i + 1;
-				Audio_PlaySound2D(2, 1.0f);
+				PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			}
 		}
 		if (GameConfig().Brightness > i)

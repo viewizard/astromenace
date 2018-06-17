@@ -373,7 +373,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/menu/button_weaponry_in.tga")), true, MenuContentTransp);
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			WeaponSetupSlot = SlotNum;
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -402,7 +402,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			    // если стоимость меньше чем есть денег + стоимость оружия
 			    (Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart))) {
 				// звук устанавливаемого оружия
-				Audio_PlaySound2D(10,1.0f);
+				PlayMenuSFX(eMenuSFX::DragInstallToSlot, 1.0f);
 
 				// если тут было оружие - сначало продаем его
 				if (WorkshopFighterGame->Weapon[SlotNum]) {
@@ -456,7 +456,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				DragWeaponAltControlData = 0;
 			} else {
 				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
-				Audio_PlaySound2D(8, 1.0f);
+				PlayMenuSFX(eMenuSFX::DragError, 1.0f);
 
 				// сброс
 				DragWeapon = false;
@@ -476,7 +476,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		    vw_GetMouseLeftClick(false) &&
 		    !DragWeapon) {
 			// звук снятия оружия из слота
-			Audio_PlaySound2D(9, 1.0f);
+			PlayMenuSFX(eMenuSFX::DragUninstallFromSlot, 1.0f);
 
 			DragWeapon = true;
 			DragWeaponNum = WorkshopFighterGame->Weapon[SlotNum]->InternalType;
@@ -792,7 +792,7 @@ void ShipSlotSetupWeapon(int Slot)
 			    // если стоимость меньше чем есть денег + стоимость оружия
 			    (Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart))) {
 				// звук устанавливаемого оружия
-				Audio_PlaySound2D(10,1.0f);
+				PlayMenuSFX(eMenuSFX::DragInstallToSlot, 1.0f);
 
 				// если тут было оружие - сначало продаем его
 				if (WorkshopFighterGame->Weapon[SlotNum] != nullptr) {
@@ -845,7 +845,7 @@ void ShipSlotSetupWeapon(int Slot)
 				DragWeaponAltControlData = 0;
 			} else {
 				// особый случай - есть не соответствие, нужно проиграть звук неудачной установки
-				Audio_PlaySound2D(8, 1.0f);
+				PlayMenuSFX(eMenuSFX::DragError, 1.0f);
 
 				// сброс
 				DragWeapon = false;
@@ -1087,7 +1087,7 @@ void Workshop_Weaponry()
 
 			if (vw_GetMouseLeftClick(false)) {
 				// звук взяли оружие
-				Audio_PlaySound2D(9,1.0f);
+				PlayMenuSFX(eMenuSFX::DragUninstallFromSlot, 1.0f);
 
 				// установка
 				DragWeapon = true;
@@ -1272,7 +1272,7 @@ void Workshop_Weaponry()
 	// проверяем состояние, если тянули и отжали, и сюда пришли - значит никто не перехватил, нужно сделать сброс
 	if (!vw_GetMouseLeftClick(false) && DragWeapon) {
 		// звук пропадающего оружия
-		Audio_PlaySound2D(11,1.0f);
+		PlayMenuSFX(eMenuSFX::DragRelease, 1.0f);
 
 		// сброс
 		DragWeapon = false;

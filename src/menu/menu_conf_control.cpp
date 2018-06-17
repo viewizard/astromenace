@@ -273,7 +273,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 			CurrentCursorStatus = 1;
 			if (vw_GetMouseLeftClick(true)) {
 				ChangeGameConfig().JoystickDeadZone = i + 1;
-				Audio_PlaySound2D(2, 1.0f);
+				PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			}
 		}
 		if (GameConfig().JoystickDeadZone > i)
@@ -305,7 +305,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 			CurrentCursorStatus = 1;
 			if (vw_GetMouseLeftClick(true)) {
 				ChangeGameConfig().ControlSensivity = i + 1;
-				Audio_PlaySound2D(2, 1.0f);
+				PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			}
 		}
 		if (GameConfig().ControlSensivity > i)

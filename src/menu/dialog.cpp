@@ -139,7 +139,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 		}
 
 		if (NeedPlayDialogOnButtonSoundX != X || NeedPlayDialogOnButtonSoundY != Y) {
-			Audio_PlaySound2D(15,1.0f);
+			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
 			NeedPlayDialogOnButtonSoundX = X;
 			NeedPlayDialogOnButtonSoundY = Y;
 		}
@@ -179,7 +179,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -227,7 +227,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 		}
 
 		if (NeedPlayDialogOnButtonSoundX != X || NeedPlayDialogOnButtonSoundY != Y) {
-			Audio_PlaySound2D(15,1.0f);
+			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
 			NeedPlayDialogOnButtonSoundX = X;
 			NeedPlayDialogOnButtonSoundY = Y;
 		}
@@ -266,7 +266,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -337,7 +337,7 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 	if (CanClick && !DragWeapon)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			*CheckBoxStatus = !(*CheckBoxStatus);
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);

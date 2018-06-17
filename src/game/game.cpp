@@ -1605,7 +1605,7 @@ void DrawGame()
 
 					if (vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_StopSound(SoundShowHideMenu, 150);
-					SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
+					SoundShowHideMenu = PlayMenuSFX(eMenuSFX::MissionHideMenu, 1.0f);
 				}
 
 				// выход в настройки
@@ -1701,7 +1701,7 @@ void DrawGame()
 					if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_StopSound(SoundShowHideMenu, 150);
 					if (NeedPlaySfx)
-						SoundShowHideMenu = Audio_PlaySound2D(12, 1.0f);
+						SoundShowHideMenu = PlayMenuSFX(eMenuSFX::MissionShowMenu, 1.0f);
 					// сброс кнопки мышки, чтобы случайно не нажали
 					vw_GetMouseLeftClick(true);
 				} else if (!GameMenu && !GameMissionCompleteStatus) { // открыто меню с выводом результата миссии, нельзя давать его закрывать
@@ -1713,7 +1713,7 @@ void DrawGame()
 					if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu))
 						vw_StopSound(SoundShowHideMenu, 150);
 					if (NeedPlaySfx)
-						SoundShowHideMenu = Audio_PlaySound2D(13, 1.0f);
+						SoundShowHideMenu = PlayMenuSFX(eMenuSFX::MissionHideMenu, 1.0f);
 					DrawGameCursor = false;
 				}
 

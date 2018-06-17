@@ -409,7 +409,7 @@ void Workshop_Workshop()
 	DstRect(GameConfig().InternalWidth/2-451, 60, GameConfig().InternalWidth/2-451+128, 60+128);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -417,7 +417,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase();
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		}
 
 		Current = 0.7f;
@@ -448,7 +448,7 @@ void Workshop_Workshop()
 	DstRect(GameConfig().InternalWidth/2-451, 200, GameConfig().InternalWidth/2-451+128, 200+128);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -456,7 +456,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+1;
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		}
 
 		Current = 0.7f;
@@ -487,7 +487,7 @@ void Workshop_Workshop()
 	DstRect(GameConfig().InternalWidth/2-451, 340, GameConfig().InternalWidth/2-451+128, 340+128);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -495,7 +495,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+2;
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		}
 
 		Current = 0.7f;
@@ -526,7 +526,7 @@ void Workshop_Workshop()
 	DstRect(GameConfig().InternalWidth/2-451, 610-128, GameConfig().InternalWidth/2-451+128, 610);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -534,7 +534,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+3;
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		}
 
 		Current = 0.7f;
@@ -737,7 +737,7 @@ void Workshop_Workshop()
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if ((NeedPlayWorkshopOnButtonSoundX != DstRect.left) ||
 		    (NeedPlayWorkshopOnButtonSoundY != DstRect.top)) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -746,7 +746,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 1;
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		}
 	} else {
 		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top) {
@@ -805,7 +805,7 @@ void Workshop_Workshop()
 
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -814,7 +814,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 5;
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		}
 	} else {
 		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top) {
@@ -871,7 +871,7 @@ void Workshop_Workshop()
 
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -880,7 +880,7 @@ void Workshop_Workshop()
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 9;
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		}
 	} else {
 		if (NeedPlayWorkshopOnButtonSoundX == DstRect.left && NeedPlayWorkshopOnButtonSoundY == DstRect.top) {
@@ -938,7 +938,7 @@ void Workshop_Workshop()
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if ((NeedPlayWorkshopOnButtonSoundX != DstRect.left) ||
 		    (NeedPlayWorkshopOnButtonSoundY != DstRect.top)) {
-			Audio_PlaySound2D(1, 1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -946,7 +946,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
-			Audio_PlaySound2D(2, 1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			CurrentSystemStockNum = 13;
 		}
 	} else {
@@ -1009,7 +1009,7 @@ void Workshop_Workshop()
 
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 		if (NeedPlayWorkshopOnButtonSoundX != DstRect.left || NeedPlayWorkshopOnButtonSoundY != DstRect.top) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			NeedPlayWorkshopOnButtonSoundX = DstRect.left;
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
@@ -1017,7 +1017,7 @@ void Workshop_Workshop()
 		Current = 1.0f;
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true)) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			CurrentSystemStockNum = 17;
 		}
 	} else {

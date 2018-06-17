@@ -81,7 +81,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 		if (*ButTransp == 1.0f) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			*Update = vw_GetTimeThread(0);
 			*ButTransp = 0.99f;
 		}
@@ -143,7 +143,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) ||
 		    (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -191,7 +191,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetMouseLeftClick(true))
-					Audio_PlaySound2D(7,1.0f);
+					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
 		}
 
@@ -226,7 +226,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		}
 
 		if (*ButTransp == 1.0f) {
-			Audio_PlaySound2D(1,1.0f);
+			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
 			*Update = vw_GetTimeThread(0);
 			*ButTransp = 0.98f;
 		}
@@ -287,7 +287,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -334,7 +334,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetMouseLeftClick(true))
-					Audio_PlaySound2D(7,1.0f);
+					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
 		}
 
@@ -365,7 +365,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 		}
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			Audio_PlaySound2D(15,1.0f);
+			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
 			NeedPlayOnButtonSoundX = X;
 			NeedPlayOnButtonSoundY = Y;
 		}
@@ -390,7 +390,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -436,7 +436,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetMouseLeftClick(true))
-					Audio_PlaySound2D(7,1.0f);
+					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
 		}
 
@@ -468,7 +468,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 		}
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			Audio_PlaySound2D(15,1.0f);
+			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
 			NeedPlayOnButtonSoundX = X;
 			NeedPlayOnButtonSoundY = Y;
 		}
@@ -493,7 +493,8 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			if (SoundClick) Audio_PlaySound2D(2,1.0f);
+			if (SoundClick)
+				PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -566,7 +567,7 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	if (CanClick && !DragWeapon)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			*CheckBoxStatus = !(*CheckBoxStatus);
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -597,7 +598,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetMouseLeftClick(true))
-					Audio_PlaySound2D(7,1.0f);
+					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
 		}
 
@@ -629,7 +630,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 		}
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			Audio_PlaySound2D(15,1.0f);
+			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
 			NeedPlayOnButtonSoundX = X;
 			NeedPlayOnButtonSoundY = Y;
 		}
@@ -650,7 +651,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);
@@ -682,7 +683,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 			if (Transp==1.0f && !DragWeapon) {
 				CurrentCursorStatus = 2;
 				if (vw_GetMouseLeftClick(true))
-					Audio_PlaySound2D(7,1.0f);
+					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
 		}
 
@@ -714,7 +715,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 		}
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			Audio_PlaySound2D(15,1.0f);
+			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
 			NeedPlayOnButtonSoundX = X;
 			NeedPlayOnButtonSoundY = Y;
 		}
@@ -735,7 +736,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			Audio_PlaySound2D(2,1.0f);
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			if (InFocusByKeyboard) {
 				vw_SetKeyStatus(SDLK_KP_ENTER, false);
 				vw_SetKeyStatus(SDLK_RETURN, false);

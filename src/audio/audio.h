@@ -30,6 +30,25 @@
 
 #include "../core/base.h"
 
+// menu sfx
+enum class eMenuSFX {
+	OverSmallButton,
+	OverBigButton,
+	Click,
+	SwitchToAnotherMenu,
+	TapingClick,
+	OverLine,
+	SelectLine,
+	CanNotClick,
+	DragError,
+	DragUninstallFromSlot,
+	DragInstallToSlot,
+	DragRelease,
+	MissionShowMenu,
+	MissionHideMenu,
+	WarningLowLife,
+};
+
 // game sfx
 enum class eGameSFX {
 	none,
@@ -93,8 +112,8 @@ enum class eMusicTheme {
 };
 
 
-// Play "2D" sfx (menu sfx).
-unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
+// Play menu sfx (2D).
+unsigned int PlayMenuSFX(eMenuSFX SoundID, float LocalVolume);
 // Play game sfx (3D).
 unsigned int PlayGameSFX(eGameSFX GameSFX, float LocalVolume, const sVECTOR3D &Location, int AtType = 1);
 // Play voice phrase.
