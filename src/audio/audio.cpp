@@ -35,8 +35,7 @@
 
 namespace {
 
-std::string CurrentPlayingMusicName;
-std::string CurrentPlayingMusicLoopPart;
+eMusicTheme CurrentPlayingMusicTheme{eMusicTheme::NONE};
 
 struct sEnumHash {
 	template <typename T>
@@ -56,6 +55,23 @@ struct sSoundMetadata {
 		FileName{_FileName},
 		VolumeCorrection{_VolumeCorrection},
 		AllowStop{_AllowStop}
+	{}
+};
+
+struct sMusicMetadata {
+	std::string FileName{};
+	std::string FileNameLoop{};
+	float VolumeCorrection{0.0f};
+	bool NeedRelease{false}; // if this music already playing - release it
+
+	sMusicMetadata(const std::string &_FileName,
+		       const std::string &_FileNameLoop,
+		       float _VolumeCorrection,
+		       bool _NeedRelease) :
+		FileName{_FileName},
+		FileNameLoop{_FileNameLoop},
+		VolumeCorrection{_VolumeCorrection},
+		NeedRelease{_NeedRelease}
 	{}
 };
 
@@ -98,7 +114,7 @@ const sSoundMetadata GameSFXList[] = {
 	{"sfx/antimaterhit.wav", 1.0f, true},	// попадание и "разваливание" снаряда о корпус объекта, для Antimatter снарядов
 	{"sfx/gausshit.wav", 1.0f, true},	// попадание и "разваливание" снаряда о корпус объекта, для Gauss снарядов
 
-	{"sfx/explosion4.wav", 1.0f, true},	// small explosion for asteroids
+	{"sfx/explosion4.wav", 1.0f, true}	// small explosion for asteroids
 };
 constexpr unsigned GameSFXQuantity = sizeof(GameSFXList) / sizeof(GameSFXList[0]);
 
@@ -118,7 +134,7 @@ const sSoundMetadata MenuSFXList[] = {
 	{"sfx/game_showmenu.wav", 1.0f, false},		// проказываем меню в игре (звук во время его появления)
 	{"sfx/game_hidemenu.wav", 1.0f, false},		// скрываем меню в игре (звук во время его исчезновения)
 	{"sfx/lowlife.wav", 1.0f, true},		// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
-	{"sfx/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
+	{"sfx/menu_onbutton2.wav", 0.15f, false}	// навели на малую кнопку
 };
 constexpr unsigned MenuSFXQuantity = sizeof(MenuSFXList) / sizeof(MenuSFXList[0]);
 
@@ -133,62 +149,54 @@ const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
 	{eVoicePhrase::Warning,			{"lang/en/voice/Warning.wav", 1.0f, true}},
 	{eVoicePhrase::WeaponDamaged,		{"lang/en/voice/WeaponDamaged.wav", 1.0f, true}},
 	{eVoicePhrase::WeaponDestroyed,		{"lang/en/voice/WeaponDestroyed.wav", 1.0f, true}},
-	{eVoicePhrase::WeaponMalfunction,	{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true}},
+	{eVoicePhrase::WeaponMalfunction,	{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true}}
 };
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
+const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap{
+	// key			metadata
+	{eMusicTheme::MENU,	{"music/menu.ogg", "", 1.0f, false}},
+	{eMusicTheme::GAME,	{"music/game.ogg", "", 1.0f, true}},
+	{eMusicTheme::BOSS,	{"music/boss-loop.ogg", "", 1.0f, false}},
+	{eMusicTheme::FAILED,	{"music/missionfailed.ogg", "", 0.7f, false}},
+	{eMusicTheme::CREDITS,	{"music/boss-intro.ogg", "music/boss-loop.ogg", 1.0f, false}}
+};
+#pragma GCC diagnostic pop
 
 } // unnamed namespace
 
 
 /*
- * Start music theme with fade.
+ * Play music theme with fade-in and fade-out previous music theme (if need).
  */
-void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks)
+void PlayMusicTheme(eMusicTheme MusicTheme, uint32_t FadeInTicks, uint32_t FadeOutTicks)
 {
-	CurrentPlayingMusicLoopPart.clear();
-	float MusicCorrection{1.0f};
+	auto tmpMusic = MusicMap.find(MusicTheme);
+	if (tmpMusic == MusicMap.end())
+		return;
 
-	switch (StartMusic) {
-	case eMusicTheme::NONE:
-		CurrentPlayingMusicName.clear();
-		break;
-	case eMusicTheme::MENU:
-		CurrentPlayingMusicName = "music/menu.ogg";
-		break;
-	case eMusicTheme::GAME:
-		CurrentPlayingMusicName = "music/game.ogg";
-		// during in-game mission restart we need "restart" music as well
-		// so, if this music already playing - release it, and start it again (see code below)
-		vw_ReleaseMusic(CurrentPlayingMusicName);
-		break;
-	case eMusicTheme::BOSS:
-		CurrentPlayingMusicName = "music/boss-loop.ogg";
-		break;
-	case eMusicTheme::FAILED:
-		CurrentPlayingMusicName = "music/missionfailed.ogg";
-		MusicCorrection = 0.7f;
-		break;
-	case eMusicTheme::CREDITS:
-		CurrentPlayingMusicName = "music/boss-intro.ogg";
-		CurrentPlayingMusicLoopPart = "music/boss-loop.ogg";
-		break;
-	}
+	if (tmpMusic->second.NeedRelease)
+		vw_ReleaseMusic(tmpMusic->second.FileName);
+
+	CurrentPlayingMusicTheme = MusicTheme;
 
 	if (vw_GetAudioStatus() && //если можно играть
-	    GameConfig().MusicVolume && // и громкость не нулевая
-	    !CurrentPlayingMusicName.empty()) {
+	    GameConfig().MusicVolume) { // и громкость не нулевая
+		vw_FadeOutAllMusicWithException(tmpMusic->second.FileName, FadeOutTicks, 1.0f, FadeInTicks);
 
-		vw_FadeOutAllMusicWithException(CurrentPlayingMusicName, FadeOutTicks, 1.0f, FadeInTicks);
-
-		if (vw_IsMusicPlaying(CurrentPlayingMusicName))
+		if (vw_IsMusicPlaying(tmpMusic->second.FileName))
 			return;
 
 		// пытаемся загрузить и играть
-		if (!vw_PlayMusic(CurrentPlayingMusicName, 0.0f, MusicCorrection * (GameConfig().MusicVolume / 10.0f),
-				  CurrentPlayingMusicLoopPart.empty(), CurrentPlayingMusicLoopPart)) {
-			vw_ReleaseMusic(CurrentPlayingMusicName);
-			CurrentPlayingMusicName.clear();
+		if (!vw_PlayMusic(tmpMusic->second.FileName, 0.0f,
+				  tmpMusic->second.VolumeCorrection * (GameConfig().MusicVolume / 10.0f),
+				  tmpMusic->second.FileNameLoop.empty(), tmpMusic->second.FileNameLoop)) {
+			vw_ReleaseMusic(tmpMusic->second.FileName);
+			CurrentPlayingMusicTheme = eMusicTheme::NONE;
 		} else // we are playing new music theme, FadeIn it
-			vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, FadeInTicks);
+			vw_SetMusicFadeIn(tmpMusic->second.FileName, 1.0f, FadeInTicks);
 	}
 }
 
@@ -254,6 +262,7 @@ unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume)
 	LocalVolume = LocalVolume * tmpVoice->second.VolumeCorrection;
 
 	// FIXME should be connected to language code, not column number, that could be changed
+	//       or it's better revise sfx files itself
 	// русский голос делаем немного тише
 	if (GameConfig().VoiceLanguage == 2)
 		LocalVolume *= 0.6f;
@@ -320,14 +329,21 @@ void AudioLoop()
 	if (!vw_IsAnyMusicPlaying()) {
 		if (vw_GetAudioStatus() && // если можно вообще играть
 		    GameConfig().MusicVolume && // если громкость не нулевая
-		    !CurrentPlayingMusicName.empty()) { // если установлен
+		    (CurrentPlayingMusicTheme != eMusicTheme::NONE)) { // если установлен
+			auto tmpMusic = MusicMap.find(CurrentPlayingMusicTheme);
+			if (tmpMusic == MusicMap.end()) {
+				CurrentPlayingMusicTheme = eMusicTheme::NONE;
+				return;
+			}
+
 			// пытаемся загрузить и проиграть
-			if (!vw_PlayMusic(CurrentPlayingMusicName, 1.0f, GameConfig().MusicVolume / 10.0f,
-					  CurrentPlayingMusicLoopPart.empty(), CurrentPlayingMusicLoopPart)) {
-				vw_ReleaseMusic(CurrentPlayingMusicName);
-				CurrentPlayingMusicName.clear();
+			if (!vw_PlayMusic(tmpMusic->second.FileName, 0.0f,
+					  tmpMusic->second.VolumeCorrection * (GameConfig().MusicVolume / 10.0f),
+					  tmpMusic->second.FileNameLoop.empty(), tmpMusic->second.FileNameLoop)) {
+				vw_ReleaseMusic(tmpMusic->second.FileName);
+				CurrentPlayingMusicTheme = eMusicTheme::NONE;
 			} else // we are playing new music theme, FadeIn it
-				vw_SetMusicFadeIn(CurrentPlayingMusicName, 1.0f, 2000);
+				vw_SetMusicFadeIn(tmpMusic->second.FileName, 1.0f, 2000);
 		}
 	} else {
 		// если что-то играем, но звук уже выключен, нужно все убрать...

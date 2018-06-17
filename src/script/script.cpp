@@ -406,9 +406,9 @@ bool cMissionScript::Update(float Time)
 					int Theme{0};
 					if (xmlDoc->iGetEntryAttribute(xmlEntry, "theme", Theme)) {
 						if (Theme == 1)
-							StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
+							PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
 						if (Theme == 2)
-							StartMusicWithFade(eMusicTheme::BOSS, 1500, 2000);
+							PlayMusicTheme(eMusicTheme::BOSS, 1500, 2000);
 					}
 				}
 			break;

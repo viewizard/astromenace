@@ -61,8 +61,8 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
 unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
 // Play voice phrase.
 unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume);
-// Start music theme with fade.
-void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks);
+// Play music theme with fade-in and fade-out previous music theme (if need).
+void PlayMusicTheme(eMusicTheme MusicTheme, uint32_t FadeInTicks, uint32_t FadeOutTicks);
 // Change "global" volume for "2D" (menu) sfx.
 void Audio_SetSound2DGlobalVolume(float NewGlobalVolume);
 // Change "global" volume for voice.

@@ -709,12 +709,12 @@ static void PreLoadGameData(eLoading LoadType)
 	case eLoading::MenuWithLogo:
 		MenuStatus = eMenuStatus::MAIN_MENU;
 		AudioLoop();
-		StartMusicWithFade(eMusicTheme::MENU, 4000, 4000);
+		PlayMusicTheme(eMusicTheme::MENU, 4000, 4000);
 		break;
 	// переход игра-меню
 	case eLoading::Menu:
 		MenuStatus = eMenuStatus::MISSION;
-		StartMusicWithFade(eMusicTheme::MENU, 2000, 2000);
+		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
 		break;
 	// переход меню-игра
 	case eLoading::Game:
@@ -779,7 +779,7 @@ static void PostLoadGameData(eLoading LoadType)
 	// уровни игры
 	case eLoading::Game:
 		InitGame();
-		StartMusicWithFade(eMusicTheme::GAME, 2000, 2000);
+		PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
 		PlayVoicePhrase(eVoicePhrase::PrepareForAction, 1.0f);
 		break;
 

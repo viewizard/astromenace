@@ -648,7 +648,7 @@ void MainMenu()
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, vw_GetText("CREDITS"), MenuContentTransp, &Button5Transp, &LastButton5UpdateTime)) {
 		ComBuffer = eCommand::SWITCH_TO_CREDITS;
-		StartMusicWithFade(eMusicTheme::CREDITS, 2000, 2000);
+		PlayMusicTheme(eMusicTheme::CREDITS, 2000, 2000);
 	}
 
 	Y = Y+Prir;
