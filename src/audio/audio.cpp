@@ -193,9 +193,9 @@ void PlayMusicTheme(eMusicTheme MusicTheme, uint32_t FadeInTicks, uint32_t FadeO
 }
 
 /*
- * Change "global" volume for "2D" (menu) sfx.
+ * Change "global" volume for menu sfx (2D).
  */
-void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
+void ChangeMenuSFXGlobalVolume(float NewGlobalVolume)
 {
 	for (auto &tmpSFX : MenuSFXMap) {
 		vw_SetSoundGlobalVolume(tmpSFX.second.FileName, NewGlobalVolume);
@@ -205,7 +205,7 @@ void Audio_SetSound2DGlobalVolume(float NewGlobalVolume)
 /*
  * Change "global" volume for voice.
  */
-void Audio_SetVoiceGlobalVolume(float NewGlobalVolume)
+void ChangeVoiceGlobalVolume(float NewGlobalVolume)
 {
 	for (auto &tmpVoice : VoiceMap) {
 		vw_SetSoundGlobalVolume(vw_GetText(tmpVoice.second.FileName, GameConfig().VoiceLanguage), NewGlobalVolume);

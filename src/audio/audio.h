@@ -120,10 +120,10 @@ unsigned int PlayGameSFX(eGameSFX GameSFX, float LocalVolume, const sVECTOR3D &L
 unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume);
 // Play music theme with fade-in and fade-out previous music theme (if need).
 void PlayMusicTheme(eMusicTheme MusicTheme, uint32_t FadeInTicks, uint32_t FadeOutTicks);
-// Change "global" volume for "2D" (menu) sfx.
-void Audio_SetSound2DGlobalVolume(float NewGlobalVolume);
+// Change "global" volume for menu sfx (2D).
+void ChangeMenuSFXGlobalVolume(float NewGlobalVolume);
 // Change "global" volume for voice.
-void Audio_SetVoiceGlobalVolume(float NewGlobalVolume);
+void ChangeVoiceGlobalVolume(float NewGlobalVolume);
 // Main audio loop.
 void AudioLoop();
 
