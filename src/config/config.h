@@ -37,7 +37,6 @@
 // TODO remove "reserved" in sPilotProfile on CONFIG_VERSION's update
 
 namespace config {
-
 // (!) changes make previous configuration file incompatible
 
 // maximum profiles
@@ -50,6 +49,17 @@ constexpr unsigned MAX_MISSIONS{100};
 constexpr unsigned MAX_WEAPONS{6};
 // maximum hints
 constexpr unsigned MAX_HINTS{10};
+
+} // config
+
+namespace config {
+// (!) changes could corrupt 2D rendering
+
+constexpr float VirtualWidth_Wide{1228.0f};
+constexpr float VirtualHeight_Wide{768.0f};
+
+constexpr float VirtualWidth_Standard{1024.0f};
+constexpr float VirtualHeight_Standard{768.0f};
 
 } // config
 
@@ -148,6 +158,9 @@ struct sGameConfig {
 	int Width{1280};	// view size width
 	int Height{768};	// view size height
 	bool Fullscreen{true};	// fullscreen mode (if false - windowed mode)
+
+	// FIXME should be removed, vw_GetInternalResolution() should be used instead in code
+	//       also, all directly usage of 1228/1024/768 should be removed as well
 	float InternalWidth{1228.0f};	// internal resolution's width
 	float InternalHeight{768.0f};	// internal resolution's height
 
@@ -206,6 +219,8 @@ struct sGameConfig {
 const sGameConfig &GameConfig();
 // Get configuration for read and write.
 sGameConfig &ChangeGameConfig();
+// Configure virtual internal resolution by view size.
+void ConfigVirtualInternalResolution();
 // Load configuration file.
 bool LoadXMLConfigFile(bool NeedResetConfig);
 // Save configuration file.

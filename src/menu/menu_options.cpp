@@ -441,12 +441,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				vw_InitOpenGLStuff(GameConfig().Width, GameConfig().Height,
 						   &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
 
-				if (StandardAspectRation({GameConfig().Width, GameConfig().Height}))
-					ChangeGameConfig().InternalWidth = 1024.0f;
-				else
-					ChangeGameConfig().InternalWidth = 1228.0f;
-				ChangeGameConfig().InternalHeight = 768.0f;
-				vw_SetInternalResolution(GameConfig().InternalWidth, GameConfig().InternalHeight, true);
+				ConfigVirtualInternalResolution();
 			}
 		}
 	}

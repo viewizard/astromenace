@@ -64,6 +64,21 @@ sGameConfig &ChangeGameConfig()
 }
 
 /*
+ * Configure virtual internal resolution by view size.
+ */
+void ConfigVirtualInternalResolution()
+{
+	if (StandardAspectRation({GameConfig().Width, GameConfig().Height})) {
+		ChangeGameConfig().InternalWidth = config::VirtualWidth_Standard;
+		ChangeGameConfig().InternalHeight = config::VirtualHeight_Standard;
+	} else {
+		ChangeGameConfig().InternalWidth = config::VirtualWidth_Wide;
+		ChangeGameConfig().InternalHeight = config::VirtualHeight_Wide;
+	}
+	vw_SetInternalResolution(GameConfig().InternalWidth, GameConfig().InternalHeight, true);
+}
+
+/*
  * Pack data with XOR.
  * Since we store data in XML, all data should be 'converted' into proper symbols.
  * In our case, we start from 97 (small 'a', see ASCII table) and store separately
