@@ -62,7 +62,7 @@ struct sMusicMetadata {
 	std::string FileName{};
 	std::string FileNameLoop{};
 	float VolumeCorrection{0.0f};
-	bool NeedRelease{false}; // if this music already playing - release it
+	bool NeedRelease{false}; // if this music theme playing now - release it first
 
 	sMusicMetadata(const std::string &_FileName,
 		       const std::string &_FileNameLoop,
@@ -74,6 +74,26 @@ struct sMusicMetadata {
 		NeedRelease{_NeedRelease}
 	{}
 };
+
+// menu sfx
+const sSoundMetadata MenuSFXList[] = {
+	{"sfx/menu_onbutton.wav", 0.4f, false},		// навели на кнопку
+	{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
+	{"sfx/menu_new.wav", 1.0f, true},		// меняем меню
+	{"sfx/menu_taping.wav", 0.8f, true},		// набор текста-названия профайла
+	{"sfx/menu_online.wav", 0.75f, true},		// стоим над профайлом-миссией
+	{"sfx/menu_selectline.wav", 1.0f, true},	// выбрали профайл-миссию
+	{"sfx/menu_nclick.wav", 1.0f, false},		// не можем нажать на кнопку, но жмем
+	{"sfx/drag_error.wav", 1.0f, true},		// не можем установить в слот
+	{"sfx/drag_offslot.wav", 0.65f, true},		// снимаем со слота оружие
+	{"sfx/drag_onslot.wav", 0.82f, true},		// устанавливаем в слот оружие
+	{"sfx/drag_release.wav", 0.6f, true},		// освобождаем курсор от оружия, если тянули
+	{"sfx/game_showmenu.wav", 1.0f, false},		// проказываем меню в игре (звук во время его появления)
+	{"sfx/game_hidemenu.wav", 1.0f, false},		// скрываем меню в игре (звук во время его исчезновения)
+	{"sfx/lowlife.wav", 1.0f, true},		// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
+	{"sfx/menu_onbutton2.wav", 0.15f, false}	// навели на малую кнопку
+};
+constexpr unsigned MenuSFXQuantity = sizeof(MenuSFXList) / sizeof(MenuSFXList[0]);
 
 // game sfx
 const sSoundMetadata GameSFXList[] = {
@@ -117,26 +137,6 @@ const sSoundMetadata GameSFXList[] = {
 	{"sfx/explosion4.wav", 1.0f, true}	// small explosion for asteroids
 };
 constexpr unsigned GameSFXQuantity = sizeof(GameSFXList) / sizeof(GameSFXList[0]);
-
-// menu sfx
-const sSoundMetadata MenuSFXList[] = {
-	{"sfx/menu_onbutton.wav", 0.4f, false},		// навели на кнопку
-	{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
-	{"sfx/menu_new.wav", 1.0f, true},		// меняем меню
-	{"sfx/menu_taping.wav", 0.8f, true},		// набор текста-названия профайла
-	{"sfx/menu_online.wav", 0.75f, true},		// стоим над профайлом-миссией
-	{"sfx/menu_selectline.wav", 1.0f, true},	// выбрали профайл-миссию
-	{"sfx/menu_nclick.wav", 1.0f, false},		// не можем нажать на кнопку, но жмем
-	{"sfx/drag_error.wav", 1.0f, true},		// не можем установить в слот
-	{"sfx/drag_offslot.wav", 0.65f, true},		// снимаем со слота оружие
-	{"sfx/drag_onslot.wav", 0.82f, true},		// устанавливаем в слот оружие
-	{"sfx/drag_release.wav", 0.6f, true},		// освобождаем курсор от оружия, если тянули
-	{"sfx/game_showmenu.wav", 1.0f, false},		// проказываем меню в игре (звук во время его появления)
-	{"sfx/game_hidemenu.wav", 1.0f, false},		// скрываем меню в игре (звук во время его исчезновения)
-	{"sfx/lowlife.wav", 1.0f, true},		// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
-	{"sfx/menu_onbutton2.wav", 0.15f, false}	// навели на малую кнопку
-};
-constexpr unsigned MenuSFXQuantity = sizeof(MenuSFXList) / sizeof(MenuSFXList[0]);
 
 const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
 	// key					metadata (note, 'en' here, since we use vw_GetText() for file name)
@@ -242,8 +242,27 @@ unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume)
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(MenuSFXList[SoundID].FileName, LocalVolume,
-			    GameConfig().SoundVolume / 10.0f, 0.0f, 0.0f, 0.0f,
+			    GameConfig().SoundVolume / 10.0f, sVECTOR3D{},
 			    true, MenuSFXList[SoundID].AllowStop, 1);
+}
+
+/*
+ * Play "3D" sfx (game sfx).
+ */
+unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, const sVECTOR3D &Location, int AtType)
+{
+	if (!vw_GetAudioStatus() ||
+	    !GameConfig().SoundVolume)
+		return 0;
+
+	// т.к. у нас со смещением же в 1 идет
+	SoundID--;
+
+	LocalVolume = LocalVolume * GameSFXList[SoundID].VolumeCorrection;
+
+	return vw_PlaySound(GameSFXList[SoundID].FileName, LocalVolume,
+			    GameConfig().SoundVolume / 10.0f, Location,
+			    false, GameSFXList[SoundID].AllowStop, AtType);
 }
 
 /*
@@ -269,28 +288,8 @@ unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume)
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(vw_GetText(tmpVoice->second.FileName, GameConfig().VoiceLanguage),
-			    LocalVolume, GameConfig().VoiceVolume / 10.0f, 0.0f, 0.0f, 0.0f,
+			    LocalVolume, GameConfig().VoiceVolume / 10.0f, sVECTOR3D{},
 			    true, tmpVoice->second.AllowStop, 1);
-}
-
-/*
- * Play "3D" sfx (game sfx).
- */
-unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType)
-{
-	if (!vw_GetAudioStatus() ||
-	    !GameConfig().SoundVolume)
-		return 0;
-
-	// т.к. у нас со смещением же в 1 идет
-	SoundID--;
-
-	LocalVolume = LocalVolume * GameSFXList[SoundID].VolumeCorrection;
-
-	return vw_PlaySound(GameSFXList[SoundID].FileName, LocalVolume,
-			    GameConfig().SoundVolume / 10.0f,
-			    Location.x, Location.y, Location.z,
-			    false, GameSFXList[SoundID].AllowStop, AtType);
 }
 
 /*

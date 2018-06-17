@@ -30,13 +30,15 @@
 
 #include "../base.h"
 
+struct sVECTOR3D;
+
 /*
  * Sound FX.
  */
 
 // Play sound.
-unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
-			  float x, float y, float z, bool Relative, bool AllowStop, int AtType);
+unsigned int vw_PlaySound(const std::string &Name, float LocalVolume, float GlobalVolume,
+			  const sVECTOR3D &Location, bool Relative, bool AllowStop, int AtType);
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
 // Check, is sound available (created) or not.

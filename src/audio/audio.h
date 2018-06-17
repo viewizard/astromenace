@@ -58,7 +58,7 @@ enum class eMusicTheme {
 // Play "2D" sfx (menu sfx).
 unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
 // Play "3D" sfx (game sfx).
-unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
+unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, const sVECTOR3D &Location, int AtType = 1);
 // Play voice phrase.
 unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume);
 // Play music theme with fade-in and fade-out previous music theme (if need).

@@ -104,8 +104,8 @@ unsigned int vw_LoadSoundBuffer(const std::string &Name)
 /*
  * Play sound.
  */
-unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _GlobalVolume,
-			  float x, float y, float z, bool Relative, bool AllowStop, int AtType)
+unsigned int vw_PlaySound(const std::string &Name, float LocalVolume, float GlobalVolume,
+			  const sVECTOR3D &Location, bool Relative, bool AllowStop, int AtType)
 {
 	if (Name.empty())
 		return 0;
@@ -125,11 +125,11 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 		return 0;
 	}
 
-	SoundsMap[tmpSoundID].LocalVolume = _LocalVolume;
-	SoundsMap[tmpSoundID].GlobalVolume = _GlobalVolume;
+	SoundsMap[tmpSoundID].LocalVolume = LocalVolume;
+	SoundsMap[tmpSoundID].GlobalVolume = GlobalVolume;
 
 	// position of the source sound
-	ALfloat SourcePos[]{x, y, z};
+	ALfloat SourcePos[]{Location.x, Location.y, Location.z};
 	// velocity of the source sound
 	constexpr ALfloat SourceVel[]{0.0f, 0.0f, 0.0f};
 
@@ -142,7 +142,7 @@ unsigned int vw_PlaySound(const std::string &Name, float _LocalVolume, float _Gl
 
 	alSourcei(SoundsMap[tmpSoundID].Source, AL_BUFFER, Buffer);
 
-	alSourcef(SoundsMap[tmpSoundID].Source, AL_GAIN, _GlobalVolume * _LocalVolume);
+	alSourcef(SoundsMap[tmpSoundID].Source, AL_GAIN, GlobalVolume * LocalVolume);
 	alSourcefv(SoundsMap[tmpSoundID].Source, AL_POSITION, SourcePos);
 	alSourcefv(SoundsMap[tmpSoundID].Source, AL_VELOCITY, SourceVel);
 	alSourcei(SoundsMap[tmpSoundID].Source, AL_LOOPING, false);
