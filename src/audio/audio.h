@@ -28,6 +28,8 @@
 #ifndef AUDIO_AUDIO_H
 #define AUDIO_AUDIO_H
 
+#include "../core/base.h"
+
 // music themes
 enum class eMusicTheme {
 	NONE,
@@ -38,12 +40,20 @@ enum class eMusicTheme {
 	CREDITS
 };
 
-unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
-unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume);
-void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks);
-void Audio_SetSound2DGlobalVolume(float NewGlobalVolume);
-void Audio_SetVoiceGlobalVolume(float NewGlobalVolume);
 
+// Play "2D" sfx (menu sfx).
+unsigned int Audio_PlaySound2D(unsigned int SoundID, float LocalVolume);
+// Play "3D" sfx (game sfx).
+unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
+// Play voice.
+unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume);
+// Start music theme with fade.
+void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks);
+// Change "global" volume for "2D" (menu) sfx.
+void Audio_SetSound2DGlobalVolume(float NewGlobalVolume);
+// Change "global" volume for voice.
+void Audio_SetVoiceGlobalVolume(float NewGlobalVolume);
+// Main audio loop.
 void AudioLoop();
 
 #endif // AUDIO_AUDIO_H

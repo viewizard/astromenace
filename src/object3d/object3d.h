@@ -40,6 +40,7 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../script/script.h"
+#include "../audio/audio.h"
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern int GameEnemyWeaponPenalty;
@@ -54,8 +55,6 @@ extern int GameTargetingSystem;
 extern int GameAdvancedProtectionSystem;
 extern int GamePowerSystem;
 extern int GameTargetingMechanicSystem;
-// FIXME should be fixed, use 'include' instead
-unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Location, int AtType = 1);
 
 enum class eObjectStatus {
 	none,
