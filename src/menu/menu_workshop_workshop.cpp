@@ -28,6 +28,7 @@
 #include "../game.h"
 #include "../config/config.h"
 #include "../ui/font.h"
+#include "../audio/audio.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 

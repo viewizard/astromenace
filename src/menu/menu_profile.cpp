@@ -28,6 +28,7 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
+#include "../audio/audio.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 

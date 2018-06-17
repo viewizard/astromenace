@@ -27,10 +27,9 @@
 
 // TODO translate comments
 
-#include "core/core.h"
-#include "enum.h"
-#include "config/config.h"
-#include "game.h" // FIXME "game.h" should be replaced by individual headers
+#include "../core/core.h"
+#include "../config/config.h"
+#include "audio.h"
 
 namespace {
 
@@ -38,13 +37,19 @@ std::string CurrentPlayingMusicName;
 std::string CurrentPlayingMusicLoopPart;
 
 struct sSoundData {
-	const char *FileName; // file name
-	float VolumeCorrection; // sound volume correction
-	bool AllowStop; // allow stop during vw_StopAllSoundsIfAllowed() call
+	std::string FileName{}; // file name
+	float VolumeCorrection{0.0f}; // sound volume correction
+	bool AllowStop{true}; // allow stop during vw_StopAllSoundsIfAllowed() call
+
+	sSoundData(const std::string &_FileName, float _VolumeCorrection, bool _AllowStop) :
+		FileName{_FileName},
+		VolumeCorrection{_VolumeCorrection},
+		AllowStop{_AllowStop}
+	{}
 };
 
 // перечень имен файлов игровых звуков
-static sSoundData GameSoundList[] = {
+const sSoundData GameSoundList[] = {
 
 	{"sfx/weapon1probl.wav", 1.0f, true},		// оружие повреждено или нечем стрелять, механическое оружие (Kinetic)
 	{"sfx/weapon2probl.wav", 1.0f, true},		// оружие повреждено или нечем стрелять, "слабое" энергетическое оружие (Ion, Plasma)
@@ -84,10 +89,10 @@ static sSoundData GameSoundList[] = {
 
 	{"sfx/explosion4.wav", 1.0f, true},		// малый взрыв: астероиды
 };
-#define GameSoundQuantity sizeof(GameSoundList)/sizeof(GameSoundList[0])
+constexpr unsigned GameSoundQuantity = sizeof(GameSoundList) / sizeof(GameSoundList[0]);
 
 // перечень имен файлов звуков для меню
-static sSoundData MenuSoundNames[] = {
+const sSoundData MenuSoundNames[] = {
 	{"sfx/menu_onbutton.wav", 0.4f, false},		// навели на кнопку
 	{"sfx/menu_click.wav", 0.6f, false},		// нажали на кнопку
 	{"sfx/menu_new.wav", 1.0f, true},		// меняем меню
@@ -104,10 +109,10 @@ static sSoundData MenuSoundNames[] = {
 	{"sfx/lowlife.wav", 1.0f, true},		// сирена или что-то подобное, когда менее 10% жизни остается (зацикленный небольшой фрагмент)
 	{"sfx/menu_onbutton2.wav", 0.15f, false},	// навели на малую кнопку
 };
-#define MenuSoundQuantity sizeof(MenuSoundNames)/sizeof(MenuSoundNames[0])
+constexpr unsigned MenuSoundQuantity = sizeof(MenuSoundNames) / sizeof(MenuSoundNames[0]);
 
 // перечень имен файлов звуков для меню
-static sSoundData VoiceNames[] = {
+const sSoundData VoiceNames[] = {
 	{"lang/en/voice/Attention.wav", 1.0f, true},
 	{"lang/en/voice/EngineMalfunction.wav", 1.0f, true},
 	{"lang/en/voice/MissileDetected.wav", 1.0f, true},//++
@@ -119,7 +124,7 @@ static sSoundData VoiceNames[] = {
 	{"lang/en/voice/WeaponDestroyed.wav", 1.0f, true},//++
 	{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true},//++
 };
-#define VoiceQuantity sizeof(VoiceNames)/sizeof(VoiceNames[0])
+constexpr unsigned VoiceQuantity = sizeof(VoiceNames) / sizeof(VoiceNames[0]);
 
 } // unnamed namespace
 
@@ -130,7 +135,7 @@ static sSoundData VoiceNames[] = {
 void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks)
 {
 	CurrentPlayingMusicLoopPart.clear();
-	float MusicCorrection = 1.0f;
+	float MusicCorrection{1.0f};
 
 	switch (StartMusic) {
 	case eMusicTheme::NONE:
@@ -232,12 +237,12 @@ unsigned int Audio_PlayVoice(unsigned int VoiceID, float LocalVolume)
 	// т.к. у нас со смещением же в 1 идет
 	VoiceID--;
 
+	LocalVolume = LocalVolume * VoiceNames[VoiceID].VolumeCorrection;
+
 	// FIXME should be connected to language code, not column number, that could be changed
 	// русский голос делаем немного тише
-	if (GameConfig().VoiceLanguage == 3)
-		VoiceNames[VoiceID].VolumeCorrection = 0.6f;
-
-	LocalVolume = LocalVolume * VoiceNames[VoiceID].VolumeCorrection;
+	if (GameConfig().VoiceLanguage == 2)
+		LocalVolume *= 0.6f;
 
 	// чтобы не было искажения по каналам, делаем установку относительно камеры...
 	return vw_PlaySound(vw_GetText(VoiceNames[VoiceID].FileName, GameConfig().VoiceLanguage),
@@ -254,20 +259,17 @@ unsigned int Audio_PlaySound3D(int SoundID, float LocalVolume, sVECTOR3D Locatio
 	    !GameConfig().SoundVolume)
 		return 0;
 
-	LocalVolume = LocalVolume * GameSoundList[SoundID-1].VolumeCorrection;
-
 	// т.к. у нас со смещением же в 1 идет
 	SoundID--;
+
+	LocalVolume = LocalVolume * GameSoundList[SoundID].VolumeCorrection;
 
 	return vw_PlaySound(GameSoundList[SoundID].FileName,
 			    LocalVolume, GameConfig().SoundVolume / 10.0f, Location.x, Location.y, Location.z,
 			    false, GameSoundList[SoundID].AllowStop, AtType);
 }
 
-//------------------------------------------------------------------------------------
-// Цикл звука
-//------------------------------------------------------------------------------------
-void Audio_LoopProc()
+void AudioLoop()
 {
 	// делаем установку слушателя (он в точке камеры)
 	// получаем текущее положение камеры

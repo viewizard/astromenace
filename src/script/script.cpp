@@ -34,6 +34,7 @@
 #include "../core/core.h"
 #include "script.h"
 #include "../config/config.h"
+#include "../audio/audio.h"
 #include "../gfx/star_system.h"
 #include "../object3d/object3d.h"
 #include "../object3d/space_ship/space_ship.h"
@@ -67,7 +68,6 @@ extern cEarthSpaceFighter *PlayerFighter;
 // FIXME should be fixed, use 'include' instead
 float GameCameraGetSpeed();
 void SetGameMissionComplete();
-void StartMusicWithFade(eMusicTheme StartMusic, uint32_t FadeInTicks, uint32_t FadeOutTicks);
 
 
 /*

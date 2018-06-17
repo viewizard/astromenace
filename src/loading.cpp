@@ -39,6 +39,7 @@
 #include "gfx/star_system.h"
 #include "gfx/shadow_map.h"
 #include "ui/font.h"
+#include "audio/audio.h"
 #include "main.h"
 
 
@@ -629,7 +630,7 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 		SDL_Delay(2);
 
 		// important, update music buffers
-		Audio_LoopProc();
+		AudioLoop();
 	}
 
 	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -680,7 +681,7 @@ static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime,
 	}
 
 	// important, update music buffers
-	Audio_LoopProc();
+	AudioLoop();
 
 	LastDrawTime = SDL_GetTicks();
 
@@ -707,7 +708,7 @@ static void PreLoadGameData(eLoading LoadType)
 	// меню, загрузка в самом начале
 	case eLoading::MenuWithLogo:
 		MenuStatus = eMenuStatus::MAIN_MENU;
-		Audio_LoopProc();
+		AudioLoop();
 		StartMusicWithFade(eMusicTheme::MENU, 4000, 4000);
 		break;
 	// переход игра-меню

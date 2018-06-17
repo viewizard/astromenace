@@ -89,16 +89,6 @@ enum class eLoading {
 	Game
 };
 
-// music themes
-enum class eMusicTheme {
-	NONE,
-	MENU,
-	GAME,
-	BOSS,
-	FAILED,
-	CREDITS
-};
-
 enum class eDialogBox {
 	None,
 	QuitFromGame,			// quit from menu, exit from the game

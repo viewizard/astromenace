@@ -29,6 +29,7 @@
 #include "../config/config.h"
 #include "../platform/platform.h"
 #include "../ui/font.h"
+#include "../audio/audio.h"
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 

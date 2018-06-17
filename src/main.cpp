@@ -34,6 +34,7 @@
 #include "enum.h"
 #include "build_config.h"
 #include "ui/font.h"
+#include "audio/audio.h"
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
@@ -309,7 +310,7 @@ static void Loop()
 		if (!NeedPause) {
 			JoystickEmulateMouseMovement(vw_GetTimeThread(0));
 			Loop_Proc();
-			Audio_LoopProc();
+			AudioLoop();
 		} else {
 			// turn off music
 			if (vw_IsAnyMusicPlaying())
