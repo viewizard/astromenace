@@ -385,7 +385,7 @@ void vw_EndRendering()
 }
 
 /*
- * Set fixed internal resolution size and status.
+ * Set virtual internal resolution size and status.
  */
 void vw_SetInternalResolution(float Width, float Height, bool Status)
 {
@@ -398,7 +398,7 @@ void vw_SetInternalResolution(float Width, float Height, bool Status)
 }
 
 /*
- * Set fixed internal resolution status.
+ * Set virtual internal resolution status.
  */
 void vw_SetInternalResolutionStatus(bool Status)
 {
@@ -406,7 +406,7 @@ void vw_SetInternalResolutionStatus(bool Status)
 }
 
 /*
- * Get fixed internal resolution.
+ * Get virtual internal resolution.
  */
 bool vw_GetInternalResolution(float *Width, float *Height)
 {
