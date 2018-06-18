@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO add macOS support
+
 /*
 
 Generally, the pattern <language>-<REGION> is used. Here, language is a lowercase ISO 639 language code.
@@ -91,6 +93,62 @@ static bool GetUserLocale(std::string &NeutralLocale, std::string &RegionalLocal
 		RegionalLocale = tmpLangEnv;
 	} else
 		NeutralLocale = tmpLangEnv;
+#elif defined(WIN32)
+	// note, only windows vista or newer are supported
+
+	#ifndef MUI_LANGUAGE_NAME
+		#define MUI_LANGUAGE_NAME 0x8 // Use ISO language (culture) name convention
+	#endif
+	#ifndef PZZWSTR
+		#define PZZWSTR WCHAR*
+	#endif
+
+	HMODULE hKernelDLL = LoadLibrary("kernel32.dll");
+	if (!hKernelDLL)
+		return false;
+
+	auto ReleaseDLLAndExitWithFalse = [hKernelDLL] () {
+		FreeLibrary(hKernelDLL);
+		return false;
+	};
+
+	typedef BOOL (WINAPI *GETUSERPREFERREDUILANGUAGES)(DWORD, PULONG, PZZWSTR, PULONG);
+	GETUSERPREFERREDUILANGUAGES pGetUserPreferredUILanguages{nullptr};
+
+	pGetUserPreferredUILanguages = (GETUSERPREFERREDUILANGUAGES) GetProcAddress(hKernelDLL, "GetUserPreferredUILanguages");
+	if (!pGetUserPreferredUILanguages)
+		return ReleaseDLLAndExitWithFalse();
+
+	ULONG numLanguages{0};
+	DWORD cchLanguagesBuffer{0};
+	if (!pGetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, nullptr, &cchLanguagesBuffer))
+		return ReleaseDLLAndExitWithFalse();
+
+	// buffer in which function retrieves an ordered, null-delimited user preferred UI languages list,
+	// this list ends with two null characters
+	std::vector<wchar_t> pwszLanguagesBuffer{};
+	pwszLanguagesBuffer.resize(cchLanguagesBuffer);
+	if (!pGetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages,
+					  pwszLanguagesBuffer.data(), &cchLanguagesBuffer))
+		return ReleaseDLLAndExitWithFalse();
+
+	// temporary wchar buffer with first language only (we have at least one '\0' for sure)
+	auto tmpIter = std::find(pwszLanguagesBuffer.cbegin(), pwszLanguagesBuffer.cend(), '\0');
+	std::wstring tmpWLang{pwszLanguagesBuffer.cbegin(), tmpIter};
+
+	// convert wchar string to char string
+	std::string tmpLang{};
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter_wchar;
+	tmpLang = converter_wchar.to_bytes(tmpWLang);
+
+	std::string::size_type tmpPos = tmpLang.find('-');
+	if (tmpPos != std::string::npos) {
+		NeutralLocale = tmpLang.substr(0, tmpPos);
+		RegionalLocale = tmpLang;
+	} else
+		NeutralLocale = tmpLang;
+
+	FreeLibrary(hKernelDLL);
 #endif
 
 	return (!NeutralLocale.empty() || !RegionalLocale.empty());
