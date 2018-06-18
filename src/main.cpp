@@ -38,7 +38,7 @@
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
-#include "fs2vfs.h"
+#include "utils/fs2vfs.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
 namespace {

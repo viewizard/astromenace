@@ -25,10 +25,10 @@
 
 *************************************************************************************/
 
-#ifndef FS2VFS_H
-#define FS2VFS_H
+#ifndef UTILS_FS2VFS_H
+#define UTILS_FS2VFS_H
 
 // Create game data VFS file (convert FS to VFS).
 int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath);
 
-#endif // FS2VFS_H
+#endif // UTILS_FS2VFS_H
