@@ -44,9 +44,9 @@ enum class eMenuSFX {
 	DragUninstallFromSlot,
 	DragInstallToSlot,
 	DragRelease,
-	MissionShowMenu,
-	MissionHideMenu,
-	WarningLowLife,
+	MissionShowMenu, // game sfx (2D), keep it here, since this is UI sfx
+	MissionHideMenu, // game sfx (2D), keep it here, since this is UI sfx
+	WarningLowLife // game sfx (2D), keep it here, since this is UI sfx
 };
 
 // game sfx

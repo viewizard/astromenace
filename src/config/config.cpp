@@ -42,7 +42,8 @@ sGameConfig Config;
 
 const std::string ConfigFileName{"config.xml"};
 const std::string ProfilesFileName{std::string{"PilotProfiles_"} +
-				   std::string{CONFIG_VERSION} + std::string{".data"}};
+				   std::string{CONFIG_VERSION} +
+				   std::string{".data"}};
 
 } // unnamed namespace
 
@@ -80,9 +81,9 @@ void ConfigVirtualInternalResolution()
 
 /*
  * Pack data with XOR.
- * Since we store data in XML, all data should be 'converted' into proper symbols.
+ * Since we store data in plain text, all data should be 'converted' into proper symbols.
  * In our case, we start from 97 (small 'a', see ASCII table) and store separately
- * tens (0-25, since unsigned char max is 255) and ones (0-9). So, in XML we will
+ * tens (0-25, since unsigned char max is 255) and ones (0-9). So, as result we will
  * see string with small letters only.
  */
 static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsigned char *Data)
