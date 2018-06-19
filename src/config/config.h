@@ -35,6 +35,8 @@
 // note, xml tag can't contain space characters, use underline instead
 #define CONFIG_VERSION "1.4"
 // TODO remove "reserved" in sPilotProfile on CONFIG_VERSION's update
+// FIXME WeaponAltControlData in sPilotProfile should be int, look at sGameConfig controls
+//       we store SDL_Keycode (int32_t) here
 
 namespace config {
 // (!) changes make previous configuration file incompatible
