@@ -692,7 +692,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 		Ypos += 40;
 
-		const char *TextTmp = "?";
+		std::string TextTmp{"?"};
 		// установка надписи на кнопке
 		if (NeedCheck != 100) {
 			if (NewWeaponControlType != 0) {
@@ -705,9 +705,9 @@ void ShipSlotSetupWeapon(int Slot)
 				if (GameConfig().Profile[CurrentProfile].WeaponAltControl[Slot] == 1)
 					TextTmp = SDL_GetKeyName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (GameConfig().Profile[CurrentProfile].WeaponAltControl[Slot] == 2)
-					TextTmp = MouseCodeName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]);
+					TextTmp = MouseButtonName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]);
 				if (GameConfig().Profile[CurrentProfile].WeaponAltControl[Slot] == 3)
-					TextTmp = JoystickButtonName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]).c_str();
+					TextTmp = JoystickButtonName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[Slot]);
 
 			} else TextTmp = (char*)vw_GetText("Click to setup");
 		}
@@ -719,7 +719,7 @@ void ShipSlotSetupWeapon(int Slot)
 			Transp = But[1];
 			Off = true;
 		}
-		if (DrawButton200_2(GameConfig().InternalWidth / 2+155, Ypos, TextTmp, Transp * MenuContentTransp, Off)) {
+		if (DrawButton200_2(GameConfig().InternalWidth / 2+155, Ypos, TextTmp.c_str(), Transp * MenuContentTransp, Off)) {
 			NeedCheck = 100;
 			vw_ResetMouseButtons();
 			NewWeaponControlType = 0;

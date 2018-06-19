@@ -55,6 +55,13 @@ void SetRawDataPathByParameter(char *argv, const std::string &ParameterName);
 const std::string &GetRawDataPath();
 
 /*
+ * Mouse.
+ */
+
+// Provide mouse button's name - "ButtonN", where N is number.
+std::string MouseButtonName(int ButtonNum);
+
+/*
  * Joystick.
  */
 

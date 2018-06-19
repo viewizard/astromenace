@@ -35,56 +35,6 @@
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
-const char * MouseCodeName(char Num)
-{
-	if (!strcmp(vw_GetText("en", GameConfig().MenuLanguage), "de")) {
-		switch (Num) {
-		case 1:
-			return "Maus1";
-		case 2:
-			return "Maus3";
-		case 3:
-			return "Maus2";
-		case 4:
-			return "Maus4";
-		case 5:
-			return "Maus5";
-		case 6:
-			return "Maus6";
-		case 7:
-			return "Maus7";
-		case 8:
-			return "Maus8";
-		case 0:
-			return "?";
-		}
-	} else {
-		switch (Num) {
-		case 1:
-			return "Mouse1";
-		case 2:
-			return "Mouse3";
-		case 3:
-			return "Mouse2";
-		case 4:
-			return "Mouse4";
-		case 5:
-			return "Mouse5";
-		case 6:
-			return "Mouse6";
-		case 7:
-			return "Mouse7";
-		case 8:
-			return "Mouse8";
-		case 0:
-			return "?";
-		}
-	}
-
-	return nullptr;
-}
-
-
 int ButQuant = 10;
 float But[10] =
 {1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f};
@@ -342,13 +292,13 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Primary Attack"));
 	float Transp = 1.0f;
 	bool Off = false;
-	const char *ButtonName = MouseCodeName(GameConfig().MousePrimary);
+	std::string ButtonName = MouseButtonName(GameConfig().MousePrimary);
 	if (NeedCheck == 7) {
 		Transp = But[6];
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+300, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+300, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 7;
 			vw_ResetMouseButtons();
@@ -362,19 +312,19 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 5;
 
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = JoystickButtonName(GameConfig().JoystickPrimary).c_str();
+	ButtonName = JoystickButtonName(GameConfig().JoystickPrimary);
 	if (NeedCheck == 9) {
 		Transp = But[8];
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ButtonName, Transp*ContentTransp, !isJoystickAvailable() || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ButtonName.c_str(), Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 9;
 			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
@@ -388,13 +338,13 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Secondary Attack"));
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = MouseCodeName(GameConfig().MouseSecondary);
+	ButtonName = MouseButtonName(GameConfig().MouseSecondary);
 	if (NeedCheck == 8) {
 		Transp = But[7];
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+300, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+300, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 8;
 			vw_ResetMouseButtons();
@@ -408,19 +358,19 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 6;
 
 	Transp = 1.0f;
 	Off = false;
-	ButtonName = JoystickButtonName(GameConfig().JoystickSecondary).c_str();
+	ButtonName = JoystickButtonName(GameConfig().JoystickSecondary);
 	if (NeedCheck == 10) {
 		Transp = But[9];
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ButtonName, Transp*ContentTransp, !isJoystickAvailable() || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ButtonName.c_str(), Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 10;
 			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
@@ -441,7 +391,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) NeedCheck = 1;
 
 	Y1 += Prir1;
@@ -454,7 +404,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 2;
 
@@ -468,7 +418,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 3;
 
@@ -482,7 +432,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName, Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 4;
 

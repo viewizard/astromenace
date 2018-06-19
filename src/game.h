@@ -200,7 +200,6 @@ extern int ButQuant;
 extern float But[10];
 
 void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
-const char * MouseCodeName(char Num);
 void CheckMouseKeybJState();
 
 
