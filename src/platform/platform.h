@@ -111,7 +111,7 @@ bool StandardAspectRation(const sViewSize &ViewSize);
  * Locale
  */
 
-// Find appropriate game language by user preferred locale.
+// Find appropriate UI language by user preferred locale.
 // Note, this function should be called after vw_InitText().
 unsigned int FindPreferredLanguageByLocale();
 

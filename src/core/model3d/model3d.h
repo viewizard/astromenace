@@ -29,9 +29,8 @@
 #define CORE_MODEL3D_MODEL3D_H
 
 #include "../base.h"
+#include "../math/math.h"
 #include "../graphics/opengl.h"
-
-struct sVECTOR3D;
 
 using bounding_box = std::array<sVECTOR3D, 8>;
 
