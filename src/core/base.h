@@ -138,13 +138,13 @@ struct sRGBCOLOR {
 #define ERR_MEM			-6	// memory allocation related issue
 #define ERR_NOT_SUPPORTED	-7	// file format not supported
 
-// integral + floating point complex type
+// integral + floating point dual type
 // caller should care about types size and numeric limits
 template <typename I, typename F>
-struct sIF_complex_type {
+struct sIF_dual_type {
 public:
 	// caller should guarantee, that integral value will not exceed floating point value size
-	sIF_complex_type(const I _i) :
+	sIF_dual_type(const I _i) :
 		__i{_i},
 		__f{static_cast<F>(_i)}
 	{
@@ -169,10 +169,10 @@ public:
 		__f = static_cast<F>(_i);
 	}
 
-	bool operator == (sIF_complex_type &_complex)
+	bool operator == (sIF_dual_type &_dual)
 	{
 		// since both parts synchronized, we need only one check
-		return (__i == _complex.i());
+		return (__i == _dual.i());
 	}
 
 private:

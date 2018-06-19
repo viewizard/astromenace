@@ -505,9 +505,9 @@ public:
 	GLtexture DepthTexture{0};
 	GLint DepthSize{0};
 	GLframebuffer FrameBufferObject{0};
-	// we are safe with sIF_complex_type here, since Width and Height not exceed 'float'
-	sIF_complex_type<GLsizei, float> Width{0};
-	sIF_complex_type<GLsizei, float> Height{0};
+	// we are safe with sIF_dual_type here, since Width and Height not exceed 'float'
+	sIF_dual_type<GLsizei, float> Width{0};
+	sIF_dual_type<GLsizei, float> Height{0};
 
 private:
 	// Don't allow direct new/delete usage in code, only vw_BuildFBO()

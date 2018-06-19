@@ -61,8 +61,8 @@ FT_Face InternalFace;
 std::unique_ptr<uint8_t[]> InternalFontBuffer{};
 
 // Font settings.
-// we are safe with sIF_complex_type here, since font size and position will not exceed 'float'
-sIF_complex_type<unsigned, float> InternalFontSize{0};
+// we are safe with sIF_dual_type here, since font size and position will not exceed 'float'
+sIF_dual_type<unsigned, float> InternalFontSize{0};
 constexpr float GlobalFontOffsetY{2.0f}; // FIXME 'fix' for legacy related code, since previously we are used texture instead of
 					 //       freetype, so, all vw_DrawText() calls have wrong Y position now in game code
 
@@ -80,9 +80,9 @@ struct sTexturePos {
 };
 
 struct sFontMetrics {
-	// we are safe with sIF_complex_type here, since position and font size will not exceed 'float'
-	sIF_complex_type<int, float> X, Y;
-	sIF_complex_type<unsigned, float> Width, Height;
+	// we are safe with sIF_dual_type here, since position and font size will not exceed 'float'
+	sIF_dual_type<int, float> X, Y;
+	sIF_dual_type<unsigned, float> Width, Height;
 	float AdvanceX;
 
 	sFontMetrics (const int _X, const int _Y,
@@ -99,14 +99,14 @@ struct sFontMetrics {
 
 struct sFontChar {
 	char32_t UTF32; // key element 1 (UTF32 code)
-	sIF_complex_type<unsigned, float> FontSize; // key element 2 (character generated size)
+	sIF_dual_type<unsigned, float> FontSize; // key element 2 (character generated size)
 
 	GLtexture Texture{0};
 	sTexturePos TexturePos;
 	sFontMetrics FontMetrics;
 
 	// constructor
-	sFontChar(char32_t _UTF32, const sIF_complex_type<unsigned, float> &_FontSize,
+	sFontChar(char32_t _UTF32, const sIF_dual_type<unsigned, float> &_FontSize,
 		  const sTexturePos &_TexturePos,
 		  const sFontMetrics &_FontMetrics) :
 		UTF32{_UTF32},
