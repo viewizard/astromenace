@@ -88,4 +88,11 @@ void vw_GetMousePos(int &X, int &Y);
 // Check mouse position over rectangle.
 bool vw_MouseOverRect(const sRECT &MDetect);
 
+/*
+ * Open URL.
+ */
+
+// Open website URL.
+bool vw_OpenWebsiteURL(const std::string &WebsiteURL);
+
 #endif // CORE_PLATFORM_PLATFORM_H
