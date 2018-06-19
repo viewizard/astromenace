@@ -255,15 +255,21 @@ static void Loop()
 				vw_SetMouseButtonStatus(event.button.button, true);
 				if (event.button.button == SDL_BUTTON_LEFT)
 					vw_SetMouseLeftClick(true);
-				if (event.button.button ==  SDL_BUTTON_RIGHT)
+				if (event.button.button == SDL_BUTTON_RIGHT)
 					vw_SetMouseRightClick(true);
+				if ((event.button.clicks == 2) && // double click
+				    (event.button.button == SDL_BUTTON_LEFT))
+					vw_SetMouseLeftDoubleClick(true);
 				break;
 			case SDL_MOUSEBUTTONUP:
 				vw_SetMouseButtonStatus(event.button.button, false);
-				if (event.button.button ==  SDL_BUTTON_LEFT)
+				if (event.button.button == SDL_BUTTON_LEFT)
 					vw_SetMouseLeftClick(false);
-				if (event.button.button ==  SDL_BUTTON_RIGHT)
+				if (event.button.button == SDL_BUTTON_RIGHT)
 					vw_SetMouseRightClick(false);
+				if ((event.button.clicks == 2) && // double click
+				    (event.button.button == SDL_BUTTON_LEFT))
+					vw_SetMouseLeftDoubleClick(false);
 				break;
 
 			case SDL_JOYBUTTONDOWN:

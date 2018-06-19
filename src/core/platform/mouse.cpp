@@ -45,17 +45,8 @@ int MouseX{0};
 int MouseY{0};
 // wheel status
 int MouseWheelStatus{0};
-
 // left mouse button double click status
 bool MouseLeftDoubleClick{false};
-// left mouse button double click time interval
-constexpr uint32_t DoubleClickTimeInterval{500}; // 500 ms
-// timer for hold double click status
-uint32_t LastTimeLeftDoubleClick{0};
-// X double click position
-int LastTimeLeftDoubleClickX{-1};
-// Y double click position
-int LastTimeLeftDoubleClickY{-1};
 
 } // unnamed namespace
 
@@ -82,23 +73,9 @@ void vw_GetMousePos(int &X, int &Y)
 /*
  * Set left mouse button double click status.
  */
-static void SetMouseLeftDoubleClick()
+void vw_SetMouseLeftDoubleClick(bool NewStatus)
 {
-	int X, Y;
-	vw_GetMousePos(X, Y);
-	uint32_t CurrentTicks = SDL_GetTicks();
-
-	if ((LastTimeLeftDoubleClickX == X) &&
-	    (LastTimeLeftDoubleClickY == Y) &&
-	    (CurrentTicks < LastTimeLeftDoubleClick + DoubleClickTimeInterval)) {
-		MouseLeftDoubleClick = true;
-		LastTimeLeftDoubleClick = CurrentTicks;
-	} else {
-		LastTimeLeftDoubleClickX = X;
-		LastTimeLeftDoubleClickY = Y;
-		LastTimeLeftDoubleClick = CurrentTicks;
-		MouseLeftDoubleClick = false;
-	}
+	MouseLeftDoubleClick = NewStatus;
 }
 
 /*
@@ -107,11 +84,6 @@ static void SetMouseLeftDoubleClick()
 bool vw_GetMouseLeftDoubleClick(bool ResetStatus)
 {
 	bool tmp = MouseLeftDoubleClick;
-	if (MouseLeftDoubleClick) {
-		LastTimeLeftDoubleClick  = 0;
-		LastTimeLeftDoubleClickX = -1;
-		LastTimeLeftDoubleClickY = -1;
-	}
 	if (ResetStatus)
 		MouseLeftDoubleClick = false;
 
@@ -124,8 +96,6 @@ bool vw_GetMouseLeftDoubleClick(bool ResetStatus)
 void vw_SetMouseLeftClick(bool NewStatus)
 {
 	MouseLeftClick = NewStatus;
-	if (NewStatus)
-		SetMouseLeftDoubleClick();
 }
 
 /*
@@ -233,9 +203,6 @@ int vw_GetWheelStatus()
  */
 void vw_SetMousePosRel(int X, int Y)
 {
-	if (X || Y)
-		MouseLeftDoubleClick = false;
-
 	MouseX += X;
 	MouseY += Y;
 
@@ -251,9 +218,6 @@ void vw_SetMousePosRel(int X, int Y)
  */
 void vw_SetMousePos(int X, int Y)
 {
-	if ((MouseX != X) || (MouseY != Y))
-		MouseLeftDoubleClick = false;
-
 	MouseX = X;
 	MouseY = Y;
 }
