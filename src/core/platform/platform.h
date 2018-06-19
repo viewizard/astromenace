@@ -93,6 +93,7 @@ bool vw_MouseOverRect(const sRECT &MDetect);
  */
 
 // Open website URL.
+// Note, this is wrapper for ASCII and ANSI functions, don't use URL with Unicode.
 bool vw_OpenWebsiteURL(const std::string &WebsiteURL);
 
 #endif // CORE_PLATFORM_PLATFORM_H

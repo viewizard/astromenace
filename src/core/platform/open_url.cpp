@@ -26,14 +26,44 @@
 *************************************************************************************/
 
 #include "../base.h"
+#ifdef __unix
+	#include <unistd.h>
+	#include <sys/wait.h>
+#endif // __unix
+#if defined(__APPLE__) && defined(__MACH__)
+	#include <CoreFoundation/CFBundle.h>
+	#include <ApplicationServices/ApplicationServices.h>
+#endif // __APPLE__
 
 /*
  * Open website URL.
+ * Note, this is wrapper for ASCII and ANSI functions, don't use URL with Unicode.
  */
 bool vw_OpenWebsiteURL(const std::string &WebsiteURL)
 {
-#ifdef __unix
+	if (WebsiteURL.empty())
+		return false;
 
+#ifdef __unix
+	// we might have a blocked process issue with our fork, in order to
+	// avoid this issue, we exec xdg-open in second fork (double-fork)
+	pid_t pid1 = fork();
+	if (pid1 == 0) {
+		pid_t pid2 = vfork();
+		if (pid2 == 0) {
+			execlp("xdg-open", "xdg-open", WebsiteURL.c_str(), nullptr);
+			_exit(EXIT_FAILURE);
+		} else if (pid2 < 0)
+			_exit(EXIT_FAILURE);
+		else
+			_exit(EXIT_SUCCESS);
+	} else if (pid1 > 0) {
+		int status;
+		if ((waitpid(pid1, &status, 0) == pid1) &&
+		    WIFEXITED(status) &&
+		    (WEXITSTATUS(status) == 0))
+			return true;
+	}
 #elif defined(__APPLE__) && defined(__MACH__)
 	CFURLRef OpenURL = CFURLCreateWithBytes (
 				nullptr,
