@@ -186,13 +186,13 @@ void JoystickEmulateMouseMovement(float Time)
 }
 
 /*
- * Provide joystick's button name - "JoystickN", where N is number.
+ * Provide joystick button's name - "ButtonN", where N is number.
  */
-const std::string JoystickButtonName(int Num)
+std::string JoystickButtonName(int ButtonNum)
 {
-	if (Num < 0)
+	if (ButtonNum < 0)
 		return "?";
 
-	// Num + 1, since buttons index start from 0
-	return "Joystick" + std::to_string(Num + 1);
+	// ButtonNum + 1, since buttons index start from 0
+	return vw_GetText("Button") + std::to_string(ButtonNum + 1);
 }

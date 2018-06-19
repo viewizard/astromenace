@@ -72,8 +72,8 @@ void SetJoystickButton(int ButtonNumber, bool ButtonStatus);
 bool GetJoystickButton(int ButtonNumber);
 // Emulate mouse movements.
 void JoystickEmulateMouseMovement(float Time);
-// Provide joystick's button name - "JoystickN", where N is number.
-const std::string JoystickButtonName(int Num);
+// Provide joystick button's name - "ButtonN", where N is number.
+std::string JoystickButtonName(int ButtonNum);
 
 /*
  * Video.
