@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-#ifndef CORE_SYSTEM_SYSTEM_H
-#define CORE_SYSTEM_SYSTEM_H
+#ifndef CORE_PLATFORM_PLATFORM_H
+#define CORE_PLATFORM_PLATFORM_H
 
 #include "../base.h"
 
@@ -86,4 +86,4 @@ void vw_GetMousePos(int &X, int &Y);
 // Check mouse position over rectangle.
 bool vw_MouseOverRect(const sRECT &MDetect);
 
-#endif // CORE_SYSTEM_SYSTEM_H
+#endif // CORE_PLATFORM_PLATFORM_H

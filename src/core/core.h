@@ -38,7 +38,7 @@
 #include "model3d/model3d.h"
 #include "particle_system/particle_system.h"
 #include "particle_system2d/particle_system2d.h"
-#include "system/system.h"
+#include "platform/platform.h"
 #include "text/text.h"
 #include "texture/texture.h"
 #include "time_thread/time_thread.h"
