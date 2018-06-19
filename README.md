@@ -1,4 +1,4 @@
-# AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace) [![Discord](https://discordapp.com/api/guilds/440767600629121027/widget.png)](https://discord.gg/PMqWxVX)
+# AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace) [![Discord](https://img.shields.io/badge/discord-join%20chat-blue.svg)](https://discord.gg/PMqWxVX)
 
 * [Installation (Windows, macOS, Linux)](https://github.com/viewizard/astromenace#installation)
 * [Build (macOS, Linux)](https://github.com/viewizard/astromenace#build)
