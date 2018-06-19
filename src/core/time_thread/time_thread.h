@@ -25,24 +25,24 @@
 
 *************************************************************************************/
 
-#ifndef CORE_CORE_H
-#define CORE_CORE_H
+#ifndef CORE_TIMETHREAD_TIMETHREAD_H
+#define CORE_TIMETHREAD_TIMETHREAD_H
 
-#include "audio/audio.h"
-#include "camera/camera.h"
-#include "collision_detection/collision_detection.h"
-#include "font/font.h"
-#include "graphics/graphics.h"
-#include "light/light.h"
-#include "math/math.h"
-#include "model3d/model3d.h"
-#include "particle_system/particle_system.h"
-#include "particle_system2d/particle_system2d.h"
-#include "system/system.h"
-#include "text/text.h"
-#include "texture/texture.h"
-#include "time_thread/time_thread.h"
-#include "vfs/vfs.h"
-#include "xml/xml.h"
+#include "../base.h"
 
-#endif // CORE_CORE_H
+// Initialize or re-initialize time for particular thread.
+void vw_InitTimeThread(int TimeThread);
+// Release all threads.
+void vw_ReleaseAllTimeThread();
+// Get time for particular thread.
+float vw_GetTimeThread(int TimeThread);
+// Pause all time threads.
+void vw_PauseTimeThreads();
+// Resume all previously paused time threads.
+void vw_ResumeTimeThreads();
+// Set time thread speed for particular thread.
+void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed = 1.0f);
+// Get time thread speed for particular thread.
+float vw_GetTimeThreadSpeed(int TimeThread);
+
+#endif // CORE_TIMETHREAD_TIMETHREAD_H

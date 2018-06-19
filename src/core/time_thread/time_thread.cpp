@@ -29,7 +29,7 @@
 The idea of this code - time manipulations, what we need in the game. For example,
 we could "pause" game by stop the time flowing, or just "slowdown" some objects.
 
-This code provide "time threads" mechanism that allow manipulate time inside time
+This code provide "time thread" mechanism that allow manipulate time inside time
 thread or even "stop" time inside time thread.
 
 In common cases, if time manipulations feature not a goal, SDL_GetTicks() provide

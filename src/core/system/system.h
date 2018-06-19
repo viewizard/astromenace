@@ -33,25 +33,6 @@
 struct sRECT;
 
 /*
- * Time threads.
- */
-
-// Initialize or re-initialize time for particular thread.
-void vw_InitTimeThread(int TimeThread);
-// Release all threads.
-void vw_ReleaseAllTimeThread();
-// Get time for particular thread.
-float vw_GetTimeThread(int TimeThread);
-// Pause all time threads.
-void vw_PauseTimeThreads();
-// Resume all previously paused time threads.
-void vw_ResumeTimeThreads();
-// Set time thread speed for particular thread.
-void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed = 1.0f);
-// Get time thread speed for particular thread.
-float vw_GetTimeThreadSpeed(int TimeThread);
-
-/*
  * Keyboard.
  */
 
