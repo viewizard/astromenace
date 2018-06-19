@@ -39,7 +39,6 @@ in theory, we should call music-related functions for actions and only
 vw_UpdateMusic() and vw_IsAnyMusicPlaying() designed to be called in loop.
 */
 
-#include "../system/system.h"
 #include "buffer.h"
 
 namespace {
