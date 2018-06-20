@@ -29,6 +29,7 @@
 #include "enum.h"
 #include "config/config.h"
 #include "platform/platform.h"
+#include "audio/audio.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
 
@@ -246,18 +247,26 @@ void Loop_Proc()
 		case eCommand::SWITCH_TO_GAME:
 			SaveXMLConfigFile();
 			LoadGameData(eLoading::Game);
+			InitGame();
+			PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
+			PlayVoicePhrase(eVoicePhrase::PrepareForAction, 1.0f);
 			break;
 
 		// переход игра-меню (выбор миссии)
 		case eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU:
 			SaveXMLConfigFile();
 			LoadGameData(eLoading::Menu);
+			MenuStatus = eMenuStatus::MISSION;
+			InitMenu();
+			PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
 			break;
 		// переход игра-главное меню
 		case eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU:
 			SaveXMLConfigFile();
 			LoadGameData(eLoading::Menu);
 			MenuStatus = eMenuStatus::MAIN_MENU;
+			InitMenu();
+			PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
 			break;
 
 		default:

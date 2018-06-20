@@ -687,7 +687,7 @@ static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime,
 		SDL_Delay(100);
 }
 
-static void PreLoadGameData(eLoading LoadType)
+static void PreLoadGameData()
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// удаляем данные из памяти
@@ -699,22 +699,6 @@ static void PreLoadGameData(eLoading LoadType)
 
 	// если это не переход меню-игра, снимаем звук
 	vw_StopAllSoundsIfAllowed();
-
-	// FIXME should be moved to proper sources
-	switch(LoadType) {
-	// меню, загрузка в самом начале
-	case eLoading::MenuWithLogo:
-		MenuStatus = eMenuStatus::MAIN_MENU;
-		PlayMusicTheme(eMusicTheme::MENU, 4000, 4000);
-		break;
-	// переход игра-меню
-	case eLoading::Menu:
-		MenuStatus = eMenuStatus::MISSION;
-		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
-		break;
-	default:
-		break;
-	}
 }
 
 static void PostLoadGameData(eLoading LoadType)
@@ -755,30 +739,6 @@ static void PostLoadGameData(eLoading LoadType)
 		}
 	}
 
-	// переходим в нужное место...
-	switch(LoadType) {
-	// меню, первая загрузка, самый старт
-	case eLoading::MenuWithLogo:
-		InitMenu();
-		break;
-
-	// меню, выходим из игры, входим в меню
-	case eLoading::Menu:
-		InitMenu();
-		MenuStatus = eMenuStatus::MISSION; // чтобы не было перехода с основного меню в мисии
-		break;
-
-	// уровни игры
-	case eLoading::Game:
-		InitGame();
-		PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
-		PlayVoicePhrase(eVoicePhrase::PrepareForAction, 1.0f);
-		break;
-
-	default:
-		break;
-	}
-
 	// всегда на черном фоне
 	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
@@ -802,7 +762,7 @@ void ChangeTexturesAnisotropyLevel()
 //------------------------------------------------------------------------------------
 void LoadGameData(eLoading LoadType)
 {
-	PreLoadGameData(LoadType);
+	PreLoadGameData();
 
 	// load assets only on game start (or restart)
 	if (LoadType != eLoading::MenuWithLogo) {
