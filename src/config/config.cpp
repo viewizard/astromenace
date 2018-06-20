@@ -233,22 +233,27 @@ static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std:
  */
 static void CheckConfig()
 {
-	if (Config.KeyBoardUp == 0)
+	// SDL_GetKeyFromName() return SDLK_UNKNOWN if the name wasn't recognized
+	if (Config.KeyBoardUp == SDLK_UNKNOWN)
 		Config.KeyBoardUp = SDLK_UP;
-	if (Config.KeyBoardDown == 0)
+	if (Config.KeyBoardDown == SDLK_UNKNOWN)
 		Config.KeyBoardDown = SDLK_DOWN;
-	if (Config.KeyBoardLeft == 0)
+	if (Config.KeyBoardLeft == SDLK_UNKNOWN)
 		Config.KeyBoardLeft = SDLK_LEFT;
-	if (Config.KeyBoardRight == 0)
+	if (Config.KeyBoardRight == SDLK_UNKNOWN)
 		Config.KeyBoardRight = SDLK_RIGHT;
-	if (Config.KeyBoardPrimary == 0)
+	if (Config.KeyBoardPrimary == SDLK_UNKNOWN)
 		Config.KeyBoardPrimary = SDLK_LCTRL;
-	if (Config.KeyBoardSecondary == 0)
+	if (Config.KeyBoardSecondary == SDLK_UNKNOWN)
 		Config.KeyBoardSecondary = SDLK_SPACE;
+
+	// std::atoi() - if no conversion can be performed, ​0​ is returned, mouse buttons should starts from 1
 	if (Config.MousePrimary == 0)
 		Config.MousePrimary = SDL_BUTTON_LEFT;
 	if (Config.MouseSecondary == 0)
 		Config.MouseSecondary = SDL_BUTTON_RIGHT;
+
+	// note, we don't check JoystickPrimary and JoystickSecondary here (same std::atoi() are used), since 0 is allowed
 
 	if ((Config.FontNumber < 0) || (Config.FontNumber >= GetFontQuantity()))
 		Config.FontNumber = 0;
