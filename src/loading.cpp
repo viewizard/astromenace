@@ -680,9 +680,6 @@ static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime,
 		}
 	}
 
-	// important, update music buffers
-	AudioLoop();
-
 	LastDrawTime = SDL_GetTicks();
 
 	// small delay for last call with 100%
@@ -708,7 +705,6 @@ static void PreLoadGameData(eLoading LoadType)
 	// меню, загрузка в самом начале
 	case eLoading::MenuWithLogo:
 		MenuStatus = eMenuStatus::MAIN_MENU;
-		AudioLoop();
 		PlayMusicTheme(eMusicTheme::MENU, 4000, 4000);
 		break;
 	// переход игра-меню
@@ -901,6 +897,8 @@ void LoadGameData(eLoading LoadType)
 				RealLoadedAssets += 100;
 				// рисуем текущее состояние загрузки, если не рисуем логотип
 				DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
+				// important, update music buffers
+				AudioLoop();
 			}
 		}
 
@@ -993,6 +991,8 @@ void LoadGameData(eLoading LoadType)
 
 		// рисуем текущее состояние загрузки, если не рисуем логотип
 		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
+		// important, update music buffers
+		AudioLoop();
 	}
 
 	// убираем картинку загрузки
