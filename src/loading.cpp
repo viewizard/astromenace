@@ -701,46 +701,41 @@ static void PreLoadGameData()
 	vw_StopAllSoundsIfAllowed();
 }
 
-static void PostLoadGameData(eLoading LoadType)
+void SetupShadowMap(eLoading LoadType)
 {
+	ShadowMap_Release();
+
+	if (GameConfig().ShadowMap <= 0)
+		return;
+
 	// инициализируем шадов меп, делаем это постоянно т.к. у нас разные размеры карт для меню и игры
-	if (GameConfig().ShadowMap > 0) {
-		int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
+	int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
 
-		auto MenuShadowMap = [&ShadowMapSize] () {
-			// since we need "soft" shadows for less price, reduce shadow map size
-			if (ShadowMapSize > 2048)
-				ShadowMapSize = 2048;
-			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize / 2))
-				ChangeGameConfig().ShadowMap = 0;
-		};
+	auto MenuShadowMap = [&ShadowMapSize] () {
+		// since we need "soft" shadows for less price, reduce shadow map size
+		if (ShadowMapSize > 2048)
+			ShadowMapSize = 2048;
+		if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize / 2))
+			ChangeGameConfig().ShadowMap = 0;
+	};
 
-		switch(LoadType) {
-		case eLoading::Menu:   // меню (выходим из игры)
-			ShadowMap_Release();
-			MenuShadowMap();
-			break;
+	switch (LoadType) {
+	case eLoading::Menu: // меню (выходим из игры)
+	case eLoading::MenuWithLogo: // меню (только запустили)
+		MenuShadowMap();
+		break;
 
-		case eLoading::MenuWithLogo:  // меню (только запустили)
-			MenuShadowMap();
-			break;
+	case eLoading::Game: // переход на уровни игры
+		// since we need "soft" shadows for less price, reduce shadow map size
+		if (ShadowMapSize > 4096)
+			ShadowMapSize = 4096;
+		if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
+			ChangeGameConfig().ShadowMap = 0;
+		break;
 
-		case eLoading::Game: // переход на уровни игры
-			ShadowMap_Release();
-			// since we need "soft" shadows for less price, reduce shadow map size
-			if (ShadowMapSize > 4096)
-				ShadowMapSize = 4096;
-			if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
-				ChangeGameConfig().ShadowMap = 0;
-			break;
-
-		default:
-			break;
-		}
+	default:
+		break;
 	}
-
-	// всегда на черном фоне
-	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void ChangeTexturesAnisotropyLevel()
@@ -766,7 +761,7 @@ void LoadGameData(eLoading LoadType)
 
 	// load assets only on game start (or restart)
 	if (LoadType != eLoading::MenuWithLogo) {
-		PostLoadGameData(LoadType);
+		SetupShadowMap(LoadType);
 		return;
 	}
 
@@ -958,5 +953,5 @@ void LoadGameData(eLoading LoadType)
 	// убираем картинку загрузки
 	vw_ReleaseTexture(LoadImageTexture);
 
-	PostLoadGameData(LoadType);
+	SetupShadowMap(LoadType);
 }
