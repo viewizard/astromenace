@@ -716,10 +716,6 @@ static void PreLoadGameData(eLoading LoadType)
 		MenuStatus = eMenuStatus::MISSION;
 		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
 		break;
-	// переход меню-игра
-	case eLoading::Game:
-		SaveXMLConfigFile();
-		break;
 	default:
 		break;
 	}

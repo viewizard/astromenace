@@ -244,15 +244,18 @@ void Loop_Proc()
 
 		// переходим на игру
 		case eCommand::SWITCH_TO_GAME:
+			SaveXMLConfigFile();
 			LoadGameData(eLoading::Game);
 			break;
 
 		// переход игра-меню (выбор миссии)
 		case eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU:
+			SaveXMLConfigFile();
 			LoadGameData(eLoading::Menu);
 			break;
 		// переход игра-главное меню
 		case eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU:
+			SaveXMLConfigFile();
 			LoadGameData(eLoading::Menu);
 			MenuStatus = eMenuStatus::MAIN_MENU;
 			break;
