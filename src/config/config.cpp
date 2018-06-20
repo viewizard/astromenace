@@ -249,18 +249,14 @@ static void CheckConfig()
 		Config.MousePrimary = SDL_BUTTON_LEFT;
 	if (Config.MouseSecondary == 0)
 		Config.MouseSecondary = SDL_BUTTON_RIGHT;
-	if (Config.JoystickPrimary == -1)
-		Config.JoystickPrimary = 0;
-	if (Config.JoystickSecondary == -1)
-		Config.JoystickSecondary = 1;
 
 	if ((Config.FontNumber < 0) || (Config.FontNumber >= GetFontQuantity()))
 		Config.FontNumber = 0;
-	if (Config.ControlSensivity > 10)
+	if (Config.ControlSensivity > 10) // NOTE use std::clamp here (since C++17)
 		Config.ControlSensivity = 10;
-	if (Config.Brightness > 10)
+	if (Config.Brightness > 10) // NOTE use std::clamp here (since C++17)
 		Config.Brightness = 10;
-	if (Config.JoystickDeadZone > 10)
+	if (Config.JoystickDeadZone > 10) // NOTE use std::clamp here (since C++17)
 		Config.JoystickDeadZone = 10;
 }
 
