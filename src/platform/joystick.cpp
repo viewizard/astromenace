@@ -36,6 +36,7 @@ Which Joystick should be used, could be configured via config file, "JoystickNum
 
 #include "../core/core.h"
 #include "../config/config.h"
+#include "platform.h"
 
 namespace {
 
@@ -52,10 +53,12 @@ float JoystickTimeDelta{0.0f};
 
 
 /*
- * Joystick initialization.
+ * Joystick (re)initialization.
  */
 bool JoystickInit(float InitialTime)
 {
+	JoystickClose(); // since we could reinit joystick, close it first
+
 	if (SDL_NumJoysticks() <= 0)
 		return false;
 
@@ -76,6 +79,7 @@ bool JoystickInit(float InitialTime)
 			  << "Joystick Number of Buttons: " << SDL_JoystickNumButtons(Joystick) << "\n"
 			  << "Joystick Number of Balls: " << SDL_JoystickNumBalls(Joystick) << "\n\n";
 	} else {
+		std::cerr << __func__ << "(): " << "SDL_JoystickOpen() failed: " << SDL_GetError() << "\n";
 		std::cout << "Couldn't open Joystick " << GameConfig().JoystickNum << "\n\n";
 		return false;
 	}
@@ -96,10 +100,14 @@ bool JoystickInit(float InitialTime)
  */
 void JoystickClose()
 {
-	if ((SDL_NumJoysticks() > 0) &&
-	    Joystick &&
-	    SDL_JoystickGetAttached(Joystick))
+	if (!Joystick)
+		return;
+
+	if (SDL_JoystickGetAttached(Joystick))
 		SDL_JoystickClose(Joystick);
+
+	Joystick = nullptr;
+	JoystickButtons.clear();
 }
 
 /*

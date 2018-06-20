@@ -282,6 +282,10 @@ static void Loop()
 				vw_SetMouseLeftClick(false);
 				SetJoystickButton(event.jbutton.button, false);
 				break;
+			case SDL_JOYDEVICEADDED:
+			case SDL_JOYDEVICEREMOVED:
+				JoystickInit(vw_GetTimeThread(0));
+				break;
 
 			case SDL_WINDOWEVENT:
 				switch (event.window.event) {

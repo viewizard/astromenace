@@ -65,7 +65,7 @@ std::string MouseButtonName(int ButtonNum);
  * Joystick.
  */
 
-// Joystick initialization.
+// Joystick (re)initialization.
 bool JoystickInit(float Time);
 // Close joystick.
 void JoystickClose();
