@@ -28,10 +28,17 @@
 #ifndef GFX_SHADOWMAP_H
 #define GFX_SHADOWMAP_H
 
+enum class eShadowMapSetup {
+	Menu,
+	Game
+};
+
 // Initialization.
 bool ShadowMap_Init(int Width, int Height);
 // Release.
 void ShadowMap_Release();
+// Setup shadow map with appropriate map's size.
+void ShadowMap_SizeSetup(eShadowMapSetup ShadowMapSetup);
 // Start shadow map rendering (depth map).
 void ShadowMap_StartRenderToFBO(sVECTOR3D FocusPointCorrection, float Distance, float fFarClip);
 // End shadow map rendering (depth map).

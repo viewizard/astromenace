@@ -30,6 +30,7 @@
 //      that based on camera focus point and 'magic' FocusPointCorrection
 
 #include "../core/core.h"
+#include "../config/config.h"
 #include "shadow_map.h"
 
 namespace {
@@ -92,6 +93,37 @@ void ShadowMap_Release()
 		return;
 
 	ShadowMapFBO.reset();
+}
+
+/*
+ * Setup shadow map with appropriate map's size.
+ */
+void ShadowMap_SizeSetup(eShadowMapSetup ShadowMapSetup)
+{
+	ShadowMap_Release();
+
+	if (GameConfig().ShadowMap <= 0)
+		return;
+
+	int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
+
+	switch (ShadowMapSetup) {
+	case eShadowMapSetup::Menu:
+		// since we need "soft" shadows for less price, reduce shadow map size
+		if (ShadowMapSize > 2048)
+			ShadowMapSize = 2048;
+		if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize / 2))
+			ChangeGameConfig().ShadowMap = 0;
+		break;
+
+	case eShadowMapSetup::Game:
+		// since we need "soft" shadows for less price, reduce shadow map size
+		if (ShadowMapSize > 4096)
+			ShadowMapSize = 4096;
+		if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
+			ChangeGameConfig().ShadowMap = 0;
+		break;
+	}
 }
 
 /*
