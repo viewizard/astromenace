@@ -32,6 +32,7 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
+#include "../gfx/shadow_map.h"
 #include "../main.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
@@ -408,8 +409,10 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 				ChangeGameConfig().AnisotropyLevel = Options_TexturesAnisotropyLevel;
 				ChangeTexturesAnisotropyLevel();
 			}
-			if (GameConfig().ShadowMap != Options_ShadowMap)
+			if (GameConfig().ShadowMap != Options_ShadowMap) {
 				ChangeGameConfig().ShadowMap = Options_ShadowMap;
+				SetupShadowMap(eLoading::Menu);
+			}
 
 			// проверяем, нужно перегружать или нет
 			if (Options_UseGLSL120 != GameConfig().UseGLSL120) {
