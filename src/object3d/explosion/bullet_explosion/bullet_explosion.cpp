@@ -27,6 +27,7 @@
 
 #include "bullet_explosion.h"
 #include "../../../config/config.h"
+#include "../../../audio/audio.h"
 
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, eObjectStatus ObjectStatus);

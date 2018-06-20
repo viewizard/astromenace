@@ -31,6 +31,8 @@
 #include "../object3d.h"
 #include "../projectile/projectile.h"
 
+enum class eGameSFX;
+
 class cWeapon : public cObject3D {
 public:
 	cWeapon();
@@ -98,7 +100,7 @@ public:
 	// выстрел - вылет частиц (засветка возле ствола)
 	std::weak_ptr<cParticleSystem> Fire{};
 	sVECTOR3D FireLocation{0.0f, 0.0f, 0.0f};
-	eGameSFX SFX{eGameSFX::none};
+	eGameSFX SFX{static_cast<eGameSFX>(0)}; // would be value initialized to 0, eGameSFX::none
 
 	// если оружие уничтожено, делаем вырывающийся огонь
 	std::weak_ptr<cParticleSystem> DestroyedFire{};

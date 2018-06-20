@@ -51,7 +51,7 @@ enum class eMenuSFX {
 
 // game sfx
 enum class eGameSFX {
-	none,
+	none, // note, 'none' should be the first element, since variables would be value initialized to 0
 	WeaponMalfunction_Kinetic, // Kinetic
 	WeaponMalfunction_Particle, // Ion, Plasma
 	WeaponMalfunction_Beam, // Maser, Laser
@@ -103,7 +103,7 @@ enum class eVoicePhrase {
 
 // music themes
 enum class eMusicTheme {
-	NONE,
+	NONE, // note, 'NONE' should be the first element, since variables would be value initialized to 0
 	MENU,
 	GAME,
 	BOSS,

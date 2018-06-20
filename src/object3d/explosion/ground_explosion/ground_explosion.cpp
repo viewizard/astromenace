@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "ground_explosion.h"
+#include "../../../audio/audio.h"
 #include "../../../object3d/space_object/ship_part/ship_part.h"
 
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);

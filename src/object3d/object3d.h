@@ -40,7 +40,6 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../script/script.h"
-#include "../audio/audio.h"
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern int GameEnemyWeaponPenalty;
