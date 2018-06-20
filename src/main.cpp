@@ -467,7 +467,7 @@ RecreateWindow:
 		SDL_ShowCursor(SDL_DISABLE);
 
 	PlayMusicTheme(eMusicTheme::MENU, 4000, 4000);
-	LoadGameData(eLoading::MenuWithLogo);
+	LoadGameData();
 	MenuStatus = eMenuStatus::MAIN_MENU;
 	InitMenu();
 

@@ -411,7 +411,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			}
 			if (GameConfig().ShadowMap != Options_ShadowMap) {
 				ChangeGameConfig().ShadowMap = Options_ShadowMap;
-				SetupShadowMap(eLoading::Menu);
+				ShadowMap_SizeSetup(eShadowMapSetup::Menu);
 			}
 
 			// проверяем, нужно перегружать или нет

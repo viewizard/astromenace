@@ -63,8 +63,7 @@ void Loop_Proc();
 //------------------------------------------------------------------------------------
 // loading.cpp
 //------------------------------------------------------------------------------------
-void LoadGameData(eLoading LoadType);
-void SetupShadowMap(eLoading LoadType);
+void LoadGameData();
 
 
 

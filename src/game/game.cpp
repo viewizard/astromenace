@@ -41,6 +41,7 @@
 #include "../ui/font.h"
 #include "../audio/audio.h"
 #include "../gfx/star_system.h"
+#include "../gfx/shadow_map.h"
 #include "../script/script.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 #include <stdarg.h> // va_start
@@ -595,10 +596,12 @@ void DrawGameExpMoney(int Exp, int Money)
 //------------------------------------------------------------------------------------
 void InitGame()
 {
-	//----
-	// только для отладки!!!
-	if (CurrentProfile<0 || CurrentProfile>4) CurrentProfile = 0;
-	if (CurrentMission == -1) CurrentMission = 0;
+	ShadowMap_SizeSetup(eShadowMapSetup::Game);
+
+	if ((CurrentProfile < 0) || (CurrentProfile > 4))
+		CurrentProfile = 0;
+	if (CurrentMission == -1)
+		CurrentMission = 0;
 
 
 	GameEnemyWeaponPenalty = GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty;

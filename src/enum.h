@@ -81,13 +81,6 @@ enum class eCommand {
 	SWITCH_FROM_GAME_TO_MAIN_MENU
 };
 
-enum class eLoading {
-	InitialValue,	// initial value for variables
-	MenuWithLogo,	// loading menu with logo at game launch
-	Menu,
-	Game
-};
-
 enum class eDialogBox {
 	None,
 	QuitFromGame,			// quit from menu, exit from the game

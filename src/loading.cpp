@@ -33,11 +33,8 @@
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
-#include "game.h"
+#include "core/core.h"
 #include "config/config.h"
-#include "object3d/object3d.h"
-#include "gfx/star_system.h"
-#include "gfx/shadow_map.h"
 #include "ui/font.h"
 #include "audio/audio.h"
 #include "main.h"
@@ -687,57 +684,6 @@ static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime,
 		SDL_Delay(100);
 }
 
-static void PreLoadGameData()
-{
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// удаляем данные из памяти
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	ReleaseAllObject3D();
-	vw_ReleaseAllParticleSystems();
-	vw_ReleaseAllLights();
-	StarSystemRelease();
-
-	// если это не переход меню-игра, снимаем звук
-	vw_StopAllSoundsIfAllowed();
-}
-
-void SetupShadowMap(eLoading LoadType)
-{
-	ShadowMap_Release();
-
-	if (GameConfig().ShadowMap <= 0)
-		return;
-
-	// инициализируем шадов меп, делаем это постоянно т.к. у нас разные размеры карт для меню и игры
-	int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
-
-	auto MenuShadowMap = [&ShadowMapSize] () {
-		// since we need "soft" shadows for less price, reduce shadow map size
-		if (ShadowMapSize > 2048)
-			ShadowMapSize = 2048;
-		if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize / 2))
-			ChangeGameConfig().ShadowMap = 0;
-	};
-
-	switch (LoadType) {
-	case eLoading::Menu: // меню (выходим из игры)
-	case eLoading::MenuWithLogo: // меню (только запустили)
-		MenuShadowMap();
-		break;
-
-	case eLoading::Game: // переход на уровни игры
-		// since we need "soft" shadows for less price, reduce shadow map size
-		if (ShadowMapSize > 4096)
-			ShadowMapSize = 4096;
-		if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize))
-			ChangeGameConfig().ShadowMap = 0;
-		break;
-
-	default:
-		break;
-	}
-}
-
 void ChangeTexturesAnisotropyLevel()
 {
 	for (unsigned i = 0; i < LoadListCount; i++) {
@@ -755,16 +701,8 @@ void ChangeTexturesAnisotropyLevel()
 //------------------------------------------------------------------------------------
 // процедура загрузки данных
 //------------------------------------------------------------------------------------
-void LoadGameData(eLoading LoadType)
+void LoadGameData()
 {
-	PreLoadGameData();
-
-	// load assets only on game start (or restart)
-	if (LoadType != eLoading::MenuWithLogo) {
-		SetupShadowMap(LoadType);
-		return;
-	}
-
 	int AllDrawLoading{0};
 	// получаем значение (реальное, по весам)
 	for (unsigned i = 0; i < LoadListCount; i++) {
@@ -781,21 +719,17 @@ void LoadGameData(eLoading LoadType)
 		NeedLoadShaders = true;
 	}
 
-	if (LoadType == eLoading::MenuWithLogo)
-		GenerateFonts();
+	GenerateFonts();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем логотип компании
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (LoadType == eLoading::MenuWithLogo) {
-		// выводим логотип Viewizard
-		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
-				  false, eAlphaCreateMode::EQUAL, false);
-		GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga");
-
-		DrawViewizardLogo(ViewizardLogoTexture);
-		vw_ReleaseTexture(ViewizardLogoTexture);
-	}
+	// выводим логотип Viewizard
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
+			  false, eAlphaCreateMode::EQUAL, false);
+	GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga");
+	DrawViewizardLogo(ViewizardLogoTexture);
+	vw_ReleaseTexture(ViewizardLogoTexture);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем список
@@ -952,6 +886,4 @@ void LoadGameData(eLoading LoadType)
 
 	// убираем картинку загрузки
 	vw_ReleaseTexture(LoadImageTexture);
-
-	SetupShadowMap(LoadType);
 }

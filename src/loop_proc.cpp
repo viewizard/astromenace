@@ -29,6 +29,8 @@
 #include "enum.h"
 #include "config/config.h"
 #include "platform/platform.h"
+#include "object3d/object3d.h"
+#include "gfx/star_system.h"
 #include "audio/audio.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
@@ -196,7 +198,14 @@ void Loop_Proc()
 	}
 
 
-
+	auto PrepareToSwitchStatus = [] () {
+		SaveXMLConfigFile();
+		ReleaseAllObject3D();
+		vw_ReleaseAllParticleSystems();
+		vw_ReleaseAllLights();
+		StarSystemRelease();
+		vw_StopAllSoundsIfAllowed();
+	};
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// выполняем то, что есть в буфере команд, если там что-то есть
@@ -244,8 +253,7 @@ void Loop_Proc()
 
 		// переходим на игру
 		case eCommand::SWITCH_TO_GAME:
-			SaveXMLConfigFile();
-			LoadGameData(eLoading::Game);
+			PrepareToSwitchStatus();
 			InitGame();
 			PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
 			PlayVoicePhrase(eVoicePhrase::PrepareForAction, 1.0f);
@@ -253,16 +261,14 @@ void Loop_Proc()
 
 		// переход игра-меню (выбор миссии)
 		case eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU:
-			SaveXMLConfigFile();
-			LoadGameData(eLoading::Menu);
+			PrepareToSwitchStatus();
 			MenuStatus = eMenuStatus::MISSION;
 			InitMenu();
 			PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
 			break;
 		// переход игра-главное меню
 		case eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU:
-			SaveXMLConfigFile();
-			LoadGameData(eLoading::Menu);
+			PrepareToSwitchStatus();
 			MenuStatus = eMenuStatus::MAIN_MENU;
 			InitMenu();
 			PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
