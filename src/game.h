@@ -144,6 +144,7 @@ extern float LastButton14UpdateTime;
 extern float MenuContentTransp;
 extern float LastMenuOnOffUpdateTime;
 
+extern bool NeedOffMenu;
 extern eMenuStatus MenuStatus;
 
 void InitMenu();

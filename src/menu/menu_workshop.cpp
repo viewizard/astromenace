@@ -442,7 +442,7 @@ void WorkshopMenu()
 			WeaponSetupSlot = -1;
 			//
 			LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
-			ComBuffer = eCommand::TURN_OFF_WORKSHOP_MENU;
+			NeedOffMenu = true;
 		}
 	}
 }

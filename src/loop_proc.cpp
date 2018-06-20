@@ -201,8 +201,7 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// выполняем то, что есть в буфере команд, если там что-то есть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((ComBuffer != eCommand::DO_NOTHING) &&
-	    (ComBuffer != eCommand::TURN_OFF_WORKSHOP_MENU)) {
+	if (ComBuffer != eCommand::DO_NOTHING) {
 
 		switch(ComBuffer) {
 		case eCommand::SWITCH_TO_MAIN_MENU:

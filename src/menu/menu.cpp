@@ -48,6 +48,7 @@ float MenuContentTransp = 0.0f;
 float LastMenuOnOffUpdateTime = 0.0f;
 float MenuBlackTransp = 0.0f;
 bool NeedOnMenu = false;// если нужно выйти из черного
+bool NeedOffMenu = false;
 bool NeedShowMenu = false;
 bool NeedHideMenu = false;
 eMenuStatus MenuStatus;
@@ -190,6 +191,7 @@ void InitMenu()
 	LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
 	MenuBlackTransp = 1.0f;
 	NeedOnMenu = true;
+	NeedOffMenu = false;
 	// подстраховка, если не укажем меню, перейдем в основное
 	MenuStatus = eMenuStatus::MAIN_MENU;
 
@@ -579,10 +581,11 @@ void DrawMenu()
 	}
 
 	// черное затемнение, выключаем воркшоп (готовимся к переходу на игру)
-	if (ComBuffer == eCommand::TURN_OFF_WORKSHOP_MENU) {
+	if (NeedOffMenu) {
 		MenuBlackTransp = 2.4f*(vw_GetTimeThread(0) - LastMenuOnOffUpdateTime);
 		if (MenuBlackTransp >= 1.0f) {
 			MenuBlackTransp = 1.0f;
+			NeedOffMenu = false;
 			LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
 			// переход на игру
 			WorkshopDestroyData();
