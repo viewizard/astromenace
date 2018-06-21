@@ -31,44 +31,46 @@ namespace {
 
 // empirical found "load value" for each sfx asset
 // small value mean that asset loads fast, big value - slow
-constexpr unsigned SFXValue{20};
+constexpr unsigned SFXLoadValue{20};
 
 // make sure, that all sfx are added in order to load them before first access,
 // otherwise they will be load on first access (that may lag the game process)
-std::vector<std::string> SFXAssetArray{{"sfx/weapon1probl.wav"},
-				       {"sfx/weapon2probl.wav"},
-				       {"sfx/weapon3probl.wav"},
-				       {"sfx/weapon4probl.wav"},
-				       {"sfx/weapon5probl.wav"},
-				       {"sfx/explosion1.wav"},
-				       {"sfx/explosion2.wav"},
-				       {"sfx/explosion3.wav"},
-				       {"sfx/explosion4.wav"},
-				       {"sfx/weaponfire1.wav"},
-				       {"sfx/weaponfire2.wav"},
-				       {"sfx/weaponfire3.wav"},
-				       {"sfx/weaponfire4.wav"},
-				       {"sfx/weaponfire5.wav"},
-				       {"sfx/weaponfire6.wav"},
-				       {"sfx/weaponfire7.wav"},
-				       {"sfx/weaponfire8.wav"},
-				       {"sfx/weaponfire9.wav"},
-				       {"sfx/weaponfire10.wav"},
-				       {"sfx/weaponfire11.wav"},
-				       {"sfx/weaponfire12.wav"},
-				       {"sfx/weaponfire13.wav"},
-				       {"sfx/weaponfire14.wav"},
-				       {"sfx/weaponfire15.wav"},
-				       {"sfx/weaponfire16.wav"},
-				       {"sfx/weaponfire17.wav"},
-				       {"sfx/weaponfire18.wav"},
-				       {"sfx/weaponfire19.wav"},
-				       {"sfx/kinetichit.wav"},
-				       {"sfx/ionhit.wav"},
-				       {"sfx/plasmahit.wav"},
-				       {"sfx/antimaterhit.wav"},
-				       {"sfx/gausshit.wav"},
-				       {"sfx/lowlife.wav"}};
+const std::vector<std::string> SFXAssetArray{
+	{"sfx/weapon1probl.wav"},
+	{"sfx/weapon2probl.wav"},
+	{"sfx/weapon3probl.wav"},
+	{"sfx/weapon4probl.wav"},
+	{"sfx/weapon5probl.wav"},
+	{"sfx/explosion1.wav"},
+	{"sfx/explosion2.wav"},
+	{"sfx/explosion3.wav"},
+	{"sfx/explosion4.wav"},
+	{"sfx/weaponfire1.wav"},
+	{"sfx/weaponfire2.wav"},
+	{"sfx/weaponfire3.wav"},
+	{"sfx/weaponfire4.wav"},
+	{"sfx/weaponfire5.wav"},
+	{"sfx/weaponfire6.wav"},
+	{"sfx/weaponfire7.wav"},
+	{"sfx/weaponfire8.wav"},
+	{"sfx/weaponfire9.wav"},
+	{"sfx/weaponfire10.wav"},
+	{"sfx/weaponfire11.wav"},
+	{"sfx/weaponfire12.wav"},
+	{"sfx/weaponfire13.wav"},
+	{"sfx/weaponfire14.wav"},
+	{"sfx/weaponfire15.wav"},
+	{"sfx/weaponfire16.wav"},
+	{"sfx/weaponfire17.wav"},
+	{"sfx/weaponfire18.wav"},
+	{"sfx/weaponfire19.wav"},
+	{"sfx/kinetichit.wav"},
+	{"sfx/ionhit.wav"},
+	{"sfx/plasmahit.wav"},
+	{"sfx/antimaterhit.wav"},
+	{"sfx/gausshit.wav"},
+	{"sfx/lowlife.wav"}
+};
 
 } // unnamed namespace
 
@@ -78,7 +80,7 @@ std::vector<std::string> SFXAssetArray{{"sfx/weapon1probl.wav"},
  */
 unsigned GetAudioAssetsValue()
 {
-	return SFXAssetArray.size() * SFXValue;
+	return SFXAssetArray.size() * SFXLoadValue;
 }
 
 /*
@@ -91,6 +93,6 @@ void ForEachAudioAssetLoad(std::function<void (unsigned AssetValue)> function)
 
 	for (auto &tmpAsset : SFXAssetArray) {
 		vw_LoadSoundBuffer(tmpAsset);
-		function(SFXValue);
+		function(SFXLoadValue);
 	}
 }
