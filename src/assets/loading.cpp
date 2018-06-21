@@ -32,6 +32,7 @@
 #include "../ui/font.h"
 #include "../audio/audio.h"
 #include "../main.h"
+#include "audio.h"
 
 
 struct sLoadList {
@@ -243,40 +244,6 @@ static sLoadList LoadList[] = {
 	{"models/earthfighter/lnch12.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/earthfighter/lnch34.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/earthfighter/rockets.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"sfx/weapon1probl.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weapon2probl.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weapon3probl.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weapon4probl.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weapon5probl.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/explosion1.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/explosion2.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/explosion3.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/explosion4.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire1.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire2.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire3.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire4.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire5.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire6.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire7.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire8.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire9.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire10.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire11.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire12.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire13.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire14.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire15.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire16.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire17.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire18.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/weaponfire19.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/kinetichit.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/ionhit.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/plasmahit.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/antimaterhit.wav",	4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/gausshit.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
-	{"sfx/lowlife.wav",		4, 20, false, eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, true, -1.0f, false},
 // мины
 	{"models/mine/mine1.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/mine/mine1i.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -628,7 +595,7 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-static void DrawLoading(int Current, int AllDrawLoading, uint32_t &LastDrawTime, GLtexture LoadImageTexture)
+static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint32_t &LastDrawTime, GLtexture LoadImageTexture)
 {
 	if ((Current != AllDrawLoading) && // the last one (with 100%) must be rendered
 	    (LastDrawTime + 10 >= SDL_GetTicks())) // 100 per second - is good enough frame rate, no need more
@@ -695,11 +662,13 @@ void ChangeTexturesAnisotropyLevel()
  */
 void LoadGameData()
 {
-	int AllDrawLoading{0};
+	unsigned int AllDrawLoading{0};
 	// получаем значение (реальное, по весам)
 	for (unsigned i = 0; i < LoadListCount; i++) {
 		AllDrawLoading += LoadList[i].Value;
 	}
+
+	AllDrawLoading += GetAudioAssetsValue();
 
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
 	bool NeedLoadShaders = false;
@@ -756,7 +725,7 @@ void LoadGameData()
 	uint32_t LastDrawTime = SDL_GetTicks();
 
 	// если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
-	int RealLoadedAssets{0};
+	unsigned int RealLoadedAssets{0};
 	if (NeedLoadShaders) {
 		for (unsigned i = 0; i < GLSLLoadListCount; i++) {
 			if (GameConfig().UseGLSL120) {
@@ -823,6 +792,14 @@ void LoadGameData()
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
 
+
+	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
+		RealLoadedAssets += AssetValue;
+		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
+		AudioLoop();
+	};
+	ForEachAudioAssetLoad(UpdateLoadStatus);
+
 	for (unsigned i = 0; i < LoadListCount; i++) {
 		switch (LoadList[i].FileType) {
 		// "2D" texture
@@ -857,13 +834,6 @@ void LoadGameData()
 		case 2:
 			vw_LoadModel3D(LoadList[i].FileName, LoadList[i].TriangleSizeLimit,
 				       LoadList[i].NeedTangentAndBinormal && GameConfig().UseGLSL120);
-			break;
-
-		// sfx
-		case 4:
-			// если вообще можем играть звуки
-			if (vw_GetAudioStatus())
-				vw_LoadSoundBuffer(LoadList[i].FileName);
 			break;
 		}
 
