@@ -34,31 +34,7 @@
 #include "../main.h"
 #include "audio.h"
 #include "model3d.h"
-
-
-struct sLoadList {
-	// имя файла
-	std::string FileName;
-	// тип файла (0-2д текстура, 1-текстура, 2-VW3D, 3-music, 4-sfx)
-	int FileType;
-	// вес данного объекта при загрузке (для текстур берем кб)
-	int Value;
-	// альфа канал, если нужно
-	bool Alpha;
-	// режим создания альфа канала
-	eAlphaCreateMode AlphaMode;
-	// фильтр текстуры
-	eTextureWrapMode TextWrap;
-	eTextureBasicFilter TextFilter;
-	int TextAnisotropy; // 1 - need, 0 - don't need
-	bool MipMap;
-	// нужно ли для этой текстуры сжатие
-	bool NeedCompression;
-	// для 3д моделей, если 1.0f делать структуру с мелкими треугольниками
-	float TriangleSizeLimit;
-	// для 3д моделей, если надо - делаем тангенты и бинормали
-	bool NeedTangentAndBinormal;
-};
+#include "texture.h"
 
 std::weak_ptr<cGLSL> GLSLShaderType1{};
 std::weak_ptr<cGLSL> GLSLShaderType2{};
@@ -76,254 +52,6 @@ const cGLSLLoadList GLSLLoadList[] = {
 	{"PerPixelLight_Explosion",	"glsl/light_explosion.vert",	"glsl/light_explosion.frag"},
 };
 #define GLSLLoadListCount sizeof(GLSLLoadList)/sizeof(GLSLLoadList[0])
-
-
-// лист загрузки меню
-static sLoadList LoadList[] = {
-// текстуры меню... кнопки, диалоги, название игры
-	{"menu/astromenace.tga",	0, 512, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button384_back.tga",	0, 192, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button384_in.tga",	0, 96, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button384_out.tga",	0, 96, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button256_back.tga",	0, 192, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button256_in.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button256_out.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button256_off.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/blackpoint.tga",		0, 0, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/whitepoint.tga",		0, 0, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/line.tga",		0, 4, true,  eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/perc.tga",		0, 2, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/perc_none.tga",		0, 2, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/checkbox_main.tga",	0, 5, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/checkbox_in.tga",	0, 5, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-// панельки и кнопки вывода информации в меню модернизации корабля
-	{"menu/workshop_panel1.tga",			0, 270, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/workshop_panel1+.tga",			0, 270, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/workshop_panel2.tga",			0, 492, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/workshop_panel2+.tga",			0, 492, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/workshop_panel3.tga",			0, 110, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/workshop_panel4.tga",			0, 54, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/workshop_panel5.tga",			0, 899, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/ammo.tga",				0, 8, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/en/menu/button_weaponry_out.tga",	0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/en/menu/button_weaponry_in.tga",		0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/de/menu/button_weaponry_out.tga",	0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/de/menu/button_weaponry_in.tga",		0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/ru/menu/button_weaponry_out.tga",	0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/ru/menu/button_weaponry_in.tga",		0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/pl/menu/button_weaponry_out.tga",	0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/pl/menu/button_weaponry_in.tga",		0, 6, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/back_spot.tga",				0, 256, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/back_spot2.tga",				0, 256, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-// диалоги
-	{"menu/dialog512_256.tga",	0, 706, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/dialog512_512.tga",	0, 1242, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/dialog768_600.tga",	0, 2131, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-// панельки
-	{"menu/panel444_333_back.tga",		0, 639, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/panel444_333_border.tga",	0, 705, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/panel800_444_back.tga",		0, 1631, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-// малые кнопки для диалогов и панелек
-	{"menu/button_dialog200_out.tga",	0, 57, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog200_in.tga",	0, 57, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog200_off.tga",	0, 57, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog128_out.tga",	0, 39, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog128_in.tga",	0, 39, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/button_dialog128_off.tga",	0, 39, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/arrow_list_up.tga",		0, 69, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"menu/arrow_list_down.tga",		0, 69, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-// иконки отображения в меню выбора миссий
-	{"script/mission1_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission2_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission3_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission4_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission5_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission6_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission7_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission8_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission9_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission10_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission11_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission12_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission13_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission14_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"script/mission15_icon.tga",	0, 12, false,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-// иконки систем корабля
-	{"menu/system_engine1.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_engine2.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_engine3.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_engine4.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_mechan1.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_mechan2.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_mechan3.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_mechan4.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_power1.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_power2.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_power3.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_power4.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_protect1.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_protect2.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_protect3.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_protect4.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_target1.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_target2.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_target3.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_target4.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/system_empty.tga",	0, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-// иконки оружия для передаскивания-отображения в слотах оружия
-	{"menu/weapon1_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon2_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon3_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon4_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon5_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon6_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon7_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon8_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon9_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon10_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon11_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon12_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon13_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon14_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon15_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon16_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon17_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon18_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon19_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon_on_icon.tga",	0, 32, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/weapon_empty_icon.tga",	0, 256, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-// курсор
-	{"menu/cursor.tga",		0, 16, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"menu/cursor_shadow.tga",	0, 16, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-// спец эффекты
-	{"gfx/flare.tga",	1, 16, true,  eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/flare1.tga",	1, 16, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/flare2.tga",	1, 16, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/flare3.tga",	1, 16, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/trail1.tga",	1, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/trail2.tga",	1, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/trail3.tga",	1, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/trail4.tga",	1, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"gfx/trail5.tga",	1, 64, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-
-// 2д часть
-	{"game/nums.tga",			0, 104, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"game/ammo.tga",			0, 2, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"game/energy.tga",			0, 2, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"game/game_panel.tga",			0, 296, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"game/game_panel2.tga",		0, 347, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"game/game_panel_el.tga",		0, 256, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"game/game_num.tga",			0, 31, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"game/weapon_panel_left.tga",		0, 56, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"game/weapon_panel_right.tga",		0, 56, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"game/weapon_ammo.tga",		0, 1, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"game/weapon_energy.tga",		0, 1, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, false, -1.0f, false},
-	{"lang/en/game/mission.tga",		0, 64, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/en/game/missionfailed.tga",	0, 168, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/en/game/pause.tga",		0, 64, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/de/game/mission.tga",		0, 64, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/de/game/missionfailed.tga",	0, 168, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/de/game/pause.tga",		0, 64, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/ru/game/mission.tga",		0, 64, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/ru/game/missionfailed.tga",	0, 168, true,  eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"lang/ru/game/pause.tga",		0, 64, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/tile_back.tga",		1, 4096/2, true,  eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"skybox/tile_stars.tga",		1, 4096/2, true,  eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// текстура брони для кораблей землян
-	{"models/earthfighter/sf-text00.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text04.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text05.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text06.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text07.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text08.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text09.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-text10.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum01.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum02.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum03.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/sf-illum04.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/lnch12.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/lnch34.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/earthfighter/rockets.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// мины
-	{"models/mine/mine1.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine1i.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine2.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine2i.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine3.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine3i.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine4.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/mine/mine4i.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// AlienFighter – load alien fighters textures.
-	{"models/alienfighter/al-text04.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienfighter/al-illum04.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
-	{"models/gr-01.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-02.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-03.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-04.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/bomber_nm.tga",	1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-05.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-06.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/gr-07.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/track.vw2d",			1, 48, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/turret/turrets.tga",		1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// BasePart – load pirate base textures.
-	{"models/spacebase/allalpha.tga",	1, 768, true, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/spacebase/metal.tga",		1, 1024, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-
-// Asteroid – load asteroids (for AsteroidField) textures.
-	{"models/space/asteroid-01.tga",	1, 96, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// Planet – load planets textures.
-	{"models/planet/asteroid.tga",			1, 512, true, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/clouds.tga",			1, 1024, true, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-	{"models/planet/q_class2.tga",			1, 192, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/a_class4.tga",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/m_class7.tga",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/planet/d_class3.tga",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/m_class7_nm.tga",		1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/d_class3_nm.tga",		1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/a_class4_nm.tga",		1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/planet_asteroids_nm.tga",	1, 384, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/q_class2_nm.tga",		1, 192, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// AlienMotherShip – load alien motherships textures.
-	{"models/alienmothership/alm-text02.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-text03.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-text04.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-text08.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum02.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum03.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum04.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/alienmothership/alm-illum08.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/alien_mothership_nm.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// Building – load buildings textures.
-	{"models/building/bld.vw2d",		1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/normalmap/buildings_nm.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-	{"models/building/bld_illum.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-
-// StarSystem1 – load StarSystem 1 SkyBox textures.
-	{"skybox/1/skybox_back6.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/1/skybox_bottom4.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/1/skybox_front5.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/1/skybox_left2.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/1/skybox_right1.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/1/skybox_top3.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-
-//StarSystem2 – load StarSystem 2 SkyBox textures.
-	{"skybox/2/skybox_back6.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/2/skybox_bottom4.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/2/skybox_front5.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/2/skybox_left2.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/2/skybox_right1.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-	{"skybox/2/skybox_top3.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
-};
-#define LoadListCount sizeof(LoadList)/sizeof(LoadList[0])
 
 
 //------------------------------------------------------------------------------------
@@ -449,33 +177,14 @@ static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint3
 		SDL_Delay(100);
 }
 
-void ChangeTexturesAnisotropyLevel()
-{
-	for (unsigned i = 0; i < LoadListCount; i++) {
-		if (((LoadList[i].FileType == 0) || // "2D" texture
-		     (LoadList[i].FileType == 1)) && // "3D" texture
-		    LoadList[i].TextAnisotropy) {
-			GLtexture tmpTexture = vw_FindTextureByName(LoadList[i].FileName);
-			vw_BindTexture(0, tmpTexture);
-			vw_SetTextureAnisotropy(GameConfig().AnisotropyLevel);
-		}
-	}
-	vw_BindTexture(0, 0);
-}
-
 /*
  * Load game assets.
  */
 void LoadGameData()
 {
-	unsigned int AllDrawLoading{0};
-	// получаем значение (реальное, по весам)
-	for (unsigned i = 0; i < LoadListCount; i++) {
-		AllDrawLoading += LoadList[i].Value;
-	}
-
-	AllDrawLoading += GetAudioAssetsValue();
-	AllDrawLoading += GetModel3DAssetsValue();
+	unsigned AllDrawLoading{GetAudioAssetsValue() +
+				GetModel3DAssetsValue() +
+				GetTextureAssetsValue()};
 
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
 	bool NeedLoadShaders = false;
@@ -599,7 +308,6 @@ void LoadGameData()
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
 
-
 	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
 		RealLoadedAssets += AssetValue;
 		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
@@ -608,40 +316,7 @@ void LoadGameData()
 	};
 	ForEachAudioAssetLoad(UpdateLoadStatus);
 	ForEachModel3DAssetLoad(UpdateLoadStatus);
-
-	for (unsigned i = 0; i < LoadListCount; i++) {
-		switch (LoadList[i].FileType) {
-		// "2D" texture
-		case 0:
-			// установки параметров
-			// vw_SetTextureAlpha(0, 0, 0) called in code above
-			vw_SetTextureProp(LoadList[i].TextFilter,
-					  LoadList[i].TextAnisotropy ? GameConfig().AnisotropyLevel : 1,
-					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
-
-			vw_LoadTexture(LoadList[i].FileName);
-			break;
-
-		// "3D" texture
-		case 1:
-			// установки параметров
-			// vw_SetTextureAlpha(0, 0, 0) called in code above
-			vw_SetTextureProp(LoadList[i].TextFilter,
-					  LoadList[i].TextAnisotropy ? GameConfig().AnisotropyLevel : 1,
-					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
-
-			// если это карта нормалей, но у нас не включены шейдеры - пропускаем
-			// (если эту опцию убрать - можно объеденить 2д текстуры и 3д текстуры)
-			if (!GameConfig().UseGLSL120 &&
-			    (LoadList[i].FileName.find("models/normalmap") != std::string::npos))
-				break;
-
-			vw_LoadTexture(LoadList[i].FileName);
-			break;
-		}
-
-		UpdateLoadStatus(LoadList[i].Value);
-	}
+	ForEachTextureAssetLoad(UpdateLoadStatus);
 
 	// убираем картинку загрузки
 	vw_ReleaseTexture(LoadImageTexture);

@@ -33,11 +33,10 @@
 #include "../enum.h"
 #include "../config/config.h"
 #include "../gfx/shadow_map.h"
+#include "../assets/texture.h"
 #include "../main.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
-// FIXME should be fixed, use 'include' instead
-void ChangeTexturesAnisotropyLevel();
 
 
 // временные данные для изменения и восстановления
