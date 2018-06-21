@@ -713,8 +713,7 @@ void LoadGameData()
 	bool NeedLoadShaders = false;
 	if (vw_GetDevCaps().OpenGL_2_0_supported &&
 	    vw_GetDevCaps().OpenGL_2_1_supported &&
-	    GameConfig().UseGLSL120 &&
-	    vw_ShadersMapEmpty()) {
+	    GameConfig().UseGLSL120) {
 		AllDrawLoading += GLSLLoadListCount * 100;
 		NeedLoadShaders = true;
 	}
