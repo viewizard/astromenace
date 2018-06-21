@@ -283,7 +283,7 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 		std::string FakeTextureFileName{"fontsize_" + std::to_string(InternalFontSize.i()) +
 						"_character_" + std::to_string(UTF32)};
 
-		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0,
+		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1,
 				  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
 		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels,
 									    FontCharsList.front()->FontMetrics.Width.i(),
@@ -388,7 +388,7 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 	}
 
 	// create texture from bitmap
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0,
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1,
 			  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
 	std::string tmpTextureName{"auto_generated_texture_for_fonts_" +
 				   std::to_string(SDL_GetTicks()) + "_" +

@@ -48,7 +48,7 @@ care about byte alignment.
 namespace {
 
 // Default anisotropy level
-GLint AnisotropyLevelTex{0};
+GLint AnisotropyLevelTex{1};
 // Default filtering type.
 sTextureFilter FilteringTex{};
 // Default address mode.
@@ -174,7 +174,7 @@ void vw_ReleaseAllTextures()
 	TexturesNameToIDMap.clear();
 
 	FilteringTex = sTextureFilter{};
-	AnisotropyLevelTex = 0;
+	AnisotropyLevelTex = 1;
 	AddressModeTex = sTextureWrap{};
 	AlphaTex = false;
 }
@@ -521,8 +521,7 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique
 		return 0;
 
 	vw_SetTextureFiltering(FilteringTex);
-	if (AnisotropyLevelTex)
-		vw_SetTextureAnisotropy(AnisotropyLevelTex);
+	vw_SetTextureAnisotropy(AnisotropyLevelTex);
 	vw_SetTextureAddressMode(AddressModeTex);
 	vw_BindTexture(0, 0);
 

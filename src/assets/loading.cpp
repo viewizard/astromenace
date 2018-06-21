@@ -722,7 +722,7 @@ void LoadGameData()
 	// загружаем логотип компании
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// выводим логотип Viewizard
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
 			  false, eAlphaCreateMode::EQUAL, false);
 	GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga");
 	DrawViewizardLogo(ViewizardLogoTexture);
@@ -733,11 +733,11 @@ void LoadGameData()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// загружаем картинки вывода загрузки
 	vw_SetTextureAlpha(0, 0, 0);
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
 			  true, eAlphaCreateMode::GREYSC, false);
 	vw_LoadTexture("loading/loading_line.tga");
 	vw_LoadTexture("loading/loading_back.tga");
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 0, eTextureWrapMode::CLAMP_TO_EDGE,
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
 			  false, eAlphaCreateMode::GREYSC, false);
 
 	GLtexture LoadImageTexture{0};
@@ -837,7 +837,8 @@ void LoadGameData()
 		case 0:
 			// установки параметров
 			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
-			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * GameConfig().AnisotropyLevel,
+			vw_SetTextureProp(LoadList[i].TextFilter,
+					  LoadList[i].TextAnisotropy ? GameConfig().AnisotropyLevel : 1,
 					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
 			vw_LoadTexture(LoadList[i].FileName);
@@ -847,7 +848,8 @@ void LoadGameData()
 		case 1:
 			// установки параметров
 			vw_SetTextureAlpha(LoadList[i].Red, LoadList[i].Green, LoadList[i].Blue);
-			vw_SetTextureProp(LoadList[i].TextFilter, LoadList[i].TextAnisotropy * GameConfig().AnisotropyLevel,
+			vw_SetTextureProp(LoadList[i].TextFilter,
+					  LoadList[i].TextAnisotropy ? GameConfig().AnisotropyLevel : 1,
 					  LoadList[i].TextWrap, LoadList[i].Alpha, LoadList[i].AlphaMode, LoadList[i].MipMap);
 
 			// если это карта нормалей, но у нас не включены шейдеры - пропускаем
