@@ -273,7 +273,7 @@ struct sDevCaps {
 	int MaxTextureWidth{0};
 	int MaxTextureHeight{0};
 	int MaxActiveLights{0};
-	GLint MaxAnisotropyLevel{0};
+	GLint MaxAnisotropyLevel{0}; // could be 0 (not supported by hardware/drivers)
 	// MSAA + CSAA modes
 	std::vector<sCoverageModes> MultisampleCoverageModes{};
 	// available depth's size for FBO

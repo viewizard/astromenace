@@ -157,12 +157,12 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// анизотропия
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::green, ContentTransp, vw_GetText("Anisotropy Level"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, Options_TexturesAnisotropyLevel == 1)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, (Options_TexturesAnisotropyLevel == 1) || !vw_GetDevCaps().MaxAnisotropyLevel)) {
 		Options_TexturesAnisotropyLevel >>= 1;
 		if (Options_TexturesAnisotropyLevel < 1)
 			Options_TexturesAnisotropyLevel = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, Options_TexturesAnisotropyLevel == vw_GetDevCaps().MaxAnisotropyLevel)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, (Options_TexturesAnisotropyLevel == vw_GetDevCaps().MaxAnisotropyLevel) || !vw_GetDevCaps().MaxAnisotropyLevel)) {
 		Options_TexturesAnisotropyLevel <<= 1;
 		if (Options_TexturesAnisotropyLevel > vw_GetDevCaps().MaxAnisotropyLevel)
 			Options_TexturesAnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;

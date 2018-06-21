@@ -165,7 +165,7 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
 	// NOTE in future, use std::clamp (since C++17)
 	if (GameConfig().AnisotropyLevel > vw_GetDevCaps().MaxAnisotropyLevel)
 		ChangeGameConfig().AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
-	else if (GameConfig().AnisotropyLevel < 1)
+	if (GameConfig().AnisotropyLevel < 1) // don't use "else-if" here, since MaxAnisotropyLevel could be 0 (not supported)
 		ChangeGameConfig().AnisotropyLevel = 1;
 
 	// for shaders version 120, check OpenGL 2.0 and 2.1
