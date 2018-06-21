@@ -299,14 +299,6 @@ void LoadGameData()
 		vw_FindShaderUniformLocation(GLSLShaderType3, "NeedNormalMapping");
 		vw_FindShaderUniformLocation(GLSLShaderType3, "PCFMode");
 	}
-	// еще одна проверка перед тем как будем использовать шадовмеп
-	// если не смогли загрузить шейдеры, то делать с шадовмеп нечего
-	if (!GameConfig().UseGLSL120)
-		ChangeGameConfig().ShadowMap = 0;
-
-	// инициализация менеджера частиц (обязательно после загрузки шейдеров)
-	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-	vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
 
 	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
 		RealLoadedAssets += AssetValue;
