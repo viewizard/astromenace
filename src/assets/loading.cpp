@@ -33,11 +33,11 @@
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
-#include "core/core.h"
-#include "config/config.h"
-#include "ui/font.h"
-#include "audio/audio.h"
-#include "main.h"
+#include "../core/core.h"
+#include "../config/config.h"
+#include "../ui/font.h"
+#include "../audio/audio.h"
+#include "../main.h"
 
 
 struct sLoadList {
@@ -698,9 +698,9 @@ void ChangeTexturesAnisotropyLevel()
 	vw_BindTexture(0, 0);
 }
 
-//------------------------------------------------------------------------------------
-// процедура загрузки данных
-//------------------------------------------------------------------------------------
+/*
+ * Load game assets.
+ */
 void LoadGameData()
 {
 	int AllDrawLoading{0};
@@ -796,7 +796,7 @@ void LoadGameData()
 		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
 		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_ShadowMap");
 
-		// find and store uniform location for all shaders, in real, we don' need
+		// find and store uniform location for all shaders, in real, we don't need
 		// store internal storage number for uniforms usage, since we load them
 		// one-by-one, and we know sequence, we could use 0-1-2-3-4 numbers directly
 		vw_FindShaderUniformLocation(GLSLShaderType1, "Texture1");

@@ -37,7 +37,6 @@ class cSpaceStars;
 class cEarthSpaceFighter;
 enum class eCommand;
 enum class eMusicTheme;
-enum class eLoading;
 enum class eMenuStatus;
 enum class eGameMenuStatus;
 enum class eDialogBox;
@@ -53,17 +52,6 @@ extern bool DrawGameCursor;
 
 void Loop_Proc();
 
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// loading.cpp
-//------------------------------------------------------------------------------------
-void LoadGameData();
 
 
 

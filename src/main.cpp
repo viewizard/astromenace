@@ -39,6 +39,7 @@
 #include "platform/platform.h"
 #include "object3d/object3d.h"
 #include "utils/fs2vfs.h"
+#include "assets/loading.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
 namespace {
