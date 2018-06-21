@@ -178,9 +178,9 @@ static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint3
 }
 
 /*
- * Load game assets.
+ * Load all game assets.
  */
-void LoadGameData()
+void LoadAllGameAssets()
 {
 	unsigned AllDrawLoading{GetAudioAssetsValue() +
 				GetModel3DAssetsValue() +

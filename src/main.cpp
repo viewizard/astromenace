@@ -470,13 +470,13 @@ RecreateWindow:
 	GenerateFonts(); // should be called after vw_InitText() and InitFont()
 
 	PlayMusicTheme(eMusicTheme::MENU, 4000, 4000);
-	LoadGameData(); // should be called after GenerateFonts(), since we use fonts for 'LOADING' text
+	LoadAllGameAssets(); // should be called after GenerateFonts(), since we use fonts for 'LOADING' text
 
-	// since in LoadGameData() we may have an issue with shaders, check ShadowMap
+	// since in LoadAllGameAssets() we may have an issue with shaders, check ShadowMap
 	if (!GameConfig().UseGLSL120)
 		ChangeGameConfig().ShadowMap = 0;
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-	// should be called after LoadGameData() (shaders loading and initialization)
+	// should be called after LoadAllGameAssets() (shaders loading and initialization)
 	vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
 
 	MenuStatus = eMenuStatus::MAIN_MENU;

@@ -30,7 +30,7 @@
 
 #include "../core/base.h"
 
-// Load game assets.
-void LoadGameData();
+// Load all game assets.
+void LoadAllGameAssets();
 
 #endif // ASSETS_LOADING_H
