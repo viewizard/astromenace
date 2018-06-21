@@ -467,8 +467,10 @@ RecreateWindow:
 	if (!NeedShowSystemCursor)
 		SDL_ShowCursor(SDL_DISABLE);
 
+	GenerateFonts(); // should be called after vw_InitText() and InitFont()
+
 	PlayMusicTheme(eMusicTheme::MENU, 4000, 4000);
-	LoadGameData();
+	LoadGameData(); // should be called after GenerateFonts(), since we use fonts for 'LOADING' text
 	MenuStatus = eMenuStatus::MAIN_MENU;
 	InitMenu();
 
