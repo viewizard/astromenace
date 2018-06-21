@@ -33,6 +33,7 @@
 #include "../audio/audio.h"
 #include "../main.h"
 #include "audio.h"
+#include "model3d.h"
 
 
 struct sLoadList {
@@ -253,79 +254,10 @@ static sLoadList LoadList[] = {
 	{"models/mine/mine3i.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/mine/mine4.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/mine/mine4i.tga",	1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// модели мин
-	{"models/mine/mine-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/mine/mine-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/mine/mine-03.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/mine/mine-04.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-// корабли землян + их оружие
-	{"models/earthfighter/sf-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-03.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-04.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-05.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-06.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-07.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-08.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-09.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-10.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-11.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-12.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-13.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-14.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-15.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-16.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-17.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-18.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-19.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-20.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-21.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/sf-22.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon1.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon2.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon3.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon4.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon5.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon6.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon7.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon8.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon9.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon10.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon11.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon12.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon13.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon14.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/weapon15.vw3d",	2, 10, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/lnch1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/lnch2.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/lnch3.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/lnch4.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/missile.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/swarm.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/torpedo.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/earthfighter/nuke.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 
 // AlienFighter – load alien fighters textures.
 	{"models/alienfighter/al-text04.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/alienfighter/al-illum04.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// малые корабли пришельцев
-	{"models/alienfighter/al-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-03.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-04.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-05.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-06.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-07.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-08.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-09.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-10.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-11.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-12.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-13.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-14.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-15.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-16.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/alienfighter/al-17.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 
 // Pirate – load all pirate data (vehicles, military buildings, ships...) testures.
 	{"models/gr-01.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -338,111 +270,13 @@ static sLoadList LoadList[] = {
 	{"models/gr-07.vw2d",			1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/track.vw2d",			1, 48, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/turret/turrets.tga",		1, 192, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// корабли пиратов
-	{"models/pirateship/gunship-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/bomber-07.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/gunship-03.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/gunship-04.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/gunship-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/bomber-03.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/bomber-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/bomber-04.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/pirateship/bomber-05.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/pirateship/bomber-06.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-// турелей
-	{"models/turret/turret-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/turret/turret-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-// гусенечный транспорт
-	{"models/tracked/engineering-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/apc-aa-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/apc-aa-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/apc-03.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/apc-01.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-11.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-10.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-09.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-08.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-07.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-06.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-05.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-03.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/tracked/tank-01.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-// колесный транспорт
-	{"models/wheeled/r-launcher-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/wheeled/apc-04.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/wheeled/apc-02.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/wheeled/jeep-05.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/wheeled/jeep-04.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/wheeled/jeep-03.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/wheeled/jeep-02.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/wheeled/jeep-01.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-// военные сооружения
-	{"models/militarybuilding/artiler-gun-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/militarybuilding/artiler-gun-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/militarybuilding/aa-gun-05.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/militarybuilding/aa-gun-04.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/militarybuilding/aa-gun-03.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/militarybuilding/aa-gun-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
-	{"models/militarybuilding/aa-gun-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, false},
 
 // BasePart – load pirate base textures.
 	{"models/spacebase/allalpha.tga",	1, 768, true, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/spacebase/metal.tga",		1, 1024, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, false, -1.0f, false},
-// геометрия базы пиратов
-	{"models/spacebase/1/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/1/2.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/1/3.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/1/4.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/1/5.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/2/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/2/2.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/2/3.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/2/4.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/2/5.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/3/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/spacebase/4/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/spacebase/5/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/spacebase/6/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/6/2.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/6/3.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/6/4.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/6/5.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/7/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/spacebase/8/1.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/8/2.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/8/3.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/8/4.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/spacebase/8/5.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 
 // Asteroid – load asteroids (for AsteroidField) textures.
 	{"models/space/asteroid-01.tga",	1, 96, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// геометрия больших астероидов
-	{"models/space/bigasteroid-01.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/space/bigasteroid-02.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/space/bigasteroid-03.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/space/bigasteroid-04.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/space/bigasteroid-05.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-// астероиды
-	{"models/space/asteroid-010.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-011.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-012.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-013.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-014.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-015.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-016.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-017.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-018.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-019.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0110.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0111.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0112.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0113.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0114.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0115.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0116.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0117.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0118.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
-	{"models/space/asteroid-0119.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, false},
 
 // Planet – load planets textures.
 	{"models/planet/asteroid.tga",			1, 512, true, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -456,13 +290,6 @@ static sLoadList LoadList[] = {
 	{"models/normalmap/a_class4_nm.tga",		1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/normalmap/planet_asteroids_nm.tga",	1, 384, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/normalmap/q_class2_nm.tga",		1, 192, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// модели планет
-	{"models/planet/aplanet.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/planet/dplanet.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/planet/gplanet.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/planet/moon.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/planet/planet5.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/planet/planet6.vw3d",	2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 
 // AlienMotherShip – load alien motherships textures.
 	{"models/alienmothership/alm-text02.vw2d",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
@@ -474,32 +301,11 @@ static sLoadList LoadList[] = {
 	{"models/alienmothership/alm-illum04.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/alienmothership/alm-illum08.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/normalmap/alien_mothership_nm.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// большие корабли пришельцев
-	{"models/alienmothership/alm-01.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/alienmothership/alm-02.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/alienmothership/alm-03.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/alienmothership/alm-04.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/alienmothership/alm-05.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/alienmothership/alm-06.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/alienmothership/alm-07.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
-	{"models/alienmothership/alm-08.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, 2.0f, true},
 
 // Building – load buildings textures.
 	{"models/building/bld.vw2d",		1, 768, false, eAlphaCreateMode::GREYSC, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/normalmap/buildings_nm.tga",	1, 768, false, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
 	{"models/building/bld_illum.vw2d",	1, 1024, true, eAlphaCreateMode::EQUAL, eTextureWrapMode::REPEAT, eTextureBasicFilter::TRILINEAR, 1, true, true, -1.0f, false},
-// постройки (мирные)
-	{"models/building/bld-01.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-02.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-03.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-04.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-05.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-06.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-07.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-08.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-09.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-10.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
-	{"models/building/bld-11.vw3d",		2, 20, true,  eAlphaCreateMode::NONE, eTextureWrapMode::REPEAT, eTextureBasicFilter::NONE, 0, true, false, -1.0f, true},
 
 // StarSystem1 – load StarSystem 1 SkyBox textures.
 	{"skybox/1/skybox_back6.tga",	1, 3072/2, false,  eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE, eTextureBasicFilter::BILINEAR, 0, false, true, -1.0f, false},
@@ -669,6 +475,7 @@ void LoadGameData()
 	}
 
 	AllDrawLoading += GetAudioAssetsValue();
+	AllDrawLoading += GetModel3DAssetsValue();
 
 	// если будем загружать шейдеры - делаем поправку общего кол-ва
 	bool NeedLoadShaders = false;
@@ -796,9 +603,11 @@ void LoadGameData()
 	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
 		RealLoadedAssets += AssetValue;
 		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
+		// important, update music buffers
 		AudioLoop();
 	};
 	ForEachAudioAssetLoad(UpdateLoadStatus);
+	ForEachModel3DAssetLoad(UpdateLoadStatus);
 
 	for (unsigned i = 0; i < LoadListCount; i++) {
 		switch (LoadList[i].FileType) {
@@ -829,20 +638,9 @@ void LoadGameData()
 
 			vw_LoadTexture(LoadList[i].FileName);
 			break;
-
-		// 3D model
-		case 2:
-			vw_LoadModel3D(LoadList[i].FileName, LoadList[i].TriangleSizeLimit,
-				       LoadList[i].NeedTangentAndBinormal && GameConfig().UseGLSL120);
-			break;
 		}
 
-		RealLoadedAssets += LoadList[i].Value;
-
-		// рисуем текущее состояние загрузки, если не рисуем логотип
-		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
-		// important, update music buffers
-		AudioLoop();
+		UpdateLoadStatus(LoadList[i].Value);
 	}
 
 	// убираем картинку загрузки
