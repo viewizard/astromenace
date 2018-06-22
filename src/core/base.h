@@ -126,6 +126,14 @@ struct sRGBCOLOR {
 #include <cmath>
 #include <cstdlib>
 
+// functor in order to use enumeration as a key (std::map, std::unordered_map, std::unordered_multimap)
+struct sEnumHash {
+	template <typename T>
+	std::size_t operator()(T t) const {
+		return static_cast<std::size_t>(t);
+	}
+};
+
 // don't setup NDEBUG in sources, use definition in build system instead
 #include <cassert>
 

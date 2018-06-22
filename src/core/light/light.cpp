@@ -31,13 +31,6 @@
 
 namespace {
 
-struct sEnumHash {
-	template <typename T>
-	std::size_t operator()(T t) const {
-		return static_cast<std::size_t>(t);
-	}
-};
-
 // no point to calculate attenuation for all scene, limit it by 10
 constexpr float AttenuationLimit{10.0f};
 // all lights, indexed by light's type
