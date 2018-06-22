@@ -129,7 +129,7 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 //------------------------------------------------------------------------------------
 // процедура прорисовки процента загрузки данных
 //------------------------------------------------------------------------------------
-static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint32_t &LastDrawTime, GLtexture LoadImageTexture)
+static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint32_t &LastDrawTime, GLtexture LoadBackground)
 {
 	if ((Current != AllDrawLoading) && // the last one (with 100%) must be rendered
 	    (LastDrawTime + 10 >= SDL_GetTicks())) // 100 per second - is good enough frame rate, no need more
@@ -140,7 +140,7 @@ static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint3
 
 	sRECT SrcRect{0, 0, 1024, 512};
 	sRECT DstRect{0, 64+32, static_cast<int>(GameConfig().InternalWidth), 64+32+512};
-	vw_Draw2D(DstRect, SrcRect, LoadImageTexture, false, 1.0f, 0.0f);
+	vw_Draw2D(DstRect, SrcRect, LoadBackground, false, 1.0f, 0.0f);
 
 	vw_DrawText(GameConfig().InternalWidth / 2 - vw_TextWidth(vw_GetText("LOADING")) / 2,
 		    768-128, 0, 0, 1.0f, eRGBCOLOR::white, 1.0f, vw_GetText("LOADING"));
@@ -247,9 +247,9 @@ void LoadAllGameAssets()
 	vw_SetTextureAlpha(0, 0, 0);
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
 			  false, eAlphaCreateMode::EQUAL, false);
-	GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga");
-	DrawViewizardLogo(ViewizardLogoTexture);
-	vw_ReleaseTexture(ViewizardLogoTexture);
+	GLtexture ViewizardLogo = vw_LoadTexture("loading/viewizardlogo.tga");
+	DrawViewizardLogo(ViewizardLogo);
+	vw_ReleaseTexture(ViewizardLogo);
 
 	// background with status bar
 	vw_SetTextureAlpha(0, 0, 0);
@@ -260,26 +260,7 @@ void LoadAllGameAssets()
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
 			  false, eAlphaCreateMode::GREYSC, false);
 
-	GLtexture LoadImageTexture{0};
-	switch (1 + vw_iRandNum(3)) {
-	case 1:
-		LoadImageTexture = vw_LoadTexture("loading/loading01.tga");
-		break;
-	case 2:
-		LoadImageTexture = vw_LoadTexture("loading/loading02.tga");
-		break;
-	case 3:
-		LoadImageTexture = vw_LoadTexture("loading/loading03.tga");
-		break;
-	case 4:
-		LoadImageTexture = vw_LoadTexture("loading/loading04.tga");
-		break;
-	// на всякий случай
-	default:
-		LoadImageTexture = vw_LoadTexture("loading/loading01.tga");
-		break;
-	}
-
+	GLtexture LoadBackground = vw_LoadTexture("loading/loading0" + std::to_string(1 + vw_iRandNum(3)) + ".tga");
 	uint32_t LastDrawTime = SDL_GetTicks();
 	unsigned RealLoadedAssets{0};
 	unsigned AllDrawLoading{GetAudioAssetsValue() +
@@ -288,7 +269,7 @@ void LoadAllGameAssets()
 
 	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
 		RealLoadedAssets += AssetValue;
-		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
+		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadBackground);
 		// important, update music buffers
 		AudioLoop();
 	};
@@ -296,5 +277,5 @@ void LoadAllGameAssets()
 	ForEachModel3DAssetLoad(UpdateLoadStatus);
 	ForEachTextureAssetLoad(UpdateLoadStatus);
 
-	vw_ReleaseTexture(LoadImageTexture);
+	vw_ReleaseTexture(LoadBackground);
 }
