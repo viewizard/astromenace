@@ -182,67 +182,14 @@ static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint3
  */
 void LoadAllGameAssets()
 {
-	unsigned AllDrawLoading{GetAudioAssetsValue() +
-				GetModel3DAssetsValue() +
-				GetTextureAssetsValue()};
+	// fill screen with white at start, since shaders load could take some time
+	vw_SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	vw_BeginRendering(RI_COLOR_BUFFER);
+	vw_EndRendering();
 
-	// если будем загружать шейдеры - делаем поправку общего кол-ва
-	bool NeedLoadShaders = false;
 	if (vw_GetDevCaps().OpenGL_2_0_supported &&
 	    vw_GetDevCaps().OpenGL_2_1_supported &&
 	    GameConfig().UseGLSL120) {
-		AllDrawLoading += GLSLLoadListCount * 100;
-		NeedLoadShaders = true;
-	}
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// загружаем логотип компании
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// выводим логотип Viewizard
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
-			  false, eAlphaCreateMode::EQUAL, false);
-	GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga");
-	DrawViewizardLogo(ViewizardLogoTexture);
-	vw_ReleaseTexture(ViewizardLogoTexture);
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// загружаем список
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// загружаем картинки вывода загрузки
-	vw_SetTextureAlpha(0, 0, 0);
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
-			  true, eAlphaCreateMode::GREYSC, false);
-	vw_LoadTexture("loading/loading_line.tga");
-	vw_LoadTexture("loading/loading_back.tga");
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
-			  false, eAlphaCreateMode::GREYSC, false);
-
-	GLtexture LoadImageTexture{0};
-	switch (1 + vw_iRandNum(3)) {
-	case 1:
-		LoadImageTexture = vw_LoadTexture("loading/loading01.tga");
-		break;
-	case 2:
-		LoadImageTexture = vw_LoadTexture("loading/loading02.tga");
-		break;
-	case 3:
-		LoadImageTexture = vw_LoadTexture("loading/loading03.tga");
-		break;
-	case 4:
-		LoadImageTexture = vw_LoadTexture("loading/loading04.tga");
-		break;
-	// на всякий случай
-	default:
-		LoadImageTexture = vw_LoadTexture("loading/loading01.tga");
-		break;
-	}
-
-	// ставим время последней прорисовки
-	uint32_t LastDrawTime = SDL_GetTicks();
-
-	// если нужно, загрузка всех шейдеров (!) обязательно это делать до загрузки моделей
-	unsigned int RealLoadedAssets{0};
-	if (NeedLoadShaders) {
 		for (unsigned i = 0; i < GLSLLoadListCount; i++) {
 			if (GameConfig().UseGLSL120) {
 
@@ -251,15 +198,11 @@ void LoadAllGameAssets()
 									       GLSLLoadList[i].FragmentShaderFileName);
 
 				if (!Program.expired()) {
-					// получаем сразу состояние, смогли прилинковать или нет
 					if (!vw_LinkShaderProgram(Program))
 						ChangeGameConfig().UseGLSL120 = false;
 				} else
 					ChangeGameConfig().UseGLSL120 = false;
 
-				RealLoadedAssets += 100;
-				// рисуем текущее состояние загрузки, если не рисуем логотип
-				DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
 				// important, update music buffers
 				AudioLoop();
 			}
@@ -300,6 +243,49 @@ void LoadAllGameAssets()
 		vw_FindShaderUniformLocation(GLSLShaderType3, "PCFMode");
 	}
 
+	// Viewizard logo
+	vw_SetTextureAlpha(0, 0, 0);
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
+			  false, eAlphaCreateMode::EQUAL, false);
+	GLtexture ViewizardLogoTexture = vw_LoadTexture("loading/viewizardlogo.tga");
+	DrawViewizardLogo(ViewizardLogoTexture);
+	vw_ReleaseTexture(ViewizardLogoTexture);
+
+	// background with status bar
+	vw_SetTextureAlpha(0, 0, 0);
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
+			  true, eAlphaCreateMode::GREYSC, false);
+	vw_LoadTexture("loading/loading_line.tga");
+	vw_LoadTexture("loading/loading_back.tga");
+	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
+			  false, eAlphaCreateMode::GREYSC, false);
+
+	GLtexture LoadImageTexture{0};
+	switch (1 + vw_iRandNum(3)) {
+	case 1:
+		LoadImageTexture = vw_LoadTexture("loading/loading01.tga");
+		break;
+	case 2:
+		LoadImageTexture = vw_LoadTexture("loading/loading02.tga");
+		break;
+	case 3:
+		LoadImageTexture = vw_LoadTexture("loading/loading03.tga");
+		break;
+	case 4:
+		LoadImageTexture = vw_LoadTexture("loading/loading04.tga");
+		break;
+	// на всякий случай
+	default:
+		LoadImageTexture = vw_LoadTexture("loading/loading01.tga");
+		break;
+	}
+
+	uint32_t LastDrawTime = SDL_GetTicks();
+	unsigned RealLoadedAssets{0};
+	unsigned AllDrawLoading{GetAudioAssetsValue() +
+				GetModel3DAssetsValue() +
+				GetTextureAssetsValue()};
+
 	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
 		RealLoadedAssets += AssetValue;
 		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime, LoadImageTexture);
@@ -310,6 +296,5 @@ void LoadAllGameAssets()
 	ForEachModel3DAssetLoad(UpdateLoadStatus);
 	ForEachTextureAssetLoad(UpdateLoadStatus);
 
-	// убираем картинку загрузки
 	vw_ReleaseTexture(LoadImageTexture);
 }
