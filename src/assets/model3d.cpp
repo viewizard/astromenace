@@ -257,3 +257,18 @@ void ForEachModel3DAssetLoad(std::function<void (unsigned AssetValue)> function)
 		function(Model3DLoadValue);
 	}
 }
+
+/*
+ * Load model3d asset.
+ */
+std::weak_ptr<sModel3D> LoadModel3DAsset(const std::string &FileName)
+{
+	for (auto tmpAsset : Model3DAssetArray) {
+		if (tmpAsset.FileName == FileName)
+			return vw_LoadModel3D(FileName,
+					      tmpAsset.TriangleSizeLimit,
+					      tmpAsset.NeedTangentAndBinormal && GameConfig().UseGLSL120);
+	}
+
+	return std::weak_ptr<sModel3D>{};
+}

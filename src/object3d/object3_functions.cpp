@@ -27,6 +27,7 @@
 
 // TODO translate comments
 
+#include "../assets/model3d.h"
 #include "object3d.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"
@@ -113,10 +114,10 @@ bool NeedCheckCollision(cObject3D *Object3D)
 //-----------------------------------------------------------------------------
 // Загрузка в модель нужной геометрии
 //-----------------------------------------------------------------------------
-void LoadObjectData(const char *Name, cObject3D *Object3D, float TriangleSizeLimit, bool NeedTangentAndBinormal)
+void LoadObjectData(const std::string &FileName, cObject3D *Object3D)
 {
 	// получение геометрии модели
-	std::weak_ptr<sModel3D> Model = vw_LoadModel3D(Name, TriangleSizeLimit, NeedTangentAndBinormal);
+	std::weak_ptr<sModel3D> Model = LoadModel3DAsset(FileName);
 	auto sharedModel = Model.lock();
 	if (!sharedModel)
 		return;

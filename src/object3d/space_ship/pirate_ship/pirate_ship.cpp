@@ -34,31 +34,30 @@ struct sPirateShipData {
 	unsigned int WeaponQuantity;
 	unsigned int BossWeaponQuantity;
 	unsigned int EngineQuantity;
-	float	Strength;
-	const	char *Name;
-	const	char *TextureName;
-	const	char *NormalMapName;
-	bool	NeedTangentAndBinormal;
+	float Strength;
+	const std::string Name;
+	const std::string TextureName;
+	const std::string NormalMapName;
 };
 
 static sPirateShipData PresetPirateShipData[] = {
-	{2,	0, 2,	20,	"models/pirateship/gunship-01.vw3d",	"models/gr-04.vw2d", " ", false},
-	{1,	0, 2,	30,	"models/pirateship/bomber-07.vw3d",	"models/gr-04.vw2d", " ", false},
-	{4,	0, 2,	100,"models/pirateship/gunship-03.vw3d",	"models/gr-03.vw2d", " ", false},
-	{4,	0, 2,	200,"models/pirateship/gunship-04.vw3d",	"models/gr-03.vw2d", " ", false},
-	{4,	0, 6,	400,"models/pirateship/gunship-02.vw3d",	"models/gr-03.vw2d", " ", false},
+	{2,	0, 2,	20,	"models/pirateship/gunship-01.vw3d",	"models/gr-04.vw2d", ""},
+	{1,	0, 2,	30,	"models/pirateship/bomber-07.vw3d",	"models/gr-04.vw2d", ""},
+	{4,	0, 2,	100,"models/pirateship/gunship-03.vw3d",	"models/gr-03.vw2d", ""},
+	{4,	0, 2,	200,"models/pirateship/gunship-04.vw3d",	"models/gr-03.vw2d", ""},
+	{4,	0, 6,	400,"models/pirateship/gunship-02.vw3d",	"models/gr-03.vw2d", ""},
 
-	{1,	2, 2,	600,"models/pirateship/bomber-03.vw3d",	"models/gr-05.vw2d", " ", false},
-	{1,	2, 4,	1200,"models/pirateship/bomber-02.vw3d",	"models/gr-05.vw2d", " ", false},
-	{1,	6, 4,	1000,"models/pirateship/bomber-04.vw3d",	"models/gr-03.vw2d", " ", false},
-	{3,	2, 6,	2000,"models/pirateship/bomber-05.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga", true},
-	{4,	4, 8,	2500,"models/pirateship/bomber-06.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga", true},
+	{1,	2, 2,	600,"models/pirateship/bomber-03.vw3d",	"models/gr-05.vw2d", ""},
+	{1,	2, 4,	1200,"models/pirateship/bomber-02.vw3d",	"models/gr-05.vw2d", ""},
+	{1,	6, 4,	1000,"models/pirateship/bomber-04.vw3d",	"models/gr-03.vw2d", ""},
+	{3,	2, 6,	2000,"models/pirateship/bomber-05.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"},
+	{4,	4, 8,	2500,"models/pirateship/bomber-06.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"},
 
-	{0,	2, 2,	300,"models/pirateship/bomber-03.vw3d",	"models/gr-05.vw2d", " ", false},
-	{0,	2, 4,	600,"models/pirateship/bomber-02.vw3d",	"models/gr-05.vw2d", " ", false},
-	{0,	6, 4,	500,"models/pirateship/bomber-04.vw3d",	"models/gr-03.vw2d", " ", false},
-	{0,	2, 6,	1000,"models/pirateship/bomber-05.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga", true},
-	{0,	4, 8,	1500,"models/pirateship/bomber-06.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga", true}
+	{0,	2, 2,	300,"models/pirateship/bomber-03.vw3d",	"models/gr-05.vw2d", ""},
+	{0,	2, 4,	600,"models/pirateship/bomber-02.vw3d",	"models/gr-05.vw2d", ""},
+	{0,	6, 4,	500,"models/pirateship/bomber-04.vw3d",	"models/gr-03.vw2d", ""},
+	{0,	2, 6,	1000,"models/pirateship/bomber-05.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"},
+	{0,	4, 8,	1500,"models/pirateship/bomber-06.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"}
 };
 #define PresetPirateShipDataCount sizeof(PresetPirateShipData)/sizeof(PresetPirateShipData[0])
 
@@ -94,12 +93,12 @@ void cPirateShip::Create(int PirateShipNum)
 	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
 
 
-	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, this, 2.0f, PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120);
+	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, this);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].TextureName);
-		if (PresetPirateShipData[PirateShipNum - 1].NeedTangentAndBinormal && GameConfig().UseGLSL120)
+		if (!PresetPirateShipData[PirateShipNum - 1].NormalMapName.empty() && GameConfig().UseGLSL120)
 			NormalMap[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].NormalMapName);
 	}
 

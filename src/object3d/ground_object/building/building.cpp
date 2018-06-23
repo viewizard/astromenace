@@ -68,7 +68,7 @@ void cBuilding::Create(int BuildingNum)
 	ShowStrength = false;
 	PromptDrawDist2 = 100.0f;
 
-	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this, -1.0f, GameConfig().UseGLSL120);
+	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName("models/building/bld.vw2d");

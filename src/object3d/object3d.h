@@ -214,8 +214,7 @@ void UpdateAllObject3D(float Time);
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
 bool NeedCheckCollision(cObject3D *Object3D);
 // Загрузка в модель нужной геометрии
-void LoadObjectData(const char *Name, cObject3D *Object3D,
-		    float TriangleSizeLimit, bool NeedTangentAndBinormal = false);
+void LoadObjectData(const std::string &FileName, cObject3D *Object3D);
 // Получение угла поворота оружия на врага
 void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
 				 float MinDistance, float (&RotationMatrix)[9], sVECTOR3D *NeedAngle,

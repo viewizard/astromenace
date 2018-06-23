@@ -77,7 +77,7 @@ void cTracked::Create(int TrackedNum)
 	// ставим без оптимизации, иначе не увидим гусениц
 	NeedCullFaces = false;
 
-	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this, 2.0f);
+	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = vw_FindTextureByName(PresetTrackedData[TrackedNum - 1].TextureName);
