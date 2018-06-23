@@ -114,7 +114,7 @@ enum class eMusicTheme {
 
 // Get all audio assets load value.
 unsigned GetAudioAssetsLoadValue();
-// Cycle with function call on each audio asset load.
+// Cycle with function callback on each audio asset load.
 void ForEachAudioAssetLoad(std::function<void (unsigned AssetValue)> function);
 // Reload voice assets for new language.
 void ReloadVoiceAssets();

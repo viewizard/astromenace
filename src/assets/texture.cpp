@@ -693,7 +693,7 @@ unsigned GetTextureAssetsLoadValue()
 }
 
 /*
- * Cycle with function call on each texture asset load.
+ * Cycle with function callback on each texture asset load.
  */
 void ForEachTextureAssetLoad(std::function<void (unsigned AssetValue)> function)
 {

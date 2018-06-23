@@ -32,7 +32,7 @@
 
 // Get all texture assets load value.
 unsigned GetTextureAssetsLoadValue();
-// Cycle with function call on each texture asset load.
+// Cycle with function callback on each texture asset load.
 void ForEachTextureAssetLoad(std::function<void (unsigned AssetValue)> function);
 // Change anisotropy level for all textures that was loaded with anisotropy.
 void ChangeTexturesAnisotropyLevel();
