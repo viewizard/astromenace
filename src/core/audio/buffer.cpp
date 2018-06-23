@@ -470,3 +470,26 @@ void vw_ReleaseAllSoundBuffers()
 	SoundBuffersMap.clear();
 	alGetError(); // reset errors
 }
+
+/*
+ * Release sound buffer.
+ * Note, since this function should be global, we declare it in audio.h header instead of buffer.h
+ */
+void vw_ReleaseSoundBuffer(const std::string &Name)
+{
+	if (Name.empty()) {
+		std::cerr << __func__ << "(): " << "empty Name parameter" << "\n";
+		return;
+	}
+
+	auto tmpBuffer = SoundBuffersMap.find(Name);
+	if (tmpBuffer == SoundBuffersMap.end())
+		return;
+
+	if (tmpBuffer->second) {
+		alDeleteBuffers(1, &tmpBuffer->second);
+		alGetError(); // reset errors
+	}
+
+	SoundBuffersMap.erase(tmpBuffer);
+}

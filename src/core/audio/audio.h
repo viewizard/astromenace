@@ -33,6 +33,13 @@
 struct sVECTOR3D;
 
 /*
+ * Buffer.
+ */
+
+// Release sound buffer.
+void vw_ReleaseSoundBuffer(const std::string &Name);
+
+/*
  * Sound FX.
  */
 
