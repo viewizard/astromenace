@@ -25,14 +25,6 @@
 
 *************************************************************************************/
 
-/*
-
-We preload all model3d before first access, otherwise they
-will be load on first access (that may lag the game process).
-
-*/
-
-
 #include "../core/core.h"
 #include "../config/config.h"
 
@@ -42,18 +34,19 @@ namespace {
 // small value mean that asset loads fast, big value - slow
 constexpr unsigned Model3DLoadValue{200};
 
-struct sModel3DAssetMetadata {
-	float TriangleSizeLimit{-1.0f};
-	bool NeedTangentAndBinormal{false};
+struct sModel3DAsset {
+	const float TriangleSizeLimit{-1.0f};
+	const bool NeedTangentAndBinormal{false};
+	std::weak_ptr<sModel3D> PreloadedModel3D{};
 
-	sModel3DAssetMetadata(float _TriangleSizeLimit,
-			      bool _NeedTangentAndBinormal) :
+	sModel3DAsset(float _TriangleSizeLimit,
+		      bool _NeedTangentAndBinormal) :
 		TriangleSizeLimit{_TriangleSizeLimit},
 		NeedTangentAndBinormal{_NeedTangentAndBinormal}
 	{}
 };
 
-const std::unordered_map<std::string, sModel3DAssetMetadata> Model3DMap{
+std::unordered_map<std::string, sModel3DAsset> Model3DMap{
 	{"models/mine/mine-01.vw3d",			{2.0f, false}},
 	{"models/mine/mine-02.vw3d",			{2.0f, false}},
 	{"models/mine/mine-03.vw3d",			{2.0f, false}},
@@ -254,23 +247,24 @@ unsigned GetModel3DAssetsLoadValue()
 void ForEachModel3DAssetLoad(std::function<void (unsigned AssetValue)> function)
 {
 	for (auto &tmpAsset : Model3DMap) {
-		vw_LoadModel3D(tmpAsset.first,
-			       tmpAsset.second.TriangleSizeLimit,
-			       tmpAsset.second.NeedTangentAndBinormal && GameConfig().UseGLSL120);
+		tmpAsset.second.PreloadedModel3D =
+				vw_LoadModel3D(tmpAsset.first,
+					       tmpAsset.second.TriangleSizeLimit,
+					       tmpAsset.second.NeedTangentAndBinormal && GameConfig().UseGLSL120);
 		function(Model3DLoadValue);
 	}
 }
 
 /*
- * Load model3d asset.
+ * Get preloaded model3d asset (preloaded by ForEachModel3DAssetLoad() call).
  */
-std::weak_ptr<sModel3D> LoadModel3DAsset(const std::string &FileName)
+std::weak_ptr<sModel3D> GetPreloadedModel3DAsset(const std::string &FileName)
 {
 	auto tmpAsset = Model3DMap.find(FileName);
-	if (tmpAsset == Model3DMap.end())
-		return std::weak_ptr<sModel3D>{};
+	if ((tmpAsset != Model3DMap.end()) &&
+	    !tmpAsset->second.PreloadedModel3D.expired())
+		return tmpAsset->second.PreloadedModel3D;
 
-	return vw_LoadModel3D(tmpAsset->first,
-			      tmpAsset->second.TriangleSizeLimit,
-			      tmpAsset->second.NeedTangentAndBinormal && GameConfig().UseGLSL120);
+	std::cerr << __func__ << "(): " << "preloaded model3d not found: " << FileName << "\n";
+	return std::weak_ptr<sModel3D>{};
 }

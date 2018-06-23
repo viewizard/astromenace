@@ -117,7 +117,7 @@ bool NeedCheckCollision(cObject3D *Object3D)
 void LoadObjectData(const std::string &FileName, cObject3D *Object3D)
 {
 	// получение геометрии модели
-	std::weak_ptr<sModel3D> Model = LoadModel3DAsset(FileName);
+	std::weak_ptr<sModel3D> Model = GetPreloadedModel3DAsset(FileName);
 	auto sharedModel = Model.lock();
 	if (!sharedModel)
 		return;
