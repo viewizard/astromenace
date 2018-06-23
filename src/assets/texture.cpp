@@ -30,7 +30,7 @@
 
 namespace {
 
-// empirical found "load value" for each texture asset
+// empirical found "everage load value" for one texture asset
 // small value mean that asset loads fast, big value - slow
 constexpr unsigned TextureLoadValue{200};
 
@@ -685,9 +685,9 @@ const std::vector<sTextureAsset> TextureAssetArray{
 
 
 /*
- * Get all texture assets value.
+ * Get all texture assets load value.
  */
-unsigned GetTextureAssetsValue()
+unsigned GetTextureAssetsLoadValue()
 {
 	return TextureAssetArray.size() * TextureLoadValue;
 }

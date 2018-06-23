@@ -30,8 +30,8 @@
 
 #include "../core/base.h"
 
-// Get all model3d assets value.
-unsigned GetModel3DAssetsValue();
+// Get all model3d assets load value.
+unsigned GetModel3DAssetsLoadValue();
 // Cycle with function call on each model3d asset load.
 void ForEachModel3DAssetLoad(std::function<void (unsigned AssetValue)> function);
 

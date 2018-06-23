@@ -31,7 +31,7 @@
 
 namespace {
 
-// empirical found "load value" for each sfx asset
+// empirical found "everage load value" for one sfx asset
 // small value mean that asset loads fast, big value - slow
 constexpr unsigned SFXLoadValue{20};
 

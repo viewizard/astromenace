@@ -30,8 +30,8 @@
 
 #include "../core/base.h"
 
-// Get all texture assets value.
-unsigned GetTextureAssetsValue();
+// Get all texture assets load value.
+unsigned GetTextureAssetsLoadValue();
 // Cycle with function call on each texture asset load.
 void ForEachTextureAssetLoad(std::function<void (unsigned AssetValue)> function);
 // Change anisotropy level for all textures that was loaded with anisotropy.

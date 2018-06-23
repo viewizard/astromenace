@@ -30,7 +30,7 @@
 
 namespace {
 
-// empirical found "load value" for each model3d asset
+// empirical found "everage load value" for one model3d asset
 // small value mean that asset loads fast, big value - slow
 constexpr unsigned Model3DLoadValue{200};
 
@@ -238,9 +238,9 @@ const std::vector<sModel3DAsset> Model3DAssetArray{
 
 
 /*
- * Get all model3d assets value.
+ * Get all model3d assets load value.
  */
-unsigned GetModel3DAssetsValue()
+unsigned GetModel3DAssetsLoadValue()
 {
 	return Model3DAssetArray.size() * Model3DLoadValue;
 }

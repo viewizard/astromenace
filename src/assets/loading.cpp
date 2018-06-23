@@ -264,8 +264,8 @@ void LoadAllGameAssets()
 	uint32_t LastDrawTime = SDL_GetTicks();
 	unsigned RealLoadedAssets{0};
 	unsigned AllDrawLoading{GetAudioAssetsLoadValue() +
-				GetModel3DAssetsValue() +
-				GetTextureAssetsValue()};
+				GetModel3DAssetsLoadValue() +
+				GetTextureAssetsLoadValue()};
 
 	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
 		RealLoadedAssets += AssetValue;
