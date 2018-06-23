@@ -49,21 +49,6 @@
  * 3. Hash calculation for tags names (for fast search, or switch statement).
  */
 
-namespace xml {
-
-/*
- * Compile-time Bernstein hash (djb2a) calculation.
- */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
-constexpr unsigned hash(const char *str, int h = 0)
-{
-	return !str[h] ? 5381 : (hash(str, h + 1) * 33) ^ str[h];
-}
-
-}
-#pragma GCC diagnostic pop
-
 enum class eEntryType {
 	Regular,	// regular, could contain attributes and sub-entries
 	Comment		// <--! comment -->

@@ -190,4 +190,15 @@ private:
 	F __f;
 };
 
+/*
+ * Compile-time Bernstein hash (djb2a) calculation.
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
+constexpr unsigned constexpr_hash_djb2a(const char *str, int h = 0)
+{
+	return !str[h] ? 5381 : (constexpr_hash_djb2a(str, h + 1) * 33) ^ str[h];
+}
+#pragma GCC diagnostic pop
+
 #endif // CORE_BASE_H

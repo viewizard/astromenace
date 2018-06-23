@@ -332,7 +332,7 @@ bool cMissionScript::Update(float Time)
 	for (; xmlEntryIter != xmlDoc->GetRootEntry()->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		switch (xmlEntry.NameHash) {
-		case xml::hash("TimeLine"): {
+		case constexpr_hash_djb2a("TimeLine"): {
 				float onTime{0.0f};
 				xmlDoc->fGetEntryAttribute(xmlEntry, "value", onTime);
 
@@ -347,7 +347,7 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case xml::hash("AIFile"):
+		case constexpr_hash_djb2a("AIFile"):
 			if (!xmlEntry.Content.empty()) {
 				xmlAI.reset(new cXMLDocument(xmlEntry.Content));
 				if (!xmlAI->GetRootEntry()) {
@@ -357,7 +357,7 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case xml::hash("Debug"):
+		case constexpr_hash_djb2a("Debug"):
 			ShowLineNumber = false;
 			xmlDoc->bGetEntryAttribute(xmlEntry, "showline", ShowLineNumber);
 
@@ -371,7 +371,7 @@ bool cMissionScript::Update(float Time)
 			xmlDoc->bGetEntryAttribute(xmlEntry, "time", ShowGameTime);
 			break;
 
-		case xml::hash("StarSystem"): {
+		case constexpr_hash_djb2a("StarSystem"): {
 				int SystemNum{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "system", SystemNum)) {
 					sVECTOR3D TmpBaseRotation(0.0f, 0.0f, 0.0f);
@@ -383,7 +383,7 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case xml::hash("LayersTransp"): {
+		case constexpr_hash_djb2a("LayersTransp"): {
 				float Layer1TranspStart{0.2f};
 				float Layer1TranspEnd{0.7f};
 				float Layer2TranspStart{0.9f};
@@ -399,7 +399,7 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case xml::hash("Music"):
+		case constexpr_hash_djb2a("Music"):
 			// change music only if player's ship still alive, otherwise we are playing 'fail' theme
 			if (PlayerFighter)
 				if (PlayerFighter->Strength > 0.0f) {
@@ -413,7 +413,7 @@ bool cMissionScript::Update(float Time)
 				}
 			break;
 
-		case xml::hash("CreatePlanet"): {
+		case constexpr_hash_djb2a("CreatePlanet"): {
 				cPlanet *Planet = new cPlanet;
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
@@ -426,7 +426,7 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case xml::hash("AsteroidField"):
+		case constexpr_hash_djb2a("AsteroidField"):
 			xmlDoc->bGetEntryAttribute(xmlEntry, "status", AsterOn);
 			xmlDoc->fGetEntryAttribute(xmlEntry, "persec", AsterQuant);
 			xmlDoc->fGetEntryAttribute(xmlEntry, "w", AsterW);
@@ -438,7 +438,7 @@ bool cMissionScript::Update(float Time)
 			xmlDoc->fGetEntryAttribute(xmlEntry, "fast", AsterMinFastSpeed);
 			break;
 
-		case xml::hash("Light"): {
+		case constexpr_hash_djb2a("Light"): {
 				eLightType LightType{eLightType::Directional};
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType) &&
@@ -476,10 +476,10 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case xml::hash("Label"):
+		case constexpr_hash_djb2a("Label"):
 			break;
 
-		case xml::hash("Goto"): {
+		case constexpr_hash_djb2a("Goto"): {
 				// если есть указатель на метку
 				std::string tmpLabel{};
 				if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
@@ -505,11 +505,11 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case xml::hash("MissionComplete"):
+		case constexpr_hash_djb2a("MissionComplete"):
 			SetGameMissionComplete();
 			break;
 
-		case xml::hash("MissionCompleteAtNoEnemy"): {
+		case constexpr_hash_djb2a("MissionCompleteAtNoEnemy"): {
 				bool SetGameMissionFlag{false};
 				NeedCheckSpaceShip = false;
 				if (xmlDoc->bGetEntryAttribute(xmlEntry, "ships", NeedCheckSpaceShip))
@@ -700,7 +700,7 @@ void cMissionScript::UpdateTimeLine()
 
 		// xml::hash() could generate error at compile-time, make sure hashes is unique
 		switch (TL.NameHash) {
-		case xml::hash("EarthFighter"):
+		case constexpr_hash_djb2a("EarthFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cEarthSpaceFighter *SpaceShip = new cEarthSpaceFighter;
 				SpaceShip->Create(tmpType);
@@ -717,7 +717,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("AlienFighter"):
+		case constexpr_hash_djb2a("AlienFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cAlienSpaceFighter *SpaceShip = new cAlienSpaceFighter;
 				SpaceShip->Create(tmpType);
@@ -725,7 +725,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("AlienMotherShip"):
+		case constexpr_hash_djb2a("AlienMotherShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cAlienSpaceMotherShip *SpaceShip = new cAlienSpaceMotherShip;
 				SpaceShip->Create(tmpType);
@@ -733,7 +733,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("PirateShip"):
+		case constexpr_hash_djb2a("PirateShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cPirateShip *SpaceShip = new cPirateShip;
 				SpaceShip->Create(tmpType);
@@ -741,7 +741,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateAsteroid"): {
+		case constexpr_hash_djb2a("CreateAsteroid"): {
 				cAsteroid *SpaceObject = new cAsteroid;
 				// тип сейчас не задействован, всегда ставим 1
 				SpaceObject->Create(1);
@@ -749,7 +749,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateBasePart"):
+		case constexpr_hash_djb2a("CreateBasePart"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cBasePart *SpaceObject = new cBasePart;
 				SpaceObject->Create(tmpType);
@@ -757,7 +757,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateBigAsteroid"):
+		case constexpr_hash_djb2a("CreateBigAsteroid"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cBigAsteroid *SpaceObject = new cBigAsteroid;
 				SpaceObject->Create(tmpType);
@@ -765,7 +765,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateMBuilding"):
+		case constexpr_hash_djb2a("CreateMBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
 				GroundObject->Create(tmpType);
@@ -773,7 +773,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateBuilding"):
+		case constexpr_hash_djb2a("CreateBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cBuilding *GroundObject = new cBuilding;
 				GroundObject->Create(tmpType);
@@ -781,7 +781,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateTracked"):
+		case constexpr_hash_djb2a("CreateTracked"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cTracked *GroundObject = new cTracked;
 				GroundObject->Create(tmpType);
@@ -789,7 +789,7 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case xml::hash("CreateWheeled"):
+		case constexpr_hash_djb2a("CreateWheeled"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
 				cWheeled *GroundObject = new cWheeled;
 				GroundObject->Create(tmpType);
