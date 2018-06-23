@@ -30,9 +30,105 @@
 
 #include "../core/base.h"
 
-// Get all audio assets value.
-unsigned GetAudioAssetsValue();
+// menu sfx
+enum class eMenuSFX {
+	OverSmallButton,
+	OverBigButton,
+	Click,
+	SwitchToAnotherMenu,
+	TapingClick,
+	OverLine,
+	SelectLine,
+	CanNotClick,
+	DragError,
+	DragUninstallFromSlot,
+	DragInstallToSlot,
+	DragRelease,
+	MissionShowMenu, // game sfx (2D), keep it here, since this is UI sfx
+	MissionHideMenu, // game sfx (2D), keep it here, since this is UI sfx
+	WarningLowLife // game sfx (2D), keep it here, since this is UI sfx
+};
+
+// game sfx
+enum class eGameSFX {
+	none, // note, 'none' should be the first element, since variables would be value initialized to 0
+	WeaponMalfunction_Kinetic, // Kinetic
+	WeaponMalfunction_Particle, // Ion, Plasma
+	WeaponMalfunction_Beam, // Maser, Laser
+	WeaponMalfunction_Energy, // Antimatter, Gauss
+	WeaponMalfunction_Launcher, // Missile, Torpedo, Bomb
+	Explosion_Small, // Asteroid
+	Explosion_Medium, // Missiles
+	Explosion_Big, // Torpedo, Alien Ship
+	Explosion_Big_Energy, // Bomb, Ground Object, Earth Fighter, Pirate Ship
+	WeaponFire_Kinetic1,
+	WeaponFire_Kinetic2,
+	WeaponFire_Kinetic3,
+	WeaponFire_Kinetic4,
+	WeaponFire_Ion1,
+	WeaponFire_Ion2,
+	WeaponFire_Ion3,
+	WeaponFire_Plasma1,
+	WeaponFire_Plasma2,
+	WeaponFire_Plasma3,
+	WeaponFire_Maser1,
+	WeaponFire_Maser2,
+	WeaponFire_Antimatter,
+	WeaponFire_Laser,
+	WeaponFire_Gauss,
+	WeaponFire_SmallMissile,
+	WeaponFire_NormalMissile,
+	WeaponFire_Torpedo,
+	WeaponFire_Bomb,
+	Hit_Kinetic,
+	Hit_Ion,
+	Hit_Plasma,
+	Hit_Antimatter,
+	Hit_Gauss
+};
+
+// voice
+enum class eVoicePhrase {
+	Attention,
+	EngineMalfunction,
+	MissileDetected,
+	PowerSupplyReestablished,
+	PrepareForAction,
+	ReactorMalfunction,
+	Warning,
+	WeaponDamaged,
+	WeaponDestroyed,
+	WeaponMalfunction
+};
+
+// music themes
+enum class eMusicTheme {
+	NONE, // note, 'NONE' should be the first element, since variables would be value initialized to 0
+	MENU,
+	GAME,
+	BOSS,
+	FAILED,
+	CREDITS
+};
+
+
+// Get all audio assets load value.
+unsigned GetAudioAssetsLoadValue();
 // Cycle with function call on each audio asset load.
 void ForEachAudioAssetLoad(std::function<void (unsigned AssetValue)> function);
+// Play menu sfx (2D).
+unsigned int PlayMenuSFX(eMenuSFX SoundID, float LocalVolume);
+// Play game sfx (3D).
+unsigned int PlayGameSFX(eGameSFX GameSFX, float LocalVolume, const sVECTOR3D &Location, int AtType = 1);
+// Play voice phrase.
+unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume);
+// Play music theme with fade-in and fade-out previous music theme (if need).
+void PlayMusicTheme(eMusicTheme MusicTheme, uint32_t FadeInTicks, uint32_t FadeOutTicks);
+// Change "global" volume for menu sfx (2D).
+void ChangeMenuSFXGlobalVolume(float NewGlobalVolume);
+// Change "global" volume for voice.
+void ChangeVoiceGlobalVolume(float NewGlobalVolume);
+// Main audio loop.
+void AudioLoop();
 
 #endif // ASSETS_AUDIO_H

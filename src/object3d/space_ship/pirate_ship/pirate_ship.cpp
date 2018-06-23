@@ -27,7 +27,7 @@
 
 #include "pirate_ship.h"
 #include "../../../config/config.h"
-#include "../../../audio/audio.h"
+#include "../../../assets/audio.h"
 
 
 struct sPirateShipData {

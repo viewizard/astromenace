@@ -39,7 +39,7 @@
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"
-#include "../audio/audio.h"
+#include "../assets/audio.h"
 #include "../gfx/star_system.h"
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"

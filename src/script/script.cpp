@@ -34,7 +34,7 @@
 #include "../core/core.h"
 #include "script.h"
 #include "../config/config.h"
-#include "../audio/audio.h"
+#include "../assets/audio.h"
 #include "../gfx/star_system.h"
 #include "../object3d/object3d.h"
 #include "../object3d/space_ship/space_ship.h"

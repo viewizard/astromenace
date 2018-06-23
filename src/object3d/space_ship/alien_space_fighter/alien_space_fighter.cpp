@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "alien_space_fighter.h"
-#include "../../../audio/audio.h"
+#include "../../../assets/audio.h"
 
 
 

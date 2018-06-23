@@ -30,7 +30,7 @@
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"
-#include "../audio/audio.h"
+#include "../assets/audio.h"
 #include "../main.h"
 #include "audio.h"
 #include "model3d.h"
@@ -263,7 +263,7 @@ void LoadAllGameAssets()
 	GLtexture LoadBackground = vw_LoadTexture("loading/loading0" + std::to_string(1 + vw_iRandNum(3)) + ".tga");
 	uint32_t LastDrawTime = SDL_GetTicks();
 	unsigned RealLoadedAssets{0};
-	unsigned AllDrawLoading{GetAudioAssetsValue() +
+	unsigned AllDrawLoading{GetAudioAssetsLoadValue() +
 				GetModel3DAssetsValue() +
 				GetTextureAssetsValue()};
 

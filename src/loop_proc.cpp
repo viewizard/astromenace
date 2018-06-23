@@ -31,7 +31,7 @@
 #include "platform/platform.h"
 #include "object3d/object3d.h"
 #include "gfx/star_system.h"
-#include "audio/audio.h"
+#include "assets/audio.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
 

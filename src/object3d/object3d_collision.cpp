@@ -29,7 +29,7 @@
 
 #include "object3d.h"
 #include "../config/config.h"
-#include "../audio/audio.h"
+#include "../assets/audio.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"
 #include "projectile/projectile.h"

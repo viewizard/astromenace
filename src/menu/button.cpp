@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "../core/core.h"
-#include "../audio/audio.h"
+#include "../assets/audio.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 

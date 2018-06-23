@@ -34,7 +34,7 @@
 #include "enum.h"
 #include "build_config.h"
 #include "ui/font.h"
-#include "audio/audio.h"
+#include "assets/audio.h"
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"

@@ -29,7 +29,7 @@
 #include "../config/config.h"
 #include "../platform/platform.h"
 #include "../ui/font.h"
-#include "../audio/audio.h"
+#include "../assets/audio.h"
 #include "../object3d/explosion/space_explosion/space_explosion.h"
 #include "../object3d/space_object/space_object.h"
 #include "../object3d/ground_object/ground_object.h"
