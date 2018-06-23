@@ -471,6 +471,8 @@ static void CreateVertexArrayLimitedBySizeTriangles(cModel3DWrapper *Model, floa
  * Note, we don't provide shared_ptr, only weak_ptr, since all memory management
  * should be internal only. Caller should operate with weak_ptr and use lock()
  * (shared_ptr) only during access to model's data.
+ * Note, FileName used as a key in ModelsMap, and should not be used with different
+ * TriangleSizeLimit or NeedTangentAndBinormal.
  */
 std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal)
 {
