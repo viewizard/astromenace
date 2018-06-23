@@ -34,7 +34,7 @@ struct sModel3D;
 
 // Get all model3d assets load value.
 unsigned GetModel3DAssetsLoadValue();
-// Cycle with function call on each model3d asset load.
+// Cycle with function callback on each model3d asset load.
 void ForEachModel3DAssetLoad(std::function<void (unsigned AssetValue)> function);
 // Load model3d asset.
 std::weak_ptr<sModel3D> LoadModel3DAsset(const std::string &FileName);
