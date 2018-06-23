@@ -25,13 +25,6 @@
 
 *************************************************************************************/
 
-/*
-
-We preload all sfx and voice sound buffers before first access, otherwise
-they will be load on first access (that may lag the game process).
-
-*/
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "audio.h"

@@ -479,7 +479,7 @@ std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float Triang
 	if (FileName.empty())
 		return std::weak_ptr<sModel3D>{};
 
-	// if we already have it, just return a pointer.
+	// if we already have it, just return previously loaded, we can't use same key twice
 	auto FoundModel = ModelsMap.find(FileName);
 	if (FoundModel != ModelsMap.end())
 		return FoundModel->second;
