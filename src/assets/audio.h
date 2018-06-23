@@ -116,6 +116,8 @@ enum class eMusicTheme {
 unsigned GetAudioAssetsLoadValue();
 // Cycle with function call on each audio asset load.
 void ForEachAudioAssetLoad(std::function<void (unsigned AssetValue)> function);
+// Reload voice assets for new language.
+void ReloadVoiceAssets();
 // Play menu sfx (2D).
 unsigned int PlayMenuSFX(eMenuSFX SoundID, float LocalVolume);
 // Play game sfx (3D).

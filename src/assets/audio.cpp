@@ -25,6 +25,13 @@
 
 *************************************************************************************/
 
+/*
+
+We preload all sfx and voice sound buffers before first access, otherwise
+they will be load on first access (that may lag the game process).
+
+*/
+
 #include "../core/core.h"
 #include "../config/config.h"
 #include "audio.h"
@@ -36,6 +43,7 @@ namespace {
 constexpr unsigned SFXLoadValue{20};
 
 eMusicTheme CurrentPlayingMusicTheme{eMusicTheme::NONE};
+unsigned int CurrentLoadedVoiceAssetsLanguage{0}; // English
 
 struct sSoundMetadata {
 	std::string FileName{};
@@ -159,7 +167,8 @@ const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap{
 unsigned GetAudioAssetsLoadValue()
 {
 	return (MenuSFXMap.size() * SFXLoadValue +
-		GameSFXMap.size() * SFXLoadValue);
+		GameSFXMap.size() * SFXLoadValue +
+		VoiceMap.size() * SFXLoadValue);
 }
 
 /*
@@ -178,6 +187,29 @@ void ForEachAudioAssetLoad(std::function<void (unsigned AssetValue)> function)
 		vw_LoadSoundBuffer(tmpAsset.second.FileName);
 		function(SFXLoadValue);
 	}
+	for (auto &tmpAsset : VoiceMap) {
+		vw_LoadSoundBuffer(vw_GetText(tmpAsset.second.FileName, GameConfig().VoiceLanguage));
+		function(SFXLoadValue);
+	}
+	CurrentLoadedVoiceAssetsLanguage = GameConfig().VoiceLanguage;
+}
+
+/*
+ * Reload voice assets for new language.
+ */
+void ReloadVoiceAssets()
+{
+	for (auto &tmpAsset : VoiceMap) {
+		std::string OldFileName{vw_GetText(tmpAsset.second.FileName, CurrentLoadedVoiceAssetsLanguage)};
+		std::string NewFileName{vw_GetText(tmpAsset.second.FileName, GameConfig().VoiceLanguage)};
+		// we may have situation, when language don't provide voice file and
+		// use voice from another language
+		if (OldFileName != NewFileName) {
+			vw_ReleaseSoundBuffer(OldFileName);
+			vw_LoadSoundBuffer(NewFileName);
+		}
+	}
+	CurrentLoadedVoiceAssetsLanguage = GameConfig().VoiceLanguage;
 }
 
 /*

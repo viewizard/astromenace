@@ -28,6 +28,7 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
+#include "../assets/audio.h"
 #include "../ui/font.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
@@ -98,12 +99,14 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 			ChangeGameConfig().VoiceLanguage = vw_GetLanguageListCount() - 1;
 		else
 			ChangeGameConfig().VoiceLanguage--;
+		ReloadVoiceAssets();
 	}
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
 		if (GameConfig().VoiceLanguage >= (vw_GetLanguageListCount() - 1))
 			ChangeGameConfig().VoiceLanguage = 0;
 		else
 			ChangeGameConfig().VoiceLanguage++;
+		ReloadVoiceAssets();
 	}
 
 	Size = vw_TextWidth(vw_GetText("English", GameConfig().VoiceLanguage));
