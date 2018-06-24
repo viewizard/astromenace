@@ -25,25 +25,29 @@
 
 *************************************************************************************/
 
+// TODO uniform location related stuff should be moved to object3d code
+
 #include "../core/core.h"
 
-std::weak_ptr<cGLSL> GLSLShaderType1{};
-std::weak_ptr<cGLSL> GLSLShaderType2{};
-std::weak_ptr<cGLSL> GLSLShaderType3{};
+namespace {
 
-struct sGLSLMetadata {
+struct sShaderMetadata {
 	std::string Name;
 	std::string VertexShaderFileName;
 	std::string FragmentShaderFileName;
 };
-const sGLSLMetadata GLSLLoadList[] = {
+const std::vector<sShaderMetadata> ShaderArray{
 	{"ParticleSystem",		"glsl/particle.vert",		"glsl/particle.frag"},
 	{"PerPixelLight",		"glsl/light.vert",		"glsl/light.frag"},
 	{"PerPixelLight_ShadowMap",	"glsl/light_shadowmap.vert",	"glsl/light_shadowmap.frag"},
 	{"PerPixelLight_Explosion",	"glsl/light_explosion.vert",	"glsl/light_explosion.frag"},
 };
-#define GLSLLoadListCount sizeof(GLSLLoadList)/sizeof(GLSLLoadList[0])
 
+} // unnamed namespace
+
+std::weak_ptr<cGLSL> GLSLShaderType1{};
+std::weak_ptr<cGLSL> GLSLShaderType2{};
+std::weak_ptr<cGLSL> GLSLShaderType3{};
 
 /*
  * Setup shader's uniform locations.
@@ -94,10 +98,10 @@ bool ForEachShaderAssetLoad(std::function<void ()> function)
 	    !vw_GetDevCaps().OpenGL_2_1_supported)
 		return false;
 
-	for (unsigned i = 0; i < GLSLLoadListCount; i++) {
-		std::weak_ptr<cGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
-							       GLSLLoadList[i].VertexShaderFileName,
-							       GLSLLoadList[i].FragmentShaderFileName);
+	for (auto &tmpAsset : ShaderArray) {
+		std::weak_ptr<cGLSL> Program = vw_CreateShader(tmpAsset.Name,
+							       tmpAsset.VertexShaderFileName,
+							       tmpAsset.FragmentShaderFileName);
 		if (Program.expired()) {
 			vw_ReleaseAllShaders();
 			return false;
