@@ -30,28 +30,11 @@
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"
-#include "../assets/audio.h"
 #include "../main.h"
 #include "audio.h"
 #include "model3d.h"
+#include "shader.h"
 #include "texture.h"
-
-std::weak_ptr<cGLSL> GLSLShaderType1{};
-std::weak_ptr<cGLSL> GLSLShaderType2{};
-std::weak_ptr<cGLSL> GLSLShaderType3{};
-
-struct cGLSLLoadList {
-	std::string Name;
-	std::string VertexShaderFileName;
-	std::string FragmentShaderFileName;
-};
-const cGLSLLoadList GLSLLoadList[] = {
-	{"ParticleSystem",		"glsl/particle.vert",		"glsl/particle.frag"},
-	{"PerPixelLight",		"glsl/light.vert",		"glsl/light.frag"},
-	{"PerPixelLight_ShadowMap",	"glsl/light_shadowmap.vert",	"glsl/light_shadowmap.frag"},
-	{"PerPixelLight_Explosion",	"glsl/light_explosion.vert",	"glsl/light_explosion.frag"},
-};
-#define GLSLLoadListCount sizeof(GLSLLoadList)/sizeof(GLSLLoadList[0])
 
 
 //------------------------------------------------------------------------------------
@@ -188,61 +171,10 @@ void LoadAllGameAssets()
 	vw_BeginRendering(RI_COLOR_BUFFER);
 	vw_EndRendering();
 
-	if (vw_GetDevCaps().OpenGL_2_0_supported &&
-	    vw_GetDevCaps().OpenGL_2_1_supported &&
-	    GameConfig().UseGLSL120) {
-		for (unsigned i = 0; i < GLSLLoadListCount; i++) {
-			if (GameConfig().UseGLSL120) {
-
-				std::weak_ptr<cGLSL> Program = vw_CreateShader(GLSLLoadList[i].Name,
-									       GLSLLoadList[i].VertexShaderFileName,
-									       GLSLLoadList[i].FragmentShaderFileName);
-
-				if (!Program.expired()) {
-					if (!vw_LinkShaderProgram(Program))
-						ChangeGameConfig().UseGLSL120 = false;
-				} else
-					ChangeGameConfig().UseGLSL120 = false;
-
-				// important, update music buffers
-				AudioLoop();
-			}
-		}
-
-		// find all shaders by name
-		GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
-		GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
-		GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_ShadowMap");
-
-		// find and store uniform location for all shaders, in real, we don't need
-		// store internal storage number for uniforms usage, since we load them
-		// one-by-one, and we know sequence, we could use 0-1-2-3-4 numbers directly
-		vw_FindShaderUniformLocation(GLSLShaderType1, "Texture1");
-		vw_FindShaderUniformLocation(GLSLShaderType1, "Texture2");
-		vw_FindShaderUniformLocation(GLSLShaderType1, "DirectLightCount");
-		vw_FindShaderUniformLocation(GLSLShaderType1, "PointLightCount");
-		vw_FindShaderUniformLocation(GLSLShaderType1, "NeedMultitexture");
-		vw_FindShaderUniformLocation(GLSLShaderType1, "NormalMap");
-		vw_FindShaderUniformLocation(GLSLShaderType1, "NeedNormalMapping");
-
-		vw_FindShaderUniformLocation(GLSLShaderType2, "Texture1");
-		vw_FindShaderUniformLocation(GLSLShaderType2, "DirectLightCount");
-		vw_FindShaderUniformLocation(GLSLShaderType2, "PointLightCount");
-		vw_FindShaderUniformLocation(GLSLShaderType2, "SpeedData1");
-		vw_FindShaderUniformLocation(GLSLShaderType2, "SpeedData2");
-
-		vw_FindShaderUniformLocation(GLSLShaderType3, "Texture1");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "Texture2");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "DirectLightCount");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "PointLightCount");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "NeedMultitexture");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "ShadowMap");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "xPixelOffset");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "yPixelOffset");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "NormalMap");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "NeedNormalMapping");
-		vw_FindShaderUniformLocation(GLSLShaderType3, "PCFMode");
-	}
+	// NOTE shaders should be load first (since OpenGL 3.1),
+	// since in OpenGL 3.1+ Fixed Function Pipeline was removed
+	if (GameConfig().UseGLSL120)
+		ChangeGameConfig().UseGLSL120 = ForEachShaderAssetLoad(AudioLoop);
 
 	// Viewizard logo
 	vw_SetTextureAlpha(0, 0, 0);
