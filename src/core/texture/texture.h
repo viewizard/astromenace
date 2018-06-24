@@ -53,7 +53,7 @@ GLtexture vw_LoadTexture(const std::string &TextureName,
 GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique_ptr<uint8_t[]> &PixelsArray,
 				     int ImageWidth, int ImageHeight, int ImageChanels,
 				     eTextureCompressionType CompressionType = eTextureCompressionType::NONE,
-				     int NeedResizeW = 0, int NeedResizeH = 0, bool NeedDuplicateCheck = true);
+				     int NeedResizeW = 0, int NeedResizeH = 0);
 // Release texture.
 void vw_ReleaseTexture(GLtexture TextureID);
 // Release all textures.
@@ -63,8 +63,6 @@ void vw_SetTextureProp(const sTextureFilter &Filtering, GLint AnisotropyLevel, c
 		       bool Alpha = false, eAlphaCreateMode AFlag = eAlphaCreateMode::EQUAL, bool MipMap = true);
 // Set textures alpha color.
 void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
-// Find texture by name.
-GLtexture vw_FindTextureByName(const std::string &Name);
 // Find texture's size by ID.
 bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width = nullptr, float *Height = nullptr);
 // Convert supported image file format to VW2D format.

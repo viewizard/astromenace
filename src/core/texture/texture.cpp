@@ -79,7 +79,6 @@ struct sTexture {
 };
 
 // Map with all loaded textures.
-std::unordered_map<std::string, GLtexture> TexturesNameToIDMap;
 std::unordered_map<GLtexture, sTexture> TexturesIDtoDataMap;
 
 } // unnamed namespace
@@ -114,18 +113,6 @@ void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue)
 }
 
 /*
- * Find texture by name.
- */
-GLtexture vw_FindTextureByName(const std::string &Name)
-{
-	auto tmpTexture = TexturesNameToIDMap.find(Name);
-	if (tmpTexture != TexturesNameToIDMap.end())
-		return tmpTexture->second;
-
-	return 0;
-}
-
-/*
  * Find texture's size by ID.
  */
 bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width, float *Height)
@@ -152,14 +139,6 @@ void vw_ReleaseTexture(GLtexture TextureID)
 
 	vw_DeleteTexture(TextureID);
 	TexturesIDtoDataMap.erase(TextureID);
-
-	for (auto &tmpTexture : TexturesNameToIDMap) {
-		if (tmpTexture.second == TextureID) {
-			TexturesNameToIDMap.erase(tmpTexture.first);
-			return;
-		}
-	}
-
 }
 
 /*
@@ -171,7 +150,6 @@ void vw_ReleaseAllTextures()
 		vw_DeleteTexture(tmpTexture.first);
 	}
 	TexturesIDtoDataMap.clear();
-	TexturesNameToIDMap.clear();
 
 	FilteringTex = sTextureFilter{};
 	AnisotropyLevelTex = 1;
@@ -474,19 +452,10 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
 GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique_ptr<uint8_t[]> &PixelsArray,
 				     int ImageWidth, int ImageHeight, int ImageChanels,
 				     eTextureCompressionType CompressionType,
-				     int NeedResizeW, int NeedResizeH, bool NeedDuplicateCheck)
+				     int NeedResizeW, int NeedResizeH)
 {
 	if (TextureName.empty() || !PixelsArray.get() || (ImageWidth <= 0) || (ImageHeight <= 0))
 		return 0;
-
-	// check for availability, probably, we already have it loaded
-	if (NeedDuplicateCheck) {
-		GLtexture tmpTextureID = vw_FindTextureByName(TextureName);
-		if (tmpTextureID) {
-			std::cout << "Texture already loaded: " << TextureName << "\n";
-			return tmpTextureID;
-		}
-	}
 
 	sTexture newTexture{};
 	newTexture.Width = ImageWidth;
@@ -526,7 +495,6 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique
 	vw_BindTexture(0, 0);
 
 	// create new entries
-	TexturesNameToIDMap.emplace(TextureName, TextureID);
 	TexturesIDtoDataMap.emplace(TextureID, newTexture);
 
 	std::cout << "Texture created from memory: " << TextureName << "\n";

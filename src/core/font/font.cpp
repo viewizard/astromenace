@@ -289,7 +289,7 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 									    FontCharsList.front()->FontMetrics.Width.i(),
 									    FontCharsList.front()->FontMetrics.Height.i(),
 									    4, eTextureCompressionType::NONE,
-									    0, 0, false);
+									    0, 0);
 	}
 
 	std::cout << "Font character was created for size: "
