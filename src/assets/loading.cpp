@@ -37,42 +37,39 @@
 #include "texture.h"
 
 
-//------------------------------------------------------------------------------------
-// процедура прорисовки логотипа
-//------------------------------------------------------------------------------------
+/*
+ * Draw Viewizard logotype.
+ */
 static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 {
-	int ShowLogoTime{6000}; // сколько нужно показывать логотип
-	int ShowLogoLife{ShowLogoTime}; // сколько осталось показывать
-	uint32_t ShowLogoPrevTime = SDL_GetTicks();
+	constexpr uint32_t FadeTicks{2000}; // 2 sec.
+	sRECT SrcRect{0, 0, 512, 512};
+	sRECT DstRect{static_cast<int>((GameConfig().InternalWidth - 512) / 2),
+		      static_cast<int>((GameConfig().InternalHeight - 512) / 2),
+		      static_cast<int>((GameConfig().InternalWidth - 512) / 2) + 512,
+		      static_cast<int>((GameConfig().InternalHeight - 512) / 2) + 512};
+	float Transp{0.0f};
+	float GreyColor{1.0f};
+	uint32_t CurrentTick{0};
 
-	vw_SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-	while (ShowLogoLife > 0) {
-		sRECT SrcRect{1, 1, 511, 511};
-		int StartX{static_cast<int>((GameConfig().InternalWidth - 510) / 2)};
-		int EndX{StartX + 510};
-		sRECT DstRect{StartX, 128 + 1, EndX, 640 - 2};
-		float Transp{1.0f};
-		float GreyColor{1.0f};
-
-		// плавно делаем появление
-		if (ShowLogoLife > ShowLogoTime / 2.0f)
-			Transp = (ShowLogoTime / 2.0f - (ShowLogoLife - ShowLogoTime / 2.0f)) / (ShowLogoTime / 2.0f);
-		else {
-			Transp = 1.0f;
-			// относительно быстро исчезаем
-			if (ShowLogoLife < ShowLogoTime / 4.0f) {
-				GreyColor = ShowLogoLife / (ShowLogoTime / 4.0f);
-				vw_SetClearColor(GreyColor, GreyColor, GreyColor, 1.0f);
+	auto CheckEvent = [] () {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+			case SDL_MOUSEBUTTONDOWN:
+			case SDL_KEYDOWN:
+			case SDL_JOYBUTTONDOWN:
+				vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+				return true;
+			default:
+				break;
 			}
 		}
-		Transp -= 0.01f; // чтобы всегда был немного прозрачным
-		if (Transp < 0.0f)
-			Transp = 0.0f;
+		return false;
+	};
 
-		// рисуем
-		vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
+	auto DrawLogo = [&] () {
+		vw_BeginRendering(RI_COLOR_BUFFER);
 		vw_Start2DMode(-1, 1);
 
 		vw_Draw2D(DstRect, SrcRect, ViewizardLogoTexture, true, Transp, 0.0f,
@@ -80,31 +77,38 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 
 		vw_End2DMode();
 		vw_EndRendering();
+	};
 
-		// проверка времени
-		ShowLogoLife -= SDL_GetTicks() - ShowLogoPrevTime;
-		ShowLogoPrevTime = SDL_GetTicks();
-		if (ShowLogoLife <= 0)
-			ShowLogoLife = 0;
+	auto Loop = [&] (uint32_t LogoFade, std::function<void ()> Calculations) {
+		while (LogoFade > CurrentTick) {
+			Calculations();
+			DrawLogo();
 
-		SDL_Event event;
-		while ( SDL_PollEvent(&event) ) {
-			switch (event.type) {
-			case SDL_MOUSEBUTTONDOWN:
-			case SDL_KEYDOWN:
-			case SDL_JOYBUTTONDOWN:
-				ShowLogoLife = 0;
-				break;
-			default:
-				break;
-			}
+			if (CheckEvent())
+				return true;
+
+			SDL_Delay(10); // we don't need high FPS here, ~100 FPS should be enough
+			AudioLoop(); // important, update music buffers
+			CurrentTick = SDL_GetTicks();
 		}
+		return false;
+	};
 
-		SDL_Delay(2);
+	vw_SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-		// important, update music buffers
-		AudioLoop();
-	}
+	CurrentTick = SDL_GetTicks();
+	uint32_t LogoFadeIn = CurrentTick + FadeTicks;
+	if (Loop(LogoFadeIn, [&] () {
+		 Transp = 1.0f - static_cast<float>(LogoFadeIn - CurrentTick) / static_cast<float>(FadeTicks);}))
+		return;
+
+	Transp = 1.0f;
+	CurrentTick = SDL_GetTicks();
+	uint32_t LogoFadeOut = CurrentTick + FadeTicks;
+	if (Loop(LogoFadeOut, [&] () {
+		 GreyColor = static_cast<float>(LogoFadeOut - CurrentTick) / static_cast<float>(FadeTicks);
+		 vw_SetClearColor(GreyColor, GreyColor, GreyColor, 1.0f);}))
+		return;
 
 	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
