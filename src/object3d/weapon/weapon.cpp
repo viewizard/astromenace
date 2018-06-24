@@ -27,7 +27,7 @@
 
 #include "weapon.h"
 #include "../../assets/audio.h"
-
+#include "../../assets/texture.h"
 
 
 // название типа оружия землян
@@ -296,9 +296,9 @@ void cWeapon::Create(int WeaponNum)
 		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, this);
 
 		for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-			Texture[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureName);
+			Texture[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum-1].TextureName);
 			if (WeaponNum < 16)
-				TextureIllum[i] = vw_FindTextureByName(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
+				TextureIllum[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
 		}
 
 	}
@@ -348,7 +348,7 @@ void cWeapon::Create(int WeaponNum)
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this);
 			for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
+				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
 		}
@@ -364,7 +364,7 @@ void cWeapon::Create(int WeaponNum)
 
 			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this);
 			for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-				Texture[i] = vw_FindTextureByName(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
+				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
 			}
 		}
@@ -505,7 +505,7 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedFire->Theta      = 5.00f;
 			sharedDestroyedFire->Life       = 0.50f*Length/3.0f;
 			sharedDestroyedFire->ParticlesPerSec = 70;
-			sharedDestroyedFire->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedDestroyedFire->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedDestroyedFire->CreationType = eParticleCreationType::Cube;
 			sharedDestroyedFire->CreationSize = sVECTOR3D(Width/2.0f,Width/2.0f,0.1f);
 			sharedDestroyedFire->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
@@ -539,7 +539,7 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedSmoke->Theta      = 35.00f;
 			sharedDestroyedSmoke->Life       = 2.00f*Length/3.0f;
 			sharedDestroyedSmoke->ParticlesPerSec = 300;
-			sharedDestroyedSmoke->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedDestroyedSmoke->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedDestroyedSmoke->CreationType = eParticleCreationType::Point;
 			sharedDestroyedSmoke->CreationSize = sVECTOR3D(Width/2.5f,Width/2.5f,0.1f);
 			sharedDestroyedSmoke->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);

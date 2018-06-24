@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "weapon.h"
-
+#include "../../assets/texture.h"
 
 
 
@@ -399,6 +399,6 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 
 	ParticleSystem->IsSuppressed = true;
 	ParticleSystem->ParticlesPerSec = 50;
-	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
 }

@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "projectile.h"
+#include "../../assets/texture.h"
 
 namespace {
 
@@ -45,7 +46,7 @@ const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
 void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
 
-	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	std::string tmpTextureName{};
 
 
@@ -558,7 +559,7 @@ void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXN
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D(4.0f,4.0f,4.0f);
-		ParticleSystem->Texture = vw_FindTextureByName("gfx/flare.tga");
+		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
 		break;
 	case 26:	// стрельба 1-го пирата Kinetic
@@ -846,7 +847,7 @@ void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXN
 
 	case 101:	// шлейф ракеты землян и пиратов
 
-		ParticleSystem->Texture = vw_FindTextureByName(MissileTrailTextures[vw_iRandNum(4)]);
+		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -869,7 +870,7 @@ void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXN
 
 	case 102:	// шлейф ракет пришельцев
 
-		ParticleSystem->Texture = vw_FindTextureByName(MissileTrailTextures[vw_iRandNum(4)]);
+		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;

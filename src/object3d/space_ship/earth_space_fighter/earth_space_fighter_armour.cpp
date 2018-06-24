@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "earth_space_fighter.h"
-
+#include "../../../assets/texture.h"
 
 
 
@@ -100,28 +100,28 @@ GLtexture GetArmourTexture(int ArmourType)
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус
 	case 0:
-		return vw_FindTextureByName("models/earthfighter/sf-text00.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text00.vw2d");
 	// примитивная броня
 	case 1:
-		return vw_FindTextureByName("models/earthfighter/sf-text04.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text04.vw2d");
 	// модернизированная броня
 	case 2:
-		return vw_FindTextureByName("models/earthfighter/sf-text05.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text05.vw2d");
 	// и против иона
 	case 3:
-		return vw_FindTextureByName("models/earthfighter/sf-text07.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text07.vw2d");
 	// и против иона+
 	case 4:
-		return vw_FindTextureByName("models/earthfighter/sf-text08.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text08.vw2d");
 	// и против иона++
 	case 5:
-		return vw_FindTextureByName("models/earthfighter/sf-text09.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text09.vw2d");
 	// и против плазмы
 	case 6:
-		return vw_FindTextureByName("models/earthfighter/sf-text10.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text10.vw2d");
 	// универсальная
 	case 7:
-		return vw_FindTextureByName("models/earthfighter/sf-text06.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-text06.vw2d");
 
 	default:
 		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
@@ -135,28 +135,28 @@ GLtexture GetArmourIllumTexture(int ArmourType)
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус
 	case 0:
-		return vw_FindTextureByName("models/earthfighter/sf-illum01.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum01.vw2d");
 	// примитивная броня
 	case 1:
-		return vw_FindTextureByName("models/earthfighter/sf-illum02.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum02.vw2d");
 	// модернизированная броня
 	case 2:
-		return vw_FindTextureByName("models/earthfighter/sf-illum03.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
 	// и против иона
 	case 3:
-		return vw_FindTextureByName("models/earthfighter/sf-illum03.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
 	// и против иона+
 	case 4:
-		return vw_FindTextureByName("models/earthfighter/sf-illum03.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
 	// и против иона++
 	case 5:
-		return vw_FindTextureByName("models/earthfighter/sf-illum02.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum02.vw2d");
 	// и против плазмы
 	case 6:
-		return vw_FindTextureByName("models/earthfighter/sf-illum04.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum04.vw2d");
 	// универсальная
 	case 7:
-		return vw_FindTextureByName("models/earthfighter/sf-illum03.vw2d");
+		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
 
 	default:
 		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";

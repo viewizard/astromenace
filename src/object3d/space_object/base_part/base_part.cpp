@@ -27,7 +27,7 @@
 
 #include "base_part.h"
 #include "../../../config/config.h"
-
+#include "../../../assets/texture.h"
 
 
 
@@ -68,12 +68,12 @@ void cBasePart::Create(int BasePartNum)
 
 case1next:
 
-		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
-		Texture[1] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+		Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[1] = 0;
-		Texture[2] = vw_FindTextureByName("models/spacebase/metal.tga");
+		Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
 		TextureIllum[2] = 0;
 
 		GraphicFXLocation.resize(8);
@@ -131,21 +131,21 @@ case1next:
 
 case2next:
 
-		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
-		Texture[1] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[1] = 0;
-		NormalMap[1] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
-		Texture[2] = vw_FindTextureByName("models/spacebase/metal.tga");
+		NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+		Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
 		TextureIllum[2] = 0;
 		break;
 
 	case 3:
 		// геометрия
 		LoadObjectData("models/spacebase/3/1.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/spacebase/metal.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
 		TextureIllum[0] = 0;
-		Texture[1] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[1] = 0;
 
 		GraphicFXLocation.resize(2);
@@ -165,14 +165,14 @@ case2next:
 	case 4:
 		// геометрия
 		LoadObjectData("models/spacebase/4/1.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
 		break;
 
 	case 5:
 		// геометрия
 		LoadObjectData("models/spacebase/5/1.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
 		break;
 
@@ -193,17 +193,17 @@ case2next:
 
 case6next:
 
-		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
-		Texture[1] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[1] = 0;
-		NormalMap[1] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+		NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		break;
 
 	case 7:
 		// геометрия
 		LoadObjectData("models/spacebase/7/1.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
 		break;
 
@@ -224,13 +224,13 @@ case6next:
 
 case8next:
 
-		Texture[0] = vw_FindTextureByName("models/spacebase/allalpha.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
-		Texture[1] = vw_FindTextureByName("models/spacebase/metal.tga");
+		Texture[1] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
 		TextureIllum[1] = 0;
-		Texture[2] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[2] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[2] = 0;
-		NormalMap[2] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+		NormalMap[2] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		break;
 
 	}

@@ -29,6 +29,7 @@
 #include "../config/config.h"
 #include "../ui/font.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
 
@@ -164,60 +165,60 @@ GLtexture GetSystemIcon(int Num)
 {
 	switch (Num) {
 	case -4:
-		return vw_FindTextureByName("menu/system_empty.tga");
+		return GetPreloadedTextureAsset("menu/system_empty.tga");
 	case -3:
-		return vw_FindTextureByName("menu/system_empty.tga");
+		return GetPreloadedTextureAsset("menu/system_empty.tga");
 	case -2:
-		return vw_FindTextureByName("menu/system_empty.tga");
+		return GetPreloadedTextureAsset("menu/system_empty.tga");
 	case -1:
-		return vw_FindTextureByName("menu/system_empty.tga");
+		return GetPreloadedTextureAsset("menu/system_empty.tga");
 	case 0:
-		return vw_FindTextureByName("menu/system_empty.tga");
+		return GetPreloadedTextureAsset("menu/system_empty.tga");
 
 	case 1:
-		return vw_FindTextureByName("menu/system_engine1.tga");
+		return GetPreloadedTextureAsset("menu/system_engine1.tga");
 	case 2:
-		return vw_FindTextureByName("menu/system_engine2.tga");
+		return GetPreloadedTextureAsset("menu/system_engine2.tga");
 	case 3:
-		return vw_FindTextureByName("menu/system_engine3.tga");
+		return GetPreloadedTextureAsset("menu/system_engine3.tga");
 	case 4:
-		return vw_FindTextureByName("menu/system_engine4.tga");
+		return GetPreloadedTextureAsset("menu/system_engine4.tga");
 
 	case 5:
-		return vw_FindTextureByName("menu/system_power1.tga");
+		return GetPreloadedTextureAsset("menu/system_power1.tga");
 	case 6:
-		return vw_FindTextureByName("menu/system_power2.tga");
+		return GetPreloadedTextureAsset("menu/system_power2.tga");
 	case 7:
-		return vw_FindTextureByName("menu/system_power3.tga");
+		return GetPreloadedTextureAsset("menu/system_power3.tga");
 	case 8:
-		return vw_FindTextureByName("menu/system_power4.tga");
+		return GetPreloadedTextureAsset("menu/system_power4.tga");
 
 	case 9:
-		return vw_FindTextureByName("menu/system_target1.tga");
+		return GetPreloadedTextureAsset("menu/system_target1.tga");
 	case 10:
-		return vw_FindTextureByName("menu/system_target2.tga");
+		return GetPreloadedTextureAsset("menu/system_target2.tga");
 	case 11:
-		return vw_FindTextureByName("menu/system_target3.tga");
+		return GetPreloadedTextureAsset("menu/system_target3.tga");
 	case 12:
-		return vw_FindTextureByName("menu/system_target4.tga");
+		return GetPreloadedTextureAsset("menu/system_target4.tga");
 
 	case 13:
-		return vw_FindTextureByName("menu/system_mechan1.tga");
+		return GetPreloadedTextureAsset("menu/system_mechan1.tga");
 	case 14:
-		return vw_FindTextureByName("menu/system_mechan2.tga");
+		return GetPreloadedTextureAsset("menu/system_mechan2.tga");
 	case 15:
-		return vw_FindTextureByName("menu/system_mechan3.tga");
+		return GetPreloadedTextureAsset("menu/system_mechan3.tga");
 	case 16:
-		return vw_FindTextureByName("menu/system_mechan4.tga");
+		return GetPreloadedTextureAsset("menu/system_mechan4.tga");
 
 	case 17:
-		return vw_FindTextureByName("menu/system_protect1.tga");
+		return GetPreloadedTextureAsset("menu/system_protect1.tga");
 	case 18:
-		return vw_FindTextureByName("menu/system_protect2.tga");
+		return GetPreloadedTextureAsset("menu/system_protect2.tga");
 	case 19:
-		return vw_FindTextureByName("menu/system_protect3.tga");
+		return GetPreloadedTextureAsset("menu/system_protect3.tga");
 	case 20:
-		return vw_FindTextureByName("menu/system_protect4.tga");
+		return GetPreloadedTextureAsset("menu/system_protect4.tga");
 
 	default:
 		std::cerr << __func__ << "(): " << "wrong Num.\n";
@@ -386,7 +387,7 @@ void Workshop_Workshop()
 {
 	sRECT SrcRect(0, 0, 256, 256);
 	sRECT DstRect(GameConfig().InternalWidth / 2 - 256, 0, GameConfig().InternalWidth / 2 - 256 + 512, 412);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot.tga"), true, 0.35f * MenuContentTransp);
 
 
 
@@ -397,7 +398,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,210,600);
 	DstRect(GameConfig().InternalWidth/2-492, 50-10, GameConfig().InternalWidth/2-492+210, 50+600-10);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel2.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel2.tga"), true, MenuContentTransp);
 
 
 
@@ -575,7 +576,7 @@ void Workshop_Workshop()
 
 	SrcRect(0,0,210,600);
 	DstRect(GameConfig().InternalWidth/2+282, 50-10, GameConfig().InternalWidth/2+492, 50+600-10);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel2+.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel2+.tga"), true, MenuContentTransp);
 
 
 

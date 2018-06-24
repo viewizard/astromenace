@@ -27,7 +27,7 @@
 
 #include "building.h"
 #include "../../../config/config.h"
-
+#include "../../../assets/texture.h"
 
 
 struct sBuildingData {
@@ -71,9 +71,9 @@ void cBuilding::Create(int BuildingNum)
 	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName("models/building/bld.vw2d");
-		TextureIllum[i] = vw_FindTextureByName("models/building/bld_illum.vw2d");
-		NormalMap[i] = vw_FindTextureByName("models/normalmap/buildings_nm.tga");
+		Texture[i] = GetPreloadedTextureAsset("models/building/bld.vw2d");
+		TextureIllum[i] = GetPreloadedTextureAsset("models/building/bld_illum.vw2d");
+		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/buildings_nm.tga");
 	}
 
 	ResistanceHull = 1.0f;

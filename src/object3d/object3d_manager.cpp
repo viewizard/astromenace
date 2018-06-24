@@ -29,6 +29,7 @@
 
 #include "../game.h"
 #include "../config/config.h"
+#include "../assets/texture.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"
 #include "space_object/space_object.h"
@@ -131,7 +132,7 @@ void DrawAllObject3D(eDrawType DrawType)
 		buff[k++] = 0.0f;
 		buff[k++] = 1.0f;
 
-		GLtexture TileTexture = vw_FindTextureByName("menu/whitepoint.tga");
+		GLtexture TileTexture = GetPreloadedTextureAsset("menu/whitepoint.tga");
 		vw_BindTexture(0, TileTexture);
 
 		float BrightnessF = 1.0f + (GameConfig().Brightness - 5) / 5.0f;

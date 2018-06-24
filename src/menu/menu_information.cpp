@@ -27,6 +27,7 @@
 
 #include "../game.h"
 #include "../config/config.h"
+#include "../assets/texture.h"
 #include "../gfx/shadow_map.h"
 #include "../object3d/object3d.h"
 #include "../object3d/weapon/weapon.h"
@@ -1244,12 +1245,12 @@ void InformationMenu()
 {
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{0, 0, static_cast<int>(GameConfig().InternalWidth), 768};
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
 
 
 	SrcRect(2,2,464-2,353-2);
 	DstRect((GameConfig().InternalWidth/2-432)-8,80-8+80,(GameConfig().InternalWidth/2-432)-8+464-4, 80-8+353-4+80);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_back.tga"), true, 0.9f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel444_333_back.tga"), true, 0.9f * MenuContentTransp);
 
 
 
@@ -1424,7 +1425,7 @@ void InformationDrawObject()
 
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f * MenuContentTransp);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
-	vw_BindTexture(0, vw_FindTextureByName("menu/line.tga"));
+	vw_BindTexture(0, GetPreloadedTextureAsset("menu/line.tga"));
 	for (int i = -SizeCell; i < SizeCell + 2; i += 2) {
 		// номер float'а в последовательности
 		int k=0;
@@ -1657,7 +1658,7 @@ void InformationDrawObject()
 	sRECT SrcRect;
 	SrcRect(2,2,482,371);
 	sRECT DstRect(GameConfig().InternalWidth/2-450, 80-18+80, GameConfig().InternalWidth/2+30, 80+351+80);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel444_333_border.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel444_333_border.tga"), true, MenuContentTransp);
 
 	vw_End2DMode();
 }

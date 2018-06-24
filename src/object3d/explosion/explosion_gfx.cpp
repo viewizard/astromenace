@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "explosion.h"
-
+#include "../../assets/texture.h"
 
 
 
@@ -37,7 +37,7 @@
 void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
 
-	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
 
 	switch(GFXNum) {

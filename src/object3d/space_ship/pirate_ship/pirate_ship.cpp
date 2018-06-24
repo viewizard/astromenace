@@ -28,7 +28,7 @@
 #include "pirate_ship.h"
 #include "../../../config/config.h"
 #include "../../../assets/audio.h"
-
+#include "../../../assets/texture.h"
 
 struct sPirateShipData {
 	unsigned int WeaponQuantity;
@@ -97,9 +97,9 @@ void cPirateShip::Create(int PirateShipNum)
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].TextureName);
+		Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[PirateShipNum - 1].TextureName);
 		if (!PresetPirateShipData[PirateShipNum - 1].NormalMapName.empty() && GameConfig().UseGLSL120)
-			NormalMap[i] = vw_FindTextureByName(PresetPirateShipData[PirateShipNum - 1].NormalMapName);
+			NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[PirateShipNum - 1].NormalMapName);
 	}
 
 

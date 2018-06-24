@@ -27,7 +27,7 @@
 
 #include "planet.h"
 #include "../../../config/config.h"
-
+#include "../../../assets/texture.h"
 
 
 
@@ -50,61 +50,61 @@ void cPlanet::Create(int PlanetNum)
 		NeedCullFaces = false;
 		NeedAlphaTest = true;
 		LoadObjectData("models/planet/aplanet.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
-		Texture[1] = vw_FindTextureByName("models/planet/asteroid.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+		Texture[1] = GetPreloadedTextureAsset("models/planet/asteroid.tga");
 		TextureIllum[1] = 0;
-		NormalMap[1] = vw_FindTextureByName("models/normalmap/planet_asteroids_nm.tga");
-		Texture[2] = vw_FindTextureByName("models/planet/asteroid.tga");
+		NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/planet_asteroids_nm.tga");
+		Texture[2] = GetPreloadedTextureAsset("models/planet/asteroid.tga");
 		TextureIllum[2] = 0;
-		NormalMap[2] = vw_FindTextureByName("models/normalmap/planet_asteroids_nm.tga");
-		Texture[3] = vw_FindTextureByName("models/planet/asteroid.tga");
+		NormalMap[2] = GetPreloadedTextureAsset("models/normalmap/planet_asteroids_nm.tga");
+		Texture[3] = GetPreloadedTextureAsset("models/planet/asteroid.tga");
 		TextureIllum[3] = 0;
-		NormalMap[3] = vw_FindTextureByName("models/normalmap/planet_asteroids_nm.tga");
+		NormalMap[3] = GetPreloadedTextureAsset("models/normalmap/planet_asteroids_nm.tga");
 		break;
 	// полу-разрушенная планета
 	case 2:
 		PromptDrawDist2 = 100.0f; // только для этой планеты ставим такое !!!
 		LoadObjectData("models/planet/dplanet.vw3d", this);
 		for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-			Texture[i] = vw_FindTextureByName("models/planet/d_class3.tga");
+			Texture[i] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 			TextureIllum[i] = 0;
-			NormalMap[i] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+			NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		}
 		break;
 	// планета с атмосферой
 	case 3:
 		NeedCullFaces = false;
 		LoadObjectData("models/planet/gplanet.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/planet/m_class7.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/m_class7.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/m_class7_nm.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/m_class7_nm.tga");
 
-		Texture[1] = vw_FindTextureByName("models/planet/clouds.tga");
+		Texture[1] = GetPreloadedTextureAsset("models/planet/clouds.tga");
 		TextureIllum[1] = 0;
 		Model3DBlocks[1].DrawType = eModel3DDrawType::Blend; // рисуем прозрачным
 		break;
 	// "красная" планета
 	case 4:
 		LoadObjectData("models/planet/moon.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/planet/q_class2.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/q_class2.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/q_class2_nm.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/q_class2_nm.tga");
 		break;
 	// планета пришельцев, лава
 	case 5:
 		LoadObjectData("models/planet/planet5.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/planet/a_class4.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/a_class4.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/a_class4_nm.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/a_class4_nm.tga");
 		break;
 	// планета пришельцев
 	case 6:
 		LoadObjectData("models/planet/planet6.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		break;
 	}
 }

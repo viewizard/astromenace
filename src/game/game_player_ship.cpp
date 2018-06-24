@@ -30,6 +30,7 @@
 #include "../platform/platform.h"
 #include "../ui/font.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../object3d/explosion/space_explosion/space_explosion.h"
 #include "../object3d/space_object/space_object.h"
 #include "../object3d/ground_object/ground_object.h"
@@ -300,7 +301,7 @@ void InitGamePlayerShip()
 			sharedShild1->AlphaShowHide = true;
 			sharedShild1->IsMagnet = true;
 			sharedShild1->MagnetFactor = -3.0f;
-			sharedShild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedShild1->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		}
@@ -333,7 +334,7 @@ void InitGamePlayerShip()
 			sharedShild1->IsMagnet = true;
 			sharedShild1->AlphaShowHide = true;
 			sharedShild1->MagnetFactor = 2.5f;
-			sharedShild1->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedShild1->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		}
@@ -361,7 +362,7 @@ void InitGamePlayerShip()
 			sharedShild2->DeadZone = ShildRadius - 0.05f;
 			sharedShild2->IsMagnet = true;
 			sharedShild2->MagnetFactor = 20.0f;
-			sharedShild2->Texture = vw_FindTextureByName("gfx/flare1.tga");
+			sharedShild2->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedShild2->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 		}
 

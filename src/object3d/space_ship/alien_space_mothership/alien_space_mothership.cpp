@@ -27,6 +27,7 @@
 
 #include "alien_space_mothership.h"
 #include "../../../config/config.h"
+#include "../../../assets/texture.h"
 
 
 struct sAlienSpaceMotherShipData {
@@ -90,11 +91,11 @@ void cAlienSpaceMotherShip::Create(int	SpaceShipNum)
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Texture);
-		TextureIllum[i] = vw_FindTextureByName(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].TextureIllum);
+		Texture[i] = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Texture);
+		TextureIllum[i] = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].TextureIllum);
 		// если шейдеры выключены - вернет ноль (не загружаем текстуры нормал мепов если нет шейдеров)
 		// в LoadObjectData указываем Setup.UseGLSL
-		NormalMap[i] = vw_FindTextureByName("models/normalmap/alien_mothership_nm.tga");
+		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/alien_mothership_nm.tga");
 	}
 
 

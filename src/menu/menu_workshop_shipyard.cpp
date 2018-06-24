@@ -28,6 +28,7 @@
 #include "../game.h"
 #include "../config/config.h"
 #include "../ui/font.h"
+#include "../assets/texture.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
@@ -540,9 +541,9 @@ void Workshop_Shipyard()
 	// затемнение
 	SrcRect(0,0,256,256 );
 	DstRect(GameConfig().InternalWidth/2-480, 100-32, GameConfig().InternalWidth/2-32, 450+32);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
 	DstRect(GameConfig().InternalWidth/2+32, 100-32, GameConfig().InternalWidth/2+480, 450+32);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
 
 
 
@@ -607,11 +608,11 @@ void Workshop_Shipyard()
 	// рамки
 	SrcRect(0,0,400,35 );
 	DstRect(GameConfig().InternalWidth/2-457, 100-11, GameConfig().InternalWidth/2-57, 100+35-11);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel4.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel4.tga"), true, MenuContentTransp);
 
 	SrcRect(0,0,400,173 );
 	DstRect(GameConfig().InternalWidth/2-457, 450-13, GameConfig().InternalWidth/2-57, 450+173-13);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel1.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel1.tga"), true, MenuContentTransp);
 
 
 	// проверяем колесо мышки
@@ -738,11 +739,11 @@ void Workshop_Shipyard()
 	// рамки
 	SrcRect(0,0,400,35 );
 	DstRect(GameConfig().InternalWidth/2+57, 100-11, GameConfig().InternalWidth/2+457, 100+35-11);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel4.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel4.tga"), true, MenuContentTransp);
 
 	SrcRect(0,0,400,173 );
 	DstRect(GameConfig().InternalWidth/2+57, 450-13, GameConfig().InternalWidth/2+457, 450+173-13);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel1+.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel1+.tga"), true, MenuContentTransp);
 
 
 

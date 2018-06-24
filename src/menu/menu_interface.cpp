@@ -29,6 +29,7 @@
 #include "../enum.h"
 #include "../config/config.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../ui/font.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
@@ -50,7 +51,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	sRECT SrcRect, DstRect;
 	SrcRect(0, 0, 2, 2);
 	DstRect(0, 0, GameConfig().InternalWidth, 768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
 
 	int X1 = GameConfig().InternalWidth / 2 - 375;
 	int Y1 = 65;

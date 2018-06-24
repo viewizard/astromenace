@@ -40,6 +40,7 @@
 #include "../config/config.h"
 #include "../ui/font.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../gfx/star_system.h"
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"
@@ -241,7 +242,7 @@ void DrawGameExpMoney(int Exp, int Money)
 	sRECT DstRect, SrcRect;
 	int Ystart;
 	float Xstart;
-	GLtexture Texture = vw_FindTextureByName("game/game_num.tga");
+	GLtexture Texture = GetPreloadedTextureAsset("game/game_num.tga");
 	if (!Texture)
 		return;
 
@@ -712,7 +713,7 @@ void InitGame()
 		sharedEnergyParticleSystem2D->IsMagnet = true;
 		sharedEnergyParticleSystem2D->MagnetFactor = 150.0f;
 		sharedEnergyParticleSystem2D->CreationType = eParticle2DCreationType::Point;
-		sharedEnergyParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
+		sharedEnergyParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		sharedEnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f, 29.0f, 0.0f));
 	}
 
@@ -738,7 +739,7 @@ void InitGame()
 		sharedLife3ParticleSystem2D->ParticlesPerSec = 50;
 		sharedLife3ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
 		sharedLife3ParticleSystem2D->CreationSize = sVECTOR3D(1.0f, 18.0f, 0.0f);
-		sharedLife3ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
+		sharedLife3ParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 	}
 
@@ -764,7 +765,7 @@ void InitGame()
 		sharedLife2ParticleSystem2D->ParticlesPerSec = 50;
 		sharedLife2ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
 		sharedLife2ParticleSystem2D->CreationSize = sVECTOR3D(18.0f, 1.0f, 0.0f);
-		sharedLife2ParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare1.tga");
+		sharedLife2ParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 	}
 
@@ -794,7 +795,7 @@ void InitGame()
 		sharedLifeParticleSystem2D->DeadZone = 24.0f;
 		sharedLifeParticleSystem2D->IsMagnet = true;
 		sharedLifeParticleSystem2D->MagnetFactor = 25.0f;
-		sharedLifeParticleSystem2D->Texture = vw_FindTextureByName("gfx/flare.tga");
+		sharedLifeParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
 		sharedLifeParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
 		sharedLifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));
 	}
@@ -1076,20 +1077,20 @@ void DrawGame()
 	if (GameConfig().InternalWidth == 1024) {
 		SrcRect(0, 0, 1024, 74);
 		DstRect(0, 0, 1024, 74);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/game_panel.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel.tga"), true, 1.0f);
 	}
 	if (GameConfig().InternalWidth == 1228) {
 		SrcRect(0, 0, 466, 73);
 		DstRect(0, 0, 466, 73);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel2.tga"), true, 1.0f);
 
 		SrcRect(1, 74, 150, 145);
 		DstRect(540, 0, 540+149, 71);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel2.tga"), true, 1.0f);
 
 		SrcRect(150, 74, 610, 145);
 		DstRect(768, 0, 768+460, 71);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/game_panel2.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel2.tga"), true, 1.0f);
 	}
 
 
@@ -1213,7 +1214,7 @@ void DrawGame()
 			float G=1.0f;
 			float B=1.0f;
 
-			GLtexture Texture = vw_FindTextureByName("game/game_panel_el.tga");
+			GLtexture Texture = GetPreloadedTextureAsset("game/game_panel_el.tga");
 			if (!Texture)
 				return;
 
@@ -1503,7 +1504,7 @@ void DrawGame()
 			// выводим подложку меню
 			SrcRect(2, 2, 564-2, 564-2);
 			DstRect(GameConfig().InternalWidth / 2 - 256 - 26, 128 - 28, GameConfig().InternalWidth / 2 - 256 + 534, 128 + 532);
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
 					   true, GameContentTransp);
 			// название меню
 			int Size = vw_TextWidth(vw_GetText("Mission Complete"));
@@ -1584,7 +1585,7 @@ void DrawGame()
 				// выводим подложку меню
 				SrcRect(2, 2, 564-2, 564-2);
 				DstRect(GameConfig().InternalWidth / 2 - 256+4-30, 128+2-30, GameConfig().InternalWidth / 2 - 256+564-30, 128+564-2-30);
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"),
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
 					  true, GameContentTransp);
 				// название меню
 				int SizeI = 17 + (234-vw_TextWidth(vw_GetText("GAME MENU")))/2;
@@ -1668,9 +1669,9 @@ void DrawGame()
 			SrcRect(0, 0, 256, 64);
 			DstRect(GameConfig().InternalWidth - 256 + 60, 768 - 54, GameConfig().InternalWidth + 60, 768 + 10);
 			if (GameContentTransp == 1.0f)
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/pause.tga")), true, CurrentAlert2*GameContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/pause.tga")), true, CurrentAlert2*GameContentTransp);
 			else
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/pause.tga")), true, GameContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/pause.tga")), true, GameContentTransp);
 
 		}
 
@@ -1748,7 +1749,7 @@ void DrawGame()
 
 		SrcRect(0, 0, 2, 2);
 		DstRect(0, 0, GameConfig().InternalWidth, 768);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
 	// черное затемнение, если нужно
@@ -1765,7 +1766,7 @@ void DrawGame()
 
 		SrcRect(0, 0, 2, 2);
 		DstRect(0, 0, GameConfig().InternalWidth, 768);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, GameBlackTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
 

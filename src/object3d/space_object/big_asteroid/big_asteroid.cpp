@@ -27,7 +27,7 @@
 
 #include "big_asteroid.h"
 #include "../../../config/config.h"
-
+#include "../../../assets/texture.h"
 
 
 //-----------------------------------------------------------------------------
@@ -71,9 +71,9 @@ case9next:
 		RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
 		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
-		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		break;
 
 
@@ -99,9 +99,9 @@ case10next:
 		RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
 		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
 
-		Texture[0] = vw_FindTextureByName("models/planet/d_class3.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
-		NormalMap[0] = vw_FindTextureByName("models/normalmap/d_class3_nm.tga");
+		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		break;
 	}
 }

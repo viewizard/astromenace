@@ -36,7 +36,7 @@ will not kill their speed and maneuverability and we will have nice difficulty m
 
 #include "projectile.h"
 #include "../explosion/bullet_explosion/bullet_explosion.h"
-
+#include "../../assets/texture.h"
 
 
 struct sProjectileData {
@@ -504,7 +504,7 @@ void cProjectile::Create(int ProjectileNum)
 	// ракета
 	case 16:
 		LoadObjectData("models/earthfighter/missile.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 13);
@@ -519,7 +519,7 @@ void cProjectile::Create(int ProjectileNum)
 	// рой
 	case 17:
 		LoadObjectData("models/earthfighter/swarm.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 16);
@@ -536,7 +536,7 @@ void cProjectile::Create(int ProjectileNum)
 	// торпеда
 	case 18:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 14);
@@ -551,7 +551,7 @@ void cProjectile::Create(int ProjectileNum)
 	// бомба
 	case 19:
 		LoadObjectData("models/earthfighter/nuke.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 15);
@@ -715,7 +715,7 @@ void cProjectile::Create(int ProjectileNum)
 	// как Missile1
 	case 205:
 		LoadObjectData("models/earthfighter/missile.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 27);
@@ -730,7 +730,7 @@ void cProjectile::Create(int ProjectileNum)
 	// как Missile2
 	case 206:
 		LoadObjectData("models/earthfighter/swarm.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 31);
@@ -763,7 +763,7 @@ void cProjectile::Create(int ProjectileNum)
 	// как торпеда
 	case 209:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 32);
@@ -778,7 +778,7 @@ void cProjectile::Create(int ProjectileNum)
 	// как бомба
 	case 210:
 		LoadObjectData("models/earthfighter/nuke.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/earthfighter/rockets.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 33);
@@ -822,16 +822,16 @@ void cProjectile::Create(int ProjectileNum)
 		MineIData = 0.0f;
 		Strength = StrengthStart = 10.0f;
 		LoadObjectData("models/mine/mine-01.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/mine/mine1.tga");
-		TextureIllum[0] = vw_FindTextureByName("models/mine/mine1i.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/mine/mine1.tga");
+		TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine1i.tga");
 		break;
 	// мина2 (наведение по высоте + приближение)
 	case 215:
 		MineIData = 0.0f;
 		Strength = StrengthStart = 15.0f;
 		LoadObjectData("models/mine/mine-02.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/mine/mine2.tga");
-		TextureIllum[0] = vw_FindTextureByName("models/mine/mine2i.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/mine/mine2.tga");
+		TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine2i.tga");
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -845,8 +845,8 @@ void cProjectile::Create(int ProjectileNum)
 		Strength = StrengthStart = 20.0f;
 		MineReloadTime = MineNextFireTime = 1.0f;
 		LoadObjectData("models/mine/mine-03.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/mine/mine3.tga");
-		TextureIllum[0] = vw_FindTextureByName("models/mine/mine3i.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/mine/mine3.tga");
+		TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine3i.tga");
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -860,8 +860,8 @@ void cProjectile::Create(int ProjectileNum)
 		Strength = StrengthStart = 40.0f;
 		MineReloadTime = MineNextFireTime = 3.0f;
 		LoadObjectData("models/mine/mine-04.vw3d", this);
-		Texture[0] = vw_FindTextureByName("models/mine/mine4.tga");
-		TextureIllum[0] = vw_FindTextureByName("models/mine/mine4i.tga");
+		Texture[0] = GetPreloadedTextureAsset("models/mine/mine4.tga");
+		TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine4i.tga");
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -1507,7 +1507,7 @@ missile:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
 			if (!TextureIllum[0])
-				TextureIllum[0] = vw_FindTextureByName("models/mine/mine1i.tga");
+				TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine1i.tga");
 			else
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
@@ -1551,7 +1551,7 @@ missile:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
 			if (!TextureIllum[0])
-				TextureIllum[0] = vw_FindTextureByName("models/mine/mine2i.tga");
+				TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine2i.tga");
 			else
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
@@ -1626,7 +1626,7 @@ missile:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
 			if (!TextureIllum[0])
-				TextureIllum[0] = vw_FindTextureByName("models/mine/mine3i.tga");
+				TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine3i.tga");
 			else
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
@@ -1727,7 +1727,7 @@ missile:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
 			if (!TextureIllum[0])
-				TextureIllum[0] = vw_FindTextureByName("models/mine/mine4i.tga");
+				TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine4i.tga");
 			else
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;

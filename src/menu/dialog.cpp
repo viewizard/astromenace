@@ -29,6 +29,7 @@
 #include "../config/config.h"
 #include "../ui/font.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../main.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
@@ -156,9 +157,9 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 	// рисуем кнопку
 	DstRect(X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
 	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog200_out.tga"), true, 0.8f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_out.tga"), true, 0.8f*Transp);
 	else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog200_in.tga"), true, 0.8f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_in.tga"), true, 0.8f*Transp);
 
 
 	// получаем длину текста
@@ -243,9 +244,9 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 	// рисуем кнопку
 	DstRect(X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
 	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog128_out.tga"), true, 0.8f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_out.tga"), true, 0.8f*Transp);
 	else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog128_in.tga"), true, 0.8f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_in.tga"), true, 0.8f*Transp);
 
 
 	// получаем длину текста
@@ -329,9 +330,9 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 	else
 		vw_DrawText(X+40+16, Y+8, 0, 0, 1.0f, eRGBCOLOR::orange, Transp, Text);
 
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/checkbox_main.tga"), true, Transp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
 	if (*CheckBoxStatus)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/checkbox_in.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
 
 
 	if (CanClick && !DragWeapon)
@@ -498,7 +499,7 @@ Dialogs with default type:
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	SrcRect(0, 0, 2, 2);
 	DstRect(0, 0, GameConfig().InternalWidth, 768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.6f*DialogContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.6f*DialogContentTransp);
 
 
 
@@ -510,17 +511,17 @@ Dialogs with default type:
 	case eDialogTypeBySize::w512h256:
 		SrcRect(2,2,572-2,316-2 );
 		DstRect(X+2-30,Y+2-30,X+572-2-30,Y+316-2-30);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_256.tga"), true, DialogContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_256.tga"), true, DialogContentTransp);
 		break;
 	case eDialogTypeBySize::w512h512:
 		SrcRect(2,2,564-2,564-2 );
 		DstRect(X+4-30,Y+2-30,X+564-30,Y+564-2-30);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog512_512.tga"), true, DialogContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"), true, DialogContentTransp);
 		break;
 	case eDialogTypeBySize::w768h600:
 		SrcRect(2,2,828-2,659-2 );
 		DstRect(X+2-30,Y+2-30,X+828-2-30,Y+659-2-30);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/dialog768_600.tga"), true, DialogContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog768_600.tga"), true, DialogContentTransp);
 		break;
 	}
 

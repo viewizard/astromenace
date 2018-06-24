@@ -28,6 +28,7 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
+#include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 const char *OnOff[2] = {
@@ -46,7 +47,7 @@ void DifficultyMenu()
 {
 	sRECT SrcRect(2, 2, 861, 482);
 	sRECT DstRect(GameConfig().InternalWidth / 2 - 427, 160, GameConfig().InternalWidth / 2 + 432, 160 + 480);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/panel800_444_back.tga"), true, 0.9f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel800_444_back.tga"), true, 0.9f * MenuContentTransp);
 
 	int X1 = GameConfig().InternalWidth / 2 - 372;
 	int Y1 = 217;

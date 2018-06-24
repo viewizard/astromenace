@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "tracked.h"
-
+#include "../../../assets/texture.h"
 
 
 struct sTrackedData {
@@ -80,7 +80,7 @@ void cTracked::Create(int TrackedNum)
 	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName(PresetTrackedData[TrackedNum - 1].TextureName);
+		Texture[i] = GetPreloadedTextureAsset(PresetTrackedData[TrackedNum - 1].TextureName);
 	}
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
@@ -139,7 +139,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
-		Texture[19] = vw_FindTextureByName("models/track.vw2d");
+		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 
@@ -176,7 +176,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 13;
-		Texture[13] = vw_FindTextureByName("models/track.vw2d");
+		Texture[13] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 
@@ -213,7 +213,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 17;
-		Texture[17] = vw_FindTextureByName("models/track.vw2d");
+		Texture[17] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 4:
@@ -255,7 +255,7 @@ void cTracked::Create(int TrackedNum)
 		Model3DBlocks[19].Location.z -= 1.0f;
 
 		TrackObjectNum = 20;
-		Texture[20] = vw_FindTextureByName("models/track.vw2d");
+		Texture[20] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 5:
@@ -291,7 +291,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 30.0f;
 
 		TrackObjectNum = 17;
-		Texture[17] = vw_FindTextureByName("models/track.vw2d");
+		Texture[17] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 6:
@@ -329,7 +329,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
-		Texture[19] = vw_FindTextureByName("models/track.vw2d");
+		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 7:
@@ -367,7 +367,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
-		Texture[19] = vw_FindTextureByName("models/track.vw2d");
+		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 8:
@@ -405,7 +405,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
-		Texture[19] = vw_FindTextureByName("models/track.vw2d");
+		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 9:
@@ -444,7 +444,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
-		Texture[19] = vw_FindTextureByName("models/track.vw2d");
+		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 10:
@@ -483,7 +483,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
-		Texture[19] = vw_FindTextureByName("models/track.vw2d");
+		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 11:
@@ -520,7 +520,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 55.0f;
 
 		TrackObjectNum = 18;
-		Texture[18] = vw_FindTextureByName("models/track.vw2d");
+		Texture[18] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 12:
@@ -569,7 +569,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 40.0f;
 
 		TrackObjectNum = 19;
-		Texture[19] = vw_FindTextureByName("models/track.vw2d");
+		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 13:
@@ -611,7 +611,7 @@ void cTracked::Create(int TrackedNum)
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 17;
-		Texture[17] = vw_FindTextureByName("models/track.vw2d");
+		Texture[17] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 14:
@@ -629,7 +629,7 @@ void cTracked::Create(int TrackedNum)
 		WheelObjectsNum[7] = 8;
 
 		TrackObjectNum = 10;
-		Texture[10] = vw_FindTextureByName("models/track.vw2d");
+		Texture[10] = GetPreloadedTextureAsset("models/track.vw2d");
 		TrackRotationDirection = -1;
 		break;
 

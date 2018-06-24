@@ -27,6 +27,7 @@
 
 #include "../core/core.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
@@ -107,15 +108,15 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 	SrcRect(2,2,512-2,96-2 );
 	// рисуем тень
 	DstRect(X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button384_back.tga"), true, IntTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_back.tga"), true, IntTransp);
 
 	SrcRect(0,0,384,64 );
 	// рисуем кнопку
 	DstRect(X,Y,X+384,Y+64);
 	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button384_out.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_out.tga"), true, Transp);
 	else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button384_in.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_in.tga"), true, Transp);
 
 
 
@@ -175,11 +176,11 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 		SrcRect(2,2,512-2,96-2 );
 		DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button256_back.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, Transp);
 
 		SrcRect(0,0,256,64 );
 		DstRect(X,Y,X+256,Y+64);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button256_off.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_off.tga"), true, Transp);
 
 
 		int Size = vw_TextWidth(Text);
@@ -256,15 +257,15 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	SrcRect(2,2,512-2,96-2 );
 	// рисуем тень
 	DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button256_back.tga"), true, IntTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, IntTransp);
 
 	SrcRect(0,0,256,64 );
 	// рисуем кнопку
 	DstRect(X,Y,X+256,Y+64);
 	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button256_out.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_out.tga"), true, Transp);
 	else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button256_in.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_in.tga"), true, Transp);
 
 
 	// получаем длину текста
@@ -325,7 +326,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 
 	if (Off || DragWeapon) {
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog200_off.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_off.tga"), true, Transp);
 
 		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
 
@@ -378,9 +379,9 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 
 	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog200_out.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_out.tga"), true, Transp);
 	else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog200_in.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_in.tga"), true, Transp);
 
 	// рисуем текст
 	if (!ON)
@@ -427,7 +428,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 
 	if (Off || DragWeapon) {
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog128_off.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_off.tga"), true, Transp);
 
 		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
 
@@ -481,9 +482,9 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 
 	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog128_out.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_out.tga"), true, Transp);
 	else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/button_dialog128_in.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_in.tga"), true, Transp);
 
 	// рисуем текст
 	if (!ON)
@@ -559,9 +560,9 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	else
 		vw_DrawText(X+40+20, Y+8, 0, 0, 1.0f, eRGBCOLOR::orange, Transp, Text);
 
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/checkbox_main.tga"), true, Transp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
 	if (*CheckBoxStatus)
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/checkbox_in.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
 
 
 	if (CanClick && !DragWeapon)
@@ -592,7 +593,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 	if (Off || DragWeapon) {
 		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/arrow_list_up.tga"), true, 0.3f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
 
 		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
@@ -644,9 +645,9 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 	if (!ON) {
 		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/arrow_list_up.tga"), true, 0.3f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
 	} else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/arrow_list_up.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, Transp);
 
 
 	if (CanClick)
@@ -677,7 +678,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 	if (Off || DragWeapon) {
 		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/arrow_list_down.tga"), true, 0.3f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
 
 		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
@@ -729,9 +730,9 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 	if (!ON) {
 		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/arrow_list_down.tga"), true, 0.3f*Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
 	} else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/arrow_list_down.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, Transp);
 
 
 	if (CanClick)

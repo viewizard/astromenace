@@ -90,7 +90,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 {
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{0, 0, static_cast<int>(GameConfig().InternalWidth), 768};
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
 
 
 

@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 // TODO add initialization via XML file, hard coded initialization should be removed
-// TODO remove vw_FindTextureByName() call from main loop
+// TODO remove GetPreloadedTextureAsset() call from main loop
 
 // TODO probably, we could use GL_EXT_draw_instanced here in future
 //      render 'space dust' instanced (send position and size in texture), instead of render 3 layer
@@ -40,6 +40,7 @@ In order to show movement and more 'live' space, star system render "space dust"
 
 #include "../enum.h"
 #include "../config/config.h"
+#include "../assets/texture.h"
 #include "../object3d/space_object/space_object.h"
 #include "skybox.h"
 
@@ -88,22 +89,22 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
 	switch (Num) {
 	case 1:
 		SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_back6.tga"), eSide::BACK);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_bottom4.tga"), eSide::BOTTOM);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_front5.tga"), eSide::FRONT);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_left2.tga"), eSide::LEFT);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_right1.tga"), eSide::RIGHT);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/1/skybox_top3.tga"), eSide::TOP);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_back6.tga"), eSide::BACK);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_bottom4.tga"), eSide::BOTTOM);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_front5.tga"), eSide::FRONT);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_left2.tga"), eSide::LEFT);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_right1.tga"), eSide::RIGHT);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_top3.tga"), eSide::TOP);
 		StarSystem_Inited = true;
 		break;
 	case 2:
 		SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_back6.tga"), eSide::BACK);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_bottom4.tga"), eSide::BOTTOM);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_front5.tga"), eSide::FRONT);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_left2.tga"), eSide::LEFT);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_right1.tga"), eSide::RIGHT);
-		SkyBoxSetTexture(vw_FindTextureByName("skybox/2/skybox_top3.tga"), eSide::TOP);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_back6.tga"), eSide::BACK);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_bottom4.tga"), eSide::BOTTOM);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_front5.tga"), eSide::FRONT);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_left2.tga"), eSide::LEFT);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_right1.tga"), eSide::RIGHT);
+		SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_top3.tga"), eSide::TOP);
 		StarSystem_Inited = true;
 		break;
 	default:
@@ -151,7 +152,7 @@ void StarSystemInitByType(eDrawType DrawType)
 			sharedSpace->CreationType = eParticleCreationType::Cube;
 			sharedSpace->CreationSize = sVECTOR3D(2.0f, 50.0f, 30.0f);
 			sharedSpace->ParticlesPerSec = 140;
-			sharedSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
+			sharedSpace->Texture = GetPreloadedTextureAsset("gfx/flare3.tga");
 			sharedSpace->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
 			sharedSpace->CameraDistResize = 0.1f;
 			sharedSpace->SetStartLocation(sVECTOR3D(-50, 10, -20));
@@ -187,7 +188,7 @@ void StarSystemInitByType(eDrawType DrawType)
 			sharedSpace->CreationType = eParticleCreationType::Cube;
 			sharedSpace->CreationSize = sVECTOR3D(200.0f, 30.0f, 10.0f);
 			sharedSpace->ParticlesPerSec = 100;
-			sharedSpace->Texture = vw_FindTextureByName("gfx/flare3.tga");
+			sharedSpace->Texture = GetPreloadedTextureAsset("gfx/flare3.tga");
 			sharedSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
 			sharedSpace->SetStartLocation(InGameInitialLocation);
 
@@ -366,7 +367,7 @@ void StarSystemDraw(eDrawType DrawType)
 	if (StarsTile < -3.0f)
 		StarsTile += 3.0f;
 
-	GLtexture TileTexture = vw_FindTextureByName("skybox/tile_back.tga");
+	GLtexture TileTexture = GetPreloadedTextureAsset("skybox/tile_back.tga");
 	vw_BindTexture(0, TileTexture);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
@@ -396,7 +397,7 @@ void StarSystemDraw(eDrawType DrawType)
 			 Color, EndTransparentLayer1,
 			 0.0f, 3.0f + StarsTile);
 
-	vw_BindTexture(0, vw_FindTextureByName("skybox/tile_stars.tga"));
+	vw_BindTexture(0, GetPreloadedTextureAsset("skybox/tile_stars.tga"));
 
 	DrawVertexArray();
 
@@ -475,7 +476,7 @@ void StarSystemDrawThirdLayer(eDrawType DrawType)
 	if (StarsTile2 < -3.0f)
 		StarsTile2 += 3.0f;
 
-	GLtexture TileTexture = vw_FindTextureByName("skybox/tile_stars.tga");
+	GLtexture TileTexture = GetPreloadedTextureAsset("skybox/tile_stars.tga");
 	vw_BindTexture(0, TileTexture);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 	vw_DepthTest(false, eCompareFunc::LESS);

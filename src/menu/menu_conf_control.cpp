@@ -32,6 +32,7 @@
 #include "../config/config.h"
 #include "../platform/platform.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
@@ -189,7 +190,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	sRECT SrcRect, DstRect;
 	SrcRect(0, 0, 2, 2);
 	DstRect(0, 0, GameConfig().InternalWidth, 768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
 
 
 
@@ -227,9 +228,9 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 			}
 		}
 		if (GameConfig().JoystickDeadZone > i)
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
 		else
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
 	}
 
 
@@ -259,9 +260,9 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 			}
 		}
 		if (GameConfig().ControlSensivity > i)
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
 		else
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
 	}
 
 

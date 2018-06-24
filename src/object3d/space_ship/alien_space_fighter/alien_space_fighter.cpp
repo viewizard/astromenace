@@ -27,7 +27,7 @@
 
 #include "alien_space_fighter.h"
 #include "../../../assets/audio.h"
-
+#include "../../../assets/texture.h"
 
 
 struct sAlienSpaceFighterData {
@@ -96,8 +96,8 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 
 	// всегда только эти текстуры и 1 объект
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName("models/alienfighter/al-text04.vw2d");
-		TextureIllum[i] = vw_FindTextureByName("models/alienfighter/al-illum04.vw2d");
+		Texture[i] = GetPreloadedTextureAsset("models/alienfighter/al-text04.vw2d");
+		TextureIllum[i] = GetPreloadedTextureAsset("models/alienfighter/al-illum04.vw2d");
 	}
 
 	// начальные установки для оружия

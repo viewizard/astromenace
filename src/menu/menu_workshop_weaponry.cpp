@@ -30,6 +30,7 @@
 #include "../platform/platform.h"
 #include "../ui/font.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
@@ -321,7 +322,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	int Xpos = X-45;
 	int Ypos = Y-36;
 	sRECT DstRect(Xpos, Ypos, Xpos + 220, Ypos + 128);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel3.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel3.tga"), true, MenuContentTransp);
 
 
 	// нужны предупреждения...
@@ -337,9 +338,9 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		SrcRect(0,AmmoShow,18,56);
 		DstRect(Xpos+23,Ypos+40+AmmoShow,Xpos+18+23,Ypos+56+40);
 		if (AmmoShow > 0)
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/ammo.tga"), true, CurrentAlert3*MenuContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/ammo.tga"), true, CurrentAlert3*MenuContentTransp);
 		else
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/ammo.tga"), true, MenuContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/ammo.tga"), true, MenuContentTransp);
 
 		if (WorkshopFighterGame->Weapon[SlotNum]->Ammo == 0)
 			WeaponAmmoOut = true;
@@ -370,7 +371,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	       (DstRect.left<= MouseX) &&
 	       (DstRect.bottom >= MouseY) &&
 	       (DstRect.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon) {
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/menu/button_weaponry_in.tga")), true, MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/menu/button_weaponry_in.tga")), true, MenuContentTransp);
 		CurrentCursorStatus = 1;
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -381,7 +382,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			}
 		}
 	} else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/menu/button_weaponry_out.tga")), true, MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/menu/button_weaponry_out.tga")), true, MenuContentTransp);
 
 
 
@@ -533,13 +534,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			}
 
 			if (NeedAlert)
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 			else
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		} else
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 	} else
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.0f});
 
 
 
@@ -574,7 +575,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 	SrcRect(0,0,128,64);
 	DstRect(X,Y,X+128,Y+64);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->InternalType)), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->InternalType)), true, MenuContentTransp);
 
 
 
@@ -597,7 +598,7 @@ void ShipSlotSetupWeapon(int Slot)
 	int Xpos = GameConfig().InternalWidth / 2 + 55;
 	int Ypos = 50-10;
 	DstRect(Xpos,Ypos,Xpos+404,Ypos+570);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel5.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel5.tga"), true, MenuContentTransp);
 
 
 
@@ -607,7 +608,7 @@ void ShipSlotSetupWeapon(int Slot)
 		// пустой слот, рисуем его
 		SrcRect(0,0,256,256);
 		DstRect(Xpos,Ypos,Xpos+256,Ypos+256);
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/weapon_empty_icon.tga"), true, MenuContentTransp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_empty_icon.tga"), true, MenuContentTransp);
 
 		int Size = vw_TextWidth(vw_GetText("Empty Weapon Slot"));
 		float WScale = 0;
@@ -1048,7 +1049,7 @@ void DrawDragingWeaponIcon(int X, int Y)
 	// в х и у - положение точки курсора
 	sRECT SrcRect(0, 0, 128, 64);
 	sRECT DstRect(X - 64, Y - 32, X + 64, Y + 32);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
 }
 
 
@@ -1108,9 +1109,9 @@ void Workshop_Weaponry()
 	// затемнение
 	SrcRect(0,0,256,256);
 	DstRect(GameConfig().InternalWidth/2-480, 100-32, GameConfig().InternalWidth/2-32, 450+32);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
 	DstRect(GameConfig().InternalWidth / 2, 0, GameConfig().InternalWidth/2+512, 622);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/back_spot.tga"), true, 0.35f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot.tga"), true, 0.35f * MenuContentTransp);
 
 
 	vw_End2DMode();
@@ -1172,11 +1173,11 @@ void Workshop_Weaponry()
 	// рамки
 	SrcRect(0,0,400,35 );
 	DstRect(GameConfig().InternalWidth/2-457, 100-11, GameConfig().InternalWidth/2-57, 100+35-11);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel4.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel4.tga"), true, MenuContentTransp);
 
 	SrcRect(0,0,400,173 );
 	DstRect(GameConfig().InternalWidth/2-457, 450-13, GameConfig().InternalWidth/2-57, 450+173-13);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/workshop_panel1.tga"), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel1.tga"), true, MenuContentTransp);
 
 
 

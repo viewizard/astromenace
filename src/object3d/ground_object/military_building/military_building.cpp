@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "military_building.h"
-
+#include "../../../assets/texture.h"
 
 
 struct sMilitaryBuildingData {
@@ -67,7 +67,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureName);
+		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureName);
 	}
 
 

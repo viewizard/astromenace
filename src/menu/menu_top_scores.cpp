@@ -28,6 +28,7 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
+#include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 namespace {
@@ -106,7 +107,7 @@ void TopScoresMenu()
 	sRECT SrcRect, DstRect;
 	SrcRect(0, 0, 2, 2);
 	DstRect(0, 0, GameConfig().InternalWidth, 768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
 
 
 	int X1 = GameConfig().InternalWidth / 2 - 362;

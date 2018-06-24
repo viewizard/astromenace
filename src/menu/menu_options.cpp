@@ -38,6 +38,7 @@
 #include "../config/config.h"
 #include "../platform/platform.h"
 #include "../assets/audio.h"
+#include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
@@ -72,7 +73,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	sRECT SrcRect, DstRect;
 	SrcRect(0, 0, 2, 2);
 	DstRect(0 ,0, GameConfig().InternalWidth, 768);
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
 
 	int X1 = GameConfig().InternalWidth / 2 - 375;
 	int Y1 = 65;
@@ -109,9 +110,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				}
 			}
 			if (GameConfig().MusicVolume > i)
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
 			else
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -154,9 +155,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				}
 			}
 			if (GameConfig().VoiceVolume > i)
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
 			else
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -195,9 +196,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				}
 			}
 			if (GameConfig().SoundVolume > i)
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
 			else
-				vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
 		}
 	}
 
@@ -312,9 +313,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			}
 		}
 		if (GameConfig().Brightness > i)
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
 		else
-			vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("menu/perc_none.tga"), true, ContentTransp);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
 	}
 
 

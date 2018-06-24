@@ -28,6 +28,7 @@
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
+#include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 
@@ -162,7 +163,7 @@ void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 
 
 		DstRect(XStart,Y,XStart+(SrcRect.right - SrcRect.left),Y+(SrcRect.bottom - SrcRect.top));
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName("game/nums.tga"), true, Transp);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/nums.tga"), true, Transp);
 		XStart += SrcRect.right - SrcRect.left;
 	}
 
@@ -201,11 +202,11 @@ void GameDrawMissionTitle()
 	DstRect(XStart,352,XStart+226,352+64);
 
 	if (MissionTitleLifeTime >= 1.0f) {
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/mission.tga")), true);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")), true);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), 1.0f);
 	} else {
-		vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/mission.tga")),
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")),
 			  true, MissionTitleLifeTime);
 		// вывод номера миссии
 		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), MissionTitleLifeTime);
@@ -262,7 +263,7 @@ void GameDrawMissionFailed()
 	SrcRect(0,0,512,84);
 	DstRect(GameConfig().InternalWidth / 2 - 256, 342, GameConfig().InternalWidth / 2 + 256, 342 + 84);
 
-	vw_Draw2D(DstRect, SrcRect, vw_FindTextureByName(vw_GetText("lang/en/game/missionfailed.tga")), true);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/missionfailed.tga")), true);
 
 
 	// выводим кнопки...

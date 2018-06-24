@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "../../core/core.h"
-
+#include "../../assets/texture.h"
 
 
 
@@ -37,7 +37,7 @@
 void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType)
 {
 
-	ParticleSystem->Texture = vw_FindTextureByName("gfx/flare1.tga");
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
 
 	switch(GFXType) {

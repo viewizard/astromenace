@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 // TODO add initialization via XML file, hard coded initialization should be removed
-// TODO remove vw_FindTextureByName() call from main loop
+// TODO remove GetPreloadedTextureAsset() call from main loop
 // TODO move to one 'static' VBO + VAO
 //      no IBO need since we use triangle strip, use range+count for each side (6 textures with 1 VBO)
 //      re-create on init and size changes only + care about release on game restart
@@ -42,6 +42,7 @@ textures. Since this one is tiled, we could scale it in 2 times for each side fo
 */
 
 #include "../core/core.h"
+#include "../assets/texture.h"
 #include "skybox.h"
 
 namespace {
@@ -94,7 +95,7 @@ static inline void AddToVertexArray(float CoordX, float CoordY, float CoordZ,
 void SkyBoxDraw()
 {
 	// setup second texture unit (with small stars)
-	vw_BindTexture(1, vw_FindTextureByName("skybox/tile_stars.tga"));
+	vw_BindTexture(1, GetPreloadedTextureAsset("skybox/tile_stars.tga"));
 	vw_SetTextureEnvMode(eTextureEnvMode::DECAL);
 	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();

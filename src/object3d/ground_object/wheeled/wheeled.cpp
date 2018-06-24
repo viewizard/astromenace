@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "wheeled.h"
-
+#include "../../../assets/texture.h"
 
 
 struct sWheeledData {
@@ -71,7 +71,7 @@ void cWheeled::Create(int WheeledNum)
 	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = vw_FindTextureByName(PresetWheeledData[WheeledNum - 1].TextureName);
+		Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureName);
 	}
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
