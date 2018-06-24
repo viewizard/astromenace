@@ -29,6 +29,7 @@
 #define ASSETS_TEXTURE_H
 
 #include "../core/base.h"
+#include "../core/graphics/graphics.h"
 
 // Get all texture assets load value.
 unsigned GetTextureAssetsLoadValue();
@@ -36,5 +37,9 @@ unsigned GetTextureAssetsLoadValue();
 void ForEachTextureAssetLoad(std::function<void (unsigned AssetValue)> function);
 // Change anisotropy level for all textures that was loaded with anisotropy.
 void ChangeTexturesAnisotropyLevel();
+// Get preloaded texture asset (preloaded by ForEachTextureAssetLoad() call).
+// Note, we don't validate textures, caller should care about call
+// ForEachTextureAssetLoad() each time, when this need.
+GLtexture GetPreloadedTextureAsset(const std::string &FileName);
 
 #endif // ASSETS_TEXTURE_H
