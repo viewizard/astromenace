@@ -793,18 +793,33 @@ void cParticleSystem::ChangeSpeed(const sVECTOR3D &Vel)
 
 /*
  * Initialization. 'Quality' is particle emission factor from 1.0f.
+ * Note, in case of 'UseGLSL', caller should load "ParticleSystem" shader
+ * before vw_InitParticleSystems() call.
  */
-void vw_InitParticleSystems(bool UseGLSL, float Quality)
+bool vw_InitParticleSystems(bool UseGLSL, float Quality)
 {
 	ParticleSystemUseGLSL = UseGLSL;
 	ParticleSystemQuality = Quality;
 
-	// find proper shaders and setup uniforms locations
+	// find proper shaders and setup uniform locations
 	if (ParticleSystemUseGLSL) {
 		ParticleSystemGLSL = vw_FindShaderByName("ParticleSystem");
+		if (ParticleSystemGLSL.expired()) {
+			std::cerr << __func__ << "(): " << "failed to find ParticleSystem shader.\n";
+			ParticleSystemUseGLSL = false;
+			return false;
+		}
 		UniformLocationParticleTexture = vw_GetUniformLocation(ParticleSystemGLSL, "ParticleTexture");
 		UniformLocationCameraPoint = vw_GetUniformLocation(ParticleSystemGLSL, "CameraPoint");
+		if ((UniformLocationParticleTexture < 0) ||
+		    (UniformLocationParticleTexture < 0)) {
+			std::cerr << __func__ << "(): " << "failed to find uniform location ParticleTexture or CameraPoint.\n";
+			ParticleSystemUseGLSL = false;
+			return false;
+		}
 	}
+
+	return true;
 }
 
 /*

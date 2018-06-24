@@ -241,7 +241,9 @@ private:
 
 
 // Initialization. 'Quality' is particle emission factor from 1.0f.
-void vw_InitParticleSystems(bool UseGLSL, float Quality);
+// Note, in case of 'UseGLSL', caller should load "ParticleSystem" shader
+// before vw_InitParticleSystems() call.
+bool vw_InitParticleSystems(bool UseGLSL, float Quality);
 // Create particle system.
 std::weak_ptr<cParticleSystem> vw_CreateParticleSystem();
 // Release particle system, provided by shared_ptr.
