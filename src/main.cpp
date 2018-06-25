@@ -481,8 +481,7 @@ RecreateWindow:
 	if (GameConfig().UseGLSL120)
 		SetupObject3DShaders(); // should be called after LoadAllGameAssets()
 
-	MenuStatus = eMenuStatus::MAIN_MENU;
-	InitMenu();
+	InitMenu(eMenuStatus::MAIN_MENU);
 
 	// Main loop.
 	Loop();

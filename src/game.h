@@ -135,7 +135,7 @@ extern float LastMenuOnOffUpdateTime;
 extern bool NeedOffMenu;
 extern eMenuStatus MenuStatus;
 
-void InitMenu();
+void InitMenu(eMenuStatus NewMenuStatus);
 void SetOptionsMenu(eMenuStatus Menu);
 void SetMenu(eMenuStatus Menu);
 void DrawMenu();

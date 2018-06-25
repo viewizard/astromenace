@@ -944,8 +944,11 @@ void ExitGameWithSave()
 		ChangeGameConfig().Profile[CurrentProfile].OpenLevelNum = CurrentMission;
 
 	// если дальше уже ничего нет, просто снимаем все... пусть игрок сам выберет
-	if (CurrentMission > (AllMission - 1))
+	if (CurrentMission > (AllMission - 1)) {
 		CurrentMission = -1;
+		// это была последняя миссия, показываем список авторов
+		ComBuffer = eCommand::SWITCH_FROM_GAME_TO_CREDITS;
+	}
 
 	vw_ResetWheelStatus();
 	// ставим нужный лист миссий
@@ -1575,7 +1578,7 @@ void DrawGame()
 			if (DrawButton384(X,Y, vw_GetText("NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 				// переходим к выбору уровня
 				ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU;
-				ExitGameWithSave();
+				ExitGameWithSave(); // после установки ComBuffer, т.к. можем переключить на Credits
 			}
 
 		} else {

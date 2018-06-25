@@ -95,8 +95,10 @@ float LastButton14UpdateTime = 0.0f;
 //------------------------------------------------------------------------------------
 // инициализация меню
 //------------------------------------------------------------------------------------
-void InitMenu()
+void InitMenu(eMenuStatus NewMenuStatus)
 {
+	MenuStatus = NewMenuStatus;
+
 	ShadowMap_SizeSetup(eShadowMapSetup::Menu);
 
 	// установка курсора на центр
@@ -196,9 +198,6 @@ void InitMenu()
 	MenuBlackTransp = 1.0f;
 	NeedOnMenu = true;
 	NeedOffMenu = false;
-	// подстраховка, если не укажем меню, перейдем в основное
-	MenuStatus = eMenuStatus::MAIN_MENU;
-
 	DrawGameCursor = true;
 }
 
