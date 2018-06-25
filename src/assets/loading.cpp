@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"
@@ -59,7 +57,6 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 			case SDL_MOUSEBUTTONDOWN:
 			case SDL_KEYDOWN:
 			case SDL_JOYBUTTONDOWN:
-				vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 				return true;
 			default:
 				break;
@@ -96,52 +93,67 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
 
 	vw_SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+	// fade-in
 	CurrentTick = SDL_GetTicks();
 	uint32_t LogoFadeIn = CurrentTick + FadeTicks;
-	if (Loop(LogoFadeIn, [&] () {
-		 Transp = 1.0f - static_cast<float>(LogoFadeIn - CurrentTick) / static_cast<float>(FadeTicks);}))
-		return;
-
-	Transp = 1.0f;
-	CurrentTick = SDL_GetTicks();
-	uint32_t LogoFadeOut = CurrentTick + FadeTicks;
-	if (Loop(LogoFadeOut, [&] () {
-		 GreyColor = static_cast<float>(LogoFadeOut - CurrentTick) / static_cast<float>(FadeTicks);
-		 vw_SetClearColor(GreyColor, GreyColor, GreyColor, 1.0f);}))
-		return;
+	if (!Loop(LogoFadeIn, [&] () {
+		  Transp = 1.0f - static_cast<float>(LogoFadeIn - CurrentTick) / static_cast<float>(FadeTicks);})) {
+		// fade-out
+		Transp = 1.0f;
+		CurrentTick = SDL_GetTicks();
+		uint32_t LogoFadeOut = CurrentTick + FadeTicks;
+		Loop(LogoFadeOut, [&] () {
+			GreyColor = static_cast<float>(LogoFadeOut - CurrentTick) / static_cast<float>(FadeTicks);
+			vw_SetClearColor(GreyColor, GreyColor, GreyColor, 1.0f);
+		});
+	}
 
 	vw_SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-//------------------------------------------------------------------------------------
-// процедура прорисовки процента загрузки данных
-//------------------------------------------------------------------------------------
-static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint32_t &LastDrawTime,
-			GLtexture LoadBackground, GLtexture StatusLine, GLtexture StatusBack)
+/*
+ * Draw assets load progress bar.
+ */
+static void DrawLoadProgress(unsigned int Current, unsigned int AllDrawLoading, uint32_t &LastDrawTick,
+			     GLtexture Background, GLtexture ProgressBar, GLtexture ProgressBarBorder)
 {
-	if ((Current != AllDrawLoading) && // the last one (with 100%) must be rendered
-	    (LastDrawTime + 10 >= SDL_GetTicks())) // 100 per second - is good enough frame rate, no need more
+	if ((Current != AllDrawLoading) && // the last one (with 100%) must be rendered for sure
+	    (LastDrawTick + 10 >= SDL_GetTicks())) // we don't need high FPS here, ~100 FPS should be enough
 		return;
 
-	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
+	vw_BeginRendering(RI_COLOR_BUFFER);
 	vw_Start2DMode(-1, 1);
 
+	int CenterdPositionY{96}; // "centered" position for background and progress bar, that located at bottom
+
+	// background
 	sRECT SrcRect{0, 0, 1024, 512};
-	sRECT DstRect{0, 64+32, static_cast<int>(GameConfig().InternalWidth), 64+32+512};
-	vw_Draw2D(DstRect, SrcRect, LoadBackground, false, 1.0f, 0.0f);
+	sRECT DstRect{0,
+		      CenterdPositionY,
+		      static_cast<int>(GameConfig().InternalWidth),
+		      CenterdPositionY + 512};
+	vw_Draw2D(DstRect, SrcRect, Background, false, 1.0f, 0.0f);
 
+	// "LOADING" text
 	vw_DrawText(GameConfig().InternalWidth / 2 - vw_TextWidth(vw_GetText("LOADING")) / 2,
-		    768-128, 0, 0, 1.0f, eRGBCOLOR::white, 1.0f, vw_GetText("LOADING"));
+		    GameConfig().InternalHeight - 16/*progress bar width*/ - 16/*font size*/ - CenterdPositionY,
+		    0, 0, 1.0f, eRGBCOLOR::white, 1.0f, vw_GetText("LOADING"));
 
-	SrcRect(0, 0, 256, 32);
-	int StartX = (GameConfig().InternalWidth - 256) / 2;
-	DstRect(StartX, 768-64-8-32, StartX + SrcRect.right - SrcRect.left, 768-64-8-32 + SrcRect.bottom - SrcRect.top);
-	vw_Draw2D(DstRect, SrcRect, StatusBack, true, 1.0f, 0.0f);
+	// progress bar border
+	SrcRect(0, 0, 256, 16);
+	DstRect((GameConfig().InternalWidth - 256) / 2,
+		GameConfig().InternalHeight - CenterdPositionY,
+		(GameConfig().InternalWidth - 256) / 2 + 256,
+		GameConfig().InternalHeight - CenterdPositionY + 16);
+	vw_Draw2D(DstRect, SrcRect, ProgressBarBorder, true, 1.0f, 0.0f);
 
-	int loaded = (int)(256.0f * Current / AllDrawLoading);
-	SrcRect(0, 0, loaded, 16);
-	DstRect(StartX, 768-64-1-32, StartX + SrcRect.right - SrcRect.left, 768-64-1-32 + SrcRect.bottom - SrcRect.top);
-	vw_Draw2D(DstRect, SrcRect, StatusLine, true, 1.0f, 0.0f);
+	// progress bar
+	SrcRect(0, 0, static_cast<int>(256.0f * Current / AllDrawLoading), 16);
+	DstRect((GameConfig().InternalWidth - 256) / 2,
+		GameConfig().InternalHeight - CenterdPositionY,
+		(GameConfig().InternalWidth - 256) / 2 + SrcRect.right/*static_cast<int>(256.0f * Current / AllDrawLoading)*/,
+		GameConfig().InternalHeight - CenterdPositionY + 16);
+	vw_Draw2D(DstRect, SrcRect, ProgressBar, true, 1.0f, 0.0f);
 
 	vw_End2DMode();
 	vw_EndRendering();
@@ -158,7 +170,7 @@ static void DrawLoading(unsigned int Current, unsigned int AllDrawLoading, uint3
 		}
 	}
 
-	LastDrawTime = SDL_GetTicks();
+	LastDrawTick = SDL_GetTicks();
 
 	// small delay for last call with 100%
 	if (Current == AllDrawLoading)
@@ -188,17 +200,17 @@ void LoadAllGameAssets()
 	DrawViewizardLogo(ViewizardLogo);
 	vw_ReleaseTexture(ViewizardLogo);
 
-	// background with status bar
+	// background with progress bar
 	vw_SetTextureAlpha(0, 0, 0);
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
 			  true, eAlphaCreateMode::GREYSC, false);
-	GLtexture StatusLine = vw_LoadTexture("loading/loading_line.tga");
-	GLtexture StatusBack = vw_LoadTexture("loading/loading_back.tga");
+	GLtexture ProgressBar = vw_LoadTexture("loading/loading_line.tga");
+	GLtexture ProgressBarBorder = vw_LoadTexture("loading/loading_back.tga");
 	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
 			  false, eAlphaCreateMode::GREYSC, false);
-	GLtexture LoadBackground = vw_LoadTexture("loading/loading0" + std::to_string(1 + vw_iRandNum(3)) + ".tga");
+	GLtexture Background = vw_LoadTexture("loading/loading0" + std::to_string(1 + vw_iRandNum(3)) + ".tga");
 
-	uint32_t LastDrawTime = SDL_GetTicks();
+	uint32_t LastDrawTick = SDL_GetTicks();
 	unsigned RealLoadedAssets{0};
 	unsigned AllDrawLoading{GetAudioAssetsLoadValue() +
 				GetModel3DAssetsLoadValue() +
@@ -206,8 +218,8 @@ void LoadAllGameAssets()
 
 	auto UpdateLoadStatus = [&] (unsigned AssetValue) {
 		RealLoadedAssets += AssetValue;
-		DrawLoading(RealLoadedAssets, AllDrawLoading, LastDrawTime,
-			    LoadBackground, StatusLine, StatusBack);
+		DrawLoadProgress(RealLoadedAssets, AllDrawLoading, LastDrawTick,
+				 Background, ProgressBar, ProgressBarBorder);
 		// important, update music buffers
 		AudioLoop();
 	};
@@ -215,7 +227,7 @@ void LoadAllGameAssets()
 	ForEachModel3DAssetLoad(UpdateLoadStatus);
 	ForEachTextureAssetLoad(UpdateLoadStatus);
 
-	vw_ReleaseTexture(StatusLine);
-	vw_ReleaseTexture(StatusBack);
-	vw_ReleaseTexture(LoadBackground);
+	vw_ReleaseTexture(ProgressBar);
+	vw_ReleaseTexture(ProgressBarBorder);
+	vw_ReleaseTexture(Background);
 }
