@@ -54,20 +54,18 @@ static void UpdateAudioListenerPosition()
 	if (!vw_GetAudioStatus())
 		return;
 
-	sVECTOR3D ListenerOriV1(0.0f, 0.0f, -1.0f);
-	vw_RotatePoint(ListenerOriV1, CameraRotation);
-	sVECTOR3D ListenerOriV2(0.0f, 1.0f, 0.0f);
-	vw_RotatePoint(ListenerOriV2, CameraRotation);
+	float ListenerPosition[3]{CameraLocation.x, CameraLocation.y, CameraLocation.z};
+	float ListenerVelocity[3]{0.0f, 0.0f, 0.0f};
 
-	// position of the Listener
-	float ListenerPos[3] = {CameraLocation.x, CameraLocation.y, CameraLocation.z};
-	// velocity of the Listener
-	float ListenerVel[3] = {0.0f, 0.0f, 0.0f};
-	// orientation of the Listener (first "look at", second "up")
-	float ListenerOri[6] = {ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
-				ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z};
+	// orientation expressed as "at" and "up" vectors
+	sVECTOR3D ListenerOrientationAT(0.0f, 0.0f, -1.0f);
+	vw_RotatePoint(ListenerOrientationAT, CameraRotation);
+	sVECTOR3D ListenerOrientationUP(0.0f, 1.0f, 0.0f);
+	vw_RotatePoint(ListenerOrientationUP, CameraRotation);
+	float ListenerOrientation[6]{ListenerOrientationAT.x, ListenerOrientationAT.y, ListenerOrientationAT.z,
+				     ListenerOrientationUP.x, ListenerOrientationUP.y, ListenerOrientationUP.z};
 
-	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
+	vw_Listener(ListenerPosition, ListenerVelocity, ListenerOrientation);
 }
 
 /*

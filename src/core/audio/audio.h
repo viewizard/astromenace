@@ -101,6 +101,7 @@ bool vw_GetAudioStatus();
 // Shutdown audio.
 void vw_ShutdownAudio();
 // Setup listener in 3D space.
-void vw_Listener(float (&ListenerPos)[3], float (&ListenerVel)[3], float (&ListenerOri)[6]);
+// Note, orientation expressed as "at" and "up" vectors.
+void vw_Listener(float (&ListenerPosition)[3], float (&ListenerVelocity)[3], float (&ListenerOrientation)[6]);
 
 #endif // CORE_AUDIO_AUDIO_H
