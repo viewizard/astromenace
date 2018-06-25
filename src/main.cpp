@@ -478,6 +478,8 @@ RecreateWindow:
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	// should be called after LoadAllGameAssets() (shaders loading and initialization)
 	vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
+	if (GameConfig().UseGLSL120)
+		SetupObject3DShaders(); // should be called after LoadAllGameAssets()
 
 	MenuStatus = eMenuStatus::MAIN_MENU;
 	InitMenu();

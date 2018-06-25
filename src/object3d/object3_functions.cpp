@@ -45,6 +45,10 @@ extern cSpaceObject *StartSpaceObject;
 extern cSpaceObject *EndSpaceObject;
 float GetProjectileSpeed(int Num);
 
+std::weak_ptr<cGLSL> GLSLShaderType1{};
+std::weak_ptr<cGLSL> GLSLShaderType2{};
+std::weak_ptr<cGLSL> GLSLShaderType3{};
+
 // направление движения камеры
 extern sVECTOR3D GameCameraMovement;
 // скорость движения камеры
@@ -1393,4 +1397,88 @@ cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, // статус �
 	}
 
 	return Res;
+}
+
+/*
+ * Setup shader's uniform location.
+ */
+static bool SetupShaderUniformLocation(std::weak_ptr<cGLSL> &Shader,
+				       const std::string &ShaderName,
+				       const std::vector<std::string> &UniformLocationNameArray)
+{
+	// find and store uniform location for all shaders, we don't really need
+	// store internal storage number for uniforms usage, since we load them
+	// one-by-one, and we know sequence, we could use 0-1-2-3-4 numbers directly
+	for (auto tmpName : UniformLocationNameArray) {
+		if (vw_FindShaderUniformLocation(Shader, tmpName) < 0) {
+			std::cerr << __func__ << "(): " << "failed to find uniform location " << tmpName
+				  << " in shader " << ShaderName << ".\n";
+			return false;
+		}
+	}
+	return true;
+}
+
+/*
+ * Setup shader.
+ */
+static bool SetupShader(std::weak_ptr<cGLSL> &Shader,
+			const std::string &ShaderName,
+			const std::vector<std::string> &UniformLocationNameArray)
+{
+	Shader = vw_FindShaderByName(ShaderName);
+	if (Shader.expired()) {
+		std::cerr << __func__ << "(): " << "failed to find " << ShaderName << " shader.\n";
+		return false;
+	}
+	if (!SetupShaderUniformLocation(Shader, ShaderName, UniformLocationNameArray))
+		return false;
+
+	return true;
+}
+
+/*
+ * Setup shaders.
+ */
+bool SetupObject3DShaders()
+{
+	const std::vector<std::string> GLSLShaderType1UniformLocationNames{
+		{"Texture1"},
+		{"Texture2"},
+		{"DirectLightCount"},
+		{"PointLightCount"},
+		{"NeedMultitexture"},
+		{"NormalMap"},
+		{"NeedNormalMapping"}
+	};
+	if (!SetupShader(GLSLShaderType1, "PerPixelLight", GLSLShaderType1UniformLocationNames))
+		return false;
+
+	const std::vector<std::string> GLSLShaderType2UniformLocationNames{
+		{"Texture1"},
+		{"DirectLightCount"},
+		{"PointLightCount"},
+		{"SpeedData1"},
+		{"SpeedData2"}
+	};
+	if (!SetupShader(GLSLShaderType2, "PerPixelLight_Explosion", GLSLShaderType2UniformLocationNames))
+		return false;
+
+	const std::vector<std::string> GLSLShaderType3UniformLocationNames{
+		{"Texture1"},
+		{"Texture2"},
+		{"DirectLightCount"},
+		{"PointLightCount"},
+		{"NeedMultitexture"},
+		{"ShadowMap"},
+		{"xPixelOffset"},
+		{"yPixelOffset"},
+		{"NormalMap"},
+		{"NeedNormalMapping"},
+		{"PCFMode"}
+	};
+	if (!SetupShader(GLSLShaderType3, "PerPixelLight_ShadowMap", GLSLShaderType3UniformLocationNames))
+		return false;
+
+	return true;
 }

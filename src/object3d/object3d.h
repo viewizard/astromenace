@@ -89,7 +89,7 @@ enum class eDeleteAfterLeaveScene {
 	wait_delay	// will be deleted after delay
 };
 // delay before object delete, since object could back to the scene
-#define DeleteAfterLeaveSceneDelay 1.0f
+constexpr float DeleteAfterLeaveSceneDelay = 1.0f;
 
 class cObject3D : public sModel3D {
 protected:
@@ -235,5 +235,7 @@ bool GetMissileOnTargetOrientateion(sVECTOR3D Location, sVECTOR3D CurrentObjectR
 bool GetMissileTargetStatus(cObject3D *TargetObject, sVECTOR3D Location, float (&RotationMatrix)[9]);
 // Получение положения ближайшего врага, для мин
 cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, sVECTOR3D Location);
+// Setup shaders.
+bool SetupObject3DShaders();
 
 #endif // OBJECT3D_OBJECT3D_H

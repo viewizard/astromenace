@@ -824,6 +824,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			    (Model3DBlocks[i].ShaderType >= 0)) {
 				std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
+				// FIXME we know what exactly we have, why we need shaders setup in this way?
 				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 				if ((Model3DBlocks[i].ShaderType == 1) && ShadowMap)
 					Model3DBlocks[i].ShaderType = 3;

@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO uniform location related stuff should be moved to object3d code
-
 #include "../core/core.h"
 
 namespace {
@@ -36,6 +34,7 @@ struct sShaderMetadata {
 	std::string VertexShaderFileName;
 	std::string FragmentShaderFileName;
 };
+
 const std::vector<sShaderMetadata> ShaderArray{
 	{"ParticleSystem",		"glsl/particle.vert",		"glsl/particle.frag"},
 	{"PerPixelLight",		"glsl/light.vert",		"glsl/light.frag"},
@@ -45,49 +44,6 @@ const std::vector<sShaderMetadata> ShaderArray{
 
 } // unnamed namespace
 
-std::weak_ptr<cGLSL> GLSLShaderType1{};
-std::weak_ptr<cGLSL> GLSLShaderType2{};
-std::weak_ptr<cGLSL> GLSLShaderType3{};
-
-/*
- * Setup shader's uniform locations.
- */
-static void SetupUniformLocations()
-{
-	// find all shaders by name
-	GLSLShaderType1 = vw_FindShaderByName("PerPixelLight");
-	GLSLShaderType2 = vw_FindShaderByName("PerPixelLight_Explosion");
-	GLSLShaderType3 = vw_FindShaderByName("PerPixelLight_ShadowMap");
-
-	// find and store uniform location for all shaders, in real, we don't need
-	// store internal storage number for uniforms usage, since we load them
-	// one-by-one, and we know sequence, we could use 0-1-2-3-4 numbers directly
-	vw_FindShaderUniformLocation(GLSLShaderType1, "Texture1");
-	vw_FindShaderUniformLocation(GLSLShaderType1, "Texture2");
-	vw_FindShaderUniformLocation(GLSLShaderType1, "DirectLightCount");
-	vw_FindShaderUniformLocation(GLSLShaderType1, "PointLightCount");
-	vw_FindShaderUniformLocation(GLSLShaderType1, "NeedMultitexture");
-	vw_FindShaderUniformLocation(GLSLShaderType1, "NormalMap");
-	vw_FindShaderUniformLocation(GLSLShaderType1, "NeedNormalMapping");
-
-	vw_FindShaderUniformLocation(GLSLShaderType2, "Texture1");
-	vw_FindShaderUniformLocation(GLSLShaderType2, "DirectLightCount");
-	vw_FindShaderUniformLocation(GLSLShaderType2, "PointLightCount");
-	vw_FindShaderUniformLocation(GLSLShaderType2, "SpeedData1");
-	vw_FindShaderUniformLocation(GLSLShaderType2, "SpeedData2");
-
-	vw_FindShaderUniformLocation(GLSLShaderType3, "Texture1");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "Texture2");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "DirectLightCount");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "PointLightCount");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "NeedMultitexture");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "ShadowMap");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "xPixelOffset");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "yPixelOffset");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "NormalMap");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "NeedNormalMapping");
-	vw_FindShaderUniformLocation(GLSLShaderType3, "PCFMode");
-}
 
 /*
  * Cycle with function callback on each shader asset load.
@@ -114,6 +70,5 @@ bool ForEachShaderAssetLoad(std::function<void ()> function)
 		function();
 	}
 
-	SetupUniformLocations();
 	return true;
 }
