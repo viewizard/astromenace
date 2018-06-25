@@ -27,6 +27,7 @@
 
 #include "../graphics/graphics.h"
 #include "../math/math.h"
+#include "../audio/audio.h"
 #include "camera.h"
 
 namespace {
@@ -46,12 +47,38 @@ sVECTOR3D CameraFocusPoint{0.0f, 0.0f, 0.0f};
 
 
 /*
+ * Update listener position and orientation.
+ */
+static void UpdateAudioListenerPosition()
+{
+	if (!vw_GetAudioStatus())
+		return;
+
+	sVECTOR3D ListenerOriV1(0.0f, 0.0f, -1.0f);
+	vw_RotatePoint(ListenerOriV1, CameraRotation);
+	sVECTOR3D ListenerOriV2(0.0f, 1.0f, 0.0f);
+	vw_RotatePoint(ListenerOriV2, CameraRotation);
+
+	// position of the Listener
+	float ListenerPos[3] = {CameraLocation.x, CameraLocation.y, CameraLocation.z};
+	// velocity of the Listener
+	float ListenerVel[3] = {0.0f, 0.0f, 0.0f};
+	// orientation of the Listener (first "look at", second "up")
+	float ListenerOri[6] = {ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
+				ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z};
+
+	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
+}
+
+/*
  * Set camera location.
  */
 void vw_SetCameraLocation(const sVECTOR3D &NewLocation)
 {
 	CameraLocation = NewLocation;
 	CameraUpdated = true;
+
+	UpdateAudioListenerPosition();
 }
 
 /*
@@ -62,6 +89,8 @@ void vw_IncCameraLocation(const sVECTOR3D &IncLocation)
 	CameraLocation += IncLocation;
 	CameraFocusPoint += IncLocation;
 	CameraUpdated = true;
+
+	UpdateAudioListenerPosition();
 }
 
 /*
@@ -108,6 +137,8 @@ void vw_SetCameraMove(const sVECTOR3D &NewRotation, float ChangeDistance, const 
 	vw_RotatePoint(CameraLocation, CameraRotation ^ (-1.0f));
 	CameraLocation += Point;
 	CameraUpdated = true;
+
+	UpdateAudioListenerPosition();
 }
 
 /*
@@ -152,6 +183,8 @@ void vw_SetCameraMoveAroundPoint(const sVECTOR3D &Point, float ChangeDistance, c
 	CameraRotation.x = -newrotX;
 	CameraRotation.y = -newrotY;
 	CameraUpdated = true;
+
+	UpdateAudioListenerPosition();
 }
 
 /*

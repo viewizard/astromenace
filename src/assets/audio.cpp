@@ -327,26 +327,6 @@ unsigned int PlayVoicePhrase(eVoicePhrase VoicePhrase, float LocalVolume)
  */
 void AudioLoop()
 {
-	sVECTOR3D CurrentCameraLocation;
-	vw_GetCameraLocation(&CurrentCameraLocation);
-	sVECTOR3D CurrentCameraRotation;
-	vw_GetCameraRotation(&CurrentCameraRotation);
-
-	sVECTOR3D ListenerOriV1(0.0f, 0.0f, -1.0f);
-	vw_RotatePoint(ListenerOriV1, CurrentCameraRotation);
-	sVECTOR3D ListenerOriV2(0.0f, 1.0f, 0.0f);
-	vw_RotatePoint(ListenerOriV2, CurrentCameraRotation);
-
-	// position of the Listener
-	float ListenerPos[3] = {CurrentCameraLocation.x, CurrentCameraLocation.y, CurrentCameraLocation.z};
-	// velocity of the Listener
-	float ListenerVel[3] = {0.0f, 0.0f, 0.0f};
-	// orientation of the Listener (first "look at", second "up")
-	float ListenerOri[6] = {ListenerOriV1.x, ListenerOriV1.y, ListenerOriV1.z,
-				ListenerOriV2.x, ListenerOriV2.y, ListenerOriV2.z};
-
-	vw_Listener(ListenerPos, ListenerVel, ListenerOri);
-
 	// update buffers
 	vw_UpdateSound(SDL_GetTicks());
 	vw_UpdateMusic(SDL_GetTicks());
