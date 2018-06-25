@@ -592,7 +592,7 @@ void DrawMenu()
 			LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
 			// переход на игру
 			WorkshopDestroyData();
-			ComBuffer = eCommand::SWITCH_TO_GAME;
+			ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
 		}
 
 		vw_Start2DMode(-1,1);

@@ -741,7 +741,7 @@ Dialogs with default type:
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			ComBuffer = eCommand::SWITCH_TO_GAME;
+			ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
 			ExitGame();
 			CloseDialog();
 		}

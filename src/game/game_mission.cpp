@@ -279,7 +279,7 @@ void GameDrawMissionFailed()
 
 	X = GameConfig().InternalWidth / 2 + 30;
 	if (DrawButton200_2(X,Y, vw_GetText("RESTART"), 1.0f, false)) {
-		ComBuffer = eCommand::SWITCH_TO_GAME;
+		ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
 		ExitGame();
 	}
 

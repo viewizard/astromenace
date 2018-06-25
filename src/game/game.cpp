@@ -1627,7 +1627,7 @@ void DrawGame()
 				if (DrawButton384(X,Y, vw_GetText("RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
 					// если убили, выводить диалог не нужно
 					if (PlayerFighter == nullptr) {
-						ComBuffer = eCommand::SWITCH_TO_GAME;
+						ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
 						ExitGame();
 					} else
 						SetCurrentDialogBox(eDialogBox::RestartLevelNoSave);

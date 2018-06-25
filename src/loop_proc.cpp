@@ -250,9 +250,7 @@ void Loop_Proc()
 		case eCommand::SWITCH_TO_WORKSHOP:
 			SetMenu(eMenuStatus::WORKSHOP);
 			break;
-
-
-		case eCommand::SWITCH_TO_GAME:
+		case eCommand::SWITCH_FROM_MENU_TO_GAME: // also used for mission restart
 			PrepareToSwitchStatus();
 			InitGame();
 			PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
