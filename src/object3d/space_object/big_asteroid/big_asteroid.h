@@ -19,7 +19,7 @@
 	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
 
 
-	Web Site: https://www.viewizard.com/
+	Website: https://www.viewizard.com/
 	Project: https://github.com/viewizard/astromenace
 	E-mail: viewizard@viewizard.com
 
