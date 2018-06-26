@@ -135,9 +135,9 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
+		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, eRGBCOLOR::white, Transp, Text);
+		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 
 
@@ -185,7 +185,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 		int Size = vw_TextWidth(Text);
 		int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-		vw_DrawText(SizeI, Y+21, 0, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
+		vw_DrawText(SizeI, Y+21, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X+2,Y+1,X+256,Y+63);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
@@ -282,9 +282,9 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
+		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, eRGBCOLOR::white, Transp, Text);
+		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
@@ -328,7 +328,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	if (Off || DragWeapon) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_off.tga"), true, Transp);
 
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
+		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X,Y,X+204,Y+35);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
@@ -385,9 +385,9 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
+		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, Transp, Text);
+		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
@@ -430,7 +430,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	if (Off || DragWeapon) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_off.tga"), true, Transp);
 
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
+		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X,Y,X+132,Y+35);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
@@ -488,9 +488,9 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, (0.7f*Transp)/2.0f, Text);
+		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, eRGBCOLOR::white, Transp, Text);
+		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if (CanClick)
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
@@ -556,9 +556,9 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	SrcRect(0,0,40,38);
 	DstRect(X,Y,X+40,Y+38);
 	if (!ON || DragWeapon)
-		vw_DrawText(X+40+20, Y+8, 0, 0, 1.0f, eRGBCOLOR::white, Transp, Text);
+		vw_DrawText(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 	else
-		vw_DrawText(X+40+20, Y+8, 0, 0, 1.0f, eRGBCOLOR::orange, Transp, Text);
+		vw_DrawText(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
 
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
 	if (*CheckBoxStatus)

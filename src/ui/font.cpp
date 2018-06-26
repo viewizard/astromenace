@@ -44,14 +44,14 @@ usage for fonts in menu elements.
 namespace {
 
 const sFontMetadata FontList[] = {
-	{"Linux Biolinum", "font/LinBiolinum_RB.otf"},
-	{"Linux Libertine", "font/LinLibertine_RB.otf"},
-	{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
-	{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
-	{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
-	{"FreeFont Mono", "font/FreeMonoBold.otf"},
-	{"FreeFont Sans", "font/FreeSansBold.otf"},
-	{"FreeFont Serif", "font/FreeSerifBold.otf"},
+	sFontMetadata{"Linux Biolinum", "font/LinBiolinum_RB.otf"},
+	sFontMetadata{"Linux Libertine", "font/LinLibertine_RB.otf"},
+	sFontMetadata{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
+	sFontMetadata{"Liberation Sans", "font/LiberationSans-Bold.ttf"},
+	sFontMetadata{"Liberation Serif", "font/LiberationSerif-Bold.ttf"},
+	sFontMetadata{"FreeFont Mono", "font/FreeMonoBold.otf"},
+	sFontMetadata{"FreeFont Sans", "font/FreeSansBold.otf"},
+	sFontMetadata{"FreeFont Serif", "font/FreeSerifBold.otf"},
 };
 constexpr int FontQuantity = sizeof(FontList) / sizeof(FontList[0]);
 

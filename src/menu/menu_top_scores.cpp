@@ -38,14 +38,14 @@ struct sTopScore {
 	int Score{0};
 	std::u32string ScoreUTF32{};
 
-	sTopScore(const std::string &_Name, int _Score) :
+	explicit sTopScore(const std::string &_Name, int _Score) :
 		Score{_Score}
 	{
 		NameUTF32 = ConvertUTF8.from_bytes(_Name);
 		ScoreUTF32 = ConvertUTF8.from_bytes(std::to_string(Score));
 	}
 
-	sTopScore(const std::u32string &_NameUTF32, int _Score, const std::u32string &_ScoreUTF32) :
+	explicit sTopScore(const std::u32string &_NameUTF32, int _Score, const std::u32string &_ScoreUTF32) :
 		NameUTF32{_NameUTF32},
 		Score{_Score},
 		ScoreUTF32{_ScoreUTF32}
@@ -70,16 +70,16 @@ void InitTopScoresMenu()
 {
 	// (!) check, that Score and ScoreUTF32 are the same value
 	static const std::list<sTopScore> DefaultTopScores{
-		{U"Viewizard", 100000, U"100000"},
-		{U"Alex", 90000, U"90000"},
-		{U"Michael", 80000, U"80000"},
-		{U"Jeffrey", 70000, U"70000"},
-		{U"Christopher", 60000, U"60000"},
-		{U"Becky", 40000, U"40000"},
-		{U"Greg", 20000, U"20000"},
-		{U"Jay", 10000, U"10000"},
-		{U"Kelvin", 5000, U"5000"},
-		{U"Stephan", 1000, U"1000"}};
+		sTopScore{U"Viewizard", 100000, U"100000"},
+		sTopScore{U"Alex", 90000, U"90000"},
+		sTopScore{U"Michael", 80000, U"80000"},
+		sTopScore{U"Jeffrey", 70000, U"70000"},
+		sTopScore{U"Christopher", 60000, U"60000"},
+		sTopScore{U"Becky", 40000, U"40000"},
+		sTopScore{U"Greg", 20000, U"20000"},
+		sTopScore{U"Jay", 10000, U"10000"},
+		sTopScore{U"Kelvin", 5000, U"5000"},
+		sTopScore{U"Stephan", 1000, U"1000"}};
 
 	TopScoresList = DefaultTopScores;
 
@@ -114,16 +114,16 @@ void TopScoresMenu()
 	int Y1 = 165;
 	int Prir1 = 42;
 
-	vw_DrawText(X1, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("NAME"));
-	vw_DrawText(X1 + 650, Y1, 0, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("SCORE"));
+	vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("NAME"));
+	vw_DrawText(X1 + 650, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("SCORE"));
 
 	Y1 += 10;
 
 	for (auto &tmpTopScore : TopScoresList) {
 		Y1 += Prir1;
 
-		vw_DrawTextUTF32(X1, Y1, 0, 530, 1.0f, eRGBCOLOR::white, MenuContentTransp, tmpTopScore.NameUTF32.c_str());
-		vw_DrawTextUTF32(X1 + 650, Y1, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, tmpTopScore.ScoreUTF32.c_str());
+		vw_DrawTextUTF32(X1, Y1, 0, 530, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpTopScore.NameUTF32.c_str());
+		vw_DrawTextUTF32(X1 + 650, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpTopScore.ScoreUTF32.c_str());
 	}
 
 	int X = (GameConfig().InternalWidth - 384) / 2;

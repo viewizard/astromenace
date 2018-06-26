@@ -174,9 +174,9 @@ void Loop_Proc()
 	if (GameConfig().ShowFPS) {
 		// фпс
 		if (GameConfig().VSync == 0)
-			vw_DrawText(6,5, 0, 0, 1.0f, eRGBCOLOR::white, 0.99f, "%s %.1f", vw_GetText("fps"), eFPS);
+			vw_DrawText(6,5, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, "%s %.1f", vw_GetText("fps"), eFPS);
 		else
-			vw_DrawText(6,5, 0, 0, 1.0f, eRGBCOLOR::white, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("fps"), eFPS, vw_GetText("On"));
+			vw_DrawText(6,5, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("fps"), eFPS, vw_GetText("On"));
 	}
 
 

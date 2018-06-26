@@ -217,7 +217,7 @@ void ShadowMap_StartFinalRender()
 	vw_BindTexture(2, ShadowMapFBO->DepthTexture);
 	vw_SetTextureCompare(eTextureCompareMode::REF_TO_TEXTURE, eCompareFunc::LEQUAL);
 	vw_SetTextureDepthMode(eTextureDepthMode::INTENSITY);
-	vw_SetTextureFiltering(eTextureBasicFilter::BILINEAR);
+	vw_SetTextureFiltering(sTextureFilter{eTextureBasicFilter::BILINEAR});
 
 	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();

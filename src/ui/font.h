@@ -32,7 +32,7 @@ struct sFontMetadata {
 	std::string FontTitle{};
 	std::string FontFileName{};
 
-	sFontMetadata(const char *_FontTitle, const char *_FontFileName) :
+	explicit sFontMetadata(const char *_FontTitle, const char *_FontFileName) :
 		FontTitle{_FontTitle},
 		FontFileName{_FontFileName}
 	{}

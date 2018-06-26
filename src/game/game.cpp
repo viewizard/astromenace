@@ -1433,7 +1433,7 @@ void DrawGame()
 
 		vw_SetFontSize(20);
 		int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidth("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed)) / 2;
-		vw_DrawText(TmpFontSize, 80, 0, 0, 1.0f, eRGBCOLOR::white, GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
+		vw_DrawText(TmpFontSize, 80, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
 		ResetFontSize();
 
 		CurrentGameSpeedShowTime -= TimeDelta;
@@ -1516,60 +1516,60 @@ void DrawGame()
 				Size = 190;
 				WScale = -190;
 			}
-			vw_DrawText(GameConfig().InternalWidth / 2 - 123 - Size / 2, 128+21, WScale, 0, 1.0f, eRGBCOLOR::yellow, 0.7f * GameContentTransp, vw_GetText("Mission Complete"));
+			vw_DrawText(GameConfig().InternalWidth / 2 - 123 - Size / 2, 128+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, 0.7f * GameContentTransp, vw_GetText("Mission Complete"));
 
 
 			int Y = 128+90;
 			int Prir = 36;
 
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, eRGBCOLOR::yellow, 0.5f * GameContentTransp, vw_GetText("Type"));
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, 0.5f * GameContentTransp, vw_GetText("Type"));
 			Size = vw_TextWidth(vw_GetText("Killed"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
-			vw_DrawText(GameConfig().InternalWidth / 2 - 31 + Size / 2, Y, WScale, 0, 1.0f, eRGBCOLOR::yellow, 0.5f * GameContentTransp, vw_GetText("Killed"));
+			vw_DrawText(GameConfig().InternalWidth / 2 - 31 + Size / 2, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, 0.5f * GameContentTransp, vw_GetText("Killed"));
 			Size = vw_TextWidth(vw_GetText("Bonus"));
 			WScale = 0;
 			if (Size > 70) {
 				Size = 70;
 				WScale = -70;
 			}
-			vw_DrawText(GameConfig().InternalWidth / 2 + 97 + Size / 2, Y, WScale, 0, 1.0f, eRGBCOLOR::yellow, 0.5f * GameContentTransp, vw_GetText("Bonus"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 97 + Size / 2, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, 0.5f * GameContentTransp, vw_GetText("Bonus"));
 			Y += Prir;
 
 			WScale = -210;
 
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  vw_GetText("Alien Spaceships"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%04i", AlienShipsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%06i", (int)AlienShipsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  vw_GetText("Alien Spaceships"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AlienShipsKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)AlienShipsKillBonus);
 			Y += Prir;
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, eRGBCOLOR::white, GameContentTransp, vw_GetText("Alien Motherships"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%04i", AlienMotherShipsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%06i", (int)AlienMotherShipsKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Alien Motherships"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AlienMotherShipsKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)AlienMotherShipsKillQuant);
 			Y += Prir;
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, eRGBCOLOR::white, GameContentTransp, vw_GetText("Pirate Spaceships"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%04i", PirateShipsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%06i", (int)PirateShipsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Pirate Spaceships"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", PirateShipsKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)PirateShipsKillBonus);
 			Y += Prir;
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, eRGBCOLOR::white, GameContentTransp, vw_GetText("Pirate Vehicles"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%04i", PirateVehiclesKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%06i", (int)PirateVehiclesKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Pirate Vehicles"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", PirateVehiclesKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)PirateVehiclesKillBonus);
 			Y += Prir;
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, eRGBCOLOR::white, GameContentTransp, vw_GetText("Pirate Buildings"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%04i", PirateBuildingsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%06i", (int)PirateBuildingsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Pirate Buildings"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", PirateBuildingsKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)PirateBuildingsKillBonus);
 			Y += Prir;
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp, vw_GetText("Asteroids"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%04i", AsteroidsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%06i", (int)AsteroidsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Asteroids"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AsteroidsKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)AsteroidsKillBonus);
 
 			Y += (int)(Prir*1.5);
-			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, eRGBCOLOR::yellow, GameContentTransp, vw_GetText("Total"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%04i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
+			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, GameContentTransp, vw_GetText("Total"));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
 					       PirateShipsKillQuant+PirateVehiclesKillQuant+PirateBuildingsKillQuant+AsteroidsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2+126, Y, 0, 0, 1.0f, eRGBCOLOR::white, GameContentTransp,  "%06i", (int)(GameMoney - GameConfig().Profile[CurrentProfile].Money * 1.0f));
+			vw_DrawText(GameConfig().InternalWidth / 2+126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)(GameMoney - GameConfig().Profile[CurrentProfile].Money * 1.0f));
 
 			// выводим кнопки меню
 			int X = GameConfig().InternalWidth / 2 - 192;
@@ -1592,7 +1592,7 @@ void DrawGame()
 					  true, GameContentTransp);
 				// название меню
 				int SizeI = 17 + (234-vw_TextWidth(vw_GetText("GAME MENU")))/2;
-				vw_DrawText(GameConfig().InternalWidth / 2 - 256 + SizeI, 128+22, 0, 0, 1.0f, eRGBCOLOR::yellow, 0.7f * GameContentTransp, vw_GetText("GAME MENU"));
+				vw_DrawText(GameConfig().InternalWidth / 2 - 256 + SizeI, 128+22, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, 0.7f * GameContentTransp, vw_GetText("GAME MENU"));
 
 				// выводим кнопки меню
 
@@ -1774,7 +1774,7 @@ void DrawGame()
 
 
 
-	if (ShowGameTime) vw_DrawText(6,45, 0, 0, 1.0f, eRGBCOLOR::white, 0.99f, "%s %.2f", "mission time:", GameTime);
+	if (ShowGameTime) vw_DrawText(6,45, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, "%s %.2f", "mission time:", GameTime);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

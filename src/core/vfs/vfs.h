@@ -129,7 +129,7 @@ struct sFILE {
 	int fseek(long offset, int origin);
 	long ftell();
 
-	sFILE(unsigned int _Size, long _Pos) :
+	explicit sFILE(unsigned int _Size, long _Pos) :
 		Size{_Size},
 		Pos{_Pos}
 	{}

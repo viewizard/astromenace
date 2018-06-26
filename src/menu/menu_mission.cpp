@@ -39,8 +39,8 @@ namespace {
 struct cMission {
 	std::string Title{};
 	std::string Descr{};
-	sRGBCOLOR TitleColor{eRGBCOLOR::orange};
-	sRGBCOLOR DescrColor{eRGBCOLOR::white};
+	sRGBCOLOR TitleColor{sRGBCOLOR{eRGBCOLOR::orange}};
+	sRGBCOLOR DescrColor{sRGBCOLOR{eRGBCOLOR::white}};
 	std::string Icon{};
 	std::string File{};
 };
@@ -118,25 +118,25 @@ void MissionListInit()
 					if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
 						switch (tmpColor) {
 						case 1:
-							MissionList.back().TitleColor = eRGBCOLOR::yellow;
+							MissionList.back().TitleColor = sRGBCOLOR{eRGBCOLOR::yellow};
 							break;
 						case 2:
-							MissionList.back().TitleColor = eRGBCOLOR::red;
+							MissionList.back().TitleColor = sRGBCOLOR{eRGBCOLOR::red};
 							break;
 						case 3:
-							MissionList.back().TitleColor = eRGBCOLOR::green;
+							MissionList.back().TitleColor = sRGBCOLOR{eRGBCOLOR::green};
 							break;
 						case 4:
-							MissionList.back().TitleColor = eRGBCOLOR::orange;
+							MissionList.back().TitleColor = sRGBCOLOR{eRGBCOLOR::orange};
 							break;
 						case 5: // grey
-							MissionList.back().TitleColor = {0.5f, 0.5f, 0.5f};
+							MissionList.back().TitleColor = sRGBCOLOR{0.5f, 0.5f, 0.5f};
 							break;
 						case 6: // dark orange
-							MissionList.back().TitleColor = {1.0f, 0.3f, 0.0f};
+							MissionList.back().TitleColor = sRGBCOLOR{1.0f, 0.3f, 0.0f};
 							break;
 						default:
-							MissionList.back().TitleColor = eRGBCOLOR::white;
+							MissionList.back().TitleColor = sRGBCOLOR{eRGBCOLOR::white};
 							break;
 						}
 					}
@@ -146,25 +146,25 @@ void MissionListInit()
 					if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
 						switch (tmpColor) {
 						case 1:
-							MissionList.back().DescrColor = eRGBCOLOR::yellow;
+							MissionList.back().DescrColor = sRGBCOLOR{eRGBCOLOR::yellow};
 							break;
 						case 2:
-							MissionList.back().DescrColor = eRGBCOLOR::red;
+							MissionList.back().DescrColor = sRGBCOLOR{eRGBCOLOR::red};
 							break;
 						case 3:
-							MissionList.back().DescrColor = eRGBCOLOR::green;
+							MissionList.back().DescrColor = sRGBCOLOR{eRGBCOLOR::green};
 							break;
 						case 4:
-							MissionList.back().DescrColor = eRGBCOLOR::orange;
+							MissionList.back().DescrColor = sRGBCOLOR{eRGBCOLOR::orange};
 							break;
 						case 5: // grey
-							MissionList.back().DescrColor = {0.5f, 0.5f, 0.5f};
+							MissionList.back().DescrColor = sRGBCOLOR{0.5f, 0.5f, 0.5f};
 							break;
 						case 6: // dark orange
-							MissionList.back().DescrColor = {1.0f, 0.3f, 0.0f};
+							MissionList.back().DescrColor = sRGBCOLOR{1.0f, 0.3f, 0.0f};
 							break;
 						default:
-							MissionList.back().DescrColor = eRGBCOLOR::white;
+							MissionList.back().DescrColor = sRGBCOLOR{eRGBCOLOR::white};
 							break;
 						}
 					}
@@ -219,13 +219,13 @@ void MissionMenu()
 
 	// выводим текущий профиль пилота
 	int Size = vw_TextWidth("%s: ", vw_GetText("Pilot Profile"));
-	vw_DrawText(X1, 208+12, 0, 0, 1.0f, eRGBCOLOR::green, MenuContentTransp, "%s: ", vw_GetText("Pilot Profile"));
+	vw_DrawText(X1, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, MenuContentTransp, "%s: ", vw_GetText("Pilot Profile"));
 
 	if ((Size + vw_TextWidth(GameConfig().Profile[CurrentProfile].Name)) > 500) {
-		vw_DrawText(X1+Size, 208+12, 0, 500-Size, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
-		vw_DrawText(X1+510, 208+12, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "...");
+		vw_DrawText(X1+Size, 208+12, 0, 500-Size, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
+		vw_DrawText(X1+510, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "...");
 	} else
-		vw_DrawText(X1+Size, 208+12, 0, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
+		vw_DrawText(X1+Size, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
 
 	if (DrawButton200_2(X1+616-72, 212, vw_GetText("Change Profile"), MenuContentTransp, false)) {
 		ComBuffer = eCommand::SWITCH_TO_PROFILE;

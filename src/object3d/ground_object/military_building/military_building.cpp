@@ -30,20 +30,20 @@
 
 
 struct sMilitaryBuildingData {
-	float	Strength;
-	int		WeaponQuantity;
-	const	char *Name;
-	const	char *TextureName;
+	float Strength;
+	int WeaponQuantity;
+	const char *Name;
+	const char *TextureName;
 };
 
-static sMilitaryBuildingData PresetMilitaryBuildingData[] = {
-	{80, 2,	"models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
-	{120, 1,	"models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
-	{80, 2,	"models/militarybuilding/aa-gun-03.vw3d", "models/gr-02.vw2d"},
-	{150, 2,	"models/militarybuilding/aa-gun-04.vw3d", "models/gr-01.vw2d"},
-	{250, 2, "models/militarybuilding/aa-gun-05.vw3d", "models/gr-03.vw2d"},
-	{50, 1,	"models/militarybuilding/artiler-gun-01.vw3d", "models/gr-03.vw2d"},
-	{200, 1,	"models/militarybuilding/artiler-gun-02.vw3d", "models/gr-01.vw2d"}
+const sMilitaryBuildingData PresetMilitaryBuildingData[] = {
+	{80,	2,	"models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
+	{120,	1,	"models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
+	{80,	2,	"models/militarybuilding/aa-gun-03.vw3d", "models/gr-02.vw2d"},
+	{150,	2,	"models/militarybuilding/aa-gun-04.vw3d", "models/gr-01.vw2d"},
+	{250,	2,	"models/militarybuilding/aa-gun-05.vw3d", "models/gr-03.vw2d"},
+	{50,	1,	"models/militarybuilding/artiler-gun-01.vw3d", "models/gr-03.vw2d"},
+	{200,	1,	"models/militarybuilding/artiler-gun-02.vw3d", "models/gr-01.vw2d"}
 };
 #define PresetMilitaryBuildingDataCount sizeof(PresetMilitaryBuildingData)/sizeof(PresetMilitaryBuildingData[0])
 

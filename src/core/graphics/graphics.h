@@ -144,7 +144,7 @@ struct sTextureWrap {
 	eTextureWrapMode R{eTextureWrapMode::REPEAT};
 
 	sTextureWrap() = default;
-	sTextureWrap(eTextureWrapMode param) :
+	explicit sTextureWrap(eTextureWrapMode param) :
 		S{param},
 		T{param},
 		R{param}
@@ -176,7 +176,7 @@ struct sTextureFilter {
 	eTextureMagFilter Mag{eTextureMagFilter::LINEAR};
 
 	sTextureFilter() = default;
-	sTextureFilter(eTextureBasicFilter Filter)
+	explicit sTextureFilter(eTextureBasicFilter Filter)
 	{
 		switch (Filter) {
 		case eTextureBasicFilter::NONE:
@@ -261,7 +261,7 @@ struct sCoverageModes {
 	int CoverageSamples{0};
 
 	sCoverageModes() = default;
-	sCoverageModes(int _ColorSamples, int _CoverageSamples) :
+	explicit sCoverageModes(int _ColorSamples, int _CoverageSamples) :
 		ColorSamples{_ColorSamples},
 		CoverageSamples{_CoverageSamples}
 	{}
@@ -573,7 +573,7 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar);
 void vw_End2DMode();
 // Draw transparent. Origin is upper left corner.
 void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bool Alpha, float Transp = 1.0f,
-	       float RotateAngle = 0.0f, const sRGBCOLOR &Color = {1.0f, 1.0f, 1.0f});
+	       float RotateAngle = 0.0f, const sRGBCOLOR &Color = sRGBCOLOR{1.0f, 1.0f, 1.0f});
 
 /*
  * misc

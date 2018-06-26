@@ -30,28 +30,28 @@
 
 
 struct sTrackedData {
-	float	Strength;
-	int		WeaponQuantity;
-	float	SpeedToRotate;
-	const	char *Name;
-	const	char *TextureName;
+	float Strength;
+	int WeaponQuantity;
+	float SpeedToRotate;
+	const char *Name;
+	const char *TextureName;
 };
 
-static sTrackedData PresetTrackedData[] = {
-	{250, 1,	60.0f,	"models/tracked/tank-01.vw3d",	"models/gr-01.vw2d"},
-	{200, 2,	45.0f,	"models/tracked/tank-03.vw3d",	"models/gr-01.vw2d"},
-	{300, 1,	45.0f,	"models/tracked/tank-05.vw3d",	"models/gr-06.vw2d"},
-	{300, 1,	55.0f,	"models/tracked/tank-06.vw3d",	"models/gr-03.vw2d"},
-	{400, 1,	60.0f,	"models/tracked/tank-07.vw3d",	"models/gr-06.vw2d"},
-	{250, 1,	70.0f,	"models/tracked/tank-08.vw3d",	"models/gr-01.vw2d"},
-	{400, 1,	60.0f,	"models/tracked/tank-09.vw3d",	"models/gr-01.vw2d"},
-	{300, 1,	60.0f,	"models/tracked/tank-10.vw3d",	"models/gr-03.vw2d"},
-	{350, 1,	60.0f,	"models/tracked/tank-11.vw3d",	"models/gr-03.vw2d"},
-	{300, 1,	60.0f,	"models/tracked/apc-01.vw3d",	"models/gr-03.vw2d"},
-	{400, 2,	60.0f,	"models/tracked/apc-03.vw3d",	"models/gr-03.vw2d"},
-	{250, 4,	60.0f,	"models/tracked/apc-aa-01.vw3d",	"models/gr-03.vw2d"},
-	{200, 2,	42.0f,	"models/tracked/apc-aa-02.vw3d",	"models/gr-02.vw2d"},
-	{50,  1,	50.0f,	"models/tracked/engineering-01.vw3d",	"models/gr-03.vw2d"}
+const sTrackedData PresetTrackedData[] = {
+	{250, 1,	60.0f,	"models/tracked/tank-01.vw3d", "models/gr-01.vw2d"},
+	{200, 2,	45.0f,	"models/tracked/tank-03.vw3d", "models/gr-01.vw2d"},
+	{300, 1,	45.0f,	"models/tracked/tank-05.vw3d", "models/gr-06.vw2d"},
+	{300, 1,	55.0f,	"models/tracked/tank-06.vw3d", "models/gr-03.vw2d"},
+	{400, 1,	60.0f,	"models/tracked/tank-07.vw3d", "models/gr-06.vw2d"},
+	{250, 1,	70.0f,	"models/tracked/tank-08.vw3d", "models/gr-01.vw2d"},
+	{400, 1,	60.0f,	"models/tracked/tank-09.vw3d", "models/gr-01.vw2d"},
+	{300, 1,	60.0f,	"models/tracked/tank-10.vw3d", "models/gr-03.vw2d"},
+	{350, 1,	60.0f,	"models/tracked/tank-11.vw3d", "models/gr-03.vw2d"},
+	{300, 1,	60.0f,	"models/tracked/apc-01.vw3d", "models/gr-03.vw2d"},
+	{400, 2,	60.0f,	"models/tracked/apc-03.vw3d", "models/gr-03.vw2d"},
+	{250, 4,	60.0f,	"models/tracked/apc-aa-01.vw3d", "models/gr-03.vw2d"},
+	{200, 2,	42.0f,	"models/tracked/apc-aa-02.vw3d", "models/gr-02.vw2d"},
+	{50,  1,	50.0f,	"models/tracked/engineering-01.vw3d", "models/gr-03.vw2d"}
 };
 #define PresetTrackedDataCount sizeof(PresetTrackedData)/sizeof(PresetTrackedData[0])
 

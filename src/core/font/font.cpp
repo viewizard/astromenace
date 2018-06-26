@@ -69,8 +69,8 @@ constexpr float GlobalFontOffsetY{2.0f}; // FIXME 'fix' for legacy related code,
 struct sTexturePos {
 	float left, top, right, bottom;
 
-	sTexturePos (const unsigned _left, const unsigned _top,
-		     const unsigned _right, const unsigned _bottom) :
+	explicit sTexturePos(const unsigned _left, const unsigned _top,
+			     const unsigned _right, const unsigned _bottom) :
 		/* we are safe with static_cast here, since size will not exceed 'float' */
 		left{static_cast<float>(_left)},
 		top{static_cast<float>(_top)},
@@ -85,9 +85,9 @@ struct sFontMetrics {
 	sIF_dual_type<unsigned, float> Width, Height;
 	float AdvanceX;
 
-	sFontMetrics (const int _X, const int _Y,
-		      const unsigned _Width, const unsigned _Height,
-		      const long _AdvanceX /* in 1/64th of points */) :
+	explicit sFontMetrics(const int _X, const int _Y,
+			      const unsigned _Width, const unsigned _Height,
+			      const long _AdvanceX /* in 1/64th of points */) :
 		X{_X},
 		Y{_Y},
 		Width{_Width},
@@ -105,10 +105,9 @@ struct sFontChar {
 	sTexturePos TexturePos;
 	sFontMetrics FontMetrics;
 
-	// constructor
-	sFontChar(char32_t _UTF32, const sIF_dual_type<unsigned, float> &_FontSize,
-		  const sTexturePos &_TexturePos,
-		  const sFontMetrics &_FontMetrics) :
+	explicit sFontChar(char32_t _UTF32, const sIF_dual_type<unsigned, float> &_FontSize,
+			   const sTexturePos &_TexturePos,
+			   const sFontMetrics &_FontMetrics) :
 		UTF32{_UTF32},
 		FontSize{_FontSize},
 		TexturePos{_TexturePos},
@@ -283,8 +282,9 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 		std::string FakeTextureFileName{"fontsize_" + std::to_string(InternalFontSize.i()) +
 						"_character_" + std::to_string(UTF32)};
 
-		vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1,
-				  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
+		vw_SetTextureProp(sTextureFilter{eTextureBasicFilter::BILINEAR}, 1,
+				  sTextureWrap{eTextureWrapMode::CLAMP_TO_EDGE},
+				  true, eAlphaCreateMode::GREYSC, false);
 		FontCharsList.front()->Texture = vw_CreateTextureFromMemory(FakeTextureFileName, tmpPixels,
 									    FontCharsList.front()->FontMetrics.Width.i(),
 									    FontCharsList.front()->FontMetrics.Height.i(),
@@ -388,8 +388,9 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 	}
 
 	// create texture from bitmap
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1,
-			  eTextureWrapMode::CLAMP_TO_EDGE, true, eAlphaCreateMode::GREYSC, false);
+	vw_SetTextureProp(sTextureFilter{eTextureBasicFilter::BILINEAR}, 1,
+			  sTextureWrap{eTextureWrapMode::CLAMP_TO_EDGE},
+			  true, eAlphaCreateMode::GREYSC, false);
 	std::string tmpTextureName{"auto_generated_texture_for_fonts_" +
 				   std::to_string(SDL_GetTicks()) + "_" +
 				   std::to_string(InternalFontSize.i())};

@@ -81,7 +81,7 @@ struct sVFS {
 	std::string FileName;
 	SDL_RWops *File{nullptr};
 
-	sVFS(const std::string &_FileName) :
+	explicit sVFS(const std::string &_FileName) :
 		FileName{_FileName}
 	{}
 	~sVFS()
@@ -97,7 +97,7 @@ struct sVFS_Entry {
 	uint32_t Size{0};
 	sVFS *Parent{nullptr};
 
-	sVFS_Entry(sVFS *_Parent) :
+	explicit sVFS_Entry(sVFS *_Parent) :
 		Parent{_Parent}
 	{}
 };

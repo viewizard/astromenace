@@ -31,32 +31,31 @@
 
 
 struct sAlienSpaceFighterData {
-
 	unsigned int WeaponQuantity;
 	unsigned int EngineQuantity;
-	float	Strength;
-	float	ShieldStrength;
-	const	char *Name;
+	float Strength;
+	float ShieldStrength;
+	const char *Name;
 };
 
-static sAlienSpaceFighterData PresetAlienSpaceFighterData[] = {
+const sAlienSpaceFighterData PresetAlienSpaceFighterData[] = {
 	{1,	4,	5,	0,	"models/alienfighter/al-01.vw3d"},
 	{1,	5,	15,	0,	"models/alienfighter/al-02.vw3d"},
 	{1,	5,	60,	0,	"models/alienfighter/al-03.vw3d"},
 	{4,	8,	40,	0, 	"models/alienfighter/al-04.vw3d"},
 	{1,	7,	30,	0,	"models/alienfighter/al-05.vw3d"},
-	{1,	6,	120,0,	"models/alienfighter/al-06.vw3d"},
-	{1,	8,	250,100,"models/alienfighter/al-07.vw3d"},
-	{1,	7,	200,50,	"models/alienfighter/al-08.vw3d"},
-	{2,	11,	500,200,"models/alienfighter/al-09.vw3d"},
-	{1,	7,	250,50,	"models/alienfighter/al-10.vw3d"},
-	{2,	6,	150,100,"models/alienfighter/al-11.vw3d"},
-	{1,	5,	200,100,"models/alienfighter/al-12.vw3d"},
-	{2,	5,	300,200,"models/alienfighter/al-13.vw3d"},
-	{2,	8,	400,300,"models/alienfighter/al-14.vw3d"},
-	{6,	4,	50,100,	"models/alienfighter/al-15.vw3d"},
-	{3,	4,	100,150,"models/alienfighter/al-16.vw3d"},
-	{5,	6,	150,200,"models/alienfighter/al-17.vw3d"}
+	{1,	6,	120,	0,	"models/alienfighter/al-06.vw3d"},
+	{1,	8,	250,	100,	"models/alienfighter/al-07.vw3d"},
+	{1,	7,	200,	50,	"models/alienfighter/al-08.vw3d"},
+	{2,	11,	500,	200,	"models/alienfighter/al-09.vw3d"},
+	{1,	7,	250,	50,	"models/alienfighter/al-10.vw3d"},
+	{2,	6,	150,	100,	"models/alienfighter/al-11.vw3d"},
+	{1,	5,	200,	100,	"models/alienfighter/al-12.vw3d"},
+	{2,	5,	300,	200,	"models/alienfighter/al-13.vw3d"},
+	{2,	8,	400,	300,	"models/alienfighter/al-14.vw3d"},
+	{6,	4,	50,	100,	"models/alienfighter/al-15.vw3d"},
+	{3,	4,	100,	150,	"models/alienfighter/al-16.vw3d"},
+	{5,	6,	150,	200,	"models/alienfighter/al-17.vw3d"}
 };
 #define PresetAlienSpaceFighterDataCount sizeof(PresetAlienSpaceFighterData)/sizeof(PresetAlienSpaceFighterData[0])
 

@@ -31,26 +31,25 @@
 
 
 struct sAlienSpaceMotherShipData {
-
 	unsigned int WeaponQuantity;
 	unsigned int BossWeaponQuantity;
 	unsigned int EngineQuantity;
-	float	Strength;
-	float	ShieldStrength;
-	const	char *Name;
-	const	char *Texture;
-	const	char *TextureIllum;
+	float Strength;
+	float ShieldStrength;
+	const char *Name;
+	const char *Texture;
+	const char *TextureIllum;
 };
 
-static sAlienSpaceMotherShipData PresetAlienSpaceMotherShipData[] = {
-	{14,1,	10,	3000, 1500,	"models/alienmothership/alm-01.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
-	{8,	8,	10,	4000, 3000,	"models/alienmothership/alm-02.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
-	{8,	1,	8,	5000, 3300,	"models/alienmothership/alm-03.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
-	{8,	8,	12,	6000, 3500,	"models/alienmothership/alm-04.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
-	{8,	6,	19,	7000, 3800,	"models/alienmothership/alm-05.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
-	{12,6,	15,	8000, 4000,	"models/alienmothership/alm-06.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
-	{5,	2,	6,	9000, 4300,	"models/alienmothership/alm-07.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"},
-	{4,	6,	10,	10000,4500,	"models/alienmothership/alm-08.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"}
+const sAlienSpaceMotherShipData PresetAlienSpaceMotherShipData[] = {
+	{14,	1,	10,	3000,	1500,	"models/alienmothership/alm-01.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
+	{8,	8,	10,	4000,	3000,	"models/alienmothership/alm-02.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
+	{8,	1,	8,	5000,	3300,	"models/alienmothership/alm-03.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
+	{8,	8,	12,	6000,	3500,	"models/alienmothership/alm-04.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
+	{8,	6,	19,	7000,	3800,	"models/alienmothership/alm-05.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
+	{12,	6,	15,	8000,	4000,	"models/alienmothership/alm-06.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
+	{5,	2,	6,	9000,	4300,	"models/alienmothership/alm-07.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"},
+	{4,	6,	10,	10000,	4500,	"models/alienmothership/alm-08.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"}
 };
 #define PresetAlienSpaceMotherShipDataCount sizeof(PresetAlienSpaceMotherShipData)/sizeof(PresetAlienSpaceMotherShipData[0])
 

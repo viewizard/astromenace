@@ -91,7 +91,7 @@ struct sViewSize {
 	int Height{0};
 
 	sViewSize() = default;
-	sViewSize(int _Width, int _Height) :
+	explicit sViewSize(int _Width, int _Height) :
 		Width{_Width},
 		Height{_Height}
 	{}

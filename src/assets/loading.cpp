@@ -137,7 +137,7 @@ static void DrawLoadProgress(unsigned int Current, unsigned int AllDrawLoading, 
 	// "LOADING" text
 	vw_DrawText(GameConfig().InternalWidth / 2 - vw_TextWidth(vw_GetText("LOADING")) / 2,
 		    GameConfig().InternalHeight - 16/*progress bar width*/ - 16/*font size*/ - CenterdPositionY,
-		    0, 0, 1.0f, eRGBCOLOR::white, 1.0f, vw_GetText("LOADING"));
+		    0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 1.0f, vw_GetText("LOADING"));
 
 	// progress bar border
 	SrcRect(0, 0, 256, 16);
@@ -194,7 +194,8 @@ void LoadAllGameAssets()
 
 	// Viewizard logo
 	vw_SetTextureAlpha(0, 0, 0);
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
+	vw_SetTextureProp(sTextureFilter{eTextureBasicFilter::BILINEAR}, 1,
+			  sTextureWrap{eTextureWrapMode::CLAMP_TO_EDGE},
 			  false, eAlphaCreateMode::EQUAL, false);
 	GLtexture ViewizardLogo = vw_LoadTexture("loading/viewizardlogo.tga");
 	DrawViewizardLogo(ViewizardLogo);
@@ -202,11 +203,13 @@ void LoadAllGameAssets()
 
 	// background with progress bar
 	vw_SetTextureAlpha(0, 0, 0);
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
+	vw_SetTextureProp(sTextureFilter{eTextureBasicFilter::BILINEAR}, 1,
+			  sTextureWrap{eTextureWrapMode::CLAMP_TO_EDGE},
 			  true, eAlphaCreateMode::GREYSC, false);
 	GLtexture ProgressBar = vw_LoadTexture("loading/loading_line.tga");
 	GLtexture ProgressBarBorder = vw_LoadTexture("loading/loading_back.tga");
-	vw_SetTextureProp(eTextureBasicFilter::BILINEAR, 1, eTextureWrapMode::CLAMP_TO_EDGE,
+	vw_SetTextureProp(sTextureFilter{eTextureBasicFilter::BILINEAR}, 1,
+			  sTextureWrap{eTextureWrapMode::CLAMP_TO_EDGE},
 			  false, eAlphaCreateMode::GREYSC, false);
 	GLtexture Background = vw_LoadTexture("loading/loading0" + std::to_string(1 + vw_iRandNum(3)) + ".tga");
 

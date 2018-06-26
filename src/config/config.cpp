@@ -69,7 +69,7 @@ sGameConfig &ChangeGameConfig()
  */
 void ConfigVirtualInternalResolution()
 {
-	if (StandardAspectRation({GameConfig().Width, GameConfig().Height})) {
+	if (StandardAspectRation(sViewSize{GameConfig().Width, GameConfig().Height})) {
 		ChangeGameConfig().InternalWidth = config::VirtualWidth_Standard;
 		ChangeGameConfig().InternalHeight = config::VirtualHeight_Standard;
 	} else {

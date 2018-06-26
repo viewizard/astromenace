@@ -34,7 +34,7 @@ struct sVECTOR3D {
 	float x{0.0f}, y{0.0f}, z{0.0f};
 
 	sVECTOR3D() = default;
-	sVECTOR3D(float _x, float _y, float _z) :
+	explicit sVECTOR3D(float _x, float _y, float _z) :
 		x{_x},
 		y{_y},
 		z{_z}
@@ -128,8 +128,8 @@ struct sVECTOR3D {
 struct sRECT {
 	int left{0}, top{0}, right{0}, bottom{0};
 
-	sRECT () = default;
-	sRECT (const int _left, const int _top, const int _right, const int _bottom) :
+	sRECT() = default;
+	explicit sRECT(const int _left, const int _top, const int _right, const int _bottom) :
 		left{_left},
 		top{_top},
 		right{_right},
@@ -148,9 +148,12 @@ struct sRECT {
 template <class Facet>
 struct deletable_facet : Facet
 {
-    template<class ...Args>
-    deletable_facet(Args&& ...args) : Facet(std::forward<Args>(args)...) {}
-    ~deletable_facet() {}
+	template<class ...Args>
+	deletable_facet(Args&& ...args) :
+		Facet(std::forward<Args>(args)...)
+	{}
+	~deletable_facet()
+	{}
 };
 // Convert utf8 to utf32: ConvertUTF8.from_bytes(utf8)
 // Convert utf32 to utf8: ConvertUTF8.to_bytes(utf32)

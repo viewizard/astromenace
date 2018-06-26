@@ -621,356 +621,356 @@ void InformationObject3DText(int ObjectNum)
 	// общее для файтеров землян
 	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Space Ship"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Space Ship"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Ship Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(GetShipGroupTitle(ObjectNum-InfoFighterStart+1)));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Ship Type:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(GetShipGroupTitle(ObjectNum-InfoFighterStart+1)));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Codename:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(GetWorkshopShipName(ObjectNum-InfoFighterStart+1)));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Codename:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(GetWorkshopShipName(ObjectNum-InfoFighterStart+1)));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Earth Federation"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Earth Federation"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Ally"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Ally"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp,  "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp,  "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", InfoObjectWeaponQuantity, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", InfoObjectWeaponQuantity, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Engines:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", InfoObjectEngineQuantity, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Engines:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", InfoObjectEngineQuantity, vw_GetText("units"));
 	}
 	// оружие для кораблей землян
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
 		if (CreateNum<InfoWeaponStart+15)
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon, Cannon"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon, Cannon"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon, Launcher"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon, Launcher"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CreateNum-InfoWeaponStart+1)));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Type:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CreateNum-InfoWeaponStart+1)));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Codename:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText(GetWeaponName(CreateNum-InfoWeaponStart+1)));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Codename:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(GetWeaponName(CreateNum-InfoWeaponStart+1)));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Earth Federation"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Earth Federation"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Hull:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
 		    (CreateNum-InfoWeaponStart+1 == 12) |
 		    (CreateNum-InfoWeaponStart+1 == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Systems:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
 		    (CreateNum-InfoWeaponStart+1 == 12) |
 		    (CreateNum-InfoWeaponStart+1 == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Energy Use:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%3.1f %s", InfoObjectEnergyUse, vw_GetText("units per shot"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Energy Use:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%3.1f %s", InfoObjectEnergyUse, vw_GetText("units per shot"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Ammo:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", InfoObjectAmmo, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Ammo:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", InfoObjectAmmo, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Reload:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%3.1f %s", InfoObjectReload, vw_GetText("seconds"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Reload:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%3.1f %s", InfoObjectReload, vw_GetText("seconds"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Range:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%3.1f %s", InfoObjectRange, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Range:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%3.1f %s", InfoObjectRange, vw_GetText("units"));
 
 	}
 	// мины
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Weapon"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Space Mine"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Type:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Space Mine"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Pirates"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage, Hull:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "100 %s", vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "100 %s", vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage, Systems:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "0 %s", vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "0 %s", vw_GetText("units"));
 		Y1 += Offset;
 
 
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Targeting System"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Targeting System"));
 		if (CreateNum == InfoMineStart)
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("No"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("No"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Yes"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Yes"));
 		Y1 += Offset;
 
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Auto Cannon:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Auto Cannon:"));
 		if (CreateNum == InfoMineStart+2)
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Yes"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Yes"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("No"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("No"));
 		Y1 += Offset;
 
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Auto Launcher:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Auto Launcher:"));
 		if (CreateNum == InfoMineStart+3)
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Yes"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Yes"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("No"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("No"));
 		Y1 += Offset;
 
 	}
 	// общее для файтеров пришельцев
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Space Ship"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Space Ship"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Ship Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Unknown"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Ship Type:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Unknown"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Unknown"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 	}
 	// общее для MotherShip пришельцев
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("MotherShip"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("MotherShip"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Ship Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Unknown"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Ship Type:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Unknown"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Unknown"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Unknown"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 50, 500, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 50, 500, vw_GetText("units"));
 	}
 	// общее для пиратов
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Pirate Ship"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Pirate Ship"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Ship Type:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Ship Type:"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Pirates"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage:"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 	}
 	// общее для зданий
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Civilian Building"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Civilian Building"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Old Republic"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Old Republic"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Indestructible"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Indestructible"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 	}
 	// общее для наземных войск
 	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Military Building"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Military Building"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Type:"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "Civilian Building");
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Type:"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Pirates"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "Kinetic");
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage:"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
 	}
 	// общее для колесного
 	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Wheeled Vehicle"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Wheeled Vehicle"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Type:"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "Civilian Building");
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Type:"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Pirates"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "Kinetic");
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage:"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
 	}
 	// общее для гусенечного
 	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
 		Y1 += Offset+5;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Object Class:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Tracked Vehicle"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Object Class:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Tracked Vehicle"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Type:"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "Civilian Building");
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Type:"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "Civilian Building");
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Pirates"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Status:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Enemy"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "Kinetic");
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "Kinetic");
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, eRGBCOLOR::yellow, MenuContentTransp, vw_GetText("Damage:"));
-		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage:"));
+		//	vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
 	}
 
 
@@ -988,64 +988,64 @@ void InformationObject3DText(int ObjectNum)
 	case InfoPirateShipStart+2:
 	case InfoPirateShipStart+3:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Marauder"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Marauder"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+4:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Warder"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Warder"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+5:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Raider"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Raider"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+6:
 	case InfoPirateShipStart+7:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Missile Carrier"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Missile Carrier"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+8:
 	case InfoPirateShipStart+9:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Battle Freighter"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Battle Freighter"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+10:
 	case InfoPirateShipStart+11:
 	case InfoPirateShipStart+12:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Missile Carrier"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Missile Carrier"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 50, 300, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 50, 300, vw_GetText("units"));
 		break;
 	case InfoPirateShipStart+13:
 	case InfoPirateShipStart+14:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Battle Freighter"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Battle Freighter"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 50, 200, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 50, 200, vw_GetText("units"));
 		break;
 
 
@@ -1056,104 +1056,104 @@ void InformationObject3DText(int ObjectNum)
 	case InfoMilitaryBuildingStart:
 	case InfoMilitaryBuildingStart+5:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Cannon"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Cannon"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 30, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 30, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+3:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("MachineGun"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("MachineGun"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+1:
 	case InfoMilitaryBuildingStart+6:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Turbo Cannon"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Turbo Cannon"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+2:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Missile Launcher"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Missile Launcher"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 		break;
 	case InfoMilitaryBuildingStart+4:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Cannon Turret"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Cannon Turret"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 
 
 	// для колесного транспорта
 	case InfoWheeledStart:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Armored Jeep"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Armored Jeep"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+1:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Jeep"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Jeep"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+2:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Armored Jeep"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Armored Jeep"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+3:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Jeep"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Jeep"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Ion"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Ion"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+4:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Armored Jeep"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Armored Jeep"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Antimatter"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Antimatter"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+5:
 	case InfoWheeledStart+6:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("APC"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("APC"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
 		break;
 	case InfoWheeledStart+7:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Missile Launcher"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Missile Launcher"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
 		break;
 
 
@@ -1164,55 +1164,55 @@ void InformationObject3DText(int ObjectNum)
 	case InfoTrackedStart+6:
 	case InfoTrackedStart+8:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Tank"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Tank"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+2:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Tank"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Tank"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Plasma"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Plasma"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+3:
 	case InfoTrackedStart+4:
 	case InfoTrackedStart+7:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Tank"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Tank"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Antimatter"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Antimatter"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+9:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("APC"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("APC"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Kinetic"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+10:
 	case InfoTrackedStart+11:
 	case InfoTrackedStart+12:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Missile Launcher"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Missile Launcher"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Propelled"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
 		break;
 	case InfoTrackedStart+13:
 		Y1 += Offset+Offset+5;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Engineer"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Engineer"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, vw_GetText("Non-combatant"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Non-combatant"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, eRGBCOLOR::white, MenuContentTransp, "%i %s", 0, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", 0, vw_GetText("units"));
 		break;
 
 

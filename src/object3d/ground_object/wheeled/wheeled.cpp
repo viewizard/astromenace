@@ -30,22 +30,22 @@
 
 
 struct sWheeledData {
-	float	Strength;
-	int		WeaponQuantity;
-	float 	SpeedToRotate;
-	const	char *Name;
-	const	char *TextureName;
+	float Strength;
+	int WeaponQuantity;
+	float SpeedToRotate;
+	const char *Name;
+	const char *TextureName;
 };
 
-static sWheeledData PresetWheeledData[] = {
-	{120, 4,	50.0f,	"models/wheeled/jeep-01.vw3d",	"models/gr-02.vw2d"},
-	{70, 2,		50.0f,	"models/wheeled/jeep-02.vw3d",	"models/gr-02.vw2d"},
-	{100, 2,	50.0f,	"models/wheeled/jeep-03.vw3d",	"models/gr-02.vw2d"},
-	{100, 1,	50.0f,	"models/wheeled/jeep-04.vw3d",	"models/gr-07.vw2d"},
-	{150, 1,	50.0f,	"models/wheeled/jeep-05.vw3d",	"models/gr-03.vw2d"},
-	{250,1,		30.0f,	"models/wheeled/apc-02.vw3d",	"models/gr-03.vw2d"},
-	{200, 2,	30.0f,	"models/wheeled/apc-04.vw3d",	"models/gr-01.vw2d"},
-	{400,2,		34.0f,	"models/wheeled/r-launcher-01.vw3d",	"models/gr-02.vw2d"}
+const sWheeledData PresetWheeledData[] = {
+	{120, 4,	50.0f,	"models/wheeled/jeep-01.vw3d", "models/gr-02.vw2d"},
+	{70, 2,		50.0f,	"models/wheeled/jeep-02.vw3d", "models/gr-02.vw2d"},
+	{100, 2,	50.0f,	"models/wheeled/jeep-03.vw3d", "models/gr-02.vw2d"},
+	{100, 1,	50.0f,	"models/wheeled/jeep-04.vw3d", "models/gr-07.vw2d"},
+	{150, 1,	50.0f,	"models/wheeled/jeep-05.vw3d", "models/gr-03.vw2d"},
+	{250,1,		30.0f,	"models/wheeled/apc-02.vw3d", "models/gr-03.vw2d"},
+	{200, 2,	30.0f,	"models/wheeled/apc-04.vw3d", "models/gr-01.vw2d"},
+	{400,2,		34.0f,	"models/wheeled/r-launcher-01.vw3d", "models/gr-02.vw2d"}
 };
 #define PresetWheeledDataCount sizeof(PresetWheeledData)/sizeof(PresetWheeledData[0])
 

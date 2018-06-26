@@ -215,14 +215,14 @@ private:
 	// Initialized with huge numbers, to be sure, that particle system
 	// will be rendered for sure (in case we pre generate particles and
 	// call Draw() before Update()).
-	sVECTOR3D AABB[8]{{-1000000.0f, 1000000.0f, -1000000.0f},
-			  {-1000000.0f, 1000000.0f, -1000000.0f},
-			  {-1000000.0f, 1000000.0f, -1000000.0f},
-			  {-1000000.0f, 1000000.0f, -1000000.0f},
-			  {-1000000.0f, 1000000.0f, -1000000.0f},
-			  {-1000000.0f, 1000000.0f, -1000000.0f},
-			  {-1000000.0f, 1000000.0f, -1000000.0f},
-			  {-1000000.0f, 1000000.0f, -1000000.0f}};
+	sVECTOR3D AABB[8]{sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f},
+			  sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f},
+			  sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f},
+			  sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f},
+			  sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f},
+			  sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f},
+			  sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f},
+			  sVECTOR3D{-1000000.0f, 1000000.0f, -1000000.0f}};
 
 	// particles
 	std::forward_list<cParticle> ParticlesList{};

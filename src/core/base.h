@@ -60,12 +60,12 @@ struct sRGBCOLOR {
 	float b{0.0f};
 
 	sRGBCOLOR() = default;
-	sRGBCOLOR(float _r, float _g, float _b) :
+	explicit sRGBCOLOR(float _r, float _g, float _b) :
 		r{_r},
 		g{_g},
 		b{_b}
 	{}
-	sRGBCOLOR(eRGBCOLOR color)
+	explicit sRGBCOLOR(eRGBCOLOR color)
 	{
 		switch (color) {
 		case eRGBCOLOR::white:
@@ -129,7 +129,8 @@ struct sRGBCOLOR {
 // functor in order to use enumeration as a key (std::map, std::unordered_map, std::unordered_multimap)
 struct sEnumHash {
 	template <typename T>
-	std::size_t operator()(T t) const {
+	std::size_t operator () (T t) const
+	{
 		return static_cast<std::size_t>(t);
 	}
 };
@@ -152,7 +153,7 @@ template <typename I, typename F>
 struct sIF_dual_type {
 public:
 	// caller should guarantee, that integral value will not exceed floating point value size
-	sIF_dual_type(const I _i) :
+	explicit sIF_dual_type(const I _i) :
 		__i{_i},
 		__f{static_cast<F>(_i)}
 	{
@@ -168,6 +169,13 @@ public:
 	float f()
 	{
 		return __f;
+	}
+
+	// caller should guarantee, that integral value will not exceed floating point value size
+	void operator = (const I _i)
+	{
+		__i = _i;
+		__f = static_cast<F>(_i);
 	}
 
 	// caller should guarantee, that integral value will not exceed floating point value size

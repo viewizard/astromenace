@@ -141,7 +141,7 @@ void CreditsMenu()
 			const char *tmpText = vw_GetText(CreditsArray[i].c_str());
 			int CenteredX = (GameConfig().InternalWidth - vw_TextWidth(tmpText)) / 2;
 			vw_DrawText(CenteredX, TextY, 0, 0, 1.0f,
-				    tmpColor, tmpTransp * MenuContentTransp,
+				    sRGBCOLOR{tmpColor}, tmpTransp * MenuContentTransp,
 				    tmpText);
 		}
 		TextY += Offset;

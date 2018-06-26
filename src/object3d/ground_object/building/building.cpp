@@ -31,11 +31,11 @@
 
 
 struct sBuildingData {
-	float	Strength;
-	const	char *Name;
+	float Strength;
+	const char *Name;
 };
 
-static sBuildingData PresetBuildingData[] = {
+const sBuildingData PresetBuildingData[] = {
 	{150,	"models/building/bld-01.vw3d"},
 	{150,	"models/building/bld-02.vw3d"},
 	{150,	"models/building/bld-03.vw3d"},

@@ -80,7 +80,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	int Prir1 = 55;
 
 
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Music Volume"));
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Music Volume"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().MusicVolume == 0))) {
 		ChangeGameConfig().MusicVolume--;
 		if (GameConfig().MusicVolume < 0)
@@ -95,7 +95,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 	if (!vw_GetAudioStatus()) {
 		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
+		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetText("Not available"));
 	} else {
 		for (int i = 0; i < 10; i++) {
 			SrcRect(0 ,0, 16, 32);
@@ -122,7 +122,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Voice Volume"));
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Voice Volume"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 0), false)) {
 		ChangeGameConfig().VoiceVolume--;
 		if (GameConfig().VoiceVolume < 0)
@@ -139,7 +139,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 	if (!vw_GetAudioStatus()) {
 		int SizeI = (170 - vw_TextWidth(vw_GetText("Not available"))) / 2;
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
+		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetText("Not available"));
 	} else {
 		for (int i = 0; i < 10; i++) {
 			SrcRect(0, 0, 16, 32);
@@ -166,7 +166,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Sound Effects Volume"));
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Sound Effects Volume"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().SoundVolume == 0))) {
 		ChangeGameConfig().SoundVolume--;
 		if (GameConfig().SoundVolume < 0)
@@ -181,7 +181,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 	if (!vw_GetAudioStatus()) {
 		int SizeI = (170-vw_TextWidth(vw_GetText("Not available")))/2;
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::orange, ContentTransp, vw_GetText("Not available"));
+		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetText("Not available"));
 	} else {
 		for (int i=0; i<10; i++) {
 			SrcRect(0,0,16,32);
@@ -205,7 +205,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Full Screen"));
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Full Screen"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, DetectWindowSizeArray().empty() || !Options_Fullscreen) ||
 	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, DetectFullscreenSize().empty() || Options_Fullscreen)) {
 		Options_Fullscreen = !Options_Fullscreen;
@@ -225,13 +225,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 	int Size = vw_TextWidth(Options_Fullscreen ? vw_GetText("On") : vw_GetText("Off"));
 	int SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, Options_Fullscreen ? vw_GetText("On") : vw_GetText("Off"));
+	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, Options_Fullscreen ? vw_GetText("On") : vw_GetText("Off"));
 
 
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Window Size"));
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Window Size"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, DetectWindowSizeArray().empty() || Options_Fullscreen)) {
 		auto iter = std::find(DetectWindowSizeArray().cbegin(),
 				      DetectWindowSizeArray().cend(),
@@ -262,7 +262,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	std::string VideoModeTitle{std::to_string(Options_Width) + "x" + std::to_string(Options_Height)};
 	Size = vw_TextWidth(VideoModeTitle.c_str());
 	SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, VideoModeTitle.c_str());
+	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, VideoModeTitle.c_str());
 
 
 
@@ -271,7 +271,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Sync to VBlank"));
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Sync to VBlank"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !Options_VSync) ||
 	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, Options_VSync))
 		if (NeedCheck == 0) {
@@ -282,7 +282,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		}
 	Size = vw_TextWidth(Options_VSync ? vw_GetText("On") : vw_GetText("Off"));
 	SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, eRGBCOLOR::white, ContentTransp, Options_VSync ? vw_GetText("On") : vw_GetText("Off"));
+	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, Options_VSync ? vw_GetText("On") : vw_GetText("Off"));
 
 
 
@@ -291,7 +291,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, eRGBCOLOR::white, ContentTransp, vw_GetText("Brightness"));
+	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Brightness"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, (GameConfig().Brightness <= 1))) {
 		ChangeGameConfig().Brightness--;
 		if (GameConfig().Brightness <= 1)
