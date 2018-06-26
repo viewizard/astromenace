@@ -40,12 +40,12 @@ unsigned int CurrentLoadedVoiceAssetsLanguage{0}; // English
 
 struct sSoundMetadata {
 	std::string FileName{};
-	float VolumeCorrection{0.0f};
+	float VolumeCorrection{1.0f};
 	bool AllowStop{true}; // allow stop this sfx in vw_StopAllSoundsIfAllowed()
 
 	explicit sSoundMetadata(const std::string &_FileName,
-				float _VolumeCorrection,
-				bool _AllowStop) :
+				float _VolumeCorrection = 1.0f,
+				bool _AllowStop = true) :
 		FileName{_FileName},
 		VolumeCorrection{_VolumeCorrection},
 		AllowStop{_AllowStop}
@@ -55,13 +55,13 @@ struct sSoundMetadata {
 struct sMusicMetadata {
 	std::string FileName{};
 	std::string FileNameLoop{};
-	float VolumeCorrection{0.0f};
+	float VolumeCorrection{1.0f};
 	bool NeedRelease{false}; // if this music theme playing now - release it first
 
 	explicit sMusicMetadata(const std::string &_FileName,
-				const std::string &_FileNameLoop,
-				float _VolumeCorrection,
-				bool _NeedRelease) :
+				const std::string &_FileNameLoop = std::string{},
+				float _VolumeCorrection = 1.0f,
+				bool _NeedRelease = false) :
 		FileName{_FileName},
 		FileNameLoop{_FileNameLoop},
 		VolumeCorrection{_VolumeCorrection},
@@ -74,80 +74,80 @@ const std::unordered_map<eMenuSFX, sSoundMetadata, sEnumHash> MenuSFXMap{
 	{eMenuSFX::OverSmallButton,		sSoundMetadata{"sfx/menu_onbutton2.wav", 0.15f, false}},
 	{eMenuSFX::OverBigButton,		sSoundMetadata{"sfx/menu_onbutton.wav", 0.4f, false}},
 	{eMenuSFX::Click,			sSoundMetadata{"sfx/menu_click.wav", 0.6f, false}},
-	{eMenuSFX::SwitchToAnotherMenu,		sSoundMetadata{"sfx/menu_new.wav", 1.0f, true}},
-	{eMenuSFX::TapingClick,			sSoundMetadata{"sfx/menu_taping.wav", 0.8f, true}},
-	{eMenuSFX::OverLine,			sSoundMetadata{"sfx/menu_online.wav", 0.75f, true}},
-	{eMenuSFX::SelectLine,			sSoundMetadata{"sfx/menu_selectline.wav", 1.0f, true}},
+	{eMenuSFX::SwitchToAnotherMenu,		sSoundMetadata{"sfx/menu_new.wav"}},
+	{eMenuSFX::TapingClick,			sSoundMetadata{"sfx/menu_taping.wav", 0.8f}},
+	{eMenuSFX::OverLine,			sSoundMetadata{"sfx/menu_online.wav", 0.75f}},
+	{eMenuSFX::SelectLine,			sSoundMetadata{"sfx/menu_selectline.wav"}},
 	{eMenuSFX::CanNotClick,			sSoundMetadata{"sfx/menu_nclick.wav", 1.0f, false}},
-	{eMenuSFX::DragError,			sSoundMetadata{"sfx/drag_error.wav", 1.0f, true}},
-	{eMenuSFX::DragUninstallFromSlot,	sSoundMetadata{"sfx/drag_offslot.wav", 0.65f, true}},
-	{eMenuSFX::DragInstallToSlot,		sSoundMetadata{"sfx/drag_onslot.wav", 0.82f, true}},
-	{eMenuSFX::DragRelease,			sSoundMetadata{"sfx/drag_release.wav", 0.6f, true}},
+	{eMenuSFX::DragError,			sSoundMetadata{"sfx/drag_error.wav"}},
+	{eMenuSFX::DragUninstallFromSlot,	sSoundMetadata{"sfx/drag_offslot.wav", 0.65f}},
+	{eMenuSFX::DragInstallToSlot,		sSoundMetadata{"sfx/drag_onslot.wav", 0.82f}},
+	{eMenuSFX::DragRelease,			sSoundMetadata{"sfx/drag_release.wav", 0.6f}},
 	{eMenuSFX::MissionShowMenu,		sSoundMetadata{"sfx/game_showmenu.wav", 1.0f, false}},
 	{eMenuSFX::MissionHideMenu,		sSoundMetadata{"sfx/game_hidemenu.wav", 1.0f, false}},
-	{eMenuSFX::WarningLowLife,		sSoundMetadata{"sfx/lowlife.wav", 1.0f, true}}
+	{eMenuSFX::WarningLowLife,		sSoundMetadata{"sfx/lowlife.wav"}}
 };
 
 const std::unordered_map<eGameSFX, sSoundMetadata, sEnumHash> GameSFXMap{
 	// key					metadata
-	{eGameSFX::WeaponMalfunction_Kinetic,	sSoundMetadata{"sfx/weapon1probl.wav", 1.0f, true}},
-	{eGameSFX::WeaponMalfunction_Particle,	sSoundMetadata{"sfx/weapon2probl.wav", 1.0f, true}},
-	{eGameSFX::WeaponMalfunction_Beam,	sSoundMetadata{"sfx/weapon3probl.wav", 1.0f, true}},
-	{eGameSFX::WeaponMalfunction_Energy,	sSoundMetadata{"sfx/weapon4probl.wav", 1.0f, true}},
-	{eGameSFX::WeaponMalfunction_Launcher,	sSoundMetadata{"sfx/weapon5probl.wav", 1.0f, true}},
-	{eGameSFX::Explosion_Small,		sSoundMetadata{"sfx/explosion4.wav", 1.0f, true}},
-	{eGameSFX::Explosion_Medium,		sSoundMetadata{"sfx/explosion1.wav", 1.0f, true}},
-	{eGameSFX::Explosion_Big,		sSoundMetadata{"sfx/explosion2.wav", 1.0f, true}},
-	{eGameSFX::Explosion_Big_Energy,	sSoundMetadata{"sfx/explosion3.wav", 1.0f, true}},
-	{eGameSFX::WeaponFire_Kinetic1,		sSoundMetadata{"sfx/weaponfire1.wav", 0.7f, true}},
-	{eGameSFX::WeaponFire_Kinetic2,		sSoundMetadata{"sfx/weaponfire2.wav", 0.65f, true}},
-	{eGameSFX::WeaponFire_Kinetic3,		sSoundMetadata{"sfx/weaponfire3.wav", 0.7f, true}},
-	{eGameSFX::WeaponFire_Kinetic4,		sSoundMetadata{"sfx/weaponfire4.wav", 1.0f, true}},
-	{eGameSFX::WeaponFire_Ion1,		sSoundMetadata{"sfx/weaponfire5.wav", 1.0f, true}},
-	{eGameSFX::WeaponFire_Ion2,		sSoundMetadata{"sfx/weaponfire6.wav", 1.0f, true}},
-	{eGameSFX::WeaponFire_Ion3,		sSoundMetadata{"sfx/weaponfire7.wav", 0.7f, true}},
-	{eGameSFX::WeaponFire_Plasma1,		sSoundMetadata{"sfx/weaponfire8.wav", 0.85f, true}},
-	{eGameSFX::WeaponFire_Plasma2,		sSoundMetadata{"sfx/weaponfire9.wav", 0.95f, true}},
-	{eGameSFX::WeaponFire_Plasma3,		sSoundMetadata{"sfx/weaponfire10.wav", 0.9f, true}},
-	{eGameSFX::WeaponFire_Maser1,		sSoundMetadata{"sfx/weaponfire11.wav", 0.6f, true}},
-	{eGameSFX::WeaponFire_Maser2,		sSoundMetadata{"sfx/weaponfire12.wav", 0.55f, true}},
-	{eGameSFX::WeaponFire_Antimatter,	sSoundMetadata{"sfx/weaponfire13.wav", 0.9f, true}},
-	{eGameSFX::WeaponFire_Laser,		sSoundMetadata{"sfx/weaponfire14.wav", 0.8f, true}},
-	{eGameSFX::WeaponFire_Gauss,		sSoundMetadata{"sfx/weaponfire15.wav", 0.8f, true}},
-	{eGameSFX::WeaponFire_SmallMissile,	sSoundMetadata{"sfx/weaponfire16.wav", 1.0f, true}},
-	{eGameSFX::WeaponFire_NormalMissile,	sSoundMetadata{"sfx/weaponfire17.wav", 1.0f, true}},
-	{eGameSFX::WeaponFire_Torpedo,		sSoundMetadata{"sfx/weaponfire18.wav", 1.0f, true}},
-	{eGameSFX::WeaponFire_Bomb,		sSoundMetadata{"sfx/weaponfire19.wav", 1.0f, true}},
-	{eGameSFX::Hit_Kinetic,			sSoundMetadata{"sfx/kinetichit.wav", 1.0f, true}},
-	{eGameSFX::Hit_Ion,			sSoundMetadata{"sfx/ionhit.wav", 1.0f, true}},
-	{eGameSFX::Hit_Plasma,			sSoundMetadata{"sfx/plasmahit.wav", 1.0f, true}},
-	{eGameSFX::Hit_Antimatter,		sSoundMetadata{"sfx/antimaterhit.wav", 1.0f, true}},
-	{eGameSFX::Hit_Gauss,			sSoundMetadata{"sfx/gausshit.wav", 1.0f, true}}
+	{eGameSFX::WeaponMalfunction_Kinetic,	sSoundMetadata{"sfx/weapon1probl.wav"}},
+	{eGameSFX::WeaponMalfunction_Particle,	sSoundMetadata{"sfx/weapon2probl.wav"}},
+	{eGameSFX::WeaponMalfunction_Beam,	sSoundMetadata{"sfx/weapon3probl.wav"}},
+	{eGameSFX::WeaponMalfunction_Energy,	sSoundMetadata{"sfx/weapon4probl.wav"}},
+	{eGameSFX::WeaponMalfunction_Launcher,	sSoundMetadata{"sfx/weapon5probl.wav"}},
+	{eGameSFX::Explosion_Small,		sSoundMetadata{"sfx/explosion4.wav"}},
+	{eGameSFX::Explosion_Medium,		sSoundMetadata{"sfx/explosion1.wav"}},
+	{eGameSFX::Explosion_Big,		sSoundMetadata{"sfx/explosion2.wav"}},
+	{eGameSFX::Explosion_Big_Energy,	sSoundMetadata{"sfx/explosion3.wav"}},
+	{eGameSFX::WeaponFire_Kinetic1,		sSoundMetadata{"sfx/weaponfire1.wav", 0.7f}},
+	{eGameSFX::WeaponFire_Kinetic2,		sSoundMetadata{"sfx/weaponfire2.wav", 0.65f}},
+	{eGameSFX::WeaponFire_Kinetic3,		sSoundMetadata{"sfx/weaponfire3.wav", 0.7f}},
+	{eGameSFX::WeaponFire_Kinetic4,		sSoundMetadata{"sfx/weaponfire4.wav"}},
+	{eGameSFX::WeaponFire_Ion1,		sSoundMetadata{"sfx/weaponfire5.wav"}},
+	{eGameSFX::WeaponFire_Ion2,		sSoundMetadata{"sfx/weaponfire6.wav"}},
+	{eGameSFX::WeaponFire_Ion3,		sSoundMetadata{"sfx/weaponfire7.wav", 0.7f}},
+	{eGameSFX::WeaponFire_Plasma1,		sSoundMetadata{"sfx/weaponfire8.wav", 0.85f}},
+	{eGameSFX::WeaponFire_Plasma2,		sSoundMetadata{"sfx/weaponfire9.wav", 0.95f}},
+	{eGameSFX::WeaponFire_Plasma3,		sSoundMetadata{"sfx/weaponfire10.wav", 0.9f}},
+	{eGameSFX::WeaponFire_Maser1,		sSoundMetadata{"sfx/weaponfire11.wav", 0.6f}},
+	{eGameSFX::WeaponFire_Maser2,		sSoundMetadata{"sfx/weaponfire12.wav", 0.55f}},
+	{eGameSFX::WeaponFire_Antimatter,	sSoundMetadata{"sfx/weaponfire13.wav", 0.9f}},
+	{eGameSFX::WeaponFire_Laser,		sSoundMetadata{"sfx/weaponfire14.wav", 0.8f}},
+	{eGameSFX::WeaponFire_Gauss,		sSoundMetadata{"sfx/weaponfire15.wav", 0.8f}},
+	{eGameSFX::WeaponFire_SmallMissile,	sSoundMetadata{"sfx/weaponfire16.wav"}},
+	{eGameSFX::WeaponFire_NormalMissile,	sSoundMetadata{"sfx/weaponfire17.wav"}},
+	{eGameSFX::WeaponFire_Torpedo,		sSoundMetadata{"sfx/weaponfire18.wav"}},
+	{eGameSFX::WeaponFire_Bomb,		sSoundMetadata{"sfx/weaponfire19.wav"}},
+	{eGameSFX::Hit_Kinetic,			sSoundMetadata{"sfx/kinetichit.wav"}},
+	{eGameSFX::Hit_Ion,			sSoundMetadata{"sfx/ionhit.wav"}},
+	{eGameSFX::Hit_Plasma,			sSoundMetadata{"sfx/plasmahit.wav"}},
+	{eGameSFX::Hit_Antimatter,		sSoundMetadata{"sfx/antimaterhit.wav"}},
+	{eGameSFX::Hit_Gauss,			sSoundMetadata{"sfx/gausshit.wav"}}
 };
 
 const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
 	// key					metadata (note, 'en' here, since we use vw_GetText() for file name)
-	{eVoicePhrase::Attention,		sSoundMetadata{"lang/en/voice/Attention.wav", 1.0f, true}},
-	{eVoicePhrase::EngineMalfunction,	sSoundMetadata{"lang/en/voice/EngineMalfunction.wav", 1.0f, true}},
-	{eVoicePhrase::MissileDetected,		sSoundMetadata{"lang/en/voice/MissileDetected.wav", 1.0f, true}},
-	{eVoicePhrase::PowerSupplyReestablished,sSoundMetadata{"lang/en/voice/PowerSupplyReestablished.wav", 1.0f, true}},
-	{eVoicePhrase::PrepareForAction,	sSoundMetadata{"lang/en/voice/PrepareForAction.wav", 1.0f, true}},
-	{eVoicePhrase::ReactorMalfunction,	sSoundMetadata{"lang/en/voice/ReactorMalfunction.wav", 1.0f, true}},
-	{eVoicePhrase::Warning,			sSoundMetadata{"lang/en/voice/Warning.wav", 1.0f, true}},
-	{eVoicePhrase::WeaponDamaged,		sSoundMetadata{"lang/en/voice/WeaponDamaged.wav", 1.0f, true}},
-	{eVoicePhrase::WeaponDestroyed,		sSoundMetadata{"lang/en/voice/WeaponDestroyed.wav", 1.0f, true}},
-	{eVoicePhrase::WeaponMalfunction,	sSoundMetadata{"lang/en/voice/WeaponMalfunction.wav", 1.0f, true}}
+	{eVoicePhrase::Attention,		sSoundMetadata{"lang/en/voice/Attention.wav"}},
+	{eVoicePhrase::EngineMalfunction,	sSoundMetadata{"lang/en/voice/EngineMalfunction.wav"}},
+	{eVoicePhrase::MissileDetected,		sSoundMetadata{"lang/en/voice/MissileDetected.wav"}},
+	{eVoicePhrase::PowerSupplyReestablished,sSoundMetadata{"lang/en/voice/PowerSupplyReestablished.wav"}},
+	{eVoicePhrase::PrepareForAction,	sSoundMetadata{"lang/en/voice/PrepareForAction.wav"}},
+	{eVoicePhrase::ReactorMalfunction,	sSoundMetadata{"lang/en/voice/ReactorMalfunction.wav"}},
+	{eVoicePhrase::Warning,			sSoundMetadata{"lang/en/voice/Warning.wav"}},
+	{eVoicePhrase::WeaponDamaged,		sSoundMetadata{"lang/en/voice/WeaponDamaged.wav"}},
+	{eVoicePhrase::WeaponDestroyed,		sSoundMetadata{"lang/en/voice/WeaponDestroyed.wav"}},
+	{eVoicePhrase::WeaponMalfunction,	sSoundMetadata{"lang/en/voice/WeaponMalfunction.wav"}}
 };
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap{
 	// key			metadata
-	{eMusicTheme::MENU,	sMusicMetadata{"music/menu.ogg", "", 1.0f, false}},
+	{eMusicTheme::MENU,	sMusicMetadata{"music/menu.ogg"}},
 	{eMusicTheme::GAME,	sMusicMetadata{"music/game.ogg", "", 1.0f, true}},
-	{eMusicTheme::BOSS,	sMusicMetadata{"music/boss-loop.ogg", "", 1.0f, false}},
-	{eMusicTheme::FAILED,	sMusicMetadata{"music/missionfailed.ogg", "", 0.7f, false}},
-	{eMusicTheme::CREDITS,	sMusicMetadata{"music/boss-intro.ogg", "music/boss-loop.ogg", 1.0f, false}}
+	{eMusicTheme::BOSS,	sMusicMetadata{"music/boss-loop.ogg"}},
+	{eMusicTheme::FAILED,	sMusicMetadata{"music/missionfailed.ogg", "", 0.7f}},
+	{eMusicTheme::CREDITS,	sMusicMetadata{"music/boss-intro.ogg", "music/boss-loop.ogg"}}
 };
 #pragma GCC diagnostic pop
 
