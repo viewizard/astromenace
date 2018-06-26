@@ -33,7 +33,7 @@
 
 namespace {
 
-const std::string CreditsArray[] {
+const std::vector<std::string> CreditsArray{
 	"PROJECT LEADER, PROGRAMMING",
 	"Mikhail Kurinnoi",
 	"",
@@ -90,11 +90,10 @@ const std::string CreditsArray[] {
 	"",
 	"",
 	"",
-	" ", /* this is correct, we need non empty line for white color for next line */
+	" ", /* this is correct, we need not empty line for white text color in next line */
 	"Copyright © 2007-2018, Viewizard",
 	"www.viewizard.com"
 };
-constexpr int CreditsArrayCount = sizeof(CreditsArray)/sizeof(CreditsArray[0]);
 
 float CurrentTextPos{0.0f};
 float LastUpdate{0.0f};
@@ -124,13 +123,13 @@ void CreditsMenu()
 	int TextY = 690 + (int)CurrentTextPos;
 	int Offset = 30;
 
-	// cycling (internal fixed size of screen (768) - "borders" + CreditsArrayCount * Offset)
-	if (CurrentTextPos <= -(550 + CreditsArrayCount * Offset))
+	// cycling (internal fixed size of screen (768) - "borders" + CreditsArray.size() * Offset)
+	if (CurrentTextPos <= -(550 + static_cast<int>(CreditsArray.size()) * Offset))
 		CurrentTextPos = 0.0f;
 
 	// we switch white/yellow colors, first is 'title', should be yellow
 	eRGBCOLOR tmpColor{eRGBCOLOR::yellow};
-	for (unsigned long i = 0; i < CreditsArrayCount; i++) {
+	for (unsigned i = 0; i < CreditsArray.size(); i++) {
 		float tmpTransp = 0.0f;
 		if (TextY > 300) // fade-in
 			tmpTransp = (650 - TextY) / 100.0f;
