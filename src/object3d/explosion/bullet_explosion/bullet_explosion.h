@@ -37,9 +37,9 @@
 class cBulletExplosion : public cExplosion
 {
 public:
-	cBulletExplosion(cObject3D *Object, cProjectile *Projectile, int ExplType,
-			 const sVECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX = true);
-	virtual ~cBulletExplosion() {};
+	explicit cBulletExplosion(cObject3D *Object, cProjectile *Projectile,
+				  int ExplType, const sVECTOR3D &ExplLocation,
+				  float Speed, bool NeedExplosionSFX = true);
 };
 
 #endif // OBJECT3D_EXPLOSION_BULLETEXPLOSION_BULLETEXPLOSION_H

@@ -66,7 +66,7 @@ static sAlienSpaceFighterData PresetAlienSpaceFighterData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cAlienSpaceFighter::Create(int	SpaceShipNum)
+cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetAlienSpaceFighterDataCount)) {
 		std::cerr << __func__ << "(): "
@@ -129,8 +129,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 1:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 0.25f, 1.85f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(101);
+		Weapon[0] = new cWeapon(101);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 0.65f, -2.3f);
@@ -152,8 +151,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 2:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, -0.30f, 3.95f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(101);
+		Weapon[0] = new cWeapon(101);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 0.8f, -3.1f);
@@ -181,8 +179,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 3:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, -0.35f, 3.9f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(102);
+		Weapon[0] = new cWeapon(102);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 0.8f, -5.5f);
@@ -216,16 +213,12 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 		WeaponLocation[1] = sVECTOR3D(-0.75f, -0.15f, 5.1f);
 		WeaponLocation[2] = sVECTOR3D(0.85f, -1.4f, 6.5f);
 		WeaponLocation[3] = sVECTOR3D(-0.85f, -1.4f, 6.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(101);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(101);
+		Weapon[0] = new cWeapon(101);
+		Weapon[1] = new cWeapon(101);
 		Weapon[1]->SFX = eGameSFX::none;
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(101);
+		Weapon[2] = new cWeapon(101);
 		Weapon[2]->SFX = eGameSFX::none;
-		Weapon[3] = new cWeapon;
-		Weapon[3]->Create(101);
+		Weapon[3] = new cWeapon(101);
 		Weapon[3]->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
@@ -267,8 +260,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 		MaxSpeedRotate = 720.0f;
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 0.0f, 0.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(103);
+		Weapon[0] = new cWeapon(103);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.0f, 0.0f, -4.0f);
@@ -302,8 +294,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 6:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 0.35f, 2.65f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(104);
+		Weapon[0] = new cWeapon(104);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 2.4f, -7.4f);
@@ -335,8 +326,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 7:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, -0.70f, 7.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(105);
+		Weapon[0] = new cWeapon(105);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 1.8f, -10.2f);
@@ -382,8 +372,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 8:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 1.10f, -0.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(103);
+		Weapon[0] = new cWeapon(103);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/4.0f;
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -426,12 +415,10 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 9:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 0.10f, 4.9f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(103);
+		Weapon[0] = new cWeapon(103);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/3.0f;
 		WeaponLocation[1] = sVECTOR3D(0.0f, 0.0f, 0.0f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(107);
+		Weapon[1] = new cWeapon(107);
 		WeaponFireType = 1;
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -491,8 +478,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 10:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 0.0f, 0.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(106);
+		Weapon[0] = new cWeapon(106);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 0.8f, -4.0f);
@@ -529,11 +515,9 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 11:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(3.9f, 1.3f, 1.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(104);
+		Weapon[0] = new cWeapon(104);
 		WeaponLocation[1] = sVECTOR3D(-3.9f, 1.3f, 1.0f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(104);
+		Weapon[1] = new cWeapon(104);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 1.0f, -5.4f);
@@ -570,8 +554,7 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 12:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 0.50f, 0.8f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(108);
+		Weapon[0] = new cWeapon(108);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.1f, 1.0f, -4.4f);
@@ -599,11 +582,9 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 13:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(3.0f, 0.0f, 0.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(109);
+		Weapon[0] = new cWeapon(109);
 		WeaponLocation[1] = sVECTOR3D(-3.0f, 0.0f, 0.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(109);
+		Weapon[1] = new cWeapon(109);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.1f, 1.0f, -4.4f);
@@ -631,11 +612,9 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 14:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(3.0f, 0.0f, 0.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(108);
+		Weapon[0] = new cWeapon(108);
 		WeaponLocation[1] = sVECTOR3D(-3.0f, 0.0f, 0.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(108);
+		Weapon[1] = new cWeapon(108);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.1f, 1.1f, -4.9f);
@@ -673,23 +652,17 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 15:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(3.8f, -1.8f, 0.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(102);
+		Weapon[0] = new cWeapon(102);
 		WeaponLocation[1] = sVECTOR3D(-3.8f, -1.8f, 0.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(102);
+		Weapon[1] = new cWeapon(102);
 		WeaponLocation[2] = sVECTOR3D(0.2f, 1.9f, -3.0f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(101);
+		Weapon[2] = new cWeapon(101);
 		WeaponLocation[3] = sVECTOR3D(-0.2f, 1.6f, -3.0f);
-		Weapon[3] = new cWeapon;
-		Weapon[3]->Create(101);
+		Weapon[3] = new cWeapon(101);
 		WeaponLocation[4] = sVECTOR3D(0.2f, 1.4f, -3.0f);
-		Weapon[4] = new cWeapon;
-		Weapon[4]->Create(101);
+		Weapon[4] = new cWeapon(101);
 		WeaponLocation[5] = sVECTOR3D(-0.2f, 1.1f, -3.0f);
-		Weapon[5] = new cWeapon;
-		Weapon[5]->Create(101);
+		Weapon[5] = new cWeapon(101);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(0.0f, 2.4f, -4.0f);
@@ -714,14 +687,11 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 16:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(3.7f, -1.9f, 1.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(102);
+		Weapon[0] = new cWeapon(102);
 		WeaponLocation[1] = sVECTOR3D(-3.7f, -1.9f, 1.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(102);
+		Weapon[1] = new cWeapon(102);
 		WeaponLocation[2] = sVECTOR3D(0.0f, 0.2f, -0.8f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(108);
+		Weapon[2] = new cWeapon(108);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(2.8f, 0.2f, -7.2f);
@@ -749,20 +719,15 @@ void cAlienSpaceFighter::Create(int	SpaceShipNum)
 	case 17:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, -0.85f, 1.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(108);
+		Weapon[0] = new cWeapon(108);
 		WeaponLocation[1] = sVECTOR3D(1.7f, -0.85f, 1.9f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(105);
+		Weapon[1] = new cWeapon(105);
 		WeaponLocation[2] = sVECTOR3D(-1.7f, -0.85f, 1.9f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(105);
+		Weapon[2] = new cWeapon(105);
 		WeaponLocation[3] = sVECTOR3D(1.0f, -0.85f, 1.1f);
-		Weapon[3] = new cWeapon;
-		Weapon[3]->Create(105);
+		Weapon[3] = new cWeapon(105);
 		WeaponLocation[4] = sVECTOR3D(-1.0f, -0.85f, 1.1f);
-		Weapon[4] = new cWeapon;
-		Weapon[4]->Create(105);
+		Weapon[4] = new cWeapon(105);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.8f, 1.0f, -7.2f);

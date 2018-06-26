@@ -31,28 +31,14 @@
 #include "../space_ship.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cEarthSpaceFighter
-//-----------------------------------------------------------------------------
+/*
+ * All earth fighters.
+ */
 class cEarthSpaceFighter : public cSpaceShip
 {
 public:
-
-	virtual ~cEarthSpaceFighter() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	SpaceShipNum);
-
+	explicit cEarthSpaceFighter(int SpaceShipNum);
 };
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Дополнительные функции для cEarthSpaceFighter
-//-----------------------------------------------------------------------------
 
 // Установка системы двигателей
 void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType);
@@ -62,7 +48,5 @@ void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType);
 bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum);
 // Получаем возможный поворот орудия в данном слоте
 void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
-
-
 
 #endif // OBJECT3D_SPACESHIP_EARTHSPACEFIGHTER_EARTHSPACEFIGHTER_H

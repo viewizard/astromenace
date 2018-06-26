@@ -31,24 +31,13 @@
 #include "../ground_object.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cWheeled
-//-----------------------------------------------------------------------------
+/*
+ * All wheeled vehicles.
+ */
 class cWheeled : public cGroundObject
 {
 public:
-
-	virtual ~cWheeled() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	WheeledNum);
-
+	explicit cWheeled(int WheeledNum);
 };
-
-
-
-
-
 
 #endif // OBJECT3D_GROUNDOBJECT_WHEELED_WHEELED_H

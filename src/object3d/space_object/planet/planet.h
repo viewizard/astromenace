@@ -31,25 +31,13 @@
 #include "../space_object.h"
 
 
-
-
-//-----------------------------------------------------------------------------
-// Класс cPlanet
-//-----------------------------------------------------------------------------
+/*
+ * All planets.
+ */
 class cPlanet : public cSpaceObject
 {
 public:
-
-	virtual ~cPlanet() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int PlanetNum);
-
-
+	explicit cPlanet(int PlanetNum);
 };
-
-
-
-
 
 #endif // OBJECT3D_SPACEOBJECT_PLANET_PLANET_H

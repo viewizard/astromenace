@@ -88,8 +88,7 @@ void WorkshopCreateShip(int Num)
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopFighterGame = new cEarthSpaceFighter;
-	WorkshopFighterGame->Create(GameConfig().Profile[CurrentProfile].Ship);
+	WorkshopFighterGame = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 	WorkshopFighterGame->DeviationOn = true;
 
 	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
@@ -155,8 +154,7 @@ void WorkshopCreateNewShip()
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopNewFighter = new cEarthSpaceFighter;
-	WorkshopNewFighter->Create(CurrentWorkshopNewFighter);
+	WorkshopNewFighter = new cEarthSpaceFighter(CurrentWorkshopNewFighter);
 	WorkshopNewFighter->DeviationOn = true;
 
 	WorkshopNewFighter->ObjectStatus = eObjectStatus::none;
@@ -185,8 +183,7 @@ void WorkshopCreateNewWeapon()
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopNewWeapon = new cWeapon;
-	WorkshopNewWeapon->Create(CurrentWorkshopNewWeapon);
+	WorkshopNewWeapon = new cWeapon(CurrentWorkshopNewWeapon);
 
 	WorkshopNewWeapon->ObjectStatus = eObjectStatus::none;
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;

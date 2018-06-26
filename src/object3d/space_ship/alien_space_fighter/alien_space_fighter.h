@@ -31,32 +31,16 @@
 #include "../space_ship.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cAlienSpaceFighter
-//-----------------------------------------------------------------------------
+/*
+ * All alien fighters.
+ */
 class cAlienSpaceFighter : public cSpaceShip
 {
 public:
-
-	virtual ~cAlienSpaceFighter() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	SpaceShipNum);
-
+	explicit cAlienSpaceFighter(int SpaceShipNum);
 };
-
-
-
-
-//-----------------------------------------------------------------------------
-// Дополнительные функции для cAlienSpaceFighter
-//-----------------------------------------------------------------------------
 
 // Создание двигателя
 void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
-
-
-
 
 #endif // OBJECT3D_SPACESHIP_ALIENSPACEFIGHTER_ALIENSPACEFIGHTER_H

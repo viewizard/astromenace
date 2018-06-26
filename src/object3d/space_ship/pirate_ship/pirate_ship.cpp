@@ -67,7 +67,7 @@ static sPirateShipData PresetPirateShipData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cPirateShip::Create(int PirateShipNum)
+cPirateShip::cPirateShip(int PirateShipNum)
 {
 	if ((PirateShipNum <= 0) || ((unsigned int)PirateShipNum > PresetPirateShipDataCount)) {
 		std::cerr << __func__ << "(): "
@@ -143,11 +143,9 @@ void cPirateShip::Create(int PirateShipNum)
 		MaxAcceler = 30.0f;
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(1.8f, -1.2f, 6.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(204);
+		Weapon[0] = new cWeapon(204);
 		WeaponLocation[1] = sVECTOR3D(-1.8f, -1.2f, 6.0f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(204);
+		Weapon[1] = new cWeapon(204);
 		Weapon[1]->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
@@ -167,8 +165,7 @@ void cPirateShip::Create(int PirateShipNum)
 		MaxAcceler = 50.0f;
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, -2.0f, 2.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(205);
+		Weapon[0] = new cWeapon(205);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.1f, 0.5f, -5.7f);
@@ -185,17 +182,13 @@ void cPirateShip::Create(int PirateShipNum)
 		MaxAcceler = 30.0f;
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(3.0f, -0.2f, -0.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(204);
+		Weapon[0] = new cWeapon(204);
 		WeaponLocation[1] = sVECTOR3D(-3.0f, -0.2f, -0.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(204);
+		Weapon[1] = new cWeapon(204);
 		WeaponLocation[2] = sVECTOR3D(2.0f, -0.2f, 0.0f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(206);
+		Weapon[2] = new cWeapon(206);
 		WeaponLocation[3] = sVECTOR3D(-2.0f, -0.2f, 0.0f);
-		Weapon[3] = new cWeapon;
-		Weapon[3]->Create(206);
+		Weapon[3] = new cWeapon(206);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.0f, 1.8f, -1.2f);
@@ -211,17 +204,13 @@ void cPirateShip::Create(int PirateShipNum)
 		MaxAcceler = 30.0f;
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(4.3f, -0.4f, -0.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(211);
+		Weapon[0] = new cWeapon(211);
 		WeaponLocation[1] = sVECTOR3D(-4.3f, -0.4f, -0.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(211);
+		Weapon[1] = new cWeapon(211);
 		WeaponLocation[2] = sVECTOR3D(3.0f, -0.4f, 0.5f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(205);
+		Weapon[2] = new cWeapon(205);
 		WeaponLocation[3] = sVECTOR3D(-3.0f, -0.4f, 0.5f);
-		Weapon[3] = new cWeapon;
-		Weapon[3]->Create(205);
+		Weapon[3] = new cWeapon(205);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.3f, 1.9f, -1.7f);
@@ -238,17 +227,13 @@ void cPirateShip::Create(int PirateShipNum)
 		MaxAcceler = 30.0f;
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(1.0f, 4.2f, -5.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(211);
+		Weapon[0] = new cWeapon(211);
 		WeaponLocation[1] = sVECTOR3D(-1.0f, 4.2f, -5.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(211);
+		Weapon[1] = new cWeapon(211);
 		WeaponLocation[2] = sVECTOR3D(0.5f, -1.8f, 5.0f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(211);
+		Weapon[2] = new cWeapon(211);
 		WeaponLocation[3] = sVECTOR3D(-0.5f, -1.8f, 5.0f);
-		Weapon[3] = new cWeapon;
-		Weapon[3]->Create(211);
+		Weapon[3] = new cWeapon(211);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(5.8f, 6.5f-4.6f, 0.0f);
@@ -283,20 +268,16 @@ void cPirateShip::Create(int PirateShipNum)
 	case 6:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 2.2f, -0.2f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(202);
+		Weapon[0] = new cWeapon(202);
 
 		BossWeaponLocation[0] = sVECTOR3D(5.4f, 1.0f, 2.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(209);
+		BossWeapon[0] = new cWeapon(209);
 		BossWeaponLocation[1] = sVECTOR3D(-5.4f, 1.0f, 2.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(209);
+		BossWeapon[1] = new cWeapon(209);
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
@@ -311,20 +292,16 @@ void cPirateShip::Create(int PirateShipNum)
 	case 7:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 2.4f, -0.2f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(202);
+		Weapon[0] = new cWeapon(202);
 
 		BossWeaponLocation[0] = sVECTOR3D(9.5f, 1.3f, 2.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(210);
+		BossWeapon[0] = new cWeapon(210);
 		BossWeaponLocation[1] = sVECTOR3D(-9.5f, 1.3f, 2.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(210);
+		BossWeapon[1] = new cWeapon(210);
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
@@ -347,33 +324,25 @@ void cPirateShip::Create(int PirateShipNum)
 	case 8:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 2.4f, -0.2f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(202);
+		Weapon[0] = new cWeapon(202);
 
 		BossWeaponLocation[0] = sVECTOR3D(9.1f, 1.3f, 2.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(206);
+		BossWeapon[0] = new cWeapon(206);
 		BossWeaponLocation[1] = sVECTOR3D(9.4f, 1.0f, 2.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(206);
+		BossWeapon[1] = new cWeapon(206);
 		BossWeaponLocation[2] = sVECTOR3D(9.1f, 0.7f, 2.0f);
-		BossWeapon[2] = new cWeapon;
-		BossWeapon[2]->Create(206);
+		BossWeapon[2] = new cWeapon(206);
 
 		BossWeaponLocation[3] = sVECTOR3D(-9.1f, 1.3f, 2.0f);
-		BossWeapon[3] = new cWeapon;
-		BossWeapon[3]->Create(206);
+		BossWeapon[3] = new cWeapon(206);
 		BossWeaponLocation[4] = sVECTOR3D(-9.4f, 1.0f, 2.0f);
-		BossWeapon[4] = new cWeapon;
-		BossWeapon[4]->Create(206);
+		BossWeapon[4] = new cWeapon(206);
 		BossWeaponLocation[5] = sVECTOR3D(-9.1f, 0.7f, 2.0f);
-		BossWeapon[5] = new cWeapon;
-		BossWeapon[5]->Create(206);
+		BossWeapon[5] = new cWeapon(206);
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 6.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
@@ -396,27 +365,21 @@ void cPirateShip::Create(int PirateShipNum)
 	case 9:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 4.2f, 7.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(201);
+		Weapon[0] = new cWeapon(201);
 		WeaponLocation[1] = sVECTOR3D(0.0f, 4.2f, 3.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(201);
+		Weapon[1] = new cWeapon(201);
 		Weapon[1]->SetRotation(sVECTOR3D(0,180,0));
 		WeaponLocation[2] = sVECTOR3D(0.0f, 3.4f, -5.0f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(202);
+		Weapon[2] = new cWeapon(202);
 
 		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 9.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(205);
+		BossWeapon[0] = new cWeapon(205);
 		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 9.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(205);
+		BossWeapon[1] = new cWeapon(205);
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
@@ -447,37 +410,28 @@ void cPirateShip::Create(int PirateShipNum)
 	case 10:
 		// оружие
 		WeaponLocation[0] = sVECTOR3D(0.0f, 4.4f, 6.8f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(201);
+		Weapon[0] = new cWeapon(201);
 		WeaponLocation[1] = sVECTOR3D(0.0f, 4.4f, 2.6f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(201);
+		Weapon[1] = new cWeapon(201);
 		Weapon[1]->SetRotation(sVECTOR3D(0,180,0));
 		WeaponLocation[2] = sVECTOR3D(0.0f, 2.6f, -7.0f);
-		Weapon[2] = new cWeapon;
-		Weapon[2]->Create(202);
+		Weapon[2] = new cWeapon(202);
 		WeaponLocation[3] = sVECTOR3D(0.0f, 2.6f, -16.0f);
-		Weapon[3] = new cWeapon;
-		Weapon[3]->Create(201);
+		Weapon[3] = new cWeapon(201);
 		Weapon[3]->SetRotation(sVECTOR3D(0,180,0));
 
 		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 8.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(205);
+		BossWeapon[0] = new cWeapon(205);
 		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 8.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(205);
+		BossWeapon[1] = new cWeapon(205);
 		BossWeaponLocation[2] = sVECTOR3D(16.5f, 2.7f, 7.5f);
-		BossWeapon[2] = new cWeapon;
-		BossWeapon[2]->Create(205);
+		BossWeapon[2] = new cWeapon(205);
 		BossWeaponLocation[3] = sVECTOR3D(-16.5f, 2.7f, 7.5f);
-		BossWeapon[3] = new cWeapon;
-		BossWeapon[3]->Create(205);
+		BossWeapon[3] = new cWeapon(205);
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);
@@ -520,15 +474,12 @@ void cPirateShip::Create(int PirateShipNum)
 	case 11:
 		// оружие
 		BossWeaponLocation[0] = sVECTOR3D(5.4f, 1.0f, 2.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(209);
+		BossWeapon[0] = new cWeapon(209);
 		BossWeaponLocation[1] = sVECTOR3D(-5.4f, 1.0f, 2.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(209);
+		BossWeapon[1] = new cWeapon(209);
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
@@ -543,15 +494,12 @@ void cPirateShip::Create(int PirateShipNum)
 	case 12:
 		// оружие
 		BossWeaponLocation[0] = sVECTOR3D(9.5f, 1.3f, 2.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(210);
+		BossWeapon[0] = new cWeapon(210);
 		BossWeaponLocation[1] = sVECTOR3D(-9.5f, 1.3f, 2.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(210);
+		BossWeapon[1] = new cWeapon(210);
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
@@ -574,27 +522,20 @@ void cPirateShip::Create(int PirateShipNum)
 	case 13:
 		// оружие
 		BossWeaponLocation[0] = sVECTOR3D(9.1f, 1.3f, 2.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(206);
+		BossWeapon[0] = new cWeapon(206);
 		BossWeaponLocation[1] = sVECTOR3D(9.4f, 1.0f, 2.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(206);
+		BossWeapon[1] = new cWeapon(206);
 		BossWeaponLocation[2] = sVECTOR3D(9.1f, 0.7f, 2.0f);
-		BossWeapon[2] = new cWeapon;
-		BossWeapon[2]->Create(206);
+		BossWeapon[2] = new cWeapon(206);
 		BossWeaponLocation[3] = sVECTOR3D(-9.1f, 1.3f, 2.0f);
-		BossWeapon[3] = new cWeapon;
-		BossWeapon[3]->Create(206);
+		BossWeapon[3] = new cWeapon(206);
 		BossWeaponLocation[4] = sVECTOR3D(-9.4f, 1.0f, 2.0f);
-		BossWeapon[4] = new cWeapon;
-		BossWeapon[4]->Create(206);
+		BossWeapon[4] = new cWeapon(206);
 		BossWeaponLocation[5] = sVECTOR3D(-9.1f, 0.7f, 2.0f);
-		BossWeapon[5] = new cWeapon;
-		BossWeapon[5]->Create(206);
+		BossWeapon[5] = new cWeapon(206);
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 6.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
@@ -617,15 +558,12 @@ void cPirateShip::Create(int PirateShipNum)
 	case 14:
 		// оружие
 		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 9.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(205);
+		BossWeapon[0] = new cWeapon(205);
 		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 9.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(205);
+		BossWeapon[1] = new cWeapon(205);
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
@@ -656,21 +594,16 @@ void cPirateShip::Create(int PirateShipNum)
 	case 15:
 		// оружие
 		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 8.0f);
-		BossWeapon[0] = new cWeapon;
-		BossWeapon[0]->Create(205);
+		BossWeapon[0] = new cWeapon(205);
 		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 8.0f);
-		BossWeapon[1] = new cWeapon;
-		BossWeapon[1]->Create(205);
+		BossWeapon[1] = new cWeapon(205);
 		BossWeaponLocation[2] = sVECTOR3D(16.5f, 2.7f, 7.5f);
-		BossWeapon[2] = new cWeapon;
-		BossWeapon[2]->Create(205);
+		BossWeapon[2] = new cWeapon(205);
 		BossWeaponLocation[3] = sVECTOR3D(-16.5f, 2.7f, 7.5f);
-		BossWeapon[3] = new cWeapon;
-		BossWeapon[3]->Create(205);
+		BossWeapon[3] = new cWeapon(205);
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = new cWeapon;
-		WeaponFlare->Create(203);
+		WeaponFlare = new cWeapon(203);
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);

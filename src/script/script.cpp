@@ -251,7 +251,6 @@ bool cMissionScript::Update(float Time)
 
 		while (NeedGenerInt > 0) {
 			cAsteroid *CreateAsteroid = new cAsteroid;
-			CreateAsteroid->Create(1);
 			if (AsterFastCount != 20)
 				CreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
 			else
@@ -414,10 +413,9 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		case constexpr_hash_djb2a("CreatePlanet"): {
-				cPlanet *Planet = new cPlanet;
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
-					Planet->Create(tmpType);
+					cPlanet *Planet = new cPlanet{tmpType};
 					SetRotation(*Planet, xmlEntry, xmlDoc);
 					SetLocation(*Planet, xmlEntry, xmlDoc, 0.0f);
 					Planet->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
@@ -702,8 +700,7 @@ void cMissionScript::UpdateTimeLine()
 		switch (TL.NameHash) {
 		case constexpr_hash_djb2a("EarthFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cEarthSpaceFighter *SpaceShip = new cEarthSpaceFighter;
-				SpaceShip->Create(tmpType);
+				cEarthSpaceFighter *SpaceShip = new cEarthSpaceFighter(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 
 				int tmpInteger{0};
@@ -719,80 +716,69 @@ void cMissionScript::UpdateTimeLine()
 
 		case constexpr_hash_djb2a("AlienFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cAlienSpaceFighter *SpaceShip = new cAlienSpaceFighter;
-				SpaceShip->Create(tmpType);
+				cAlienSpaceFighter *SpaceShip = new cAlienSpaceFighter(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("AlienMotherShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cAlienSpaceMotherShip *SpaceShip = new cAlienSpaceMotherShip;
-				SpaceShip->Create(tmpType);
+				cAlienSpaceMotherShip *SpaceShip = new cAlienSpaceMotherShip(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("PirateShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cPirateShip *SpaceShip = new cPirateShip;
-				SpaceShip->Create(tmpType);
+				cPirateShip *SpaceShip = new cPirateShip(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateAsteroid"): {
 				cAsteroid *SpaceObject = new cAsteroid;
-				// тип сейчас не задействован, всегда ставим 1
-				SpaceObject->Create(1);
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBasePart"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBasePart *SpaceObject = new cBasePart;
-				SpaceObject->Create(tmpType);
+				cBasePart *SpaceObject = new cBasePart(tmpType);
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBigAsteroid"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBigAsteroid *SpaceObject = new cBigAsteroid;
-				SpaceObject->Create(tmpType);
+				cBigAsteroid *SpaceObject = new cBigAsteroid(tmpType);
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateMBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cMilitaryBuilding *GroundObject = new cMilitaryBuilding;
-				GroundObject->Create(tmpType);
+				cMilitaryBuilding *GroundObject = new cMilitaryBuilding(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBuilding *GroundObject = new cBuilding;
-				GroundObject->Create(tmpType);
+				cBuilding *GroundObject = new cBuilding(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateTracked"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cTracked *GroundObject = new cTracked;
-				GroundObject->Create(tmpType);
+				cTracked *GroundObject = new cTracked(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateWheeled"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cWheeled *GroundObject = new cWheeled;
-				GroundObject->Create(tmpType);
+				cWheeled *GroundObject = new cWheeled(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;

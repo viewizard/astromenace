@@ -31,23 +31,13 @@
 #include "../space_object.h"
 
 
-
-
-//-----------------------------------------------------------------------------
-// Класс cShipPart
-//-----------------------------------------------------------------------------
+/*
+ * All ship parts.
+ */
 class cShipPart : public cSpaceObject
 {
 public:
-
-	virtual ~cShipPart() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int ShipPartNum);
+	cShipPart();
 };
-
-
-
-
 
 #endif // OBJECT3D_SPACEOBJECT_SHIPPART_SHIPPART_H

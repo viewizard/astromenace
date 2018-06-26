@@ -31,32 +31,16 @@
 #include "../space_ship.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cAlienSpaceMotherShip
-//-----------------------------------------------------------------------------
+/*
+ * All alien motherships.
+ */
 class cAlienSpaceMotherShip : public cSpaceShip
 {
 public:
-
-	virtual ~cAlienSpaceMotherShip() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	SpaceShipNum);
-
+	explicit cAlienSpaceMotherShip(int SpaceShipNum);
 };
-
-
-
-
-//-----------------------------------------------------------------------------
-// Дополнительные функции для cAlienSpaceMotherShip
-//-----------------------------------------------------------------------------
 
 // Создание двигателя
 void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
-
-
-
 
 #endif // OBJECT3D_SPACESHIP_ALIENSPACEMOTHERSHIP_ALIENSPACEMOTHERSHIP_H

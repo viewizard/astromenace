@@ -31,24 +31,13 @@
 #include "../ground_object.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cTracked
-//-----------------------------------------------------------------------------
+/*
+ * All tracked vehicles.
+ */
 class cTracked : public cGroundObject
 {
 public:
-
-	virtual ~cTracked() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	TrackedNum);
-
+	explicit cTracked(int TrackedNum);
 };
-
-
-
-
-
 
 #endif // OBJECT3D_GROUNDOBJECT_TRACKED_TRACKED_H

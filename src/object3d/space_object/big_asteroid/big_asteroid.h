@@ -31,24 +31,13 @@
 #include "../space_object.h"
 
 
-
-
-//-----------------------------------------------------------------------------
-// Класс cBigAsteroid
-//-----------------------------------------------------------------------------
+/*
+ * All big asteroids.
+ */
 class cBigAsteroid : public cSpaceObject
 {
 public:
-
-	virtual ~cBigAsteroid() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int AsteroidNum);
-
+	explicit cBigAsteroid(int AsteroidNum);
 };
-
-
-
-
 
 #endif // OBJECT3D_SPACEOBJECT_BIGASTEROID_BIGASTEROID_H

@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cBasePart::Create(int BasePartNum)
+cBasePart::cBasePart(int BasePartNum)
 {
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BasePart;

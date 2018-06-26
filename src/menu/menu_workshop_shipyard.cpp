@@ -337,8 +337,7 @@ void WorkshopCreateBuyShip()
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopFighterGame = new cEarthSpaceFighter;
-	WorkshopFighterGame->Create(GameConfig().Profile[CurrentProfile].Ship);
+	WorkshopFighterGame = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	WorkshopFighterGame->EngineDestroyType = true;
 	WorkshopFighterGame->ShowStrength = false;

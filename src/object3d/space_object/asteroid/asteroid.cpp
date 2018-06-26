@@ -35,10 +35,9 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cAsteroid::Create(int SpaceObjectNum)
+cAsteroid::cAsteroid()
 {
 	ObjectType = eObjectType::Asteroids;
-	InternalType = SpaceObjectNum;
 
 	Strength = StrengthStart = 10.0f/GameEnemyArmorPenalty;
 

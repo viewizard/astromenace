@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cPlanet::Create(int PlanetNum)
+cPlanet::cPlanet(int PlanetNum)
 {
 	ObjectStatus = eObjectStatus::none;
 	ObjectType = eObjectType::Planet;

@@ -31,24 +31,13 @@
 #include "../ground_object.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cBuilding
-//-----------------------------------------------------------------------------
+/*
+ * All civilian buildings.
+ */
 class cBuilding : public cGroundObject
 {
 public:
-
-	virtual ~cBuilding() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	BuildingNum);
-
+	explicit cBuilding(int BuildingNum);
 };
-
-
-
-
-
 
 #endif // OBJECT3D_GROUNDOBJECT_BUILDING_BUILDING_H

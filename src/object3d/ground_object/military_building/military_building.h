@@ -31,24 +31,13 @@
 #include "../ground_object.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cMilitaryBuilding
-//-----------------------------------------------------------------------------
+/*
+ * All military buildings.
+ */
 class cMilitaryBuilding : public cGroundObject
 {
 public:
-
-	virtual ~cMilitaryBuilding() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	MilitaryBuildingNum);
-
+	explicit cMilitaryBuilding(int MilitaryBuildingNum);
 };
-
-
-
-
-
 
 #endif // OBJECT3D_GROUNDOBJECT_MILITARYBUILDING_MILITARYBUILDING_H

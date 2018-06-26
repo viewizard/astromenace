@@ -33,7 +33,7 @@
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cBigAsteroid::Create(int AsteroidNum)
+cBigAsteroid::cBigAsteroid(int AsteroidNum)
 {
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BigAsteroid;

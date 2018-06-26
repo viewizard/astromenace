@@ -31,24 +31,13 @@
 #include "../space_object.h"
 
 
-
-
-//-----------------------------------------------------------------------------
-// Класс cAsteroid
-//-----------------------------------------------------------------------------
+/*
+ * Small asteroids.
+ */
 class cAsteroid : public cSpaceObject
 {
 public:
-
-	virtual ~cAsteroid() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int AsteroidNum);
-
+	cAsteroid();
 };
-
-
-
-
 
 #endif // OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H

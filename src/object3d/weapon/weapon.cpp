@@ -231,7 +231,7 @@ static sWeaponData PresetPirateWeaponData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cWeapon::cWeapon()
+cWeapon::cWeapon(int WeaponNum)
 {
 	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::ShipWeapon;
@@ -243,15 +243,7 @@ cWeapon::cWeapon()
 	Weight = 500;
 
 	AttachWeapon(this);
-}
 
-
-
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
-void cWeapon::Create(int WeaponNum)
-{
 	if (WeaponNum <= 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon object with Number " << WeaponNum << "\n";
 		return;

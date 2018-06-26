@@ -31,25 +31,13 @@
 #include "../space_object.h"
 
 
-
-
-//-----------------------------------------------------------------------------
-// Класс cBasePart
-//-----------------------------------------------------------------------------
+/*
+ * All pirate base parts.
+ */
 class cBasePart : public cSpaceObject
 {
 public:
-
-	virtual ~cBasePart() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int BasePartNum);
-
-
+	explicit cBasePart(int BasePartNum);
 };
-
-
-
-
 
 #endif // OBJECT3D_SPACEOBJECT_BASEPART_BASEPART_H

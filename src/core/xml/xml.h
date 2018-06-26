@@ -69,7 +69,7 @@ class cXMLDocument {
 public:
 	cXMLDocument() = default;
 	// Load XML from file.
-	cXMLDocument(const std::string &XMLFileName, bool Hash = false);
+	explicit cXMLDocument(const std::string &XMLFileName, bool Hash = false);
 
 	// Save XML to file (libSDL RWops).
 	bool Save(const std::string &XMLFileName);

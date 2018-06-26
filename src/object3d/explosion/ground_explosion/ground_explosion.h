@@ -38,9 +38,8 @@
 class cGroundExplosion : public cExplosion
 {
 public:
-	cGroundExplosion(cGroundObject *Object, int ExplType, const sVECTOR3D &ExplLocation,
-			 int ObjectPieceNum, bool NeedExplosionSFX=true);
-	virtual ~cGroundExplosion() {};
+	explicit cGroundExplosion(cGroundObject *Object, int ExplType, const sVECTOR3D &ExplLocation,
+				  int ObjectPieceNum, bool NeedExplosionSFX = true);
 };
 
 #endif // OBJECT3D_EXPLOSION_GROUNDEXPLOSION_GROUNDEXPLOSION_H

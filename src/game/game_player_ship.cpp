@@ -235,8 +235,7 @@ void InitGamePlayerShip()
 	if (GameConfig().Profile[CurrentProfile].Ship == 0)
 		std::cerr << __func__ << "(): " << "Error, Pilot Profile not created.\n";
 
-	PlayerFighter = new cEarthSpaceFighter;
-	PlayerFighter->Create(GameConfig().Profile[CurrentProfile].Ship);
+	PlayerFighter = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 	PlayerFighter->DeviationOn = true;
 	PlayerFighter->Deviation[0] = sVECTOR3D(0.0f, 0.0f, 1.0f);
 

@@ -31,32 +31,16 @@
 #include "../space_ship.h"
 
 
-
-//-----------------------------------------------------------------------------
-// Класс cPirateShip
-//-----------------------------------------------------------------------------
+/*
+ * All pirate ships.
+ */
 class cPirateShip : public cSpaceShip
 {
 public:
-
-	virtual ~cPirateShip() {};
-
-	// Создание нужного объекта
-	virtual void	Create(int	PirateShipNum);
-
+	explicit cPirateShip(int PirateShipNum);
 };
-
-
-
-
-//-----------------------------------------------------------------------------
-// Дополнительные функции для cPirateShip
-//-----------------------------------------------------------------------------
 
 // Создание двигателя
 void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
-
-
-
 
 #endif // OBJECT3D_SPACESHIP_PIRATESHIP_PIRATESHIP_H

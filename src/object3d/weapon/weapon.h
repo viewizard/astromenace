@@ -35,7 +35,7 @@ enum class eGameSFX;
 
 class cWeapon : public cObject3D {
 public:
-	cWeapon();
+	explicit cWeapon(int WeaponNum);
 	virtual ~cWeapon();
 
 	// Обновление данных объектa
@@ -46,8 +46,6 @@ public:
 	virtual void SetRotation(sVECTOR3D NewRotation) override;
 	// Установка положения
 	virtual void SetLocation(sVECTOR3D NewLocation) override;
-	// Создание нужного объекта
-	virtual void Create(int WeaponNum);
 
 	// уровень оружия, по мощности
 	int WeaponLevel{1};

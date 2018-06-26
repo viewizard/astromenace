@@ -52,7 +52,7 @@ static sMilitaryBuildingData PresetMilitaryBuildingData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
+cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 {
 	if ((MilitaryBuildingNum <= 0) || ((unsigned int)MilitaryBuildingNum > PresetMilitaryBuildingDataCount)) {
 		std::cerr << __func__ << "(): "
@@ -95,11 +95,9 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 	switch (MilitaryBuildingNum) {
 	case 1:
 		WeaponLocation[0] = sVECTOR3D(0.3f, 4.6f, 2.6f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(204);
+		Weapon[0] = new cWeapon(204);
 		WeaponLocation[1] = sVECTOR3D(-0.3f, 4.6f, 2.6f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(204);
+		Weapon[1] = new cWeapon(204);
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 4;
@@ -119,8 +117,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 	case 2:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 4.6f, 4.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(204);
+		Weapon[0] = new cWeapon(204);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
 		WeaponFireType = 2;
 
@@ -145,12 +142,10 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 	case 3:
 		WeaponLocation[0] = sVECTOR3D(2.8f, 5.3f, 7.5f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(205);
+		Weapon[0] = new cWeapon(205);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 		WeaponLocation[1] = sVECTOR3D(-2.8f, 5.3f, 7.5f);
-		Weapon[1] = new cWeapon;
-		Weapon[1]->Create(205);
+		Weapon[1] = new cWeapon(205);
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
 		WeaponFireType = 3;
 
@@ -167,13 +162,11 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 	case 4:
 		WeaponLocation[0] = sVECTOR3D(3.6f, 8.5f, 4.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(204);
+		Weapon[0] = new cWeapon(204);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 		WeaponLocation[1] = sVECTOR3D(-3.6f, 8.5f, 4.0f);
-		Weapon[1] = new cWeapon;
+		Weapon[1] = new cWeapon(204);
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
-		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 4;
@@ -198,13 +191,11 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 	case 5:
 		WeaponLocation[0] = sVECTOR3D(1.95f, 6.5f, 3.7f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(204);
+		Weapon[0] = new cWeapon(204);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
 		WeaponLocation[1] = sVECTOR3D(-1.95f, 6.5f, 3.7f);
-		Weapon[1] = new cWeapon;
+		Weapon[1] = new cWeapon(204);
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 3.0f;
-		Weapon[1]->Create(204);
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 2;
@@ -220,8 +211,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 	case 6:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 3.0f, 7.0f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(204);
+		Weapon[0] = new cWeapon(204);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.5f;
 
 		TargetHorizBlocksQuantity = 2;
@@ -237,8 +227,7 @@ void cMilitaryBuilding::Create(int	MilitaryBuildingNum)
 
 	case 7:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 5.2f, 10.3f);
-		Weapon[0] = new cWeapon;
-		Weapon[0]->Create(211);
+		Weapon[0] = new cWeapon(211);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime;
 
 		TargetHorizBlocksQuantity = 4;

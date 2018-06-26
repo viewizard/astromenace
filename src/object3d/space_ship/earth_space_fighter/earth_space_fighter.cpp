@@ -509,7 +509,7 @@ float GetShipArmor(int SpaceShipNum)
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-void cEarthSpaceFighter::Create(int	SpaceShipNum)
+cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetEarthSpaceFighterDataCount)) {
 		std::cerr << __func__ << "(): "
