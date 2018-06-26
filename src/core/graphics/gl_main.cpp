@@ -398,14 +398,6 @@ void vw_SetInternalResolution(float Width, float Height, bool Status)
 }
 
 /*
- * Set virtual internal resolution status.
- */
-void vw_SetInternalResolutionStatus(bool Status)
-{
-	InternalResolution = Status;
-}
-
-/*
  * Get virtual internal resolution.
  */
 bool vw_GetInternalResolution(float *Width, float *Height)
