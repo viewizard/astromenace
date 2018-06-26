@@ -150,10 +150,16 @@ void CreditsMenu()
 		tmpColor = CreditsArray[i].empty() ? eRGBCOLOR::yellow : eRGBCOLOR::white;
 	}
 
-	int X = (GameConfig().InternalWidth - 384) / 2;
+	int X = GameConfig().InternalWidth / 2 - 256 - 38;
 	int Y = 165 + 100 * 5;
-	if (DrawButton384(X, Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime)) {
+	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	{
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
+	}
+	X = GameConfig().InternalWidth / 2 + 38;
+	if (DrawButton256(X,Y, vw_GetText("DONATE"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
+	{
+		vw_OpenWebsiteURL("https://www.viewizard.com/donate.html");
 	}
 }
