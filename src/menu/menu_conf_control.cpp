@@ -45,6 +45,44 @@ float LastTimeBut = 0.0f;
 
 
 
+static bool ReservedKeys(int Key)
+{
+	switch (Key) {
+	case SDLK_ESCAPE:
+		NeedCheck = 0;
+	case SDLK_F1:
+	case SDLK_F2:
+	case SDLK_F3:
+	case SDLK_F4:
+	case SDLK_F5:
+	case SDLK_F6:
+	case SDLK_F7:
+	case SDLK_F8:
+	case SDLK_F9:
+	case SDLK_F10:
+	case SDLK_F11:
+	case SDLK_F12:
+	case SDLK_F13:
+	case SDLK_F14:
+	case SDLK_F15:
+	case SDLK_F16:
+	case SDLK_F17:
+	case SDLK_F18:
+	case SDLK_F19:
+	case SDLK_F20:
+	case SDLK_F21:
+	case SDLK_F22:
+	case SDLK_F23:
+	case SDLK_F24:
+	case SDLK_PRINTSCREEN:
+		vw_SetKeyStatus(Key, false);
+		return true;
+	}
+
+	return false;
+}
+
+
 // проверка, выбрали что-то или нет
 void CheckMouseKeybJState()
 {
@@ -56,9 +94,10 @@ void CheckMouseKeybJState()
 			if ((NeedCheck > 0 && NeedCheck <= 6) || NeedCheck == 100)
 				for (int k = 0; k < vw_GetKeyStateArraySize(); k++) {
 					int i = SDL_GetKeyFromScancode((SDL_Scancode)k);
-					if (vw_GetKeyStatus(i))
+					if (vw_GetKeyStatus(i) &&
+					    !ReservedKeys(i))
 						if (SDL_GetKeyName(i)) { // если мы играем с этой кнопкой
-							switch(NeedCheck) {
+							switch (NeedCheck) {
 							case 1:
 								ChangeGameConfig().KeyBoardUp = i;
 								break;
