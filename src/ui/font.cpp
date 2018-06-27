@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO add fontconfig support for Linux
+
 /*
 All menu elements should be pre generated.
 Exceptions: pilot profiles name, default names in top scores.
@@ -43,7 +45,7 @@ usage for fonts in menu elements.
 
 namespace {
 
-const sFontMetadata FontList[] = {
+const std::vector<sFontMetadata> BuiltInFontList{
 	sFontMetadata{"Linux Biolinum", "font/LinBiolinum_RB.otf"},
 	sFontMetadata{"Linux Libertine", "font/LinLibertine_RB.otf"},
 	sFontMetadata{"Liberation Mono", "font/LiberationMono-Bold.ttf"},
@@ -53,7 +55,6 @@ const sFontMetadata FontList[] = {
 	sFontMetadata{"FreeFont Sans", "font/FreeSansBold.otf"},
 	sFontMetadata{"FreeFont Serif", "font/FreeSerifBold.otf"},
 };
-constexpr int FontQuantity = sizeof(FontList) / sizeof(FontList[0]);
 
 constexpr unsigned MainFontSize{16};
 
@@ -141,10 +142,10 @@ void GenerateFonts()
 const sFontMetadata &GetFontMetadata(int FontNumber)
 {
 	if ((FontNumber < 0) ||
-	    (FontNumber >= FontQuantity))
+	    (FontNumber >= static_cast<int>(BuiltInFontList.size())))
 		FontNumber = 0;
 
-	return FontList[FontNumber];
+	return BuiltInFontList[FontNumber];
 }
 
 /*
@@ -152,5 +153,5 @@ const sFontMetadata &GetFontMetadata(int FontNumber)
  */
 int GetFontQuantity()
 {
-	return FontQuantity;
+	return static_cast<int>(BuiltInFontList.size());
 }
