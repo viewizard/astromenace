@@ -50,6 +50,11 @@ static bool ReservedKeys(int Key)
 	switch (Key) {
 	case SDLK_ESCAPE:
 		NeedCheck = 0;
+		// don't remove this code duplication for now, don't use "[[fallthrough]];" (since C++17)
+		// or "[[gnu::fallthrough]];" here for supress GCC7 warnings, since this produce another
+		// warnings on old compiller versions
+		vw_SetKeyStatus(Key, false);
+		return true;
 	case SDLK_F1:
 	case SDLK_F2:
 	case SDLK_F3:

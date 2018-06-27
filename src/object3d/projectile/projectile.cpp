@@ -1516,6 +1516,8 @@ missile:
 		while (Model3DBlocks[0].Rotation.y > 360.0f) {
 			Model3DBlocks[0].Rotation.y -= 360.0f;
 		}
+		// wip, disabled for now
+	break;
 	// мина пришельцев, энергетическая (1-й тип)
 	case 106: {
 		// получаем положение ближайшего врага
@@ -1560,6 +1562,8 @@ missile:
 		while (Model3DBlocks[0].Rotation.y > 360.0f) {
 			Model3DBlocks[0].Rotation.y -= 360.0f;
 		}
+		// wip, disabled for now
+	break;
 	// мина пришельцев, энергетическая (2-й тип)
 	case 107:
 		RotationSpeed = 180.0f;
