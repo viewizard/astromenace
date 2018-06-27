@@ -1040,24 +1040,6 @@ int GetShipWeaponsMaxSlotLevel()
 
 
 
-// вызываем прямо перед прорисовкой курсора
-void DrawDragingWeaponIcon(int X, int Y)
-{
-	// если не тянем - соотв. и не рисуем
-	if (!DragWeapon) return;
-
-	// в х и у - положение точки курсора
-	sRECT SrcRect(0, 0, 128, 64);
-	sRECT DstRect(X - 64, Y - 32, X + 64, Y + 32);
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
-}
-
-
-
-
-
-
-
 
 
 

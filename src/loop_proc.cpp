@@ -30,6 +30,7 @@
 #include "config/config.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
+#include "ui/cursor.h"
 #include "gfx/star_system.h"
 #include "assets/audio.h"
 #include "assets/texture.h"
@@ -45,16 +46,6 @@ float LastSecond;
 float eFPS = 0;
 unsigned int eCurrentFrames = 0;
 
-// для работы курсора
-// текущий цвет 0-зеленый, 1-можно на нажимать, 2-нельзя нажимать
-int CurrentCursorStatus;
-// состояние курсора
-float CurrentCursorFlash = 1.0f;
-float CurrentCursorFlashLastTime = -1.0f;
-bool DrawGameCursor = true;
-
-void DrawDragingWeaponIcon(int X, int Y);
-
 extern float CurrentGameSpeedShowTime;
 
 
@@ -67,16 +58,7 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// работа с курсором
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// начальная установка
-	CurrentCursorStatus = 0;
-	if (CurrentCursorFlashLastTime == -1.0f) {
-		CurrentCursorFlashLastTime = vw_GetTimeThread(0);
-	} else {
-		CurrentCursorFlash -= vw_GetTimeThread(0) - CurrentCursorFlashLastTime;
-		if (CurrentCursorFlash < 0.3f)
-			CurrentCursorFlash = 1.0f;
-		CurrentCursorFlashLastTime = vw_GetTimeThread(0);
-	}
+	CursorUpdate();
 
 
 
@@ -134,35 +116,7 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// рисуем курсор
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (DrawGameCursor) {
-		int mX, mY;
-		vw_GetMousePos(mX, mY);
-
-		// если нужно, рисуем перетягиваемое оружие
-		if (MenuStatus == eMenuStatus::WORKSHOP)
-			DrawDragingWeaponIcon(mX, mY);
-
-		sRECT SrcRect(0, 0, 64, 64);
-		sRECT DstRect(mX-12, mY-13, mX+64-12, mY+64-13);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
-		switch (CurrentCursorStatus) {
-		case 0:
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
-			break;
-
-		case 1:
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
-			break;
-
-		case 2:
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
-			break;
-
-		case 3:
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
-			break;
-		}
-	}
+	CursorDraw();
 
 
 

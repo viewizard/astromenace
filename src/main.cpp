@@ -34,6 +34,7 @@
 #include "enum.h"
 #include "build_config.h"
 #include "ui/font.h"
+#include "ui/cursor.h"
 #include "assets/audio.h"
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
@@ -346,7 +347,7 @@ static void Loop()
 /*
  * Main.
  */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
 	bool NeedShowSystemCursor{false};
 	bool NeedResetConfig{false};
@@ -464,9 +465,6 @@ RecreateWindow:
 
 	ConfigVirtualInternalResolution();
 
-	if (!NeedShowSystemCursor)
-		SDL_ShowCursor(SDL_DISABLE);
-
 	GenerateFonts(); // should be called after vw_InitText() and InitFont()
 
 	PlayMusicTheme(eMusicTheme::MENU, 4000, 4000);
@@ -481,14 +479,13 @@ RecreateWindow:
 	if (GameConfig().UseGLSL120)
 		SetupObject3DShaders(); // should be called after LoadAllGameAssets()
 
+	CursorInit(NeedShowSystemCursor);
 	InitMenu(eMenuStatus::MAIN_MENU);
 
 	// Main loop.
 	Loop();
 
-	if (!NeedShowSystemCursor)
-		SDL_ShowCursor(SDL_ENABLE);
-
+	CursorRelease();
 	DestroyInfoObject();
 	WorkshopDestroyData();
 
