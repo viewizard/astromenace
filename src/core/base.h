@@ -37,76 +37,6 @@
 
 #include "SDL2/SDL.h"
 
-// suppress warnings about unused variables, when we need to
-#ifdef __GNUC__
-#  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
-#else
-#  define UNUSED(x) UNUSED_ ## x
-#endif
-
-enum class eRGBCOLOR {
-	white,
-	black,
-	red,
-	green,
-	blue,
-	yellow,
-	orange
-};
-
-struct sRGBCOLOR {
-	float r{0.0f};
-	float g{0.0f};
-	float b{0.0f};
-
-	sRGBCOLOR() = default;
-	explicit sRGBCOLOR(float _r, float _g, float _b) :
-		r{_r},
-		g{_g},
-		b{_b}
-	{}
-	explicit sRGBCOLOR(eRGBCOLOR color)
-	{
-		switch (color) {
-		case eRGBCOLOR::white:
-			r = 1.0f;
-			g = 1.0f;
-			b = 1.0f;
-			break;
-		case eRGBCOLOR::black:
-			r = 0.0f;
-			g = 0.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::red:
-			r = 1.0f;
-			g = 0.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::green:
-			r = 0.0f;
-			g = 1.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::blue:
-			r = 0.0f;
-			g = 0.0f;
-			b = 1.0f;
-			break;
-		case eRGBCOLOR::yellow:
-			r = 1.0f;
-			g = 1.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::orange:
-			r = 1.0f;
-			g = 0.5f;
-			b = 0.0f;
-			break;
-		}
-	}
-};
-
 // STL (only includes what's really used)
 #include <unordered_map>
 #include <unordered_set>
@@ -126,6 +56,16 @@ struct sRGBCOLOR {
 #include <cmath>
 #include <cstdlib>
 
+// don't setup NDEBUG in sources, use definition in build system instead
+#include <cassert>
+
+// suppress warnings about unused variables, when we need to
+#ifdef __GNUC__
+#  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
+#else
+#  define UNUSED(x) UNUSED_ ## x
+#endif
+
 // functor in order to use enumeration as a key (std::map, std::unordered_map, std::unordered_multimap)
 struct sEnumHash {
 	template <typename T>
@@ -134,18 +74,6 @@ struct sEnumHash {
 		return static_cast<std::size_t>(t);
 	}
 };
-
-// don't setup NDEBUG in sources, use definition in build system instead
-#include <cassert>
-
-// error codes
-#define ERR_PARAMETERS		-1	// function's parameters related issue
-#define ERR_FILE_NOT_FOUND	-2	// file not found
-#define ERR_FILE_IO		-3	// file I/O issue
-#define ERR_VFS_BUILD		-4	// VFS build number issue
-#define ERR_EXT_RES		-5	// issue with external resources
-#define ERR_MEM			-6	// memory allocation related issue
-#define ERR_NOT_SUPPORTED	-7	// file format not supported
 
 // integral + floating point dual type
 // caller should care about types size and numeric limits
@@ -208,5 +136,14 @@ constexpr unsigned constexpr_hash_djb2a(const char *str, int h = 0)
 	return !str[h] ? 5381 : (constexpr_hash_djb2a(str, h + 1) * 33) ^ str[h];
 }
 #pragma GCC diagnostic pop
+
+// error codes
+constexpr int ERR_PARAMETERS{-1};	// function's parameters related issue
+constexpr int ERR_FILE_NOT_FOUND{-2};	// file not found
+constexpr int ERR_FILE_IO{-3};		// file I/O issue
+constexpr int ERR_VFS_BUILD{-4};	// VFS build number issue
+constexpr int ERR_EXT_RES{-5};		// issue with external resources
+constexpr int ERR_MEM{-6};		// memory allocation related issue
+constexpr int ERR_NOT_SUPPORTED{-7};	// file format not supported
 
 #endif // CORE_BASE_H

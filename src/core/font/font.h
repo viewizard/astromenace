@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+struct sRGBCOLOR;
+
 // Font initialization by font name (path to file).
 int vw_InitFont(const std::string &FontName);
 // Set current font size.
