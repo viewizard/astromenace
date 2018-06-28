@@ -30,7 +30,7 @@
 
 #include "../base.h"
 
-#define VFS_VER "v1.6"
+constexpr char VFS_VER[]{"v1.6"};
 
 enum class eFileLocation {
 	Unknown,
