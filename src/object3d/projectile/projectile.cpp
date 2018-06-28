@@ -33,11 +33,9 @@ will not kill their speed and maneuverability and we will have nice difficulty m
 
 */
 
-
 #include "projectile.h"
 #include "../explosion/bullet_explosion/bullet_explosion.h"
 #include "../../assets/texture.h"
-
 
 struct sProjectileData {
 	float Radius;
@@ -50,11 +48,8 @@ struct sProjectileData {
 	int GraphicFXQuantity;
 };
 
-
-
-
 // снаряды для оружия землян 1-99
-const sProjectileData PresetEarthProjectileData[] = {
+const std::vector<sProjectileData> PresetEarthProjectileData{
 	// Kinetic
 	{0.3f, 5, 0,	0, 50, 4, 1},
 	{0.6f, 20, 0,	0, 45, 4, 1},
@@ -83,13 +78,9 @@ const sProjectileData PresetEarthProjectileData[] = {
 	{0.2f, 400, 0,	1, 35, 7, 2},
 	{0.2f, 800, 0,	1, 30, 6, 2},
 };
-#define PresetEarthProjectileDataCount sizeof(PresetEarthProjectileData)/sizeof(PresetEarthProjectileData[0])
-
-
-
 
 // снаряды для оружия пришельцев 101-199
-const sProjectileData PresetAlienProjectileData[] = {
+const std::vector<sProjectileData> PresetAlienProjectileData{
 	// как Kinetic1
 	{0.3f, 5, 0,	0, 70, 4, 1},
 	// с наведением, как Kinetic2
@@ -112,12 +103,9 @@ const sProjectileData PresetAlienProjectileData[] = {
 	{1.0f, 250, 0,	2, 0, 1, 1},
 
 };
-#define PresetAlienProjectileDataCount sizeof(PresetAlienProjectileData)/sizeof(PresetAlienProjectileData[0])
-
-
 
 // снаряды для оружия пиратов 201-299
-const sProjectileData PresetPirateProjectileData[] = {
+const std::vector<sProjectileData> PresetPirateProjectileData{
 	// стрельба турели 1
 	{0.3f, 5, 0,	0, 60, 4, 1},
 	// стрельба турели 2
@@ -155,7 +143,7 @@ const sProjectileData PresetPirateProjectileData[] = {
 	// мина4 (наведение по высоте + стрельба ракетами)
 	{1.2f, 200, 0,	4, 0, -1, 1},
 };
-#define PresetPirateProjectileDataCount sizeof(PresetPirateProjectileData)/sizeof(PresetPirateProjectileData[0])
+
 
 
 
@@ -260,13 +248,13 @@ void cProjectile::Create(int ProjectileNum)
 	if (ProjectileNum <= 0) {
 		std::cerr << __func__ << "(): " << "Could not init cProjectile object with Number " << ProjectileNum << "\n";
 		return;
-	} else if ((ProjectileNum >= 1 && ProjectileNum <= 99) && ((unsigned int)ProjectileNum > PresetEarthProjectileDataCount)) {
+	} else if ((ProjectileNum >= 1 && ProjectileNum <= 99) && ((unsigned int)ProjectileNum > PresetEarthProjectileData.size())) {
 		std::cerr << __func__ << "(): " << "Could not init cProjectile(1) object with Number " << ProjectileNum << "\n";
 		return;
-	} else if ((ProjectileNum >= 101 && ProjectileNum <= 199) && ((unsigned int)ProjectileNum-100 > PresetAlienProjectileDataCount)) {
+	} else if ((ProjectileNum >= 101 && ProjectileNum <= 199) && ((unsigned int)ProjectileNum-100 > PresetAlienProjectileData.size())) {
 		std::cerr << __func__ << "(): " << "Could not init cProjectile(2) object with Number " << ProjectileNum << "\n";
 		return;
-	} else if ((ProjectileNum >= 201 && ProjectileNum <= 299) && ((unsigned int)ProjectileNum-200 > PresetPirateProjectileDataCount)) {
+	} else if ((ProjectileNum >= 201 && ProjectileNum <= 299) && ((unsigned int)ProjectileNum-200 > PresetPirateProjectileData.size())) {
 		std::cerr << __func__ << "(): " << "Could not init cProjectile(3) object with Number " << ProjectileNum << "\n";
 		return;
 	}
@@ -995,7 +983,7 @@ void cProjectile::SetRotation(sVECTOR3D NewRotation)
 {
 
 	// вызываем родительскую функцию
-	::cObject3D::SetRotation(NewRotation);
+	cObject3D::SetRotation(NewRotation);
 
 
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
@@ -1024,7 +1012,7 @@ void cProjectile::SetRotation(sVECTOR3D NewRotation)
 void cProjectile::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::cObject3D::SetLocation(NewLocation);
+	cObject3D::SetLocation(NewLocation);
 
 	if (GraphicFX.empty())
 		return;
@@ -1291,7 +1279,7 @@ bool cProjectile::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::cObject3D::Update(Time)) {
+	if (!cObject3D::Update(Time)) {
 		// если лучевое оружие, никогда не уничтожаем его!!!
 		// это сделаем в пушке...
 		if (ProjectileType == 2)
