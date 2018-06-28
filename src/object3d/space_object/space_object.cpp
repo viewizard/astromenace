@@ -28,7 +28,9 @@
 #include "space_object.h"
 #include "../../game.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -278,4 +280,5 @@ bool cSpaceObject::Update(float Time)
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

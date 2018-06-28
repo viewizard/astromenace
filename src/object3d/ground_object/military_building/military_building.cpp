@@ -28,7 +28,9 @@
 #include "military_building.h"
 #include "../../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 struct sMilitaryBuildingData {
 	float Strength;
@@ -279,4 +281,5 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	}
 }
 
+} // astromenace namespace
 } // viewizard namespace

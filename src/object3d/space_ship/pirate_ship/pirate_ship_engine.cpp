@@ -28,7 +28,9 @@
 #include "pirate_ship.h"
 #include "../../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 
 //-----------------------------------------------------------------------------
@@ -169,4 +171,5 @@ void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int E
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

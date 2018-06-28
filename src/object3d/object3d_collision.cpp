@@ -39,7 +39,9 @@
 #include "explosion/ground_explosion/ground_explosion.h"
 #include "explosion/space_explosion/space_explosion.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 float GetProjectileSpeed(int Num);
 void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType);
@@ -1445,4 +1447,5 @@ NexttmpS:
 	// следующего, не было сбоя... при обновлении указателя у первого
 }
 
+} // astromenace namespace
 } // viewizard namespace

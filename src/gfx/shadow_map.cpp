@@ -33,7 +33,9 @@
 #include "../config/config.h"
 #include "shadow_map.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -249,4 +251,5 @@ void ShadowMap_EndFinalRender()
 	vw_BindTexture(2, 0);
 }
 
+} // astromenace namespace
 } // viewizard namespace

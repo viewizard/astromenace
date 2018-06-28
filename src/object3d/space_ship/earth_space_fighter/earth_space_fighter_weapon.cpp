@@ -27,7 +27,9 @@
 
 #include "earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 
 //-----------------------------------------------------------------------------
@@ -65,4 +67,5 @@ bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, i
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

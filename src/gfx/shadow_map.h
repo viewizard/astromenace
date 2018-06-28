@@ -28,7 +28,9 @@
 #ifndef GFX_SHADOWMAP_H
 #define GFX_SHADOWMAP_H
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 enum class eShadowMapSetup {
 	Menu,
@@ -54,6 +56,7 @@ float ShadowMap_Get_xPixelOffset();
 // Y offset for shader.
 float ShadowMap_Get_yPixelOffset();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // GFX_SHADOWMAP_H

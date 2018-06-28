@@ -28,7 +28,9 @@
 #include "../core/core.h"
 #include "../config/config.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -271,4 +273,5 @@ std::weak_ptr<sModel3D> GetPreloadedModel3DAsset(const std::string &FileName)
 	return std::weak_ptr<sModel3D>{};
 }
 
+} // astromenace namespace
 } // viewizard namespace

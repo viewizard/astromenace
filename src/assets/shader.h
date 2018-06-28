@@ -30,11 +30,14 @@
 
 #include "../core/base.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Cycle with function callback on each shader asset load.
 bool ForEachShaderAssetLoad(std::function<void ()> function);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // ASSETS_GLSL_H

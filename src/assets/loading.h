@@ -30,11 +30,14 @@
 
 #include "../core/base.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Load all game assets.
 void LoadAllGameAssets();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // ASSETS_LOADING_H

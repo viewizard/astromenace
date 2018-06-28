@@ -27,7 +27,9 @@
 
 #include "earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Получаем возможный поворот орудия в данном слоте
@@ -939,4 +941,5 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 	SetEarthSpaceFighterArmour(this, 0);
 }
 
+} // astromenace namespace
 } // viewizard namespace

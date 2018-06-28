@@ -28,7 +28,9 @@
 #ifndef UI_CURSOR_H
 #define UI_CURSOR_H
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //
 void CursorInit(bool ShowSystemCursor);
@@ -39,6 +41,7 @@ void CursorUpdate();
 //
 void CursorDraw();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // UI_CURSOR_H

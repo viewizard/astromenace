@@ -27,7 +27,9 @@
 
 #include "space_object.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Указатели на начальный и конечный объект в списке
 cSpaceObject *StartSpaceObject = nullptr;
@@ -149,4 +151,5 @@ void ReleaseAllSpaceObject()
 	EndSpaceObject = nullptr;
 }
 
+} // astromenace namespace
 } // viewizard namespace

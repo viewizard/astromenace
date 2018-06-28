@@ -28,7 +28,9 @@
 #include "weapon.h"
 #include "../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 
 //-----------------------------------------------------------------------------
@@ -402,4 +404,5 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

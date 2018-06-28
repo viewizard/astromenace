@@ -31,7 +31,9 @@
 #include "../object3d.h"
 #include "../projectile/projectile.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 enum class eGameSFX;
 
@@ -135,6 +137,7 @@ void	DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllWeapon();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_WEAPON_WEAPON_H

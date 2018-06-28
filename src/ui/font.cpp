@@ -43,7 +43,9 @@ usage for fonts in menu elements.
 #include "../build_config.h"
 #include "font.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -158,4 +160,5 @@ int GetFontQuantity()
 	return static_cast<int>(BuiltInFontList.size());
 }
 
+} // astromenace namespace
 } // viewizard namespace

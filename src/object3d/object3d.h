@@ -41,7 +41,9 @@
 #include "../enum.h"
 #include "../script/script.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern int GameEnemyWeaponPenalty;
@@ -240,6 +242,7 @@ cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, sVECTOR3D Locatio
 // Setup shaders.
 bool SetupObject3DShaders();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_OBJECT3D_H

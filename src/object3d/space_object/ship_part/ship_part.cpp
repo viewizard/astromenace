@@ -27,7 +27,9 @@
 
 #include "ship_part.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -40,4 +42,5 @@ cShipPart::cShipPart()
 	// т.к. это часть большого корабля
 }
 
+} // astromenace namespace
 } // viewizard namespace

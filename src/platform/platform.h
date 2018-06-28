@@ -30,7 +30,9 @@
 
 #include "../core/base.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * Paths.
@@ -124,6 +126,7 @@ bool StandardAspectRation(const sViewSize &ViewSize);
 // Note, this function should be called after vw_InitText().
 unsigned int FindPreferredLanguageByLocale();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // PLATFORM_PLATFORM_H

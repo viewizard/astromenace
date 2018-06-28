@@ -28,7 +28,9 @@
 #ifndef GFX_SKYBOX_H
 #define GFX_SKYBOX_H
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 enum class eSide : unsigned {
 	RIGHT,	// The RIGHT side
@@ -48,6 +50,7 @@ void SkyBoxCreate(float X, float Y, float Z, float Width, float Height, float Le
 // Draw initialized SkyBox sides.
 void SkyBoxDraw();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // GFX_SKYBOX_H

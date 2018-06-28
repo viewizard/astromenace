@@ -28,11 +28,14 @@
 #ifndef UTILS_FS2VFS_H
 #define UTILS_FS2VFS_H
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Create game data VFS file (convert FS to VFS).
 int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // UTILS_FS2VFS_H

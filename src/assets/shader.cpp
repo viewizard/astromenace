@@ -27,7 +27,9 @@
 
 #include "../core/core.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -75,4 +77,5 @@ bool ForEachShaderAssetLoad(std::function<void ()> function)
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

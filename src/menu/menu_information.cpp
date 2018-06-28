@@ -40,7 +40,9 @@
 #include "../object3d/ground_object/tracked/tracked.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //------------------------------------------------------------------------------------
 // переменные
@@ -1654,4 +1656,5 @@ void InformationDrawObject()
 	vw_End2DMode();
 }
 
+} // astromenace namespace
 } // viewizard namespace

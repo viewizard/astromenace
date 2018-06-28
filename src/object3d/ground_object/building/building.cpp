@@ -29,7 +29,9 @@
 #include "../../../config/config.h"
 #include "../../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 struct sBuildingData {
 	float Strength;
@@ -83,4 +85,5 @@ cBuilding::cBuilding(int BuildingNum)
 	Strength = StrengthStart = PresetBuildingData[BuildingNum-1].Strength/GameEnemyArmorPenalty;
 }
 
+} // astromenace namespace
 } // viewizard namespace

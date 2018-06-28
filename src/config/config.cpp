@@ -36,7 +36,9 @@
 #include "config.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -551,4 +553,5 @@ int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 	return 0;
 }
 
+} // astromenace namespace
 } // viewizard namespace

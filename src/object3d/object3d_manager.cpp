@@ -37,7 +37,9 @@
 #include "../gfx/star_system.h"
 #include "../gfx/shadow_map.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
@@ -170,4 +172,5 @@ void UpdateAllObject3D(float Time)
 	UpdateAllExplosion(Time);
 }
 
+} // astromenace namespace
 } // viewizard namespace

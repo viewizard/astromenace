@@ -30,7 +30,9 @@
 
 #include "../space_object.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * All pirate base parts.
@@ -41,6 +43,7 @@ public:
 	explicit cBasePart(int BasePartNum);
 };
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_SPACEOBJECT_BASEPART_BASEPART_H

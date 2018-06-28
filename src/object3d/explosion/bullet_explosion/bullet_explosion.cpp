@@ -29,7 +29,9 @@
 #include "../../../config/config.h"
 #include "../../../assets/audio.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, eObjectStatus ObjectStatus);
@@ -994,4 +996,5 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

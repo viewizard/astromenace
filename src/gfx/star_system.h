@@ -30,7 +30,9 @@
 
 #include "../enum.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Star system initialization.
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
@@ -47,6 +49,7 @@ void StarSystemDrawThirdLayer(eDrawType DrawType);
 // Release star system.
 void StarSystemRelease();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // GFX_STARSYSTEM_H

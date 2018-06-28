@@ -52,7 +52,9 @@
 #include "../object3d/ground_object/wheeled/wheeled.h"
 #include "../object3d/ground_object/tracked/tracked.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
@@ -828,4 +830,5 @@ void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
 	std::cerr << __func__ << "(): " << "AI_Mode " << TimeSheetList.front().AI_Mode << " not found.\n";
 }
 
+} // astromenace namespace
 } // viewizard namespace

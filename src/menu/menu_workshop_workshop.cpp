@@ -32,7 +32,9 @@
 #include "../assets/texture.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 extern cEarthSpaceFighter *WorkshopFighterGame;
 extern float CurrentAlert2;
@@ -1125,4 +1127,5 @@ void Workshop_Workshop()
 	ResetFontSize();
 }
 
+} // astromenace namespace
 } // viewizard namespace

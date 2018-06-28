@@ -30,7 +30,9 @@
 #include "../../../assets/audio.h"
 #include "../../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 struct sPirateShipData {
 	unsigned int WeaponQuantity;
@@ -661,4 +663,5 @@ cPirateShip::cPirateShip(int PirateShipNum)
 	}
 }
 
+} // astromenace namespace
 } // viewizard namespace

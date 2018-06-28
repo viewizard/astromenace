@@ -30,7 +30,9 @@
 
 #include "../ground_object.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * All military buildings.
@@ -41,6 +43,7 @@ public:
 	explicit cMilitaryBuilding(int MilitaryBuildingNum);
 };
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_GROUNDOBJECT_MILITARYBUILDING_MILITARYBUILDING_H

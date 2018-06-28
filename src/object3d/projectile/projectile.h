@@ -30,7 +30,9 @@
 
 #include "../object3d.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Класс cProjectile
@@ -127,6 +129,7 @@ void	DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllProjectile();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_PROJECTILE_PROJECTILE_H

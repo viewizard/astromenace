@@ -30,7 +30,9 @@
 
 #include "../space_ship.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * All earth fighters.
@@ -50,6 +52,7 @@ bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, i
 // Получаем возможный поворот орудия в данном слоте
 void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_SPACESHIP_EARTHSPACEFIGHTER_EARTHSPACEFIGHTER_H

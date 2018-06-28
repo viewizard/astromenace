@@ -30,7 +30,9 @@
 
 #include "../core/base.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // since we have POD structures that could be changed in new version,
 // make sure we load proper profiles and top scores
@@ -239,6 +241,7 @@ enum class eDifficultyAction {
 };
 int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action = eDifficultyAction::Get);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // CONFIG_CONFIG_H

@@ -28,7 +28,9 @@
 #ifndef UI_FONT_H
 #define UI_FONT_H
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 struct sFontMetadata {
 	std::string FontTitle{};
@@ -53,6 +55,7 @@ const sFontMetadata &GetFontMetadata(int FontNumber);
 // Get fonts quantity.
 int GetFontQuantity();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // UI_FONT_H

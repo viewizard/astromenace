@@ -30,7 +30,9 @@
 
 #include "../space_ship.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * All alien fighters.
@@ -44,6 +46,7 @@ public:
 // Создание двигателя
 void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_SPACESHIP_ALIENSPACEFIGHTER_ALIENSPACEFIGHTER_H

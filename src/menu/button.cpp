@@ -30,7 +30,9 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 extern bool DragWeapon;
 
@@ -749,4 +751,5 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 	return false;
 }
 
+} // astromenace namespace
 } // viewizard namespace

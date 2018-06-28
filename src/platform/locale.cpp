@@ -45,7 +45,9 @@ language name, as distinct from "en-BZ" (English, Belize).
 #include "../core/core.h"
 #include "platform.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * Get user preferred locale.
@@ -189,4 +191,5 @@ unsigned int FindPreferredLanguageByLocale()
 	return 0;
 }
 
+} // astromenace namespace
 } // viewizard namespace

@@ -31,7 +31,9 @@
 #include "../core/base.h"
 #include "../core/graphics/graphics.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Get all texture assets load value.
 unsigned GetTextureAssetsLoadValue();
@@ -44,6 +46,7 @@ void ChangeTexturesAnisotropyLevel();
 // ForEachTextureAssetLoad() each time, when this need.
 GLtexture GetPreloadedTextureAsset(const std::string &FileName);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // ASSETS_TEXTURE_H

@@ -32,7 +32,9 @@
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 extern cEarthSpaceFighter *WorkshopFighterGame;
 extern cEarthSpaceFighter *WorkshopNewFighter;
@@ -767,4 +769,5 @@ void Workshop_Shipyard()
 	ResetFontSize();
 }
 
+} // astromenace namespace
 } // viewizard namespace

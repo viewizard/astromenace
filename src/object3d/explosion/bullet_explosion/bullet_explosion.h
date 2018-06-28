@@ -30,7 +30,9 @@
 
 #include "../explosion.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * All bullets/rockets explosions.
@@ -43,6 +45,7 @@ public:
 				  float Speed, bool NeedExplosionSFX = true);
 };
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_EXPLOSION_BULLETEXPLOSION_BULLETEXPLOSION_H

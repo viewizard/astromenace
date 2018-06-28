@@ -27,7 +27,9 @@
 
 #include "../core/core.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * Provide mouse button's name - "ButtonN", where N is number.
@@ -40,4 +42,5 @@ std::string MouseButtonName(int ButtonNum)
 	return vw_GetText("Button") + std::to_string(ButtonNum);
 }
 
+} // astromenace namespace
 } // viewizard namespace

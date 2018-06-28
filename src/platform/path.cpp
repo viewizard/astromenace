@@ -43,7 +43,9 @@
 #include <sys/stat.h> // mkdir
 #endif // unix
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -254,4 +256,5 @@ const std::string &GetRawDataPath()
 	return RawDataPath;
 }
 
+} // astromenace namespace
 } // viewizard namespace

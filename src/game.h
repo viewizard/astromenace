@@ -35,6 +35,9 @@
 namespace viewizard {
 
 struct sVECTOR3D;
+
+namespace astromenace {
+
 class cSpaceStars;
 class cEarthSpaceFighter;
 enum class eCommand;
@@ -42,8 +45,6 @@ enum class eMusicTheme;
 enum class eMenuStatus;
 enum class eGameMenuStatus;
 enum class eDialogBox;
-
-
 
 //------------------------------------------------------------------------------------
 // loop_proc.cpp
@@ -418,6 +419,7 @@ void DrawGameWeaponSlots();
 
 
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // GAME_H

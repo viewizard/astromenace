@@ -30,7 +30,9 @@
 
 #include "../core/base.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // menu sfx
 enum class eMenuSFX {
@@ -135,6 +137,7 @@ void ChangeVoiceGlobalVolume(float NewGlobalVolume);
 // Main audio loop.
 void AudioLoop();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // ASSETS_AUDIO_H

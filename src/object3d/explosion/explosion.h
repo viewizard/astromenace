@@ -31,7 +31,9 @@
 #include "../object3d.h"
 #include "../projectile/projectile.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 
 //-----------------------------------------------------------------------------
@@ -120,6 +122,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 
 
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_EXPLOSION_EXPLOSION_H

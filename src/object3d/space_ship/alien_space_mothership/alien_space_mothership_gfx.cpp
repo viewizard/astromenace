@@ -28,7 +28,9 @@
 #include "alien_space_mothership.h"
 #include "../../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 
 
@@ -475,4 +477,5 @@ void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSys
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

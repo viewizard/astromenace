@@ -28,7 +28,9 @@
 #include "explosion.h"
 #include "../../config/config.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -351,4 +353,5 @@ bool cExplosion::Update(float Time)
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

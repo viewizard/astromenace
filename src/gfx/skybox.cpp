@@ -45,7 +45,9 @@ textures. Since this one is tiled, we could scale it in 2 times for each side fo
 #include "../assets/texture.h"
 #include "skybox.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -210,4 +212,5 @@ void SkyBoxCreate(float X, float Y, float Z, float Width, float Height, float Le
 	SkyBoxHalfLength = Length / 2.0f;
 }
 
+} // astromenace namespace
 } // viewizard namespace

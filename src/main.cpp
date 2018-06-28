@@ -43,7 +43,9 @@
 #include "assets/loading.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -346,6 +348,7 @@ static void Loop()
 	}
 }
 
+} // astromenace namespace
 } // viewizard namespace
 
 /*
@@ -354,6 +357,7 @@ static void Loop()
 int main(int argc, char *argv[])
 {
 	using namespace viewizard;
+	using namespace viewizard::astromenace;
 
 	bool NeedShowSystemCursor{false};
 	bool NeedResetConfig{false};

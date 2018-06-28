@@ -34,6 +34,8 @@ namespace viewizard {
 
 struct sModel3D;
 
+namespace astromenace {
+
 // Get all model3d assets load value.
 unsigned GetModel3DAssetsLoadValue();
 // Cycle with function callback on each model3d asset load.
@@ -41,6 +43,7 @@ void ForEachModel3DAssetLoad(std::function<void (unsigned AssetValue)> function)
 // Get preloaded model3d asset (preloaded by ForEachModel3DAssetLoad() call).
 std::weak_ptr<sModel3D> GetPreloadedModel3DAsset(const std::string &FileName);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // ASSETS_MODEL3D_H

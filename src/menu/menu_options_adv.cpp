@@ -37,7 +37,9 @@
 #include "../main.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // временные данные для изменения и восстановления
 int Options_TexturesAnisotropyLevel;
@@ -431,4 +433,5 @@ void SaveOptionsAdvMenuTmpData()
 	ChangeGameConfig().UseGLSL120 = Options_UseGLSL120;
 }
 
+} // astromenace namespace
 } // viewizard namespace

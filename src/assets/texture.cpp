@@ -28,7 +28,9 @@
 #include "../core/core.h"
 #include "../config/config.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -442,4 +444,5 @@ GLtexture GetPreloadedTextureAsset(const std::string &FileName)
 	return 0;
 }
 
+} // astromenace namespace
 } // viewizard namespace

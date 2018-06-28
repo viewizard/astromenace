@@ -27,7 +27,9 @@
 
 #include "space_ship.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Указатели на начальный и конечный объект в списке
 cSpaceShip *StartSpaceShip = nullptr;
@@ -146,4 +148,5 @@ void ReleaseAllSpaceShip()
 	EndSpaceShip = nullptr;
 }
 
+} // astromenace namespace
 } // viewizard namespace

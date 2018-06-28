@@ -28,13 +28,16 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // Quit from main loop.
 void QuitFromMainLoop();
 // Recreate game's window.
 void RecreateGameWindow();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // MAIN_H

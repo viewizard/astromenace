@@ -38,7 +38,9 @@ Which Joystick should be used, could be configured via config file, "JoystickNum
 #include "../config/config.h"
 #include "platform.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -207,4 +209,5 @@ std::string JoystickButtonName(int ButtonNum)
 	return vw_GetText("Button") + std::to_string(ButtonNum + 1);
 }
 
+} // astromenace namespace
 } // viewizard namespace

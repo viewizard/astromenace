@@ -44,7 +44,9 @@ In order to show movement and more 'live' space, star system render "space dust"
 #include "../object3d/space_object/space_object.h"
 #include "skybox.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -500,4 +502,5 @@ void StarSystemDrawThirdLayer(eDrawType DrawType)
 	vw_BindTexture(0, 0);
 }
 
+} // astromenace namespace
 } // viewizard namespace

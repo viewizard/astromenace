@@ -34,7 +34,9 @@
 #include "shader.h"
 #include "texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * Draw Viewizard logotype.
@@ -236,4 +238,5 @@ void LoadAllGameAssets()
 	vw_ReleaseTexture(Background);
 }
 
+} // astromenace namespace
 } // viewizard namespace

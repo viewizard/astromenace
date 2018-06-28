@@ -30,7 +30,9 @@
 
 #include "../core/core.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 struct sTimeSheet {
 	bool InUse{false};
@@ -106,6 +108,7 @@ private:
  */
 void InterAIMode(std::list<sTimeSheet> &TimeSheetList);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // SCRIPT_SCRIPT_H

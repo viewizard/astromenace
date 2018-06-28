@@ -28,7 +28,9 @@
 #include "../../core/core.h"
 #include "../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Создание эффектов для космических объектов (двигатели для базы)
@@ -95,4 +97,5 @@ void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

@@ -33,7 +33,9 @@
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)
 int NeedShowBB = 0;
@@ -1244,4 +1246,5 @@ bool cObject3D::Update(float Time)
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

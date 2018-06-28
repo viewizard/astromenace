@@ -30,7 +30,9 @@
 
 #include "core/base.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 enum class eDrawType {
 	MENU,
@@ -107,6 +109,7 @@ enum class eDialogBox {
 	RestartOnAdvOptChanged		// on mission (in-game menu), restart game on adv-option changes, warning that progress will be lost
 };
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // ENUM_H

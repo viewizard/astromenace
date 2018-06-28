@@ -31,7 +31,9 @@
 #include "../object3d.h"
 #include "../weapon/weapon.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Класс cSpaceShip
@@ -223,6 +225,7 @@ void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceShip();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_SPACESHIP_SPACESHIP_H

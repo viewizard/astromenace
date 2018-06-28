@@ -30,7 +30,9 @@
 #include "../../../assets/audio.h"
 #include "../../space_object/ship_part/ship_part.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
@@ -860,4 +862,5 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

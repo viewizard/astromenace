@@ -28,7 +28,9 @@
 #include "ground_object.h"
 #include "../../script/script.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -837,4 +839,5 @@ bool cGroundObject::Update(float Time)
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

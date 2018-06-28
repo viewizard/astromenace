@@ -41,7 +41,9 @@ itself and drag object (if drag and drop are used).
 #include "../enum.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -142,4 +144,5 @@ void CursorDraw()
 	}
 }
 
+} // astromenace namespace
 } // viewizard namespace

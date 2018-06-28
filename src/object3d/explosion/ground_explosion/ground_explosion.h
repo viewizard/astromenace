@@ -31,7 +31,9 @@
 #include "../explosion.h"
 #include "../../ground_object/ground_object.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * All ground objects explosions.
@@ -43,6 +45,7 @@ public:
 				  int ObjectPieceNum, bool NeedExplosionSFX = true);
 };
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_EXPLOSION_GROUNDEXPLOSION_GROUNDEXPLOSION_H

@@ -28,7 +28,9 @@
 #include "../core/vfs/vfs.h"
 #include "../build_config.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 const std::string GameData[] = {
 	"lang/ru/voice/EngineMalfunction.wav",
@@ -421,4 +423,5 @@ int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePat
 			    GameData, GameDataCount);
 }
 
+} // astromenace namespace
 } // viewizard namespace

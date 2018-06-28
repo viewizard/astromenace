@@ -29,7 +29,9 @@
 #include "../../assets/audio.h"
 #include "../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // название типа оружия землян
 const char *GetWeaponGroupTitle(int Num)
@@ -1222,4 +1224,5 @@ bool cWeapon::WeaponFire(float Time)
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

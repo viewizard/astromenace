@@ -34,7 +34,9 @@
 #include "projectile/projectile.h"
 #include "space_object/space_object.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern cSpaceShip *StartSpaceShip;
@@ -1485,4 +1487,5 @@ bool SetupObject3DShaders()
 	return true;
 }
 
+} // astromenace namespace
 } // viewizard namespace

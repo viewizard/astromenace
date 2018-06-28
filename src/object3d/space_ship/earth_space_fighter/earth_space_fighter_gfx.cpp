@@ -28,7 +28,9 @@
 #include "earth_space_fighter.h"
 #include "../../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 
 //-----------------------------------------------------------------------------
@@ -398,4 +400,5 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

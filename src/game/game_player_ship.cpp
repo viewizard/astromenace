@@ -36,7 +36,9 @@
 #include "../object3d/ground_object/ground_object.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
@@ -1116,4 +1118,5 @@ void GamePlayerShip()
 
 }
 
+} // astromenace namespace
 } // viewizard namespace

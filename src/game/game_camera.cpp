@@ -28,7 +28,9 @@
 #include "../game.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
 sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
@@ -245,4 +247,5 @@ float GameCameraGetSpeed()
 	return GameCameraSpeed;
 }
 
+} // astromenace namespace
 } // viewizard namespace

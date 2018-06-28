@@ -31,7 +31,9 @@
 #include "../object3d.h"
 #include "../weapon/weapon.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //-----------------------------------------------------------------------------
 // Класс cGroundObject
@@ -170,6 +172,7 @@ void	DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllGroundObject();
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H

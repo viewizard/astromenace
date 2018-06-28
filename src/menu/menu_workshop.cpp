@@ -31,7 +31,9 @@
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 //------------------------------------------------------------------------------------
 // переменные
@@ -685,4 +687,5 @@ void WorkshopDrawWeapon(cWeapon *Weapon)
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
 }
 
+} // astromenace namespace
 } // viewizard namespace

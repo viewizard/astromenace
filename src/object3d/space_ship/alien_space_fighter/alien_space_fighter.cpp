@@ -29,7 +29,9 @@
 #include "../../../assets/audio.h"
 #include "../../../assets/texture.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 struct sAlienSpaceFighterData {
 	unsigned int WeaponQuantity;
@@ -775,4 +777,5 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	}
 }
 
+} // astromenace namespace
 } // viewizard namespace

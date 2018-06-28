@@ -29,7 +29,9 @@
 #include "../config/config.h"
 #include "audio.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 namespace {
 
@@ -361,4 +363,5 @@ void AudioLoop()
 	}
 }
 
+} // astromenace namespace
 } // viewizard namespace

@@ -30,7 +30,9 @@
 
 #include "../space_ship.h"
 
+// NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+namespace astromenace {
 
 /*
  * All alien motherships.
@@ -44,6 +46,7 @@ public:
 // Создание двигателя
 void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
 
+} // astromenace namespace
 } // viewizard namespace
 
 #endif // OBJECT3D_SPACESHIP_ALIENSPACEMOTHERSHIP_ALIENSPACEMOTHERSHIP_H
