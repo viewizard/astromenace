@@ -79,7 +79,7 @@ cSpaceObject::~cSpaceObject()
 void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::cObject3D::SetLocation(NewLocation);
+	cObject3D::SetLocation(NewLocation);
 
 	if (!GraphicFX.empty()) {
 		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
@@ -100,7 +100,7 @@ void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 {
 	// вызываем родительскую функцию
-	::cObject3D::SetRotation(NewRotation);
+	cObject3D::SetRotation(NewRotation);
 
 	if (!GraphicFX.empty()) {
 		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
@@ -136,7 +136,7 @@ bool cSpaceObject::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::cObject3D::Update(Time)) return false;
+	if (!cObject3D::Update(Time)) return false;
 
 	// если это часть корабля босса, взрываем через время
 	if (BossPartCountDown > -1.0f) {

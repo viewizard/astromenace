@@ -124,7 +124,7 @@ cGroundObject::~cGroundObject()
 void cGroundObject::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
-	::cObject3D::SetLocation(NewLocation);
+	cObject3D::SetLocation(NewLocation);
 
 	// если оружие вообще есть
 	if (Weapon != nullptr)
@@ -143,7 +143,7 @@ void cGroundObject::SetLocation(sVECTOR3D NewLocation)
 void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 {
 	// вызываем родительскую функцию
-	::cObject3D::SetRotation(NewRotation);
+	cObject3D::SetRotation(NewRotation);
 
 	// оружие
 	sVECTOR3D RotationBase = Rotation;
@@ -197,7 +197,7 @@ bool cGroundObject::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::cObject3D::Update(Time))
+	if (!cObject3D::Update(Time))
 		return false;
 	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
 	if (TimeDelta == 0.0f)

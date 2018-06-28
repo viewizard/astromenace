@@ -84,7 +84,7 @@ bool cExplosion::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!::cObject3D::Update(Time)) {
+	if (!cObject3D::Update(Time)) {
 		// делаем правильную остановку частиц...
 		for (auto tmpGFX : GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock()) {
