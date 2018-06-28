@@ -92,9 +92,8 @@ struct sWeaponData {
 	const char *TextureIllumName;
 };
 
-
 // оружие землян 1-99
-const sWeaponData PresetEarthWeaponData[] = {
+const std::vector<sWeaponData> PresetEarthWeaponData{
 	// Kinetic
 	{eGameSFX::WeaponFire_Kinetic1,		true, 25,	1,	1.5f,	3000,	0.4f, sVECTOR3D(0.0f, -0.613f, 2.0f), sVECTOR3D(0.0f, -0.65f, 1.0f), "models/earthfighter/weapon5.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
 	{eGameSFX::WeaponFire_Kinetic2,		true, 25,	1,	3,	1500,	0.6f, sVECTOR3D(0.0f, -0.613f, 2.93f), sVECTOR3D(0.0f, -0.6f, 1.8f), "models/earthfighter/weapon11.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
@@ -123,13 +122,9 @@ const sWeaponData PresetEarthWeaponData[] = {
 	{eGameSFX::WeaponFire_Torpedo,		false, 25,	5,	10,	50,	8.0f, sVECTOR3D(0.0f, -0.95f, 4.0f), sVECTOR3D(0.0f, -0.9f, 1.5f), "models/earthfighter/lnch3.vw3d", "models/earthfighter/lnch34.tga", ""},
 	{eGameSFX::WeaponFire_Bomb,		false, 30,	5,	15,	25,	10.0f, sVECTOR3D(0.0f, -0.95f, 5.0f), sVECTOR3D(0.0f, -0.9f, 1.8f), "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""},
 };
-#define PresetEarthWeaponDataCount sizeof(PresetEarthWeaponData)/sizeof(PresetEarthWeaponData[0])
-
-
-
 
 // оружие пришельцев 101-199
-static sWeaponData PresetAlienWeaponData[] = {
+static std::vector<sWeaponData> PresetAlienWeaponData{
 	// оружие пришельцев (как Kinetic1)
 	{eGameSFX::WeaponFire_Ion2, true, 1.0f,		1,	1,	5000,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (с наведением, как Kinetic2)
@@ -150,18 +145,10 @@ static sWeaponData PresetAlienWeaponData[] = {
 	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// оружие пришельцев (как Laser) для больших кораблей
 	{eGameSFX::WeaponFire_Laser, true, 15,		5,	150,	800,	1.2f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
-
-
-
 };
-#define PresetAlienWeaponDataCount sizeof(PresetAlienWeaponData)/sizeof(PresetAlienWeaponData[0])
-
-
-
-
 
 // оружие пиратов 201-299
-static sWeaponData PresetPirateWeaponData[] = {
+static std::vector<sWeaponData> PresetPirateWeaponData{
 	// турель для кораблей пиратов
 	{eGameSFX::WeaponFire_Kinetic1, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D(0.0f, 1.5f, 1.0f), sVECTOR3D(0.0f, 1.5f, 1.0f), "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
 	// турель для кораблей пиратов
@@ -199,10 +186,7 @@ static sWeaponData PresetPirateWeaponData[] = {
 	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
 	// мина4 (наведение по высоте + стрельба ракетами)
 	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
-
-
 };
-#define PresetPirateWeaponDataCount sizeof(PresetPirateWeaponData)/sizeof(PresetPirateWeaponData[0])
 
 
 
@@ -247,13 +231,13 @@ cWeapon::cWeapon(int WeaponNum)
 	if (WeaponNum <= 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon object with Number " << WeaponNum << "\n";
 		return;
-	} else if ((WeaponNum >= 1 && WeaponNum <= 99) && ((unsigned int)WeaponNum > PresetEarthWeaponDataCount)) {
+	} else if ((WeaponNum >= 1 && WeaponNum <= 99) && ((unsigned int)WeaponNum > PresetEarthWeaponData.size())) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(1) object with Number " << WeaponNum << "\n";
 		return;
-	} else if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum-100 > PresetAlienWeaponDataCount)) {
+	} else if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum-100 > PresetAlienWeaponData.size())) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(2) object with Number " << WeaponNum << "\n";
 		return;
-	} else if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum-200 > PresetPirateWeaponDataCount)) {
+	} else if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum-200 > PresetPirateWeaponData.size())) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(3) object with Number " << WeaponNum << "\n";
 		return;
 	}
@@ -1236,5 +1220,3 @@ bool cWeapon::WeaponFire(float Time)
 	// выстрел был
 	return true;
 }
-
-
