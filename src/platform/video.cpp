@@ -25,9 +25,6 @@
 
 *************************************************************************************/
 
-#include "../core/base.h"
-#include "platform.h"
-
 /*
 Note, we use view size instead of window size (or display size),
 in the meaning of game's rendering area size.
@@ -42,6 +39,11 @@ revised first in order to prevent objects creation in the visible
 part of scene.
 In real, we allow any view size with aspect ratio from 5:4 (1.25) to 16:9 (1.77).
 */
+
+#include "../core/base.h"
+#include "platform.h"
+
+namespace viewizard {
 
 namespace {
 
@@ -266,3 +268,5 @@ const std::vector<sViewSize> &DetectWindowSizeArray()
 
 	return WindowSizeArray;
 }
+
+} // viewizard namespace

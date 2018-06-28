@@ -30,6 +30,7 @@
 
 #include "../space_ship.h"
 
+namespace viewizard {
 
 /*
  * All pirate ships.
@@ -42,5 +43,7 @@ public:
 
 // Создание двигателя
 void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACESHIP_PIRATESHIP_PIRATESHIP_H

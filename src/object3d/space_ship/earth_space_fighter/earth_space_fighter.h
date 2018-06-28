@@ -30,6 +30,7 @@
 
 #include "../space_ship.h"
 
+namespace viewizard {
 
 /*
  * All earth fighters.
@@ -48,5 +49,7 @@ void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType);
 bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum);
 // Получаем возможный поворот орудия в данном слоте
 void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACESHIP_EARTHSPACEFIGHTER_EARTHSPACEFIGHTER_H

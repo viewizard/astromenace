@@ -27,7 +27,7 @@
 
 #include "earth_space_fighter.h"
 
-
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Получаем возможный поворот орудия в данном слоте
@@ -938,3 +938,5 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 	// делаем предварительную уснановку брони-текстур
 	SetEarthSpaceFighterArmour(this, 0);
 }
+
+} // viewizard namespace

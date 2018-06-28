@@ -33,6 +33,8 @@
 #include "../ui/font.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 const char *ButtonGameWeaponInfoType[4] = {
 	"Full",
 	"Flat",
@@ -259,11 +261,4 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	}
 }
 
-
-
-
-
-
-
-
-
+} // viewizard namespace

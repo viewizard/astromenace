@@ -31,6 +31,8 @@
 #include "../base.h"
 #include "../graphics/graphics.h"
 
+namespace viewizard {
+
 enum class eLoadTextureAs {
 	AUTO,	// Detect by file extension
 	VW2D,	// VW2D file
@@ -67,5 +69,7 @@ void vw_SetTextureAlpha(uint8_t nARed, uint8_t nAGreen, uint8_t nABlue);
 bool vw_FindTextureSizeByID(GLtexture TextureID, float *Width = nullptr, float *Height = nullptr);
 // Convert supported image file format to VW2D format.
 void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestName);
+
+} // viewizard namespace
 
 #endif // CORE_TEXTURE_TEXTURE_H

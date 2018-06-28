@@ -33,6 +33,8 @@
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"
 
+namespace viewizard {
+
 // флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)
 int NeedShowBB = 0;
 
@@ -1241,3 +1243,5 @@ bool cObject3D::Update(float Time)
 
 	return true;
 }
+
+} // viewizard namespace

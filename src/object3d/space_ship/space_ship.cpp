@@ -31,6 +31,7 @@
 #include "../../script/script.h"
 #include "earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
 
 extern bool PlayerFighterLeftEng;
 extern bool PlayerFighterRightEng;
@@ -1574,8 +1575,4 @@ bool cSpaceShip::Update(float Time)
 	return true;
 }
 
-
-
-
-
-
+} // viewizard namespace

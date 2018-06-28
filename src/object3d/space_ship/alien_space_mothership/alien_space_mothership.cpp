@@ -29,6 +29,7 @@
 #include "../../../config/config.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
 
 struct sAlienSpaceMotherShipData {
 	unsigned int WeaponQuantity;
@@ -857,3 +858,5 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		}
 	}
 }
+
+} // viewizard namespace

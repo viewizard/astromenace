@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 struct sVECTOR3D;
 
 /*
@@ -103,5 +105,7 @@ void vw_ShutdownAudio();
 // Setup listener in 3D space.
 // Note, orientation expressed as "at" and "up" vectors.
 void vw_Listener(float (&ListenerPosition)[3], float (&ListenerVelocity)[3], float (&ListenerOrientation)[6]);
+
+} // viewizard namespace
 
 #endif // CORE_AUDIO_AUDIO_H

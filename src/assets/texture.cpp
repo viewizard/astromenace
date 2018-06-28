@@ -28,6 +28,8 @@
 #include "../core/core.h"
 #include "../config/config.h"
 
+namespace viewizard {
+
 namespace {
 
 // empirical found "everage load value" for one texture asset
@@ -439,3 +441,5 @@ GLtexture GetPreloadedTextureAsset(const std::string &FileName)
 	std::cerr << __func__ << "(): " << "preloaded texture not found: " << FileName << "\n";
 	return 0;
 }
+
+} // viewizard namespace

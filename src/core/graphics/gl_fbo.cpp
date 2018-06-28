@@ -40,6 +40,8 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace viewizard {
+
 namespace {
 
 // Current FBO, null if FrameBuffer.
@@ -289,3 +291,5 @@ sFBO::~sFBO()
 	    FrameBufferObject)
 		_glDeleteFramebuffers(1, &FrameBufferObject);
 }
+
+} // viewizard namespace

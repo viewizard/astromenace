@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 struct sRGBCOLOR;
 
 // Font initialization by font name (path to file).
@@ -59,5 +61,7 @@ int vw_TextWidth(const char *Text, ...);
 // Draw text with current font with variadic arguments.
 int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
 		const sRGBCOLOR &Color, float Transp, const char *Text, ...);
+
+} // viewizard namespace
 
 #endif // CORE_FONT_FONT_H

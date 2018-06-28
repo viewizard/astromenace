@@ -31,6 +31,8 @@
 #include "../base.h"
 #include "../model3d/model3d.h"
 
+namespace viewizard {
+
 struct sModel3DBlock;
 
 // AABB-AABB collision detection.
@@ -56,5 +58,7 @@ bool vw_SphereOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Obje
 bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBlock &Object1DrawObjectList,
 			    const float (&Object1RotationMatrix)[9], float Object2Radius, const sVECTOR3D &Object2Location,
 			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D *CollisionLocation);
+
+} // viewizard namespace
 
 #endif // CORE_COLLISIONDETECTION_COLLISIONDETECTION_H

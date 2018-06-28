@@ -30,6 +30,7 @@
 
 #include "../space_object.h"
 
+namespace viewizard {
 
 /*
  * All ship parts.
@@ -39,5 +40,7 @@ class cShipPart : public cSpaceObject
 public:
 	cShipPart();
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACEOBJECT_SHIPPART_SHIPPART_H

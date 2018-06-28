@@ -31,8 +31,7 @@
 #include "../object3d.h"
 #include "../weapon/weapon.h"
 
-
-
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Класс cSpaceShip
@@ -223,5 +222,7 @@ void	UpdateAllSpaceShip(float Time);
 void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceShip();
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACESHIP_SPACESHIP_H

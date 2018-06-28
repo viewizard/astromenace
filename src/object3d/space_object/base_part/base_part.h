@@ -30,6 +30,7 @@
 
 #include "../space_object.h"
 
+namespace viewizard {
 
 /*
  * All pirate base parts.
@@ -39,5 +40,7 @@ class cBasePart : public cSpaceObject
 public:
 	explicit cBasePart(int BasePartNum);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACEOBJECT_BASEPART_BASEPART_H

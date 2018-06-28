@@ -28,9 +28,7 @@
 #include "asteroid.h"
 #include "../../../assets/texture.h"
 
-
-
-
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -74,3 +72,4 @@ cAsteroid::cAsteroid()
 	Radius = Width/2.0f;
 }
 
+} // viewizard namespace

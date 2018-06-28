@@ -38,6 +38,8 @@ Rules for functions and variables naming:
 
 #include "opengl.h"
 
+namespace viewizard {
+
 struct sDevCaps;
 
 /*
@@ -54,5 +56,7 @@ sDevCaps &__GetDevCaps();
 void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
 			   GLsizei stride, GLuint VertexBO, GLuint IndexBO);
 void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO);
+
+} // viewizard namespace
 
 #endif // CORE_GRAPHICS_GRAPHICSINTERNAL_H

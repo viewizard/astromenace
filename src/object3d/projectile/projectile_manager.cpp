@@ -27,7 +27,7 @@
 
 #include "projectile.h"
 
-
+namespace viewizard {
 
 // Указатели на начальный и конечный объект в списке
 cProjectile *StartProjectile = nullptr;
@@ -144,3 +144,4 @@ void ReleaseAllProjectile()
 	}
 }
 
+} // viewizard namespace

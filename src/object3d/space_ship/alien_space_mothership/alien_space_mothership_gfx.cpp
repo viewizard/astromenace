@@ -28,7 +28,7 @@
 #include "alien_space_mothership.h"
 #include "../../../assets/texture.h"
 
-
+namespace viewizard {
 
 
 
@@ -474,3 +474,5 @@ void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSys
 	}
 
 }
+
+} // viewizard namespace

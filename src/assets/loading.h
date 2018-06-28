@@ -30,7 +30,11 @@
 
 #include "../core/base.h"
 
+namespace viewizard {
+
 // Load all game assets.
 void LoadAllGameAssets();
+
+} // viewizard namespace
 
 #endif // ASSETS_LOADING_H

@@ -27,6 +27,8 @@
 
 #include "../core/core.h"
 
+namespace viewizard {
+
 /*
  * Provide mouse button's name - "ButtonN", where N is number.
  */
@@ -37,3 +39,5 @@ std::string MouseButtonName(int ButtonNum)
 
 	return vw_GetText("Button") + std::to_string(ButtonNum);
 }
+
+} // viewizard namespace

@@ -39,6 +39,8 @@
 #include "explosion/ground_explosion/ground_explosion.h"
 #include "explosion/space_explosion/space_explosion.h"
 
+namespace viewizard {
+
 float GetProjectileSpeed(int Num);
 void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType);
 
@@ -1442,3 +1444,5 @@ NexttmpS:
 	// снаряды не учитываем, иначе - поправь указатели, чтобы при удалении
 	// следующего, не было сбоя... при обновлении указателя у первого
 }
+
+} // viewizard namespace

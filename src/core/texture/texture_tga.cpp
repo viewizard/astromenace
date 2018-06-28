@@ -29,6 +29,8 @@
 
 #include "../vfs/vfs.h"
 
+namespace viewizard {
+
 int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels)
 {
 	constexpr uint8_t TGA_RGB{2};	// normal RGB (BGR) file
@@ -128,3 +130,5 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, 
 
 	return 0;
 }
+
+} // viewizard namespace

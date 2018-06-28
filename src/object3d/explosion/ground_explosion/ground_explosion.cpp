@@ -29,6 +29,8 @@
 #include "../../../assets/audio.h"
 #include "../../../object3d/space_object/ship_part/ship_part.h"
 
+namespace viewizard {
+
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
 
@@ -212,3 +214,5 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 
 }
+
+} // viewizard namespace

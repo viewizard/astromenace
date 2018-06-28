@@ -30,6 +30,7 @@
 
 #include "../ground_object.h"
 
+namespace viewizard {
 
 /*
  * All wheeled vehicles.
@@ -39,5 +40,7 @@ class cWheeled : public cGroundObject
 public:
 	explicit cWheeled(int WheeledNum);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_GROUNDOBJECT_WHEELED_WHEELED_H

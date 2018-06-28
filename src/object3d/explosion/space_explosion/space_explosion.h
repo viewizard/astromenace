@@ -30,6 +30,7 @@
 
 #include "../explosion.h"
 
+namespace viewizard {
 
 /*
  * All space explosions.
@@ -42,5 +43,6 @@ public:
 				 int ObjectPieceNum, bool NeedExplosionSFX = true);
 };
 
+} // viewizard namespace
 
 #endif // OBJECT3D_EXPLOSION_SPACEEXPLOSION_SPACEEXPLOSION_H

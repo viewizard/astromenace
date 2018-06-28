@@ -28,6 +28,8 @@
 #include "../core/vfs/vfs.h"
 #include "../build_config.h"
 
+namespace viewizard {
+
 const std::string GameData[] = {
 	"lang/ru/voice/EngineMalfunction.wav",
 	"lang/ru/voice/WeaponDamaged.wav",
@@ -418,3 +420,5 @@ int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePat
 			    RawDataDir, "models/models.pack",
 			    GameData, GameDataCount);
 }
+
+} // viewizard namespace

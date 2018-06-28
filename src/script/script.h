@@ -30,6 +30,8 @@
 
 #include "../core/core.h"
 
+namespace viewizard {
+
 struct sTimeSheet {
 	bool InUse{false};
 	float Time{0.0f};
@@ -103,5 +105,7 @@ private:
  * Unpack TimeSheet to the list.
  */
 void InterAIMode(std::list<sTimeSheet> &TimeSheetList);
+
+} // viewizard namespace
 
 #endif // SCRIPT_SCRIPT_H

@@ -32,6 +32,7 @@
 #include "../assets/texture.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
 
 extern cEarthSpaceFighter *WorkshopFighterGame;
 extern float CurrentAlert2;
@@ -1124,3 +1125,4 @@ void Workshop_Workshop()
 	ResetFontSize();
 }
 
+} // viewizard namespace

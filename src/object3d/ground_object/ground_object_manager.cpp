@@ -27,7 +27,7 @@
 
 #include "ground_object.h"
 
-
+namespace viewizard {
 
 // Указатели на начальный и конечный объект в списке
 cGroundObject *StartGroundObject = nullptr;
@@ -144,3 +144,5 @@ void ReleaseAllGroundObject()
 	StartGroundObject = nullptr;
 	EndGroundObject = nullptr;
 }
+
+} // viewizard namespace

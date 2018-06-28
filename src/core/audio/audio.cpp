@@ -28,6 +28,8 @@
 #include "buffer.h"
 #include "audio.h"
 
+namespace viewizard {
+
 namespace {
 
 /*
@@ -173,3 +175,5 @@ void vw_Listener(float (&ListenerPosition)[3], float (&ListenerVelocity)[3], flo
 	alListenerfv(AL_ORIENTATION, ListenerOrientation);
 	alGetError(); // reset errors
 }
+
+} // viewizard namespace

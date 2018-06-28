@@ -52,6 +52,8 @@ same functionality.
 #include "../base.h"
 #include "../math/math.h"
 
+namespace viewizard {
+
 namespace {
 
 struct sTimeThread {
@@ -179,3 +181,5 @@ float vw_GetTimeThreadSpeed(int TimeThread)
 
 	return TimeThreadsMap[TimeThread].Speed;
 }
+
+} // viewizard namespace

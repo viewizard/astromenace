@@ -39,6 +39,8 @@
 #include "../light/light.h"
 #include "particle_system.h"
 
+namespace viewizard {
+
 namespace {
 
 // Local draw buffer, that dynamically allocate memory at maximum required
@@ -958,3 +960,5 @@ void vw_UpdateAllParticleSystems(float Time)
 		}
 	}
 }
+
+} // viewizard namespace

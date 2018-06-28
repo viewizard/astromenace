@@ -31,6 +31,8 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 const char *OnOff[2] = {
 	"On",
 	"Off"
@@ -256,3 +258,5 @@ void DifficultyMenu()
 	if (DrawButton384(X,Y, vw_GetText("BACK"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_PROFILE;
 }
+
+} // viewizard namespace

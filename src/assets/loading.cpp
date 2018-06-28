@@ -34,6 +34,7 @@
 #include "shader.h"
 #include "texture.h"
 
+namespace viewizard {
 
 /*
  * Draw Viewizard logotype.
@@ -234,3 +235,5 @@ void LoadAllGameAssets()
 	vw_ReleaseTexture(ProgressBarBorder);
 	vw_ReleaseTexture(Background);
 }
+
+} // viewizard namespace

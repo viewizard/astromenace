@@ -37,7 +37,7 @@
 #include "../main.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
-
+namespace viewizard {
 
 // временные данные для изменения и восстановления
 int Options_TexturesAnisotropyLevel;
@@ -430,3 +430,5 @@ void SaveOptionsAdvMenuTmpData()
 {
 	ChangeGameConfig().UseGLSL120 = Options_UseGLSL120;
 }
+
+} // viewizard namespace

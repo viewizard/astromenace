@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 class cParticleSystem2D;
 
 enum class eParticle2DCreationType {
@@ -151,5 +153,7 @@ void vw_UpdateAllParticleSystems2D(float Time);
 void vw_DrawAllParticleSystems2D();
 // Release all particle systems 2D.
 void vw_ReleaseAllParticleSystems2D();
+
+} // viewizard namespace
 
 #endif // CORE_PARTICLESYSTEM2D_PARTICLESYSTEM2D_H

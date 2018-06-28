@@ -30,6 +30,8 @@
 #include "../../../assets/audio.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
+
 struct sPirateShipData {
 	unsigned int WeaponQuantity;
 	unsigned int BossWeaponQuantity;
@@ -658,3 +660,5 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		}
 	}
 }
+
+} // viewizard namespace

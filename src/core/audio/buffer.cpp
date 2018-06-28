@@ -34,6 +34,8 @@ another side, in this way we can reuse already created stream buffers.
 
 #include "buffer.h"
 
+namespace viewizard {
+
 constexpr unsigned NUM_OF_DYNBUF{20};	// (stream) num buffers in queue
 constexpr unsigned DYNBUF_SIZE{16384};	// (stream) buffer size
 
@@ -503,3 +505,5 @@ void vw_ReleaseSoundBuffer(const std::string &Name)
 
 	SoundBuffersMap.erase(tmpBuffer);
 }
+
+} // viewizard namespace

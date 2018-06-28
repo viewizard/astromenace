@@ -28,6 +28,8 @@
 #include "../base.h"
 #include "opengl.h"
 
+namespace viewizard {
+
 // OpenGL 1.3 (only what we need or would need in future)
 PFNGLACTIVETEXTUREPROC _glActiveTexture{nullptr};
 PFNGLCLIENTACTIVETEXTUREPROC _glClientActiveTexture{nullptr};
@@ -426,3 +428,5 @@ bool __Initialize_GL_NV_framebuffer_multisample_coverage()
 
 	return _glRenderbufferStorageMultisampleCoverageNV;
 }
+
+} // viewizard namespace

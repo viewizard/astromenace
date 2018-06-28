@@ -41,6 +41,8 @@ vw_UpdateMusic() and vw_IsAnyMusicPlaying() designed to be called in loop.
 
 #include "buffer.h"
 
+namespace viewizard {
+
 namespace {
 
 struct sMusic {
@@ -326,3 +328,5 @@ void vw_SetMusicGlobalVolume(float NewGlobalVolume)
 		tmpMusic.second.SetGlobalVolume(NewGlobalVolume);
 	}
 }
+
+} // viewizard namespace

@@ -51,6 +51,7 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace viewizard {
 
 /*
  * Create texture.
@@ -281,3 +282,5 @@ void vw_SetTextureEnvMode(eTextureEnvMode mode)
 {
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, static_cast<GLint>(mode));
 }
+
+} // viewizard namespace

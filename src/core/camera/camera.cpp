@@ -30,6 +30,8 @@
 #include "../audio/audio.h"
 #include "camera.h"
 
+namespace viewizard {
+
 namespace {
 
 // Camera update flag (need for frustum calculation on camera update).
@@ -210,3 +212,5 @@ void vw_CameraLookAt()
 		CameraUpdated = false;
 	}
 }
+
+} // viewizard namespace

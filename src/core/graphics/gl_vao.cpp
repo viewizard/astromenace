@@ -35,6 +35,8 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace viewizard {
+
 /*
  * Build vertex array object.
  */
@@ -89,3 +91,5 @@ void vw_DeleteVAO(GLuint &VAO)
 	_glDeleteVertexArrays(1, &VAO);
 	VAO = 0;
 }
+
+} // viewizard namespace

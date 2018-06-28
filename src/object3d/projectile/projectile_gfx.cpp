@@ -28,6 +28,8 @@
 #include "projectile.h"
 #include "../../assets/texture.h"
 
+namespace viewizard {
+
 namespace {
 
 const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
@@ -898,3 +900,4 @@ void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXN
 	}
 }
 
+} // viewizard namespace

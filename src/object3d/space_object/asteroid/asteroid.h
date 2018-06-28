@@ -30,6 +30,7 @@
 
 #include "../space_object.h"
 
+namespace viewizard {
 
 /*
  * Small asteroids.
@@ -39,5 +40,7 @@ class cAsteroid : public cSpaceObject
 public:
 	cAsteroid();
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H

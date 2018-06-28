@@ -30,6 +30,7 @@
 
 #include "../ground_object.h"
 
+namespace viewizard {
 
 /*
  * All military buildings.
@@ -39,5 +40,7 @@ class cMilitaryBuilding : public cGroundObject
 public:
 	explicit cMilitaryBuilding(int MilitaryBuildingNum);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_GROUNDOBJECT_MILITARYBUILDING_MILITARYBUILDING_H

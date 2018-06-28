@@ -28,8 +28,7 @@
 #include "earth_space_fighter.h"
 #include "../../../assets/texture.h"
 
-
-
+namespace viewizard {
 
 
 //-----------------------------------------------------------------------------
@@ -399,6 +398,4 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 
 }
 
-
-
-
+} // viewizard namespace

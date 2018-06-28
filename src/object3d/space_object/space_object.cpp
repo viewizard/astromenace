@@ -28,8 +28,7 @@
 #include "space_object.h"
 #include "../../game.h"
 
-
-
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -279,5 +278,4 @@ bool cSpaceObject::Update(float Time)
 	return true;
 }
 
-
-
+} // viewizard namespace

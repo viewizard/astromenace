@@ -30,6 +30,8 @@
 
 #include "../enum.h"
 
+namespace viewizard {
+
 // Star system initialization.
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
 // Star system initialization by game's part type (menu/game).
@@ -44,5 +46,7 @@ void StarSystemDraw(eDrawType DrawType);
 void StarSystemDrawThirdLayer(eDrawType DrawType);
 // Release star system.
 void StarSystemRelease();
+
+} // viewizard namespace
 
 #endif // GFX_STARSYSTEM_H

@@ -28,8 +28,7 @@
 #include "earth_space_fighter.h"
 #include "../../../assets/texture.h"
 
-
-
+namespace viewizard {
 
 
 
@@ -183,17 +182,4 @@ void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType)
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+} // viewizard namespace

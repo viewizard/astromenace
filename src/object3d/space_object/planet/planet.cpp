@@ -29,7 +29,7 @@
 #include "../../../config/config.h"
 #include "../../../assets/texture.h"
 
-
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -108,3 +108,5 @@ cPlanet::cPlanet(int PlanetNum)
 		break;
 	}
 }
+
+} // viewizard namespace

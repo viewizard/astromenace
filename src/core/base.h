@@ -66,6 +66,8 @@
 #  define UNUSED(x) UNUSED_ ## x
 #endif
 
+namespace viewizard {
+
 // functor in order to use enumeration as a key (std::map, std::unordered_map, std::unordered_multimap)
 struct sEnumHash {
 	template <typename T>
@@ -145,5 +147,7 @@ constexpr int ERR_VFS_BUILD{-4};	// VFS build number issue
 constexpr int ERR_EXT_RES{-5};		// issue with external resources
 constexpr int ERR_MEM{-6};		// memory allocation related issue
 constexpr int ERR_NOT_SUPPORTED{-7};	// file format not supported
+
+} // viewizard namespace
 
 #endif // CORE_BASE_H

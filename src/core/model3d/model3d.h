@@ -32,6 +32,8 @@
 #include "../math/math.h"
 #include "../graphics/opengl.h"
 
+namespace viewizard {
+
 using bounding_box = std::array<sVECTOR3D, 8>;
 
 // Oriented Bounding Box, coordinates are related to model's center
@@ -141,5 +143,7 @@ struct sModel3D {
 std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit, bool NeedTangentAndBinormal);
 // Release all 3D models.
 void vw_ReleaseAllModel3D();
+
+} // viewizard namespace
 
 #endif // CORE_MODEL3D_MODEL3D_H

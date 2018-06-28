@@ -29,6 +29,7 @@
 #include "../../../assets/audio.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
 
 struct sAlienSpaceFighterData {
 	unsigned int WeaponQuantity;
@@ -774,3 +775,4 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	}
 }
 
+} // viewizard namespace

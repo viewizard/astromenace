@@ -30,6 +30,7 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
 
 extern bool DragWeapon;
 
@@ -747,3 +748,5 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 	return false;
 }
+
+} // viewizard namespace

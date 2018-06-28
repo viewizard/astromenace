@@ -30,6 +30,10 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels);
+
+} // viewizard namespace
 
 #endif // CORE_TEXTURE_TEXTURETGA_H

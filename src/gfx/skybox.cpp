@@ -45,6 +45,8 @@ textures. Since this one is tiled, we could scale it in 2 times for each side fo
 #include "../assets/texture.h"
 #include "skybox.h"
 
+namespace viewizard {
+
 namespace {
 
 // SkyBox textures
@@ -207,3 +209,5 @@ void SkyBoxCreate(float X, float Y, float Z, float Width, float Height, float Le
 	SkyBoxHalfHeight = Height / 2.0f;
 	SkyBoxHalfLength = Length / 2.0f;
 }
+
+} // viewizard namespace

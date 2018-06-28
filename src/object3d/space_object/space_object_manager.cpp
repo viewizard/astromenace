@@ -27,6 +27,7 @@
 
 #include "space_object.h"
 
+namespace viewizard {
 
 // Указатели на начальный и конечный объект в списке
 cSpaceObject *StartSpaceObject = nullptr;
@@ -147,3 +148,5 @@ void ReleaseAllSpaceObject()
 	StartSpaceObject = nullptr;
 	EndSpaceObject = nullptr;
 }
+
+} // viewizard namespace

@@ -31,6 +31,8 @@
 #include "../object3d.h"
 #include "../explosion/space_explosion/space_explosion.h"
 
+namespace viewizard {
+
 //-----------------------------------------------------------------------------
 // Класс cSpaceObject
 //-----------------------------------------------------------------------------
@@ -87,5 +89,7 @@ void	UpdateAllSpaceObject(float Time);
 void	DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllSpaceObject();
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACEOBJECT_SPACEOBJECT_H

@@ -28,8 +28,7 @@
 #include "../../core/core.h"
 #include "../../assets/texture.h"
 
-
-
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Создание эффектов для космических объектов (двигатели для базы)
@@ -96,3 +95,4 @@ void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 
 }
 
+} // viewizard namespace

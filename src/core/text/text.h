@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 // Initialization. Load file with translation in .csv format (supported by LibreOffice Calc).
 int vw_InitText(const char *FileName, const char SymbolSeparator, const char SymbolEndOfLine);
 // Set default language.
@@ -46,5 +48,7 @@ std::unordered_set<char32_t> &vw_FindCharsSetForLanguage();
 void vw_ReleaseText();
 // Get available languages count.
 unsigned int vw_GetLanguageListCount();
+
+} // viewizard namespace
 
 #endif // CORE_TEXT_TEXT_H

@@ -31,6 +31,8 @@
 #include "buffer.h"
 #include "../math/math.h"
 
+namespace viewizard {
+
 namespace {
 
 struct sSound {
@@ -365,3 +367,5 @@ void vw_StopSound(unsigned int ID, uint32_t StopDelayTicks)
 	if (tmpSound != SoundsMap.end())
 		tmpSound->second.Stop(StopDelayTicks);
 }
+
+} // viewizard namespace

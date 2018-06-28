@@ -31,6 +31,8 @@
 #include "../assets/audio.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 const std::vector<std::string> CreditsArray{
@@ -163,3 +165,5 @@ void CreditsMenu()
 		vw_OpenWebsiteURL("https://www.viewizard.com/donate.html");
 	}
 }
+
+} // viewizard namespace

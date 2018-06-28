@@ -30,6 +30,8 @@
 
 #include "../core/base.h"
 
+namespace viewizard {
+
 /*
  * Paths.
  */
@@ -121,5 +123,7 @@ bool StandardAspectRation(const sViewSize &ViewSize);
 // Find appropriate UI language by user preferred locale.
 // Note, this function should be called after vw_InitText().
 unsigned int FindPreferredLanguageByLocale();
+
+} // viewizard namespace
 
 #endif // PLATFORM_PLATFORM_H

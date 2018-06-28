@@ -30,6 +30,8 @@
 #include "../assets/texture.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
+
 // работа с морганием вывода
 extern float CurrentAlert2;
 extern float CurrentAlert3;
@@ -575,3 +577,5 @@ void DrawGameWeaponSlots()
 
 
 }
+
+} // viewizard namespace

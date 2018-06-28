@@ -32,6 +32,7 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
 
 // вот тут храним самый важный номер! - номер текущего профайла!!!
 int	CurrentProfile=-1;
@@ -475,3 +476,5 @@ void ProfileMenu()
 		ComBuffer = eCommand::SWITCH_TO_MISSION;
 
 }
+
+} // viewizard namespace

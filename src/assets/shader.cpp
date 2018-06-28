@@ -27,6 +27,8 @@
 
 #include "../core/core.h"
 
+namespace viewizard {
+
 namespace {
 
 struct sShaderMetadata {
@@ -72,3 +74,5 @@ bool ForEachShaderAssetLoad(std::function<void ()> function)
 
 	return true;
 }
+
+} // viewizard namespace

@@ -31,6 +31,7 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
 
 float MissionTitleLifeTime = 0.0f;
 float LastMissionTitleUpdateTime = 0.0f;
@@ -285,4 +286,4 @@ void GameDrawMissionFailed()
 
 }
 
-
+} // viewizard namespace

@@ -37,6 +37,7 @@
 #include "../gfx/star_system.h"
 #include "../gfx/shadow_map.h"
 
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
@@ -168,3 +169,5 @@ void UpdateAllObject3D(float Time)
 	UpdateAllSpaceObject(Time);
 	UpdateAllExplosion(Time);
 }
+
+} // viewizard namespace

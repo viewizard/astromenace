@@ -29,6 +29,8 @@
 #include "../math/math.h"
 #include "light.h"
 
+namespace viewizard {
+
 namespace {
 
 // no point to calculate attenuation for all scene, limit it by 10
@@ -268,3 +270,5 @@ void cLight::SetLocation(sVECTOR3D NewLocation)
 	if (LightType != eLightType::Directional)
 		Location = NewLocation;
 }
+
+} // viewizard namespace

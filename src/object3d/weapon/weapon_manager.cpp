@@ -27,7 +27,7 @@
 
 #include "weapon.h"
 
-
+namespace viewizard {
 
 // Указатели на начальный и конечный объект в списке
 cWeapon *StartWeapon = nullptr;
@@ -142,3 +142,4 @@ void ReleaseAllWeapon()
 	}
 }
 
+} // viewizard namespace

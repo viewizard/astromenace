@@ -44,6 +44,7 @@ sources, you are free to change or add methods to sound.h header file instead.
 #endif // defined(__APPLE__) && defined(__MACH__)
 #include "AL/alut.h"
 
+namespace viewizard {
 
 /*
  * Check ALC errors.
@@ -94,5 +95,7 @@ inline bool CheckALSourceState(ALuint Source, ALint State)
 	alGetError(); // reset errors
 	return (tmpState == State);
 }
+
+} // viewizard namespace
 
 #endif // CORE_AUDIO_OPENAL_H

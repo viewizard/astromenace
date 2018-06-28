@@ -33,6 +33,8 @@
 #include "../config/config.h"
 #include "shadow_map.h"
 
+namespace viewizard {
+
 namespace {
 
 std::shared_ptr<sFBO> ShadowMapFBO{};
@@ -246,3 +248,5 @@ void ShadowMap_EndFinalRender()
 
 	vw_BindTexture(2, 0);
 }
+
+} // viewizard namespace

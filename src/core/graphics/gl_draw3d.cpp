@@ -46,6 +46,8 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace viewizard {
+
 /*
  * Setup states and pointers.
  * Also used for VAO generation.
@@ -161,3 +163,5 @@ void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *Verte
 	else
 		__Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
 }
+
+} // viewizard namespace

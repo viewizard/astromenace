@@ -45,6 +45,7 @@ language name, as distinct from "en-BZ" (English, Belize).
 #include "../core/core.h"
 #include "platform.h"
 
+namespace viewizard {
 
 /*
  * Get user preferred locale.
@@ -187,3 +188,5 @@ unsigned int FindPreferredLanguageByLocale()
 
 	return 0;
 }
+
+} // viewizard namespace

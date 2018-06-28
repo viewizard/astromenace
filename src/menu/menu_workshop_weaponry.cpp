@@ -34,6 +34,7 @@
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
 
 extern cEarthSpaceFighter *WorkshopFighterGame;
 extern cWeapon *WorkshopNewWeapon;
@@ -1272,5 +1273,4 @@ void Workshop_Weaponry()
 
 }
 
-
-
+} // viewizard namespace

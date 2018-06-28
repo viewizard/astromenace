@@ -30,6 +30,7 @@
 
 #include "../space_object.h"
 
+namespace viewizard {
 
 /*
  * All planets.
@@ -39,5 +40,7 @@ class cPlanet : public cSpaceObject
 public:
 	explicit cPlanet(int PlanetNum);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACEOBJECT_PLANET_PLANET_H

@@ -30,6 +30,8 @@
 #include "../vfs/vfs.h"
 #include "model3d.h"
 
+namespace viewizard {
+
 class cModel3DWrapper : public sModel3D {
 	friend std::weak_ptr<sModel3D> vw_LoadModel3D(const std::string &FileName, float TriangleSizeLimit,
 						      bool NeedTangentAndBinormal);
@@ -845,3 +847,5 @@ void sModel3D::MetadataInitialization()
 	float Height2 = Height / 2.0f;
 	Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 }
+
+} // viewizard namespace

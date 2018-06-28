@@ -39,6 +39,7 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace viewizard {
 
 /*
  * Build buffer object (size in bytes).
@@ -89,3 +90,5 @@ void vw_DeleteBufferObject(GLuint &buffer)
 	_glDeleteBuffers(1, &buffer);
 	buffer = 0;
 }
+
+} // viewizard namespace

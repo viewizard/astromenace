@@ -28,6 +28,8 @@
 #include "../graphics/graphics.h"
 #include "../math/math.h"
 
+namespace viewizard {
+
 namespace {
 
 // right mouse button status
@@ -238,3 +240,5 @@ bool vw_MouseOverRect(const sRECT &MDetect)
 
 	return false;
 }
+
+} // viewizard namespace

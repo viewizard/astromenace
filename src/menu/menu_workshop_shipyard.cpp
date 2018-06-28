@@ -32,6 +32,7 @@
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
 
 extern cEarthSpaceFighter *WorkshopFighterGame;
 extern cEarthSpaceFighter *WorkshopNewFighter;
@@ -766,4 +767,4 @@ void Workshop_Shipyard()
 	ResetFontSize();
 }
 
-
+} // viewizard namespace

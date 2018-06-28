@@ -28,8 +28,7 @@
 #include "explosion.h"
 #include "../../assets/texture.h"
 
-
-
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Создание графического эффекта
@@ -335,3 +334,4 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 	}
 }
 
+} // viewizard namespace

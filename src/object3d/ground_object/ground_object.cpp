@@ -28,6 +28,7 @@
 #include "ground_object.h"
 #include "../../script/script.h"
 
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -836,5 +837,4 @@ bool cGroundObject::Update(float Time)
 	return true;
 }
 
-
-
+} // viewizard namespace

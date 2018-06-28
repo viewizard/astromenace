@@ -31,6 +31,7 @@
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
 
 //------------------------------------------------------------------------------------
 // переменные
@@ -684,3 +685,4 @@ void WorkshopDrawWeapon(cWeapon *Weapon)
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
 }
 
+} // viewizard namespace

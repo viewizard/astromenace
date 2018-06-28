@@ -43,6 +43,8 @@ for current hardware (and supported by code at this moment).
 #include "../base.h"
 #include "opengl.h"
 
+namespace viewizard {
+
 struct sRECT;
 struct sVECTOR3D;
 class cTexture;
@@ -644,5 +646,7 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 
 // Create screenshot from current OpenGL surface.
 int vw_Screenshot(int Width, int Height, const std::string &FileName);
+
+} // viewizard namespace
 
 #endif // CORE_GRAPHICS_GRAPHICS_H

@@ -38,6 +38,8 @@ Which Joystick should be used, could be configured via config file, "JoystickNum
 #include "../config/config.h"
 #include "platform.h"
 
+namespace viewizard {
+
 namespace {
 
 SDL_Joystick *Joystick{nullptr};
@@ -204,3 +206,5 @@ std::string JoystickButtonName(int ButtonNum)
 	// ButtonNum + 1, since buttons index start from 0
 	return vw_GetText("Button") + std::to_string(ButtonNum + 1);
 }
+
+} // viewizard namespace

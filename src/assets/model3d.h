@@ -30,6 +30,8 @@
 
 #include "../core/base.h"
 
+namespace viewizard {
+
 struct sModel3D;
 
 // Get all model3d assets load value.
@@ -38,5 +40,7 @@ unsigned GetModel3DAssetsLoadValue();
 void ForEachModel3DAssetLoad(std::function<void (unsigned AssetValue)> function);
 // Get preloaded model3d asset (preloaded by ForEachModel3DAssetLoad() call).
 std::weak_ptr<sModel3D> GetPreloadedModel3DAsset(const std::string &FileName);
+
+} // viewizard namespace
 
 #endif // ASSETS_MODEL3D_H

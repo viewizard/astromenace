@@ -31,6 +31,8 @@
 #include "../object3d.h"
 #include "../projectile/projectile.h"
 
+namespace viewizard {
+
 enum class eGameSFX;
 
 class cWeapon : public cObject3D {
@@ -132,5 +134,7 @@ void	UpdateAllWeapon(float Time);
 void	DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllWeapon();
+
+} // viewizard namespace
 
 #endif // OBJECT3D_WEAPON_WEAPON_H

@@ -36,6 +36,7 @@
 #include "assets/texture.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
 
 // командный буфер
 eCommand ComBuffer{eCommand::DO_NOTHING};
@@ -377,3 +378,5 @@ void Loop_Proc()
 	}
 
 }
+
+} // viewizard namespace

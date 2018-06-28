@@ -52,6 +52,8 @@
 #include "../object3d/ground_object/wheeled/wheeled.h"
 #include "../object3d/ground_object/tracked/tracked.h"
 
+namespace viewizard {
+
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
 extern cGroundObject *StartGroundObject;
@@ -825,3 +827,5 @@ void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
 
 	std::cerr << __func__ << "(): " << "AI_Mode " << TimeSheetList.front().AI_Mode << " not found.\n";
 }
+
+} // viewizard namespace

@@ -27,7 +27,7 @@
 
 #include "explosion.h"
 
-
+namespace viewizard {
 
 // Указатели на начальный и конечный объект в списке
 cExplosion *StartExplosion = nullptr;
@@ -141,3 +141,5 @@ void ReleaseAllExplosion()
 	StartExplosion = nullptr;
 	EndExplosion = nullptr;
 }
+
+} // viewizard namespace

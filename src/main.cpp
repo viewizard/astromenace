@@ -43,6 +43,8 @@
 #include "assets/loading.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 bool NeedQuitFromLoop{false};
@@ -344,11 +346,15 @@ static void Loop()
 	}
 }
 
+} // viewizard namespace
+
 /*
  * Main.
  */
 int main(int argc, char *argv[])
 {
+	using namespace viewizard;
+
 	bool NeedShowSystemCursor{false};
 	bool NeedResetConfig{false};
 	bool NeedPack{false};

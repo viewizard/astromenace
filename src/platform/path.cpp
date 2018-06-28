@@ -43,6 +43,8 @@
 #include <sys/stat.h> // mkdir
 #endif // unix
 
+namespace viewizard {
+
 namespace {
 
 std::string DataPath{
@@ -251,3 +253,5 @@ const std::string &GetRawDataPath()
 
 	return RawDataPath;
 }
+
+} // viewizard namespace

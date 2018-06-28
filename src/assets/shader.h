@@ -30,7 +30,11 @@
 
 #include "../core/base.h"
 
+namespace viewizard {
+
 // Cycle with function callback on each shader asset load.
 bool ForEachShaderAssetLoad(std::function<void ()> function);
+
+} // viewizard namespace
 
 #endif // ASSETS_GLSL_H

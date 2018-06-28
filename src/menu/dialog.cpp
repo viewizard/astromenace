@@ -34,6 +34,8 @@
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
+
 namespace {
 
 eDialogBox CurrentDialogBox{eDialogBox::None}; // current dialog box
@@ -1648,3 +1650,5 @@ Dialogs with default type:
 		vw_SetKeyStatus(SDLK_ESCAPE, false);
 	}
 }
+
+} // viewizard namespace

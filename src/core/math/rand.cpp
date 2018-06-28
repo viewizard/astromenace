@@ -28,6 +28,8 @@
 #include "../base.h"
 #include <random> // this one should not being used in other parts of code
 
+namespace viewizard {
+
 namespace {
 
 std::random_device rd;
@@ -58,3 +60,5 @@ int vw_iRandNum(int Max)
 {
 	return static_cast<int>(std::floor(vw_fRand() * static_cast<float>(Max + 1)));
 }
+
+} // viewizard namespace

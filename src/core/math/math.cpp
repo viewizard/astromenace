@@ -27,6 +27,8 @@
 
 #include "math.h"
 
+namespace viewizard {
+
 // utf8 <=> utf32 converter
 std::wstring_convert<deletable_facet<std::codecvt<char32_t, char, std::mbstate_t>>, char32_t> ConvertUTF8;
 
@@ -336,3 +338,5 @@ void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle)
 		Point.z = -tmpY * s + tmpZ * c;
 	}
 }
+
+} // viewizard namespace

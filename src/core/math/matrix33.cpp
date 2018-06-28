@@ -27,6 +27,8 @@
 
 #include "math.h"
 
+namespace viewizard {
+
 /*
  * Setup matrix identity.
  */
@@ -160,3 +162,5 @@ void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float (&Matrix33)[9])
 	      Matrix33[1] * Point.x + Matrix33[4] * Point.y + Matrix33[7] * Point.z,
 	      Matrix33[2] * Point.x + Matrix33[5] * Point.y + Matrix33[8] * Point.z);
 }
+
+} // viewizard namespace

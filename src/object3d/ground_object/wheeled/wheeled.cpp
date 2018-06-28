@@ -28,6 +28,7 @@
 #include "wheeled.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
 
 struct sWheeledData {
 	float Strength;
@@ -355,3 +356,4 @@ cWheeled::cWheeled(int WheeledNum)
 	}
 }
 
+} // viewizard namespace

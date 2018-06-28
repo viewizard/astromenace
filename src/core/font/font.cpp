@@ -51,6 +51,8 @@
 #include FT_FREETYPE_H
 #include <stdarg.h> // va_start
 
+namespace viewizard {
+
 namespace {
 
 // FreeType related stuff.
@@ -820,3 +822,5 @@ int vw_DrawText3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	vw_BindTexture(0, 0);
 	return 0;
 }
+
+} // viewizard namespace

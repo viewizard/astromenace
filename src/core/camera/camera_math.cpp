@@ -28,6 +28,8 @@
 #include "../graphics/graphics.h"
 #include "../math/math.h"
 
+namespace viewizard {
+
 namespace {
 
 float Frustum[6][4]{{0, 0, 0, 0},
@@ -197,3 +199,5 @@ bool vw_BoxInFrustum(const sVECTOR3D &MinPoint, const sVECTOR3D &MaxPoint)
 	// return a true for the box being inside of the frustum
 	return true;
 }
+
+} // viewizard namespace

@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 struct sVECTOR3D {
 	float x{0.0f}, y{0.0f}, z{0.0f};
 
@@ -253,5 +255,7 @@ void vw_Matrix33CreateRotate(float (&Matrix33)[9], const sVECTOR3D &Angle);
 void vw_Matrix33InverseRotate(float (&Matrix33)[9]);
 // Calculate point position by transformation matrix.
 void vw_Matrix33CalcPoint(sVECTOR3D &Point, const float (&Matrix33)[9]);
+
+} // viewizard namespace
 
 #endif // CORE_MATH_MATH_H

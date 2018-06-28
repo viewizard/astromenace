@@ -28,8 +28,7 @@
 #include "alien_space_fighter.h"
 #include "../../../assets/texture.h"
 
-
-
+namespace viewizard {
 
 
 //-----------------------------------------------------------------------------
@@ -208,3 +207,4 @@ void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 
 }
 
+} // viewizard namespace

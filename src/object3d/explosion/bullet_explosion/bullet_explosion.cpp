@@ -29,6 +29,8 @@
 #include "../../../config/config.h"
 #include "../../../assets/audio.h"
 
+namespace viewizard {
+
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, eObjectStatus ObjectStatus);
 
@@ -991,3 +993,5 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 	}
 
 }
+
+} // viewizard namespace

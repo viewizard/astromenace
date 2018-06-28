@@ -29,6 +29,8 @@
 #include "../config/config.h"
 #include "audio.h"
 
+namespace viewizard {
+
 namespace {
 
 // empirical found "everage load value" for one sfx asset
@@ -358,3 +360,5 @@ void AudioLoop()
 		}
 	}
 }
+
+} // viewizard namespace

@@ -31,6 +31,8 @@
 #include "../core/base.h"
 #include "../core/graphics/graphics.h"
 
+namespace viewizard {
+
 // Get all texture assets load value.
 unsigned GetTextureAssetsLoadValue();
 // Cycle with function callback on each texture asset load.
@@ -41,5 +43,7 @@ void ChangeTexturesAnisotropyLevel();
 // Note, we don't validate textures, caller should care about call
 // ForEachTextureAssetLoad() each time, when this need.
 GLtexture GetPreloadedTextureAsset(const std::string &FileName);
+
+} // viewizard namespace
 
 #endif // ASSETS_TEXTURE_H

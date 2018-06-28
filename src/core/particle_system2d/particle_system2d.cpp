@@ -38,6 +38,8 @@
 #include "../texture/texture.h"
 #include "particle_system2d.h"
 
+namespace viewizard {
+
 namespace {
 
 // Local draw buffer, that dynamically allocate memory at maximum required
@@ -438,3 +440,5 @@ void vw_ReleaseAllParticleSystems2D()
 {
 	ParticleSystemsList.clear();
 }
+
+} // viewizard namespace

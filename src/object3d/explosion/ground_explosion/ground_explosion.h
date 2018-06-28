@@ -31,6 +31,7 @@
 #include "../explosion.h"
 #include "../../ground_object/ground_object.h"
 
+namespace viewizard {
 
 /*
  * All ground objects explosions.
@@ -41,5 +42,7 @@ public:
 	explicit cGroundExplosion(cGroundObject *Object, int ExplType, const sVECTOR3D &ExplLocation,
 				  int ObjectPieceNum, bool NeedExplosionSFX = true);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_EXPLOSION_GROUNDEXPLOSION_GROUNDEXPLOSION_H

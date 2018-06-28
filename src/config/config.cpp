@@ -36,6 +36,8 @@
 #include "config.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 sGameConfig Config;
@@ -548,3 +550,5 @@ int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 
 	return 0;
 }
+
+} // viewizard namespace

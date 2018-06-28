@@ -49,6 +49,8 @@
  * 3. Hash calculation for tags names (for fast search, or switch statement).
  */
 
+namespace viewizard {
+
 enum class eEntryType {
 	Regular,	// regular, could contain attributes and sub-entries
 	Comment		// <--! comment -->
@@ -228,5 +230,7 @@ private:
 	// hash check for collisions
 	std::map<unsigned, std::string> HashCheckMap{};
 };
+
+} // viewizard namespace
 
 #endif // CORE_XML_XML_H

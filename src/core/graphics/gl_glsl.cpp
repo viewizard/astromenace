@@ -36,6 +36,8 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace viewizard {
+
 struct cGLSL {
 	friend std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 						    const std::string &VertexShaderFileName,
@@ -425,3 +427,5 @@ bool vw_Uniform3f(GLint UniformLocation, float data1, float data2, float data3)
 
 	return true;
 }
+
+} // viewizard namespace

@@ -39,6 +39,8 @@ sources, you are free to change or add methods to sound.h header file instead.
 #include "vorbis/vorbisfile.h"
 #include "ogg/ogg.h"
 
+namespace viewizard {
+
 struct sStreamBuffer;
 
 // Create stream buffer from OGG file.
@@ -60,5 +62,7 @@ ALuint vw_CreateSoundBufferFromOGG(const std::string &Name);
 ALuint vw_FindSoundBufferIDByName(const std::string &Name);
 // Release all sound buffers.
 void vw_ReleaseAllSoundBuffers();
+
+} // viewizard namespace
 
 #endif // CORE_AUDIO_BUFFER_H

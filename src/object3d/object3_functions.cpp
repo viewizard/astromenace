@@ -34,6 +34,8 @@
 #include "projectile/projectile.h"
 #include "space_object/space_object.h"
 
+namespace viewizard {
+
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
@@ -1482,3 +1484,5 @@ bool SetupObject3DShaders()
 
 	return true;
 }
+
+} // viewizard namespace

@@ -38,6 +38,8 @@ Rules for functions and variables naming:
 
 #include "opengl.h"
 
+namespace viewizard {
+
 // OpenGL 1.3 (only what we need or would need in future)
 extern PFNGLACTIVETEXTUREPROC _glActiveTexture;
 extern PFNGLCLIENTACTIVETEXTUREPROC _glClientActiveTexture;
@@ -135,5 +137,7 @@ bool __Initialize_OpenGL_2_1();
 bool __Initialize_OpenGL_3_0();
 bool __Initialize_OpenGL_4_2();
 bool __Initialize_GL_NV_framebuffer_multisample_coverage();
+
+} // viewizard namespace
 
 #endif // CORE_GRAPHICS_EXTENSION_H

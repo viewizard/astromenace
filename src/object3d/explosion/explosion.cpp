@@ -28,6 +28,7 @@
 #include "explosion.h"
 #include "../../config/config.h"
 
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -350,5 +351,4 @@ bool cExplosion::Update(float Time)
 	return true;
 }
 
-
-
+} // viewizard namespace

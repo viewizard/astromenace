@@ -35,6 +35,7 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
 
 int ButQuant = 10;
 float But[10] =
@@ -542,3 +543,5 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	}
 
 }
+
+} // viewizard namespace

@@ -27,6 +27,8 @@
 
 #include "../math/math.h"
 
+namespace viewizard {
+
 namespace {
 
 // libSDL2 keystate array size
@@ -121,3 +123,5 @@ const std::u32string &vw_GetCurrentUnicodeChar()
 {
 	return CurrentUnicodeChar;
 }
+
+} // viewizard namespace

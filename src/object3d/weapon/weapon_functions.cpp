@@ -28,8 +28,7 @@
 #include "weapon.h"
 #include "../../assets/texture.h"
 
-
-
+namespace viewizard {
 
 
 //-----------------------------------------------------------------------------
@@ -402,3 +401,5 @@ void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponN
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
 }
+
+} // viewizard namespace

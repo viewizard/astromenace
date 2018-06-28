@@ -30,6 +30,7 @@
 
 #include "../explosion.h"
 
+namespace viewizard {
 
 /*
  * All bullets/rockets explosions.
@@ -41,5 +42,7 @@ public:
 				  int ExplType, const sVECTOR3D &ExplLocation,
 				  float Speed, bool NeedExplosionSFX = true);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_EXPLOSION_BULLETEXPLOSION_BULLETEXPLOSION_H

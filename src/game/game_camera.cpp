@@ -28,6 +28,7 @@
 #include "../game.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
 
 sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
 sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
@@ -244,4 +245,4 @@ float GameCameraGetSpeed()
 	return GameCameraSpeed;
 }
 
-
+} // viewizard namespace

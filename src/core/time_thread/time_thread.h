@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 // Initialize or re-initialize time for particular thread.
 void vw_InitTimeThread(int TimeThread);
 // Release all threads.
@@ -44,5 +46,7 @@ void vw_ResumeTimeThreads();
 void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed = 1.0f);
 // Get time thread speed for particular thread.
 float vw_GetTimeThreadSpeed(int TimeThread);
+
+} // viewizard namespace
 
 #endif // CORE_TIMETHREAD_TIMETHREAD_H

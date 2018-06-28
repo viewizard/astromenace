@@ -31,8 +31,7 @@
 #include "../object3d.h"
 #include "../projectile/projectile.h"
 
-
-
+namespace viewizard {
 
 
 //-----------------------------------------------------------------------------
@@ -121,7 +120,6 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 
 
 
-
-
+} // viewizard namespace
 
 #endif // OBJECT3D_EXPLOSION_EXPLOSION_H

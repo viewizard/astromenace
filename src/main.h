@@ -28,9 +28,13 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+namespace viewizard {
+
 // Quit from main loop.
 void QuitFromMainLoop();
 // Recreate game's window.
 void RecreateGameWindow();
+
+} // viewizard namespace
 
 #endif // MAIN_H

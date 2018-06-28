@@ -77,6 +77,8 @@ Logging works without initialization, too.
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
 
+namespace viewizard {
+
 struct sVFS {
 	std::string FileName;
 	SDL_RWops *File{nullptr};
@@ -539,3 +541,5 @@ long sFILE::ftell()
 {
 	return Pos;
 }
+
+} // viewizard namespace

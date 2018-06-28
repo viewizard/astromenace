@@ -32,6 +32,8 @@
 
 #include "core/base.h"
 
+namespace viewizard {
+
 struct sVECTOR3D;
 class cSpaceStars;
 class cEarthSpaceFighter;
@@ -416,7 +418,6 @@ void DrawGameWeaponSlots();
 
 
 
-
-
+} // viewizard namespace
 
 #endif // GAME_H

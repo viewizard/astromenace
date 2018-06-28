@@ -43,6 +43,8 @@ usage for fonts in menu elements.
 #include "../build_config.h"
 #include "font.h"
 
+namespace viewizard {
+
 namespace {
 
 const std::vector<sFontMetadata> BuiltInFontList{
@@ -155,3 +157,5 @@ int GetFontQuantity()
 {
 	return static_cast<int>(BuiltInFontList.size());
 }
+
+} // viewizard namespace

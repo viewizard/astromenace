@@ -41,6 +41,8 @@ itself and drag object (if drag and drop are used).
 #include "../enum.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 float CurrentCursorFlash{1.0f};
@@ -139,3 +141,5 @@ void CursorDraw()
 		break;
 	}
 }
+
+} // viewizard namespace

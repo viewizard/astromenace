@@ -30,6 +30,7 @@
 
 #include "../space_object.h"
 
+namespace viewizard {
 
 /*
  * All big asteroids.
@@ -39,5 +40,7 @@ class cBigAsteroid : public cSpaceObject
 public:
 	explicit cBigAsteroid(int AsteroidNum);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_SPACEOBJECT_BIGASTEROID_BIGASTEROID_H

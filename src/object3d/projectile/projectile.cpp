@@ -37,6 +37,8 @@ will not kill their speed and maneuverability and we will have nice difficulty m
 #include "../explosion/bullet_explosion/bullet_explosion.h"
 #include "../../assets/texture.h"
 
+namespace viewizard {
+
 struct sProjectileData {
 	float Radius;
 	float DamageHull;
@@ -1822,3 +1824,5 @@ missile:
 	// объект в порядке - удалять не нужно
 	return true;
 }
+
+} // viewizard namespace

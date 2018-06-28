@@ -30,6 +30,8 @@
 
 #include "../core/base.h"
 
+namespace viewizard {
+
 // menu sfx
 enum class eMenuSFX {
 	OverSmallButton,
@@ -132,5 +134,7 @@ void ChangeMenuSFXGlobalVolume(float NewGlobalVolume);
 void ChangeVoiceGlobalVolume(float NewGlobalVolume);
 // Main audio loop.
 void AudioLoop();
+
+} // viewizard namespace
 
 #endif // ASSETS_AUDIO_H

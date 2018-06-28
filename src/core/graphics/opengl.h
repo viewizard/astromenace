@@ -64,9 +64,13 @@
 
 #include "glext.h" // provide glext.h version we need
 
+namespace viewizard {
+
 // alias for OpenGL variable types, in order to make code more clear
 using GLtexture = GLuint;
 using GLrenderbuffer = GLuint;
 using GLframebuffer = GLuint;
+
+} // viewizard namespace
 
 #endif // CORE_GRAPHICS_OPENGL_H

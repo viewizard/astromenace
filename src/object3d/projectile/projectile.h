@@ -30,6 +30,7 @@
 
 #include "../object3d.h"
 
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Класс cProjectile
@@ -125,5 +126,7 @@ void	UpdateAllProjectile(float Time);
 void	DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllProjectile();
+
+} // viewizard namespace
 
 #endif // OBJECT3D_PROJECTILE_PROJECTILE_H

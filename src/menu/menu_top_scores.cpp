@@ -31,6 +31,8 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 struct sTopScore {
@@ -131,3 +133,5 @@ void TopScoresMenu()
 	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
 }
+
+} // viewizard namespace

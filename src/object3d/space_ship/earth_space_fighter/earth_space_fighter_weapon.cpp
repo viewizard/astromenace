@@ -27,8 +27,7 @@
 
 #include "earth_space_fighter.h"
 
-
-
+namespace viewizard {
 
 
 //-----------------------------------------------------------------------------
@@ -65,3 +64,5 @@ bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, i
 
 	return true;
 }
+
+} // viewizard namespace

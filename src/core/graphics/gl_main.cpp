@@ -45,6 +45,8 @@
 #include "graphics.h"
 #include "extensions.h"
 
+namespace viewizard {
+
 namespace {
 
 // hardware device capabilities
@@ -532,3 +534,5 @@ void vw_DepthTest(bool mode, eCompareFunc func)
 	} else
 		glDisable(GL_DEPTH_TEST);
 }
+
+} // viewizard namespace

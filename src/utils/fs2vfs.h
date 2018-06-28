@@ -28,7 +28,11 @@
 #ifndef UTILS_FS2VFS_H
 #define UTILS_FS2VFS_H
 
+namespace viewizard {
+
 // Create game data VFS file (convert FS to VFS).
 int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath);
+
+} // viewizard namespace
 
 #endif // UTILS_FS2VFS_H

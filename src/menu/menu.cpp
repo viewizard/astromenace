@@ -39,6 +39,8 @@
 #include "../gfx/shadow_map.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 std::unique_ptr<cMissionScript> MenuScript{};
@@ -657,6 +659,4 @@ void MainMenu()
 
 }
 
-
-
-
+} // viewizard namespace

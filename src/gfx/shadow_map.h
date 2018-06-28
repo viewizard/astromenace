@@ -28,6 +28,8 @@
 #ifndef GFX_SHADOWMAP_H
 #define GFX_SHADOWMAP_H
 
+namespace viewizard {
+
 enum class eShadowMapSetup {
 	Menu,
 	Game
@@ -51,5 +53,7 @@ void ShadowMap_EndFinalRender();
 float ShadowMap_Get_xPixelOffset();
 // Y offset for shader.
 float ShadowMap_Get_yPixelOffset();
+
+} // viewizard namespace
 
 #endif // GFX_SHADOWMAP_H

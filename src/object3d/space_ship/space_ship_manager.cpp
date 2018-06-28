@@ -27,7 +27,7 @@
 
 #include "space_ship.h"
 
-
+namespace viewizard {
 
 // Указатели на начальный и конечный объект в списке
 cSpaceShip *StartSpaceShip = nullptr;
@@ -145,3 +145,5 @@ void ReleaseAllSpaceShip()
 	StartSpaceShip = nullptr;
 	EndSpaceShip = nullptr;
 }
+
+} // viewizard namespace

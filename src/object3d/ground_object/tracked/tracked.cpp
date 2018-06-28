@@ -28,6 +28,7 @@
 #include "tracked.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
 
 struct sTrackedData {
 	float Strength;
@@ -664,3 +665,4 @@ cTracked::cTracked(int TrackedNum)
 	}
 }
 
+} // viewizard namespace

@@ -40,7 +40,7 @@
 #include "../object3d/ground_object/tracked/tracked.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
-
+namespace viewizard {
 
 //------------------------------------------------------------------------------------
 // переменные
@@ -1653,3 +1653,5 @@ void InformationDrawObject()
 
 	vw_End2DMode();
 }
+
+} // viewizard namespace

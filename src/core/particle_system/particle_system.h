@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 struct sVECTOR3D;
 class cLight;
 
@@ -258,5 +260,7 @@ void vw_DrawAllParticleSystems();
 void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawParticleSystem);
 // Update all particle systems.
 void vw_UpdateAllParticleSystems(float Time);
+
+} // viewizard namespace
 
 #endif // CORE_PARTICLESYSTEM_PARTICLESYSTEM_H

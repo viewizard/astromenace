@@ -36,6 +36,8 @@
 #include "../object3d/ground_object/ground_object.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
 
+namespace viewizard {
+
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
 extern cSpaceObject *StartSpaceObject;
@@ -1114,8 +1116,4 @@ void GamePlayerShip()
 
 }
 
-
-
-
-
-
+} // viewizard namespace

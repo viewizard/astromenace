@@ -27,6 +27,7 @@
 
 #include "graphics.h"
 
+namespace viewizard {
 
 /*
  * Set lighting status.
@@ -73,3 +74,5 @@ void vw_MaterialV(eMaterialParameter pname, const GLfloat *param)
 {
 	glMaterialfv(GL_FRONT_AND_BACK, static_cast<GLenum>(pname), param);
 }
+
+} // viewizard namespace

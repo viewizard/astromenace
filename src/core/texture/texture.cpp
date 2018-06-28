@@ -46,6 +46,8 @@ care about byte alignment.
 #include "texture.h"
 #include "texture_tga.h"
 
+namespace viewizard {
+
 namespace {
 
 // Default anisotropy level
@@ -497,3 +499,5 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique
 	std::cout << "Texture created from memory: " << TextureName << "\n";
 	return TextureID;
 }
+
+} // viewizard namespace

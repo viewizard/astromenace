@@ -34,6 +34,8 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 struct cMission {
@@ -467,3 +469,5 @@ void MissionMenu()
 
 
 }
+
+} // viewizard namespace

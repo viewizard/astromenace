@@ -28,6 +28,8 @@
 #ifndef GFX_SKYBOX_H
 #define GFX_SKYBOX_H
 
+namespace viewizard {
+
 enum class eSide : unsigned {
 	RIGHT,	// The RIGHT side
 	LEFT,	// The LEFT side
@@ -45,5 +47,7 @@ void SkyBoxSetTexture(GLtexture TextureID, eSide Side);
 void SkyBoxCreate(float X, float Y, float Z, float Width, float Height, float Length);
 // Draw initialized SkyBox sides.
 void SkyBoxDraw();
+
+} // viewizard namespace
 
 #endif // GFX_SKYBOX_H

@@ -41,6 +41,7 @@
 #include "../assets/texture.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 // временные данные для изменения и восстановления
@@ -448,3 +449,5 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		}
 	}
 }
+
+} // viewizard namespace

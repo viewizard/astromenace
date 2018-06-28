@@ -31,6 +31,7 @@
 #include "../object3d.h"
 #include "../weapon/weapon.h"
 
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Класс cGroundObject
@@ -168,5 +169,7 @@ void	UpdateAllGroundObject(float Time);
 void	DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void	ReleaseAllGroundObject();
+
+} // viewizard namespace
 
 #endif // OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H

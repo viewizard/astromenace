@@ -32,6 +32,7 @@
 
 #include "object3d.h"
 
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Проверка столкновений Sphere-Mesh
@@ -561,3 +562,5 @@ bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, in
 
 	return false;
 }
+
+} // viewizard namespace

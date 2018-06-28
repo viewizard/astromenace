@@ -33,6 +33,8 @@
 #include "../font/font.h"
 #include "text.h"
 
+namespace viewizard {
+
 namespace {
 
 // Map of Maps with all sorted language data in utf8.
@@ -321,3 +323,5 @@ std::unordered_set<char32_t> &vw_FindCharsSetForLanguage()
 
 	return CharsSetForLanguage;
 }
+
+} // viewizard namespace

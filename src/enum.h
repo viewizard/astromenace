@@ -30,6 +30,8 @@
 
 #include "core/base.h"
 
+namespace viewizard {
+
 enum class eDrawType {
 	MENU,
 	GAME
@@ -104,5 +106,7 @@ enum class eDialogBox {
 	RestartOnOptionsChanged,	// on mission (in-game menu), restart game on option changes, warning that progress will be lost
 	RestartOnAdvOptChanged		// on mission (in-game menu), restart game on adv-option changes, warning that progress will be lost
 };
+
+} // viewizard namespace
 
 #endif // ENUM_H

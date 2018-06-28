@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 constexpr char VFS_VER[]{"v1.6"};
 
 enum class eFileLocation {
@@ -143,5 +145,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName);
 // You could call vw_fclose() if you should release memory in particular
 // part of code. Otherwise, it will be released automatically (see. unique_ptr).
 int vw_fclose(std::unique_ptr<sFILE> &stream);
+
+} // viewizard namespace
 
 #endif // CORE_VFS_VFS_H

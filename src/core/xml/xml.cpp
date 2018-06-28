@@ -31,6 +31,8 @@
 #include "../vfs/vfs.h"
 #include "xml.h"
 
+namespace viewizard {
+
 namespace {
 
 // For more compatibility, we use 'Windows' end line symbols
@@ -390,3 +392,5 @@ bool cXMLDocument::Save(const std::string &XMLFileName)
 	SDL_RWclose(File);
 	return true;
 }
+
+} // viewizard namespace

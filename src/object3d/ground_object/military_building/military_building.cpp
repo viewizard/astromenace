@@ -28,6 +28,7 @@
 #include "military_building.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
 
 struct sMilitaryBuildingData {
 	float Strength;
@@ -278,3 +279,4 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	}
 }
 
+} // viewizard namespace

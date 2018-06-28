@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 struct sVECTOR3D;
 
 enum class eLightType {
@@ -102,5 +104,7 @@ std::weak_ptr<cLight> vw_CreatePointLight(const sVECTOR3D &Location,
 					  float Linear, float Quadratic);
 // Get main direct light. Usually, first one is the main.
 bool vw_GetMainDirectLight(std::weak_ptr<cLight> &Light);
+
+} // viewizard namespace
 
 #endif // CORE_LIGHT_LIGHT_H

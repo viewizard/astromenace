@@ -28,6 +28,8 @@
 #ifndef UI_FONT_H
 #define UI_FONT_H
 
+namespace viewizard {
+
 struct sFontMetadata {
 	std::string FontTitle{};
 	std::string FontFileName{};
@@ -50,5 +52,7 @@ void GenerateFonts();
 const sFontMetadata &GetFontMetadata(int FontNumber);
 // Get fonts quantity.
 int GetFontQuantity();
+
+} // viewizard namespace
 
 #endif // UI_FONT_H

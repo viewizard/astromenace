@@ -37,6 +37,7 @@ but only provide them to OpenGL functions, let OpenGL check them.
 #include "../math/math.h"
 #include "graphics.h"
 
+namespace viewizard {
 
 /*
  * Replace the current matrix with the identity matrix.
@@ -117,3 +118,5 @@ void vw_PopMatrix()
 {
 	glPopMatrix();
 }
+
+} // viewizard namespace

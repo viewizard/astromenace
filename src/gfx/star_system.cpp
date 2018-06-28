@@ -44,6 +44,8 @@ In order to show movement and more 'live' space, star system render "space dust"
 #include "../object3d/space_object/space_object.h"
 #include "skybox.h"
 
+namespace viewizard {
+
 namespace {
 
 // StarSystem initialization status
@@ -497,3 +499,5 @@ void StarSystemDrawThirdLayer(eDrawType DrawType)
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
 }
+
+} // viewizard namespace

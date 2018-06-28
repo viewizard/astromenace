@@ -48,6 +48,8 @@
 #include <stdarg.h> // va_start
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
+namespace viewizard {
+
 namespace {
 
 std::unique_ptr<cMissionScript> MissionScript{};
@@ -1783,8 +1785,4 @@ void DrawGame()
 	vw_End2DMode();
 }
 
-
-
-
-
-
+} // viewizard namespace

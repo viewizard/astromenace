@@ -28,6 +28,8 @@
 #ifndef UI_CURSOR_H
 #define UI_CURSOR_H
 
+namespace viewizard {
+
 //
 void CursorInit(bool ShowSystemCursor);
 //
@@ -36,5 +38,7 @@ void CursorRelease();
 void CursorUpdate();
 //
 void CursorDraw();
+
+} // viewizard namespace
 
 #endif // UI_CURSOR_H

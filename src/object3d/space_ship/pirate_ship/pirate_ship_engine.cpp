@@ -28,8 +28,7 @@
 #include "pirate_ship.h"
 #include "../../../assets/texture.h"
 
-
-
+namespace viewizard {
 
 
 //-----------------------------------------------------------------------------
@@ -170,3 +169,4 @@ void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int E
 
 }
 
+} // viewizard namespace

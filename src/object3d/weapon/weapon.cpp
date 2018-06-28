@@ -29,6 +29,7 @@
 #include "../../assets/audio.h"
 #include "../../assets/texture.h"
 
+namespace viewizard {
 
 // название типа оружия землян
 const char *GetWeaponGroupTitle(int Num)
@@ -1220,3 +1221,5 @@ bool cWeapon::WeaponFire(float Time)
 	// выстрел был
 	return true;
 }
+
+} // viewizard namespace

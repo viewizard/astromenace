@@ -28,6 +28,8 @@
 #include "../math/math.h"
 #include "../model3d/model3d.h"
 
+namespace viewizard {
+
 /*
  * Check, is point belong triangle.
  */
@@ -521,3 +523,5 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 
 	return false;
 }
+
+} // viewizard namespace

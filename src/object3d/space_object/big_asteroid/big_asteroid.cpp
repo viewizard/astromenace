@@ -29,6 +29,7 @@
 #include "../../../config/config.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -105,3 +106,5 @@ case10next:
 		break;
 	}
 }
+
+} // viewizard namespace

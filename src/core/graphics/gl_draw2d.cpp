@@ -33,6 +33,8 @@
 #include "../texture/texture.h"
 #include "graphics.h"
 
+namespace viewizard {
+
 namespace {
 
 constexpr unsigned int DrawBufferSize{16}; // RI_2f_XYZ | RI_2f_TEX = (2 + 2) * 4 vertices = 16
@@ -175,3 +177,5 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
 }
+
+} // viewizard namespace

@@ -29,6 +29,7 @@
 #include "../../../config/config.h"
 #include "../../../assets/texture.h"
 
+namespace viewizard {
 
 struct sBuildingData {
 	float Strength;
@@ -82,3 +83,4 @@ cBuilding::cBuilding(int BuildingNum)
 	Strength = StrengthStart = PresetBuildingData[BuildingNum-1].Strength/GameEnemyArmorPenalty;
 }
 
+} // viewizard namespace

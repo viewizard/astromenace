@@ -30,6 +30,8 @@
 
 #include "../base.h"
 
+namespace viewizard {
+
 struct sVECTOR3D;
 
 /* Camera related function. */
@@ -61,5 +63,7 @@ void vw_CalculateFrustum();
 bool vw_SphereInFrustum(const sVECTOR3D &Point, float Radius);
 // This checks if a box is in the frustum.
 bool vw_BoxInFrustum(const sVECTOR3D &MinPoint, const sVECTOR3D &MaxPoint);
+
+} // viewizard namespace
 
 #endif // CORE_CAMERA_CAMERA_H

@@ -28,6 +28,8 @@
 #include "../core/core.h"
 #include "../config/config.h"
 
+namespace viewizard {
+
 namespace {
 
 // empirical found "everage load value" for one model3d asset
@@ -268,3 +270,5 @@ std::weak_ptr<sModel3D> GetPreloadedModel3DAsset(const std::string &FileName)
 	std::cerr << __func__ << "(): " << "preloaded model3d not found: " << FileName << "\n";
 	return std::weak_ptr<sModel3D>{};
 }
+
+} // viewizard namespace

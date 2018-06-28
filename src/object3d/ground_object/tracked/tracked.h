@@ -30,6 +30,7 @@
 
 #include "../ground_object.h"
 
+namespace viewizard {
 
 /*
  * All tracked vehicles.
@@ -39,5 +40,7 @@ class cTracked : public cGroundObject
 public:
 	explicit cTracked(int TrackedNum);
 };
+
+} // viewizard namespace
 
 #endif // OBJECT3D_GROUNDOBJECT_TRACKED_TRACKED_H
