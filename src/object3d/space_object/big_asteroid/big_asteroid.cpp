@@ -71,8 +71,8 @@ cBigAsteroid::cBigAsteroid(int AsteroidNum)
 case9next:
 
 		//Speed = 25.0f;
-		RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
-		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
+		RotationSpeed.x = 10.0f + 10.0f*vw_fRand0();
+		RotationSpeed.y = 2.0f + 20.0f*vw_fRand0();
 
 		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
@@ -99,8 +99,8 @@ case9next:
 case10next:
 
 		//Speed = 25.0f;
-		RotationSpeed.x = 10.0f + 10.0f*vw_Randf0;
-		RotationSpeed.y = 2.0f + 20.0f*vw_Randf0;
+		RotationSpeed.x = 10.0f + 10.0f*vw_fRand0();
+		RotationSpeed.y = 2.0f + 20.0f*vw_fRand0();
 
 		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;

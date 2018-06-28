@@ -211,7 +211,10 @@ float vw_fRandNum(float Max);
 // Generate random integer in range [0, Max].
 int vw_iRandNum(int Max);
 // Generate random float in range (-1.0f, 1.0f).
-#define vw_Randf0 (vw_fRand() - vw_fRand())
+inline float vw_fRand0()
+{
+	return vw_fRand() - vw_fRand();
+}
 
 /*
  * 4x4 matrix, float Matrix[16]:

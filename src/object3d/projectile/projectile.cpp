@@ -957,9 +957,9 @@ cProjectile::~cProjectile()
 					fDist2 = 3.0f;
 
 				if (fDist2 < effective_dist2) {
-					pVelocity = sVECTOR3D(Dist2.x + 10.0f * vw_Randf0,
-							      Dist2.y + 10.0f * vw_Randf0,
-							      Dist2.z + 10.0f * vw_Randf0);
+					pVelocity = sVECTOR3D(Dist2.x + 10.0f * vw_fRand0(),
+							      Dist2.y + 10.0f * vw_fRand0(),
+							      Dist2.z + 10.0f * vw_fRand0());
 					pVelocity.Normalize();
 					pVelocity = pVelocity ^ (effective_dist2 / fDist2);
 					pNeedStop = true;

@@ -795,13 +795,13 @@ bool cGroundObject::Update(float Time)
 				if (NeedDeviation[i] <= CurentDeviationSum[i]+CurentDeviation[i]) {
 					CurentDeviation[i] -= CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
 					CurentDeviationSum[i] += CurentDeviation[i];
-					NeedDeviation[i] = vw_Randf0*0.1f;
+					NeedDeviation[i] = vw_fRand0()*0.1f;
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			} else {
 				if (NeedDeviation[i] >= CurentDeviationSum[i]+CurentDeviation[i]) {
 					CurentDeviation[i] += CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
 					CurentDeviationSum[i] += CurentDeviation[i];
-					NeedDeviation[i] = vw_Randf0*0.1f;
+					NeedDeviation[i] = vw_fRand0()*0.1f;
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			}
 

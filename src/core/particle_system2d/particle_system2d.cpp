@@ -151,14 +151,14 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity, float TimeDelta)
 		cParticle2D &NewParticle = ParticlesList.back();
 
 		NewParticle.Age = 0.0f;
-		NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
+		NewParticle.Lifetime = Life + vw_fRand0() * LifeVar;
 		if (NewParticle.Lifetime < 0.0f)
 			NewParticle.Lifetime = 0.0f;
 
 		// generate color
-		NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
-		NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
-		NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
+		NewParticle.Color.r = ColorStart.r + vw_fRand0() * ColorVar.r;
+		NewParticle.Color.g = ColorStart.g + vw_fRand0() * ColorVar.g;
+		NewParticle.Color.b = ColorStart.b + vw_fRand0() * ColorVar.b;
 		vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.g, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.b, 0.0f, 1.0f);
@@ -169,7 +169,7 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity, float TimeDelta)
 		NewParticle.ColorDelta.b = (ColorEnd.b - NewParticle.Color.b) / NewParticle.Lifetime;
 
 		// generate alpha
-		NewParticle.Alpha = AlphaStart + vw_Randf0 * AlphaVar;
+		NewParticle.Alpha = AlphaStart + vw_fRand0() * AlphaVar;
 		vw_Clamp(NewParticle.Alpha, 0.0f, 1.0f);
 
 		switch (CreationType) {
@@ -186,7 +186,7 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity, float TimeDelta)
 			break;
 		}
 
-		NewParticle.Size = SizeStart + vw_Randf0 * SizeVar;
+		NewParticle.Size = SizeStart + vw_fRand0() * SizeVar;
 		if (NewParticle.Size < 0.0f)
 			NewParticle.Size = 0.0f;
 		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
@@ -194,7 +194,7 @@ void cParticleSystem2D::EmitParticles(unsigned int Quantity, float TimeDelta)
 		SetupNewParticleDirection(NewParticle);
 
 		// calculate velocity
-		float NewSpeed = Speed + vw_Randf0 * SpeedVar;
+		float NewSpeed = Speed + vw_fRand0() * SpeedVar;
 		if (NewSpeed < 0.0f)
 			NewSpeed = 0.0f;
 		NewParticle.Velocity *= NewSpeed;
@@ -237,9 +237,9 @@ void cParticleSystem2D::GenerateLocationCircleType(cParticle2D &NewParticle)
 {
 	// note, this is not really 'circle' type, since we use
 	// vector instead of radius for initial location calculation
-	sVECTOR3D CreationPos{vw_Randf0 * CreationSize.x,
-			      vw_Randf0 * CreationSize.y,
-			      vw_Randf0 * CreationSize.z};
+	sVECTOR3D CreationPos{vw_fRand0() * CreationSize.x,
+			      vw_fRand0() * CreationSize.y,
+			      vw_fRand0() * CreationSize.z};
 
 	if (DeadZone > 0.0f) {
 		float ParticleDist2 = CreationPos.x * CreationPos.x +
@@ -266,8 +266,8 @@ void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
 		}
 
 		// emit with deviation
-		float RandomYaw = vw_Randf0 * 3.14159f * 2.0f; // 2π = 360°
-		float RandomPitch = vw_Randf0 * Theta * 3.14159f / 180.0f; // convert Theta to radians (1° = π/180°)
+		float RandomYaw = vw_fRand0() * 3.14159f * 2.0f; // 2π = 360°
+		float RandomPitch = vw_fRand0() * Theta * 3.14159f / 180.0f; // convert Theta to radians (1° = π/180°)
 
 		// y
 		NewParticle.Velocity.y = Direction.y * cosf(RandomPitch);
@@ -287,9 +287,9 @@ void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
 	}
 
 	// emit in random direction
-	NewParticle.Velocity.y = vw_Randf0 * Theta / 360.0f;
-	NewParticle.Velocity.x = vw_Randf0 * Theta / 360.0f;
-	NewParticle.Velocity.z = vw_Randf0 * Theta / 360.0f;
+	NewParticle.Velocity.y = vw_fRand0() * Theta / 360.0f;
+	NewParticle.Velocity.x = vw_fRand0() * Theta / 360.0f;
+	NewParticle.Velocity.z = vw_fRand0() * Theta / 360.0f;
 	NewParticle.Velocity.Normalize();
 }
 

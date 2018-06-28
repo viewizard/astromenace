@@ -263,12 +263,12 @@ bool cMissionScript::Update(float Time)
 			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));
 
 			if (AsterFastCount != 20)
-				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_Randf0 + AsterXPos,
+				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
 								      AsterYPos * 2 + AsterH * vw_fRand(),
 								      AsterZPos + 20.0f) +
 							    GamePoint);
 			else
-				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_Randf0 + AsterXPos,
+				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
 								      AsterYPos * 2 + AsterH * vw_fRand(),
 								      AsterZPos) +
 							    GamePoint);

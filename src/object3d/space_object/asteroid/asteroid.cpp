@@ -62,8 +62,8 @@ cAsteroid::cAsteroid()
 
 
 	//Speed = 25.0f;
-	RotationSpeed.x = 100.0f + 50.0f*vw_Randf0;
-	RotationSpeed.y = 20.0f + 20.0f*vw_Randf0;
+	RotationSpeed.x = 100.0f + 50.0f*vw_fRand0();
+	RotationSpeed.y = 20.0f + 20.0f*vw_fRand0();
 
 
 

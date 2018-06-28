@@ -262,7 +262,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 1);
 			sharedGFX->Speed = 0.5f * Projectile->Radius;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->SetStartLocation(Projectile->Location);
 			if (Projectile->Speed != 0.0f)
 				sharedGFX->Theta = 360.00f;
@@ -274,14 +274,14 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(3*Projectile->Radius) + (int)(vw_Randf0*3*Projectile->Radius);
+		int ttt = (int)(3*Projectile->Radius) + (int)(vw_fRand0()*3*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
 			cProjectile *ProjectileTMP  = nullptr;
 			ProjectileTMP  = new cProjectile;
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			ProjectileTMP->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
 			sVECTOR3D TM1 = Projectile->Orientation^Projectile->Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -295,10 +295,10 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			}
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
-			ProjectileTMP->Speed = Projectile->Speed + Projectile->Radius*1.5f + 2.0f*vw_Randf0;
+			ProjectileTMP->Speed = Projectile->Speed + Projectile->Radius*1.5f + 2.0f*vw_fRand0();
 			ProjectileTMP->SpeedEnd = 0.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed;
-			ProjectileTMP->Lifetime = Projectile->Age = 2.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = Projectile->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -487,7 +487,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			sVECTOR3D TM1 = Projectile->Orientation;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -502,7 +502,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/4.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -538,7 +538,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -553,7 +553,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/4.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -590,7 +590,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -605,7 +605,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/4.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -648,7 +648,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			sVECTOR3D TM1 = Projectile->Orientation;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -663,7 +663,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (3  + vw_fRand()) * Projectile->Radius;
@@ -673,7 +673,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -684,7 +684,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 		// создаем немного разлетающихся кусков-снарядов
 		ttt = (3 + vw_fRand()) * Projectile->Radius;
@@ -694,7 +694,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -705,7 +705,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 
 		ttt = (3 + vw_fRand() * 5) * Projectile->Radius;
@@ -714,7 +714,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -725,7 +725,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
@@ -736,7 +736,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_Randf0, 360.0f*vw_Randf0, 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
 			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -747,7 +747,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ProjectileTMP->ObjectStatus = ObjectStatus;
 			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
 			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_Randf0;
+			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -879,7 +879,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 			ExplosionPieceData[Count].Velocity.y = Model3DBlocks[0].VertexArray.get()[i * Model3DBlocks[0].VertexStride + 1];
 			ExplosionPieceData[Count].Velocity.z = Model3DBlocks[0].VertexArray.get()[i * Model3DBlocks[0].VertexStride + 2];
 
-			float VelocityTMP = vw_Randf0*tRadius2;
+			float VelocityTMP = vw_fRand0()*tRadius2;
 
 			// записываем центр треугольника, оно же базовое ускорение + цент UV, нужно для шейдера
 			if (GameConfig().UseGLSL120) {

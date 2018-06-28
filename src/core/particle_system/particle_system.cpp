@@ -219,14 +219,14 @@ void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 
 		// setup lifetime and age
 		NewParticle.Age = 0.0f;
-		NewParticle.Lifetime = Life + vw_Randf0 * LifeVar;
+		NewParticle.Lifetime = Life + vw_fRand0() * LifeVar;
 		if (NewParticle.Lifetime < 0.0f)
 			NewParticle.Lifetime = 0.0f;
 
 		// calculate color
-		NewParticle.Color.r = ColorStart.r + vw_Randf0 * ColorVar.r;
-		NewParticle.Color.g = ColorStart.g + vw_Randf0 * ColorVar.g;
-		NewParticle.Color.b = ColorStart.b + vw_Randf0 * ColorVar.b;
+		NewParticle.Color.r = ColorStart.r + vw_fRand0() * ColorVar.r;
+		NewParticle.Color.g = ColorStart.g + vw_fRand0() * ColorVar.g;
+		NewParticle.Color.b = ColorStart.b + vw_fRand0() * ColorVar.b;
 		vw_Clamp(NewParticle.Color.r, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.g, 0.0f, 1.0f);
 		vw_Clamp(NewParticle.Color.b, 0.0f, 1.0f);
@@ -235,7 +235,7 @@ void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 		NewParticle.ColorDelta.b = (ColorEnd.b - NewParticle.Color.b) / NewParticle.Lifetime;
 
 		// calculate alpha
-		NewParticle.Alpha = AlphaStart + vw_Randf0 * AlphaVar;
+		NewParticle.Alpha = AlphaStart + vw_fRand0() * AlphaVar;
 		vw_Clamp(NewParticle.Alpha, 0.0f, 1.0f);
 		NewParticle.AlphaDelta = (AlphaEnd - NewParticle.Alpha) / NewParticle.Lifetime;
 		NewParticle.AlphaShowHide = AlphaShowHide;
@@ -263,7 +263,7 @@ void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 		}
 
 		// calculate size
-		NewParticle.Size = SizeStart + vw_Randf0 * SizeVar;
+		NewParticle.Size = SizeStart + vw_fRand0() * SizeVar;
 		if (NewParticle.Size < 0.0f)
 			NewParticle.Size = SizeStart;
 		NewParticle.SizeDelta = (SizeEnd - NewParticle.Size) / NewParticle.Lifetime;
@@ -278,13 +278,13 @@ void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 			// emit with deviation
 			NewParticle.Velocity = Direction;
 			vw_RotatePoint(NewParticle.Velocity,
-				       sVECTOR3D(Theta * vw_Randf0 / 2.0f, Theta * vw_Randf0 / 2.0f, 0.0f));
+				       sVECTOR3D(Theta * vw_fRand0() / 2.0f, Theta * vw_fRand0() / 2.0f, 0.0f));
 		}
 
 		NewParticle.NeedStop = NeedStop;
 
 		// calculate speed
-		float NewSpeed = Speed + vw_Randf0 * SpeedVar;
+		float NewSpeed = Speed + vw_fRand0() * SpeedVar;
 		if (NewSpeed < 0.0f)
 			NewSpeed = 0.0f;
 		NewParticle.Velocity *= NewSpeed;
@@ -333,7 +333,7 @@ void cParticleSystem::SizeCorrectionByCameraDist(cParticle &NewParticle)
 		float tmpEnd = SizeEnd - SizeEnd * (1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
 		float tmpVar = SizeVar - SizeVar * (1.0f - CameraDistResize) * (SystDist-ParticleDist) / SystDist;
 
-		NewParticle.Size = tmpStart + vw_Randf0 * tmpVar;
+		NewParticle.Size = tmpStart + vw_fRand0() * tmpVar;
 		if (NewParticle.Size < 0.0f)
 			NewParticle.Size = 0.0f;
 		NewParticle.SizeDelta = (tmpEnd - NewParticle.Size) / NewParticle.Lifetime;
@@ -348,9 +348,9 @@ void cParticleSystem::GenerateLocationPointType(cParticle &NewParticle)
 	// FIXME this should be fixed, Point Type should return same location as system,
 	//       if particle system need CreationSize, Sphere or Cube Type should be used
 	//       since we have point type by default, not so easy now find related code
-	NewParticle.Location = Location + sVECTOR3D(vw_Randf0 * CreationSize.x,
-						    vw_Randf0 * CreationSize.y,
-						    vw_Randf0 * CreationSize.z);
+	NewParticle.Location = Location + sVECTOR3D(vw_fRand0() * CreationSize.x,
+						    vw_fRand0() * CreationSize.y,
+						    vw_fRand0() * CreationSize.z);
 }
 
 /*
@@ -386,9 +386,9 @@ void cParticleSystem::GenerateLocationSphereType(cParticle &NewParticle)
 {
 	// note, this is not really 'sphere' type, since we use
 	// vector instead of radius for initial location calculation
-	sVECTOR3D CreationPos{vw_Randf0 * CreationSize.x,
-			      vw_Randf0 * CreationSize.y,
-			      vw_Randf0 * CreationSize.z};
+	sVECTOR3D CreationPos{vw_fRand0() * CreationSize.x,
+			      vw_fRand0() * CreationSize.y,
+			      vw_fRand0() * CreationSize.z};
 
 	if (DeadZone > 0.0f) {
 		float ParticleDist2 = CreationPos.x * CreationPos.x +

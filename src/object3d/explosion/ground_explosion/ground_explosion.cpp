@@ -140,8 +140,8 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 					if (ShipPart->Radius != 0) ShipPart->Velocity = VelocityTMP^(1.0f/ShipPart->Radius);
 					else ShipPart->Velocity = VelocityTMP ^ (1.0f + 5.0f * vw_fRand());
 
-					ShipPart->RotationSpeed.x = 2.0f*vw_Randf0;
-					ShipPart->RotationSpeed.y = 2.0f*vw_Randf0;
+					ShipPart->RotationSpeed.x = 2.0f*vw_fRand0();
+					ShipPart->RotationSpeed.y = 2.0f*vw_fRand0();
 				}
 				if (ExplType == 2) {
 					// проверяем, это колесо или нет
@@ -153,21 +153,21 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 					if (Wheel) {
 						sVECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						// делаем небольшой случайный доворот
-						vw_RotatePoint(VelocityTMP, sVECTOR3D(-5.0f - 15.0f * vw_fRand(), 10.0f*vw_Randf0, 0.0f));
+						vw_RotatePoint(VelocityTMP, sVECTOR3D(-5.0f - 15.0f * vw_fRand(), 10.0f*vw_fRand0(), 0.0f));
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^((1.0f + 5.0f * vw_fRand())/ShipPart->Radius);
 						else ShipPart->Velocity = VelocityTMP^(1.0f + 5.0f * vw_fRand());
 
-						ShipPart->RotationSpeed.x = 40.0f+80.0f*vw_Randf0;
-						ShipPart->RotationSpeed.y = 40.0f+80.0f*vw_Randf0;
-						ShipPart->RotationSpeed.z = 40.0f+80.0f*vw_Randf0;
+						ShipPart->RotationSpeed.x = 40.0f+80.0f*vw_fRand0();
+						ShipPart->RotationSpeed.y = 40.0f+80.0f*vw_fRand0();
+						ShipPart->RotationSpeed.z = 40.0f+80.0f*vw_fRand0();
 					} else {
 						sVECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^(5.0f/ShipPart->Radius);
 						else ShipPart->Velocity = VelocityTMP^(1.0f + 5.0f * vw_fRand());
 
-						ShipPart->RotationSpeed.x = 2.0f*vw_Randf0;
-						ShipPart->RotationSpeed.y = 2.0f*vw_Randf0;
-						ShipPart->RotationSpeed.z = 2.0f*vw_Randf0;
+						ShipPart->RotationSpeed.x = 2.0f*vw_fRand0();
+						ShipPart->RotationSpeed.y = 2.0f*vw_fRand0();
+						ShipPart->RotationSpeed.z = 2.0f*vw_fRand0();
 					}
 				}
 

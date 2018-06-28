@@ -323,7 +323,7 @@ cWheeled::cWheeled(int WheeledNum)
 
 	for (int i=0; i<DeviationObjQuantity; i++) {
 		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
-		NeedDeviation[i] = vw_Randf0*0.1f;
+		NeedDeviation[i] = vw_fRand0()*0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
 		DeviationObjNum[i] = WheelObjectsNum[i];
 	}

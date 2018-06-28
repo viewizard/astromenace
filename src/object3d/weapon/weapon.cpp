@@ -637,7 +637,7 @@ bool cWeapon::Update(float Time)
 				cProjectile *Projectile = new cProjectile;
 				Projectile->Create(InternalType);
 				Projectile->SetLocation(Location + FireLocation);
-				Projectile->SetRotation(Rotation + sVECTOR3D(vw_Randf0 * 30.0f, 0.0f, vw_Randf0 * 30.0f));
+				Projectile->SetRotation(Rotation + sVECTOR3D(vw_fRand0() * 30.0f, 0.0f, vw_fRand0() * 30.0f));
 
 				for (auto tmpGFX : Projectile->GraphicFX) {
 					if (auto sharedGFX = tmpGFX.lock()) {

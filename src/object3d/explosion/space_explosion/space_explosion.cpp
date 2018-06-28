@@ -87,7 +87,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 1);
 			sharedGFX->Speed = 1.5f * Object->Radius;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			sharedGFX->ParticlesPerSec = (int)(20 * Object->Radius);
 			sharedGFX->Direction = Object->Orientation;
@@ -98,13 +98,13 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(3*Object->Radius) + (int)(vw_Randf0*3*Object->Radius);
+		int ttt = (int)(3*Object->Radius) + (int)(vw_fRand0()*3*Object->Radius);
 		for (int i=0; i<ttt; i++) {
 			cProjectile *Projectile  = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
 			sVECTOR3D TM1 = Object->Orientation^Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius*6.0f));
 			Projectile->Orientation.Normalize();
@@ -117,10 +117,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
-			Projectile->Speed = Speed + Object->Radius*2.0f + 2.0f*vw_Randf0;
+			Projectile->Speed = Speed + Object->Radius*2.0f + 2.0f*vw_fRand0();
 			Projectile->SpeedEnd = 0.0f;
 			Projectile->SpeedStart = Projectile->Speed;
-			Projectile->Lifetime = Projectile->Age = 1.0f+vw_Randf0;
+			Projectile->Lifetime = Projectile->Age = 1.0f+vw_fRand0();
 			Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
 			Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
 		}
@@ -161,7 +161,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[2].lock()) {
 			SetExplosionGFX(sharedGFX, 4);
 			sharedGFX->Speed = Object->Radius / 3.0f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -174,7 +174,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 2);
 			sharedGFX->Speed = Object->Radius * 1.2f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -183,13 +183,13 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(Object->Radius) + (int)(vw_Randf0*Object->Radius);
+		int ttt = (int)(Object->Radius) + (int)(vw_fRand0()*Object->Radius);
 		for (int i=0; i<ttt; i++) {
 			cProjectile *Projectile  = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
 			sVECTOR3D TM1 = Object->Orientation^Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/4.0f));
 			Projectile->Orientation.Normalize();
@@ -208,10 +208,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
-			Projectile->Speed = Speed + Object->Radius/2.0f + 2.0f*vw_Randf0;
+			Projectile->Speed = Speed + Object->Radius/2.0f + 2.0f*vw_fRand0();
 			Projectile->SpeedEnd = 0.0f;
 			Projectile->SpeedStart = Projectile->Speed;
-			Projectile->Lifetime = Projectile->Age = 1.5f+vw_Randf0;
+			Projectile->Lifetime = Projectile->Age = 1.5f+vw_fRand0();
 			Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
 			Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
 		}
@@ -251,7 +251,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 6);
 			sharedGFX->Speed = Object->Radius / 1.4f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -263,7 +263,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 5);
 			sharedGFX->Speed = Object->Radius * 1.1f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -302,7 +302,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 12);
 			sharedGFX->Speed = Object->Radius / 1.4f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -314,7 +314,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 11);
 			sharedGFX->Speed = Object->Radius * 1.1f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -344,7 +344,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 6);
 			sharedGFX->Speed = Object->Radius / 1.3f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -356,7 +356,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 5);
 			sharedGFX->Speed = Object->Radius * 1.1f;
-			sharedGFX->SpeedVar = vw_Randf0;
+			sharedGFX->SpeedVar = vw_fRand0();
 			sharedGFX->MoveSystem(Object->Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
@@ -365,13 +365,13 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(0.5f*Object->Radius) + (int)(vw_Randf0*Object->Radius);
+		int ttt = (int)(0.5f*Object->Radius) + (int)(vw_fRand0()*Object->Radius);
 		for (int i=0; i<ttt; i++) {
 			cProjectile *Projectile = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(sVECTOR3D(360.0f*vw_Randf0, 360.0f*vw_Randf0, 360.0f*vw_Randf0));
+			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
 			sVECTOR3D TM1 = Object->Orientation^Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/2.0f));
 			Projectile->Orientation.Normalize();
@@ -384,10 +384,10 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
-			Projectile->Speed = Speed + Object->Radius/2.0f + 2.0f*vw_Randf0;
+			Projectile->Speed = Speed + Object->Radius/2.0f + 2.0f*vw_fRand0();
 			Projectile->SpeedEnd = 0.0f;
 			Projectile->SpeedStart = Projectile->Speed;
-			Projectile->Lifetime = Projectile->Age = 1.5f+vw_Randf0;
+			Projectile->Lifetime = Projectile->Age = 1.5f+vw_fRand0();
 			Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
 			Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
 		}
@@ -473,8 +473,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			ShipPart->Speed = Speed - 2 * vw_fRand();
 
-			ShipPart->RotationSpeed.x = 2.0f*vw_Randf0;
-			ShipPart->RotationSpeed.y = 2.0f*vw_Randf0;
+			ShipPart->RotationSpeed.x = 2.0f*vw_fRand0();
+			ShipPart->RotationSpeed.y = 2.0f*vw_fRand0();
 
 			ShipPart->StrengthStart = ShipPart->Strength = 1.0f;
 			ShipPart->ObjectStatus = Object->ObjectStatus;
@@ -682,14 +682,14 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				// находим расстояние, чтобы включить его
 				float dist = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +
 					     ExplosionPieceData[Count].Velocity.y * ExplosionPieceData[Count].Velocity.y +
-					     ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z + vw_Randf0;
+					     ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z + vw_fRand0();
 
 
 				float Acc = (MeshAcc/1000.0f)*(Diag/dist)*(MeshAcc/Object->Radius);
 				if (Acc > MeshAcc)
-					Acc = MeshAcc + vw_Randf0;
+					Acc = MeshAcc + vw_fRand0();
 				if (Acc < -MeshAcc)
-					Acc = -MeshAcc - vw_Randf0;
+					Acc = -MeshAcc - vw_fRand0();
 
 
 				// записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
@@ -706,7 +706,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2) + 10] = ExplosionPieceData[Count].Velocity.z;
 					// acc
 					if (dist/Diag < 0.01f) {
-						tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 11] = Acc + 4.0f * vw_Randf0;
+						tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 11] = Acc + 4.0f * vw_fRand0();
 						tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 1) + 11] = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 11];
 						tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2) + 11] = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 11];
 					} else {
@@ -719,7 +719,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 
 				if (dist/Diag < 0.01f)
-					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^(Acc+4.0f*vw_Randf0);
+					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^(Acc+4.0f*vw_fRand0());
 				else
 					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^Acc;
 

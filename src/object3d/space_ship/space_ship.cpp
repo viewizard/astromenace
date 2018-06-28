@@ -55,7 +55,7 @@ cSpaceShip::cSpaceShip()
 	CurentDeviationSum = new float[DeviationObjQuantity];
 
 	Deviation[0].Set(0.0f, 1.0f, 0.0f);
-	NeedDeviation[0] = vw_Randf0*0.1f;
+	NeedDeviation[0] = vw_fRand0()*0.1f;
 	CurentDeviation[0] = CurentDeviationSum[0] = 0.0f;
 
 	// подключаем к своему списку
@@ -1091,13 +1091,13 @@ bool cSpaceShip::Update(float Time)
 				if (NeedDeviation[i] <= CurentDeviationSum[i]+CurentDeviation[i]) {
 					CurentDeviation[i] -= CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
 					CurentDeviationSum[i] += CurentDeviation[i];
-					NeedDeviation[i] = vw_Randf0*0.1f;
+					NeedDeviation[i] = vw_fRand0()*0.1f;
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			} else {
 				if (NeedDeviation[i] >= CurentDeviationSum[i]+CurentDeviation[i]) {
 					CurentDeviation[i] += CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
 					CurentDeviationSum[i] += CurentDeviation[i];
-					NeedDeviation[i] = vw_Randf0*0.1f;
+					NeedDeviation[i] = vw_fRand0()*0.1f;
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			}
 

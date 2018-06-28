@@ -126,7 +126,7 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power)
 	GameCameraDeviationPower = Power*(10000.0f- dist2)/40000.0f;
 
 
-	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_Randf0;
+	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_fRand0();
 
 }
 
@@ -179,12 +179,12 @@ void GameCameraUpdate(float Time)
 		if (Sign == 1.0f) {
 			if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
 				GameCameraDeviation = GameCameraNeedDeviation;
-				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_Randf0;
+				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_fRand0();
 			} else GameCameraDeviation += CurrentDeviation;
 		} else {
 			if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
 				GameCameraDeviation = GameCameraNeedDeviation;
-				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_Randf0;
+				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_fRand0();
 			} else GameCameraDeviation += CurrentDeviation;
 		}
 	} else // нужно остановить ровно, уже не надо болтать

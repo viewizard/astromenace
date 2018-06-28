@@ -53,7 +53,7 @@ int CurrentWorkshop = 3;
 
 // небольшая девиация оружия в слотах
 float CurentDeviation = 0.0f;
-float NeedDeviation = vw_Randf0*5.0f;
+float NeedDeviation = vw_fRand0()*5.0f;
 float CurentDeviationSum = 0.0f;
 float CurentTime = 0.0f;
 
@@ -218,7 +218,7 @@ void WorkshopCreate()
 	CurrentWorkshopNewFighter = 1;
 	CurrentWorkshopNewWeapon = 1;
 	CurentDeviation = 0.0f;
-	NeedDeviation = vw_Randf0*5.0f;
+	NeedDeviation = vw_fRand0()*5.0f;
 	CurentDeviationSum = 0.0f;
 	CurentTime = 0.0f;
 	CurrentAlert2 = 1.0f;
@@ -303,13 +303,13 @@ void WorkshopMenu()
 			if (NeedDeviation <= CurentDeviationSum+CurentDeviation) {
 				CurentDeviation -= CurentDeviationSum+CurentDeviation-NeedDeviation;
 				CurentDeviationSum += CurentDeviation;
-				NeedDeviation = vw_Randf0*5.0f;
+				NeedDeviation = vw_fRand0()*5.0f;
 			} else CurentDeviationSum += CurentDeviation;
 		} else {
 			if (NeedDeviation >= CurentDeviationSum+CurentDeviation) {
 				CurentDeviation += CurentDeviationSum+CurentDeviation-NeedDeviation;
 				CurentDeviationSum += CurentDeviation;
-				NeedDeviation = vw_Randf0*5.0f;
+				NeedDeviation = vw_fRand0()*5.0f;
 			} else CurentDeviationSum += CurentDeviation;
 		}
 	}
