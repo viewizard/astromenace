@@ -34,6 +34,16 @@ another side, in this way we can reuse already created stream buffers.
 
 #include "buffer.h"
 
+constexpr unsigned NUM_OF_DYNBUF{20};	// (stream) num buffers in queue
+constexpr unsigned DYNBUF_SIZE{16384};	// (stream) buffer size
+
+struct sStreamBuffer {
+	std::array<ALuint, NUM_OF_DYNBUF> Buffers{};
+	std::unique_ptr<sFILE> File{};
+	OggVorbis_File mVF{};
+	vorbis_info *mInfo{nullptr};
+};
+
 namespace {
 
 std::unordered_map<std::string, ALuint> SoundBuffersMap;
@@ -130,7 +140,7 @@ static sStreamBuffer *ResetStreamBuffers(sStreamBuffer *StreamBuffer)
 	// set current position to 0
 	ov_pcm_seek(&StreamBuffer->mVF, 0);
 	// fill all buffers with proper data
-	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+	for (unsigned i = 0; i < NUM_OF_DYNBUF; i++) {
 		// we are safe with static_cast here, since Rate is 'the frequency of the audio data'
 		// that will not exceed 'ALsizei' in our case for sure (usually, frequency <1000 Hz)
 		ReadOggBlock(StreamBuffer->Buffers[i], DYNBUF_SIZE,
@@ -208,7 +218,7 @@ sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::
 		return nullptr;
 	}
 
-	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+	for (unsigned i = 0; i < NUM_OF_DYNBUF; i++) {
 		// we are safe with static_cast here, since Rate is 'the frequency of the audio data'
 		// that will not exceed 'ALsizei' in our case for sure (usually, frequency <1000 Hz)
 		ReadOggBlock(StreamBuffersMap[Name].Buffers[i], DYNBUF_SIZE,
@@ -256,7 +266,7 @@ bool vw_QueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source)
 		return false;
 	}
 
-	for (int i = 0; i < NUM_OF_DYNBUF; i++) {
+	for (unsigned i = 0; i < NUM_OF_DYNBUF; i++) {
 		alSourceQueueBuffers(Source, 1, StreamBuffer->Buffers.data() + i);
 		if (!CheckALError(__func__))
 			return false;

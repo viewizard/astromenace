@@ -39,16 +39,7 @@ sources, you are free to change or add methods to sound.h header file instead.
 #include "vorbis/vorbisfile.h"
 #include "ogg/ogg.h"
 
-#define NUM_OF_DYNBUF	20	// (stream) num buffers in queue
-#define DYNBUF_SIZE	16384	// (stream) buffer size
-
-
-struct sStreamBuffer {
-	std::array<ALuint, NUM_OF_DYNBUF> Buffers{};
-	std::unique_ptr<sFILE> File{};
-	OggVorbis_File mVF{};
-	vorbis_info *mInfo{nullptr};
-};
+struct sStreamBuffer;
 
 // Create stream buffer from OGG file.
 sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::string &LoopFileName);
