@@ -44,6 +44,7 @@ care about byte alignment.
 #include "../vfs/vfs.h"
 #include "../math/math.h"
 #include "texture.h"
+#include "texture_tga.h"
 
 namespace {
 
@@ -82,10 +83,6 @@ struct sTexture {
 std::unordered_map<GLtexture, sTexture> TexturesIDtoDataMap;
 
 } // unnamed namespace
-
-namespace texture {
-int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels);
-} // namespace texture
 
 
 /*
@@ -350,7 +347,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 
 	switch (LoadAs) {
 	case eLoadTextureAs::TGA:
-		texture::ReadTGA(tmpPixelsArray, pFile.get(), tmpWidth, tmpHeight, tmpChanels);
+		ReadTGA(tmpPixelsArray, pFile.get(), tmpWidth, tmpHeight, tmpChanels);
 		break;
 
 	default:
@@ -419,7 +416,7 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
 	// load texture
 	switch(LoadAs) {
 	case eLoadTextureAs::TGA:
-		texture::ReadTGA(tmpPixelsArray, pFile.get(), DWidth, DHeight, DChanels);
+		ReadTGA(tmpPixelsArray, pFile.get(), DWidth, DHeight, DChanels);
 		break;
 
 	case eLoadTextureAs::VW2D:

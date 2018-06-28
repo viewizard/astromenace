@@ -29,13 +29,11 @@
 
 #include "../vfs/vfs.h"
 
-namespace texture {
-
-#define TGA_RGB		 2	// normal RGB (BGR) file
-#define TGA_RLE		10	// RLE file
-
 int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels)
 {
+	constexpr uint8_t TGA_RGB{2};	// normal RGB (BGR) file
+	constexpr uint8_t TGA_RLE{10};	// RLE file
+
 	uint8_t tmpTGAHeaderLength{0};
 	uint8_t tmpTGAImageType{0};	// RLE, RGB
 	uint8_t tmpBits{0};		// 16, 24, 32
@@ -130,5 +128,3 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, 
 
 	return 0;
 }
-
-} // namespace texture
