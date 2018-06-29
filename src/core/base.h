@@ -134,9 +134,9 @@ private:
  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
-constexpr unsigned constexpr_hash_djb2a(const char *str, int h = 0)
+constexpr unsigned constexpr_hash_djb2a(const char *str, unsigned h = 0)
 {
-	return !str[h] ? 5381 : (constexpr_hash_djb2a(str, h + 1) * 33) ^ str[h];
+	return !str[h] ? 5381 : (constexpr_hash_djb2a(str, h + 1) * 33) ^ static_cast<unsigned>(str[h]);
 }
 #pragma GCC diagnostic pop
 
