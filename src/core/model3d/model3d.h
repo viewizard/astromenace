@@ -103,6 +103,8 @@ struct sModel3DBlock {
 };
 
 struct sModel3D {
+	virtual ~sModel3D() = default;
+
 	// attached blocks
 	std::vector<sModel3DBlock> Model3DBlocks{};
 
