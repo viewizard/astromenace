@@ -141,7 +141,7 @@ private:
 	float TimeLastUpdate{0.0f};
 	float EmissionResidue{0.0f};	// emission residue, for next update cycle
 
-	std::list<cParticle2D> ParticlesList;
+	std::list<cParticle2D> ParticlesList{};
 };
 
 
