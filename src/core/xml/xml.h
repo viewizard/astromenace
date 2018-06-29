@@ -215,7 +215,7 @@ public:
 
 private:
 	// Save XML elements to file recursively.
-	void SaveRecursive(const sXMLEntry &XMLEntry, SDL_RWops *File, unsigned int Level);
+	void SaveRecursive(const sXMLEntry &XMLEntry, std::ofstream &File, unsigned int Level);
 	// Parce tag line.
 	bool ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry);
 	// Parse tag content.

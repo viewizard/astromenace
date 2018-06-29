@@ -300,66 +300,47 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName, bool Hash)
 /*
  * Save XML elements to file recursively.
  */
-void cXMLDocument::SaveRecursive(const sXMLEntry &XMLEntry, SDL_RWops *File, unsigned int Level)
+void cXMLDocument::SaveRecursive(const sXMLEntry &XMLEntry, std::ofstream &File, unsigned int Level)
 {
 	if (XMLEntry.EntryType == eEntryType::Comment) {
 		// comment
 		for (unsigned int i = 0; i < Level; i++) {
-			SDL_RWwrite(File, "    ", strlen("    "), 1);
+			File << "    ";
 		}
-		SDL_RWwrite(File, "<!--", strlen("<!--"), 1);
-		SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
-		SDL_RWwrite(File, "-->", strlen("-->"), 1);
-		SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
+		File << "<!--" << XMLEntry.Name << "-->" << EndLine;
 	} else {
 		// regular element
 
 		// name
 		for (unsigned int i = 0; i < Level; i++) {
-			SDL_RWwrite(File, "    ", strlen("    "), 1);
+			File << "    ";
 		}
-		SDL_RWwrite(File, "<", strlen("<"), 1);
-		SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
+		File << "<" << XMLEntry.Name;
 
 		// attributes
 		if (!XMLEntry.Attributes.empty()) {
 			for (const auto &TmpAttrib : XMLEntry.Attributes) {
-				SDL_RWwrite(File, " ", strlen(" "), 1);
-				SDL_RWwrite(File, TmpAttrib.first.data(), TmpAttrib.first.size(), 1);
-				SDL_RWwrite(File, "=\"", strlen("=\""), 1);
-				SDL_RWwrite(File, TmpAttrib.second.data(), TmpAttrib.second.size(), 1);
-				SDL_RWwrite(File, "\"", strlen("\""), 1);
+				File << " " << TmpAttrib.first << "=\"" << TmpAttrib.second << "\"";
 			}
-			SDL_RWwrite(File, " ", strlen(" "), 1);
+			File << " ";
 		}
 
 		// data
 		if (!XMLEntry.ChildrenList.empty() || !XMLEntry.Content.empty()) {
 			if (!XMLEntry.Content.empty()) {
-				SDL_RWwrite(File, ">", strlen(">"), 1);
-				SDL_RWwrite(File, XMLEntry.Content.data(), XMLEntry.Content.size(), 1);
-				SDL_RWwrite(File, "</", strlen("</"), 1);
-				SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
-				SDL_RWwrite(File, ">", strlen(">"), 1);
-				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
+				File << ">" << XMLEntry.Content << "</" << XMLEntry.Name << ">" << EndLine.data();
 			} else {
-				SDL_RWwrite(File, ">", strlen(">"), 1);
-				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
+				File << ">" << EndLine;
 				for (auto &tmpEntry : XMLEntry.ChildrenList) {
 					SaveRecursive(tmpEntry, File, Level + 1);
 				}
 				for (unsigned int i = 0; i < Level; i++) {
-					SDL_RWwrite(File, "    ", strlen("    "), 1);
+					File << "    ";
 				}
-				SDL_RWwrite(File, "</", strlen("</"), 1);
-				SDL_RWwrite(File, XMLEntry.Name.data(), XMLEntry.Name.size(), 1);
-				SDL_RWwrite(File, ">", strlen(">"), 1);
-				SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
+				File << "</" << XMLEntry.Name << ">" << EndLine;
 			}
-		} else {
-			SDL_RWwrite(File, "/>", strlen("/>"), 1);
-			SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
-		}
+		} else
+			File << "/>" << EndLine;
 	}
 }
 
@@ -370,26 +351,21 @@ bool cXMLDocument::Save(const std::string &XMLFileName)
 {
 	std::cout << "Save XML file: " << XMLFileName << "\n";
 
-	SDL_RWops *File = SDL_RWFromFile(XMLFileName.c_str(), "wb");
-	if (!File) {
+	std::ofstream File(XMLFileName);
+	if (!File.is_open()) {
 		std::cerr << __func__ << "(): " << "Can't open XML file for write " << XMLFileName << "\n";
 		return false;
 	}
 
 	// XML header
-	const std::string tmpXMLHeader{"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"};
-	SDL_RWwrite(File, tmpXMLHeader.data(), tmpXMLHeader.size(), 1);
-	SDL_RWwrite(File, EndLine.data(), EndLine.size(), 1);
+	File << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << EndLine;
 
-	if (!RootXMLEntry.get()) {
-		SDL_RWclose(File);
+	if (!RootXMLEntry.get())
 		return true;
-	}
 
 	// save all data recursively
 	SaveRecursive(*RootXMLEntry.get(), File, 0);
 
-	SDL_RWclose(File);
 	return true;
 }
 
