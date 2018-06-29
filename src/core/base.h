@@ -55,6 +55,7 @@
 #include <functional>
 #include <cmath>
 #include <cstdlib>
+#include <fstream>
 
 // don't setup NDEBUG in sources, use definition in build system instead
 #include <cassert>

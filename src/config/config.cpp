@@ -90,22 +90,22 @@ void ConfigVirtualInternalResolution()
  * tens (0-25, since unsigned char max is 255) and ones (0-9). So, as result we will
  * see string with small letters only.
  */
-static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsigned char *Data)
+static void PackWithXOR(std::string &DataXOR, int DataSize, const unsigned char *Data)
 {
-	// should be stored: XOR key, 'ten', 'one', and null-terminated symbol at the end of array
+	// should be stored: XOR key, 'ten', 'one', and null-terminated symbol at the end of string
 	DataXOR.resize(DataSize * 3 + 1);
 	for (int i = 0; i < DataSize; i++) {
 		int tmpOffset = DataSize + i * 2;
 		// XOR key, randomize for each character
-		DataXOR[i] = static_cast<unsigned char>(97 + vw_iRandNum(25));
+		DataXOR[i] = static_cast<char>(97 + vw_iRandNum(25));
 		// XOR
-		unsigned char tmpDataXOR = Data[i] ^ DataXOR[i];
+		unsigned char tmpDataXOR = Data[i] ^ static_cast<unsigned char>(DataXOR[i]);
 		// store 'ten'
-		DataXOR[tmpOffset] = static_cast<unsigned char>(97 + tmpDataXOR / 10.0f);
+		DataXOR[tmpOffset] = static_cast<char>(97 + tmpDataXOR / 10.0f);
 		// store 'one'
-		DataXOR[tmpOffset + 1] = static_cast<unsigned char>(97 + (tmpDataXOR - (DataXOR[tmpOffset] - 97) * 10));
+		DataXOR[tmpOffset + 1] = static_cast<char>(97 + (tmpDataXOR - (DataXOR[tmpOffset] - 97) * 10));
 	}
-	// we should return null-terminated array
+	// we should return null-terminated string
 	DataXOR[DataSize * 3] = '\0';
 }
 
@@ -114,18 +114,17 @@ static void PackWithXOR(std::vector<unsigned char> &DataXOR, int DataSize, unsig
  */
 static void SavePilotProfiles()
 {
-	std::string tmpPilotProfiles{GetConfigPath() + ProfilesFileName};
-	std::vector<unsigned char> ProfileXOR{};
+	std::string ProfileXOR{};
 	PackWithXOR(ProfileXOR, sizeof(sPilotProfile) * 5, reinterpret_cast<unsigned char *>(Config.Profile));
 
-	SDL_RWops *File = SDL_RWFromFile(tmpPilotProfiles.c_str(), "wb");
-	if (!File) {
-		std::cerr << __func__ << "(): " << "Can't create file " << tmpPilotProfiles << "\n";
+	std::string FileName{GetConfigPath() + ProfilesFileName};
+	std::ofstream File(FileName);
+	if (!File.is_open()) {
+		std::cerr << __func__ << "(): " << "Can't create file " << FileName << "\n";
 		return;
 	}
 
-	SDL_RWwrite(File, ProfileXOR.data(), ProfileXOR.size(), 1);
-	SDL_RWclose(File);
+	File << ProfileXOR;
 }
 
 /*
@@ -217,7 +216,7 @@ void SaveXMLConfigFile()
 /*
  * Unpack data with XOR.
  */
-static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std::vector<unsigned char> &DataXOR)
+static void UnpackWithXOR(unsigned char *Data, unsigned int DataSize, const std::string &DataXOR)
 {
 	if ((DataXOR.size() / 3) < DataSize) {
 		std::cerr << __func__ << "(): " << "DataXOR string less than expected.\n";
@@ -289,24 +288,15 @@ static void SetupCurrentProfileAndMission()
  */
 static void LoadPilotProfiles()
 {
-	std::string tmpPilotProfiles{GetConfigPath() + ProfilesFileName};
-	std::vector<unsigned char> ProfileXOR{};
-
-	SDL_RWops *File = SDL_RWFromFile(tmpPilotProfiles.c_str(), "rb");
-	if (!File) {
-		std::cerr << __func__ << "(): " << "Can't open file " << tmpPilotProfiles << "\n";
+	std::string FileName{GetConfigPath() + ProfilesFileName};
+	std::ifstream File(FileName);
+	if (!File.is_open()) {
+		std::cerr << __func__ << "(): " << "Can't open file " << FileName << "\n";
 		return;
 	}
 
-	SDL_RWseek(File, 0, SEEK_END);
-	int tmpSize = SDL_RWtell(File);
-	SDL_RWseek(File, 0, SEEK_SET);
-
-	ProfileXOR.resize(tmpSize);
-	// NOTE remove const_cast in future, (since C++17) "CharT* data();" also added.
-	SDL_RWread(File, const_cast<unsigned char *>(ProfileXOR.data()), tmpSize, 1);
-	SDL_RWclose(File);
-
+	std::string ProfileXOR{};
+	File >> ProfileXOR;
 	UnpackWithXOR(reinterpret_cast<unsigned char *>(Config.Profile), sizeof(sPilotProfile) * 5, ProfileXOR);
 }
 
