@@ -399,11 +399,9 @@ eFileLocation vw_DetectFileLocation(const std::string &FileName)
 		return eFileLocation::VFS;
 
 	// trying to open real file in file system
-	SDL_RWops *File = SDL_RWFromFile(FileName.c_str(), "rb");
-	if (File) {
-		SDL_RWclose(File);
+	std::ifstream File(FileName);
+	if (File.good())
 		return eFileLocation::FS;
-	}
 
 	return eFileLocation::Unknown;
 }
