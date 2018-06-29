@@ -102,10 +102,11 @@ public:
 	}
 
 	// caller should guarantee, that integral value will not exceed floating point value size
-	void operator = (const I _i)
+	sIF_dual_type &operator = (const I _i)
 	{
 		__i = _i;
 		__f = static_cast<F>(_i);
+		return *this;
 	}
 
 	// caller should guarantee, that integral value will not exceed floating point value size
