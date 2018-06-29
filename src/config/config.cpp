@@ -119,7 +119,7 @@ static void SavePilotProfiles()
 
 	std::string FileName{GetConfigPath() + ProfilesFileName};
 	std::ofstream File(FileName);
-	if (!File.is_open()) {
+	if (File.fail()) {
 		std::cerr << __func__ << "(): " << "Can't create file " << FileName << "\n";
 		return;
 	}
@@ -290,7 +290,7 @@ static void LoadPilotProfiles()
 {
 	std::string FileName{GetConfigPath() + ProfilesFileName};
 	std::ifstream File(FileName);
-	if (!File.is_open()) {
+	if (File.fail()) {
 		std::cerr << __func__ << "(): " << "Can't open file " << FileName << "\n";
 		return;
 	}

@@ -647,7 +647,7 @@ bool cModel3DWrapper::SaveVW3D(const std::string &FileName)
 	}
 
 	std::ofstream FileVW3D(FileName, std::ios::binary);
-	if (!FileVW3D.is_open()) {
+	if (FileVW3D.fail()) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file on disk.\n";
 		return false;
 	}

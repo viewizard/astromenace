@@ -352,7 +352,7 @@ bool cXMLDocument::Save(const std::string &XMLFileName)
 	std::cout << "Save XML file: " << XMLFileName << "\n";
 
 	std::ofstream File(XMLFileName);
-	if (!File.is_open()) {
+	if (File.fail()) {
 		std::cerr << __func__ << "(): " << "Can't open XML file for write " << XMLFileName << "\n";
 		return false;
 	}

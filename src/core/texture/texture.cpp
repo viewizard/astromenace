@@ -366,7 +366,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 
 	// write data to disk
 	std::ofstream FileVW2D(DestName, std::ios::binary);
-	if (!FileVW2D.is_open()) {
+	if (FileVW2D.fail()) {
 		std::cerr << __func__ << "(): " << "Can't create " << DestName << " file on disk.\n";
 		return;
 	}
