@@ -98,10 +98,6 @@ struct sVFS_Entry {
 	uint32_t Offset{0};
 	uint32_t Size{0};
 	std::weak_ptr<sVFS> Parent{};
-
-	explicit sVFS_Entry(const std::shared_ptr<sVFS> &_Parent) :
-		Parent{_Parent}
-	{}
 };
 
 namespace {
@@ -109,7 +105,7 @@ namespace {
 // List with all opened VFS.
 std::forward_list<std::shared_ptr<sVFS>> VFSList;
 // Map with file's entries in all opened VFS.
-std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> VFSEntriesMap;
+std::unordered_map<std::string, sVFS_Entry> VFSEntriesMap;
 
 constexpr unsigned int FixedHeaderPartSize = 4 + 4 + 4; /*VFS_ + ver + build*/
 
@@ -121,31 +117,29 @@ constexpr unsigned int FixedHeaderPartSize = 4 + 4 + 4; /*VFS_ + ver + build*/
  */
 static int WriteIntoVFSfromMemory(const std::shared_ptr<sVFS> &WritableVFS, const std::string &Name,
 				  const uint8_t *DataBuffer, uint32_t DataSize, uint32_t &FileTableOffset,
-				  std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
+				  std::unordered_map<std::string, sVFS_Entry> &WritableVFSEntriesMap)
 {
 	if (!WritableVFS || Name.empty() || !DataBuffer ||
 	    (DataSize <= 0) || (Name.size() > UINT16_MAX)) // UINT16_MAX - we should store string size in uint16_t variable
 		return ERR_PARAMETERS;
 
-	// push VFS entry into the map
-	WritableVFSEntriesMap[Name] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(WritableVFS));
-
 	// add new data to VFS file, in this case we could use
 	// FileTableOffset, since this is the end of data part
-	WritableVFSEntriesMap[Name]->Offset = FileTableOffset;
-	WritableVFSEntriesMap[Name]->Size = DataSize;
-	SDL_RWseek(WritableVFS->File, WritableVFSEntriesMap[Name]->Offset, SEEK_SET);
-	SDL_RWwrite(WritableVFS->File, DataBuffer, WritableVFSEntriesMap[Name]->Size, 1);
+	WritableVFSEntriesMap[Name].Offset = FileTableOffset;
+	WritableVFSEntriesMap[Name].Size = DataSize;
+	SDL_RWseek(WritableVFS->File, WritableVFSEntriesMap[Name].Offset, SEEK_SET);
+	SDL_RWwrite(WritableVFS->File, DataBuffer, WritableVFSEntriesMap[Name].Size, 1);
+	WritableVFSEntriesMap[Name].Parent = WritableVFS;
 
 	// write all entries belong to this VFS file
 	for (const auto &tmpEntry : WritableVFSEntriesMap) {
-		auto sharedParent = tmpEntry.second->Parent.lock();
+		auto sharedParent = tmpEntry.second.Parent.lock();
 		if (sharedParent == WritableVFS) {
 			uint16_t tmpNameSize{(uint16_t)(tmpEntry.first.size())};
 			SDL_RWwrite(WritableVFS->File, &tmpNameSize, sizeof(tmpNameSize), 1);
 			SDL_RWwrite(WritableVFS->File, tmpEntry.first.c_str(), tmpEntry.first.size(), 1);
-			SDL_RWwrite(WritableVFS->File, &tmpEntry.second->Offset, sizeof(tmpEntry.second->Offset), 1);
-			SDL_RWwrite(WritableVFS->File, &tmpEntry.second->Size, sizeof(tmpEntry.second->Size), 1);
+			SDL_RWwrite(WritableVFS->File, &tmpEntry.second.Offset, sizeof(tmpEntry.second.Offset), 1);
+			SDL_RWwrite(WritableVFS->File, &tmpEntry.second.Size, sizeof(tmpEntry.second.Size), 1);
 		}
 	}
 
@@ -160,10 +154,9 @@ static int WriteIntoVFSfromMemory(const std::shared_ptr<sVFS> &WritableVFS, cons
 /*
  * Write data from file into VFS file.
  */
-static int WriteIntoVFSfromFile(const std::shared_ptr<sVFS> &WritableVFS,
-				const std::string &SrcName, const std::string &DstName,
-				uint32_t &FileTableOffset, std::unordered_map<std::string,
-				std::unique_ptr<sVFS_Entry>> &WritableVFSEntriesMap)
+static int WriteIntoVFSfromFile(const std::shared_ptr<sVFS> &WritableVFS, const std::string &SrcName,
+				const std::string &DstName, uint32_t &FileTableOffset,
+				std::unordered_map<std::string, sVFS_Entry> &WritableVFSEntriesMap)
 {
 	if (!WritableVFS || SrcName.empty() || DstName.empty())
 		return ERR_PARAMETERS;
@@ -176,7 +169,7 @@ static int WriteIntoVFSfromFile(const std::shared_ptr<sVFS> &WritableVFS,
 
 	SDL_RWseek(tmpFile, 0, SEEK_END);
 	// we don't use >2GB VFS files, so, we ok here with static_cast
-	int tmpFileSize = static_cast<int>(SDL_RWtell(tmpFile));
+	uint32_t tmpFileSize = static_cast<uint32_t>(SDL_RWtell(tmpFile));
 	SDL_RWseek(tmpFile, 0, SEEK_SET);
 
 	// std::unique_ptr, we need only memory allocation without container's features
@@ -222,7 +215,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	SDL_RWwrite(TempVFS->File, &FileTableOffset, sizeof(FileTableOffset), 1);
 
 	// we need separate VFS entries map
-	std::unordered_map<std::string, std::unique_ptr<sVFS_Entry>> WritableVFSEntriesMap;
+	std::unordered_map<std::string, sVFS_Entry> WritableVFSEntriesMap;
 
 	// add model pack files into VFS
 	if (!ModelsPack.empty()) {
@@ -341,10 +334,9 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 		tmpName.resize(tmpNameSize); // make sure, that we have enough allocated memory for string before SDL_RWread
 		SDL_RWread(VFSList.front()->File, &tmpName[0], tmpNameSize, 1);
 
-		VFSEntriesMap[tmpName] = std::unique_ptr<sVFS_Entry>(new sVFS_Entry(VFSList.front()));
-
-		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName]->Offset), sizeof(VFSEntriesMap[tmpName]->Offset), 1);
-		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName]->Size), sizeof(VFSEntriesMap[tmpName]->Size), 1);
+		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName].Offset), sizeof(VFSEntriesMap[tmpName].Offset), 1);
+		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName].Size), sizeof(VFSEntriesMap[tmpName].Size), 1);
+		VFSEntriesMap[tmpName].Parent = VFSList.front();
 	}
 
 	// unconditional rehash, at this line we have not rehashed map
@@ -368,15 +360,15 @@ int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops *&VFSFil
 	if (FileInVFS == VFSEntriesMap.end())
 		return ERR_FILE_NOT_FOUND;
 
-	auto sharedParent = FileInVFS->second->Parent.lock();
+	auto sharedParent = FileInVFS->second.Parent.lock();
 	if (!sharedParent) {
 		VFSEntriesMap.erase(FileName); // this is "dead" entry not connected to any VFS, remove it
 		return ERR_FILE_NOT_FOUND;
 	}
 
 	VFSFile = sharedParent->File;
-	DataOffset = FileInVFS->second->Offset;
-	DataSize = FileInVFS->second->Size;
+	DataOffset = FileInVFS->second.Offset;
+	DataSize = FileInVFS->second.Size;
 
 	return 0;
 }
