@@ -365,22 +365,19 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	vw_fclose(pFile);
 
 	// write data to disk
-	SDL_RWops *FileVW2D;
-	FileVW2D = SDL_RWFromFile(DestName.c_str(), "wb");
-	if (!FileVW2D) {
+	std::ofstream FileVW2D(DestName, std::ios::binary);
+	if (!FileVW2D.is_open()) {
 		std::cerr << __func__ << "(): " << "Can't create " << DestName << " file on disk.\n";
 		return;
 	}
 
-	char tmpSign[4]{'V','W','2','D'};
-	SDL_RWwrite(FileVW2D, tmpSign, 4, 1);
+	char Sign[4]{'V','W','2','D'};
+	FileVW2D.write(Sign, 4);
 
-	SDL_RWwrite(FileVW2D, &tmpWidth, sizeof(tmpWidth), 1);
-	SDL_RWwrite(FileVW2D, &tmpHeight, sizeof(tmpHeight), 1);
-	SDL_RWwrite(FileVW2D, &tmpChanels, sizeof(tmpChanels), 1);
-	SDL_RWwrite(FileVW2D, tmpPixelsArray.get(), tmpWidth * tmpHeight * tmpChanels, 1);
-
-	SDL_RWclose(FileVW2D);
+	FileVW2D.write(reinterpret_cast<char*>(&tmpWidth), sizeof(tmpWidth));
+	FileVW2D.write(reinterpret_cast<char*>(&tmpHeight), sizeof(tmpHeight));
+	FileVW2D.write(reinterpret_cast<char*>(&tmpChanels), sizeof(tmpChanels));
+	FileVW2D.write(reinterpret_cast<char*>(tmpPixelsArray.get()), tmpWidth * tmpHeight * tmpChanels);
 }
 
 /*
