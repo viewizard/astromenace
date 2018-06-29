@@ -646,39 +646,42 @@ bool cModel3DWrapper::SaveVW3D(const std::string &FileName)
 		return false;
 	}
 
-	SDL_RWops *FileVW3D;
-	FileVW3D = SDL_RWFromFile(FileName.c_str(), "wb");
-	if (!FileVW3D) {
+	std::ofstream FileVW3D(FileName, std::ios::binary);
+	if (!FileVW3D.is_open()) {
 		std::cerr << __func__ << "(): " << "Can't create " << FileName << " file on disk.\n";
 		return false;
 	}
 
 	// Sign for VW3D file format (magic number)
 	constexpr char Sign[4]{'V','W','3','D'};
-	SDL_RWwrite(FileVW3D, Sign, 4, 1);
+	FileVW3D.write(Sign, 4);
 
 	std::uint32_t BlocksListCount = static_cast<std::uint32_t>(Model3DBlocks.size());
-	SDL_RWwrite(FileVW3D, &BlocksListCount, sizeof(BlocksListCount), 1);
+	FileVW3D.write(reinterpret_cast<char*>(&BlocksListCount), sizeof(BlocksListCount));
 
 	for (auto &tmpModel3DBlock : Model3DBlocks) {
 		// VertexFormat
-		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.VertexFormat, sizeof(Model3DBlocks[0].VertexFormat), 1);
+		FileVW3D.write(reinterpret_cast<char*>(&tmpModel3DBlock.VertexFormat),
+			       sizeof(Model3DBlocks[0].VertexFormat));
 		// VertexStride
-		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.VertexStride, sizeof(Model3DBlocks[0].VertexStride), 1);
+		FileVW3D.write(reinterpret_cast<char*>(&tmpModel3DBlock.VertexStride),
+			       sizeof(Model3DBlocks[0].VertexStride));
 		// VertexQuantity
-		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.VertexQuantity, sizeof(Model3DBlocks[0].VertexQuantity), 1);
+		FileVW3D.write(reinterpret_cast<char*>(&tmpModel3DBlock.VertexQuantity),
+			       sizeof(Model3DBlocks[0].VertexQuantity));
 		// Location
-		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.Location, sizeof(Model3DBlocks[0].Location.x) * 3, 1);
+		FileVW3D.write(reinterpret_cast<char*>(&tmpModel3DBlock.Location),
+			       sizeof(Model3DBlocks[0].Location.x) * 3);
 		// Rotation
-		SDL_RWwrite(FileVW3D, &tmpModel3DBlock.Rotation, sizeof(Model3DBlocks[0].Rotation.x) * 3, 1);
+		FileVW3D.write(reinterpret_cast<char*>(&tmpModel3DBlock.Rotation),
+			       sizeof(Model3DBlocks[0].Rotation.x) * 3);
 	}
 
-	SDL_RWwrite(FileVW3D, &GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
-	SDL_RWwrite(FileVW3D, GlobalVertexArray.get(),
-		    Model3DBlocks[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray.get()[0]),
-		    1);
-	SDL_RWwrite(FileVW3D, GlobalIndexArray.get(), GlobalIndexArrayCount * sizeof(GlobalIndexArray.get()[0]), 1);
-	SDL_RWclose(FileVW3D);
+	FileVW3D.write(reinterpret_cast<char*>(&GlobalVertexArrayCount), sizeof(GlobalVertexArrayCount));
+	FileVW3D.write(reinterpret_cast<char*>(GlobalVertexArray.get()),
+		       Model3DBlocks[0].VertexStride * GlobalVertexArrayCount * sizeof(GlobalVertexArray.get()[0]));
+	FileVW3D.write(reinterpret_cast<char*>(GlobalIndexArray.get()),
+		       GlobalIndexArrayCount * sizeof(GlobalIndexArray.get()[0]));
 
 	std::cout << "VW3D Write: " << FileName << "\n";
 	return true;
