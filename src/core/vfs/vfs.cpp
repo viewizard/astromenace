@@ -81,7 +81,7 @@ namespace viewizard {
 
 struct sVFS {
 	std::string FileName;
-	SDL_RWops *File{nullptr};
+	SDL_RWops *File{nullptr}; // FIXME (?) switch to std::ifstream
 
 	explicit sVFS(const std::string &_FileName) :
 		FileName{_FileName}
@@ -97,7 +97,7 @@ struct sVFS {
 struct sVFS_Entry {
 	uint32_t Offset{0};
 	uint32_t Size{0};
-	sVFS *Parent{nullptr};
+	sVFS *Parent{nullptr}; // FIXME switch to std::weak_ptr usage in code.
 
 	explicit sVFS_Entry(sVFS *_Parent) :
 		Parent{_Parent}
