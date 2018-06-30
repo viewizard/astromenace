@@ -189,9 +189,9 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 	// write VFS sign "VFS_", version and build number
 	constexpr char Sign[4]{'V','F','S','_'};
-	TempVFS->wFile.write(reinterpret_cast<const char*>(Sign), 4 /*fixed 4 bites size*/);
-	TempVFS->wFile.write(reinterpret_cast<const char*>(VFS_VER), 4 /*fixed 4 bites size*/);
-	TempVFS->wFile.write(reinterpret_cast<char*>(&BuildNumber), 4 /*fixed 4 bites size*/);
+	TempVFS->wFile.write(reinterpret_cast<const char*>(Sign), 4 /*fixed 4 bytes size*/);
+	TempVFS->wFile.write(reinterpret_cast<const char*>(VFS_VER), 4 /*fixed 4 bytes size*/);
+	TempVFS->wFile.write(reinterpret_cast<char*>(&BuildNumber), 4 /*fixed 4 bytes size*/);
 
 	// new file table offset
 	uint32_t FileTableOffset{FixedHeaderPartSize + sizeof(FileTableOffset)};
@@ -279,7 +279,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// check VFS file sign "VFS_"
 	char Sign[4];
-	VFSList.front()->rFile.read(reinterpret_cast<char*>(&Sign), 4 /*fixed 4 bites size*/);
+	VFSList.front()->rFile.read(reinterpret_cast<char*>(&Sign), 4 /*fixed 4 bytes size*/);
 	if (VFSList.front()->rFile.fail())
 		return errPrintWithVFSListPop("VFS file size error", ERR_FILE_IO);
 	// Sign don't contain null-terminated string, strncmp() should be used
@@ -288,7 +288,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// check VFS file version
 	char Version[4];
-	VFSList.front()->rFile.read(reinterpret_cast<char*>(&Version), 4 /*fixed 4 bites size*/);
+	VFSList.front()->rFile.read(reinterpret_cast<char*>(&Version), 4 /*fixed 4 bytes size*/);
 	if (VFSList.front()->rFile.fail())
 		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
 	// Version don't contain null-terminated string, strncmp() should be used
@@ -297,7 +297,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// check VFS file build number
 	unsigned int vfsBuildNumber;
-	VFSList.front()->rFile.read(reinterpret_cast<char*>(&vfsBuildNumber), 4 /*fixed 4 bites size*/);
+	VFSList.front()->rFile.read(reinterpret_cast<char*>(&vfsBuildNumber), 4 /*fixed 4 bytes size*/);
 	if (VFSList.front()->rFile.fail())
 		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
 	if (BuildNumber) {
