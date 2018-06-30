@@ -394,8 +394,7 @@ int main(int argc, char *argv[])
 
 	LogGameAndLibsVersion();
 
-	// the file I/O are initialized by default (https://wiki.libsdl.org/SDL_Init)
-	// since VFS use only file I/O, we are safe to call this one before SDL_Init()
+	// since VFS don't use libSDL, we are safe to call this one before SDL_Init()
 	if (NeedPack)
 		return ConvertFS2VFS(GetRawDataPath(), GetDataPath() + "gamedata.vfs");
 

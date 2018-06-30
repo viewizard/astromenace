@@ -59,18 +59,6 @@
   4b - file size
 */
 
-/*
-Warning!
-
-VFS code could be used before SDL_Init() and SDL_InitSubSystem(),
-make sure, that only file I/O SDL subsystem are used in VFS code.
-
-From SDL wiki (https://wiki.libsdl.org/SDL_Init):
-The file I/O and threading subsystems are initialized by default.
-You must specifically initialize other subsystems if you use them in your application.
-Logging works without initialization, too.
-*/
-
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
 
