@@ -261,11 +261,15 @@ cXMLDocument::cXMLDocument(const std::string &XMLFileName, bool Hash)
 	RootXMLEntry.reset();
 
 	// read all data into buffer
-	std::string Buffer;
-	if (vw_VFStoBuffer(XMLFileName, Buffer)) {
+	std::unique_ptr<sFILE> File = vw_fopen(XMLFileName);
+	if (!File) {
 		std::cerr << __func__ << "(): " << "XML file not found: " << XMLFileName << "\n";
 		return;
 	}
+	std::string Buffer{};
+	Buffer.resize(File->Size + 1, '\0');
+	Buffer.assign(reinterpret_cast<char*>(File->Data.get()), File->Size);
+	vw_fclose(File);
 
 	// check header
 	if (Buffer.find("<?xml") == std::string::npos) {
