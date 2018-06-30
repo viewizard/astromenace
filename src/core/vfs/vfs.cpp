@@ -347,33 +347,6 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 }
 
 /*
- * Get internal VFS state for data extraction.
- */
-int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops *&VFSFile,
-				 uint32_t &DataOffset, uint32_t &DataSize)
-{
-	if (FileName.empty())
-		return ERR_PARAMETERS;
-
-	auto FileInVFS = VFSEntriesMap.find(FileName);
-
-	if (FileInVFS == VFSEntriesMap.end())
-		return ERR_FILE_NOT_FOUND;
-
-	auto sharedParent = FileInVFS->second.Parent.lock();
-	if (!sharedParent) {
-		VFSEntriesMap.erase(FileName); // this is "dead" entry not connected to any VFS, remove it
-		return ERR_FILE_NOT_FOUND;
-	}
-
-	VFSFile = sharedParent->File;
-	DataOffset = FileInVFS->second.Offset;
-	DataSize = FileInVFS->second.Size;
-
-	return 0;
-}
-
-/*
  * Shutdown VFS.
  */
 void vw_ShutdownVFS()
@@ -388,25 +361,6 @@ void vw_ShutdownVFS()
 }
 
 /*
- * Detect file location.
- */
-eFileLocation vw_DetectFileLocation(const std::string &FileName)
-{
-	if (FileName.empty())
-		return eFileLocation::Unknown;
-
-	if (VFSEntriesMap.find(FileName) != VFSEntriesMap.end())
-		return eFileLocation::VFS;
-
-	// trying to open real file in file system
-	std::ifstream File(FileName);
-	if (File.good())
-		return eFileLocation::FS;
-
-	return eFileLocation::Unknown;
-}
-
-/*
  * Open the sFILE.
  * Return std::unique_ptr, provide smart pointer connected to caller's scope.
  */
@@ -415,48 +369,39 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 	if (FileName.empty())
 		return nullptr;
 
-	// initial memory allocation and setup
-	SDL_RWops *tmpFile{nullptr};
-	uint32_t DataOffset{0}, DataSize{0};
-	std::unique_ptr<sFILE> File(new sFILE(0, 0));
-
-	switch (vw_DetectFileLocation(FileName)) {
-	case eFileLocation::VFS:
-		if (vw_GetInternalDataStateInVFS(FileName, tmpFile, DataOffset, DataSize))
+	auto FileInVFS = VFSEntriesMap.find(FileName);
+	if (FileInVFS != VFSEntriesMap.end()) {
+		auto sharedParent = FileInVFS->second.Parent.lock();
+		if (!sharedParent) {
+			VFSEntriesMap.erase(FileName); // this is "dead" entry not connected to any VFS, remove it
 			return nullptr;
+		}
 
-		File->Size = DataSize;
+		std::unique_ptr<sFILE> File(new sFILE(0, 0));
+
+		File->Size = FileInVFS->second.Size;
+		SDL_RWseek(sharedParent->File, FileInVFS->second.Offset, SEEK_SET);
 		File->Data.reset(new uint8_t[File->Size]);
-		SDL_RWseek(tmpFile, DataOffset, SEEK_SET);
-		SDL_RWread(tmpFile, File->Data.get(), File->Size, 1);
-		break;
+		SDL_RWread(sharedParent->File, File->Data.get(), File->Size, 1);
 
-	case eFileLocation::FS:
-		tmpFile = SDL_RWFromFile(FileName.c_str(), "rb");
-		if (!tmpFile)
-			return nullptr;
-
-		SDL_RWseek(tmpFile, 0, SEEK_END);
-		// we don't use >2GB VFS files, so, we ok here with static_cast
-		if (SDL_RWtell(tmpFile) > 0)
-			File->Size = static_cast<uint32_t>(SDL_RWtell(tmpFile));
-		else
-			return nullptr;
-		SDL_RWseek(tmpFile, 0, SEEK_SET);
-
-		File->Data.reset(new uint8_t[File->Size]);
-
-		SDL_RWread(tmpFile, File->Data.get(), File->Size, 1);
-		SDL_RWclose(tmpFile);
-		break;
-
-	case eFileLocation::Unknown:
-		std::cerr << __func__ << "(): " << "Can't find file " << FileName << "\n";
-		return nullptr;
-		break;
+		return File;
 	}
 
-	return File;
+	std::ifstream fsFile(FileName, std::ios::binary);
+	if (fsFile.good()) {
+		std::unique_ptr<sFILE> File(new sFILE(0, 0));
+
+		fsFile.seekg(0, std::ios::end);
+		File->Size = fsFile.tellg();
+		fsFile.seekg(0, std::ios::beg);
+
+		File->Data.reset(new uint8_t[File->Size]);
+		fsFile.read(reinterpret_cast<char*>(File->Data.get()), File->Size);
+
+		return File;
+	}
+
+	return nullptr;
 }
 
 /*

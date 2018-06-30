@@ -34,92 +34,14 @@ namespace viewizard {
 
 constexpr char VFS_VER[]{"v1.6"};
 
-enum class eFileLocation {
-	Unknown,
-	VFS,	// File present in the VFS.
-	FS	// File present in the File System.
-};
-
-
 // Create VFS file.
 int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 		 const std::string &RawDataDir, const std::string &ModelsPack,
 		 const std::string GameData[], unsigned int GameDataCount);
 // Open VFS file.
 int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
-// Get internal VFS state for data extraction.
-int vw_GetInternalDataStateInVFS(const std::string &FileName, SDL_RWops *&VFSFile,
-				 uint32_t &DataOffset, uint32_t &DataSize);
 // Shutdown VFS.
 void vw_ShutdownVFS();
-// Detect file location.
-eFileLocation vw_DetectFileLocation(const std::string &FileName);
-
-// Get stored in VFS data to buffer (or fallback to FS).
-template <typename T>
-inline int vw_VFStoBuffer(const std::string &FileName, T &Buffer)
-{
-	if (FileName.empty())
-		return ERR_PARAMETERS;
-
-	SDL_RWops *tmpFile{nullptr};
-	uint32_t DataOffset{0}, DataSize{0};
-	int err{0};
-
-	// The array should be null-terminated, data() and c_str() perform the same function.
-	bool isString = std::is_same<T, std::string>::value;
-
-	switch (vw_DetectFileLocation(FileName)) {
-	case eFileLocation::VFS:
-		err = vw_GetInternalDataStateInVFS(FileName, tmpFile, DataOffset, DataSize);
-		if (err)
-			return err;
-
-		Buffer.resize(DataSize + (isString ? 1 : 0));
-		SDL_RWseek(tmpFile, DataOffset, SEEK_SET);
-		// don't remove .data() usage, we need .data() and .resize()
-		// member functions in order to detect allowed container's
-		// type for template
-		// NOTE remove const_cast in future, (since C++17) "CharT* data();" also added.
-		SDL_RWread(tmpFile, const_cast<typename T::value_type *>(Buffer.data()), DataSize, 1);
-
-		if (isString)
-			Buffer[DataSize] = '\0';
-		break;
-
-	case eFileLocation::FS:
-		tmpFile = SDL_RWFromFile(FileName.c_str(), "rb");
-		if (!tmpFile)
-			return ERR_FILE_NOT_FOUND;
-
-		SDL_RWseek(tmpFile, 0, SEEK_END);
-		// we don't use >2GB VFS files, so, we ok here with static_cast
-		if (SDL_RWtell(tmpFile) > 0)
-			DataSize = static_cast<uint32_t>(SDL_RWtell(tmpFile));
-		else
-			return ERR_FILE_IO;
-		SDL_RWseek(tmpFile, 0, SEEK_SET);
-
-		Buffer.resize(DataSize + (isString ? 1 : 0));
-		// don't remove .data() usage, we need .data() and .resize()
-		// member functions in order to detect allowed container's
-		// type for template
-		// NOTE remove const_cast in future, (since C++17) "CharT* data();" also added.
-		SDL_RWread(tmpFile, const_cast<typename T::value_type *>(Buffer.data()), DataSize, 1);
-		SDL_RWclose(tmpFile);
-
-		if (isString)
-			Buffer[DataSize] = '\0';
-		break;
-
-	case eFileLocation::Unknown:
-		std::cerr << __func__ << "(): " << "Can't find file " << FileName << "\n";
-		return ERR_FILE_NOT_FOUND;
-		break;
-	}
-
-	return 0;
-}
 
 struct sFILE {
 	uint32_t Size{0};
