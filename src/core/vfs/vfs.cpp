@@ -25,9 +25,6 @@
 
 *************************************************************************************/
 
-// TODO SDL2 operate with 64bit offsets (long long, since C++11), see SDL_RWtell()
-//      move to 64bit and remove all related static_cast-s
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 /*
@@ -81,17 +78,12 @@ namespace viewizard {
 
 struct sVFS {
 	std::string FileName;
-	SDL_RWops *File{nullptr}; // FIXME (?) switch to std::ifstream
+	std::ifstream rFile{};
+	std::ofstream wFile{};
 
 	explicit sVFS(const std::string &_FileName) :
 		FileName{_FileName}
 	{}
-	~sVFS()
-	{
-		// not sure, if libSDL close SDL_RWops on "out of scope"
-		if (File)
-			SDL_RWclose(File);
-	}
 };
 
 struct sVFS_Entry {
@@ -127,8 +119,8 @@ static int WriteIntoVFSfromMemory(const std::shared_ptr<sVFS> &WritableVFS, cons
 	// FileTableOffset, since this is the end of data part
 	WritableVFSEntriesMap[Name].Offset = FileTableOffset;
 	WritableVFSEntriesMap[Name].Size = DataSize;
-	SDL_RWseek(WritableVFS->File, WritableVFSEntriesMap[Name].Offset, SEEK_SET);
-	SDL_RWwrite(WritableVFS->File, DataBuffer, WritableVFSEntriesMap[Name].Size, 1);
+	WritableVFS->wFile.seekp(WritableVFSEntriesMap[Name].Offset, std::ios::beg);
+	WritableVFS->wFile.write(reinterpret_cast<const char*>(DataBuffer), WritableVFSEntriesMap[Name].Size);
 	WritableVFSEntriesMap[Name].Parent = WritableVFS;
 
 	// write all entries belong to this VFS file
@@ -136,16 +128,18 @@ static int WriteIntoVFSfromMemory(const std::shared_ptr<sVFS> &WritableVFS, cons
 		auto sharedParent = tmpEntry.second.Parent.lock();
 		if (sharedParent == WritableVFS) {
 			uint16_t tmpNameSize{(uint16_t)(tmpEntry.first.size())};
-			SDL_RWwrite(WritableVFS->File, &tmpNameSize, sizeof(tmpNameSize), 1);
-			SDL_RWwrite(WritableVFS->File, tmpEntry.first.c_str(), tmpEntry.first.size(), 1);
-			SDL_RWwrite(WritableVFS->File, &tmpEntry.second.Offset, sizeof(tmpEntry.second.Offset), 1);
-			SDL_RWwrite(WritableVFS->File, &tmpEntry.second.Size, sizeof(tmpEntry.second.Size), 1);
+			WritableVFS->wFile.write(reinterpret_cast<char*>(&tmpNameSize), sizeof(tmpNameSize));
+			WritableVFS->wFile.write(tmpEntry.first.c_str(), tmpEntry.first.size());
+			WritableVFS->wFile.write(reinterpret_cast<const char*>(&tmpEntry.second.Offset),
+						 sizeof(tmpEntry.second.Offset));
+			WritableVFS->wFile.write(reinterpret_cast<const char*>(&tmpEntry.second.Size),
+						 sizeof(tmpEntry.second.Size));
 		}
 	}
 
-	SDL_RWseek(WritableVFS->File, FixedHeaderPartSize, SEEK_SET);
+	WritableVFS->wFile.seekp(FixedHeaderPartSize, std::ios::beg);
 	FileTableOffset += DataSize;
-	SDL_RWwrite(WritableVFS->File, &FileTableOffset, sizeof(FileTableOffset), 1);
+	WritableVFS->wFile.write(reinterpret_cast<char*>(&FileTableOffset), sizeof(FileTableOffset));
 
 	std::cout << Name << " file added to VFS.\n";
 	return 0;
@@ -161,22 +155,23 @@ static int WriteIntoVFSfromFile(const std::shared_ptr<sVFS> &WritableVFS, const 
 	if (!WritableVFS || SrcName.empty() || DstName.empty())
 		return ERR_PARAMETERS;
 
-	SDL_RWops *tmpFile = SDL_RWFromFile(SrcName.c_str(), "rb");
-	if (!tmpFile) {
+	std::ifstream File{SrcName, std::ios::binary};
+	if (File.fail()) {
 		std::cerr << __func__ << "(): " << "Can't find file " << SrcName << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
-	SDL_RWseek(tmpFile, 0, SEEK_END);
-	// we don't use >2GB VFS files, so, we ok here with static_cast
-	uint32_t tmpFileSize = static_cast<uint32_t>(SDL_RWtell(tmpFile));
-	SDL_RWseek(tmpFile, 0, SEEK_SET);
+	File.seekg(0, std::ios::end);
+	auto tmpSize = File.tellg();
+	if (tmpSize == std::ios::pos_type(-1))
+		return ERR_PARAMETERS;
+	File.seekg(0, std::ios::beg);
+	uint32_t tmpFileSize = static_cast<uint32_t>(tmpSize);
 
 	// std::unique_ptr, we need only memory allocation without container's features
 	// don't use std::vector here, since it allocates AND value-initializes
 	std::unique_ptr<uint8_t[]> tmpBuffer(new uint8_t[tmpFileSize]);
-	SDL_RWread(tmpFile, tmpBuffer.get(), tmpFileSize, 1);
-	SDL_RWclose(tmpFile);
+	File.read(reinterpret_cast<char*>(tmpBuffer.get()), tmpFileSize);
 
 	int err = WriteIntoVFSfromMemory(WritableVFS, DstName, tmpBuffer.get(), tmpFileSize,
 					 FileTableOffset, WritableVFSEntriesMap);
@@ -198,21 +193,21 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 	std::shared_ptr<sVFS> TempVFS(std::make_shared<sVFS>(Name));
 
-	TempVFS->File = SDL_RWFromFile(Name.c_str(), "wb");
-	if (!TempVFS->File) {
+	TempVFS->wFile.open(Name, std::ios::binary);
+	if (TempVFS->wFile.fail()) {
 		std::cerr << __func__ << "(): " << "Can't open VFS file for write " << Name << "\n";
 		return ERR_FILE_NOT_FOUND;
 	}
 
 	// write VFS sign "VFS_", version and build number
 	constexpr char Sign[4]{'V','F','S','_'};
-	SDL_RWwrite(TempVFS->File, Sign, 4 /*fixed 4 bites size*/, 1);
-	SDL_RWwrite(TempVFS->File, VFS_VER, 4 /*fixed 4 bites size*/, 1);
-	SDL_RWwrite(TempVFS->File, &BuildNumber, 4 /*fixed 4 bites size*/, 1);
+	TempVFS->wFile.write(reinterpret_cast<const char*>(Sign), 4 /*fixed 4 bites size*/);
+	TempVFS->wFile.write(reinterpret_cast<const char*>(VFS_VER), 4 /*fixed 4 bites size*/);
+	TempVFS->wFile.write(reinterpret_cast<char*>(&BuildNumber), 4 /*fixed 4 bites size*/);
 
 	// new file table offset
 	uint32_t FileTableOffset{FixedHeaderPartSize + sizeof(FileTableOffset)};
-	SDL_RWwrite(TempVFS->File, &FileTableOffset, sizeof(FileTableOffset), 1);
+	TempVFS->wFile.write(reinterpret_cast<char*>(&FileTableOffset), sizeof(FileTableOffset));
 
 	// we need separate VFS entries map
 	std::unordered_map<std::string, sVFS_Entry> WritableVFSEntriesMap;
@@ -284,18 +279,20 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	VFSList.push_front(std::make_shared<sVFS>(Name));
 
-	VFSList.front()->File = SDL_RWFromFile(Name.c_str(), "rb");
-	if (!VFSList.front()->File)
+	VFSList.front()->rFile.open(Name, std::ios::binary);
+	if (VFSList.front()->rFile.fail())
 		return errPrintWithVFSListPop("Can't find VFS file", ERR_FILE_NOT_FOUND);
 
-	SDL_RWseek(VFSList.front()->File,0,SEEK_END);
-	// we don't use >2GB VFS files, so, we ok here with static_cast
-	int VFS_FileSize = static_cast<int>(SDL_RWtell(VFSList.front()->File));
-	SDL_RWseek(VFSList.front()->File,0,SEEK_SET);
+	VFSList.front()->rFile.seekg(0, std::ios::end);
+	auto VFS_FileSize = VFSList.front()->rFile.tellg();
+	if (VFS_FileSize == std::ios::pos_type(-1))
+		return errPrintWithVFSListPop("VFS file size error", ERR_FILE_IO);
+	VFSList.front()->rFile.seekg(0, std::ios::beg);
 
 	// check VFS file sign "VFS_"
 	char Sign[4];
-	if(!SDL_RWread(VFSList.front()->File, &Sign, 4 /*fixed 4 bites size*/, 1))
+	VFSList.front()->rFile.read(reinterpret_cast<char*>(&Sign), 4 /*fixed 4 bites size*/);
+	if (VFSList.front()->rFile.fail())
 		return errPrintWithVFSListPop("VFS file size error", ERR_FILE_IO);
 	// Sign don't contain null-terminated string, strncmp() should be used
 	if (strncmp(Sign, "VFS_", 4) != 0)
@@ -303,7 +300,8 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// check VFS file version
 	char Version[4];
-	if(!SDL_RWread(VFSList.front()->File, &Version, 4 /*fixed 4 bites size*/, 1))
+	VFSList.front()->rFile.read(reinterpret_cast<char*>(&Version), 4 /*fixed 4 bites size*/);
+	if (VFSList.front()->rFile.fail())
 		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
 	// Version don't contain null-terminated string, strncmp() should be used
 	if (strncmp(Version, VFS_VER, 4) != 0)
@@ -311,7 +309,8 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 
 	// check VFS file build number
 	unsigned int vfsBuildNumber;
-	if(!SDL_RWread(VFSList.front()->File, &vfsBuildNumber, 4 /*fixed 4 bites size*/, 1))
+	VFSList.front()->rFile.read(reinterpret_cast<char*>(&vfsBuildNumber), 4 /*fixed 4 bites size*/);
+	if (VFSList.front()->rFile.fail())
 		return errPrintWithVFSListPop("VFS file corrupted:", ERR_FILE_IO);
 	if (BuildNumber) {
 		if (vfsBuildNumber) {
@@ -322,20 +321,24 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 	}
 
 	uint32_t FileTableOffset;
-	SDL_RWread(VFSList.front()->File, &FileTableOffset, sizeof(FileTableOffset), 1);
-	SDL_RWseek(VFSList.front()->File, FileTableOffset, SEEK_SET);
+	VFSList.front()->rFile.read(reinterpret_cast<char*>(&FileTableOffset), sizeof(FileTableOffset));
+	VFSList.front()->rFile.seekg(FileTableOffset, std::ios::beg);
 
 	// add entries from new connected VFS file
-	while (VFS_FileSize != SDL_RWtell(VFSList.front()->File)) {
+	while (VFSList.front()->rFile.good() &&
+	       (VFS_FileSize != VFSList.front()->rFile.tellg())) {
 		uint16_t tmpNameSize;
-		SDL_RWread(VFSList.front()->File, &tmpNameSize, sizeof(tmpNameSize), 1);
+		VFSList.front()->rFile.read(reinterpret_cast<char*>(&tmpNameSize), sizeof(tmpNameSize));
 
 		std::string tmpName;
-		tmpName.resize(tmpNameSize); // make sure, that we have enough allocated memory for string before SDL_RWread
-		SDL_RWread(VFSList.front()->File, &tmpName[0], tmpNameSize, 1);
+		tmpName.resize(tmpNameSize);
+		// NOTE remove const_cast in future, (since C++17) "CharT* data();" also added.
+		VFSList.front()->rFile.read(const_cast<char*>(tmpName.data()), tmpNameSize);
 
-		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName].Offset), sizeof(VFSEntriesMap[tmpName].Offset), 1);
-		SDL_RWread(VFSList.front()->File, &(VFSEntriesMap[tmpName].Size), sizeof(VFSEntriesMap[tmpName].Size), 1);
+		VFSList.front()->rFile.read(reinterpret_cast<char*>(&VFSEntriesMap[tmpName].Offset),
+					    sizeof(VFSEntriesMap[tmpName].Offset));
+		VFSList.front()->rFile.read(reinterpret_cast<char*>(&VFSEntriesMap[tmpName].Size),
+					    sizeof(VFSEntriesMap[tmpName].Size));
 		VFSEntriesMap[tmpName].Parent = VFSList.front();
 	}
 
@@ -380,21 +383,24 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 		std::unique_ptr<sFILE> File(new sFILE(0, 0));
 
 		File->Size = FileInVFS->second.Size;
-		SDL_RWseek(sharedParent->File, FileInVFS->second.Offset, SEEK_SET);
+		sharedParent->rFile.seekg(FileInVFS->second.Offset, std::ios::beg);
 		File->Data.reset(new uint8_t[File->Size]);
-		SDL_RWread(sharedParent->File, File->Data.get(), File->Size, 1);
+		sharedParent->rFile.read(reinterpret_cast<char*>(File->Data.get()), File->Size);
 
 		return File;
 	}
 
 	std::ifstream fsFile(FileName, std::ios::binary);
 	if (fsFile.good()) {
-		std::unique_ptr<sFILE> File(new sFILE(0, 0));
-
 		fsFile.seekg(0, std::ios::end);
-		File->Size = fsFile.tellg();
+		auto tmpSize = fsFile.tellg();
+		if (tmpSize == std::ios::pos_type(-1))
+			return nullptr;
 		fsFile.seekg(0, std::ios::beg);
 
+		std::unique_ptr<sFILE> File(new sFILE(0, 0));
+
+		File->Size = static_cast<uint32_t>(tmpSize);
 		File->Data.reset(new uint8_t[File->Size]);
 		fsFile.read(reinterpret_cast<char*>(File->Data.get()), File->Size);
 
