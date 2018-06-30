@@ -414,24 +414,18 @@ int vw_fclose(std::unique_ptr<sFILE> &stream)
 }
 
 /*
- * Reads an array of count elements, each one with a size of size bytes,
- * from the stream and stores them in the block of memory specified by buffer.
+ * Reads an array of 'count' elements, each one with a size of 'size' bytes,
+ * from the stream and stores them in the block of memory specified by 'buffer'.
  */
-int sFILE::fread(void *buffer, size_t size, size_t count)
+size_t sFILE::fread(void *buffer, size_t size, size_t count)
 {
-	int CopyCount{0};
-
 	if (!buffer || !Data)
 		return ERR_PARAMETERS;
 
-	// read data
-	for (size_t i = 0; i < count; i++) {
-		if (size <= static_cast<unsigned>(Size - Pos)) {
-			memcpy((uint8_t *)buffer + CopyCount * size, Data.get() + Pos, size);
-			Pos += size;
-			CopyCount++;
-		} else
-			break; // end of sFILE
+	size_t CopyCount{0};
+	for (; (CopyCount < count) && (Size >= static_cast<uint32_t>(Pos + size)); CopyCount++) {
+		memcpy(static_cast<uint8_t *>(buffer) + CopyCount * size, Data.get() + Pos, size);
+		Pos += size;
 	}
 
 	return CopyCount;

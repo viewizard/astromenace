@@ -49,7 +49,7 @@ struct sFILE {
 	// don't use std::vector here, since it allocates AND value-initializes
 	std::unique_ptr<uint8_t[]> Data{};
 
-	int fread(void *buffer, size_t size, size_t count);
+	size_t fread(void *buffer, size_t size, size_t count);
 	int fseek(long offset, int origin);
 	long ftell();
 
