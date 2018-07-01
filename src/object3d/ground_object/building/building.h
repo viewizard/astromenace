@@ -37,7 +37,7 @@ namespace astromenace {
 /*
  * All civilian buildings.
  */
-class cBuilding : public cGroundObject
+class cBuilding final : public cGroundObject
 {
 public:
 	explicit cBuilding(int BuildingNum);

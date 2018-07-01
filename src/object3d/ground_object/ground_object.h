@@ -25,6 +25,12 @@
 
 *************************************************************************************/
 
+// TODO separate classes for buildings and vehicles (+ separate classes for ground explosions)
+
+// TODO separate class for turrets (use it for second inherited class?)
+
+// TODO translate comments
+
 #ifndef OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
 #define OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
 
@@ -35,111 +41,107 @@
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Класс cGroundObject
-//-----------------------------------------------------------------------------
 class cGroundObject : public cObject3D
 {
 public:
-	// базовые конструктор и деструктор объекта
 	cGroundObject();
 	virtual ~cGroundObject();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time) override;
+	virtual bool Update(float Time) override;
 	// Установка положения объекта
-	virtual void	SetLocation(sVECTOR3D NewLocation) override;
+	virtual void SetLocation(sVECTOR3D NewLocation) override;
 	// Установка углов поворота объекта
-	virtual void	SetRotation(sVECTOR3D NewRotation) override;
+	virtual void SetRotation(sVECTOR3D NewRotation) override;
 
 	// колеса, для транспорта
 
 	// скорость вращения колес
-	float	WheelTrackSpeed{0.0f};
+	float WheelTrackSpeed{0.0f};
 
 	// кол-во колес
-	int	WheelQuantity{0};
+	int WheelQuantity{0};
 	// перечень номеров объектов с колесами
-	int	*WheelObjectsNum{nullptr};
+	int *WheelObjectsNum{nullptr};
 
 	// колеса поворотные, для установки угла поворота
 	// кол-во колес
-	int	WheelRotateQuantity{0};
+	int WheelRotateQuantity{0};
 	// перечень номеров объектов с колесами
-	int	*WheelRotateObjectsNum{nullptr};
+	int *WheelRotateObjectsNum{nullptr};
 	// скорость вращения колес
-	float	WheelRotateSpeed{0.0f};
+	float WheelRotateSpeed{0.0f};
 	// максимальный угол поворота колес для модели
-	float	MaxWheelRotateAngle{20.0f};
+	float MaxWheelRotateAngle{20.0f};
 
 	// если нужно, номер объекта с траком для тайловой анимации
-	int	TrackObjectNum{-1};
-	int	TrackRotationDirection{1};// направление вращения траков
+	int TrackObjectNum{-1};
+	int TrackRotationDirection{1};// направление вращения траков
 
 	// нужно повернуть (пересчитать мэш) при следующем проходе
 	// Update + учесть эти данные в Rotation
-	sVECTOR3D	NeedRotate{0.0f, 0.0f, 0.0f};
+	sVECTOR3D NeedRotate{0.0f, 0.0f, 0.0f};
 	// скорость поворота по каждому раправлению
-	sVECTOR3D	RotationSpeed{1.0f, 1.0f, 1.0f};
+	sVECTOR3D RotationSpeed{1.0f, 1.0f, 1.0f};
 
 	// максимальная скорость units/sec, зависит от двигателя
-	float	MaxSpeed{0.0f};
+	float MaxSpeed{0.0f};
 	// текущая скорость
-	float	Speed{0.0f};
+	float Speed{0.0f};
 	// нужная скорость
-	float	NeedSpeed{0.0f};
+	float NeedSpeed{0.0f};
 
 	// максимальное ускорение units/sec*sec, зависит от двигателя
-	float	MaxAcceler{0.0f};
+	float MaxAcceler{0.0f};
 	// макс. маневровых двигателей
-	float	MaxSpeedRotate{0.0f};
+	float MaxSpeedRotate{0.0f};
 	// текущее ускорение
-	float	Acceler{0.0f};
+	float Acceler{0.0f};
 	// нужное ускорение
-	float	NeedAcceler{1.0f};
+	float NeedAcceler{1.0f};
 
 	// кол-во оружия доступного на данной моделе
-	int		WeaponQuantity{0};
+	int WeaponQuantity{0};
 	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool		*WeaponSetFire{nullptr};
+	bool *WeaponSetFire{nullptr};
 	// указатель на массив оружия
-	cWeapon		**Weapon{nullptr};
+	cWeapon **Weapon{nullptr};
 	// расположение оружия (относительное)
-	sVECTOR3D	*WeaponLocation{nullptr};
+	sVECTOR3D *WeaponLocation{nullptr};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
-	int		WeaponFireType{2};
-	int		WeaponGroupCurrentFireNum{-1};
-	float		WeaponGroupCurrentFireDelay{0.0f};
+	int WeaponFireType{2};
+	int WeaponGroupCurrentFireNum{-1};
+	float WeaponGroupCurrentFireDelay{0.0f};
 	// наведение на цель
-	bool		WeaponTargeting{false};
+	bool WeaponTargeting{false};
 
 	// для просчета положения точки стрельбы, считаем как кости
-	sVECTOR3D	BaseBound{0.0f, 0.0f, 0.0f};
-	sVECTOR3D	MiddleBound{0.0f, 0.0f, 0.0f};
-	sVECTOR3D	*WeaponBound{nullptr};
+	sVECTOR3D BaseBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D MiddleBound{0.0f, 0.0f, 0.0f};
+	sVECTOR3D *WeaponBound{nullptr};
 	// если точки фиксированы, не нужно менять направление точки выстрела
 	// только учитываем общий поворот модели и соотв. точку выстрела
 	// работает только если объекты поворота башни и ствола не заданы!
-	bool	DoNotCalculateRotation{false};
+	bool DoNotCalculateRotation{false};
 
 	// коэф. преобразования скорость в скорость вращения колес
-	float	SpeedToRotate{0.0f};
+	float SpeedToRotate{0.0f};
 
 	// набор указателей на номера частей, которыми нацеливаемся по горизонтале
-	int	TargetHorizBlocksQuantity{0};
-	int	*TargetHorizBlocks{nullptr};
-	float	TargetHorizBlocksCurrentAngle{0.0f};
-	float	TargetHorizBlocksNeedAngle{0.0f};
+	int TargetHorizBlocksQuantity{0};
+	int *TargetHorizBlocks{nullptr};
+	float TargetHorizBlocksCurrentAngle{0.0f};
+	float TargetHorizBlocksNeedAngle{0.0f};
 	// набор указателей на номера частей, которыми нацеливаемся по вертикали
-	int	TargetVertBlocksQuantity{0};
-	int	*TargetVertBlocks{nullptr};
-	float	TargetVertBlocksMaxAngle{80.0f};
-	float	TargetVertBlocksMinAngle{0.0f};
-	float	TargetVertBlocksCurrentAngle{0.0f};
-	float	TargetVertBlocksNeedAngle{0.0f};
+	int TargetVertBlocksQuantity{0};
+	int *TargetVertBlocks{nullptr};
+	float TargetVertBlocksMaxAngle{80.0f};
+	float TargetVertBlocksMinAngle{0.0f};
+	float TargetVertBlocksCurrentAngle{0.0f};
+	float TargetVertBlocksNeedAngle{0.0f};
 	// если нужно вращать ствол (многоствольный пулемет)
-	int	BarrelBlocksQuantity{0};
-	int	*BarrelBlocks{nullptr};
+	int BarrelBlocksQuantity{0};
+	int *BarrelBlocks{nullptr};
 
 	// небольшая девиация-болтание колес
 	bool DeviationOn{false};
@@ -152,25 +154,21 @@ public:
 	int *DeviationObjNum{nullptr};
 
 	// для собственного списка
-	cGroundObject	*Next{nullptr};
-	cGroundObject	*Prev{nullptr};
+	cGroundObject *Next{nullptr};
+	cGroundObject *Prev{nullptr};
 };
 
 
-//-----------------------------------------------------------------------------
-// Менеджер GroundObject, дополнительный
-//-----------------------------------------------------------------------------
-
 // Включаем в список
-void	AttachGroundObject(cGroundObject* GroundObject);
+void AttachGroundObject(cGroundObject* GroundObject);
 // Исключаем из списка
-void	DetachGroundObject(cGroundObject* GroundObject);
+void DetachGroundObject(cGroundObject* GroundObject);
 // Проверяем все объекты, обновляем данные
-void	UpdateAllGroundObject(float Time);
+void UpdateAllGroundObject(float Time);
 // Прорисовываем все объекты
-void	DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
+void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
-void	ReleaseAllGroundObject();
+void ReleaseAllGroundObject();
 
 } // astromenace namespace
 } // viewizard namespace

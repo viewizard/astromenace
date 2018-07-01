@@ -37,7 +37,7 @@ namespace astromenace {
 /*
  * All tracked vehicles.
  */
-class cTracked : public cGroundObject
+class cTracked final : public cGroundObject
 {
 public:
 	explicit cTracked(int TrackedNum);

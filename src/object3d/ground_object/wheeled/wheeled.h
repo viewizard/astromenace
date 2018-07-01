@@ -37,7 +37,7 @@ namespace astromenace {
 /*
  * All wheeled vehicles.
  */
-class cWheeled : public cGroundObject
+class cWheeled final : public cGroundObject
 {
 public:
 	explicit cWheeled(int WheeledNum);

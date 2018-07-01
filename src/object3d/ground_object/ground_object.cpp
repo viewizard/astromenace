@@ -41,10 +41,7 @@ cGroundObject::cGroundObject()
 
 	// подключаем к своему списку
 	AttachGroundObject(this);
-
 }
-
-
 
 //-----------------------------------------------------------------------------
 // Деструктор
@@ -112,15 +109,6 @@ cGroundObject::~cGroundObject()
 	DetachGroundObject(this);
 }
 
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
@@ -136,9 +124,6 @@ void cGroundObject::SetLocation(sVECTOR3D NewLocation)
 				Weapon[i]->SetLocation(NewLocation + WeaponLocation[i]);
 		}
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
@@ -163,7 +148,6 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 	if (TargetVertBlocks != nullptr)
 		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
 
-
 	if (Weapon != nullptr)
 		for (int i = 0; i < WeaponQuantity; i++)
 			if (Weapon[i] != nullptr) {
@@ -185,14 +169,6 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 			}
 }
 
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Обновление данных объектa Object3D
 //-----------------------------------------------------------------------------
@@ -205,10 +181,6 @@ bool cGroundObject::Update(float Time)
 	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
 	if (TimeDelta == 0.0f)
 		return true;
-
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// обработка скрипта
@@ -229,18 +201,6 @@ bool cGroundObject::Update(float Time)
 					WeaponSetFire[i] = TimeSheetList.front().Fire;
 			}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	// если нужно наводить на цель
 	if (WeaponTargeting) {
@@ -281,7 +241,6 @@ bool cGroundObject::Update(float Time)
 		TargetVertBlocksNeedAngle = 0.0f;
 
 	}
-
 
 	// собственно повороты элементов модели на углы
 	{
@@ -331,10 +290,6 @@ bool cGroundObject::Update(float Time)
 			}
 		}
 
-
-
-
-
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот стволов по вертикали
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -379,10 +334,6 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// находим точку стрельбы и учитываем направление
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -399,7 +350,6 @@ bool cGroundObject::Update(float Time)
 	sVECTOR3D RotationWeapon = Rotation;
 	if (TargetVertBlocks != nullptr)
 		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
-
 
 	if (Weapon != nullptr)
 		for (int i = 0; i < WeaponQuantity; i++)
@@ -421,11 +371,6 @@ bool cGroundObject::Update(float Time)
 
 				Weapon[i]->SetLocation(Location + WeaponLocation[i]);
 			}
-
-
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// смотрим, есть ли команда открыть огонь
@@ -462,7 +407,6 @@ bool cGroundObject::Update(float Time)
 				// если еще не было начальной установки
 				if (WeaponGroupCurrentFireNum == -1)
 					WeaponGroupCurrentFireNum = FirstWeapon;
-
 
 				// стреляем
 				for (int i = 0; i < WeaponQuantity; i++) {
@@ -549,12 +493,6 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-
-
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вращение стволов пулемета
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -567,10 +505,6 @@ bool cGroundObject::Update(float Time)
 				Model3DBlocks[BarrelBlocks[i]].GeometryAnimation.z -= 360.0f;
 		}
 	}
-
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вращение колес в транспорте
@@ -588,7 +522,6 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// тайловая анимация для траков
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -601,8 +534,6 @@ bool cGroundObject::Update(float Time)
 		if (Model3DBlocks[TrackObjectNum].TextureAnimation.x < -1.0f)
 			Model3DBlocks[TrackObjectNum].TextureAnimation.x += 1.0f;
 	}
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// повотор
@@ -655,7 +586,6 @@ bool cGroundObject::Update(float Time)
 			if (NeedRotate.y != 0.0f) NeedRotate.y -= tmpRotate.y;
 		}
 
-
 		// угол по z
 		if (NeedRotate.z != 0.0f) {
 			float Sign = 1.0f;
@@ -680,10 +610,6 @@ bool cGroundObject::Update(float Time)
 
 		// установка поворота там же сохраняем, какой общий поворот модели
 		SetRotation(tmpRotate);
-
-
-
-
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот колес в транспорте
@@ -717,13 +643,6 @@ bool cGroundObject::Update(float Time)
 		}
 
 	}
-
-
-
-
-
-
-
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -771,14 +690,10 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание колес, если нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (DeviationOn)
+	if (DeviationOn) {
 		for (int i=0; i<DeviationObjQuantity; i++) {
 			float Sign = 1.0f;
 			// нужно двигать
@@ -808,15 +723,7 @@ bool cGroundObject::Update(float Time)
 			sVECTOR3D Tmp = Deviation[i] ^ CurentDeviation[i];
 			SetObjectLocation(Model3DBlocks[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
 		}
-
-
-
-
-
-
-
-
-
+	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// считаем вектор движения
@@ -830,10 +737,6 @@ bool cGroundObject::Update(float Time)
 		// делаем сдвиг модели в указанную точку
 		SetLocation(Location+Velocity);
 	}
-
-
-
-
 
 	// объект в порядке - удалять не нужно
 	return true;
