@@ -27,10 +27,108 @@
 
 #include "ground_object.h"
 #include "../../script/script.h"
+#include "../weapon/weapon.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+// Указатели на начальный и конечный объект в списке
+cGroundObject *StartGroundObject = nullptr;
+cGroundObject *EndGroundObject = nullptr;
+
+//-----------------------------------------------------------------------------
+// Включаем в список
+//-----------------------------------------------------------------------------
+static void AttachGroundObject(cGroundObject* GroundObject)
+{
+	if (GroundObject == nullptr)
+		return;
+
+	// первый в списке...
+	if (EndGroundObject == nullptr) {
+		GroundObject->Prev = nullptr;
+		GroundObject->Next = nullptr;
+		StartGroundObject = GroundObject;
+		EndGroundObject = GroundObject;
+	} else { // продолжаем заполнение...
+		GroundObject->Prev = EndGroundObject;
+		GroundObject->Next = nullptr;
+		EndGroundObject->Next = GroundObject;
+		EndGroundObject = GroundObject;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Исключаем из списка
+//-----------------------------------------------------------------------------
+static void DetachGroundObject(cGroundObject* GroundObject)
+{
+	if (GroundObject == nullptr) return;
+
+	// переустанавливаем указатели...
+	if (StartGroundObject == GroundObject)
+		StartGroundObject = GroundObject->Next;
+	if (EndGroundObject == GroundObject)
+		EndGroundObject = GroundObject->Prev;
+
+	if (GroundObject->Next != nullptr)
+		GroundObject->Next->Prev = GroundObject->Prev;
+	else if (GroundObject->Prev != nullptr)
+		GroundObject->Prev->Next = nullptr;
+
+	if (GroundObject->Prev != nullptr)
+		GroundObject->Prev->Next = GroundObject->Next;
+	else if (GroundObject->Next != nullptr)
+		GroundObject->Next->Prev = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// Проверяем все объекты, обновляем данные
+//-----------------------------------------------------------------------------
+void UpdateAllGroundObject(float Time)
+{
+	cGroundObject *tmp = StartGroundObject;
+	while (tmp != nullptr) {
+		cGroundObject *tmp2 = tmp->Next;
+		// делаем обновление данных по объекту
+		if (!tmp->Update(Time))
+			// если его нужно уничтожить - делаем это
+			delete tmp;
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Прорисовываем все объекты
+//-----------------------------------------------------------------------------
+void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap)
+{
+
+	cGroundObject *tmp = StartGroundObject;
+	while (tmp != nullptr) {
+		cGroundObject *tmp2 = tmp->Next;
+		tmp->Draw(VertexOnlyPass, ShadowMap);
+		tmp = tmp2;
+	}
+
+}
+
+//-----------------------------------------------------------------------------
+// Удаляем все объекты в списке
+//-----------------------------------------------------------------------------
+void ReleaseAllGroundObject()
+{
+	cGroundObject *tmp = StartGroundObject;
+	while (tmp != nullptr) {
+		cGroundObject *tmp2 = tmp->Next;
+		delete tmp;
+		tmp = tmp2;
+	}
+
+	StartGroundObject = nullptr;
+	EndGroundObject = nullptr;
+}
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных

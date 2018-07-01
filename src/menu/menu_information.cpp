@@ -33,12 +33,9 @@
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/alien_space_fighter/alien_space_fighter.h"
 #include "../object3d/space_ship/alien_space_mothership/alien_space_mothership.h"
-#include "../object3d/space_ship/pirate_ship/pirate_ship.h"
-#include "../object3d/ground_object/building/building.h"
-#include "../object3d/ground_object/military_building/military_building.h"
-#include "../object3d/ground_object/wheeled/wheeled.h"
-#include "../object3d/ground_object/tracked/tracked.h"
 #include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
+#include "../object3d/space_ship/pirate_ship/pirate_ship.h"
+#include "../object3d/ground_object/ground_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -53,7 +50,7 @@ cProjectile *InfoMine = nullptr;
 cAlienSpaceFighter *InfoAlien = nullptr;
 cAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
 cPirateShip *InfoPirateShip = nullptr;
-cBuilding *InfoBuilding = nullptr;
+cCivilianBuilding *InfoCivilianBuilding = nullptr;
 cMilitaryBuilding *InfoMilitaryBuilding = nullptr;
 cWheeled *InfoWheeled = nullptr;
 cTracked *InfoTracked = nullptr;
@@ -291,9 +288,9 @@ void DestroyInfoObject()
 		delete InfoPirateShip;
 		InfoPirateShip = nullptr;
 	}
-	if (InfoBuilding != nullptr) {
-		delete InfoBuilding;
-		InfoBuilding = nullptr;
+	if (InfoCivilianBuilding != nullptr) {
+		delete InfoCivilianBuilding;
+		InfoCivilianBuilding = nullptr;
 	}
 	if (InfoMilitaryBuilding != nullptr) {
 		delete InfoMilitaryBuilding;
@@ -509,25 +506,25 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
-		InfoBuilding = new cBuilding(tmpCreateNum);
-		InfoBuilding->ObjectStatus = eObjectStatus::none;
-		InfoBuilding->SetLocation(sVECTOR3D(1000,-1000-InfoBuilding->AABB[6].y, 0));
-		ObjectBaseLocation = InfoBuilding->Location - sVECTOR3D(1000,-1000,0);
+		InfoCivilianBuilding = new cCivilianBuilding(tmpCreateNum);
+		InfoCivilianBuilding->ObjectStatus = eObjectStatus::none;
+		InfoCivilianBuilding->SetLocation(sVECTOR3D(1000,-1000-InfoCivilianBuilding->AABB[6].y, 0));
+		ObjectBaseLocation = InfoCivilianBuilding->Location - sVECTOR3D(1000,-1000,0);
 
-		Point = sVECTOR3D(1000,-1000+InfoBuilding->Height/3.0f,0);
+		Point = sVECTOR3D(1000,-1000+InfoCivilianBuilding->Height/3.0f,0);
 
-		PointCamera = sVECTOR3D(0.0f,(InfoBuilding->Length
-					     +InfoBuilding->Width+
-					     InfoBuilding->Height)*0.16f +InfoBuilding->Height*0.3f,
-				       -(InfoBuilding->Length
-					 +InfoBuilding->Width+
-					 InfoBuilding->Height)*0.38f-InfoBuilding->Height*0.7f);
-		InfoObjectWidth = InfoBuilding->Width;
-		InfoObjectLength = InfoBuilding->Length;
-		InfoObjectHeight = InfoBuilding->Height;
-		InfoObjectStrength = InfoBuilding->StrengthStart;
+		PointCamera = sVECTOR3D(0.0f,(InfoCivilianBuilding->Length +
+					      InfoCivilianBuilding->Width +
+					      InfoCivilianBuilding->Height)*0.16f + InfoCivilianBuilding->Height*0.3f,
+				       -(InfoCivilianBuilding->Length +
+					 InfoCivilianBuilding->Width +
+					 InfoCivilianBuilding->Height)*0.38f-InfoCivilianBuilding->Height*0.7f);
+		InfoObjectWidth = InfoCivilianBuilding->Width;
+		InfoObjectLength = InfoCivilianBuilding->Length;
+		InfoObjectHeight = InfoCivilianBuilding->Height;
+		InfoObjectStrength = InfoCivilianBuilding->StrengthStart;
 
-		InfoBuilding->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+		InfoCivilianBuilding->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
 	}
 	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoMilitaryBuildingStart+1;
@@ -1513,9 +1510,9 @@ void InformationDrawObject()
 		InfoPirateShip->SetLocation(TMPLocation);
 		InfoPirateShip->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
 	}
-	if (InfoBuilding) {
-		InfoBuilding->SetLocation(TMPLocation);
-		InfoBuilding->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+	if (InfoCivilianBuilding) {
+		InfoCivilianBuilding->SetLocation(TMPLocation);
+		InfoCivilianBuilding->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
 	}
 	if (InfoMilitaryBuilding) {
 		InfoMilitaryBuilding->SetLocation(TMPLocation);
@@ -1567,8 +1564,8 @@ void InformationDrawObject()
 				}
 			}
 		}
-		if (InfoBuilding) {
-			InfoBuilding->Draw(true);
+		if (InfoCivilianBuilding) {
+			InfoCivilianBuilding->Draw(true);
 		}
 		if (InfoMilitaryBuilding) {
 			InfoMilitaryBuilding->Draw(true);
@@ -1624,8 +1621,8 @@ void InformationDrawObject()
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoPirateShip->Engines);
 	}
-	if (InfoBuilding) {
-		InfoBuilding->Draw(false, ShadowMap);
+	if (InfoCivilianBuilding) {
+		InfoCivilianBuilding->Draw(false, ShadowMap);
 	}
 	if (InfoMilitaryBuilding) {
 		InfoMilitaryBuilding->Draw(false, ShadowMap);

@@ -47,10 +47,7 @@
 #include "../object3d/space_ship/pirate_ship/pirate_ship.h"
 #include "../object3d/space_object/base_part/base_part.h"
 #include "../object3d/space_object/big_asteroid/big_asteroid.h"
-#include "../object3d/ground_object/military_building/military_building.h"
-#include "../object3d/ground_object/building/building.h"
-#include "../object3d/ground_object/wheeled/wheeled.h"
-#include "../object3d/ground_object/tracked/tracked.h"
+#include "../object3d/ground_object/ground_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -768,7 +765,7 @@ void cMissionScript::UpdateTimeLine()
 
 		case constexpr_hash_djb2a("CreateBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBuilding *GroundObject = new cBuilding(tmpType);
+				cCivilianBuilding *GroundObject = new cCivilianBuilding(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;

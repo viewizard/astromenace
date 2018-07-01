@@ -25,8 +25,9 @@
 
 *************************************************************************************/
 
-#include "military_building.h"
-#include "../../../assets/texture.h"
+#include "ground_object.h"
+#include "../../assets/texture.h"
+#include "../weapon/weapon.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

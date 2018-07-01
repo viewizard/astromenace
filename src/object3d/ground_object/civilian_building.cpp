@@ -25,9 +25,9 @@
 
 *************************************************************************************/
 
-#include "building.h"
-#include "../../../config/config.h"
-#include "../../../assets/texture.h"
+#include "ground_object.h"
+#include "../../config/config.h"
+#include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -58,7 +58,7 @@ const sBuildingData PresetBuildingData[] = {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cBuilding::cBuilding(int BuildingNum)
+cCivilianBuilding::cCivilianBuilding(int BuildingNum)
 {
 	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount)) {
 		std::cerr << __func__ << "(): " << "Could not init cBuilding object with Number " << BuildingNum << "\n";

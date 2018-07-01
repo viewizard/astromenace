@@ -35,14 +35,14 @@
 #define OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
 
 #include "../object3d.h"
-#include "../weapon/weapon.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
 
-class cGroundObject : public cObject3D
-{
+class cWeapon;
+
+class cGroundObject : public cObject3D {
 public:
 	cGroundObject();
 	virtual ~cGroundObject();
@@ -158,11 +158,27 @@ public:
 	cGroundObject *Prev{nullptr};
 };
 
+class cCivilianBuilding final : public cGroundObject {
+public:
+	explicit cCivilianBuilding(int BuildingNum);
+};
 
-// Включаем в список
-void AttachGroundObject(cGroundObject* GroundObject);
-// Исключаем из списка
-void DetachGroundObject(cGroundObject* GroundObject);
+class cMilitaryBuilding final : public cGroundObject {
+public:
+	explicit cMilitaryBuilding(int MilitaryBuildingNum);
+};
+
+class cTracked final : public cGroundObject {
+public:
+	explicit cTracked(int TrackedNum);
+};
+
+class cWheeled final : public cGroundObject {
+public:
+	explicit cWheeled(int WheeledNum);
+};
+
+
 // Проверяем все объекты, обновляем данные
 void UpdateAllGroundObject(float Time);
 // Прорисовываем все объекты
