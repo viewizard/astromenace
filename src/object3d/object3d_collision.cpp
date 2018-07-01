@@ -715,10 +715,10 @@ exitN1:
 
 					switch (tmpG->ObjectType) {
 					case eObjectType::PirateBuilding:
-						new cGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum2);
+						new cGroundExplosion(*tmpG, 1, tmpG->Location, ObjectPieceNum2);
 						break;
 					case eObjectType::PirateVehicle:
-						new cGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum2);
+						new cGroundExplosion(*tmpG, 2, tmpG->Location, ObjectPieceNum2);
 						break;
 					default:
 						break;
@@ -905,10 +905,10 @@ exitN2:
 
 						switch (tmpG->ObjectType) {
 						case eObjectType::PirateBuilding:
-							new cGroundExplosion(tmpG, 1, IntercPoint, ObjectPieceNum);
+							new cGroundExplosion(*tmpG, 1, IntercPoint, ObjectPieceNum);
 							break;
 						case eObjectType::PirateVehicle:
-							new cGroundExplosion(tmpG, 2, IntercPoint, ObjectPieceNum);
+							new cGroundExplosion(*tmpG, 2, IntercPoint, ObjectPieceNum);
 							break;
 						default:
 							break;
@@ -987,10 +987,10 @@ exitN2:
 				    (tmpG->Strength <= 0.0f)) {
 					switch (tmpG->ObjectType) {
 					case eObjectType::PirateBuilding:
-						new cGroundExplosion(tmpG, 1, tmpG->Location, ObjectPieceNum);
+						new cGroundExplosion(*tmpG, 1, tmpG->Location, ObjectPieceNum);
 						break;
 					case eObjectType::PirateVehicle:
-						new cGroundExplosion(tmpG, 2, tmpG->Location, ObjectPieceNum);
+						new cGroundExplosion(*tmpG, 2, tmpG->Location, ObjectPieceNum);
 						break;
 					default:
 						break;
@@ -1426,10 +1426,10 @@ NexttmpS:
 
 				switch (tmpG->ObjectType) {
 				case eObjectType::PirateBuilding:
-					new cGroundExplosion(tmpG, 1, tmpG->Location, -1);
+					new cGroundExplosion(*tmpG, 1, tmpG->Location, -1);
 					break;
 				case eObjectType::PirateVehicle:
-					new cGroundExplosion(tmpG, 2, tmpG->Location, -1);
+					new cGroundExplosion(*tmpG, 2, tmpG->Location, -1);
 					break;
 				default:
 					break;

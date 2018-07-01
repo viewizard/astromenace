@@ -39,10 +39,10 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sVECTOR3D &ExplLocation,
+cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
 				   int ObjectPieceNum, bool NeedExplosionSFX)
 {
-	TimeLastUpdate = Object->TimeLastUpdate;
+	TimeLastUpdate = Object.TimeLastUpdate;
 	ExplosionTypeByClass = 3;
 	// тип взрыва, используем только один, но все равно нужно для проверки (может передали левый ExplType)
 	// 1-взрыв на части
@@ -62,18 +62,6 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 		InternalExplosionType = 1;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// взрыв на части
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -81,15 +69,15 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 		// строим обратную матрицу
 		float InvRotationMat[9];
 		// сохраняем старые значения + пересчет новых
-		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(Object->CurrentRotationMat[0]));
+		memcpy(InvRotationMat, Object.CurrentRotationMat, 9*sizeof(Object.CurrentRotationMat[0]));
 		// делаем инверсную старую матрицу
 		vw_Matrix33InverseRotate(InvRotationMat);
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (unsigned int i = 0; i < Object->Model3DBlocks.size(); i++) {
+		for (unsigned int i = 0; i < Object.Model3DBlocks.size(); i++) {
 			// трак, пропускаем
-			if (Object->TrackObjectNum == static_cast<int>(i))
+			if (Object.TrackObjectNum == static_cast<int>(i))
 				continue;
 			else {
 				// создаем часть
@@ -100,28 +88,28 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 				// только одна текстура (!) 2-ю для подстветки не тянем
 				ShipPart->Texture.resize(1, 0);
-				ShipPart->Texture[0] = Object->Texture[i];
-				if ((Object->NormalMap.size() > (unsigned)i) && Object->NormalMap[i]) {
+				ShipPart->Texture[0] = Object.Texture[i];
+				if ((Object.NormalMap.size() > (unsigned)i) && Object.NormalMap[i]) {
 					ShipPart->NormalMap.resize(1, 0);
-					ShipPart->NormalMap[0] = Object->NormalMap[i];
+					ShipPart->NormalMap[0] = Object.NormalMap[i];
 				}
 
 				// берем то, что нужно
 				ShipPart->Model3DBlocks.resize(1);
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-				ShipPart->Model3DBlocks[0] = Object->Model3DBlocks[i];
+				ShipPart->Model3DBlocks[0] = Object.Model3DBlocks[i];
 				// берем стандартные шейдеры
 				ShipPart->Model3DBlocks[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-				if (Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
-					Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
+				if (Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
+					Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
 					ShipPart->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
 				}
 
 				// находим точку локального положения объекта в моделе
-				sVECTOR3D LocalLocation = Object->Model3DBlocks[i].Location;
-				vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
-				LocalLocation = Object->HitBB[i].Location - LocalLocation;
+				sVECTOR3D LocalLocation = Object.Model3DBlocks[i].Location;
+				vw_Matrix33CalcPoint(LocalLocation, Object.CurrentRotationMat);
+				LocalLocation = Object.HitBB[i].Location - LocalLocation;
 				vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
 				ShipPart->Model3DBlocks[0].Location = LocalLocation ^ (-1.0f);
@@ -130,8 +118,8 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				ShipPart->MetadataInitialization();
 
 				// установка текущего положения и поворота
-				ShipPart->SetLocation(Object->Location + Object->HitBB[i].Location);
-				ShipPart->SetRotation(Object->Rotation);
+				ShipPart->SetLocation(Object.Location + Object.HitBB[i].Location);
+				ShipPart->SetRotation(Object.Rotation);
 
 
 				if (ExplType == 1) {
@@ -146,12 +134,12 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 				if (ExplType == 2) {
 					// проверяем, это колесо или нет
 					bool Wheel = false;
-					for (int k=0; k<Object->WheelQuantity; k++) {
-						if (Object->WheelObjectsNum[k] == (int)i) Wheel = true;
+					for (int k=0; k<Object.WheelQuantity; k++) {
+						if (Object.WheelObjectsNum[k] == (int)i) Wheel = true;
 					}
 
 					if (Wheel) {
-						sVECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
+						sVECTOR3D VelocityTMP = ShipPart->Location - Object.Location;
 						// делаем небольшой случайный доворот
 						vw_RotatePoint(VelocityTMP, sVECTOR3D(-5.0f - 15.0f * vw_fRand(), 10.0f*vw_fRand0(), 0.0f));
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^((1.0f + 5.0f * vw_fRand())/ShipPart->Radius);
@@ -161,7 +149,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 						ShipPart->RotationSpeed.y = 40.0f+80.0f*vw_fRand0();
 						ShipPart->RotationSpeed.z = 40.0f+80.0f*vw_fRand0();
 					} else {
-						sVECTOR3D VelocityTMP = ShipPart->Location - Object->Location;
+						sVECTOR3D VelocityTMP = ShipPart->Location - Object.Location;
 						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^(5.0f/ShipPart->Radius);
 						else ShipPart->Velocity = VelocityTMP^(1.0f + 5.0f * vw_fRand());
 
@@ -173,7 +161,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 
 
 				ShipPart->StrengthStart = ShipPart->Strength = 1.0f;
-				ShipPart->ObjectStatus = Object->ObjectStatus;
+				ShipPart->ObjectStatus = Object.ObjectStatus;
 				ShipPart->ShowStrength = false;
 
 
@@ -189,19 +177,10 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 		Lifetime = 0.0f;
 	}
 
-
-
-
-
-
-
-
 	// дальше, если не видем точку взрыва не делать... проверяем...
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
 		return;
 	}
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// спец эффекты
@@ -213,8 +192,6 @@ cGroundExplosion::cGroundExplosion(cGroundObject *Object, int ExplType, const sV
 		if (NeedExplosionSFX)
 			PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
 	}
-
-
 }
 
 } // astromenace namespace

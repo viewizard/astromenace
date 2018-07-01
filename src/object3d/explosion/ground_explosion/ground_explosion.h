@@ -41,7 +41,7 @@ namespace astromenace {
 class cGroundExplosion : public cExplosion
 {
 public:
-	explicit cGroundExplosion(cGroundObject *Object, int ExplType, const sVECTOR3D &ExplLocation,
+	explicit cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
 				  int ObjectPieceNum, bool NeedExplosionSFX = true);
 };
 
