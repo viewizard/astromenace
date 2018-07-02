@@ -1283,15 +1283,15 @@ exitN4:
 //-----------------------------------------------------------------------------
 // Проверка попадания в сферу Sphere-Sphere
 //-----------------------------------------------------------------------------
-bool CheckSphereSphereDestroyDetection(cObject3D *Object1, sVECTOR3D Point, float Radius, float *Distance2)
+bool CheckSphereSphereDestroyDetection(const cObject3D &Object1, const sVECTOR3D &Point, float Radius, float &Distance2)
 {
 	// квадрат расстояния между объектами
-	*Distance2 = (Object1->Location.x - Point.x) * (Object1->Location.x - Point.x) +
-		     (Object1->Location.y - Point.y) * (Object1->Location.y - Point.y) +
-		     (Object1->Location.z - Point.z) * (Object1->Location.z - Point.z);
+	Distance2 = (Object1.Location.x - Point.x) * (Object1.Location.x - Point.x) +
+		    (Object1.Location.y - Point.y) * (Object1.Location.y - Point.y) +
+		    (Object1.Location.z - Point.z) * (Object1.Location.z - Point.z);
 
 	// если расстояние меньше или равно - значит есть столкновение по радиусам
-	if (*Distance2 <= Radius * Radius)
+	if (Distance2 <= Radius * Radius)
 		return true;
 
 	// объекты очень далеко
@@ -1324,7 +1324,7 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		if (NeedCheckCollision(*tmpS) &&
 		    ((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy)) ||
 		     ((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player)))) &&
-		    (&DontTouchObject != tmpS) && CheckSphereSphereDestroyDetection(tmpS, Point, Radius, &Distance2)) {
+		    (&DontTouchObject != tmpS) && CheckSphereSphereDestroyDetection(*tmpS, Point, Radius, Distance2)) {
 			if ((tmpS->ObjectType == eObjectType::ShipPart) &&
 			    (vw_fRand() > 0.4f))
 				goto NexttmpS;
@@ -1359,7 +1359,7 @@ NexttmpS:
 		if (NeedCheckCollision(*tmpShip) &&
 		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip->ObjectStatus == eObjectStatus::Enemy)) ||
 		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip->ObjectStatus == eObjectStatus::Ally) || (tmpShip->ObjectStatus == eObjectStatus::Player)))) &&
-		     (&DontTouchObject != tmpShip) && CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, &Distance2))) {
+		     (&DontTouchObject != tmpShip) && CheckSphereSphereDestroyDetection(*tmpShip, Point, Radius, Distance2))) {
 
 			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
 
@@ -1415,7 +1415,7 @@ NexttmpS:
 		if (NeedCheckCollision(*tmpG) &&
 		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)) ||
 		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player)))) &&
-		     (&DontTouchObject != tmpG) && CheckSphereSphereDestroyDetection(tmpG, Point, Radius, &Distance2))) {
+		     (&DontTouchObject != tmpG) && CheckSphereSphereDestroyDetection(*tmpG, Point, Radius, Distance2))) {
 			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
 
 			// отнимаем у всех по Damage
