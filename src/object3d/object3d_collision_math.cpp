@@ -39,62 +39,63 @@ namespace astromenace {
 //-----------------------------------------------------------------------------
 // Проверка столкновений Sphere-Mesh
 //-----------------------------------------------------------------------------
-bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, sVECTOR3D *NewLoc, int *Object1PieceNum)
+bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
+				       sVECTOR3D &NewLoc, int &Object1PieceNum)
 {
-	if (Object1->Model3DBlocks.empty())
+	if (Object1.Model3DBlocks.empty())
 		return false;
 
-	for (unsigned int j = 0; j < Object1->Model3DBlocks.size(); j++) {
-		if (!Object1->HitBB.empty()) {
-			float Distance2 = (Object1->Location.x + Object1->HitBB[j].Location.x - Object2->Location.x) *
-					  (Object1->Location.x + Object1->HitBB[j].Location.x - Object2->Location.x) +
-					  (Object1->Location.y + Object1->HitBB[j].Location.y - Object2->Location.y) *
-					  (Object1->Location.y + Object1->HitBB[j].Location.y - Object2->Location.y) +
-					  (Object1->Location.z + Object1->HitBB[j].Location.z - Object2->Location.z) *
-					  (Object1->Location.z + Object1->HitBB[j].Location.z - Object2->Location.z);
+	for (unsigned int j = 0; j < Object1.Model3DBlocks.size(); j++) {
+		if (!Object1.HitBB.empty()) {
+			float Distance2 = (Object1.Location.x + Object1.HitBB[j].Location.x - Object2.Location.x) *
+					  (Object1.Location.x + Object1.HitBB[j].Location.x - Object2.Location.x) +
+					  (Object1.Location.y + Object1.HitBB[j].Location.y - Object2.Location.y) *
+					  (Object1.Location.y + Object1.HitBB[j].Location.y - Object2.Location.y) +
+					  (Object1.Location.z + Object1.HitBB[j].Location.z - Object2.Location.z) *
+					  (Object1.Location.z + Object1.HitBB[j].Location.z - Object2.Location.z);
 
 			// если очень далеко - берем следующий HitBB
 			// но сначала делаем еще одну проверку
-			if (Distance2 > Object1->HitBB[j].Radius2 + Object2->Radius * Object2->Radius) {
+			if (Distance2 > Object1.HitBB[j].Radius2 + Object2.Radius * Object2.Radius) {
 				// средняя точка линии
-				sVECTOR3D mid = (Object2->Location + Object2->PrevLocation) / 2.0f;
+				sVECTOR3D mid = (Object2.Location + Object2.PrevLocation) / 2.0f;
 				// направление линии
-				sVECTOR3D dir = Object2->Location - Object2->PrevLocation;
+				sVECTOR3D dir = Object2.Location - Object2.PrevLocation;
 				// полудлина линии
 				float hl = dir.Length() / 2.0f;
 				dir.Normalize();
 
-				sVECTOR3D T = Object1->Location + Object1->HitBB[j].Location - mid;
+				sVECTOR3D T = Object1.Location + Object1.HitBB[j].Location - mid;
 				float r;
 
 				// проверяем, является ли одна из осей X,Y,Z разделяющей
-				if ((fabs(T.x) > (Object1->HitBB[j].Box[0].x + hl * fabs(dir.x))) ||
-				    (fabs(T.y) > (Object1->HitBB[j].Box[0].y + hl * fabs(dir.y))) ||
-				    (fabs(T.z) > (Object1->HitBB[j].Box[0].z + hl * fabs(dir.z))))
+				if ((fabs(T.x) > (Object1.HitBB[j].Box[0].x + hl * fabs(dir.x))) ||
+				    (fabs(T.y) > (Object1.HitBB[j].Box[0].y + hl * fabs(dir.y))) ||
+				    (fabs(T.z) > (Object1.HitBB[j].Box[0].z + hl * fabs(dir.z))))
 					continue;
 
 				// проверяем X ^ dir
-				r = Object1->HitBB[j].Box[0].y * fabs(dir.z) + Object1->HitBB[j].Box[0].z * fabs(dir.y);
+				r = Object1.HitBB[j].Box[0].y * fabs(dir.z) + Object1.HitBB[j].Box[0].z * fabs(dir.y);
 				if (fabs(T.y*dir.z - T.z*dir.y) > r)
 					continue;
 
 				// проверяем Y ^ dir
-				r = Object1->HitBB[j].Box[0].x * fabs(dir.z) + Object1->HitBB[j].Box[0].z * fabs(dir.x);
+				r = Object1.HitBB[j].Box[0].x * fabs(dir.z) + Object1.HitBB[j].Box[0].z * fabs(dir.x);
 				if (fabs(T.z * dir.x - T.x * dir.z) > r)
 					continue;
 
 				// проверяем Z ^ dir
-				r = Object1->HitBB[j].Box[0].x * fabs(dir.y) + Object1->HitBB[j].Box[0].y * fabs(dir.x);
+				r = Object1.HitBB[j].Box[0].x * fabs(dir.y) + Object1.HitBB[j].Box[0].y * fabs(dir.x);
 				if (fabs(T.x * dir.y - T.y * dir.x) > r)
 					continue;
 			}
 		}
 
 		// дальше работаем с геометрией
-		if(vw_SphereMeshCollision(Object1->Location, Object1->Model3DBlocks[j],
-					  Object1->CurrentRotationMat, Object2->Radius, Object2->Location,
-					  Object2->PrevLocation, NewLoc)) {
-			*Object1PieceNum = j;
+		if(vw_SphereMeshCollision(Object1.Location, Object1.Model3DBlocks[j],
+					  Object1.CurrentRotationMat, Object2.Radius, Object2.Location,
+					  Object2.PrevLocation, NewLoc)) {
+			Object1PieceNum = j;
 			return true;
 		}
 	}

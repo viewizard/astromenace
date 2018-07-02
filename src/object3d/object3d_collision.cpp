@@ -76,7 +76,8 @@ extern int CurrentMission;
 float GameCameraGetSpeed();
 
 bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum);
-bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, sVECTOR3D *NewLoc, int *Object1PieceNum);
+bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
+				       sVECTOR3D &NewLoc, int &Object1PieceNum);
 bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
 				       int &Object1PieceNum, int &Object2PieceNum);
 bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum);
@@ -186,7 +187,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 							  Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
 				   vw_SphereOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
 							 Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
-				   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
+				   CheckMeshSphereCollisionDetection(*Object, *Projectile, *IntercPoint, *ObjectPieceNum)) {
 
 				if (NeedCheckCollision(*Object)) {
 					DamagesData->DamageHull = Projectile->DamageHull;
@@ -248,7 +249,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 
 				// если это не убиваемый объект, должны столкнуться с геометрией
 				if (!NeedCheckCollision(*Object)) {
-					if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
+					if (CheckMeshSphereCollisionDetection(*Object, *Projectile, *IntercPoint, *ObjectPieceNum)) {
 						// взрываем...
 						if (NeedCheckCollision(*Object))
 							new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
