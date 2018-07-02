@@ -76,9 +76,9 @@ extern int CurrentMission;
 float GameCameraGetSpeed();
 
 bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum);
-
 bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, sVECTOR3D *NewLoc, int *Object1PieceNum);
-bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum, int *Object2PieceNum);
+bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
+				       int &Object1PieceNum, int &Object2PieceNum);
 bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum);
 
 // щит у игрока
@@ -685,7 +685,7 @@ exitN1:
 						   tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
 			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
 						  tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
-			    CheckHitBBHitBBCollisionDetection(tmpShip, tmpG, &ObjectPieceNum1, &ObjectPieceNum2)) {
+			    CheckHitBBHitBBCollisionDetection(*tmpShip, *tmpG, ObjectPieceNum1, ObjectPieceNum2)) {
 
 				if ((tmpG->ObjectType == eObjectType::CivilianBuilding) &&
 				    !CheckHitBBMeshCollisionDetection(*tmpShip, *tmpG, ObjectPieceNum2)) {
@@ -781,7 +781,7 @@ exitN2:
 			    vw_AABBAABBCollision(tmpShip->AABB, tmpShip->Location, tmpCollisionShip1->AABB, tmpCollisionShip1->Location) &&
 			    vw_OBBOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
 					       tmpCollisionShip1->OBB.Box, tmpCollisionShip1->OBB.Location, tmpCollisionShip1->Location, tmpCollisionShip1->CurrentRotationMat) &&
-			    CheckHitBBHitBBCollisionDetection(tmpShip, tmpCollisionShip1, &ObjectPieceNum1, &ObjectPieceNum2)) {
+			    CheckHitBBHitBBCollisionDetection(*tmpShip, *tmpCollisionShip1, ObjectPieceNum1, ObjectPieceNum2)) {
 
 				float StrTMP = tmpShip->Strength;
 				tmpShip->Strength -= tmpCollisionShip1->Strength / tmpShip->ResistanceHull;
