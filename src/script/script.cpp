@@ -55,8 +55,6 @@ namespace astromenace {
 
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
-extern cGroundObject *StartGroundObject;
-extern cGroundObject *EndGroundObject;
 
 extern int NeedShowBB;
 extern bool UndeadDebugMode;
@@ -288,29 +286,27 @@ bool cMissionScript::Update(float Time)
 		bool NeedDecreaseTime{true};
 
 		if (NeedCheckSpaceShip) {
-			int tmpEnemyCount{0};
 			cSpaceShip *tmpObject = StartSpaceShip;
 			while (tmpObject) {
 				if ((tmpObject->ObjectStatus == eObjectStatus::Enemy) &&
-				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled))
-					tmpEnemyCount++;
+				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled) &&
+				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::disabled)) {
+					NeedDecreaseTime = false;
+					break;
+				}
 				tmpObject = tmpObject->Next;
 			}
-			if (tmpEnemyCount > 0)
-				NeedDecreaseTime = false;
-
 		}
-		if (NeedCheckGroundObject) {
-			int tmpEnemyCount{0};
-			cGroundObject *tmpObject = StartGroundObject;
-			while (tmpObject) {
-				if (NeedCheckCollision(*tmpObject) &&
-				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled))
-					tmpEnemyCount++;
-				tmpObject = tmpObject->Next;
-			}
-			if (tmpEnemyCount > 0)
-				NeedDecreaseTime = false;
+		if (NeedDecreaseTime && NeedCheckGroundObject) {
+			ForEachGroundObject([&NeedDecreaseTime] (const cGroundObject &tmpGround) {
+				if (NeedCheckCollision(tmpGround) &&
+				    (tmpGround.DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled) &&
+				    (tmpGround.DeleteAfterLeaveScene != eDeleteAfterLeaveScene::disabled)) {
+					NeedDecreaseTime = false;
+					return eGroundCycle::Break;
+				}
+				return eGroundCycle::Continue;
+			});
 		}
 
 		if (NeedDecreaseTime)
