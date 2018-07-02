@@ -43,8 +43,6 @@ extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
-extern cGroundObject *StartGroundObject;
-extern cGroundObject *EndGroundObject;
 extern cSpaceObject *StartSpaceObject;
 extern cSpaceObject *EndSpaceObject;
 float GetProjectileSpeed(int Num);
@@ -323,20 +321,17 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	// не стрелять по "мирным" постойкам
 	// !!! ВАЖНО
 	// у всех наземных объектов ноль на уровне пола...
-	cGroundObject *tmpG = StartGroundObject;
-	while (tmpG) {
-		cGroundObject *tmpGround2 = tmpG->Next;
-
+	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
-		if (NeedCheckCollision(*tmpG) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)))) {
+		if (NeedCheckCollision(tmpGround) &&
+		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||
+		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpGround.ObjectStatus == eObjectStatus::Enemy)))) {
 
-			sVECTOR3D tmpLocation = tmpG->GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
-			sVECTOR3D RealLocation = tmpG->Location + tmpLocation;
+			sVECTOR3D tmpLocation = tmpGround.GeometryCenter;
+			vw_Matrix33CalcPoint(tmpLocation, tmpGround.CurrentRotationMat); // поворачиваем в плоскость объекта
+			sVECTOR3D RealLocation = tmpGround.Location + tmpLocation;
 
-			if ((tmpG->Speed != 0.0f) &&
+			if ((tmpGround.Speed != 0.0f) &&
 			    (WeaponType != 0) &&
 			    // это не лучевое оружие, которое бьет сразу
 			    (WeaponType != 11) && (WeaponType != 12) && (WeaponType != 14) &&
@@ -350,35 +345,35 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 				float ObjCurrentTime = CurrentDist / ProjectileSpeed;
 
 				// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-				sVECTOR3D FutureLocation = tmpG->Orientation ^ (tmpG->Speed * ObjCurrentTime);
+				sVECTOR3D FutureLocation = tmpGround.Orientation ^ (tmpGround.Speed * ObjCurrentTime);
 
 				// находи точку по середине... это нам и надо... туда целимся...
 				RealLocation = RealLocation + FutureLocation;
 			}
 
 			// проверяем, если с одной стороны все точки - значит мимо, если нет - попали :)
-			float tmp1 = A * (tmpG->Location.x + tmpG->OBB.Box[0].x) + B * (tmpG->Location.y + tmpG->OBB.Box[0].y) + C * (tmpG->Location.z + tmpG->OBB.Box[0].z) + D;
-			float tmp2 = A * (tmpG->Location.x + tmpG->OBB.Box[1].x) + B * (tmpG->Location.y + tmpG->OBB.Box[1].y) + C * (tmpG->Location.z + tmpG->OBB.Box[1].z) + D;
-			float tmp3 = A * (tmpG->Location.x + tmpG->OBB.Box[2].x) + B * (tmpG->Location.y + tmpG->OBB.Box[2].y) + C * (tmpG->Location.z + tmpG->OBB.Box[2].z) + D;
-			float tmp4 = A * (tmpG->Location.x + tmpG->OBB.Box[3].x) + B * (tmpG->Location.y + tmpG->OBB.Box[3].y) + C * (tmpG->Location.z + tmpG->OBB.Box[3].z) + D;
-			float tmp5 = A * (tmpG->Location.x + tmpG->OBB.Box[4].x) + B * (tmpG->Location.y + tmpG->OBB.Box[4].y) + C * (tmpG->Location.z + tmpG->OBB.Box[4].z) + D;
-			float tmp6 = A * (tmpG->Location.x + tmpG->OBB.Box[5].x) + B * (tmpG->Location.y + tmpG->OBB.Box[5].y) + C * (tmpG->Location.z + tmpG->OBB.Box[5].z) + D;
-			float tmp7 = A * (tmpG->Location.x + tmpG->OBB.Box[6].x) + B * (tmpG->Location.y + tmpG->OBB.Box[6].y) + C * (tmpG->Location.z + tmpG->OBB.Box[6].z) + D;
-			float tmp8 = A * (tmpG->Location.x + tmpG->OBB.Box[7].x) + B * (tmpG->Location.y + tmpG->OBB.Box[7].y) + C * (tmpG->Location.z + tmpG->OBB.Box[7].z) + D;
+			float tmp1 = A * (tmpGround.Location.x + tmpGround.OBB.Box[0].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[0].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[0].z) + D;
+			float tmp2 = A * (tmpGround.Location.x + tmpGround.OBB.Box[1].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[1].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[1].z) + D;
+			float tmp3 = A * (tmpGround.Location.x + tmpGround.OBB.Box[2].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[2].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[2].z) + D;
+			float tmp4 = A * (tmpGround.Location.x + tmpGround.OBB.Box[3].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[3].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[3].z) + D;
+			float tmp5 = A * (tmpGround.Location.x + tmpGround.OBB.Box[4].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[4].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[4].z) + D;
+			float tmp6 = A * (tmpGround.Location.x + tmpGround.OBB.Box[5].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[5].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[5].z) + D;
+			float tmp7 = A * (tmpGround.Location.x + tmpGround.OBB.Box[6].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[6].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[6].z) + D;
+			float tmp8 = A * (tmpGround.Location.x + tmpGround.OBB.Box[7].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[7].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[7].z) + D;
 
 			if (!(((tmp1 > Width2) && (tmp2 > Width2) && (tmp3 > Width2) && (tmp4 > Width2) &&
 			       (tmp5 > Width2) && (tmp6 > Width2) && (tmp7 > Width2) && (tmp8 > Width2)) ||
 			      ((tmp1 < -Width2) && (tmp2 < -Width2) && (tmp3 < -Width2) && (tmp4 < -Width2) &&
 			       (tmp5 < -Width2) && (tmp6 < -Width2) && (tmp7 < -Width2) && (tmp8 < -Width2)))) {
 				// проверяем, спереди или сзади стоит противник
-				tmp1 = A2 * (tmpG->Location.x + tmpG->OBB.Box[0].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[0].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[0].z) + D2;
-				tmp2 = A2 * (tmpG->Location.x + tmpG->OBB.Box[1].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[1].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[1].z) + D2;
-				tmp3 = A2 * (tmpG->Location.x + tmpG->OBB.Box[2].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[2].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[2].z) + D2;
-				tmp4 = A2 * (tmpG->Location.x + tmpG->OBB.Box[3].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[3].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[3].z) + D2;
-				tmp5 = A2 * (tmpG->Location.x + tmpG->OBB.Box[4].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[4].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[4].z) + D2;
-				tmp6 = A2 * (tmpG->Location.x + tmpG->OBB.Box[5].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[5].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[5].z) + D2;
-				tmp7 = A2 * (tmpG->Location.x + tmpG->OBB.Box[6].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[6].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[6].z) + D2;
-				tmp8 = A2 * (tmpG->Location.x + tmpG->OBB.Box[7].x) + B2 * (tmpG->Location.y + tmpG->OBB.Box[7].y) + C2 * (tmpG->Location.z + tmpG->OBB.Box[7].z) + D2;
+				tmp1 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[0].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[0].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[0].z) + D2;
+				tmp2 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[1].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[1].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[1].z) + D2;
+				tmp3 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[2].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[2].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[2].z) + D2;
+				tmp4 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[3].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[3].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[3].z) + D2;
+				tmp5 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[4].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[4].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[4].z) + D2;
+				tmp6 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[5].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[5].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[5].z) + D2;
+				tmp7 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[6].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[6].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[6].z) + D2;
+				tmp8 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[7].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[7].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[7].z) + D2;
 
 				if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
 				    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
@@ -444,9 +439,8 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 				}
 			}
 		}
-
-		tmpG = tmpGround2;
-	}
+		return eGroundCycle::Continue;
+	});
 
 	// проверка по космическим объектам
 	cSpaceObject *tmpS = StartSpaceObject;
@@ -1003,16 +997,14 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 
 	// проверка по наземным объектам
 	// не стрелять по "мирным" постойкам
-	cGroundObject *tmpG = StartGroundObject;
-	while (tmpG) {
-		cGroundObject *tmpGround2 = tmpG->Next;
+	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
-		if (NeedCheckCollision(*tmpG) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)))) {
-			sVECTOR3D tmpLocation = tmpG->GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmpG->CurrentRotationMat); // поворачиваем в плоскость объекта
-			TargetLocation = tmpG->Location + tmpLocation;
+		if (NeedCheckCollision(tmpGround) &&
+		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||
+		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpGround.ObjectStatus == eObjectStatus::Enemy)))) {
+			sVECTOR3D tmpLocation = tmpGround.GeometryCenter;
+			vw_Matrix33CalcPoint(tmpLocation, tmpGround.CurrentRotationMat); // поворачиваем в плоскость объекта
+			TargetLocation = tmpGround.Location + tmpLocation;
 
 			// проверяем, спереди или сзади стоит противник
 			float tmp1 = A2 * TargetLocation.x + B2 * TargetLocation.y + C2 * TargetLocation.z + D2;
@@ -1060,21 +1052,22 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 							Tdist = m * m + n * n + p * p;
 							TargetLocked = true;
 							TType = 2;
-							Target = tmpG;
+							// FIXME we should use std::weak_ptr for target object instead
+							Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpGround));
 						}
 					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
 						TargetAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
 						TargetLocked = true;
 						TType = 2;
-						Target = tmpG;
+						// FIXME we should use std::weak_ptr for target object instead
+						Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpGround));
 					}
 				}
 			}
 		}
-
-		tmpG = tmpGround2;
-	}
+		return eGroundCycle::Continue;
+	});
 
 	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp) {
@@ -1324,6 +1317,7 @@ static bool GetMissileTargetPosition(cObject3D *TargetObject,
 //-----------------------------------------------------------------------------
 // Проверяем статус цели для ракет, жива она еще или нет, и где по отношению ракеты находится
 //-----------------------------------------------------------------------------
+// FIXME we should use std::weak_ptr for target object instead
 bool GetMissileTargetStatus(cObject3D *TargetObject,
 			    sVECTOR3D Location, // положение точки относительно которой будем наводить
 			    float (&RotationMatrix)[9]) // матрица вращения объекта
@@ -1336,13 +1330,16 @@ bool GetMissileTargetStatus(cObject3D *TargetObject,
 		tmpProjectile = tmpProjectile2;
 	}
 
-	cGroundObject *tmpG = StartGroundObject;
-	while (tmpG) {
-		cGroundObject *tmpGround2 = tmpG->Next;
-		if (tmpG == TargetObject)
-			return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
-		tmpG = tmpGround2;
-	}
+	bool ObjectFound{false};
+	ForEachGroundObject([&TargetObject, &ObjectFound] (const cGroundObject &tmpGround) {
+		if (&tmpGround == TargetObject) {
+			ObjectFound = true;
+			return eGroundCycle::Break;
+		}
+		return eGroundCycle::Continue;
+	});
+	if (ObjectFound)
+		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 
 	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp) {
