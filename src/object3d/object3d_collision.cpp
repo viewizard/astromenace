@@ -305,12 +305,9 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 }
 
 // единая процедура для проигрывания эффекта разлета всех снарядов
-void DestroyProjectileWithExplosion(cProjectile *Projectile, sVECTOR3D IntercPoint)
+void DestroyProjectileWithExplosion(const cProjectile &Projectile, const sVECTOR3D &IntercPoint)
 {
-	if (!Projectile)
-		return;
-
-	switch (Projectile->ProjectileType) {
+	switch (Projectile.ProjectileType) {
 	// обычные снаряды
 	case 0:
 		// "разбиваем" снаряд о корпус
@@ -318,7 +315,7 @@ void DestroyProjectileWithExplosion(cProjectile *Projectile, sVECTOR3D IntercPoi
 			TMPBulletExplosion = new cBulletExplosion;
 			TMPBulletExplosion->Create(0, Projectile, Projectile->Num, IntercPoint, ObjectSpeed, Projectile->NeedDeadSound);
 		*/
-		PlayBulletExplosion(IntercPoint, Projectile->NeedDeadSound, Projectile->Num);
+		PlayBulletExplosion(IntercPoint, Projectile.NeedDeadSound, Projectile.Num);
 		break;
 
 	// ракеты-торпеды-бомбы
@@ -527,7 +524,7 @@ void DetectCollisionAllObject3D()
 
 				// удаляем только те, которые разбились
 				if (tmpProjectile->ProjectileType != 2) {
-					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+					DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
 					delete tmpProjectile;
 					tmpProjectile = nullptr;
 				}
@@ -563,7 +560,7 @@ void DetectCollisionAllObject3D()
 
 							// удаляем только те, которые разбились
 							if (tmpProjectile->ProjectileType != 2) {
-								DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+								DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
 								delete tmpProjectile;
 								tmpProjectile = nullptr;
 							}
@@ -924,7 +921,7 @@ exitN2:
 
 				// удаляем только те, которые разбились
 				if (tmpProjectile->ProjectileType != 2) {
-					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+					DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
 					delete tmpProjectile;
 					tmpProjectile = nullptr;
 				}
@@ -1053,7 +1050,7 @@ exitN2:
 
 				// удаляем только те, которые разбились
 				if (tmpProjectile->ProjectileType != 2) {
-					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+					DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
 					delete tmpProjectile;
 					tmpProjectile = nullptr;
 				}
