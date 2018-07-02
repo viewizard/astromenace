@@ -272,31 +272,31 @@ bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D
 //-----------------------------------------------------------------------------
 // Проверка столкновений HitBB-OBB
 //-----------------------------------------------------------------------------
-bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum)
+bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum)
 {
 	// проверяем HitBB, находим номера пересекающихся
-	for (unsigned int i = 0; i < Object1->Model3DBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Object1.Model3DBlocks.size(); i++) {
 		// строим матрицу, чтобы развернуть точки
 		float TMPOldInvRotationMat[9];
-		memcpy(TMPOldInvRotationMat, Object2->CurrentRotationMat, 9 * sizeof(Object2->CurrentRotationMat[0]));
+		memcpy(TMPOldInvRotationMat, Object2.CurrentRotationMat, 9 * sizeof(Object2.CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(TMPOldInvRotationMat);
 
 		float matB[9];
-		memcpy(matB, Object1->CurrentRotationMat, 9 * sizeof(Object1->CurrentRotationMat[0]));
+		memcpy(matB, Object1.CurrentRotationMat, 9 * sizeof(Object1.CurrentRotationMat[0]));
 		vw_Matrix33Mult(matB, TMPOldInvRotationMat);
 
-		sVECTOR3D vPosB = (Object1->Location + Object1->HitBB[i].Location) -
-				  (Object2->Location + Object2->OBB.Location);
+		sVECTOR3D vPosB = (Object1.Location + Object1.HitBB[i].Location) -
+				  (Object2.Location + Object2.OBB.Location);
 		vw_Matrix33CalcPoint(vPosB, TMPOldInvRotationMat);
 
 		sVECTOR3D XAxis(matB[0], matB[3], matB[6]);
 		sVECTOR3D YAxis(matB[1], matB[4], matB[7]);
 		sVECTOR3D ZAxis(matB[2], matB[5], matB[8]);
 
-		sVECTOR3D Obj2_data{Object1->HitBB[i].Size.x / 2.0f,
-				    Object1->HitBB[i].Size.y / 2.0f,
-				    Object1->HitBB[i].Size.z / 2.0f};
-		sVECTOR3D Obj1_data{Object2->Width / 2.0f, Object2->Height / 2.0f, Object2->Length / 2.0f};
+		sVECTOR3D Obj2_data{Object1.HitBB[i].Size.x / 2.0f,
+				    Object1.HitBB[i].Size.y / 2.0f,
+				    Object1.HitBB[i].Size.z / 2.0f};
+		sVECTOR3D Obj1_data{Object2.Width / 2.0f, Object2.Height / 2.0f, Object2.Length / 2.0f};
 
 		//делаем 15 проверок, т.к. у нас 15 разделяющих осей
 
@@ -406,7 +406,7 @@ bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int
 			continue;
 
 		// если тут, нашли пересекающиеся!
-		*Object1PieceNum = i;
+		Object1PieceNum = i;
 		return true;
 	}
 

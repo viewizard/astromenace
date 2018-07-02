@@ -80,7 +80,7 @@ bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D
 				       sVECTOR3D &NewLoc, int &Object1PieceNum);
 bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
 				       int &Object1PieceNum, int &Object2PieceNum);
-bool CheckHitBBOBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum);
+bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum);
 
 // щит у игрока
 extern float ShildEnergyStatus;
@@ -245,7 +245,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 				// ставим так, т.к.на больших кораблях плохо
 				   vw_OBBOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
 						      Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat) &&
-				   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
+				   CheckHitBBOBBCollisionDetection(*Object, *Projectile, *ObjectPieceNum)) {
 
 				// если это не убиваемый объект, должны столкнуться с геометрией
 				if (!NeedCheckCollision(*Object)) {
@@ -285,7 +285,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 						  Object->Radius, Object->Location, Object->PrevLocation) &&
 			    vw_OBBOBBCollision(Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat,
 					       Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat) &&
-			    CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
+			    CheckHitBBOBBCollisionDetection(*Object, *Projectile, *ObjectPieceNum)) {
 				*IntercPoint = Object->Location;
 
 				// находим по дельте повреждения
@@ -589,7 +589,7 @@ void DetectCollisionAllObject3D()
 						   tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
 			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
 						  tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    CheckHitBBOBBCollisionDetection(tmpShip, tmpS, &ObjectPieceNum)) {
+			    CheckHitBBOBBCollisionDetection(*tmpShip, *tmpS, ObjectPieceNum)) {
 
 				if (((tmpS->ObjectType == eObjectType::BasePart) ||
 				     (tmpS->ObjectType == eObjectType::BigAsteroid)) &&
@@ -951,7 +951,7 @@ exitN2:
 						   tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
 			    vw_SphereOBBCollision(tmpG->OBB.Box, tmpG->OBB.Location, tmpG->Location, tmpG->CurrentRotationMat,
 						  tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    CheckHitBBOBBCollisionDetection(tmpG, tmpS, &ObjectPieceNum)) {
+			    CheckHitBBOBBCollisionDetection(*tmpG, *tmpS, ObjectPieceNum)) {
 
 				// если столкновение с преградой которую не можем уничтожить
 				if (!NeedCheckCollision(*tmpS))
