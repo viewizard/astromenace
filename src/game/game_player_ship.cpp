@@ -43,7 +43,6 @@ namespace astromenace {
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
 extern cSpaceObject *StartSpaceObject;
-extern cGroundObject *StartGroundObject;
 
 float GetEnginePower(int EngineType);
 float GetEngineAcceleration(int EngineType);
@@ -494,7 +493,7 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		bool CollisionDetected = false;
 		cSpaceObject *tmpS = StartSpaceObject;
-		while ((tmpS != nullptr) && (PlayerFighter != nullptr)) {
+		while (tmpS != nullptr) {
 			cSpaceObject *tmpSpace2 = tmpS->Next;
 
 			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
@@ -509,24 +508,21 @@ void GamePlayerShip()
 
 			tmpS = tmpSpace2;
 		}
-		cGroundObject *tmpG = StartGroundObject;
-		while ((tmpG != nullptr) && (PlayerFighter != nullptr)) {
-			cGroundObject *tmpGround2 = tmpG->Next;
-
-			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
-			// если объект ближе чем радиус, кричим
-			if (tmpG->ObjectType == eObjectType::CivilianBuilding)
-				if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
-							     tmpG->Radius, tmpG->Location, tmpG->PrevLocation))
-					if (vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
-								   PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation))
-						if (vw_SphereOBBCollision(tmpG->OBB.Box, tmpG->OBB.Location, tmpG->Location, tmpG->CurrentRotationMat,
-									  PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation)) {
-							CollisionDetected = true;
-						}
-
-			tmpG = tmpGround2;
-		}
+		ForEachGroundObject([&CollisionDetected] (const cGroundObject &tmpGround) {
+			// test with "immortal" civilian buildings
+			if ((tmpGround.ObjectType == eObjectType::CivilianBuilding) &&
+			    (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
+						      tmpGround.Radius, tmpGround.Location, tmpGround.PrevLocation)) &&
+			    (vw_SphereAABBCollision(tmpGround.AABB, tmpGround.Location, PlayerFighter->Radius,
+						    PlayerFighter->Location, PlayerFighter->PrevLocation)) &&
+			    (vw_SphereOBBCollision(tmpGround.OBB.Box, tmpGround.OBB.Location, tmpGround.Location,
+						   tmpGround.CurrentRotationMat, PlayerFighter->Radius,
+						   PlayerFighter->Location, PlayerFighter->PrevLocation))) {
+				CollisionDetected = true;
+				return eGroundCycle::Break;
+			}
+			return eGroundCycle::Continue;
+		});
 		if (CollisionDetected) {
 			// голос, ворнинг, можем столкнуться с объектом
 			// проверяем, действительно еще играем
