@@ -75,7 +75,7 @@ extern float AsteroidsKillBonus;
 extern int CurrentMission;
 float GameCameraGetSpeed();
 
-bool CheckHitBBMeshCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum);
+bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum);
 
 bool CheckMeshSphereCollisionDetection(cObject3D *Object1, cObject3D *Object2, sVECTOR3D *NewLoc, int *Object1PieceNum);
 bool CheckHitBBHitBBCollisionDetection(cObject3D *Object1, cObject3D *Object2, int *Object1PieceNum, int *Object2PieceNum);
@@ -592,7 +592,7 @@ void DetectCollisionAllObject3D()
 
 				if (((tmpS->ObjectType == eObjectType::BasePart) ||
 				     (tmpS->ObjectType == eObjectType::BigAsteroid)) &&
-				    !CheckHitBBMeshCollisionDetection(tmpShip, tmpS, &ObjectPieceNum)) {
+				    !CheckHitBBMeshCollisionDetection(*tmpShip, *tmpS, ObjectPieceNum)) {
 					// если не столкнулись = выходим
 					goto exitN1;
 				}
@@ -688,7 +688,7 @@ exitN1:
 			    CheckHitBBHitBBCollisionDetection(tmpShip, tmpG, &ObjectPieceNum1, &ObjectPieceNum2)) {
 
 				if ((tmpG->ObjectType == eObjectType::CivilianBuilding) &&
-				    !CheckHitBBMeshCollisionDetection(tmpShip, tmpG, &ObjectPieceNum2)) {
+				    !CheckHitBBMeshCollisionDetection(*tmpShip, *tmpG, ObjectPieceNum2)) {
 						// если не столкнулись = выходим
 						goto exitN2;
 				}
@@ -1094,12 +1094,12 @@ exitN2:
 
 					// проверка, если это столкновение с базой - надо внимательно смотреть
 					if ((tmpS->ObjectType == eObjectType::BasePart) &&
-					    (!CheckHitBBMeshCollisionDetection(tmpCollisionSpace1, tmpS, &ObjectPieceNum)))
+					    (!CheckHitBBMeshCollisionDetection(*tmpCollisionSpace1, *tmpS, ObjectPieceNum)))
 							// если не столкнулись = выходим
 							goto exitN4;
 					// проверка, если это столкновение с базой - надо внимательно смотреть
 					if ((tmpCollisionSpace1->ObjectType == eObjectType::BasePart) &&
-					    (!CheckHitBBMeshCollisionDetection(tmpS, tmpCollisionSpace1, &ObjectPieceNum)))
+					    (!CheckHitBBMeshCollisionDetection(*tmpS, *tmpCollisionSpace1, ObjectPieceNum)))
 							// если не столкнулись = выходим
 							goto exitN4;
 
