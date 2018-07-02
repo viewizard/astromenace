@@ -370,7 +370,7 @@ bool vw_SphereOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Obje
  */
 bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBlock &Object1DrawObjectList,
 			    const float (&Object1RotationMatrix)[9], float Object2Radius, const sVECTOR3D &Object2Location,
-			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D *CollisionLocation)
+			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D &CollisionLocation)
 {
 	// translation matrix
 	float TransMat[16]{Object1RotationMatrix[0], Object1RotationMatrix[1], Object1RotationMatrix[2], 0.0f,
@@ -448,7 +448,7 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 
 			// return the point data if point belongs to triangle (not just plane)
 			if (PointInTriangle(IntercPoint, Point1, Point2, Point3)) {
-				*CollisionLocation = IntercPoint;
+				CollisionLocation = IntercPoint;
 				return true;
 			}
 		}
@@ -463,7 +463,7 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 				      DistancePoint1.y * DistancePoint1.y +
 				      DistancePoint1.z * DistancePoint1.z};
 		if (Distance2Point1 <= Object2Radius2) {
-			*CollisionLocation = Point1;
+			CollisionLocation = Point1;
 			return true;
 		}
 
@@ -473,7 +473,7 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 				      DistancePoint2.y * DistancePoint2.y +
 				      DistancePoint2.z * DistancePoint2.z};
 		if (Distance2Point2 <= Object2Radius2) {
-			*CollisionLocation = Point2;
+			CollisionLocation = Point2;
 			return true;
 		}
 
@@ -483,7 +483,7 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 				      DistancePoint3.y * DistancePoint3.y +
 				      DistancePoint3.z * DistancePoint3.z};
 		if (Distance2Point3 <= Object2Radius2) {
-			*CollisionLocation = Point3;
+			CollisionLocation = Point3;
 			return true;
 		}
 
@@ -514,7 +514,7 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 				// check, do line (not ray here) cross the plane
 				if (((Object2PrevLocation - IntercPoint) * (Object2Location - IntercPoint) < 0.0f) &&
 				    (PointInTriangle(IntercPoint, Point1, Point2, Point3))) {
-					*CollisionLocation = IntercPoint;
+					CollisionLocation = IntercPoint;
 					return true;
 				}
 			}
