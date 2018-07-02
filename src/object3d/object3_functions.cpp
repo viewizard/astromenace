@@ -63,10 +63,10 @@ float GameCameraGetSpeed();
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
 // так же используется для определения "неубиваемых" объектов
 //-----------------------------------------------------------------------------
-bool NeedCheckCollision(cObject3D *Object3D)
+bool NeedCheckCollision(const cObject3D &Object3D)
 {
 	// don't use 'default' case here, we need compiler's warning if anyone was missed
-	switch (Object3D->ObjectType) {
+	switch (Object3D.ObjectType) {
 	case eObjectType::none:
 		return false;
 
@@ -204,7 +204,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	while (tmp) {
 		cSpaceShip *tmpShip2 = tmp->Next;
 		// проверка, чтобы не считать свой корабль
-		if ((NeedCheckCollision(tmp)) &&
+		if ((NeedCheckCollision(*tmp)) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 			// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
@@ -328,7 +328,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 		cGroundObject *tmpGround2 = tmpG->Next;
 
 		// если по этому надо стрелять
-		if (NeedCheckCollision(tmpG) &&
+		if (NeedCheckCollision(*tmpG) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)))) {
 
@@ -454,7 +454,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 		cSpaceObject *tmpSpace2 = tmpS->Next;
 
 		// если по этому надо стрелять
-		if (NeedCheckCollision(tmpS) &&
+		if (NeedCheckCollision(*tmpS) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy)))) {
 
@@ -613,7 +613,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 	while (tmp) {
 		cSpaceShip *tmpShip2 = tmp->Next;
 		// если по этому надо стрелять
-		if (NeedCheckCollision(tmp) &&
+		if (NeedCheckCollision(*tmp) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 
@@ -764,7 +764,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 	while (tmp) {
 		cSpaceShip *tmpShip2 = tmp->Next;
 		// если по этому надо стрелять
-		if (NeedCheckCollision(tmp) &&
+		if (NeedCheckCollision(*tmp) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 
@@ -942,7 +942,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 	while (tmpProjectile) {
 		cProjectile *tmpProjectile2 = tmpProjectile->Next;
 		// только фларес
-		if ((tmpProjectile->ProjectileType == 3) && NeedCheckCollision(tmpProjectile) &&
+		if ((tmpProjectile->ProjectileType == 3) && NeedCheckCollision(*tmpProjectile) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpProjectile->ObjectStatus == eObjectStatus::Ally) || (tmpProjectile->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpProjectile->ObjectStatus == eObjectStatus::Enemy)))) {
 
@@ -1007,7 +1007,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 	while (tmpG) {
 		cGroundObject *tmpGround2 = tmpG->Next;
 		// если по этому надо стрелять
-		if (NeedCheckCollision(tmpG) &&
+		if (NeedCheckCollision(*tmpG) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)))) {
 			sVECTOR3D tmpLocation = tmpG->GeometryCenter;
@@ -1080,7 +1080,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 	while (tmp) {
 		cSpaceShip *tmpShip2 = tmp->Next;
 		// проверка, чтобы не считать свой корабль
-		if (NeedCheckCollision(tmp) &&
+		if (NeedCheckCollision(*tmp) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 
@@ -1153,7 +1153,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 	while (tmpS) {
 		cSpaceObject *tmpSpace2 = tmpS->Next;
 		// если по этому надо стрелять
-		if (NeedCheckCollision(tmpS) &&
+		if (NeedCheckCollision(*tmpS) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy))) &&
 		    (tmpS->ObjectType != eObjectType::ShipPart)) {
@@ -1380,7 +1380,7 @@ cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, // статус �
 		cSpaceShip *tmpShip2 = tmp->Next;
 
 		// если по этому надо стрелять
-		if (NeedCheckCollision(tmp) &&
+		if (NeedCheckCollision(*tmp) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
 			// получаем квадрат радиуса

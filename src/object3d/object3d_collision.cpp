@@ -112,7 +112,7 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 	     // снаряды игрока со всеми, кроме игрока
 	     (((Object->ObjectStatus == eObjectStatus::Enemy) || (Object->ObjectStatus == eObjectStatus::Ally)) && (Projectile->ObjectStatus == eObjectStatus::Player)))
 	    // или это не разрушаемый объект и нужно 100% проверить, чтобы не пролетало через него снарядов
-	    || (!NeedCheckCollision(Object))) {
+	    || (!NeedCheckCollision(*Object))) {
 		switch (Projectile->ProjectileType) {
 		// обычные снаряды
 		case 0:
@@ -188,13 +188,13 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 							 Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
 				   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 
-				if (NeedCheckCollision(Object)) {
+				if (NeedCheckCollision(*Object)) {
 					DamagesData->DamageHull = Projectile->DamageHull;
 					DamagesData->DamageSystems = Projectile->DamageSystems;
 				}
 				// "разбиваем" снаряд о корпус
 				// звук тянем отдельно!
-				if (NeedCheckCollision(Object))
+				if (NeedCheckCollision(*Object))
 					new cBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, ObjectSpeed, false);
 				else
 					new cBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, 0.0f, false);
@@ -247,10 +247,10 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 				   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
 
 				// если это не убиваемый объект, должны столкнуться с геометрией
-				if (!NeedCheckCollision(Object)) {
+				if (!NeedCheckCollision(*Object)) {
 					if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 						// взрываем...
-						if (NeedCheckCollision(Object))
+						if (NeedCheckCollision(*Object))
 							new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
 						else
 							new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
@@ -262,12 +262,12 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 
 				*IntercPoint = Projectile->Location;
 
-				if (NeedCheckCollision(Object)) {
+				if (NeedCheckCollision(*Object)) {
 					DamagesData->DamageHull = Projectile->DamageHull;
 					DamagesData->DamageSystems = Projectile->DamageSystems;
 				}
 				// взрываем...
-				if (NeedCheckCollision(Object))
+				if (NeedCheckCollision(*Object))
 					new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
 				else
 					new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
@@ -598,7 +598,7 @@ void DetectCollisionAllObject3D()
 				}
 
 				// если столкновение с преградой которую не можем уничтожить
-				if (!NeedCheckCollision(tmpS)) {
+				if (!NeedCheckCollision(*tmpS)) {
 					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
 					if (tmpShip->ObjectStatus != eObjectStatus::Player)
 						tmpShip->Strength -= (tmpShip->StrengthStart / 0.5f) * tmpShip->TimeDelta;
@@ -609,12 +609,12 @@ void DetectCollisionAllObject3D()
 					tmpShip->Strength -= tmpS->Strength / tmpShip->ResistanceHull;
 					tmpS->Strength -= StrTMP / tmpS->ResistanceHull;
 				}
-				if (!NeedCheckCollision(tmpShip))
+				if (!NeedCheckCollision(*tmpShip))
 					tmpS->Strength = 0.0f;
 
 
 				// если уже все... удаляем
-				if (NeedCheckCollision(tmpS) &&
+				if (NeedCheckCollision(*tmpS) &&
 				    (tmpS->Strength <= 0.0f)) {
 					AddPlayerBonus(tmpS, tmpShip->ObjectStatus);
 
@@ -632,7 +632,7 @@ void DetectCollisionAllObject3D()
 					tmpS = nullptr;
 				}
 
-				if (NeedCheckCollision(tmpShip) &&
+				if (NeedCheckCollision(*tmpShip) &&
 					// если уже все... удаляем
 				    (tmpShip->Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
@@ -694,7 +694,7 @@ exitN1:
 				}
 
 				// если столкновение с преградой которую не можем уничтожить
-				if (!NeedCheckCollision(tmpG)) {
+				if (!NeedCheckCollision(*tmpG)) {
 					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
 					if (tmpShip->ObjectStatus != eObjectStatus::Player)
 						tmpShip->Strength -= (tmpShip->StrengthStart / 0.5f) * tmpShip->TimeDelta;
@@ -705,11 +705,11 @@ exitN1:
 					tmpShip->Strength -= tmpG->Strength / tmpShip->ResistanceHull;
 					tmpG->Strength -= StrTMP / tmpG->ResistanceHull;
 				}
-				if (!NeedCheckCollision(tmpShip))
+				if (!NeedCheckCollision(*tmpShip))
 					tmpG->Strength = 0.0f;
 
 				// если уже все... удаляем
-				if (NeedCheckCollision(tmpG) &&
+				if (NeedCheckCollision(*tmpG) &&
 				    (tmpG->Strength <= 0.0f)) {
 					AddPlayerBonus(tmpG, tmpShip->ObjectStatus);
 
@@ -727,7 +727,7 @@ exitN1:
 					tmpG = nullptr;
 				}
 
-				if (NeedCheckCollision(tmpShip) &&
+				if (NeedCheckCollision(*tmpShip) &&
 					// если уже все... удаляем
 				    (tmpShip->Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
@@ -788,20 +788,20 @@ exitN2:
 				tmpCollisionShip1->Strength -= StrTMP / tmpCollisionShip1->ResistanceHull;
 
 				// если столкновение с преградой которую не можем уничтожить
-				if (!NeedCheckCollision(tmpCollisionShip1))
+				if (!NeedCheckCollision(*tmpCollisionShip1))
 					tmpShip->Strength = 0.0f;
-				if (!NeedCheckCollision(tmpShip))
+				if (!NeedCheckCollision(*tmpShip))
 					tmpCollisionShip1->Strength = 0.0f;
 
 				// проверка на бонус
-				if (NeedCheckCollision(tmpCollisionShip1) &&
+				if (NeedCheckCollision(*tmpCollisionShip1) &&
 				    (tmpCollisionShip1->Strength <= 0.0f))
 					AddPlayerBonus(tmpCollisionShip1, tmpShip->ObjectStatus);
-				if (NeedCheckCollision(tmpShip) &&
+				if (NeedCheckCollision(*tmpShip) &&
 				    (tmpShip->Strength <= 0.0f))
 					AddPlayerBonus(tmpShip, tmpCollisionShip1->ObjectStatus);
 
-				if (NeedCheckCollision(tmpCollisionShip1) &&
+				if (NeedCheckCollision(*tmpCollisionShip1) &&
 					// если уже все... удаляем
 				    (tmpCollisionShip1->Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
@@ -836,7 +836,7 @@ exitN2:
 					}
 				}
 
-				if (NeedCheckCollision(tmpShip) &&
+				if (NeedCheckCollision(*tmpShip) &&
 					// если уже все... удаляем
 				    (tmpShip->Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
@@ -895,7 +895,7 @@ exitN2:
 			if(DetectProjectileCollision(tmpG, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpG->Speed)) {
 				tmpGround2 = tmpG->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
-				if (NeedCheckCollision(tmpG)) {
+				if (NeedCheckCollision(*tmpG)) {
 					tmpG->Strength -= DamagesData.DamageHull / tmpG->ResistanceHull;
 
 					// если уже все... удаляем
@@ -943,7 +943,7 @@ exitN2:
 			// не проверяем с частями базы
 			if ((tmpS->ObjectType != eObjectType::BasePart) &&
 				// не проверяем если оба не можем уничтожить
-			    (NeedCheckCollision(tmpG) || NeedCheckCollision(tmpS)) &&
+			    (NeedCheckCollision(*tmpG) || NeedCheckCollision(*tmpS)) &&
 			    vw_SphereSphereCollision(tmpG->Radius, tmpG->Location,
 						    tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
 			    vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
@@ -953,19 +953,19 @@ exitN2:
 			    CheckHitBBOBBCollisionDetection(tmpG, tmpS, &ObjectPieceNum)) {
 
 				// если столкновение с преградой которую не можем уничтожить
-				if (!NeedCheckCollision(tmpS))
+				if (!NeedCheckCollision(*tmpS))
 					tmpG->Strength -= (tmpG->StrengthStart / 0.5f) * tmpG->TimeDelta;
 				else {
 					float StrTMP = tmpG->Strength;
 					tmpG->Strength -= tmpS->Strength/tmpG->ResistanceHull;
 					tmpS->Strength -= StrTMP/tmpS->ResistanceHull;
 				}
-				if (!NeedCheckCollision(tmpG))
+				if (!NeedCheckCollision(*tmpG))
 					tmpS->Strength = 0.0f;
 
 
 				// если уже все... удаляем
-				if (NeedCheckCollision(tmpS) &&
+				if (NeedCheckCollision(*tmpS) &&
 				    (tmpS->Strength <= 0.0f)) {
 					AddPlayerBonus(tmpS, tmpG->ObjectStatus);
 
@@ -983,7 +983,7 @@ exitN2:
 					tmpS = nullptr;
 				}
 
-				if (NeedCheckCollision(tmpG) &&
+				if (NeedCheckCollision(*tmpG) &&
 				    (tmpG->Strength <= 0.0f)) {
 					switch (tmpG->ObjectType) {
 					case eObjectType::PirateBuilding:
@@ -1025,7 +1025,7 @@ exitN2:
 			if(DetectProjectileCollision(tmpS, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpS->Speed)) {
 				tmpSpace2 = tmpS->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
-				if (NeedCheckCollision(tmpS)) {
+				if (NeedCheckCollision(*tmpS)) {
 					tmpS->Strength -= DamagesData.DamageHull/tmpS->ResistanceHull;
 					// если уже все... удаляем
 					if (tmpS->Strength <= 0.0f) {
@@ -1068,7 +1068,7 @@ exitN2:
 			cSpaceObject *tmpCollisionSpace2 = tmpCollisionSpace1->Next;
 
 			// если хоть один из них уничтожаемый
-			if ((NeedCheckCollision(tmpCollisionSpace1) || NeedCheckCollision(tmpS)) &&
+			if ((NeedCheckCollision(*tmpCollisionSpace1) || NeedCheckCollision(*tmpS)) &&
 			    vw_SphereSphereCollision(tmpS->Radius, tmpS->Location,
 						     tmpCollisionSpace1->Radius, tmpCollisionSpace1->Location, tmpCollisionSpace1->PrevLocation) &&
 			    vw_OBBOBBCollision(tmpS->OBB.Box, tmpS->OBB.Location, tmpS->Location, tmpS->CurrentRotationMat,
@@ -1105,7 +1105,7 @@ exitN2:
 
 					bool SFXplayed = false;
 
-					if ((NeedCheckCollision(tmpCollisionSpace1)) &&
+					if ((NeedCheckCollision(*tmpCollisionSpace1)) &&
 					    ((tmpCollisionSpace1->ObjectType == eObjectType::Asteroids) ||
 					     (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart))) {
 						switch (tmpCollisionSpace1->ObjectType) {
@@ -1125,7 +1125,7 @@ exitN2:
 						delete tmpCollisionSpace1;// tmpCollisionSpace1 = 0;
 					}
 
-					if (NeedCheckCollision(tmpS) &&
+					if (NeedCheckCollision(*tmpS) &&
 					    ((tmpS->ObjectType == eObjectType::Asteroids) || (tmpS->ObjectType == eObjectType::ShipPart))) {
 						switch (tmpS->ObjectType) {
 						case eObjectType::Asteroids:
@@ -1319,7 +1319,7 @@ void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Poi
 	while (tmpS) {
 		cSpaceObject *tmpSpace2 = tmpS->Next;
 
-		if (NeedCheckCollision(tmpS) &&
+		if (NeedCheckCollision(*tmpS) &&
 		    ((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy)) ||
 		     ((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player)))) &&
 		    (DontTouchObject != tmpS) && CheckSphereSphereDestroyDetection(tmpS, Point, Radius, &Distance2)) {
@@ -1354,7 +1354,7 @@ NexttmpS:
 	while (tmpShip) {
 		cSpaceShip *tmpShip2 = tmpShip->Next;
 
-		if (NeedCheckCollision(tmpShip) &&
+		if (NeedCheckCollision(*tmpShip) &&
 		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip->ObjectStatus == eObjectStatus::Enemy)) ||
 		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip->ObjectStatus == eObjectStatus::Ally) || (tmpShip->ObjectStatus == eObjectStatus::Player)))) &&
 		     (DontTouchObject != tmpShip) && CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, &Distance2))) {
@@ -1410,7 +1410,7 @@ NexttmpS:
 	while (tmpG) {
 		cGroundObject *tmpGround2 = tmpG->Next;
 
-		if (NeedCheckCollision(tmpG) &&
+		if (NeedCheckCollision(*tmpG) &&
 		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)) ||
 		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player)))) &&
 		     (DontTouchObject != tmpG) && CheckSphereSphereDestroyDetection(tmpG, Point, Radius, &Distance2))) {

@@ -304,7 +304,7 @@ bool cMissionScript::Update(float Time)
 			int tmpEnemyCount{0};
 			cGroundObject *tmpObject = StartGroundObject;
 			while (tmpObject) {
-				if (NeedCheckCollision(tmpObject) &&
+				if (NeedCheckCollision(*tmpObject) &&
 				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled))
 					tmpEnemyCount++;
 				tmpObject = tmpObject->Next;
