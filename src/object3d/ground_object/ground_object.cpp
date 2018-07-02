@@ -130,6 +130,30 @@ void ReleaseAllGroundObject()
 	EndGroundObject = nullptr;
 }
 
+/*
+ * Managed cycle for each ground object.
+ */
+void ForEachGroundObject(std::function<eGroundCycle (const cGroundObject &Object)> function)
+{
+	cGroundObject *tmpGround = StartGroundObject;
+	while (tmpGround) {
+		cGroundObject *tmpGroundNext = tmpGround->Next;
+		switch (function(*tmpGround)) {
+		case eGroundCycle::Continue:
+			break;
+		case eGroundCycle::Break:
+			return;
+		case eGroundCycle::DeleteObjectAndContinue:
+			delete tmpGround;
+			break;
+		case eGroundCycle::DeleteObjectAndBreak:
+			delete tmpGround;
+			return;
+		}
+		tmpGround = tmpGroundNext;
+	}
+}
+
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------

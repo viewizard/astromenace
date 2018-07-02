@@ -178,6 +178,13 @@ public:
 	explicit cWheeled(int WheeledNum);
 };
 
+enum class eGroundCycle {
+	Continue,
+	Break,
+	DeleteObjectAndContinue,
+	DeleteObjectAndBreak
+};
+
 
 // Проверяем все объекты, обновляем данные
 void UpdateAllGroundObject(float Time);
@@ -185,6 +192,8 @@ void UpdateAllGroundObject(float Time);
 void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void ReleaseAllGroundObject();
+// Managed cycle for each ground object.
+void ForEachGroundObject(std::function<eGroundCycle (const cGroundObject &Object)> function);
 
 } // astromenace namespace
 } // viewizard namespace
