@@ -34,7 +34,8 @@ namespace viewizard {
 namespace astromenace {
 
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
-void DestroyRadiusCollisionAllObject3D(cObject3D *DontTouchObject, sVECTOR3D Point, float Radius, float Damage, eObjectStatus ObjectStatus);
+void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const sVECTOR3D &Point,
+				       float Radius, float Damage, eObjectStatus ObjectStatus);
 
 
 void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType)
@@ -566,7 +567,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 	// торпеда пиратов
 	case 209: {
 		// убиваем всех, кто рядом
-		DestroyRadiusCollisionAllObject3D(Object, Projectile->Location, 75.0f, Projectile->DamageHull, Projectile->ObjectStatus);
+		DestroyRadiusCollisionAllObject3D(*Object, Projectile->Location, 75.0f, Projectile->DamageHull, Projectile->ObjectStatus);
 
 		VelocityOrientation = Projectile->Orientation^(-1);
 		OldSpeed = Speed = 0.0f;
@@ -619,7 +620,7 @@ cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, i
 	// бомба пиратов
 	case 210: {
 		// убиваем всех, кто рядом
-		DestroyRadiusCollisionAllObject3D(Object, Projectile->Location, 150.0f, Projectile->DamageHull, Projectile->ObjectStatus);
+		DestroyRadiusCollisionAllObject3D(*Object, Projectile->Location, 150.0f, Projectile->DamageHull, Projectile->ObjectStatus);
 
 		VelocityOrientation = Projectile->Orientation^(-1);
 		OldSpeed = Speed = 0.0f;
