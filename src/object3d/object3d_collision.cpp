@@ -97,39 +97,40 @@ struct sDamagesData {
 	float DamageSystems;
 };
 
-bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjectile *Projectile, sVECTOR3D *IntercPoint, sDamagesData *DamagesData, float ObjectSpeed)
+bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
+			       sVECTOR3D &IntercPoint, sDamagesData &DamagesData, float ObjectSpeed)
 {
-	DamagesData->DamageHull = 0.0f;
-	DamagesData->DamageSystems = 0.0f;
+	DamagesData.DamageHull = 0.0f;
+	DamagesData.DamageSystems = 0.0f;
 	// поправка на скорость камеры для корабля игрока
-	if (Object->ObjectStatus == eObjectStatus::Player)
+	if (Object.ObjectStatus == eObjectStatus::Player)
 		ObjectSpeed += GameCameraGetSpeed();
 
 	// проверяем, нужно ли для этого снаряда проверять данный объект
 	// снаряды союзников или игрока - с врагами
-	if ((((Object->ObjectStatus == eObjectStatus::Enemy) && ((Projectile->ObjectStatus == eObjectStatus::Ally) || (Projectile->ObjectStatus == eObjectStatus::Player))) ||
+	if ((((Object.ObjectStatus == eObjectStatus::Enemy) && ((Projectile.ObjectStatus == eObjectStatus::Ally) || (Projectile.ObjectStatus == eObjectStatus::Player))) ||
 	     // снаряды врагов - с союзниками или игроком
-	     (((Object->ObjectStatus == eObjectStatus::Ally) || (Object->ObjectStatus == eObjectStatus::Player)) && (Projectile->ObjectStatus == eObjectStatus::Enemy)) ||
+	     (((Object.ObjectStatus == eObjectStatus::Ally) || (Object.ObjectStatus == eObjectStatus::Player)) && (Projectile.ObjectStatus == eObjectStatus::Enemy)) ||
 	     // снаряды игрока со всеми, кроме игрока
-	     (((Object->ObjectStatus == eObjectStatus::Enemy) || (Object->ObjectStatus == eObjectStatus::Ally)) && (Projectile->ObjectStatus == eObjectStatus::Player)))
+	     (((Object.ObjectStatus == eObjectStatus::Enemy) || (Object.ObjectStatus == eObjectStatus::Ally)) && (Projectile.ObjectStatus == eObjectStatus::Player))) ||
 	    // или это не разрушаемый объект и нужно 100% проверить, чтобы не пролетало через него снарядов
-	    || (!NeedCheckCollision(*Object))) {
-		switch (Projectile->ProjectileType) {
+	    !NeedCheckCollision(Object)) {
+		switch (Projectile.ProjectileType) {
 		// обычные снаряды
 		case 0:
 			// если игрок со щитом или дифлектором, и щит заряжен
-			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameEnemyWeaponPenalty)) &&
-			    (Object->ObjectStatus == eObjectStatus::Player) &&
+			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile.DamageHull * GameEnemyWeaponPenalty)) &&
+			    (Object.ObjectStatus == eObjectStatus::Player) &&
 				// у игрока есть щит, просто проверяем, если снаряд приблизился
 				// на расстояние =< радиуса - уничтожаем его
-			    vw_SphereSphereCollision(Object->Radius, Object->Location,
-						     Projectile->Radius, Projectile->Location, Projectile->PrevLocation)) {
+			    vw_SphereSphereCollision(Object.Radius, Object.Location,
+						     Projectile.Radius, Projectile.Location, Projectile.PrevLocation)) {
 				// если отражатель, разворачиваем пулю...
 				if (GameAdvancedProtectionSystem == 4) {
-					Projectile->ObjectStatus = Object->ObjectStatus;
-					Projectile->SetRotation(Projectile->Rotation ^ (-1));
+					Projectile.ObjectStatus = Object.ObjectStatus;
+					Projectile.SetRotation(Projectile.Rotation ^ (-1));
 
-					for (auto tmpGFX : Projectile->GraphicFX) {
+					for (auto tmpGFX : Projectile.GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
 							sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameEnemyWeaponPenalty);
 							sharedGFX->Speed = sharedGFX->Speed * GameEnemyWeaponPenalty;
@@ -137,68 +138,68 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor * GameEnemyWeaponPenalty * GameEnemyWeaponPenalty;
 						}
 					}
-					Projectile->SpeedStart = Projectile->Speed * GameEnemyWeaponPenalty;
-					Projectile->SpeedEnd = (Projectile->Speed * GameEnemyWeaponPenalty) / 4.0f;
-					Projectile->Age = Projectile->Age / GameEnemyWeaponPenalty;
-					Projectile->Lifetime = Projectile->Lifetime / GameEnemyWeaponPenalty;
+					Projectile.SpeedStart = Projectile.Speed * GameEnemyWeaponPenalty;
+					Projectile.SpeedEnd = (Projectile.Speed * GameEnemyWeaponPenalty) / 4.0f;
+					Projectile.Age = Projectile.Age / GameEnemyWeaponPenalty;
+					Projectile.Lifetime = Projectile.Lifetime / GameEnemyWeaponPenalty;
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
 					// физический урон минимален
-					CurrentStatus -= Projectile->DamageHull / 5.0f;
+					CurrentStatus -= Projectile.DamageHull / 5.0f;
 					// а ионный на оборот
-					CurrentStatus -= Projectile->DamageSystems * 2.0f;
+					CurrentStatus -= Projectile.DamageSystems * 2.0f;
 					if (CurrentStatus < 0.0f)
 						CurrentStatus = 0.0f;
 					// и вычисляем сколько осталось в щите
 					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
 
-					Projectile->DamageHull = Projectile->DamageHull * GameEnemyWeaponPenalty;
-					Projectile->DamageSystems = Projectile->DamageSystems * GameEnemyWeaponPenalty;
+					Projectile.DamageHull = Projectile.DamageHull * GameEnemyWeaponPenalty;
+					Projectile.DamageSystems = Projectile.DamageSystems * GameEnemyWeaponPenalty;
 
 					// здесь только так! иначе уничтожим снаряд
 					return false;
 				} else {
 					// "разбиваем" снаряд о корпус, звук тянем отдельно!
-					new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, ObjectSpeed, false);
+					new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, ObjectSpeed, false);
 
 					// где сейчас, там и погибли
-					*IntercPoint = Projectile->Location;
+					IntercPoint = Projectile.Location;
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
 					// физический урон минимален
-					CurrentStatus -= Projectile->DamageHull / 5.0f;
+					CurrentStatus -= Projectile.DamageHull / 5.0f;
 					// а ионный на оборот
-					CurrentStatus -= Projectile->DamageSystems * 2.0f;
+					CurrentStatus -= Projectile.DamageSystems * 2.0f;
 					if (CurrentStatus < 0.0f)
 						CurrentStatus = 0.0f;
 					// и вычисляем сколько осталось в щите
 					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
 
 					// столкновение не было (!!! именно так, иначе ерунда с указателем на снаряд)
-					DamagesData->DamageHull = 0.0f;
-					DamagesData->DamageSystems = 0.0f;
+					DamagesData.DamageHull = 0.0f;
+					DamagesData.DamageSystems = 0.0f;
 					return true;
 				}
-			} else if (vw_SphereSphereCollision(Object->Radius, Object->Location,
-							    Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
-				   vw_SphereAABBCollision(Object->AABB, Object->Location,
-							  Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
-				   vw_SphereOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
-							 Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
-				   CheckMeshSphereCollisionDetection(*Object, *Projectile, *IntercPoint, *ObjectPieceNum)) {
+			} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
+							    Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
+				   vw_SphereAABBCollision(Object.AABB, Object.Location,
+							  Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
+				   vw_SphereOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
+							 Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
+				   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 
-				if (NeedCheckCollision(*Object)) {
-					DamagesData->DamageHull = Projectile->DamageHull;
-					DamagesData->DamageSystems = Projectile->DamageSystems;
+				if (NeedCheckCollision(Object)) {
+					DamagesData.DamageHull = Projectile.DamageHull;
+					DamagesData.DamageSystems = Projectile.DamageSystems;
 				}
 				// "разбиваем" снаряд о корпус
 				// звук тянем отдельно!
-				if (NeedCheckCollision(*Object))
-					new cBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, ObjectSpeed, false);
+				if (NeedCheckCollision(Object))
+					new cBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, ObjectSpeed, false);
 				else
-					new cBulletExplosion(Object, Projectile, Projectile->Num, *IntercPoint, 0.0f, false);
+					new cBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, 0.0f, false);
 
 				// столкновение было
 				return true;
@@ -208,70 +209,70 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 		// ракеты-торпеды-бомбы
 		case 1:
 			// если игрок со щитом или дифлектором, и щит заряжен
-			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile->DamageHull * GameEnemyWeaponPenalty)) &&
-			    (Object->ObjectStatus == eObjectStatus::Player)) {
+			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile.DamageHull * GameEnemyWeaponPenalty)) &&
+			    (Object.ObjectStatus == eObjectStatus::Player)) {
 				// у игрока есть щит, просто проверяем, если снаряд приблизился
 				// на расстояние =< радиуса - уничтожаем его
-				if (vw_SphereSphereCollision(Object->Radius, Object->Location,
-							     Projectile->Radius, Projectile->Location, Projectile->PrevLocation)) {
-					*IntercPoint = Projectile->Location;
+				if (vw_SphereSphereCollision(Object.Radius, Object.Location,
+							     Projectile.Radius, Projectile.Location, Projectile.PrevLocation)) {
+					IntercPoint = Projectile.Location;
 
 					// "разбиваем" снаряд о корпус
-					new cBulletExplosion(Object, Projectile, -Projectile->Num, Projectile->Location, ObjectSpeed);
+					new cBulletExplosion(&Object, &Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
 					// физический урон минимален
-					CurrentStatus -= Projectile->DamageHull / 5.0f;
+					CurrentStatus -= Projectile.DamageHull / 5.0f;
 					// а ионный на оборот
-					CurrentStatus -= Projectile->DamageHull * 2.0f;
+					CurrentStatus -= Projectile.DamageHull * 2.0f;
 					if (CurrentStatus < 0.0f)
 						CurrentStatus = 0.0f;
 					// и вычисляем сколько осталось в щите
 					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
 
 					// передаем, столкновение было, чтобы корректно удалить снаряд в общей процедуре
-					DamagesData->DamageHull = 0.0f;
-					DamagesData->DamageSystems = 0.0f;
+					DamagesData.DamageHull = 0.0f;
+					DamagesData.DamageSystems = 0.0f;
 					return true;
 				}
-			} else if (vw_SphereSphereCollision(Object->Radius, Object->Location,
-							    Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
+			} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
+							    Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
 				   // это ракета, просто проверяем, что она близко - и взрываем
-				   vw_SphereAABBCollision(Object->AABB, Object->Location,
-							  Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
-				   vw_SphereOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
-							 Projectile->Radius, Projectile->Location, Projectile->PrevLocation) &&
+				   vw_SphereAABBCollision(Object.AABB, Object.Location,
+							  Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
+				   vw_SphereOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
+							 Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
 				// ставим так, т.к.на больших кораблях плохо
-				   vw_OBBOBBCollision(Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat,
-						      Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat) &&
-				   CheckHitBBOBBCollisionDetection(*Object, *Projectile, *ObjectPieceNum)) {
+				   vw_OBBOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
+						      Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat) &&
+				   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
 
 				// если это не убиваемый объект, должны столкнуться с геометрией
-				if (!NeedCheckCollision(*Object)) {
-					if (CheckMeshSphereCollisionDetection(*Object, *Projectile, *IntercPoint, *ObjectPieceNum)) {
+				if (!NeedCheckCollision(Object)) {
+					if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 						// взрываем...
-						if (NeedCheckCollision(*Object))
-							new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
+						if (NeedCheckCollision(Object))
+							new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
 						else
-							new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
+							new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
 
 						return true;
 					} else
 						return false;
 				}
 
-				*IntercPoint = Projectile->Location;
+				IntercPoint = Projectile.Location;
 
-				if (NeedCheckCollision(*Object)) {
-					DamagesData->DamageHull = Projectile->DamageHull;
-					DamagesData->DamageSystems = Projectile->DamageSystems;
+				if (NeedCheckCollision(Object)) {
+					DamagesData.DamageHull = Projectile.DamageHull;
+					DamagesData.DamageSystems = Projectile.DamageSystems;
 				}
 				// взрываем...
-				if (NeedCheckCollision(*Object))
-					new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, Projectile->Speed);
+				if (NeedCheckCollision(Object))
+					new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
 				else
-					new cBulletExplosion(Object, Projectile, Projectile->Num, Projectile->Location, 0.0f);
+					new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
 				// столкновение было
 				return true;
 			}
@@ -279,19 +280,19 @@ bool DetectProjectileCollision(cObject3D *Object, int *ObjectPieceNum, cProjecti
 
 		// лучевое оружие
 		case 2:
-			if (vw_AABBAABBCollision(Object->AABB, Object->Location, Projectile->AABB, Projectile->Location) &&
+			if (vw_AABBAABBCollision(Object.AABB, Object.Location, Projectile.AABB, Projectile.Location) &&
 			// в данном случае именно Projectile на первом месте!!!
-			    vw_SphereOBBCollision(Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat,
-						  Object->Radius, Object->Location, Object->PrevLocation) &&
-			    vw_OBBOBBCollision(Projectile->OBB.Box, Projectile->OBB.Location, Projectile->Location, Projectile->CurrentRotationMat,
-					       Object->OBB.Box, Object->OBB.Location, Object->Location, Object->CurrentRotationMat) &&
-			    CheckHitBBOBBCollisionDetection(*Object, *Projectile, *ObjectPieceNum)) {
-				*IntercPoint = Object->Location;
+			    vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
+						  Object.Radius, Object.Location, Object.PrevLocation) &&
+			    vw_OBBOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
+					       Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat) &&
+			    CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
+				IntercPoint = Object.Location;
 
 				// находим по дельте повреждения
-				DamagesData->DamageHull = Projectile->DamageHull*Object->TimeDelta;
+				DamagesData.DamageHull = Projectile.DamageHull * Object.TimeDelta;
 				// всегда ноль
-				DamagesData->DamageSystems = 0.0f;
+				DamagesData.DamageSystems = 0.0f;
 				// столкновение было
 				return true;
 			}
@@ -429,7 +430,7 @@ void DetectCollisionAllObject3D()
 			// проверка на попадание в корпус корабля
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
-			if (DetectProjectileCollision(tmpShip, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpShip->Speed)) {
+			if (DetectProjectileCollision(*tmpShip, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpShip->Speed)) {
 				tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
 				// если на корабле есть щит, сначала его уничтожаем
@@ -545,7 +546,7 @@ void DetectCollisionAllObject3D()
 						// делаем проверку
 						sDamagesData DamagesDataWeapon;
 						int ObjectPieceNumWeapon;
-						if(DetectProjectileCollision(tmpShip->Weapon[i], &ObjectPieceNumWeapon, tmpProjectile, &IntercPoint, &DamagesDataWeapon, tmpShip->Speed)) {
+						if(DetectProjectileCollision(*tmpShip->Weapon[i], ObjectPieceNumWeapon, *tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip->Speed)) {
 							tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
 							// просто делаем изменения в прочности... и больше ничего
@@ -890,7 +891,7 @@ exitN2:
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			if(DetectProjectileCollision(tmpG, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpG->Speed)) {
+			if(DetectProjectileCollision(*tmpG, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpG->Speed)) {
 				tmpGround2 = tmpG->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
 				if (NeedCheckCollision(*tmpG)) {
@@ -1020,7 +1021,7 @@ exitN2:
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			if(DetectProjectileCollision(tmpS, &ObjectPieceNum, tmpProjectile, &IntercPoint, &DamagesData, tmpS->Speed)) {
+			if(DetectProjectileCollision(*tmpS, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpS->Speed)) {
 				tmpSpace2 = tmpS->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
 				if (NeedCheckCollision(*tmpS)) {

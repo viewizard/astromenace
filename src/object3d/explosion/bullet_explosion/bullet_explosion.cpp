@@ -190,7 +190,7 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-cBulletExplosion::cBulletExplosion(cObject3D *Object, cProjectile *Projectile, int ExplType,
+cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Projectile, int ExplType,
 				   const sVECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX)
 {
 	TimeLastUpdate = Projectile->TimeLastUpdate;

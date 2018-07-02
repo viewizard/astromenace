@@ -40,7 +40,7 @@ namespace astromenace {
 class cBulletExplosion : public cExplosion
 {
 public:
-	explicit cBulletExplosion(cObject3D *Object, cProjectile *Projectile,
+	explicit cBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 				  int ExplType, const sVECTOR3D &ExplLocation,
 				  float Speed, bool NeedExplosionSFX = true);
 };
