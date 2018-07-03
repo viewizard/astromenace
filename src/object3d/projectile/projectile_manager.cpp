@@ -117,7 +117,7 @@ void UpdateAllProjectile(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap)
+void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	cProjectile *tmp = StartProjectile;
@@ -136,7 +136,7 @@ void DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap)
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
 //-----------------------------------------------------------------------------
-void ReleaseAllProjectile()
+void ReleaseAllProjectiles()
 {
 	cProjectile *tmp = StartProjectile;
 	while (tmp != nullptr) {

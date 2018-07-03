@@ -115,7 +115,7 @@ void UpdateAllWeapon(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap)
+void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 
 	cWeapon *tmp = StartWeapon;
@@ -134,7 +134,7 @@ void DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap)
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
 //-----------------------------------------------------------------------------
-void ReleaseAllWeapon()
+void ReleaseAllWeapons()
 {
 	cWeapon *tmp = StartWeapon;
 	while (tmp != nullptr) {

@@ -112,7 +112,7 @@ void UpdateAllExplosion(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllExplosion(bool VertexOnlyPass)
+void DrawAllExplosions(bool VertexOnlyPass)
 {
 
 	cExplosion *tmp = StartExplosion;
@@ -131,7 +131,7 @@ void DrawAllExplosion(bool VertexOnlyPass)
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
 //-----------------------------------------------------------------------------
-void ReleaseAllExplosion()
+void ReleaseAllExplosions()
 {
 	cExplosion *tmp = StartExplosion;
 	while (tmp != nullptr) {

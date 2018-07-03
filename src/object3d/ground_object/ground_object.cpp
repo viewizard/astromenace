@@ -123,7 +123,7 @@ cWheeled *CreateWheeled(int WheeledNum)
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------
-void UpdateAllGroundObject(float Time)
+void UpdateAllGroundObjects(float Time)
 {
 	cGroundObject *tmp = StartGroundObject;
 	while (tmp != nullptr) {
@@ -139,7 +139,7 @@ void UpdateAllGroundObject(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap)
+void DrawAllGroundObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	cGroundObject *tmp = StartGroundObject;
 	while (tmp != nullptr) {
@@ -166,7 +166,7 @@ void ReleaseGroundObject(cGroundObject *Object)
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
 //-----------------------------------------------------------------------------
-void ReleaseAllGroundObject()
+void ReleaseAllGroundObjects()
 {
 	cGroundObject *tmp = StartGroundObject;
 	while (tmp != nullptr) {

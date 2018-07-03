@@ -118,7 +118,7 @@ void UpdateAllSpaceShip(float Time)
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
-void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap)
+void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {
@@ -135,7 +135,7 @@ void DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap)
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
 //-----------------------------------------------------------------------------
-void ReleaseAllSpaceShip()
+void ReleaseAllSpaceShips()
 {
 	cSpaceShip *tmp = StartSpaceShip;
 	while (tmp != nullptr) {

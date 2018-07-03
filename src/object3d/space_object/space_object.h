@@ -88,9 +88,9 @@ void	DetachSpaceObject(cSpaceObject* SpaceObject);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceObject(float Time);
 // Прорисовываем все объекты
-void	DrawAllSpaceObject(bool VertexOnlyPass, unsigned int ShadowMap);
+void	DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
-void	ReleaseAllSpaceObject();
+void	ReleaseAllSpaceObjects();
 
 } // astromenace namespace
 } // viewizard namespace

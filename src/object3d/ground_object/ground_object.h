@@ -50,9 +50,9 @@ enum class eGroundCycle {
 };
 
 class cGroundObject : public cObject3D {
-	friend void UpdateAllGroundObject(float Time);
+	friend void UpdateAllGroundObjects(float Time);
 	friend void ReleaseGroundObject(cGroundObject *Object);
-	friend void ReleaseAllGroundObject();
+	friend void ReleaseAllGroundObjects();
 	friend void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
 
 protected:
@@ -218,13 +218,13 @@ cTracked *CreateTracked(int TrackedNum);
 // Create cWheeled object.
 cWheeled *CreateWheeled(int WheeledNum);
 // Проверяем все объекты, обновляем данные
-void UpdateAllGroundObject(float Time);
+void UpdateAllGroundObjects(float Time);
 // Прорисовываем все объекты
-void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
+void DrawAllGroundObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular ground object.
 void ReleaseGroundObject(cGroundObject *Object);
 // Удаляем все объекты в списке
-void ReleaseAllGroundObject();
+void ReleaseAllGroundObjects();
 // Managed cycle for each ground object.
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
 

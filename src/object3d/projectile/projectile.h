@@ -125,9 +125,9 @@ void	DetachProjectile(cProjectile* Projectile);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllProjectile(float Time);
 // Прорисовываем все объекты
-void	DrawAllProjectile(bool VertexOnlyPass, unsigned int ShadowMap);
+void	DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
-void	ReleaseAllProjectile();
+void	ReleaseAllProjectiles();
 
 } // astromenace namespace
 } // viewizard namespace

@@ -108,9 +108,9 @@ void	DetachExplosion(cExplosion* Explosion);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllExplosion(float Time);
 // Прорисовываем все объекты
-void	DrawAllExplosion(bool VertexOnlyPass);
+void	DrawAllExplosions(bool VertexOnlyPass);
 // Удаляем все объекты в списке
-void	ReleaseAllExplosion();
+void	ReleaseAllExplosions();
 
 
 

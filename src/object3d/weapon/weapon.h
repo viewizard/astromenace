@@ -133,9 +133,9 @@ void	DetachWeapon(cWeapon* Weapon);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllWeapon(float Time);
 // Прорисовываем все объекты
-void	DrawAllWeapon(bool VertexOnlyPass, unsigned int ShadowMap);
+void	DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
-void	ReleaseAllWeapon();
+void	ReleaseAllWeapons();
 
 } // astromenace namespace
 } // viewizard namespace

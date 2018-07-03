@@ -46,14 +46,14 @@ namespace astromenace {
 //-----------------------------------------------------------------------------
 void ReleaseAllObject3D()
 {
-	ReleaseAllSpaceShip();
-	ReleaseAllGroundObject();
+	ReleaseAllSpaceShips();
+	ReleaseAllGroundObjects();
 	// until code refactored and moved to STL, make sure this called after SpaceShip and GroundObject,
 	// since we release all connected to SpaceShip and GroundObject weapons in their destructors
-	ReleaseAllWeapon();
-	ReleaseAllProjectile();
-	ReleaseAllSpaceObject();
-	ReleaseAllExplosion();
+	ReleaseAllWeapons();
+	ReleaseAllProjectiles();
+	ReleaseAllSpaceObjects();
+	ReleaseAllExplosions();
 }
 
 //-----------------------------------------------------------------------------
@@ -78,12 +78,12 @@ void DrawAllObject3D(eDrawType DrawType)
 			break;
 		}
 
-		DrawAllSpaceShip(true, 0);
-		DrawAllWeapon(true, 0);
-		DrawAllGroundObject(true, 0);
-		DrawAllProjectile(true, 0);
-		DrawAllExplosion(true);
-		DrawAllSpaceObject(true, 0);
+		DrawAllSpaceShips(true, 0);
+		DrawAllWeapons(true, 0);
+		DrawAllGroundObjects(true, 0);
+		DrawAllProjectiles(true, 0);
+		DrawAllExplosions(true);
+		DrawAllSpaceObjects(true, 0);
 
 		ShadowMap_EndRenderToFBO();
 
@@ -92,17 +92,17 @@ void DrawAllObject3D(eDrawType DrawType)
 		ShadowMap_StartFinalRender();
 	}
 
-	DrawAllSpaceObject(false, ShadowMap);
-	DrawAllSpaceShip(false, ShadowMap);
-	DrawAllWeapon(false, ShadowMap);
-	DrawAllGroundObject(false, ShadowMap);
-	DrawAllProjectile(false, ShadowMap);
+	DrawAllSpaceObjects(false, ShadowMap);
+	DrawAllSpaceShips(false, ShadowMap);
+	DrawAllWeapons(false, ShadowMap);
+	DrawAllGroundObjects(false, ShadowMap);
+	DrawAllProjectiles(false, ShadowMap);
 
 	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();
 
 	// взрывы
-	DrawAllExplosion(false);
+	DrawAllExplosions(false);
 
 	// эффекты - самые последние в прорисовке!
 	vw_DrawAllParticleSystems();
@@ -166,7 +166,7 @@ void UpdateAllObject3D(float Time)
 {
 	UpdateAllSpaceShip(Time);
 	UpdateAllWeapon(Time);
-	UpdateAllGroundObject(Time);
+	UpdateAllGroundObjects(Time);
 	UpdateAllProjectile(Time);
 	UpdateAllSpaceObject(Time);
 	UpdateAllExplosion(Time);

@@ -221,9 +221,9 @@ void	DetachSpaceShip(cSpaceShip* SpaceShip);
 // Проверяем все объекты, обновляем данные
 void	UpdateAllSpaceShip(float Time);
 // Прорисовываем все объекты
-void	DrawAllSpaceShip(bool VertexOnlyPass, unsigned int ShadowMap);
+void	DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
-void	ReleaseAllSpaceShip();
+void	ReleaseAllSpaceShips();
 
 } // astromenace namespace
 } // viewizard namespace
