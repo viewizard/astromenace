@@ -714,7 +714,6 @@ void Workshop_Shipyard()
 		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
 	}
 
-	SizeI = SizeI - vw_TextWidth("%i", WorkshopFighterGame->WeaponQuantity);
 	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
 	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponQuantity);
 
