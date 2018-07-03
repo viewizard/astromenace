@@ -1408,45 +1408,38 @@ NexttmpS:
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все cGroundObject с
-	// cProjectile
+	// проверяем все cGroundObject
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	cGroundObject *tmpG = StartGroundObject;
-	while (tmpG) {
-		cGroundObject *tmpGround2 = tmpG->Next;
-
-		if (NeedCheckCollision(*tmpG) &&
-		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpG->ObjectStatus == eObjectStatus::Enemy)) ||
-		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpG->ObjectStatus == eObjectStatus::Ally) || (tmpG->ObjectStatus == eObjectStatus::Player)))) &&
-		     (&DontTouchObject != tmpG) && CheckSphereSphereDestroyDetection(*tmpG, Point, Radius, Distance2))) {
+	ForEachGroundObject([&] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
+		if (NeedCheckCollision(tmpGround) &&
+		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpGround.ObjectStatus == eObjectStatus::Enemy)) ||
+		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player)))) &&
+		     (&DontTouchObject != &tmpGround) && CheckSphereSphereDestroyDetection(tmpGround, Point, Radius, Distance2))) {
 			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
 
 			// отнимаем у всех по Damage
-			tmpG->Strength -= DamageHull / tmpG->ResistanceHull;
+			tmpGround.Strength -= DamageHull / tmpGround.ResistanceHull;
 
 			// если уже все... удаляем
-			if (tmpG->Strength <= 0.0f) {
+			if (tmpGround.Strength <= 0.0f) {
 				// проверка, нужно начислять или нет
-				AddPlayerBonus(*tmpG, ObjectStatus);
+				AddPlayerBonus(tmpGround, ObjectStatus);
 
-				switch (tmpG->ObjectType) {
+				switch (tmpGround.ObjectType) {
 				case eObjectType::PirateBuilding:
-					new cGroundExplosion(*tmpG, 1, tmpG->Location, -1);
+					new cGroundExplosion(tmpGround, 1, tmpGround.Location, -1);
 					break;
 				case eObjectType::PirateVehicle:
-					new cGroundExplosion(*tmpG, 2, tmpG->Location, -1);
+					new cGroundExplosion(tmpGround, 2, tmpGround.Location, -1);
 					break;
 				default:
 					break;
 				}
 
-				delete tmpG;
-				tmpG = nullptr;
+				GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 			}
 		}
-
-		tmpG = tmpGround2;
-	}
+	});
 
 	// снаряды не учитываем, иначе - поправь указатели, чтобы при удалении
 	// следующего, не было сбоя... при обновлении указателя у первого
