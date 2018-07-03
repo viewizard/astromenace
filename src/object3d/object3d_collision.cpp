@@ -51,8 +51,6 @@ extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
-extern cGroundObject *StartGroundObject;
-extern cGroundObject *EndGroundObject;
 extern cSpaceObject *StartSpaceObject;
 extern cSpaceObject *EndSpaceObject;
 
@@ -883,42 +881,36 @@ exitN1:
 	// проверяем все cGroundObject с
 	// cProjectile
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	cGroundObject *tmpG = StartGroundObject;
-	while (tmpG) {
-		cGroundObject *tmpGround2 = tmpG->Next;
-
+	ForEachGroundObject([] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 		// точка попадания, если оно есть
 		sVECTOR3D IntercPoint;
 		// проверяем со снарядами
 		cProjectile *tmpProjectile = StartProjectile;
-		while (tmpProjectile && tmpG) {
+		while (tmpProjectile) {
 			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			if(DetectProjectileCollision(*tmpG, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpG->Speed)) {
-				tmpGround2 = tmpG->Next; // обязательно!!! если попали торпедой или бомбой!!!
-
-				if (NeedCheckCollision(*tmpG)) {
-					tmpG->Strength -= DamagesData.DamageHull / tmpG->ResistanceHull;
+			if(DetectProjectileCollision(tmpGround, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpGround.Speed)) {
+				if (NeedCheckCollision(tmpGround)) {
+					tmpGround.Strength -= DamagesData.DamageHull / tmpGround.ResistanceHull;
 
 					// если уже все... удаляем
-					if (tmpG->Strength <= 0.0f) {
+					if (tmpGround.Strength <= 0.0f) {
 						// проверка, нужно начислять или нет
-						AddPlayerBonus(*tmpG, tmpProjectile->ObjectStatus);
+						AddPlayerBonus(tmpGround, tmpProjectile->ObjectStatus);
 
-						switch (tmpG->ObjectType) {
+						switch (tmpGround.ObjectType) {
 						case eObjectType::PirateBuilding:
-							new cGroundExplosion(*tmpG, 1, IntercPoint, ObjectPieceNum);
+							new cGroundExplosion(tmpGround, 1, IntercPoint, ObjectPieceNum);
 							break;
 						case eObjectType::PirateVehicle:
-							new cGroundExplosion(*tmpG, 2, IntercPoint, ObjectPieceNum);
+							new cGroundExplosion(tmpGround, 2, IntercPoint, ObjectPieceNum);
 							break;
 						default:
 							break;
 						}
-						delete tmpG;
-						tmpG = nullptr;
+						GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 
 						// убираем звук попадания-разбивания снаряда
 						tmpProjectile->NeedDeadSound = false;
@@ -934,12 +926,16 @@ exitN1:
 			}
 
 			tmpProjectile = tmpProjectile2;
+			if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue) // FIXME temporary
+				break;
 		}
+		if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue)
+			return;
 
 		// проверяем столкновение
 		// cSpaceObject
 		cSpaceObject *tmpS = StartSpaceObject;
-		while (tmpS && tmpG) {
+		while (tmpS) {
 			cSpaceObject *tmpSpace2 = tmpS->Next;
 
 			int ObjectPieceNum;
@@ -947,31 +943,31 @@ exitN1:
 			// не проверяем с частями базы
 			if ((tmpS->ObjectType != eObjectType::BasePart) &&
 				// не проверяем если оба не можем уничтожить
-			    (NeedCheckCollision(*tmpG) || NeedCheckCollision(*tmpS)) &&
-			    vw_SphereSphereCollision(tmpG->Radius, tmpG->Location,
+			    (NeedCheckCollision(tmpGround) || NeedCheckCollision(*tmpS)) &&
+			    vw_SphereSphereCollision(tmpGround.Radius, tmpGround.Location,
 						    tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    vw_SphereAABBCollision(tmpG->AABB, tmpG->Location,
+			    vw_SphereAABBCollision(tmpGround.AABB, tmpGround.Location,
 						   tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    vw_SphereOBBCollision(tmpG->OBB.Box, tmpG->OBB.Location, tmpG->Location, tmpG->CurrentRotationMat,
+			    vw_SphereOBBCollision(tmpGround.OBB.Box, tmpGround.OBB.Location, tmpGround.Location, tmpGround.CurrentRotationMat,
 						  tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    CheckHitBBOBBCollisionDetection(*tmpG, *tmpS, ObjectPieceNum)) {
+			    CheckHitBBOBBCollisionDetection(tmpGround, *tmpS, ObjectPieceNum)) {
 
 				// если столкновение с преградой которую не можем уничтожить
 				if (!NeedCheckCollision(*tmpS))
-					tmpG->Strength -= (tmpG->StrengthStart / 0.5f) * tmpG->TimeDelta;
+					tmpGround.Strength -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
 				else {
-					float StrTMP = tmpG->Strength;
-					tmpG->Strength -= tmpS->Strength/tmpG->ResistanceHull;
+					float StrTMP = tmpGround.Strength;
+					tmpGround.Strength -= tmpS->Strength/tmpGround.ResistanceHull;
 					tmpS->Strength -= StrTMP/tmpS->ResistanceHull;
 				}
-				if (!NeedCheckCollision(*tmpG))
+				if (!NeedCheckCollision(tmpGround))
 					tmpS->Strength = 0.0f;
 
 
 				// если уже все... удаляем
 				if (NeedCheckCollision(*tmpS) &&
 				    (tmpS->Strength <= 0.0f)) {
-					AddPlayerBonus(*tmpS, tmpG->ObjectStatus);
+					AddPlayerBonus(*tmpS, tmpGround.ObjectStatus);
 
 					switch (tmpS->ObjectType) {
 					case eObjectType::Asteroids:
@@ -987,28 +983,27 @@ exitN1:
 					tmpS = nullptr;
 				}
 
-				if (NeedCheckCollision(*tmpG) &&
-				    (tmpG->Strength <= 0.0f)) {
-					switch (tmpG->ObjectType) {
+				if (NeedCheckCollision(tmpGround) &&
+				    (tmpGround.Strength <= 0.0f)) {
+					switch (tmpGround.ObjectType) {
 					case eObjectType::PirateBuilding:
-						new cGroundExplosion(*tmpG, 1, tmpG->Location, ObjectPieceNum);
+						new cGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum);
 						break;
 					case eObjectType::PirateVehicle:
-						new cGroundExplosion(*tmpG, 2, tmpG->Location, ObjectPieceNum);
+						new cGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum);
 						break;
 					default:
 						break;
 						}
-					delete tmpG;
-					tmpG = nullptr;
+					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 				}
 			}
 
 			tmpS = tmpSpace2;
+			if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue) // FIXME temporary
+				break;
 		}
-
-		tmpG = tmpGround2;
-	}
+	});
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем все cSpaceObject

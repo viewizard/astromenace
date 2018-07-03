@@ -33,9 +33,14 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
 // Указатели на начальный и конечный объект в списке
 cGroundObject *StartGroundObject = nullptr;
 cGroundObject *EndGroundObject = nullptr;
+
+} // unnamed namespace
+
 
 //-----------------------------------------------------------------------------
 // Включаем в список
