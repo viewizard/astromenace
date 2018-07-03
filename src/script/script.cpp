@@ -753,28 +753,28 @@ void cMissionScript::UpdateTimeLine()
 
 		case constexpr_hash_djb2a("CreateMBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cMilitaryBuilding *GroundObject = new cMilitaryBuilding(tmpType);
+				cMilitaryBuilding *GroundObject = CreateMilitaryBuilding(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cCivilianBuilding *GroundObject = new cCivilianBuilding(tmpType);
+				cCivilianBuilding *GroundObject = CreateCivilianBuilding(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateTracked"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cTracked *GroundObject = new cTracked(tmpType);
+				cTracked *GroundObject = CreateTracked(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateWheeled"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cWheeled *GroundObject = new cWheeled(tmpType);
+				cWheeled *GroundObject = CreateWheeled(tmpType);
 				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;

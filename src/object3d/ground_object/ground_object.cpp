@@ -88,6 +88,38 @@ static void DetachGroundObject(cGroundObject* GroundObject)
 		GroundObject->Next->Prev = nullptr;
 }
 
+/*
+ * Create cCivilianBuilding object.
+ */
+cCivilianBuilding *CreateCivilianBuilding(int BuildingNum)
+{
+	return new cCivilianBuilding(BuildingNum);
+}
+
+/*
+ * Create cMilitaryBuilding object.
+ */
+cMilitaryBuilding *CreateMilitaryBuilding(int MilitaryBuildingNum)
+{
+	return new cMilitaryBuilding(MilitaryBuildingNum);
+}
+
+/*
+ * Create cTracked object.
+ */
+cTracked *CreateTracked(int TrackedNum)
+{
+	return new cTracked(TrackedNum);
+}
+
+/*
+ * Create cWheeled object.
+ */
+cWheeled *CreateWheeled(int WheeledNum)
+{
+	return new cWheeled(WheeledNum);
+}
+
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------
@@ -109,14 +141,26 @@ void UpdateAllGroundObject(float Time)
 //-----------------------------------------------------------------------------
 void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap)
 {
-
 	cGroundObject *tmp = StartGroundObject;
 	while (tmp != nullptr) {
 		cGroundObject *tmp2 = tmp->Next;
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
+}
 
+/*
+ * Release particular ground object.
+ */
+void ReleaseGroundObject(cGroundObject *Object)
+{
+	cGroundObject *tmp = StartGroundObject;
+	while (tmp) {
+		cGroundObject *tmp2 = tmp->Next;
+		if (tmp == Object)
+			delete tmp;
+		tmp = tmp2;
+	}
 }
 
 //-----------------------------------------------------------------------------

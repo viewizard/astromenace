@@ -51,6 +51,7 @@ enum class eGroundCycle {
 
 class cGroundObject : public cObject3D {
 	friend void UpdateAllGroundObject(float Time);
+	friend void ReleaseGroundObject(cGroundObject *Object);
 	friend void ReleaseAllGroundObject();
 	friend void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
 
@@ -172,30 +173,56 @@ public:
 };
 
 class cCivilianBuilding final : public cGroundObject {
-public:
+	friend cCivilianBuilding *CreateCivilianBuilding(int BuildingNum);
+	friend void ReleaseGroundObject(cGroundObject *Object);
+private:
+	// don't allow direct new/delete usage in code
 	explicit cCivilianBuilding(int BuildingNum);
+	virtual ~cCivilianBuilding() = default;
 };
 
 class cMilitaryBuilding final : public cGroundObject {
-public:
+	friend cMilitaryBuilding *CreateMilitaryBuilding(int MilitaryBuildingNum);
+	friend void ReleaseGroundObject(cGroundObject *Object);
+private:
+	// don't allow direct new/delete usage in code
 	explicit cMilitaryBuilding(int MilitaryBuildingNum);
+	virtual ~cMilitaryBuilding() = default;
 };
 
 class cTracked final : public cGroundObject {
-public:
+	friend cTracked *CreateTracked(int TrackedNum);
+	friend void ReleaseGroundObject(cGroundObject *Object);
+private:
+	// don't allow direct new/delete usage in code
 	explicit cTracked(int TrackedNum);
+	virtual ~cTracked() = default;
 };
 
 class cWheeled final : public cGroundObject {
-public:
+	friend cWheeled *CreateWheeled(int WheeledNum);
+	friend void ReleaseGroundObject(cGroundObject *Object);
+private:
+	// don't allow direct new/delete usage in code
 	explicit cWheeled(int WheeledNum);
+	virtual ~cWheeled() = default;
 };
 
 
+// Create cCivilianBuilding object.
+cCivilianBuilding *CreateCivilianBuilding(int BuildingNum);
+// Create cMilitaryBuilding object.
+cMilitaryBuilding *CreateMilitaryBuilding(int MilitaryBuildingNum);
+// Create cTracked object.
+cTracked *CreateTracked(int TrackedNum);
+// Create cWheeled object.
+cWheeled *CreateWheeled(int WheeledNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllGroundObject(float Time);
 // Прорисовываем все объекты
 void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
+// Release particular ground object.
+void ReleaseGroundObject(cGroundObject *Object);
 // Удаляем все объекты в списке
 void ReleaseAllGroundObject();
 // Managed cycle for each ground object.
