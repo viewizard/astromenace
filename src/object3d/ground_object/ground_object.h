@@ -42,11 +42,24 @@ namespace astromenace {
 
 class cWeapon;
 
+enum class eGroundCycle {
+	Continue,
+	Break,
+	DeleteObjectAndContinue,
+	DeleteObjectAndBreak
+};
+
 class cGroundObject : public cObject3D {
-public:
+	friend void UpdateAllGroundObject(float Time);
+	friend void ReleaseAllGroundObject();
+	friend void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
+
+protected:
+	// don't allow object of this class creation
 	cGroundObject();
 	virtual ~cGroundObject();
 
+public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 	// Установка положения объекта
@@ -176,13 +189,6 @@ public:
 class cWheeled final : public cGroundObject {
 public:
 	explicit cWheeled(int WheeledNum);
-};
-
-enum class eGroundCycle {
-	Continue,
-	Break,
-	DeleteObjectAndContinue,
-	DeleteObjectAndBreak
 };
 
 
