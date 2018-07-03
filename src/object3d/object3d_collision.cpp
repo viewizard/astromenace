@@ -672,28 +672,24 @@ exitN1:
 		// 2 - AABB-AABB
 		// 3 - OBB-OBB
 		// 4 - HitBB-HitBB
-		cGroundObject *tmpG = StartGroundObject;
-		while (tmpG && tmpShip) {
-			cGroundObject *tmpGround2 = tmpG->Next;
-
+		if (tmpShip) // FIXME should be revised, when tmpShip will also have ForEach...()
+		ForEachGroundObject([&tmpShip] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 			int ObjectPieceNum1;
 			int ObjectPieceNum2;
 			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
-						     tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
+						     tmpGround.Radius, tmpGround.Location, tmpGround.PrevLocation) &&
 			    vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
-						   tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
+						   tmpGround.Radius, tmpGround.Location, tmpGround.PrevLocation) &&
 			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
-						  tmpG->Radius, tmpG->Location, tmpG->PrevLocation) &&
-			    CheckHitBBHitBBCollisionDetection(*tmpShip, *tmpG, ObjectPieceNum1, ObjectPieceNum2)) {
+						  tmpGround.Radius, tmpGround.Location, tmpGround.PrevLocation) &&
+			    CheckHitBBHitBBCollisionDetection(*tmpShip, tmpGround, ObjectPieceNum1, ObjectPieceNum2)) {
 
-				if ((tmpG->ObjectType == eObjectType::CivilianBuilding) &&
-				    !CheckHitBBMeshCollisionDetection(*tmpShip, *tmpG, ObjectPieceNum2)) {
-						// если не столкнулись = выходим
-						goto exitN2;
-				}
+				if ((tmpGround.ObjectType == eObjectType::CivilianBuilding) &&
+				    !CheckHitBBMeshCollisionDetection(*tmpShip, tmpGround, ObjectPieceNum2))
+						return; // eGroundCycle::Continue
 
 				// если столкновение с преградой которую не можем уничтожить
-				if (!NeedCheckCollision(*tmpG)) {
+				if (!NeedCheckCollision(tmpGround)) {
 					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
 					if (tmpShip->ObjectStatus != eObjectStatus::Player)
 						tmpShip->Strength -= (tmpShip->StrengthStart / 0.5f) * tmpShip->TimeDelta;
@@ -701,29 +697,28 @@ exitN1:
 						tmpShip->Strength -= (tmpShip->StrengthStart / 2.0f) * tmpShip->TimeDelta;
 				} else {
 					float StrTMP = tmpShip->Strength;
-					tmpShip->Strength -= tmpG->Strength / tmpShip->ResistanceHull;
-					tmpG->Strength -= StrTMP / tmpG->ResistanceHull;
+					tmpShip->Strength -= tmpGround.Strength / tmpShip->ResistanceHull;
+					tmpGround.Strength -= StrTMP / tmpGround.ResistanceHull;
 				}
 				if (!NeedCheckCollision(*tmpShip))
-					tmpG->Strength = 0.0f;
+					tmpGround.Strength = 0.0f;
 
 				// если уже все... удаляем
-				if (NeedCheckCollision(*tmpG) &&
-				    (tmpG->Strength <= 0.0f)) {
-					AddPlayerBonus(*tmpG, tmpShip->ObjectStatus);
+				if (NeedCheckCollision(tmpGround) &&
+				    (tmpGround.Strength <= 0.0f)) {
+					AddPlayerBonus(tmpGround, tmpShip->ObjectStatus);
 
-					switch (tmpG->ObjectType) {
+					switch (tmpGround.ObjectType) {
 					case eObjectType::PirateBuilding:
-						new cGroundExplosion(*tmpG, 1, tmpG->Location, ObjectPieceNum2);
+						new cGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum2);
 						break;
 					case eObjectType::PirateVehicle:
-						new cGroundExplosion(*tmpG, 2, tmpG->Location, ObjectPieceNum2);
+						new cGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum2);
 						break;
 					default:
 						break;
 					}
-					delete tmpG;
-					tmpG = nullptr;
+					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(*tmpShip) &&
@@ -752,16 +747,26 @@ exitN1:
 						}
 						delete tmpShip;
 						tmpShip = nullptr;
+
+						// break ground cycle
+						switch (GroundCycleCommand) {
+						case eGroundCycle::Continue:
+							GroundCycleCommand = eGroundCycle::Break;
+							break;
+						case eGroundCycle::DeleteObjectAndContinue:
+							GroundCycleCommand = eGroundCycle::DeleteObjectAndBreak;
+							break;
+						default:
+							break;
+						}
+
 					} else {
 						// запоминаем, что взорвалось
 						PlayerDeadObjectPieceNum = ObjectPieceNum1;
 					}
 				}
 			}
-
-exitN2:
-			tmpG = tmpGround2;
-		}
+		});
 
 		// проверяем все cSpaceShip с cSpaceShip
 		// 1 - радиус-радиус
