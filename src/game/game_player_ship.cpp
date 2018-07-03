@@ -508,7 +508,7 @@ void GamePlayerShip()
 
 			tmpS = tmpSpace2;
 		}
-		ForEachGroundObject([&CollisionDetected] (const cGroundObject &tmpGround) {
+		ForEachGroundObject([&CollisionDetected] (const cGroundObject &tmpGround, eGroundCycle &Command) {
 			// test with "immortal" civilian buildings
 			if ((tmpGround.ObjectType == eObjectType::CivilianBuilding) &&
 			    (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
@@ -519,9 +519,8 @@ void GamePlayerShip()
 						   tmpGround.CurrentRotationMat, PlayerFighter->Radius,
 						   PlayerFighter->Location, PlayerFighter->PrevLocation))) {
 				CollisionDetected = true;
-				return eGroundCycle::Break;
+				Command = eGroundCycle::Break;
 			}
-			return eGroundCycle::Continue;
 		});
 		if (CollisionDetected) {
 			// голос, ворнинг, можем столкнуться с объектом

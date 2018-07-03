@@ -298,14 +298,13 @@ bool cMissionScript::Update(float Time)
 			}
 		}
 		if (NeedDecreaseTime && NeedCheckGroundObject) {
-			ForEachGroundObject([&NeedDecreaseTime] (const cGroundObject &tmpGround) {
+			ForEachGroundObject([&NeedDecreaseTime] (const cGroundObject &tmpGround, eGroundCycle &Command) {
 				if (NeedCheckCollision(tmpGround) &&
 				    (tmpGround.DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled) &&
 				    (tmpGround.DeleteAfterLeaveScene != eDeleteAfterLeaveScene::disabled)) {
 					NeedDecreaseTime = false;
-					return eGroundCycle::Break;
+					Command = eGroundCycle::Break;
 				}
-				return eGroundCycle::Continue;
 			});
 		}
 

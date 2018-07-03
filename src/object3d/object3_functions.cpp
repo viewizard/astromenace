@@ -321,7 +321,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	// не стрелять по "мирным" постойкам
 	// !!! ВАЖНО
 	// у всех наземных объектов ноль на уровне пола...
-	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
+	ForEachGroundObject([&] (const cGroundObject &tmpGround, eGroundCycle &UNUSED(Command)) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||
@@ -439,7 +439,6 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 				}
 			}
 		}
-		return eGroundCycle::Continue;
 	});
 
 	// проверка по космическим объектам
@@ -997,7 +996,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 
 	// проверка по наземным объектам
 	// не стрелять по "мирным" постойкам
-	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
+	ForEachGroundObject([&] (const cGroundObject &tmpGround, eGroundCycle &UNUSED(Command)) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||
@@ -1066,7 +1065,6 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 				}
 			}
 		}
-		return eGroundCycle::Continue;
 	});
 
 	cSpaceShip *tmp = StartSpaceShip;
@@ -1331,12 +1329,11 @@ bool GetMissileTargetStatus(cObject3D *TargetObject,
 	}
 
 	bool ObjectFound{false};
-	ForEachGroundObject([&TargetObject, &ObjectFound] (const cGroundObject &tmpGround) {
+	ForEachGroundObject([&TargetObject, &ObjectFound] (const cGroundObject &tmpGround, eGroundCycle &Command) {
 		if (&tmpGround == TargetObject) {
 			ObjectFound = true;
-			return eGroundCycle::Break;
+			Command = eGroundCycle::Break;
 		}
-		return eGroundCycle::Continue;
 	});
 	if (ObjectFound)
 		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);

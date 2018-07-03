@@ -133,12 +133,14 @@ void ReleaseAllGroundObject()
 /*
  * Managed cycle for each ground object.
  */
-void ForEachGroundObject(std::function<eGroundCycle (const cGroundObject &Object)> function)
+void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function)
 {
 	cGroundObject *tmpGround = StartGroundObject;
 	while (tmpGround) {
 		cGroundObject *tmpGroundNext = tmpGround->Next;
-		switch (function(*tmpGround)) {
+		eGroundCycle Command{eGroundCycle::Continue};
+		function(*tmpGround, Command);
+		switch (Command) {
 		case eGroundCycle::Continue:
 			break;
 		case eGroundCycle::Break:

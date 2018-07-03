@@ -193,7 +193,7 @@ void DrawAllGroundObject(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void ReleaseAllGroundObject();
 // Managed cycle for each ground object.
-void ForEachGroundObject(std::function<eGroundCycle (const cGroundObject &Object)> function);
+void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
 
 } // astromenace namespace
 } // viewizard namespace
