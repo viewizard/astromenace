@@ -71,11 +71,10 @@ public:
 	cSpaceObject *Prev{nullptr};
 };
 
-// FIXME rename to small asteroid
-class cAsteroid : public cSpaceObject
+class cSmallAsteroid : public cSpaceObject
 {
 public:
-	cAsteroid();
+	cSmallAsteroid();
 };
 
 class cBigAsteroid : public cSpaceObject

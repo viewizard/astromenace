@@ -74,7 +74,7 @@ enum class eObjectType {
 	PirateShip,
 	PirateVehicle,
 	PirateBuilding,
-	Asteroids,
+	SmallAsteroid,
 	ShipPart,
 	ShipWeapon,
 	Projectile,

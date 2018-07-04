@@ -246,7 +246,7 @@ bool cMissionScript::Update(float Time)
 		AsterRealNeed = NeedGener - static_cast<float>(NeedGenerInt);
 
 		while (NeedGenerInt > 0) {
-			cAsteroid *CreateAsteroid = new cAsteroid;
+			cSmallAsteroid *CreateAsteroid = new cSmallAsteroid;
 			if (AsterFastCount != 20)
 				CreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
 			else
@@ -734,7 +734,7 @@ void cMissionScript::UpdateTimeLine()
 			break;
 
 		case constexpr_hash_djb2a("CreateAsteroid"): {
-				cAsteroid *SpaceObject = new cAsteroid;
+				cSmallAsteroid *SpaceObject = new cSmallAsteroid;
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;

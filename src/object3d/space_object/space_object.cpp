@@ -296,7 +296,7 @@ bool cSpaceObject::Update(float Time)
 	}
 
 	// если астероиды
-	if ((ObjectType == eObjectType::Asteroids) ||
+	if ((ObjectType == eObjectType::SmallAsteroid) ||
 	    (ObjectType == eObjectType::BigAsteroid)) {
 		// если большие астероиды летящие сверху
 		if ((ObjectType == eObjectType::BigAsteroid) &&

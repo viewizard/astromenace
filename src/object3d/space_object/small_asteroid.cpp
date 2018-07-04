@@ -37,9 +37,9 @@ namespace astromenace {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cAsteroid::cAsteroid()
+cSmallAsteroid::cSmallAsteroid()
 {
-	ObjectType = eObjectType::Asteroids;
+	ObjectType = eObjectType::SmallAsteroid;
 
 	Strength = StrengthStart = 10.0f / GameEnemyArmorPenalty;
 

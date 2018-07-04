@@ -86,7 +86,7 @@ bool NeedCheckCollision(const cObject3D &Object3D)
 	case eObjectType::PirateBuilding:
 		return true;
 
-	case eObjectType::Asteroids:
+	case eObjectType::SmallAsteroid:
 		return true;
 
 	case eObjectType::ShipPart:

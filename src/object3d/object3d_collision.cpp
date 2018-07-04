@@ -393,7 +393,7 @@ void AddPlayerBonus(const cObject3D &Object, eObjectStatus KilledByObjectStatus)
 			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
 			break;
 
-		case eObjectType::Asteroids:
+		case eObjectType::SmallAsteroid:
 			AsteroidsKillBonus += ((Object.StrengthStart*GameEnemyArmorPenalty)/8.0f)/BonusDiv;
 			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 8.0f) / BonusDiv;
 			AsteroidsKillQuant += 1;
@@ -616,7 +616,7 @@ void DetectCollisionAllObject3D()
 					AddPlayerBonus(*tmpS, tmpShip->ObjectStatus);
 
 					switch (tmpS->ObjectType) {
-					case eObjectType::Asteroids:
+					case eObjectType::SmallAsteroid:
 						new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 						break;
 					case eObjectType::ShipPart:
@@ -970,7 +970,7 @@ exitN1:
 					AddPlayerBonus(*tmpS, tmpGround.ObjectStatus);
 
 					switch (tmpS->ObjectType) {
-					case eObjectType::Asteroids:
+					case eObjectType::SmallAsteroid:
 						new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 						break;
 					case eObjectType::ShipPart:
@@ -1032,7 +1032,7 @@ exitN1:
 						AddPlayerBonus(*tmpS, tmpProjectile->ObjectStatus);
 
 						switch (tmpS->ObjectType) {
-						case eObjectType::Asteroids:
+						case eObjectType::SmallAsteroid:
 							new cSpaceExplosion(tmpS, 1, IntercPoint, tmpS->Speed, -1);
 							break;
 						case eObjectType::ShipPart:
@@ -1105,10 +1105,10 @@ exitN1:
 					bool SFXplayed = false;
 
 					if ((NeedCheckCollision(*tmpCollisionSpace1)) &&
-					    ((tmpCollisionSpace1->ObjectType == eObjectType::Asteroids) ||
+					    ((tmpCollisionSpace1->ObjectType == eObjectType::SmallAsteroid) ||
 					     (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart))) {
 						switch (tmpCollisionSpace1->ObjectType) {
-						case eObjectType::Asteroids:
+						case eObjectType::SmallAsteroid:
 							new cSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 							break;
 						case eObjectType::ShipPart:
@@ -1125,9 +1125,9 @@ exitN1:
 					}
 
 					if (NeedCheckCollision(*tmpS) &&
-					    ((tmpS->ObjectType == eObjectType::Asteroids) || (tmpS->ObjectType == eObjectType::ShipPart))) {
+					    ((tmpS->ObjectType == eObjectType::SmallAsteroid) || (tmpS->ObjectType == eObjectType::ShipPart))) {
 						switch (tmpS->ObjectType) {
-						case eObjectType::Asteroids:
+						case eObjectType::SmallAsteroid:
 							new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 							break;
 						case eObjectType::ShipPart:
