@@ -25,9 +25,11 @@
 
 *************************************************************************************/
 
-// TODO separate classes for buildings and vehicles (+ separate classes for ground explosions)
-
-// TODO separate class for turrets (use it for second inherited class?)
+// TODO split code for classes (? also separate classes for ground explosions)
+//      inheritance: cGroundObject -> cCivilianBuilding
+//                   cGroundObject + turret code -> cMilitaryBuilding
+//                   cMilitaryBuilding + wheels code -> cWheeled
+//                   cWheeled + tracks code -> cTracked
 
 // TODO translate comments
 
