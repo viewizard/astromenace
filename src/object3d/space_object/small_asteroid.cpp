@@ -25,25 +25,40 @@
 
 *************************************************************************************/
 
-#ifndef OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H
-#define OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H
+// TODO translate comments
 
-#include "../space_object.h"
+#include "space_object.h"
+#include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
 
-/*
- * Small asteroids.
- */
-class cAsteroid : public cSpaceObject
+//-----------------------------------------------------------------------------
+// Конструктор, инициализация всех переменных
+//-----------------------------------------------------------------------------
+cAsteroid::cAsteroid()
 {
-public:
-	cAsteroid();
-};
+	ObjectType = eObjectType::Asteroids;
+
+	Strength = StrengthStart = 10.0f / GameEnemyArmorPenalty;
+
+	std::string Model3DFileName{"models/space/asteroid-01" + std::to_string(vw_iRandNum(19)) + ".vw3d"};
+	LoadObjectData(Model3DFileName, this);
+
+	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
+		Texture[i] = GetPreloadedTextureAsset("models/space/asteroid-01.tga");
+	}
+
+	RotationSpeed.x = 100.0f + 50.0f * vw_fRand0();
+	RotationSpeed.y = 20.0f + 20.0f * vw_fRand0();
+
+	// небольшая поправка... в зависимости от размеров объекта
+	Strength = StrengthStart = Radius * StrengthStart;
+
+	// ставим правильный радиус
+	Radius = Width / 2.0f;
+}
 
 } // astromenace namespace
 } // viewizard namespace
-
-#endif // OBJECT3D_SPACEOBJECT_ASTEROID_ASTEROID_H

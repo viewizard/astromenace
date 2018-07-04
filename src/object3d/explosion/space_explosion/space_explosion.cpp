@@ -28,7 +28,7 @@
 #include "space_explosion.h"
 #include "../../../config/config.h"
 #include "../../../assets/audio.h"
-#include "../../space_object/ship_part/ship_part.h"
+#include "../../space_object/space_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

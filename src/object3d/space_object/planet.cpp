@@ -25,9 +25,9 @@
 
 *************************************************************************************/
 
-#include "planet.h"
-#include "../../../config/config.h"
-#include "../../../assets/texture.h"
+#include "space_object.h"
+#include "../../config/config.h"
+#include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

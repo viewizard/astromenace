@@ -25,9 +25,13 @@
 
 *************************************************************************************/
 
-#include "base_part.h"
-#include "../../../config/config.h"
-#include "../../../assets/texture.h"
+// FIXME revise code, remove goto statement
+
+// TODO translate comments
+
+#include "space_object.h"
+#include "../../config/config.h"
+#include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -43,11 +47,9 @@ cBasePart::cBasePart(int BasePartNum)
 	NeedAlphaTest = true;
 
 	// задали первичный, нужно случайным образом найти
-	if (BasePartNum == 1 || BasePartNum == 2 || BasePartNum == 6 || BasePartNum == 8) {
+	if ((BasePartNum == 1) || (BasePartNum == 2) || (BasePartNum == 6) || (BasePartNum == 8)) {
 		int Rand = 1 + vw_iRandNum(4);
-		if (Rand < 1) Rand = 1;
-		if (Rand > 5) Rand = 5;
-		BasePartNum = BasePartNum*10 + Rand;
+		BasePartNum = BasePartNum * 10 + Rand;
 	}
 	InternalType = BasePartNum;
 

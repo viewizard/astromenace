@@ -25,25 +25,24 @@
 
 *************************************************************************************/
 
-#ifndef OBJECT3D_SPACEOBJECT_PLANET_PLANET_H
-#define OBJECT3D_SPACEOBJECT_PLANET_PLANET_H
+// TODO translate comments
 
-#include "../space_object.h"
+#include "space_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
 
-/*
- * All planets.
- */
-class cPlanet : public cSpaceObject
+//-----------------------------------------------------------------------------
+// Конструктор, инициализация всех переменных
+//-----------------------------------------------------------------------------
+cShipPart::cShipPart()
 {
-public:
-	explicit cPlanet(int PlanetNum);
-};
+	ObjectType = eObjectType::ShipPart;
+
+	// тут все делаем сами...
+	// т.к. это часть большого корабля
+}
 
 } // astromenace namespace
 } // viewizard namespace
-
-#endif // OBJECT3D_SPACEOBJECT_PLANET_PLANET_H

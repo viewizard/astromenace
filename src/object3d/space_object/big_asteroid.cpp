@@ -25,9 +25,11 @@
 
 *************************************************************************************/
 
-#include "big_asteroid.h"
-#include "../../../config/config.h"
-#include "../../../assets/texture.h"
+// TODO translate comments
+
+#include "space_object.h"
+#include "../../config/config.h"
+#include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -44,9 +46,7 @@ cBigAsteroid::cBigAsteroid(int AsteroidNum)
 	// задали первичный, нужно случайным образом найти
 	if (AsteroidNum == 1 || AsteroidNum == 2) {
 		int Rand = 1 + vw_iRandNum(4);
-		if (Rand < 1) Rand = 1;
-		if (Rand > 5) Rand = 5;
-		AsteroidNum = AsteroidNum*10 + Rand;
+		AsteroidNum = AsteroidNum * 10 + Rand;
 	}
 	InternalType = AsteroidNum;
 
@@ -71,8 +71,8 @@ cBigAsteroid::cBigAsteroid(int AsteroidNum)
 case9next:
 
 		//Speed = 25.0f;
-		RotationSpeed.x = 10.0f + 10.0f*vw_fRand0();
-		RotationSpeed.y = 2.0f + 20.0f*vw_fRand0();
+		RotationSpeed.x = 10.0f + 10.0f * vw_fRand0();
+		RotationSpeed.y = 2.0f + 20.0f * vw_fRand0();
 
 		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
@@ -99,8 +99,8 @@ case9next:
 case10next:
 
 		//Speed = 25.0f;
-		RotationSpeed.x = 10.0f + 10.0f*vw_fRand0();
-		RotationSpeed.y = 2.0f + 20.0f*vw_fRand0();
+		RotationSpeed.x = 10.0f + 10.0f * vw_fRand0();
+		RotationSpeed.y = 2.0f + 20.0f * vw_fRand0();
 
 		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;

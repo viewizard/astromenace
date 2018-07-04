@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #ifndef OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
 #define OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
 
@@ -35,9 +37,6 @@
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Класс cSpaceObject
-//-----------------------------------------------------------------------------
 class cSpaceObject : public cObject3D
 {
 public:
@@ -46,51 +45,73 @@ public:
 	virtual ~cSpaceObject();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time) override;
+	virtual bool Update(float Time) override;
 	// Установка положения объекта
-	virtual void	SetLocation(sVECTOR3D NewLocation) override;
+	virtual void SetLocation(sVECTOR3D NewLocation) override;
 	// Установка углов поворота объекта
-	virtual void	SetRotation(sVECTOR3D NewRotation) override;
+	virtual void SetRotation(sVECTOR3D NewRotation) override;
 
 	// скорость
-	float		Speed{0.0f};
-	sVECTOR3D	RotationSpeed{0.0f, 0.0f, 0.0f};
-	sVECTOR3D	Velocity{0.0f, 0.0f, 0.0f};
+	float Speed{0.0f};
+	sVECTOR3D RotationSpeed{0.0f, 0.0f, 0.0f};
+	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
 	// последнее положение камеры нужно для планет
-	sVECTOR3D	LastCameraPoint{0.0f, 0.0f, 0.0f};
+	sVECTOR3D LastCameraPoint{0.0f, 0.0f, 0.0f};
 
 	// эффекты
 	std::vector<sVECTOR3D> GraphicFXLocation{};
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
 	// чтобы возрвать часть корабля босса пришельцев через время
-	float		BossPartCountDown{-1.0f};
+	float BossPartCountDown{-1.0f};
 
 	// для собственного списка
-	cSpaceObject	*Next{nullptr};
-	cSpaceObject	*Prev{nullptr};
+	cSpaceObject *Next{nullptr};
+	cSpaceObject *Prev{nullptr};
+};
+
+// FIXME rename to small asteroid
+class cAsteroid : public cSpaceObject
+{
+public:
+	cAsteroid();
+};
+
+class cBigAsteroid : public cSpaceObject
+{
+public:
+	explicit cBigAsteroid(int AsteroidNum);
+};
+
+class cPlanet : public cSpaceObject
+{
+public:
+	explicit cPlanet(int PlanetNum);
+};
+
+// FIXME rename to space debris
+class cShipPart : public cSpaceObject
+{
+public:
+	cShipPart();
+};
+
+class cBasePart : public cSpaceObject
+{
+public:
+	explicit cBasePart(int BasePartNum);
 };
 
 
+// Проверяем все объекты, обновляем данные
+void UpdateAllSpaceObject(float Time);
+// Прорисовываем все объекты
+void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
+// Удаляем все объекты в списке
+void ReleaseAllSpaceObjects();
 // установка эффекта, если нужно
 void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType);
-
-
-//-----------------------------------------------------------------------------
-// Менеджер SpaceObject, дополнительный
-//-----------------------------------------------------------------------------
-
-// Включаем в список
-void	AttachSpaceObject(cSpaceObject* SpaceObject);
-// Исключаем из списка
-void	DetachSpaceObject(cSpaceObject* SpaceObject);
-// Проверяем все объекты, обновляем данные
-void	UpdateAllSpaceObject(float Time);
-// Прорисовываем все объекты
-void	DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
-// Удаляем все объекты в списке
-void	ReleaseAllSpaceObjects();
 
 } // astromenace namespace
 } // viewizard namespace

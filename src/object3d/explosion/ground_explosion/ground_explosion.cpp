@@ -27,7 +27,7 @@
 
 #include "ground_explosion.h"
 #include "../../../assets/audio.h"
-#include "../../../object3d/space_object/ship_part/ship_part.h"
+#include "../../../object3d/space_object/space_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

@@ -25,12 +25,180 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "space_object.h"
-#include "../../game.h"
+#include "../../assets/texture.h"
+#include "../../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+// Указатели на начальный и конечный объект в списке
+cSpaceObject *StartSpaceObject = nullptr;
+cSpaceObject *EndSpaceObject = nullptr;
+
+
+//-----------------------------------------------------------------------------
+// Включаем в список
+//-----------------------------------------------------------------------------
+static void AttachSpaceObject(cSpaceObject *SpaceObject)
+{
+	if (SpaceObject == nullptr)
+		return;
+
+	if (EndSpaceObject == nullptr) {
+		SpaceObject->Prev = nullptr;
+		SpaceObject->Next = nullptr;
+		StartSpaceObject = SpaceObject;
+		EndSpaceObject = SpaceObject;
+	} else {
+		SpaceObject->Prev = EndSpaceObject;
+		SpaceObject->Next = nullptr;
+		EndSpaceObject->Next = SpaceObject;
+		EndSpaceObject = SpaceObject;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Исключаем из списка
+//-----------------------------------------------------------------------------
+static void DetachSpaceObject(cSpaceObject *SpaceObject)
+{
+	if (SpaceObject == nullptr)
+		return;
+
+	if (StartSpaceObject == SpaceObject)
+		StartSpaceObject = SpaceObject->Next;
+	if (EndSpaceObject == SpaceObject)
+		EndSpaceObject = SpaceObject->Prev;
+
+
+	if (SpaceObject->Next != nullptr)
+		SpaceObject->Next->Prev = SpaceObject->Prev;
+	else if (SpaceObject->Prev != nullptr)
+		SpaceObject->Prev->Next = nullptr;
+
+	if (SpaceObject->Prev != nullptr)
+		SpaceObject->Prev->Next = SpaceObject->Next;
+	else if (SpaceObject->Next != nullptr)
+		SpaceObject->Next->Prev = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// Проверяем все объекты, обновляем данные
+//-----------------------------------------------------------------------------
+void UpdateAllSpaceObject(float Time)
+{
+	cSpaceObject *tmp = StartSpaceObject;
+	while (tmp != nullptr) {
+		cSpaceObject *tmp2 = tmp->Next;
+		// делаем обновление данных по объекту
+		if (!tmp->Update(Time))
+			delete tmp;
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Прорисовываем все объекты
+//-----------------------------------------------------------------------------
+void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap)
+{
+	cSpaceObject *tmp = StartSpaceObject;
+	while (tmp != nullptr) {
+		cSpaceObject *tmp2 = tmp->Next;
+
+		// планеты и астероиды рисуем до тайловой анимации в игре!!!
+		if ((tmp->ObjectType != eObjectType::Planet) &&
+		    !((tmp->ObjectType == eObjectType::BigAsteroid) &&
+		      ((tmp->InternalType > 10) && (tmp->InternalType < 20))))
+			tmp->Draw(VertexOnlyPass, ShadowMap);
+
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Удаляем все объекты в списке
+//-----------------------------------------------------------------------------
+void ReleaseAllSpaceObjects()
+{
+	cSpaceObject *tmp = StartSpaceObject;
+	while (tmp != nullptr) {
+		cSpaceObject *tmp2 = tmp->Next;
+		delete tmp;
+		tmp = tmp2;
+	}
+
+	StartSpaceObject = nullptr;
+	EndSpaceObject = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// Создание эффектов для космических объектов (двигатели для базы)
+//-----------------------------------------------------------------------------
+void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType)
+{
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+	ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+
+	switch(GFXType) {
+	// двигатели на базе пиратов
+	case 1:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.30f;
+		ParticleSystem->SizeEnd    = 0.60f;
+		ParticleSystem->Speed      = 10.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 5.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D(0.8f, 0.1f, 0.8f);
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
+		break;
+	case 2:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 180.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
+		break;
+
+	default:
+		std::cerr << __func__ << "(): " << "wrong GFXType.\n";
+		break;
+	}
+
+}
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -44,9 +212,6 @@ cSpaceObject::cSpaceObject()
 	// подключаем к своему списку
 	AttachSpaceObject(this);
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // Деструктор
@@ -65,15 +230,6 @@ cSpaceObject::~cSpaceObject()
 	DetachSpaceObject(this);
 }
 
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
@@ -91,9 +247,6 @@ void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 		}
 	}
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
@@ -122,14 +275,6 @@ void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
 	}
 }
 
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Обновление данных объектa
 //-----------------------------------------------------------------------------
@@ -137,7 +282,8 @@ bool cSpaceObject::Update(float Time)
 {
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
-	if (!cObject3D::Update(Time)) return false;
+	if (!cObject3D::Update(Time))
+		return false;
 
 	// если это часть корабля босса, взрываем через время
 	if (BossPartCountDown > -1.0f) {
@@ -148,7 +294,6 @@ bool cSpaceObject::Update(float Time)
 			return false;
 		}
 	}
-
 
 	// если астероиды
 	if ((ObjectType == eObjectType::Asteroids) ||
@@ -169,10 +314,6 @@ bool cSpaceObject::Update(float Time)
 		}
 	}
 
-
-
-
-
 	// если части корабля или техники, останавливаем
 	if (ObjectType == eObjectType::ShipPart) {
 		if (Speed > 0.0f) {
@@ -187,21 +328,18 @@ bool cSpaceObject::Update(float Time)
 		}
 
 		if (RotationSpeed.x != 0.0f) {
-			SetRotation(sVECTOR3D(-RotationSpeed.x*TimeDelta,0.0f,0.0f));
-			RotationSpeed.x -= (RotationSpeed.x/4.0f)*TimeDelta;
+			SetRotation(sVECTOR3D(-RotationSpeed.x * TimeDelta, 0.0f, 0.0f));
+			RotationSpeed.x -= (RotationSpeed.x / 4.0f) * TimeDelta;
 		}
 		if (RotationSpeed.y != 0.0f) {
-			SetRotation(sVECTOR3D(0.0f,-RotationSpeed.y*TimeDelta,0.0f));
-			RotationSpeed.y -= (RotationSpeed.y/4.0f)*TimeDelta;
+			SetRotation(sVECTOR3D(0.0f, -RotationSpeed.y * TimeDelta, 0.0f));
+			RotationSpeed.y -= (RotationSpeed.y / 4.0f) * TimeDelta;
 		}
 		if (RotationSpeed.z != 0.0f) {
-			SetRotation(sVECTOR3D(0.0f,0.0f,-RotationSpeed.z*TimeDelta));
-			RotationSpeed.z -= (RotationSpeed.z/4.0f)*TimeDelta;
+			SetRotation(sVECTOR3D(0.0f, 0.0f, -RotationSpeed.z * TimeDelta));
+			RotationSpeed.z -= (RotationSpeed.z / 4.0f) * TimeDelta;
 		}
 	}
-
-
-
 
 	// если планеты, должны учесть положение камеры т.е. ее смещение
 	if ((ObjectType == eObjectType::Planet) ||
@@ -209,9 +347,9 @@ bool cSpaceObject::Update(float Time)
 		sVECTOR3D Temp = GamePoint - LastCameraPoint;
 
 		// у планет особое движение... они немного могут двигаться на камеру...
-		sVECTOR3D OrientTTT = Temp^(-1);
+		sVECTOR3D OrientTTT = Temp ^ (-1);
 		OrientTTT.Normalize();
-		SetLocation(Location + (OrientTTT^(Speed*TimeDelta)) + Temp);
+		SetLocation(Location + (OrientTTT ^ (Speed * TimeDelta)) + Temp);
 		LastCameraPoint = GamePoint;
 
 		// вращения планет и их частей
@@ -262,19 +400,14 @@ bool cSpaceObject::Update(float Time)
 					tmpModel3DBlock.Rotation.y += 360.0f;
 			}
 		}
-
 	} else {
-		SetLocation(Location + (Orientation^(Speed*TimeDelta)));
+		SetLocation(Location + (Orientation ^ (Speed * TimeDelta)));
 	}
-
-
 
 	if (Velocity.x + Velocity.y + Velocity.z != 0.0f) {
-		SetLocation(Location + (Velocity^TimeDelta));
-		Velocity -= Velocity^(0.5f*TimeDelta);
+		SetLocation(Location + (Velocity ^ TimeDelta));
+		Velocity -= Velocity ^ (0.5f * TimeDelta);
 	}
-
-
 
 	// объект в порядке - удалять не нужно
 	return true;
