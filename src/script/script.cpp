@@ -641,25 +641,30 @@ static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXM
 /*
  * Load GroundObject related script data.
  */
-static void LoadGroundObjectScript(cGroundObject &GroundObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
+static void LoadGroundObjectScript(std::weak_ptr<cGroundObject> &GroundObject,
+				   const std::unique_ptr<cXMLDocument> &xmlDoc,
 				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
 				   const std::shared_ptr<cXMLDocument> &xmlAI)
 {
-	if (ShowLineNumber)
-		SetDebugInformation(GroundObject, xmlEntry, ShowLineNumber);
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", GroundObject.NeedSpeed))
-		GroundObject.Speed = GroundObject.NeedSpeed;
+	auto sharedGroundObject = GroundObject.lock();
+	if (!sharedGroundObject)
+		return;
 
-	SetDeleteAfterLeaveScene(GroundObject, xmlEntry, xmlDoc);
-	SetAIMode(GroundObject.TimeSheetList, xmlEntry, xmlDoc, xmlAI);
-	SetRotation(GroundObject, xmlEntry, xmlDoc);
-	SetLocation(GroundObject, xmlEntry, xmlDoc, TimeOpLag);
+	if (ShowLineNumber)
+		SetDebugInformation(*sharedGroundObject, xmlEntry, ShowLineNumber);
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", sharedGroundObject->NeedSpeed))
+		sharedGroundObject->Speed = sharedGroundObject->NeedSpeed;
+
+	SetDeleteAfterLeaveScene(*sharedGroundObject, xmlEntry, xmlDoc);
+	SetAIMode(sharedGroundObject->TimeSheetList, xmlEntry, xmlDoc, xmlAI);
+	SetRotation(*sharedGroundObject, xmlEntry, xmlDoc);
+	SetLocation(*sharedGroundObject, xmlEntry, xmlDoc, TimeOpLag);
 
 	for (const auto &tmpXMLEntry : xmlEntry.ChildrenList) {
 		if (tmpXMLEntry.Name == "TimeSheet") {
-			GroundObject.TimeSheetList.emplace_back();
+			sharedGroundObject->TimeSheetList.emplace_back();
 			LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-					  GroundObject.TimeSheetList.back(), xmlAI);
+					  sharedGroundObject->TimeSheetList.back(), xmlAI);
 		}
 	}
 }
@@ -753,29 +758,29 @@ void cMissionScript::UpdateTimeLine()
 
 		case constexpr_hash_djb2a("CreateMBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cGroundObject *GroundObject = CreateMilitaryBuilding(tmpType);
-				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cGroundObject> GroundObject = CreateMilitaryBuilding(tmpType);
+				LoadGroundObjectScript(GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cGroundObject *GroundObject = CreateCivilianBuilding(tmpType);
-				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cGroundObject> GroundObject = CreateCivilianBuilding(tmpType);
+				LoadGroundObjectScript(GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateTracked"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cGroundObject *GroundObject = CreateTracked(tmpType);
-				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cGroundObject> GroundObject = CreateTracked(tmpType);
+				LoadGroundObjectScript(GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateWheeled"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cGroundObject *GroundObject = CreateWheeled(tmpType);
-				LoadGroundObjectScript(*GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cGroundObject> GroundObject = CreateWheeled(tmpType);
+				LoadGroundObjectScript(GroundObject, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 

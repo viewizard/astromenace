@@ -164,7 +164,7 @@ public:
 };
 
 class cCivilianBuilding final : public cGroundObject {
-	friend cGroundObject *CreateCivilianBuilding(int BuildingNum);
+	friend std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateCivilianBuilding()
 	// allowed for cCivilianBuilding creation and release setup (deleter must be provided).
@@ -172,7 +172,7 @@ private:
 };
 
 class cMilitaryBuilding final : public cGroundObject {
-	friend cGroundObject *CreateMilitaryBuilding(int MilitaryBuildingNum);
+	friend std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateMilitaryBuilding()
 	// allowed for cMilitaryBuilding creation and release setup (deleter must be provided).
@@ -180,7 +180,7 @@ private:
 };
 
 class cTracked final : public cGroundObject {
-	friend cGroundObject *CreateTracked(int TrackedNum);
+	friend std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateTracked()
 	// allowed for cTracked creation and release setup (deleter must be provided).
@@ -188,7 +188,7 @@ private:
 };
 
 class cWheeled final : public cGroundObject {
-	friend cGroundObject *CreateWheeled(int WheeledNum);
+	friend std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateWheeled()
 	// allowed for cWheeled creation and release setup (deleter must be provided).
@@ -197,23 +197,22 @@ private:
 
 
 // Create cCivilianBuilding object.
-cGroundObject *CreateCivilianBuilding(int BuildingNum);
+std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum);
 // Create cMilitaryBuilding object.
-cGroundObject *CreateMilitaryBuilding(int MilitaryBuildingNum);
+std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum);
 // Create cTracked object.
-cGroundObject *CreateTracked(int TrackedNum);
+std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum);
 // Create cWheeled object.
-cGroundObject *CreateWheeled(int WheeledNum);
+std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum);
 // Update and remove (erase) dead objects.
 void UpdateAllGroundObjects(float Time);
 // Draw all ground objects.
 void DrawAllGroundObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular ground object.
-void ReleaseGroundObject(cGroundObject *Object);
+void ReleaseGroundObject(std::weak_ptr<cGroundObject> &Object);
 // Release all ground objects.
 void ReleaseAllGroundObjects();
 // Managed cycle for each ground object.
-// Note, don't release "Object" in cycle directly by ReleaseGroundObject(), use "Command" + "return" instead.
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
 
 } // astromenace namespace

@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// FIXME move to std::shared_ptr/std::weak_ptr usage in code
-
 // TODO translate comments
 
 #include "ground_object.h"
@@ -48,41 +46,41 @@ std::forward_list<std::shared_ptr<cGroundObject>> GroundObjectList{};
 /*
  * Create cCivilianBuilding object.
  */
-cGroundObject *CreateCivilianBuilding(int BuildingNum)
+std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum)
 {
 	GroundObjectList.emplace_front(std::shared_ptr<cCivilianBuilding>{new cCivilianBuilding{BuildingNum},
 									  [](cCivilianBuilding *p) {delete p;}});
-	return GroundObjectList.front().get();
+	return GroundObjectList.front();
 }
 
 /*
  * Create cMilitaryBuilding object.
  */
-cGroundObject *CreateMilitaryBuilding(int MilitaryBuildingNum)
+std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum)
 {
 	GroundObjectList.emplace_front(std::shared_ptr<cMilitaryBuilding>{new cMilitaryBuilding{MilitaryBuildingNum},
 									  [](cMilitaryBuilding *p) {delete p;}});
-	return GroundObjectList.front().get();
+	return GroundObjectList.front();
 }
 
 /*
  * Create cTracked object.
  */
-cGroundObject *CreateTracked(int TrackedNum)
+std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum)
 {
 	GroundObjectList.emplace_front(std::shared_ptr<cTracked>{new cTracked{TrackedNum},
 								 [](cTracked *p) {delete p;}});
-	return GroundObjectList.front().get();
+	return GroundObjectList.front();
 }
 
 /*
  * Create cWheeled object.
  */
-cGroundObject *CreateWheeled(int WheeledNum)
+std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum)
 {
 	GroundObjectList.emplace_front(std::shared_ptr<cWheeled>{new cWheeled{WheeledNum},
 								 [](cWheeled *p) {delete p;}});
-	return GroundObjectList.front().get();
+	return GroundObjectList.front();
 }
 
 /*
@@ -114,11 +112,15 @@ void DrawAllGroundObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 /*
  * Release particular ground object.
  */
-void ReleaseGroundObject(cGroundObject *Object)
+void ReleaseGroundObject(std::weak_ptr<cGroundObject> &Object)
 {
+	auto sharedObject = Object.lock();
+	if (!sharedObject)
+		return;
+
 	auto prev_iter = GroundObjectList.before_begin();
 	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
-		if (iter->get() == Object)
+		if (iter->get() == sharedObject.get())
 			iter = GroundObjectList.erase_after(prev_iter);
 		else {
 			prev_iter = iter;
@@ -137,7 +139,6 @@ void ReleaseAllGroundObjects()
 
 /*
  * Managed cycle for each ground object.
- * Note, don't release "Object" in cycle directly by ReleaseGroundObject(), use "Command" + "return" instead.
  */
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function)
 {
