@@ -50,10 +50,10 @@ cProjectile *InfoMine = nullptr;
 cAlienSpaceFighter *InfoAlien = nullptr;
 cAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
 cPirateShip *InfoPirateShip = nullptr;
-cCivilianBuilding *InfoCivilianBuilding = nullptr;
-cMilitaryBuilding *InfoMilitaryBuilding = nullptr;
-cWheeled *InfoWheeled = nullptr;
-cTracked *InfoTracked = nullptr;
+cGroundObject *InfoCivilianBuilding{nullptr};
+cGroundObject *InfoMilitaryBuilding{nullptr};
+cGroundObject *InfoWheeled{nullptr};
+cGroundObject *InfoTracked{nullptr};
 
 
 int GetWeaponHullDamage(int Num);

@@ -50,11 +50,6 @@ enum class eGroundCycle {
 };
 
 class cGroundObject : public cObject3D {
-	friend void UpdateAllGroundObjects(float Time);
-	friend void ReleaseGroundObject(cGroundObject *Object);
-	friend void ReleaseAllGroundObjects();
-	friend void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
-
 protected:
 	// don't allow object of this class creation
 	cGroundObject();
@@ -166,66 +161,59 @@ public:
 	float *CurentDeviationSum{nullptr};
 	// ассоциированный объект (если нужно)
 	int *DeviationObjNum{nullptr};
-
-	// для собственного списка
-	cGroundObject *Next{nullptr};
-	cGroundObject *Prev{nullptr};
 };
 
 class cCivilianBuilding final : public cGroundObject {
-	friend cCivilianBuilding *CreateCivilianBuilding(int BuildingNum);
-	friend void ReleaseGroundObject(cGroundObject *Object);
+	friend cGroundObject *CreateCivilianBuilding(int BuildingNum);
 private:
-	// don't allow direct new/delete usage in code
+	// Don't allow direct new/delete usage in code, only CreateCivilianBuilding()
+	// allowed for cCivilianBuilding creation and release setup (deleter must be provided).
 	explicit cCivilianBuilding(int BuildingNum);
-	virtual ~cCivilianBuilding() = default;
 };
 
 class cMilitaryBuilding final : public cGroundObject {
-	friend cMilitaryBuilding *CreateMilitaryBuilding(int MilitaryBuildingNum);
-	friend void ReleaseGroundObject(cGroundObject *Object);
+	friend cGroundObject *CreateMilitaryBuilding(int MilitaryBuildingNum);
 private:
-	// don't allow direct new/delete usage in code
+	// Don't allow direct new/delete usage in code, only CreateMilitaryBuilding()
+	// allowed for cMilitaryBuilding creation and release setup (deleter must be provided).
 	explicit cMilitaryBuilding(int MilitaryBuildingNum);
-	virtual ~cMilitaryBuilding() = default;
 };
 
 class cTracked final : public cGroundObject {
-	friend cTracked *CreateTracked(int TrackedNum);
-	friend void ReleaseGroundObject(cGroundObject *Object);
+	friend cGroundObject *CreateTracked(int TrackedNum);
 private:
-	// don't allow direct new/delete usage in code
+	// Don't allow direct new/delete usage in code, only CreateTracked()
+	// allowed for cTracked creation and release setup (deleter must be provided).
 	explicit cTracked(int TrackedNum);
-	virtual ~cTracked() = default;
 };
 
 class cWheeled final : public cGroundObject {
-	friend cWheeled *CreateWheeled(int WheeledNum);
-	friend void ReleaseGroundObject(cGroundObject *Object);
+	friend cGroundObject *CreateWheeled(int WheeledNum);
 private:
-	// don't allow direct new/delete usage in code
+	// Don't allow direct new/delete usage in code, only CreateWheeled()
+	// allowed for cWheeled creation and release setup (deleter must be provided).
 	explicit cWheeled(int WheeledNum);
-	virtual ~cWheeled() = default;
 };
 
 
 // Create cCivilianBuilding object.
-cCivilianBuilding *CreateCivilianBuilding(int BuildingNum);
+cGroundObject *CreateCivilianBuilding(int BuildingNum);
 // Create cMilitaryBuilding object.
-cMilitaryBuilding *CreateMilitaryBuilding(int MilitaryBuildingNum);
+cGroundObject *CreateMilitaryBuilding(int MilitaryBuildingNum);
 // Create cTracked object.
-cTracked *CreateTracked(int TrackedNum);
+cGroundObject *CreateTracked(int TrackedNum);
 // Create cWheeled object.
-cWheeled *CreateWheeled(int WheeledNum);
-// Проверяем все объекты, обновляем данные
+cGroundObject *CreateWheeled(int WheeledNum);
+// Update and remove (erase) dead objects.
 void UpdateAllGroundObjects(float Time);
-// Прорисовываем все объекты
+// Draw all ground objects.
 void DrawAllGroundObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular ground object.
 void ReleaseGroundObject(cGroundObject *Object);
-// Удаляем все объекты в списке
+// Release all ground objects.
 void ReleaseAllGroundObjects();
 // Managed cycle for each ground object.
+// Note, don't release "Object" in cycle directly by ReleaseGroundObject(), use "Command" + "return" instead.
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
 
 } // astromenace namespace

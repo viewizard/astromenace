@@ -25,6 +25,10 @@
 
 *************************************************************************************/
 
+// FIXME move to std::shared_ptr/std::weak_ptr usage in code
+
+// TODO translate comments
+
 #include "ground_object.h"
 #include "../../script/script.h"
 #include "../weapon/weapon.h"
@@ -35,117 +39,75 @@ namespace astromenace {
 
 namespace {
 
-// Указатели на начальный и конечный объект в списке
-cGroundObject *StartGroundObject = nullptr;
-cGroundObject *EndGroundObject = nullptr;
+// all ground object list
+std::forward_list<std::shared_ptr<cGroundObject>> GroundObjectList{};
 
 } // unnamed namespace
 
 
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-static void AttachGroundObject(cGroundObject* GroundObject)
-{
-	if (GroundObject == nullptr)
-		return;
-
-	// первый в списке...
-	if (EndGroundObject == nullptr) {
-		GroundObject->Prev = nullptr;
-		GroundObject->Next = nullptr;
-		StartGroundObject = GroundObject;
-		EndGroundObject = GroundObject;
-	} else { // продолжаем заполнение...
-		GroundObject->Prev = EndGroundObject;
-		GroundObject->Next = nullptr;
-		EndGroundObject->Next = GroundObject;
-		EndGroundObject = GroundObject;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-static void DetachGroundObject(cGroundObject* GroundObject)
-{
-	if (GroundObject == nullptr) return;
-
-	// переустанавливаем указатели...
-	if (StartGroundObject == GroundObject)
-		StartGroundObject = GroundObject->Next;
-	if (EndGroundObject == GroundObject)
-		EndGroundObject = GroundObject->Prev;
-
-	if (GroundObject->Next != nullptr)
-		GroundObject->Next->Prev = GroundObject->Prev;
-	else if (GroundObject->Prev != nullptr)
-		GroundObject->Prev->Next = nullptr;
-
-	if (GroundObject->Prev != nullptr)
-		GroundObject->Prev->Next = GroundObject->Next;
-	else if (GroundObject->Next != nullptr)
-		GroundObject->Next->Prev = nullptr;
-}
-
 /*
  * Create cCivilianBuilding object.
  */
-cCivilianBuilding *CreateCivilianBuilding(int BuildingNum)
+cGroundObject *CreateCivilianBuilding(int BuildingNum)
 {
-	return new cCivilianBuilding(BuildingNum);
+	GroundObjectList.emplace_front(std::shared_ptr<cCivilianBuilding>{new cCivilianBuilding{BuildingNum},
+									  [](cCivilianBuilding *p) {delete p;}});
+	return GroundObjectList.front().get();
 }
 
 /*
  * Create cMilitaryBuilding object.
  */
-cMilitaryBuilding *CreateMilitaryBuilding(int MilitaryBuildingNum)
+cGroundObject *CreateMilitaryBuilding(int MilitaryBuildingNum)
 {
-	return new cMilitaryBuilding(MilitaryBuildingNum);
+	GroundObjectList.emplace_front(std::shared_ptr<cMilitaryBuilding>{new cMilitaryBuilding{MilitaryBuildingNum},
+									  [](cMilitaryBuilding *p) {delete p;}});
+	return GroundObjectList.front().get();
 }
 
 /*
  * Create cTracked object.
  */
-cTracked *CreateTracked(int TrackedNum)
+cGroundObject *CreateTracked(int TrackedNum)
 {
-	return new cTracked(TrackedNum);
+	GroundObjectList.emplace_front(std::shared_ptr<cTracked>{new cTracked{TrackedNum},
+								 [](cTracked *p) {delete p;}});
+	return GroundObjectList.front().get();
 }
 
 /*
  * Create cWheeled object.
  */
-cWheeled *CreateWheeled(int WheeledNum)
+cGroundObject *CreateWheeled(int WheeledNum)
 {
-	return new cWheeled(WheeledNum);
+	GroundObjectList.emplace_front(std::shared_ptr<cWheeled>{new cWheeled{WheeledNum},
+								 [](cWheeled *p) {delete p;}});
+	return GroundObjectList.front().get();
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем все объекты, обновляем данные
-//-----------------------------------------------------------------------------
+/*
+ * Update and remove (erase) dead objects.
+ */
 void UpdateAllGroundObjects(float Time)
 {
-	cGroundObject *tmp = StartGroundObject;
-	while (tmp != nullptr) {
-		cGroundObject *tmp2 = tmp->Next;
-		// делаем обновление данных по объекту
-		if (!tmp->Update(Time))
-			// если его нужно уничтожить - делаем это
-			delete tmp;
-		tmp = tmp2;
+	auto prev_iter = GroundObjectList.before_begin();
+	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
+		if (!iter->get()->Update(Time))
+			iter = GroundObjectList.erase_after(prev_iter);
+		else {
+			prev_iter = iter;
+			++iter;
+		}
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовываем все объекты
-//-----------------------------------------------------------------------------
+/*
+ * Draw all ground objects.
+ */
 void DrawAllGroundObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 {
-	cGroundObject *tmp = StartGroundObject;
-	while (tmp != nullptr) {
-		cGroundObject *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass, ShadowMap);
-		tmp = tmp2;
+	for (auto &tmpObject : GroundObjectList) {
+		tmpObject.get()->Draw(VertexOnlyPass, ShadowMap);
 	}
 }
 
@@ -154,54 +116,50 @@ void DrawAllGroundObjects(bool VertexOnlyPass, unsigned int ShadowMap)
  */
 void ReleaseGroundObject(cGroundObject *Object)
 {
-	cGroundObject *tmp = StartGroundObject;
-	while (tmp) {
-		cGroundObject *tmp2 = tmp->Next;
-		if (tmp == Object)
-			delete tmp;
-		tmp = tmp2;
+	auto prev_iter = GroundObjectList.before_begin();
+	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
+		if (iter->get() == Object)
+			iter = GroundObjectList.erase_after(prev_iter);
+		else {
+			prev_iter = iter;
+			++iter;
+		}
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Удаляем все объекты в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all ground objects.
+ */
 void ReleaseAllGroundObjects()
 {
-	cGroundObject *tmp = StartGroundObject;
-	while (tmp != nullptr) {
-		cGroundObject *tmp2 = tmp->Next;
-		delete tmp;
-		tmp = tmp2;
-	}
-
-	StartGroundObject = nullptr;
-	EndGroundObject = nullptr;
+	GroundObjectList.clear();
 }
 
 /*
  * Managed cycle for each ground object.
+ * Note, don't release "Object" in cycle directly by ReleaseGroundObject(), use "Command" + "return" instead.
  */
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function)
 {
-	cGroundObject *tmpGround = StartGroundObject;
-	while (tmpGround) {
-		cGroundObject *tmpGroundNext = tmpGround->Next;
+	auto prev_iter = GroundObjectList.before_begin();
+	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
 		eGroundCycle Command{eGroundCycle::Continue};
-		function(*tmpGround, Command);
+		function(*iter->get(), Command);
+
 		switch (Command) {
 		case eGroundCycle::Continue:
+			prev_iter = iter;
+			++iter;
 			break;
 		case eGroundCycle::Break:
 			return;
 		case eGroundCycle::DeleteObjectAndContinue:
-			delete tmpGround;
+			iter = GroundObjectList.erase_after(prev_iter);
 			break;
 		case eGroundCycle::DeleteObjectAndBreak:
-			delete tmpGround;
+			GroundObjectList.erase_after(prev_iter);
 			return;
 		}
-		tmpGround = tmpGroundNext;
 	}
 }
 
@@ -211,9 +169,6 @@ void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle
 cGroundObject::cGroundObject()
 {
 	ObjectStatus = eObjectStatus::Enemy;
-
-	// подключаем к своему списку
-	AttachGroundObject(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -278,8 +233,6 @@ cGroundObject::~cGroundObject()
 		if (DeviationObjNum != nullptr)
 			delete [] DeviationObjNum;
 	}
-
-	DetachGroundObject(this);
 }
 
 //-----------------------------------------------------------------------------
