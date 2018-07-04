@@ -41,6 +41,8 @@ struct sWheeledData {
 	std::string TextureFileName;
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWheeledData> PresetWheeledData{
 	{120,	4,	50.0f,	"models/wheeled/jeep-01.vw3d", "models/gr-02.vw2d"},
 	{70,	2,	50.0f,	"models/wheeled/jeep-02.vw3d", "models/gr-02.vw2d"},
@@ -51,6 +53,7 @@ const std::vector<sWheeledData> PresetWheeledData{
 	{200,	2,	30.0f,	"models/wheeled/apc-04.vw3d", "models/gr-01.vw2d"},
 	{400,	2,	34.0f,	"models/wheeled/r-launcher-01.vw3d", "models/gr-02.vw2d"}
 };
+#pragma GCC diagnostic pop
 
 
 //-----------------------------------------------------------------------------

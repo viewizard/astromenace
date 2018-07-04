@@ -40,6 +40,8 @@ struct sMilitaryBuildingData {
 	std::string TextureFileName;
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
 const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData{
 	{80,	2,	"models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
 	{120,	1,	"models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
@@ -49,6 +51,7 @@ const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData{
 	{50,	1,	"models/militarybuilding/artiler-gun-01.vw3d", "models/gr-03.vw2d"},
 	{200,	1,	"models/militarybuilding/artiler-gun-02.vw3d", "models/gr-01.vw2d"}
 };
+#pragma GCC diagnostic pop
 
 
 //-----------------------------------------------------------------------------
