@@ -89,7 +89,7 @@ bool NeedCheckCollision(const cObject3D &Object3D)
 	case eObjectType::SmallAsteroid:
 		return true;
 
-	case eObjectType::ShipPart:
+	case eObjectType::SpaceDebris:
 		return true;
 
 	case eObjectType::ShipWeapon:
@@ -1147,7 +1147,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 		if (NeedCheckCollision(*tmpS) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player))) ||
 		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy))) &&
-		    (tmpS->ObjectType != eObjectType::ShipPart)) {
+		    (tmpS->ObjectType != eObjectType::SpaceDebris)) {
 					// проверяем, спереди или сзади стоит противник
 			float tmp1 = A2 * tmpS->Location.x  + B2 * tmpS->Location.y  + C2 * tmpS->Location.z + D2;
 			if (tmp1 > 0.0f) {

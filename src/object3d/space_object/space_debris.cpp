@@ -36,9 +36,9 @@ namespace astromenace {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cShipPart::cShipPart()
+cSpaceDebris::cSpaceDebris()
 {
-	ObjectType = eObjectType::ShipPart;
+	ObjectType = eObjectType::SpaceDebris;
 
 	// тут все делаем сами...
 	// т.к. это часть большого корабля

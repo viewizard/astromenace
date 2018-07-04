@@ -315,7 +315,7 @@ bool cSpaceObject::Update(float Time)
 	}
 
 	// если части корабля или техники, останавливаем
-	if (ObjectType == eObjectType::ShipPart) {
+	if (ObjectType == eObjectType::SpaceDebris) {
 		if (Speed > 0.0f) {
 			Speed -= TimeDelta;
 			if (Speed < 0.0f)

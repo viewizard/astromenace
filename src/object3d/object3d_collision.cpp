@@ -348,7 +348,7 @@ void AddPlayerBonus(const cObject3D &Object, eObjectStatus KilledByObjectStatus)
 		switch (Object.ObjectType) {
 		case eObjectType::none:
 		case eObjectType::EarthFighter:
-		case eObjectType::ShipPart:
+		case eObjectType::SpaceDebris:
 		case eObjectType::ShipWeapon:
 		case eObjectType::Explosion:
 		case eObjectType::CivilianBuilding:
@@ -619,7 +619,7 @@ void DetectCollisionAllObject3D()
 					case eObjectType::SmallAsteroid:
 						new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 						break;
-					case eObjectType::ShipPart:
+					case eObjectType::SpaceDebris:
 						new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
 						break;
 					default:
@@ -973,7 +973,7 @@ exitN1:
 					case eObjectType::SmallAsteroid:
 						new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
 						break;
-					case eObjectType::ShipPart:
+					case eObjectType::SpaceDebris:
 						new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1);
 						break;
 					default:
@@ -1035,7 +1035,7 @@ exitN1:
 						case eObjectType::SmallAsteroid:
 							new cSpaceExplosion(tmpS, 1, IntercPoint, tmpS->Speed, -1);
 							break;
-						case eObjectType::ShipPart:
+						case eObjectType::SpaceDebris:
 							new cSpaceExplosion(tmpS, 32, IntercPoint, tmpS->Speed, -1);
 							break;
 						default:
@@ -1075,19 +1075,19 @@ exitN1:
 				// если попали в часть базы - просто летим в другую сторону,
 				// если это обломок корабля или модели
 				// и если большой астероид
-				if (((tmpS->ObjectType == eObjectType::BasePart) && (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart)) ||
-				    ((tmpS->ObjectType == eObjectType::ShipPart) && (tmpCollisionSpace1->ObjectType == eObjectType::BasePart))) {
-					if (tmpS->ObjectType == eObjectType::ShipPart)
+				if (((tmpS->ObjectType == eObjectType::BasePart) && (tmpCollisionSpace1->ObjectType == eObjectType::SpaceDebris)) ||
+				    ((tmpS->ObjectType == eObjectType::SpaceDebris) && (tmpCollisionSpace1->ObjectType == eObjectType::BasePart))) {
+					if (tmpS->ObjectType == eObjectType::SpaceDebris)
 						vw_RotatePoint(tmpS->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
-					if (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart)
+					if (tmpCollisionSpace1->ObjectType == eObjectType::SpaceDebris)
 						vw_RotatePoint(tmpCollisionSpace1->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
 
 					goto exitN4;
 				}
 
 				// смотрим, чтобы это были не только обломки с обломками (иначе не красиво взрываются корабли)
-				if ((tmpCollisionSpace1->ObjectType != eObjectType::ShipPart) ||
-				    (tmpS->ObjectType != eObjectType::ShipPart)) {
+				if ((tmpCollisionSpace1->ObjectType != eObjectType::SpaceDebris) ||
+				    (tmpS->ObjectType != eObjectType::SpaceDebris)) {
 
 					int ObjectPieceNum;
 
@@ -1106,12 +1106,12 @@ exitN1:
 
 					if ((NeedCheckCollision(*tmpCollisionSpace1)) &&
 					    ((tmpCollisionSpace1->ObjectType == eObjectType::SmallAsteroid) ||
-					     (tmpCollisionSpace1->ObjectType == eObjectType::ShipPart))) {
+					     (tmpCollisionSpace1->ObjectType == eObjectType::SpaceDebris))) {
 						switch (tmpCollisionSpace1->ObjectType) {
 						case eObjectType::SmallAsteroid:
 							new cSpaceExplosion(tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 							break;
-						case eObjectType::ShipPart:
+						case eObjectType::SpaceDebris:
 							new cSpaceExplosion(tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
 							break;
 						default:
@@ -1125,12 +1125,12 @@ exitN1:
 					}
 
 					if (NeedCheckCollision(*tmpS) &&
-					    ((tmpS->ObjectType == eObjectType::SmallAsteroid) || (tmpS->ObjectType == eObjectType::ShipPart))) {
+					    ((tmpS->ObjectType == eObjectType::SmallAsteroid) || (tmpS->ObjectType == eObjectType::SpaceDebris))) {
 						switch (tmpS->ObjectType) {
 						case eObjectType::SmallAsteroid:
 							new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 							break;
-						case eObjectType::ShipPart:
+						case eObjectType::SpaceDebris:
 							new cSpaceExplosion(tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
 							break;
 						default:
@@ -1323,7 +1323,7 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		    ((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy)) ||
 		     ((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player)))) &&
 		    (&DontTouchObject != tmpS) && CheckSphereSphereDestroyDetection(*tmpS, Point, Radius, Distance2)) {
-			if ((tmpS->ObjectType == eObjectType::ShipPart) &&
+			if ((tmpS->ObjectType == eObjectType::SpaceDebris) &&
 			    (vw_fRand() > 0.4f))
 				goto NexttmpS;
 

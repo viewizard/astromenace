@@ -89,11 +89,10 @@ public:
 	explicit cPlanet(int PlanetNum);
 };
 
-// FIXME rename to space debris
-class cShipPart : public cSpaceObject
+class cSpaceDebris : public cSpaceObject
 {
 public:
-	cShipPart();
+	cSpaceDebris();
 };
 
 class cBasePart : public cSpaceObject

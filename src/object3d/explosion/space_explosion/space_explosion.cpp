@@ -425,34 +425,33 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		// строим обратную матрицу
 		float InvRotationMat[9];
 		// сохраняем старые значения + пересчет новых
-		memcpy(InvRotationMat, Object->CurrentRotationMat, 9*sizeof(Object->CurrentRotationMat[0]));
+		memcpy(InvRotationMat, Object->CurrentRotationMat, 9 * sizeof(Object->CurrentRotationMat[0]));
 		// делаем инверсную старую матрицу
 		vw_Matrix33InverseRotate(InvRotationMat);
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
 		for (unsigned int i = 0; i < Object->Model3DBlocks.size(); i++) {
-			cShipPart *ShipPart;
-			ShipPart = new cShipPart;
-			ShipPart->ObjectType = eObjectType::ShipPart;
-			ShipPart->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
+			cSpaceDebris *SpaceDebris = new cSpaceDebris;
+			SpaceDebris->ObjectType = eObjectType::SpaceDebris;
+			SpaceDebris->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 
 			// только одна текстура (!) 2-ю для подстветки не тянем
-			ShipPart->Texture.resize(1, 0);
-			ShipPart->Texture[0] = Object->Texture[i];
+			SpaceDebris->Texture.resize(1, 0);
+			SpaceDebris->Texture[0] = Object->Texture[i];
 			if ((Object->NormalMap.size() > (unsigned)i) && Object->NormalMap[i]) {
-				ShipPart->NormalMap.resize(1, 0);
-				ShipPart->NormalMap[0] = Object->NormalMap[i];
+				SpaceDebris->NormalMap.resize(1, 0);
+				SpaceDebris->NormalMap[0] = Object->NormalMap[i];
 			}
 
 			// берем то, что нужно
-			ShipPart->Model3DBlocks.resize(1);
+			SpaceDebris->Model3DBlocks.resize(1);
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-			ShipPart->Model3DBlocks[0] = Object->Model3DBlocks[i];
+			SpaceDebris->Model3DBlocks[0] = Object->Model3DBlocks[i];
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
 			if (Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
 				Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
-				ShipPart->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
+				SpaceDebris->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
 			}
 
 			// находим точку локального положения объекта в моделе
@@ -461,24 +460,24 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			LocalLocation = Object->HitBB[i].Location - LocalLocation;
 			vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 			// и меняем внутрее положение
-			ShipPart->Model3DBlocks[0].Location = LocalLocation^(-1.0f);
+			SpaceDebris->Model3DBlocks[0].Location = LocalLocation^(-1.0f);
 
 			// находим все данные по геометрии
-			ShipPart->MetadataInitialization();
+			SpaceDebris->MetadataInitialization();
 
 			// установка текущего положения и поворота
-			ShipPart->SetLocation(Object->Location + Object->HitBB[i].Location);
-			ShipPart->SetRotation(Object->Rotation);
+			SpaceDebris->SetLocation(Object->Location + Object->HitBB[i].Location);
+			SpaceDebris->SetRotation(Object->Rotation);
 
 
-			ShipPart->Speed = Speed - 2 * vw_fRand();
+			SpaceDebris->Speed = Speed - 2 * vw_fRand();
 
-			ShipPart->RotationSpeed.x = 2.0f*vw_fRand0();
-			ShipPart->RotationSpeed.y = 2.0f*vw_fRand0();
+			SpaceDebris->RotationSpeed.x = 2.0f * vw_fRand0();
+			SpaceDebris->RotationSpeed.y = 2.0f * vw_fRand0();
 
-			ShipPart->StrengthStart = ShipPart->Strength = 1.0f;
-			ShipPart->ObjectStatus = Object->ObjectStatus;
-			ShipPart->ShowStrength = false;
+			SpaceDebris->StrengthStart = SpaceDebris->Strength = 1.0f;
+			SpaceDebris->ObjectStatus = Object->ObjectStatus;
+			SpaceDebris->ShowStrength = false;
 
 
 			// взрываем тот объект, в который попали
@@ -489,14 +488,14 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 				break;
 			case 33: // взрыв боссов пришельцев
 				// взорвем все в течении 3-х секунд
-				ShipPart->BossPartCountDown = 3.0f * vw_fRand();
+				SpaceDebris->BossPartCountDown = 3.0f * vw_fRand();
 				NeedExplosionType = 34;
 				break;
 			}
 			if (ObjectPieceNum != -1)
 				if (ObjectPieceNum == (int)i) {
-					new cSpaceExplosion(ShipPart, NeedExplosionType, ShipPart->Location, ShipPart->Speed, -1);
-					delete ShipPart;
+					new cSpaceExplosion(SpaceDebris, NeedExplosionType, SpaceDebris->Location, SpaceDebris->Speed, -1);
+					delete SpaceDebris;
 				}
 		}
 

@@ -81,29 +81,28 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				continue;
 			else {
 				// создаем часть
-				cShipPart *ShipPart;
-				ShipPart = new cShipPart;
-				ShipPart->ObjectType = eObjectType::ShipPart;
-				ShipPart->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
+				cSpaceDebris *SpaceDebris = new cSpaceDebris;
+				SpaceDebris->ObjectType = eObjectType::SpaceDebris;
+				SpaceDebris->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 
 				// только одна текстура (!) 2-ю для подстветки не тянем
-				ShipPart->Texture.resize(1, 0);
-				ShipPart->Texture[0] = Object.Texture[i];
+				SpaceDebris->Texture.resize(1, 0);
+				SpaceDebris->Texture[0] = Object.Texture[i];
 				if ((Object.NormalMap.size() > (unsigned)i) && Object.NormalMap[i]) {
-					ShipPart->NormalMap.resize(1, 0);
-					ShipPart->NormalMap[0] = Object.NormalMap[i];
+					SpaceDebris->NormalMap.resize(1, 0);
+					SpaceDebris->NormalMap[0] = Object.NormalMap[i];
 				}
 
 				// берем то, что нужно
-				ShipPart->Model3DBlocks.resize(1);
+				SpaceDebris->Model3DBlocks.resize(1);
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-				ShipPart->Model3DBlocks[0] = Object.Model3DBlocks[i];
+				SpaceDebris->Model3DBlocks[0] = Object.Model3DBlocks[i];
 				// берем стандартные шейдеры
-				ShipPart->Model3DBlocks[0].ShaderType = 1;
+				SpaceDebris->Model3DBlocks[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
 				if (Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
 					Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
-					ShipPart->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
+					SpaceDebris->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
 				}
 
 				// находим точку локального положения объекта в моделе
@@ -112,64 +111,71 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				LocalLocation = Object.HitBB[i].Location - LocalLocation;
 				vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
-				ShipPart->Model3DBlocks[0].Location = LocalLocation ^ (-1.0f);
+				SpaceDebris->Model3DBlocks[0].Location = LocalLocation ^ (-1.0f);
 
 				// находим все данные по геометрии
-				ShipPart->MetadataInitialization();
+				SpaceDebris->MetadataInitialization();
 
 				// установка текущего положения и поворота
-				ShipPart->SetLocation(Object.Location + Object.HitBB[i].Location);
-				ShipPart->SetRotation(Object.Rotation);
+				SpaceDebris->SetLocation(Object.Location + Object.HitBB[i].Location);
+				SpaceDebris->SetRotation(Object.Rotation);
 
 
 				if (ExplType == 1) {
-					ShipPart->Speed = 0.0f;
-					sVECTOR3D VelocityTMP = ShipPart->Location - ExplLocation;
-					if (ShipPart->Radius != 0) ShipPart->Velocity = VelocityTMP^(1.0f/ShipPart->Radius);
-					else ShipPart->Velocity = VelocityTMP ^ (1.0f + 5.0f * vw_fRand());
+					SpaceDebris->Speed = 0.0f;
+					sVECTOR3D VelocityTMP = SpaceDebris->Location - ExplLocation;
+					if (SpaceDebris->Radius != 0)
+						SpaceDebris->Velocity = VelocityTMP ^ (1.0f / SpaceDebris->Radius);
+					else
+						SpaceDebris->Velocity = VelocityTMP ^ (1.0f + 5.0f * vw_fRand());
 
-					ShipPart->RotationSpeed.x = 2.0f*vw_fRand0();
-					ShipPart->RotationSpeed.y = 2.0f*vw_fRand0();
+					SpaceDebris->RotationSpeed.x = 2.0f * vw_fRand0();
+					SpaceDebris->RotationSpeed.y = 2.0f * vw_fRand0();
 				}
 				if (ExplType == 2) {
 					// проверяем, это колесо или нет
 					bool Wheel = false;
-					for (int k=0; k<Object.WheelQuantity; k++) {
-						if (Object.WheelObjectsNum[k] == (int)i) Wheel = true;
+					for (int k = 0; k < Object.WheelQuantity; k++) {
+						if (Object.WheelObjectsNum[k] == (int)i)
+							Wheel = true;
 					}
 
 					if (Wheel) {
-						sVECTOR3D VelocityTMP = ShipPart->Location - Object.Location;
+						sVECTOR3D VelocityTMP = SpaceDebris->Location - Object.Location;
 						// делаем небольшой случайный доворот
-						vw_RotatePoint(VelocityTMP, sVECTOR3D(-5.0f - 15.0f * vw_fRand(), 10.0f*vw_fRand0(), 0.0f));
-						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^((1.0f + 5.0f * vw_fRand())/ShipPart->Radius);
-						else ShipPart->Velocity = VelocityTMP^(1.0f + 5.0f * vw_fRand());
+						vw_RotatePoint(VelocityTMP, sVECTOR3D(-5.0f - 15.0f * vw_fRand(), 10.0f * vw_fRand0(), 0.0f));
+						if (SpaceDebris->Radius != 0.0f)
+							SpaceDebris->Velocity = VelocityTMP ^ ((1.0f + 5.0f * vw_fRand()) / SpaceDebris->Radius);
+						else
+							SpaceDebris->Velocity = VelocityTMP ^ (1.0f + 5.0f * vw_fRand());
 
-						ShipPart->RotationSpeed.x = 40.0f+80.0f*vw_fRand0();
-						ShipPart->RotationSpeed.y = 40.0f+80.0f*vw_fRand0();
-						ShipPart->RotationSpeed.z = 40.0f+80.0f*vw_fRand0();
+						SpaceDebris->RotationSpeed.x = 40.0f + 80.0f * vw_fRand0();
+						SpaceDebris->RotationSpeed.y = 40.0f + 80.0f * vw_fRand0();
+						SpaceDebris->RotationSpeed.z = 40.0f + 80.0f * vw_fRand0();
 					} else {
-						sVECTOR3D VelocityTMP = ShipPart->Location - Object.Location;
-						if(ShipPart->Radius != 0.0f) ShipPart->Velocity = VelocityTMP^(5.0f/ShipPart->Radius);
-						else ShipPart->Velocity = VelocityTMP^(1.0f + 5.0f * vw_fRand());
+						sVECTOR3D VelocityTMP = SpaceDebris->Location - Object.Location;
+						if (SpaceDebris->Radius != 0.0f)
+							SpaceDebris->Velocity = VelocityTMP ^ (5.0f / SpaceDebris->Radius);
+						else
+							SpaceDebris->Velocity = VelocityTMP ^ (1.0f + 5.0f * vw_fRand());
 
-						ShipPart->RotationSpeed.x = 2.0f*vw_fRand0();
-						ShipPart->RotationSpeed.y = 2.0f*vw_fRand0();
-						ShipPart->RotationSpeed.z = 2.0f*vw_fRand0();
+						SpaceDebris->RotationSpeed.x = 2.0f * vw_fRand0();
+						SpaceDebris->RotationSpeed.y = 2.0f * vw_fRand0();
+						SpaceDebris->RotationSpeed.z = 2.0f * vw_fRand0();
 					}
 				}
 
 
-				ShipPart->StrengthStart = ShipPart->Strength = 1.0f;
-				ShipPart->ObjectStatus = Object.ObjectStatus;
-				ShipPart->ShowStrength = false;
+				SpaceDebris->StrengthStart = SpaceDebris->Strength = 1.0f;
+				SpaceDebris->ObjectStatus = Object.ObjectStatus;
+				SpaceDebris->ShowStrength = false;
 
 
 				if (ObjectPieceNum != -1)
 					if (ObjectPieceNum == (int)i) {
 						// а теперь взрываем ту, в которую попали...
-						new cSpaceExplosion(ShipPart, 32, ShipPart->Location, ShipPart->Speed, -1);
-						delete ShipPart;
+						new cSpaceExplosion(SpaceDebris, 32, SpaceDebris->Location, SpaceDebris->Speed, -1);
+						delete SpaceDebris;
 					}
 			}
 		}
