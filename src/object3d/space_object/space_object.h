@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// FIXME split backgroind big asteroid code, render with separate function (planets and
+//       backgroind big asteroid), remove related code from StarSystemDraw()
+
 // TODO translate comments
 
 #ifndef OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
@@ -36,6 +39,13 @@
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+enum class eSpaceCycle {
+	Continue,
+	Break,
+	DeleteObjectAndContinue,
+	DeleteObjectAndBreak
+};
 
 class cSpaceObject : public cObject3D
 {
@@ -110,6 +120,8 @@ void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 void ReleaseAllSpaceObjects();
 // установка эффекта, если нужно
 void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType);
+// Managed cycle for each space object.
+void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function);
 
 } // astromenace namespace
 } // viewizard namespace

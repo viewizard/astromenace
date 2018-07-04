@@ -136,6 +136,32 @@ void ReleaseAllSpaceObjects()
 	EndSpaceObject = nullptr;
 }
 
+/*
+ * Managed cycle for each ground object.
+ */
+void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function)
+{
+	cSpaceObject *tmpSpace = StartSpaceObject;
+	while (tmpSpace) {
+		cSpaceObject *tmpSpaceNext = tmpSpace->Next;
+		eSpaceCycle Command{eSpaceCycle::Continue};
+		function(*tmpSpace, Command);
+		switch (Command) {
+		case eSpaceCycle::Continue:
+			break;
+		case eSpaceCycle::Break:
+			return;
+		case eSpaceCycle::DeleteObjectAndContinue:
+			delete tmpSpace;
+			break;
+		case eSpaceCycle::DeleteObjectAndBreak:
+			delete tmpSpace;
+			return;
+		}
+		tmpSpace = tmpSpaceNext;
+	}
+}
+
 //-----------------------------------------------------------------------------
 // Создание эффектов для космических объектов (двигатели для базы)
 //-----------------------------------------------------------------------------
