@@ -37,28 +37,26 @@ struct sTrackedData {
 	float Strength;
 	int WeaponQuantity;
 	float SpeedToRotate;
-	const char *Name;
-	const char *TextureName;
+	std::string Model3DFileName;
+	std::string TextureFileName;
 };
 
-const sTrackedData PresetTrackedData[] = {
-	{250, 1,	60.0f,	"models/tracked/tank-01.vw3d", "models/gr-01.vw2d"},
-	{200, 2,	45.0f,	"models/tracked/tank-03.vw3d", "models/gr-01.vw2d"},
-	{300, 1,	45.0f,	"models/tracked/tank-05.vw3d", "models/gr-06.vw2d"},
-	{300, 1,	55.0f,	"models/tracked/tank-06.vw3d", "models/gr-03.vw2d"},
-	{400, 1,	60.0f,	"models/tracked/tank-07.vw3d", "models/gr-06.vw2d"},
-	{250, 1,	70.0f,	"models/tracked/tank-08.vw3d", "models/gr-01.vw2d"},
-	{400, 1,	60.0f,	"models/tracked/tank-09.vw3d", "models/gr-01.vw2d"},
-	{300, 1,	60.0f,	"models/tracked/tank-10.vw3d", "models/gr-03.vw2d"},
-	{350, 1,	60.0f,	"models/tracked/tank-11.vw3d", "models/gr-03.vw2d"},
-	{300, 1,	60.0f,	"models/tracked/apc-01.vw3d", "models/gr-03.vw2d"},
-	{400, 2,	60.0f,	"models/tracked/apc-03.vw3d", "models/gr-03.vw2d"},
-	{250, 4,	60.0f,	"models/tracked/apc-aa-01.vw3d", "models/gr-03.vw2d"},
-	{200, 2,	42.0f,	"models/tracked/apc-aa-02.vw3d", "models/gr-02.vw2d"},
-	{50,  1,	50.0f,	"models/tracked/engineering-01.vw3d", "models/gr-03.vw2d"}
+const std::vector<sTrackedData> PresetTrackedData{
+	{250,	1,	60.0f,	"models/tracked/tank-01.vw3d", "models/gr-01.vw2d"},
+	{200,	2,	45.0f,	"models/tracked/tank-03.vw3d", "models/gr-01.vw2d"},
+	{300,	1,	45.0f,	"models/tracked/tank-05.vw3d", "models/gr-06.vw2d"},
+	{300,	1,	55.0f,	"models/tracked/tank-06.vw3d", "models/gr-03.vw2d"},
+	{400,	1,	60.0f,	"models/tracked/tank-07.vw3d", "models/gr-06.vw2d"},
+	{250,	1,	70.0f,	"models/tracked/tank-08.vw3d", "models/gr-01.vw2d"},
+	{400,	1,	60.0f,	"models/tracked/tank-09.vw3d", "models/gr-01.vw2d"},
+	{300,	1,	60.0f,	"models/tracked/tank-10.vw3d", "models/gr-03.vw2d"},
+	{350,	1,	60.0f,	"models/tracked/tank-11.vw3d", "models/gr-03.vw2d"},
+	{300,	1,	60.0f,	"models/tracked/apc-01.vw3d", "models/gr-03.vw2d"},
+	{400,	2,	60.0f,	"models/tracked/apc-03.vw3d", "models/gr-03.vw2d"},
+	{250,	4,	60.0f,	"models/tracked/apc-aa-01.vw3d", "models/gr-03.vw2d"},
+	{200,	2,	42.0f,	"models/tracked/apc-aa-02.vw3d", "models/gr-02.vw2d"},
+	{50,	1,	50.0f,	"models/tracked/engineering-01.vw3d", "models/gr-03.vw2d"}
 };
-#define PresetTrackedDataCount sizeof(PresetTrackedData)/sizeof(PresetTrackedData[0])
-
 
 
 //-----------------------------------------------------------------------------
@@ -66,7 +64,7 @@ const sTrackedData PresetTrackedData[] = {
 //-----------------------------------------------------------------------------
 cTracked::cTracked(int TrackedNum)
 {
-	if ((TrackedNum <= 0) || ((unsigned int)TrackedNum > PresetTrackedDataCount)) {
+	if ((TrackedNum <= 0) || (static_cast<unsigned>(TrackedNum) > PresetTrackedData.size())) {
 		std::cerr << __func__ << "(): " << "Could not init cTracked object with Number " << TrackedNum << "\n";
 		return;
 	}
@@ -77,24 +75,21 @@ cTracked::cTracked(int TrackedNum)
 	MaxSpeedRotate = 20.0f;
 	InternalType = TrackedNum;
 
-
 	// ставим без оптимизации, иначе не увидим гусениц
 	NeedCullFaces = false;
 
-	LoadObjectData(PresetTrackedData[TrackedNum-1].Name, this);
+	LoadObjectData(PresetTrackedData[TrackedNum - 1].Model3DFileName, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = GetPreloadedTextureAsset(PresetTrackedData[TrackedNum - 1].TextureName);
+		Texture[i] = GetPreloadedTextureAsset(PresetTrackedData[TrackedNum - 1].TextureFileName);
 	}
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
-	SpeedToRotate = PresetTrackedData[TrackedNum-1].SpeedToRotate;
+	SpeedToRotate = PresetTrackedData[TrackedNum - 1].SpeedToRotate;
 
+	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength/GameEnemyArmorPenalty;
 
-	Strength = StrengthStart = PresetTrackedData[TrackedNum-1].Strength/GameEnemyArmorPenalty;
-
-
-	WeaponQuantity = PresetTrackedData[TrackedNum-1].WeaponQuantity;
+	WeaponQuantity = PresetTrackedData[TrackedNum - 1].WeaponQuantity;
 	// начальные установки для оружия
 	WeaponSetFire = new bool[WeaponQuantity];
 	WeaponLocation = new sVECTOR3D[WeaponQuantity];
@@ -104,7 +99,6 @@ cTracked::cTracked(int TrackedNum)
 		WeaponSetFire[i] = false;
 		Weapon[i] = nullptr;
 	}
-
 
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (TrackedNum) {
@@ -145,7 +139,6 @@ cTracked::cTracked(int TrackedNum)
 		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
-
 	case 2:
 		WeaponLocation[0] = sVECTOR3D(0.1f, 6.1f, -0.4f);
 		Weapon[0] = new cWeapon(204);
@@ -179,7 +172,6 @@ cTracked::cTracked(int TrackedNum)
 		TrackObjectNum = 13;
 		Texture[13] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
-
 
 	case 3:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 5.2f, 3.7f);
@@ -617,10 +609,7 @@ cTracked::cTracked(int TrackedNum)
 		Texture[10] = GetPreloadedTextureAsset("models/track.vw2d");
 		TrackRotationDirection = -1;
 		break;
-
 	}
-
-
 
 	// установка остальных параметров девиации
 	DeviationOn = false;
@@ -631,9 +620,9 @@ cTracked::cTracked(int TrackedNum)
 	CurentDeviationSum = new float[DeviationObjQuantity];
 	DeviationObjNum = new int[DeviationObjQuantity];
 
-	for (int i=0; i<DeviationObjQuantity; i++) {
+	for (int i = 0; i < DeviationObjQuantity; i++) {
 		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
-		NeedDeviation[i] = vw_fRand0()*0.1f;
+		NeedDeviation[i] = vw_fRand0() * 0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
 		DeviationObjNum[i] = WheelObjectsNum[i];
 	}
@@ -641,8 +630,6 @@ cTracked::cTracked(int TrackedNum)
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (int i = 0; i < WheelQuantity; i++)
 		Model3DBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
-
-
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizBlocks != nullptr) {

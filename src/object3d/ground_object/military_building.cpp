@@ -36,11 +36,11 @@ namespace astromenace {
 struct sMilitaryBuildingData {
 	float Strength;
 	int WeaponQuantity;
-	const char *Name;
-	const char *TextureName;
+	std::string Model3DFileName;
+	std::string TextureFileName;
 };
 
-const sMilitaryBuildingData PresetMilitaryBuildingData[] = {
+const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData{
 	{80,	2,	"models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
 	{120,	1,	"models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
 	{80,	2,	"models/militarybuilding/aa-gun-03.vw3d", "models/gr-02.vw2d"},
@@ -49,8 +49,6 @@ const sMilitaryBuildingData PresetMilitaryBuildingData[] = {
 	{50,	1,	"models/militarybuilding/artiler-gun-01.vw3d", "models/gr-03.vw2d"},
 	{200,	1,	"models/militarybuilding/artiler-gun-02.vw3d", "models/gr-01.vw2d"}
 };
-#define PresetMilitaryBuildingDataCount sizeof(PresetMilitaryBuildingData)/sizeof(PresetMilitaryBuildingData[0])
-
 
 
 //-----------------------------------------------------------------------------
@@ -58,7 +56,7 @@ const sMilitaryBuildingData PresetMilitaryBuildingData[] = {
 //-----------------------------------------------------------------------------
 cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 {
-	if ((MilitaryBuildingNum <= 0) || ((unsigned int)MilitaryBuildingNum > PresetMilitaryBuildingDataCount)) {
+	if ((MilitaryBuildingNum <= 0) || (static_cast<unsigned>(MilitaryBuildingNum) > PresetMilitaryBuildingData.size())) {
 		std::cerr << __func__ << "(): "
 			  << "Could not init cMilitaryBuilding object with Number " << MilitaryBuildingNum << "\n";
 		return;
@@ -67,22 +65,18 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	ObjectType = eObjectType::PirateBuilding;
 	InternalType = MilitaryBuildingNum;
 
-	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum-1].Name, this);
-
+	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Model3DFileName, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureName);
+		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileName);
 	}
-
 
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
 
+	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Strength/GameEnemyArmorPenalty;
 
-	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum-1].Strength/GameEnemyArmorPenalty;
-
-
-	WeaponQuantity = PresetMilitaryBuildingData[MilitaryBuildingNum-1].WeaponQuantity;
+	WeaponQuantity = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].WeaponQuantity;
 	// начальные установки для оружия
 	WeaponSetFire = new bool[WeaponQuantity];
 	WeaponLocation = new sVECTOR3D[WeaponQuantity];
@@ -92,8 +86,6 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		WeaponSetFire[i] = false;
 		Weapon[i] = nullptr;
 	}
-
-
 
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (MilitaryBuildingNum) {
@@ -252,11 +244,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		BarrelBlocks = new int[BarrelBlocksQuantity];
 		BarrelBlocks[0] = 1;
 		break;
-
 	}
-
-
-
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizBlocks != nullptr) {

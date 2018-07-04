@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "ground_object.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"
@@ -35,10 +37,10 @@ namespace astromenace {
 
 struct sBuildingData {
 	float Strength;
-	const char *Name;
+	std::string Model3DFileName;
 };
 
-const sBuildingData PresetBuildingData[] = {
+const std::vector<sBuildingData> PresetBuildingData{
 	{150,	"models/building/bld-01.vw3d"},
 	{150,	"models/building/bld-02.vw3d"},
 	{150,	"models/building/bld-03.vw3d"},
@@ -51,8 +53,6 @@ const sBuildingData PresetBuildingData[] = {
 	{150,	"models/building/bld-10.vw3d"},
 	{150,	"models/building/bld-11.vw3d"}
 };
-#define PresetBuildingDataCount sizeof(PresetBuildingData)/sizeof(PresetBuildingData[0])
-
 
 
 //-----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ const sBuildingData PresetBuildingData[] = {
 //-----------------------------------------------------------------------------
 cCivilianBuilding::cCivilianBuilding(int BuildingNum)
 {
-	if ((BuildingNum <= 0) || ((unsigned int)BuildingNum > PresetBuildingDataCount)) {
+	if ((BuildingNum <= 0) || (static_cast<unsigned>(BuildingNum) > PresetBuildingData.size())) {
 		std::cerr << __func__ << "(): " << "Could not init cBuilding object with Number " << BuildingNum << "\n";
 		return;
 	}
@@ -71,7 +71,7 @@ cCivilianBuilding::cCivilianBuilding(int BuildingNum)
 	ShowStrength = false;
 	PromptDrawDist2 = 100.0f;
 
-	LoadObjectData(PresetBuildingData[BuildingNum-1].Name, this);
+	LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileName, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset("models/building/bld.vw2d");
@@ -82,7 +82,7 @@ cCivilianBuilding::cCivilianBuilding(int BuildingNum)
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
 
-	Strength = StrengthStart = PresetBuildingData[BuildingNum-1].Strength/GameEnemyArmorPenalty;
+	Strength = StrengthStart = PresetBuildingData[BuildingNum - 1].Strength / GameEnemyArmorPenalty;
 }
 
 } // astromenace namespace

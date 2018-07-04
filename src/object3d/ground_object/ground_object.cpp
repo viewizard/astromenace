@@ -275,25 +275,26 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 	if (TargetVertBlocks != nullptr)
 		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
 
-	if (Weapon != nullptr)
-		for (int i = 0; i < WeaponQuantity; i++)
+	if (Weapon != nullptr) {
+		for (int i = 0; i < WeaponQuantity; i++) {
 			if (Weapon[i] != nullptr) {
 				sVECTOR3D WeaponBoundTMP = WeaponBound[i];
 				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
 				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
-
 				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 				if ((TargetHorizBlocks == nullptr) &&
 				    (TargetVertBlocks == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
 					RotationWeapon = sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f) + Rotation;
-				Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1.0f));
+				Weapon[i]->SetRotation(Weapon[i]->Rotation ^ (-1.0f));
 				Weapon[i]->SetRotation(RotationWeapon);
 
 				Weapon[i]->SetLocation(Location + WeaponLocation[i]);
 			}
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -322,11 +323,12 @@ bool cGroundObject::Update(float Time)
 		RotationSpeed = TimeSheetList.front().RotationAcceler;
 		WeaponTargeting = TimeSheetList.front().Targeting;
 
-		if (Weapon != nullptr)
+		if (Weapon != nullptr) {
 			for (int i = 0; i < WeaponQuantity; i++) {
 				if (Weapon[i] != nullptr)
 					WeaponSetFire[i] = TimeSheetList.front().Fire;
 			}
+		}
 	}
 
 	// если нужно наводить на цель
@@ -337,30 +339,30 @@ bool cGroundObject::Update(float Time)
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		// находимся в начальном состоянии поворота ствола
-		int WeapNum = 204; // номер самого простого из пиратского оружия
-		sVECTOR3D FirePos(0.0f,0.0f,0.0f);
+		int WeapNum{204}; // номер самого простого из пиратского оружия
+		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
 		if (Weapon != nullptr) {
 			if (Weapon[0] != nullptr)
 				WeapNum = Weapon[0]->InternalType;
 
-			int Count = 0;
+			int Count{0};
 			for (int i = 0; i < WeaponQuantity; i++) {
 				if (Weapon[i] != nullptr) {
 					FirePos += WeaponLocation[i];
 					Count++;
 				}
 			}
-			FirePos = FirePos^(1.0f/Count);
+			FirePos = FirePos ^ (1.0f / Count);
 		}
 		sVECTOR3D NeedAngle(TargetVertBlocksNeedAngle,TargetHorizBlocksNeedAngle,0);
-		if (GetTurretOnTargetOrientateion(ObjectStatus, Location+FirePos, Rotation,
-						  CurrentRotationMat,	&NeedAngle, WeapNum)) {
+		if (GetTurretOnTargetOrientateion(ObjectStatus, Location + FirePos, Rotation,
+						  CurrentRotationMat, &NeedAngle, WeapNum)) {
 			// наводим на цель
 			TargetHorizBlocksNeedAngle = NeedAngle.y;
 			TargetVertBlocksNeedAngle = NeedAngle.x;
 		} else {
 			// врагов нет, нужно просто поднять ствол
-			TargetVertBlocksNeedAngle = TargetVertBlocksMaxAngle*0.5f;
+			TargetVertBlocksNeedAngle = TargetVertBlocksMaxAngle * 0.5f;
 		}
 	} else {
 		// устанавливаем в начальное положение
@@ -387,11 +389,11 @@ bool cGroundObject::Update(float Time)
 			float NeedRotateCalculation = TargetHorizBlocksCurrentAngle;
 
 			if (TargetHorizBlocksNeedAngle>TargetHorizBlocksCurrentAngle) {
-				NeedRotateCalculation += 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
+				NeedRotateCalculation += 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation > TargetHorizBlocksNeedAngle)
 					NeedRotateCalculation = TargetHorizBlocksNeedAngle;
 			} else {
-				NeedRotateCalculation -= 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
+				NeedRotateCalculation -= 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation < TargetHorizBlocksNeedAngle)
 					NeedRotateCalculation = TargetHorizBlocksNeedAngle;
 			}
@@ -400,7 +402,7 @@ bool cGroundObject::Update(float Time)
 			TargetHorizBlocksCurrentAngle = NeedRotateCalculation;
 
 			// поворачиваем все объекты
-			for (int i=0; i<TargetHorizBlocksQuantity; i++) {
+			for (int i = 0; i < TargetHorizBlocksQuantity; i++) {
 
 				sVECTOR3D tmp = Model3DBlocks[TargetHorizBlocks[i]].Location -
 						Model3DBlocks[TargetHorizBlocks[0]].Location;
@@ -426,13 +428,13 @@ bool cGroundObject::Update(float Time)
 			// находим угол, на который нужно повернуть
 			float NeedRotateCalculation = TargetVertBlocksCurrentAngle;
 			if (TargetVertBlocksNeedAngle>TargetVertBlocksCurrentAngle) {
-				NeedRotateCalculation += 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
+				NeedRotateCalculation += 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation > TargetVertBlocksNeedAngle)
 					NeedRotateCalculation = TargetVertBlocksNeedAngle;
 				if (NeedRotateCalculation > TargetVertBlocksMaxAngle)
 					NeedRotateCalculation = TargetVertBlocksMaxAngle;
 			} else {
-				NeedRotateCalculation -= 80.0f*TimeDelta/GameEnemyTargetingSpeedPenalty;
+				NeedRotateCalculation -= 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
 				if (NeedRotateCalculation < TargetVertBlocksNeedAngle)
 					NeedRotateCalculation = TargetVertBlocksNeedAngle;
 				if (NeedRotateCalculation < TargetVertBlocksMinAngle)
@@ -478,8 +480,8 @@ bool cGroundObject::Update(float Time)
 	if (TargetVertBlocks != nullptr)
 		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
 
-	if (Weapon != nullptr)
-		for (int i = 0; i < WeaponQuantity; i++)
+	if (Weapon != nullptr) {
+		for (int i = 0; i < WeaponQuantity; i++) {
 			if (Weapon[i] != nullptr) {
 				sVECTOR3D WeaponBoundTMP = WeaponBound[i];
 				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
@@ -492,126 +494,121 @@ bool cGroundObject::Update(float Time)
 				    !DoNotCalculateRotation) // и если нужно считать...
 					RotationWeapon = Rotation - sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f);
 
-
 				Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1.0f));
 				Weapon[i]->SetRotation(RotationWeapon);
 
 				Weapon[i]->SetLocation(Location + WeaponLocation[i]);
 			}
+		}
+	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// смотрим, есть ли команда открыть огонь
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (Weapon != nullptr) {
 		// если залп или игрок (игроку регулируем сами)
+		// FIXME switch from if-else-if to case (?)
 		if (WeaponFireType == 1) {
 			for (int i=0; i<WeaponQuantity; i++) {
 				if ((Weapon[i] != nullptr) &&
 				    (WeaponSetFire[i]))
 					Weapon[i]->WeaponFire(Time);
 			}
-		} else { // переменный огонь
-			if (WeaponFireType == 2) {
+		} else if (WeaponFireType == 2) { // переменный огонь
+			int PrimCount{0};
+			float PrimTime{0.0f};
+			int FirstWeapon{6};
+			int LastWeapon{0};
 
-				int PrimCount = 0;
-				float PrimTime = 0.0f;
-				int FirstWeapon = 6;
-				int LastWeapon = 0;
+			WeaponGroupCurrentFireDelay -= TimeDelta;
 
-				WeaponGroupCurrentFireDelay -= TimeDelta;
-
-				// находим кол-во оружия
-				for (int i=0; i<WeaponQuantity; i++) {
-					if (Weapon[i] != nullptr) {
-						PrimCount++;
-						PrimTime += Weapon[i]->NextFireTime;
-						if (FirstWeapon > i)
-							FirstWeapon = i;
-						if (LastWeapon < i)
-							LastWeapon = i;
-					}
+			// находим кол-во оружия
+			for (int i=0; i<WeaponQuantity; i++) {
+				if (Weapon[i] != nullptr) {
+					PrimCount++;
+					PrimTime += Weapon[i]->NextFireTime;
+					if (FirstWeapon > i)
+						FirstWeapon = i;
+					if (LastWeapon < i)
+						LastWeapon = i;
 				}
-				// если еще не было начальной установки
-				if (WeaponGroupCurrentFireNum == -1)
-					WeaponGroupCurrentFireNum = FirstWeapon;
+			}
+			// если еще не было начальной установки
+			if (WeaponGroupCurrentFireNum == -1)
+				WeaponGroupCurrentFireNum = FirstWeapon;
 
-				// стреляем
-				for (int i = 0; i < WeaponQuantity; i++) {
-					if ((Weapon[i] != nullptr) &&
-					    (WeaponSetFire[i])) {
-						if (WeaponGroupCurrentFireNum == i &&
-						    WeaponGroupCurrentFireDelay <= 0.0f) {
-							Weapon[i]->WeaponFire(Time);
+			// стреляем
+			for (int i = 0; i < WeaponQuantity; i++) {
+				if ((Weapon[i] != nullptr) &&
+				    (WeaponSetFire[i])) {
+					if (WeaponGroupCurrentFireNum == i &&
+					    WeaponGroupCurrentFireDelay <= 0.0f) {
+						Weapon[i]->WeaponFire(Time);
 
-							WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameEnemyWeaponPenalty)/2.0f);
-							WeaponGroupCurrentFireNum++;
-							if (WeaponGroupCurrentFireNum > LastWeapon)
-								WeaponGroupCurrentFireNum = FirstWeapon;
+						WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameEnemyWeaponPenalty)/2.0f);
+						WeaponGroupCurrentFireNum++;
+						if (WeaponGroupCurrentFireNum > LastWeapon)
+							WeaponGroupCurrentFireNum = FirstWeapon;
 
-							// если такого оружия нет, берем что есть
-							if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
-								bool exit = false;
-								while (!exit) {
-									WeaponGroupCurrentFireNum++;
-									if (WeaponGroupCurrentFireNum > LastWeapon)
-										WeaponGroupCurrentFireNum = FirstWeapon;
-									if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
-										exit = true;
-								}
+						// если такого оружия нет, берем что есть
+						if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
+							bool exit = false;
+							while (!exit) {
+								WeaponGroupCurrentFireNum++;
+								if (WeaponGroupCurrentFireNum > LastWeapon)
+									WeaponGroupCurrentFireNum = FirstWeapon;
+								if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
+									exit = true;
 							}
 						}
 					}
 				}
-			} else { // переменный огонь2 (залп ракет или чего-то еще)
-				if (WeaponFireType == 3) {
+			}
+		} else if (WeaponFireType == 3) { // переменный огонь2 (залп ракет или чего-то еще)
+			int PrimCount{0};
+			float PrimTime{0.0f};
+			int FirstWeapon{6};
+			int LastWeapon{0};
 
-					int PrimCount = 0;
-					float PrimTime = 0.0f;
-					int FirstWeapon = 6;
-					int LastWeapon = 0;
+			WeaponGroupCurrentFireDelay -= TimeDelta;
 
-					WeaponGroupCurrentFireDelay -= TimeDelta;
+			// находим кол-во оружия
+			for (int i=0; i<WeaponQuantity; i++) {
+				if (Weapon[i] != nullptr) {
+					PrimCount++;
+					PrimTime += Weapon[i]->NextFireTime;
+					if (FirstWeapon > i)
+						FirstWeapon = i;
+					if (LastWeapon < i)
+						LastWeapon = i;
+				}
+			}
+			// если еще не было начальной установки
+			if (WeaponGroupCurrentFireNum == -1)
+				WeaponGroupCurrentFireNum = FirstWeapon;
 
-					// находим кол-во оружия
-					for (int i=0; i<WeaponQuantity; i++) {
-						if (Weapon[i] != nullptr) {
-							PrimCount++;
-							PrimTime += Weapon[i]->NextFireTime;
-							if (FirstWeapon > i)
-								FirstWeapon = i;
-							if (LastWeapon < i)
-								LastWeapon = i;
-						}
-					}
-					// если еще не было начальной установки
-					if (WeaponGroupCurrentFireNum == -1)
-						WeaponGroupCurrentFireNum = FirstWeapon;
+			// стреляем
+			for (int i = 0; i < WeaponQuantity; i++) {
+				if ((Weapon[i] != nullptr) &&
+				    (WeaponSetFire[i])) {
+				if (WeaponGroupCurrentFireNum == i &&
+					    WeaponGroupCurrentFireDelay <= 0.0f) {
+						Weapon[i]->WeaponFire(Time);
 
+						WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
+						WeaponGroupCurrentFireNum++;
+						if (WeaponGroupCurrentFireNum > LastWeapon)
+							WeaponGroupCurrentFireNum = FirstWeapon;
 
-					// стреляем
-					for (int i = 0; i < WeaponQuantity; i++) {
-						if ((Weapon[i] != nullptr) &&
-						    (WeaponSetFire[i])) {
-							if (WeaponGroupCurrentFireNum == i &&
-							    WeaponGroupCurrentFireDelay <= 0.0f) {
-								Weapon[i]->WeaponFire(Time);
-
-								WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
+						// если такого оружия нет, берем что есть
+						if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
+							bool exit = false;
+							while (!exit) {
 								WeaponGroupCurrentFireNum++;
 								if (WeaponGroupCurrentFireNum > LastWeapon)
 									WeaponGroupCurrentFireNum = FirstWeapon;
-
-								// если такого оружия нет, берем что есть
-								if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
-									bool exit = false;
-									while (!exit) {
-										WeaponGroupCurrentFireNum++;
-										if (WeaponGroupCurrentFireNum > LastWeapon)
-											WeaponGroupCurrentFireNum = FirstWeapon;
-										if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
-											exit = true;
-									}
-								}
+								if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
+									exit = true;
 							}
 						}
 					}
@@ -665,16 +662,17 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// повотор
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (NeedRotate.x != 0.0f || NeedRotate.y != 0.0f || NeedRotate.z != 0.0f) {
+	if ((NeedRotate.x != 0.0f) || (NeedRotate.y != 0.0f) || (NeedRotate.z != 0.0f)) {
 		// Находим допустимый поворот по углу
 		sVECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
 
 		// угол по x
 		if (NeedRotate.x != 0.0f) {
-			float Sign = 1.0f;
-			if (NeedRotate.x < 0.0f) Sign = -1.0f;
+			float Sign{1.0f};
+			if (NeedRotate.x < 0.0f)
+				Sign = -1.0f;
 			// вычисляем скорость поворота по данным двигателя
-			tmpRotate.x = Sign*MaxSpeedRotate*RotationSpeed.x*TimeDelta;
+			tmpRotate.x = Sign * MaxSpeedRotate * RotationSpeed.x * TimeDelta;
 			// смотрим, если уже повернули - снимаем
 			if (Sign == 1.0f) {
 				if (tmpRotate.x >= NeedRotate.x) {
@@ -688,15 +686,17 @@ bool cGroundObject::Update(float Time)
 				}
 			}
 			// меняем значение
-			if (NeedRotate.x != 0.0f) NeedRotate.x -= tmpRotate.x;
+			if (NeedRotate.x != 0.0f)
+				NeedRotate.x -= tmpRotate.x;
 		}
 
 		// угол по y
 		if (NeedRotate.y != 0.0f) {
-			float Sign = 1.0f;
-			if (NeedRotate.y < 0.0f) Sign = -1.0f;
+			float Sign{1.0f};
+			if (NeedRotate.y < 0.0f)
+				Sign = -1.0f;
 			// вычисляем скорость поворота по данным двигателя
-			tmpRotate.y = Sign*MaxSpeedRotate*RotationSpeed.y*TimeDelta;
+			tmpRotate.y = Sign * MaxSpeedRotate * RotationSpeed.y * TimeDelta;
 			// смотрим, если уже повернули - снимаем
 			if (Sign == 1.0f) {
 				if (tmpRotate.y >= NeedRotate.y) {
@@ -710,15 +710,17 @@ bool cGroundObject::Update(float Time)
 				}
 			}
 			// меняем значение
-			if (NeedRotate.y != 0.0f) NeedRotate.y -= tmpRotate.y;
+			if (NeedRotate.y != 0.0f)
+				NeedRotate.y -= tmpRotate.y;
 		}
 
 		// угол по z
 		if (NeedRotate.z != 0.0f) {
-			float Sign = 1.0f;
-			if (NeedRotate.z < 0.0f) Sign = -1.0f;
+			float Sign{1.0f};
+			if (NeedRotate.z < 0.0f)
+				Sign = -1.0f;
 			// вычисляем скорость поворота по данным двигателя
-			tmpRotate.z = Sign*MaxSpeedRotate*RotationSpeed.z*TimeDelta;
+			tmpRotate.z = Sign * MaxSpeedRotate * RotationSpeed.z * TimeDelta;
 			// смотрим, если уже повернули - снимаем
 			if (Sign == 1.0f) {
 				if (tmpRotate.z >= NeedRotate.z) {
@@ -732,7 +734,8 @@ bool cGroundObject::Update(float Time)
 				}
 			}
 			// меняем значение
-			if (NeedRotate.z != 0.0f) NeedRotate.z -= tmpRotate.z;
+			if (NeedRotate.z != 0.0f)
+				NeedRotate.z -= tmpRotate.z;
 		}
 
 		// установка поворота там же сохраняем, какой общий поворот модели
@@ -760,15 +763,12 @@ bool cGroundObject::Update(float Time)
 				if (NeedRotateY<-MaxWheelRotateAngle)
 					NeedRotateY = -MaxWheelRotateAngle;
 
-
 				SetObjectRotation(sVECTOR3D(Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.x,
 							    NeedRotateY,
 							    Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.z),
 						  WheelRotateObjectsNum[i]);
-
 			}
 		}
-
 	}
 
 
@@ -778,30 +778,32 @@ bool cGroundObject::Update(float Time)
 
 	// если нужно разогнаться, или управление на игроке - и нужно стремиться к нулю
 	if (NeedSpeed != 0.0f) {
-		float Sign = 1.0f;
+		float Sign{1.0f};
 		// нужно двигать назад
-		if (NeedSpeed < 0.0f) Sign = -1.0f;
+		if (NeedSpeed < 0.0f)
+			Sign = -1.0f;
 
 		// "ровняем" скорость под модель
-		if (Sign == 1.0f) {
+		if (Sign == 1.0f)
 			vw_Clamp(NeedSpeed, 0.0f, MaxSpeed);
-		} else {
+		else
 			vw_Clamp(NeedSpeed, -MaxSpeed, 0.0f);
-		}
 
 		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
-			if (NeedSpeed < Speed) Sign = -1.0f;
+			if (NeedSpeed < Speed)
+				Sign = -1.0f;
 		} else {
-			if (NeedSpeed > Speed) Sign = 1.0f;
+			if (NeedSpeed > Speed)
+				Sign = 1.0f;
 		}
 
 
 		// даем полный газ, учитывая сколько процентов можем выдать
-		Acceler = Sign*MaxAcceler*NeedAcceler;
+		Acceler = Sign * MaxAcceler * NeedAcceler;
 
 		// считаем текущую скорость
-		Speed = Speed + Acceler*TimeDelta;
+		Speed = Speed + Acceler * TimeDelta;
 
 		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
@@ -821,29 +823,32 @@ bool cGroundObject::Update(float Time)
 	// небольшая девиация-болтание колес, если нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (DeviationOn) {
-		for (int i=0; i<DeviationObjQuantity; i++) {
-			float Sign = 1.0f;
+		for (int i = 0; i < DeviationObjQuantity; i++) {
+			float Sign{1.0f};
 			// нужно двигать
-			if (NeedDeviation[i] < 0.0f) Sign = -1.0f;
+			if (NeedDeviation[i] < 0.0f)
+				Sign = -1.0f;
 			if (Sign == 1.0f) {
-				if (NeedDeviation[i] < CurentDeviationSum[i]) Sign = -1.0f;
+				if (NeedDeviation[i] < CurentDeviationSum[i])
+					Sign = -1.0f;
 			} else {
-				if (NeedDeviation[i] > CurentDeviationSum[i]) Sign = 1.0f;
+				if (NeedDeviation[i] > CurentDeviationSum[i])
+					Sign = 1.0f;
 			}
 
-			CurentDeviation[i] = Sign*0.35f*TimeDelta;
+			CurentDeviation[i] = Sign * 0.35f * TimeDelta;
 
 			if (Sign == 1.0f) {
-				if (NeedDeviation[i] <= CurentDeviationSum[i]+CurentDeviation[i]) {
-					CurentDeviation[i] -= CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
+				if (NeedDeviation[i] <= CurentDeviationSum[i] + CurentDeviation[i]) {
+					CurentDeviation[i] -= CurentDeviationSum[i] + CurentDeviation[i] - NeedDeviation[i];
 					CurentDeviationSum[i] += CurentDeviation[i];
-					NeedDeviation[i] = vw_fRand0()*0.1f;
+					NeedDeviation[i] = vw_fRand0() * 0.1f;
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			} else {
-				if (NeedDeviation[i] >= CurentDeviationSum[i]+CurentDeviation[i]) {
-					CurentDeviation[i] += CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
+				if (NeedDeviation[i] >= CurentDeviationSum[i] + CurentDeviation[i]) {
+					CurentDeviation[i] += CurentDeviationSum[i] + CurentDeviation[i] - NeedDeviation[i];
 					CurentDeviationSum[i] += CurentDeviation[i];
-					NeedDeviation[i] = vw_fRand0()*0.1f;
+					NeedDeviation[i] = vw_fRand0() * 0.1f;
 				} else CurentDeviationSum[i] += CurentDeviation[i];
 			}
 
@@ -855,14 +860,13 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// считаем вектор движения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//VECTOR3D Velocity = (Orientation^(Speed*TimeDelta))+(sVECTOR3D(0.0f,0.0f,10.0f)^TimeDelta);
-	sVECTOR3D Velocity = (Orientation^(Speed*TimeDelta));
+	sVECTOR3D Velocity = (Orientation ^ (Speed * TimeDelta));
 
 	// перемещение объекта, если нужно
-	if (Velocity.x != 0.0f || Velocity.y != 0.0f  || Velocity.z != 0.0f ) {
-		WheelTrackSpeed = Speed*SpeedToRotate;
+	if ((Velocity.x != 0.0f) || (Velocity.y != 0.0f) || (Velocity.z != 0.0f)) {
+		WheelTrackSpeed = Speed * SpeedToRotate;
 		// делаем сдвиг модели в указанную точку
-		SetLocation(Location+Velocity);
+		SetLocation(Location + Velocity);
 	}
 
 	// объект в порядке - удалять не нужно

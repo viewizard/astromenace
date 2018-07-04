@@ -37,22 +37,20 @@ struct sWheeledData {
 	float Strength;
 	int WeaponQuantity;
 	float SpeedToRotate;
-	const char *Name;
-	const char *TextureName;
+	std::string Model3DFileName;
+	std::string TextureFileName;
 };
 
-const sWheeledData PresetWheeledData[] = {
-	{120, 4,	50.0f,	"models/wheeled/jeep-01.vw3d", "models/gr-02.vw2d"},
-	{70, 2,		50.0f,	"models/wheeled/jeep-02.vw3d", "models/gr-02.vw2d"},
-	{100, 2,	50.0f,	"models/wheeled/jeep-03.vw3d", "models/gr-02.vw2d"},
-	{100, 1,	50.0f,	"models/wheeled/jeep-04.vw3d", "models/gr-07.vw2d"},
-	{150, 1,	50.0f,	"models/wheeled/jeep-05.vw3d", "models/gr-03.vw2d"},
-	{250,1,		30.0f,	"models/wheeled/apc-02.vw3d", "models/gr-03.vw2d"},
-	{200, 2,	30.0f,	"models/wheeled/apc-04.vw3d", "models/gr-01.vw2d"},
-	{400,2,		34.0f,	"models/wheeled/r-launcher-01.vw3d", "models/gr-02.vw2d"}
+const std::vector<sWheeledData> PresetWheeledData{
+	{120,	4,	50.0f,	"models/wheeled/jeep-01.vw3d", "models/gr-02.vw2d"},
+	{70,	2,	50.0f,	"models/wheeled/jeep-02.vw3d", "models/gr-02.vw2d"},
+	{100,	2,	50.0f,	"models/wheeled/jeep-03.vw3d", "models/gr-02.vw2d"},
+	{100,	1,	50.0f,	"models/wheeled/jeep-04.vw3d", "models/gr-07.vw2d"},
+	{150,	1,	50.0f,	"models/wheeled/jeep-05.vw3d", "models/gr-03.vw2d"},
+	{250,	1,	30.0f,	"models/wheeled/apc-02.vw3d", "models/gr-03.vw2d"},
+	{200,	2,	30.0f,	"models/wheeled/apc-04.vw3d", "models/gr-01.vw2d"},
+	{400,	2,	34.0f,	"models/wheeled/r-launcher-01.vw3d", "models/gr-02.vw2d"}
 };
-#define PresetWheeledDataCount sizeof(PresetWheeledData)/sizeof(PresetWheeledData[0])
-
 
 
 //-----------------------------------------------------------------------------
@@ -60,7 +58,7 @@ const sWheeledData PresetWheeledData[] = {
 //-----------------------------------------------------------------------------
 cWheeled::cWheeled(int WheeledNum)
 {
-	if ((WheeledNum <= 0) || ((unsigned int)WheeledNum > PresetWheeledDataCount)) {
+	if ((WheeledNum <= 0) || (static_cast<unsigned>(WheeledNum) > PresetWheeledData.size())) {
 		std::cerr << __func__ << "(): " << "Could not init cWheeled object with Number " << WheeledNum << "\n";
 		return;
 	}
@@ -71,32 +69,27 @@ cWheeled::cWheeled(int WheeledNum)
 	MaxAcceler = 5.0f;
 	MaxSpeedRotate = 20.0f;
 
-
-	LoadObjectData(PresetWheeledData[WheeledNum-1].Name, this);
+	LoadObjectData(PresetWheeledData[WheeledNum - 1].Model3DFileName, this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
-		Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureName);
+		Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureFileName);
 	}
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
-	SpeedToRotate = PresetWheeledData[WheeledNum-1].SpeedToRotate;
+	SpeedToRotate = PresetWheeledData[WheeledNum - 1].SpeedToRotate;
 
+	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength/GameEnemyArmorPenalty;
 
-	Strength = StrengthStart = PresetWheeledData[WheeledNum-1].Strength/GameEnemyArmorPenalty;
-
-
-	WeaponQuantity = PresetWheeledData[WheeledNum-1].WeaponQuantity;
+	WeaponQuantity = PresetWheeledData[WheeledNum - 1].WeaponQuantity;
 	// начальные установки для оружия
 	WeaponSetFire = new bool[WeaponQuantity];
 	WeaponLocation = new sVECTOR3D[WeaponQuantity];
 	Weapon = new cWeapon*[WeaponQuantity];
 	WeaponBound = new sVECTOR3D[WeaponQuantity];
-	for (int i=0; i<WeaponQuantity; i++) {
+	for (int i = 0; i < WeaponQuantity; i++) {
 		WeaponSetFire[i] = false;
 		Weapon[i] = nullptr;
 	}
-
-
 
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (WheeledNum) {
@@ -311,8 +304,6 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 	}
 
-
-
 	// установка остальных параметров девиации
 	DeviationOn = false;
 	DeviationObjQuantity = WheelQuantity;
@@ -322,9 +313,9 @@ cWheeled::cWheeled(int WheeledNum)
 	CurentDeviationSum = new float[DeviationObjQuantity];
 	DeviationObjNum = new int[DeviationObjQuantity];
 
-	for (int i=0; i<DeviationObjQuantity; i++) {
+	for (int i = 0; i < DeviationObjQuantity; i++) {
 		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
-		NeedDeviation[i] = vw_fRand0()*0.1f;
+		NeedDeviation[i] = vw_fRand0() * 0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
 		DeviationObjNum[i] = WheelObjectsNum[i];
 	}
@@ -332,8 +323,6 @@ cWheeled::cWheeled(int WheeledNum)
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (int i = 0; i < WheelQuantity; i++)
 		Model3DBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
-
-
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizBlocks != nullptr)
