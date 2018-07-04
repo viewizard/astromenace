@@ -79,7 +79,6 @@ unsigned int VertexArrayPosition{0};
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern sVECTOR3D GamePoint;
-extern cSpaceObject *StartSpaceObject;
 // FIXME should be fixed, use 'include' instead
 float GameCameraGetDeviation();
 
@@ -290,35 +289,30 @@ void StarSystemDraw(eDrawType DrawType)
 		vw_DepthTest(true, eCompareFunc::LEQUAL);
 	}
 
+	// FIXME should be moved to 'space_object' code
 	// planets and big asteroids should be rendered before 'space dust'
-	cSpaceObject *tmpSpaceObject = StartSpaceObject;
-	while (tmpSpaceObject) {
-		cSpaceObject *tmp2 = tmpSpaceObject->Next;
-
-		// planets
-		if (tmpSpaceObject->ObjectType == eObjectType::Planet) {
+	ForEachSpaceObject([&] (cSpaceObject &tmpSpace, eSpaceCycle &UNUSED(Command)) {
+		if (tmpSpace.ObjectType == eObjectType::Planet) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
 				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.90f - GameCameraGetDeviation() * 4.0f,
 						       GameCameraGetDeviation() * 2.0f, 0.0f));
 			}
-			tmpSpaceObject->Draw(false);
+			tmpSpace.Draw(false);
 			if (DrawType == eDrawType::GAME)
 				vw_PopMatrix();
-		} else if ((tmpSpaceObject->ObjectType == eObjectType::BigAsteroid) &&
-			   ((tmpSpaceObject->InternalType > 10) && (tmpSpaceObject->InternalType < 20))) {
+		} else if ((tmpSpace.ObjectType == eObjectType::BigAsteroid) &&
+			   ((tmpSpace.InternalType > 10) && (tmpSpace.InternalType < 20))) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
 				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
 						       GameCameraGetDeviation() * 2.0f, 0.0f));
 			}
-			tmpSpaceObject->Draw(false);
+			tmpSpace.Draw(false);
 			if (DrawType == eDrawType::GAME)
 				vw_PopMatrix();
 		}
-
-		tmpSpaceObject = tmp2;
-	}
+	});
 
 	// 'space dust' much more closer to player, than planets, clear the depth buffer
 	vw_Clear(RI_DEPTH_BUFFER);
