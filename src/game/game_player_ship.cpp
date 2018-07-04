@@ -42,7 +42,6 @@ namespace astromenace {
 
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
-extern cSpaceObject *StartSpaceObject;
 
 float GetEnginePower(int EngineType);
 float GetEngineAcceleration(int EngineType);
@@ -492,22 +491,17 @@ void GamePlayerShip()
 		// Вывод голосового предупреждения если возможно столкновение
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		bool CollisionDetected = false;
-		cSpaceObject *tmpS = StartSpaceObject;
-		while (tmpS != nullptr) {
-			cSpaceObject *tmpSpace2 = tmpS->Next;
-
-			// проверка на возможное столкновение с неразрушаемым объектом, вывод голосового предупреждения
-			// если объект ближе чем радиус, кричим
-			if (tmpS->ObjectType == eObjectType::BigAsteroid)
-				if (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
-							     tmpS->Radius, tmpS->Location, tmpS->PrevLocation))
-					if (vw_SphereAABBCollision(tmpS->AABB, tmpS->Location,
-								   PlayerFighter->Radius, PlayerFighter->Location, PlayerFighter->PrevLocation)) {
-						CollisionDetected = true;
-					}
-
-			tmpS = tmpSpace2;
-		}
+		ForEachSpaceObject([&CollisionDetected] (const cSpaceObject &tmpSpace, eSpaceCycle &Command) {
+			// test with "immortal" big asteroids
+			if ((tmpSpace.ObjectType == eObjectType::BigAsteroid) &&
+			    (vw_SphereSphereCollision(PlayerFighter->Radius, PlayerFighter->Location,
+						      tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation)) &&
+			    (vw_SphereAABBCollision(tmpSpace.AABB, tmpSpace.Location, PlayerFighter->Radius,
+						    PlayerFighter->Location, PlayerFighter->PrevLocation))) {
+				CollisionDetected = true;
+				Command = eSpaceCycle::Break;
+			}
+		});
 		ForEachGroundObject([&CollisionDetected] (const cGroundObject &tmpGround, eGroundCycle &Command) {
 			// test with "immortal" civilian buildings
 			if ((tmpGround.ObjectType == eObjectType::CivilianBuilding) &&
