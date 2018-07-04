@@ -1315,37 +1315,31 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 	// делаем это первым, т.к. потом тут будет куча осколков которые тоже
 	// придется взрывать
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	cSpaceObject *tmpS = StartSpaceObject;
-	while (tmpS) {
-		cSpaceObject *tmpSpace2 = tmpS->Next;
-
-		if (NeedCheckCollision(*tmpS) &&
-		    ((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpS->ObjectStatus == eObjectStatus::Enemy)) ||
-		     ((ObjectStatus == eObjectStatus::Enemy) && ((tmpS->ObjectStatus == eObjectStatus::Ally) || (tmpS->ObjectStatus == eObjectStatus::Player)))) &&
-		    (&DontTouchObject != tmpS) && CheckSphereSphereDestroyDetection(*tmpS, Point, Radius, Distance2)) {
-			if ((tmpS->ObjectType == eObjectType::SpaceDebris) &&
+	ForEachSpaceObject([&] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
+		if (NeedCheckCollision(tmpSpace) &&
+		    ((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpSpace.ObjectStatus == eObjectStatus::Enemy)) ||
+		     ((ObjectStatus == eObjectStatus::Enemy) && ((tmpSpace.ObjectStatus == eObjectStatus::Ally) || (tmpSpace.ObjectStatus == eObjectStatus::Player)))) &&
+		    (&DontTouchObject != &tmpSpace) && CheckSphereSphereDestroyDetection(tmpSpace, Point, Radius, Distance2)) {
+			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
 			    (vw_fRand() > 0.4f))
-				goto NexttmpS;
+				return; // eSpaceCycle::Continue;
 
 			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
 
 			// отнимаем у всех по Damage
-			tmpS->Strength -= DamageHull/tmpS->ResistanceHull;
+			tmpSpace.Strength -= DamageHull / tmpSpace.ResistanceHull;
 
 			// если уже все... удаляем
-			if (tmpS->Strength <= 0.0f) {
+			if (tmpSpace.Strength <= 0.0f) {
 				// проверка, нужно начислять или нет
-				AddPlayerBonus(*tmpS, ObjectStatus);
+				AddPlayerBonus(tmpSpace, ObjectStatus);
 
-				new cSpaceExplosion(tmpS, 1, tmpS->Location, tmpS->Speed, -1);
-				delete tmpS;
-				tmpS = nullptr;
+				new cSpaceExplosion(&tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
+
+				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 			}
 		}
-
-NexttmpS:
-		tmpS = tmpSpace2;
-	}
+	});
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверка для всех кораблей
