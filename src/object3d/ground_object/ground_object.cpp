@@ -38,7 +38,7 @@ namespace astromenace {
 namespace {
 
 // all ground object list
-std::forward_list<std::shared_ptr<cGroundObject>> GroundObjectList{};
+std::list<std::shared_ptr<cGroundObject>> GroundObjectList{};
 
 } // unnamed namespace
 
@@ -88,14 +88,11 @@ std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum)
  */
 void UpdateAllGroundObjects(float Time)
 {
-	auto prev_iter = GroundObjectList.before_begin();
 	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
 		if (!iter->get()->Update(Time))
-			iter = GroundObjectList.erase_after(prev_iter);
-		else {
-			prev_iter = iter;
+			iter = GroundObjectList.erase(iter);
+		else
 			++iter;
-		}
 	}
 }
 
@@ -118,14 +115,12 @@ void ReleaseGroundObject(std::weak_ptr<cGroundObject> &Object)
 	if (!sharedObject)
 		return;
 
-	auto prev_iter = GroundObjectList.before_begin();
 	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
-		if (iter->get() == sharedObject.get())
-			iter = GroundObjectList.erase_after(prev_iter);
-		else {
-			prev_iter = iter;
+		if (iter->get() == sharedObject.get()) {
+			iter = GroundObjectList.erase(iter);
+			return;
+		} else
 			++iter;
-		}
 	}
 }
 
@@ -142,23 +137,21 @@ void ReleaseAllGroundObjects()
  */
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function)
 {
-	auto prev_iter = GroundObjectList.before_begin();
 	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
 		eGroundCycle Command{eGroundCycle::Continue};
 		function(*iter->get(), Command);
 
 		switch (Command) {
 		case eGroundCycle::Continue:
-			prev_iter = iter;
 			++iter;
 			break;
 		case eGroundCycle::Break:
 			return;
 		case eGroundCycle::DeleteObjectAndContinue:
-			iter = GroundObjectList.erase_after(prev_iter);
+			iter = GroundObjectList.erase(iter);
 			break;
 		case eGroundCycle::DeleteObjectAndBreak:
-			GroundObjectList.erase_after(prev_iter);
+			GroundObjectList.erase(iter);
 			return;
 		}
 	}
