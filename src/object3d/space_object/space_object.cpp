@@ -162,6 +162,45 @@ void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &C
 	}
 }
 
+/*
+ * Managed cycle for each space object pair.
+ */
+void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
+						cSpaceObject &SecondObject,
+						eSpacePairCycle &Command)> function)
+{
+	cSpaceObject *tmpFirstSpace = StartSpaceObject;
+	while (tmpFirstSpace) {
+		eSpacePairCycle Command{eSpacePairCycle::Continue};
+		cSpaceObject *tmpSecondSpace = tmpFirstSpace->Next;
+		while (tmpSecondSpace) {
+			cSpaceObject *tmpSecondSpaceNext = tmpSecondSpace->Next;
+
+			Command = eSpacePairCycle::Continue;
+			function(*tmpFirstSpace, *tmpSecondSpace, Command);
+
+			if ((Command == eSpacePairCycle::DeleteSecondObjectAndContinue) ||
+			    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
+				delete tmpSecondSpace;
+
+			// break second cycle
+			if ((Command == eSpacePairCycle::DeleteFirstObjectAndContinue) ||
+			    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
+				break;
+
+			tmpSecondSpace = tmpSecondSpaceNext;
+		}
+
+		cSpaceObject *tmpFirstSpaceNext = tmpFirstSpace->Next;
+
+		if ((Command == eSpacePairCycle::DeleteFirstObjectAndContinue) ||
+		    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
+			delete tmpFirstSpace;
+
+		tmpFirstSpace = tmpFirstSpaceNext;
+	}
+}
+
 //-----------------------------------------------------------------------------
 // Создание эффектов для космических объектов (двигатели для базы)
 //-----------------------------------------------------------------------------

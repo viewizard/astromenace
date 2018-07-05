@@ -47,6 +47,13 @@ enum class eSpaceCycle {
 	DeleteObjectAndBreak
 };
 
+enum class eSpacePairCycle {
+	Continue,
+	DeleteFirstObjectAndContinue,
+	DeleteSecondObjectAndContinue,
+	DeleteBothObjectsAndContinue
+};
+
 class cSpaceObject : public cObject3D
 {
 public:
@@ -122,6 +129,10 @@ void ReleaseAllSpaceObjects();
 void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType);
 // Managed cycle for each space object.
 void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function);
+// Managed cycle for each space object pair.
+void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
+						cSpaceObject &SecondObject,
+						eSpacePairCycle &Command)> function);
 
 } // astromenace namespace
 } // viewizard namespace
