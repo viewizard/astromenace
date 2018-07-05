@@ -147,9 +147,9 @@ void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &C
 {
 	cSpaceObject *tmpSpace = StartSpaceObject;
 	while (tmpSpace) {
-		cSpaceObject *tmpSpaceNext = tmpSpace->Next;
 		eSpaceCycle Command{eSpaceCycle::Continue};
 		function(*tmpSpace, Command);
+		cSpaceObject *tmpSpaceNext = tmpSpace->Next;
 		switch (Command) {
 		case eSpaceCycle::Continue:
 			break;
@@ -178,10 +178,9 @@ void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 		eSpacePairCycle Command{eSpacePairCycle::Continue};
 		cSpaceObject *tmpSecondSpace = tmpFirstSpace->Next;
 		while (tmpSecondSpace) {
-			cSpaceObject *tmpSecondSpaceNext = tmpSecondSpace->Next;
-
 			Command = eSpacePairCycle::Continue;
 			function(*tmpFirstSpace, *tmpSecondSpace, Command);
+			cSpaceObject *tmpSecondSpaceNext = tmpSecondSpace->Next;
 
 			if ((Command == eSpacePairCycle::DeleteSecondObjectAndContinue) ||
 			    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
