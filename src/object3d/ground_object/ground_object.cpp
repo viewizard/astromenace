@@ -117,10 +117,10 @@ void ReleaseGroundObject(std::weak_ptr<cGroundObject> &Object)
 
 	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
 		if (iter->get() == sharedObject.get()) {
-			iter = GroundObjectList.erase(iter);
+			GroundObjectList.erase(iter);
 			return;
-		} else
-			++iter;
+		}
+		++iter;
 	}
 }
 
