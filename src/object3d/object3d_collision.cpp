@@ -574,28 +574,24 @@ void DetectCollisionAllObject3D()
 
 		// проверяем столкновение
 		// cSpaceObject
-		cSpaceObject *tmpS = StartSpaceObject;
-		while (tmpS && tmpShip) {
-			cSpaceObject *tmpSpace2 = tmpS->Next;
-
+		if (tmpShip) // FIXME should be revised, when tmpShip will also have ForEach...()
+		ForEachSpaceObject([&tmpShip] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 			int ObjectPieceNum;
 			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
-						     tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
+						     tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
 			    vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
-						   tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
+						   tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
 			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
-						  tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    CheckHitBBOBBCollisionDetection(*tmpShip, *tmpS, ObjectPieceNum)) {
+						  tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
+			    CheckHitBBOBBCollisionDetection(*tmpShip, tmpSpace, ObjectPieceNum)) {
 
-				if (((tmpS->ObjectType == eObjectType::BasePart) ||
-				     (tmpS->ObjectType == eObjectType::BigAsteroid)) &&
-				    !CheckHitBBMeshCollisionDetection(*tmpShip, *tmpS, ObjectPieceNum)) {
-					// если не столкнулись = выходим
-					goto exitN1;
-				}
+				if (((tmpSpace.ObjectType == eObjectType::BasePart) ||
+				     (tmpSpace.ObjectType == eObjectType::BigAsteroid)) &&
+				    !CheckHitBBMeshCollisionDetection(*tmpShip, tmpSpace, ObjectPieceNum))
+					return; // eSpaceCycle::Continue
 
 				// если столкновение с преградой которую не можем уничтожить
-				if (!NeedCheckCollision(*tmpS)) {
+				if (!NeedCheckCollision(tmpSpace)) {
 					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
 					if (tmpShip->ObjectStatus != eObjectStatus::Player)
 						tmpShip->Strength -= (tmpShip->StrengthStart / 0.5f) * tmpShip->TimeDelta;
@@ -603,30 +599,29 @@ void DetectCollisionAllObject3D()
 						tmpShip->Strength -= (tmpShip->StrengthStart / 2.0f) * tmpShip->TimeDelta;
 				} else {
 					float StrTMP = tmpShip->Strength;
-					tmpShip->Strength -= tmpS->Strength / tmpShip->ResistanceHull;
-					tmpS->Strength -= StrTMP / tmpS->ResistanceHull;
+					tmpShip->Strength -= tmpSpace.Strength / tmpShip->ResistanceHull;
+					tmpSpace.Strength -= StrTMP / tmpSpace.ResistanceHull;
 				}
 				if (!NeedCheckCollision(*tmpShip))
-					tmpS->Strength = 0.0f;
+					tmpSpace.Strength = 0.0f;
 
 
 				// если уже все... удаляем
-				if (NeedCheckCollision(*tmpS) &&
-				    (tmpS->Strength <= 0.0f)) {
-					AddPlayerBonus(*tmpS, tmpShip->ObjectStatus);
+				if (NeedCheckCollision(tmpSpace) &&
+				    (tmpSpace.Strength <= 0.0f)) {
+					AddPlayerBonus(tmpSpace, tmpShip->ObjectStatus);
 
-					switch (tmpS->ObjectType) {
+					switch (tmpSpace.ObjectType) {
 					case eObjectType::SmallAsteroid:
-						new cSpaceExplosion(*tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+						new cSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					case eObjectType::SpaceDebris:
-						new cSpaceExplosion(*tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+						new cSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					default:
 						break;
 					}
-					delete tmpS;
-					tmpS = nullptr;
+					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(*tmpShip) &&
@@ -655,15 +650,26 @@ void DetectCollisionAllObject3D()
 						}
 						delete tmpShip;
 						tmpShip = nullptr;
+
+						// break space cycle
+						switch (SpaceCycleCommand) {
+						case eSpaceCycle::Continue:
+							SpaceCycleCommand = eSpaceCycle::Break;
+							break;
+						case eSpaceCycle::DeleteObjectAndContinue:
+							SpaceCycleCommand = eSpaceCycle::DeleteObjectAndBreak;
+							break;
+						default:
+							break;
+						}
+
 					} else {
 						// запоминаем, что взорвалось
 						PlayerDeadObjectPieceNum = ObjectPieceNum;
 					}
 				}
 			}
-exitN1:
-			tmpS = tmpSpace2;
-		}
+		});
 
 		// проверяем на столкновение с наземнымы объектами
 		// 1 - радиус-радиус
@@ -957,8 +963,8 @@ exitN1:
 					tmpGround.Strength -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
 				else {
 					float StrTMP = tmpGround.Strength;
-					tmpGround.Strength -= tmpS->Strength/tmpGround.ResistanceHull;
-					tmpS->Strength -= StrTMP/tmpS->ResistanceHull;
+					tmpGround.Strength -= tmpS->Strength / tmpGround.ResistanceHull;
+					tmpS->Strength -= StrTMP / tmpS->ResistanceHull;
 				}
 				if (!NeedCheckCollision(tmpGround))
 					tmpS->Strength = 0.0f;
