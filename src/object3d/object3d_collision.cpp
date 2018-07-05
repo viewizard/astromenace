@@ -51,8 +51,6 @@ extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
-extern cSpaceObject *StartSpaceObject;
-extern cSpaceObject *EndSpaceObject;
 
 extern float GameMoney;
 extern float GameExperience;
@@ -1067,97 +1065,81 @@ void DetectCollisionAllObject3D()
 		}
 	});
 
-	cSpaceObject *tmpS = StartSpaceObject;
-	while (tmpS) {
-		cSpaceObject *tmpSpace2 = tmpS->Next;
+	ForEachSpaceObjectPair([] (cSpaceObject &FirstObject, cSpaceObject &SecondObject, eSpacePairCycle &Command) {
+		if ((NeedCheckCollision(SecondObject) || NeedCheckCollision(FirstObject)) &&
+		    vw_SphereSphereCollision(FirstObject.Radius, FirstObject.Location,
+					     SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
+		    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
+				       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
+			// если попали в часть базы - просто летим в другую сторону,
+			// если это обломок корабля или модели
+			if (((FirstObject.ObjectType == eObjectType::BasePart) && (SecondObject.ObjectType == eObjectType::SpaceDebris)) ||
+			    ((FirstObject.ObjectType == eObjectType::SpaceDebris) && (SecondObject.ObjectType == eObjectType::BasePart))) {
+				if (FirstObject.ObjectType == eObjectType::SpaceDebris)
+					vw_RotatePoint(FirstObject.Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
+				if (SecondObject.ObjectType == eObjectType::SpaceDebris)
+					vw_RotatePoint(SecondObject.Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
 
-		// cSpaceObject на столкновения только по Сфера-Сфера
-		// начиная со следующего объекта, чтобы 2 раза не сравнивать
-		cSpaceObject *tmpCollisionSpace1 = tmpSpace2;
-		while ((tmpCollisionSpace1 != nullptr) && (tmpS != nullptr)) {
-			cSpaceObject *tmpCollisionSpace2 = tmpCollisionSpace1->Next;
+				return; // eSpacePairCycle::Continue
+			}
 
-			// если хоть один из них уничтожаемый
-			if ((NeedCheckCollision(*tmpCollisionSpace1) || NeedCheckCollision(*tmpS)) &&
-			    vw_SphereSphereCollision(tmpS->Radius, tmpS->Location,
-						     tmpCollisionSpace1->Radius, tmpCollisionSpace1->Location, tmpCollisionSpace1->PrevLocation) &&
-			    vw_OBBOBBCollision(tmpS->OBB.Box, tmpS->OBB.Location, tmpS->Location, tmpS->CurrentRotationMat,
-					       tmpCollisionSpace1->OBB.Box, tmpCollisionSpace1->OBB.Location, tmpCollisionSpace1->Location, tmpCollisionSpace1->CurrentRotationMat)) {
-				// если попали в часть базы - просто летим в другую сторону,
-				// если это обломок корабля или модели
-				// и если большой астероид
-				if (((tmpS->ObjectType == eObjectType::BasePart) && (tmpCollisionSpace1->ObjectType == eObjectType::SpaceDebris)) ||
-				    ((tmpS->ObjectType == eObjectType::SpaceDebris) && (tmpCollisionSpace1->ObjectType == eObjectType::BasePart))) {
-					if (tmpS->ObjectType == eObjectType::SpaceDebris)
-						vw_RotatePoint(tmpS->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
-					if (tmpCollisionSpace1->ObjectType == eObjectType::SpaceDebris)
-						vw_RotatePoint(tmpCollisionSpace1->Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
+			// смотрим, чтобы это были не только обломки с обломками (иначе не красиво взрываются корабли)
+			if ((SecondObject.ObjectType != eObjectType::SpaceDebris) ||
+			    (FirstObject.ObjectType != eObjectType::SpaceDebris)) {
 
-					goto exitN4;
+				int ObjectPieceNum;
+
+				// проверка, если это столкновение с базой - надо внимательно смотреть
+				if ((FirstObject.ObjectType == eObjectType::BasePart) &&
+				    (!CheckHitBBMeshCollisionDetection(SecondObject, FirstObject, ObjectPieceNum)))
+						return; // eSpacePairCycle::Continue
+				// проверка, если это столкновение с базой - надо внимательно смотреть
+				if ((SecondObject.ObjectType == eObjectType::BasePart) &&
+				    (!CheckHitBBMeshCollisionDetection(FirstObject, SecondObject, ObjectPieceNum)))
+						return; // eSpacePairCycle::Continue
+
+				bool SFXplayed = false;
+
+				if ((NeedCheckCollision(SecondObject)) &&
+				    ((SecondObject.ObjectType == eObjectType::SmallAsteroid) ||
+				     (SecondObject.ObjectType == eObjectType::SpaceDebris))) {
+					switch (SecondObject.ObjectType) {
+					case eObjectType::SmallAsteroid:
+						new cSpaceExplosion(SecondObject, 1, SecondObject.Location, SecondObject.Speed, -1);
+						break;
+					case eObjectType::SpaceDebris:
+						new cSpaceExplosion(SecondObject, 32, SecondObject.Location, SecondObject.Speed, -1);
+						break;
+					default:
+						break;
+					}
+					SFXplayed = true;
+
+					Command = eSpacePairCycle::DeleteSecondObjectAndContinue;
 				}
 
-				// смотрим, чтобы это были не только обломки с обломками (иначе не красиво взрываются корабли)
-				if ((tmpCollisionSpace1->ObjectType != eObjectType::SpaceDebris) ||
-				    (tmpS->ObjectType != eObjectType::SpaceDebris)) {
-
-					int ObjectPieceNum;
-
-					// проверка, если это столкновение с базой - надо внимательно смотреть
-					if ((tmpS->ObjectType == eObjectType::BasePart) &&
-					    (!CheckHitBBMeshCollisionDetection(*tmpCollisionSpace1, *tmpS, ObjectPieceNum)))
-							// если не столкнулись = выходим
-							goto exitN4;
-					// проверка, если это столкновение с базой - надо внимательно смотреть
-					if ((tmpCollisionSpace1->ObjectType == eObjectType::BasePart) &&
-					    (!CheckHitBBMeshCollisionDetection(*tmpS, *tmpCollisionSpace1, ObjectPieceNum)))
-							// если не столкнулись = выходим
-							goto exitN4;
-
-					bool SFXplayed = false;
-
-					if ((NeedCheckCollision(*tmpCollisionSpace1)) &&
-					    ((tmpCollisionSpace1->ObjectType == eObjectType::SmallAsteroid) ||
-					     (tmpCollisionSpace1->ObjectType == eObjectType::SpaceDebris))) {
-						switch (tmpCollisionSpace1->ObjectType) {
-						case eObjectType::SmallAsteroid:
-							new cSpaceExplosion(*tmpCollisionSpace1, 1, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
-							break;
-						case eObjectType::SpaceDebris:
-							new cSpaceExplosion(*tmpCollisionSpace1, 32, tmpCollisionSpace1->Location, tmpCollisionSpace1->Speed, -1);
-							break;
-						default:
-							break;
-						}
-						SFXplayed = true;
-						// проверка, можем удалить следующий (tmpSpace2), берем другой
-						if (tmpCollisionSpace1 == tmpSpace2)
-							tmpSpace2 = tmpSpace2->Next;
-						delete tmpCollisionSpace1;// tmpCollisionSpace1 = 0;
+				if (NeedCheckCollision(FirstObject) &&
+				    ((FirstObject.ObjectType == eObjectType::SmallAsteroid) ||
+				     (FirstObject.ObjectType == eObjectType::SpaceDebris))) {
+					switch (FirstObject.ObjectType) {
+					case eObjectType::SmallAsteroid:
+						new cSpaceExplosion(FirstObject, 1, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
+						break;
+					case eObjectType::SpaceDebris:
+						new cSpaceExplosion(FirstObject, 32, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
+						break;
+					default:
+						break;
 					}
 
-					if (NeedCheckCollision(*tmpS) &&
-					    ((tmpS->ObjectType == eObjectType::SmallAsteroid) || (tmpS->ObjectType == eObjectType::SpaceDebris))) {
-						switch (tmpS->ObjectType) {
-						case eObjectType::SmallAsteroid:
-							new cSpaceExplosion(*tmpS, 1, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
-							break;
-						case eObjectType::SpaceDebris:
-							new cSpaceExplosion(*tmpS, 32, tmpS->Location, tmpS->Speed, -1, !SFXplayed);
-							break;
-						default:
-							break;
-						}
-						delete tmpS;
-						tmpS = nullptr;
-					}
+					if (Command == eSpacePairCycle::DeleteSecondObjectAndContinue)
+						Command = eSpacePairCycle::DeleteBothObjectsAndContinue;
+					else
+						Command = eSpacePairCycle::DeleteFirstObjectAndContinue;
 				}
 			}
-exitN4:
-			tmpCollisionSpace1 = tmpCollisionSpace2;
 		}
-
-		tmpS = tmpSpace2;
-	}
+	});
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// для cProjectile игрока проверяем со всеми

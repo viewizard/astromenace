@@ -35,9 +35,13 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
 // Указатели на начальный и конечный объект в списке
 cSpaceObject *StartSpaceObject = nullptr;
 cSpaceObject *EndSpaceObject = nullptr;
+
+} // unnamed namespace
 
 
 //-----------------------------------------------------------------------------
