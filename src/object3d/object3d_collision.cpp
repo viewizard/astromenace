@@ -940,53 +940,49 @@ void DetectCollisionAllObject3D()
 
 		// проверяем столкновение
 		// cSpaceObject
-		cSpaceObject *tmpS = StartSpaceObject;
-		while (tmpS) {
-			cSpaceObject *tmpSpace2 = tmpS->Next;
-
+		ForEachSpaceObject([&tmpGround, &GroundCycleCommand] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 			int ObjectPieceNum;
 
 			// не проверяем с частями базы
-			if ((tmpS->ObjectType != eObjectType::BasePart) &&
+			if ((tmpSpace.ObjectType != eObjectType::BasePart) &&
 				// не проверяем если оба не можем уничтожить
-			    (NeedCheckCollision(tmpGround) || NeedCheckCollision(*tmpS)) &&
+			    (NeedCheckCollision(tmpGround) || NeedCheckCollision(tmpSpace)) &&
 			    vw_SphereSphereCollision(tmpGround.Radius, tmpGround.Location,
-						    tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
+						    tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
 			    vw_SphereAABBCollision(tmpGround.AABB, tmpGround.Location,
-						   tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
+						   tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
 			    vw_SphereOBBCollision(tmpGround.OBB.Box, tmpGround.OBB.Location, tmpGround.Location, tmpGround.CurrentRotationMat,
-						  tmpS->Radius, tmpS->Location, tmpS->PrevLocation) &&
-			    CheckHitBBOBBCollisionDetection(tmpGround, *tmpS, ObjectPieceNum)) {
+						  tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
+			    CheckHitBBOBBCollisionDetection(tmpGround, tmpSpace, ObjectPieceNum)) {
 
 				// если столкновение с преградой которую не можем уничтожить
-				if (!NeedCheckCollision(*tmpS))
+				if (!NeedCheckCollision(tmpSpace))
 					tmpGround.Strength -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
 				else {
 					float StrTMP = tmpGround.Strength;
-					tmpGround.Strength -= tmpS->Strength / tmpGround.ResistanceHull;
-					tmpS->Strength -= StrTMP / tmpS->ResistanceHull;
+					tmpGround.Strength -= tmpSpace.Strength / tmpGround.ResistanceHull;
+					tmpSpace.Strength -= StrTMP / tmpSpace.ResistanceHull;
 				}
 				if (!NeedCheckCollision(tmpGround))
-					tmpS->Strength = 0.0f;
+					tmpSpace.Strength = 0.0f;
 
 
 				// если уже все... удаляем
-				if (NeedCheckCollision(*tmpS) &&
-				    (tmpS->Strength <= 0.0f)) {
-					AddPlayerBonus(*tmpS, tmpGround.ObjectStatus);
+				if (NeedCheckCollision(tmpSpace) &&
+				    (tmpSpace.Strength <= 0.0f)) {
+					AddPlayerBonus(tmpSpace, tmpGround.ObjectStatus);
 
-					switch (tmpS->ObjectType) {
+					switch (tmpSpace.ObjectType) {
 					case eObjectType::SmallAsteroid:
-						new cSpaceExplosion(*tmpS, 1, tmpS->Location, tmpS->Speed, -1);
+						new cSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					case eObjectType::SpaceDebris:
-						new cSpaceExplosion(*tmpS, 32, tmpS->Location, tmpS->Speed, -1);
+						new cSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					default:
 						break;
 					}
-					delete tmpS;
-					tmpS = nullptr;
+					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(tmpGround) &&
@@ -1001,14 +997,22 @@ void DetectCollisionAllObject3D()
 					default:
 						break;
 						}
+
 					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
+					// break space cycle
+					switch (SpaceCycleCommand) {
+					case eSpaceCycle::Continue:
+						SpaceCycleCommand = eSpaceCycle::Break;
+						break;
+					case eSpaceCycle::DeleteObjectAndContinue:
+						SpaceCycleCommand = eSpaceCycle::DeleteObjectAndBreak;
+						break;
+					default:
+						break;
+					}
 				}
 			}
-
-			tmpS = tmpSpace2;
-			if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue) // FIXME temporary
-				break;
-		}
+		});
 	});
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
