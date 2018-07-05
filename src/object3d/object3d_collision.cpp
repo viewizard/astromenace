@@ -1018,41 +1018,35 @@ void DetectCollisionAllObject3D()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем все cSpaceObject
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	cSpaceObject *tmpS = StartSpaceObject;
-	while (tmpS) {
-		cSpaceObject *tmpSpace2 = tmpS->Next;
-
+	ForEachSpaceObject([] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 		// точка попадания, если оно есть
 		sVECTOR3D IntercPoint;
 		// проверяем со снарядами
 		cProjectile *tmpProjectile = StartProjectile;
-		while (tmpProjectile && tmpS) {
+		while (tmpProjectile) {
 			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			if(DetectProjectileCollision(*tmpS, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpS->Speed)) {
-				tmpSpace2 = tmpS->Next; // обязательно!!! если попали торпедой или бомбой!!!
-
-				if (NeedCheckCollision(*tmpS)) {
-					tmpS->Strength -= DamagesData.DamageHull/tmpS->ResistanceHull;
+			if(DetectProjectileCollision(tmpSpace, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpSpace.Speed)) {
+				if (NeedCheckCollision(tmpSpace)) {
+					tmpSpace.Strength -= DamagesData.DamageHull / tmpSpace.ResistanceHull;
 					// если уже все... удаляем
-					if (tmpS->Strength <= 0.0f) {
+					if (tmpSpace.Strength <= 0.0f) {
 						// проверка, нужно начислять или нет
-						AddPlayerBonus(*tmpS, tmpProjectile->ObjectStatus);
+						AddPlayerBonus(tmpSpace, tmpProjectile->ObjectStatus);
 
-						switch (tmpS->ObjectType) {
+						switch (tmpSpace.ObjectType) {
 						case eObjectType::SmallAsteroid:
-							new cSpaceExplosion(*tmpS, 1, IntercPoint, tmpS->Speed, -1);
+							new cSpaceExplosion(tmpSpace, 1, IntercPoint, tmpSpace.Speed, -1);
 							break;
 						case eObjectType::SpaceDebris:
-							new cSpaceExplosion(*tmpS, 32, IntercPoint, tmpS->Speed, -1);
+							new cSpaceExplosion(tmpSpace, 32, IntercPoint, tmpSpace.Speed, -1);
 							break;
 						default:
 							break;
 						}
-						delete tmpS;
-						tmpS = nullptr;
+						SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 
 						// убираем звук попадания-разбивания снаряда
 						tmpProjectile->NeedDeadSound = false;
@@ -1068,7 +1062,14 @@ void DetectCollisionAllObject3D()
 			}
 
 			tmpProjectile = tmpProjectile2;
+			if (SpaceCycleCommand == eSpaceCycle::DeleteObjectAndContinue) // FIXME temporary
+				break;
 		}
+	});
+
+	cSpaceObject *tmpS = StartSpaceObject;
+	while (tmpS) {
+		cSpaceObject *tmpSpace2 = tmpS->Next;
 
 		// cSpaceObject на столкновения только по Сфера-Сфера
 		// начиная со следующего объекта, чтобы 2 раза не сравнивать
