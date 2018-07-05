@@ -40,13 +40,13 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 //-----------------------------------------------------------------------------
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
-cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3D &ExplLocation,
+cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3D &ExplLocation,
 				 float Speed, int ObjectPieceNum, bool NeedExplosionSFX)
 {
 	// если ObjectPieceNum==-1 полный взрыв... не частями
 	// например ядерная ракета взрывает все объекты, или это астероид
 
-	TimeLastUpdate = Object->TimeLastUpdate;
+	TimeLastUpdate = Object.TimeLastUpdate;
 	ExplosionTypeByClass = 1;
 	// 1-взрыв на части, 2-разлет геометрии
 	int InternalExplosionType = 0;
@@ -56,7 +56,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty) + 1.0f; // чуть больше убираем...
 
 	// сохраняем статус объекта, чтобы правильно создавать части-снаряды и обломки
-	ObjectStatus = Object->ObjectStatus;
+	ObjectStatus = Object.ObjectStatus;
 	// сохраняем тип взрыва
 	ExplosionType = ExplType;
 	// для регулирования ускорения разлета геометрии
@@ -75,22 +75,22 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		MeshAcc = 10.0f;
 
 		// сохраняем данные объекта, чтобы не было скачков и не учитывать смещение в меше
-		SetLocation(Object->Location);
-		Orientation = Object->Orientation;
+		SetLocation(Object.Location);
+		Orientation = Object.Orientation;
 
 		// эффект
 		GraphicFX.resize(1);
 
 		// установка эффекта
-		float tRadius = Object->Radius/2.0f;
+		float tRadius = Object.Radius / 2.0f;
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 1);
-			sharedGFX->Speed = 1.5f * Object->Radius;
+			sharedGFX->Speed = 1.5f * Object.Radius;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
-			sharedGFX->ParticlesPerSec = (int)(20 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->MoveSystem(Object.Location);
+			sharedGFX->ParticlesPerSec = (int)(20 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 			sharedGFX->CreationType = eParticleCreationType::Sphere;
 			sharedGFX->CreationSize = sVECTOR3D(tRadius, tRadius, tRadius);
 			sharedGFX->Life = 1.5f;
@@ -98,15 +98,15 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(3*Object->Radius) + (int)(vw_fRand0()*3*Object->Radius);
+		int ttt = (int)(3 * Object.Radius) + (int)(vw_fRand0() * 3 * Object.Radius);
 		for (int i=0; i<ttt; i++) {
 			cProjectile *Projectile  = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
 			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
-			sVECTOR3D TM1 = Object->Orientation^Speed;
-			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius*6.0f));
+			sVECTOR3D TM1 = Object.Orientation ^ Speed;
+			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius * 6.0f));
 			Projectile->Orientation.Normalize();
 
 			for (auto tmpGFX : Projectile->GraphicFX) {
@@ -117,7 +117,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
-			Projectile->Speed = Speed + Object->Radius*2.0f + 2.0f*vw_fRand0();
+			Projectile->Speed = Speed + Object.Radius * 2.0f + 2.0f * vw_fRand0();
 			Projectile->SpeedEnd = 0.0f;
 			Projectile->SpeedStart = Projectile->Speed;
 			Projectile->Lifetime = Projectile->Age = 1.0f+vw_fRand0();
@@ -141,8 +141,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		MeshAcc = 20.0f;
 
 		// сохраняем данные объекта, чтобы не было скачков и не учитывать смещение в меше
-		SetLocation(Object->Location);
-		Orientation = Object->Orientation;
+		SetLocation(Object.Location);
+		Orientation = Object.Orientation;
 
 		// эффект
 		GraphicFX.resize(3);
@@ -151,47 +151,47 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 3);
-			sharedGFX->MoveSystem(Object->Location);
-			sharedGFX->ParticlesPerSec = (int)(5 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
-			sharedGFX->CreationSize = sVECTOR3D(Object->Radius / 4, Object->Radius / 4, Object->Radius / 4);
+			sharedGFX->MoveSystem(Object.Location);
+			sharedGFX->ParticlesPerSec = (int)(5 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
+			sharedGFX->CreationSize = sVECTOR3D(Object.Radius / 4, Object.Radius / 4, Object.Radius / 4);
 		}
 
 		GraphicFX[2] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[2].lock()) {
 			SetExplosionGFX(sharedGFX, 4);
-			sharedGFX->Speed = Object->Radius / 3.0f;
+			sharedGFX->Speed = Object.Radius / 3.0f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(5 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(5 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 			sharedGFX->NeedStop = false;
 		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 2);
-			sharedGFX->Speed = Object->Radius * 1.2f;
+			sharedGFX->Speed = Object.Radius * 1.2f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(10 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(10 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(Object->Radius) + (int)(vw_fRand0()*Object->Radius);
+		int ttt = (int)(Object.Radius) + (int)(vw_fRand0() * Object.Radius);
 		for (int i=0; i<ttt; i++) {
 			cProjectile *Projectile  = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
 			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
-			sVECTOR3D TM1 = Object->Orientation^Speed;
-			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/4.0f));
+			sVECTOR3D TM1 = Object.Orientation ^ Speed;
+			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius / 4.0f));
 			Projectile->Orientation.Normalize();
 
 			for (auto tmpGFX : Projectile->GraphicFX) {
@@ -208,7 +208,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
-			Projectile->Speed = Speed + Object->Radius/2.0f + 2.0f*vw_fRand0();
+			Projectile->Speed = Speed + Object.Radius / 2.0f + 2.0f * vw_fRand0();
 			Projectile->SpeedEnd = 0.0f;
 			Projectile->SpeedStart = Projectile->Speed;
 			Projectile->Lifetime = Projectile->Age = 1.5f+vw_fRand0();
@@ -240,8 +240,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		MeshAcc = 20.0f;
 
 		// сохраняем данные объекта, чтобы не было скачков и не учитывать смещение в меше
-		SetLocation(Object->Location);
-		Orientation = Object->Orientation;
+		SetLocation(Object.Location);
+		Orientation = Object.Orientation;
 
 		// эффект
 		GraphicFX.resize(2);
@@ -250,25 +250,25 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 6);
-			sharedGFX->Speed = Object->Radius / 1.4f;
+			sharedGFX->Speed = Object.Radius / 1.4f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(15 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 5);
-			sharedGFX->Speed = Object->Radius * 1.1f;
+			sharedGFX->Speed = Object.Radius * 1.1f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed > 0.01f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(15 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 		}
 	}
 
@@ -291,8 +291,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		MeshAcc = 20.0f;
 
 		// сохраняем данные объекта, чтобы не было скачков и не учитывать смещение в меше
-		SetLocation(Object->Location);
-		Orientation = Object->Orientation;
+		SetLocation(Object.Location);
+		Orientation = Object.Orientation;
 
 		// эффект
 		GraphicFX.resize(2);
@@ -301,25 +301,25 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 12);
-			sharedGFX->Speed = Object->Radius / 1.4f;
+			sharedGFX->Speed = Object.Radius / 1.4f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(15 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 11);
-			sharedGFX->Speed = Object->Radius * 1.1f;
+			sharedGFX->Speed = Object.Radius * 1.1f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(15 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 		}
 	}
 
@@ -333,8 +333,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		MeshAcc = 20.0f;
 
 		// сохраняем данные объекта, чтобы не было скачков и не учитывать смещение в меше
-		SetLocation(Object->Location);
-		Orientation = Object->Orientation;
+		SetLocation(Object.Location);
+		Orientation = Object.Orientation;
 
 		// эффект
 		GraphicFX.resize(2);
@@ -343,37 +343,37 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 6);
-			sharedGFX->Speed = Object->Radius / 1.3f;
+			sharedGFX->Speed = Object.Radius / 1.3f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(15 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 		}
 
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 5);
-			sharedGFX->Speed = Object->Radius * 1.1f;
+			sharedGFX->Speed = Object.Radius * 1.1f;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->MoveSystem(Object->Location);
+			sharedGFX->MoveSystem(Object.Location);
 			if (Speed != 0.0f)
 				sharedGFX->Theta = 360.00f / (Speed / 8);
-			sharedGFX->ParticlesPerSec = (int)(15 * Object->Radius);
-			sharedGFX->Direction = Object->Orientation;
+			sharedGFX->ParticlesPerSec = (int)(15 * Object.Radius);
+			sharedGFX->Direction = Object.Orientation;
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(0.5f*Object->Radius) + (int)(vw_fRand0()*Object->Radius);
+		int ttt = (int)(0.5f * Object.Radius) + (int)(vw_fRand0() * Object.Radius);
 		for (int i=0; i<ttt; i++) {
 			cProjectile *Projectile = new cProjectile;
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
 			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
-			sVECTOR3D TM1 = Object->Orientation^Speed;
-			Projectile->Orientation = TM1 + (Projectile->Orientation^(Object->Radius/2.0f));
+			sVECTOR3D TM1 = Object.Orientation^Speed;
+			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius / 2.0f));
 			Projectile->Orientation.Normalize();
 
 			for (auto tmpGFX : Projectile->GraphicFX) {
@@ -384,7 +384,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 			Projectile->ObjectStatus = ObjectStatus;
 			// учитываем пенальти
-			Projectile->Speed = Speed + Object->Radius/2.0f + 2.0f*vw_fRand0();
+			Projectile->Speed = Speed + Object.Radius / 2.0f + 2.0f * vw_fRand0();
 			Projectile->SpeedEnd = 0.0f;
 			Projectile->SpeedStart = Projectile->Speed;
 			Projectile->Lifetime = Projectile->Age = 1.5f+vw_fRand0();
@@ -425,39 +425,39 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		// строим обратную матрицу
 		float InvRotationMat[9];
 		// сохраняем старые значения + пересчет новых
-		memcpy(InvRotationMat, Object->CurrentRotationMat, 9 * sizeof(Object->CurrentRotationMat[0]));
+		memcpy(InvRotationMat, Object.CurrentRotationMat, 9 * sizeof(Object.CurrentRotationMat[0]));
 		// делаем инверсную старую матрицу
 		vw_Matrix33InverseRotate(InvRotationMat);
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (unsigned int i = 0; i < Object->Model3DBlocks.size(); i++) {
+		for (unsigned int i = 0; i < Object.Model3DBlocks.size(); i++) {
 			cSpaceDebris *SpaceDebris = new cSpaceDebris;
 			SpaceDebris->ObjectType = eObjectType::SpaceDebris;
 			SpaceDebris->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 
 			// только одна текстура (!) 2-ю для подстветки не тянем
 			SpaceDebris->Texture.resize(1, 0);
-			SpaceDebris->Texture[0] = Object->Texture[i];
-			if ((Object->NormalMap.size() > (unsigned)i) && Object->NormalMap[i]) {
+			SpaceDebris->Texture[0] = Object.Texture[i];
+			if ((Object.NormalMap.size() > (unsigned)i) && Object.NormalMap[i]) {
 				SpaceDebris->NormalMap.resize(1, 0);
-				SpaceDebris->NormalMap[0] = Object->NormalMap[i];
+				SpaceDebris->NormalMap[0] = Object.NormalMap[i];
 			}
 
 			// берем то, что нужно
 			SpaceDebris->Model3DBlocks.resize(1);
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-			SpaceDebris->Model3DBlocks[0] = Object->Model3DBlocks[i];
+			SpaceDebris->Model3DBlocks[0] = Object.Model3DBlocks[i];
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-			if (Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
-				Object->Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
+			if (Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
+				Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
 				SpaceDebris->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
 			}
 
 			// находим точку локального положения объекта в моделе
-			sVECTOR3D LocalLocation = Object->Model3DBlocks[i].Location;
-			vw_Matrix33CalcPoint(LocalLocation, Object->CurrentRotationMat);
-			LocalLocation = Object->HitBB[i].Location - LocalLocation;
+			sVECTOR3D LocalLocation = Object.Model3DBlocks[i].Location;
+			vw_Matrix33CalcPoint(LocalLocation, Object.CurrentRotationMat);
+			LocalLocation = Object.HitBB[i].Location - LocalLocation;
 			vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 			// и меняем внутрее положение
 			SpaceDebris->Model3DBlocks[0].Location = LocalLocation^(-1.0f);
@@ -466,8 +466,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			SpaceDebris->MetadataInitialization();
 
 			// установка текущего положения и поворота
-			SpaceDebris->SetLocation(Object->Location + Object->HitBB[i].Location);
-			SpaceDebris->SetRotation(Object->Rotation);
+			SpaceDebris->SetLocation(Object.Location + Object.HitBB[i].Location);
+			SpaceDebris->SetRotation(Object.Rotation);
 
 
 			SpaceDebris->Speed = Speed - 2 * vw_fRand();
@@ -476,7 +476,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			SpaceDebris->RotationSpeed.y = 2.0f * vw_fRand0();
 
 			SpaceDebris->StrengthStart = SpaceDebris->Strength = 1.0f;
-			SpaceDebris->ObjectStatus = Object->ObjectStatus;
+			SpaceDebris->ObjectStatus = Object.ObjectStatus;
 			SpaceDebris->ShowStrength = false;
 
 
@@ -494,7 +494,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			}
 			if (ObjectPieceNum != -1)
 				if (ObjectPieceNum == (int)i) {
-					new cSpaceExplosion(SpaceDebris, NeedExplosionType, SpaceDebris->Location, SpaceDebris->Speed, -1);
+					new cSpaceExplosion(*SpaceDebris, NeedExplosionType, SpaceDebris->Location, SpaceDebris->Speed, -1);
 					delete SpaceDebris;
 				}
 		}
@@ -513,25 +513,25 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 	if (InternalExplosionType == 2) {
 		// AABB нужен, т.к. по нему рисуем, если во фруструме
 		// копируем AABB, т.к. они сейчас подходят...
-		AABB[0] = Object->AABB[0];
-		AABB[1] = Object->AABB[1];
-		AABB[2] = Object->AABB[2];
-		AABB[3] = Object->AABB[3];
-		AABB[4] = Object->AABB[4];
-		AABB[5] = Object->AABB[5];
-		AABB[6] = Object->AABB[6];
-		AABB[7] = Object->AABB[7];
+		AABB[0] = Object.AABB[0];
+		AABB[1] = Object.AABB[1];
+		AABB[2] = Object.AABB[2];
+		AABB[3] = Object.AABB[3];
+		AABB[4] = Object.AABB[4];
+		AABB[5] = Object.AABB[5];
+		AABB[6] = Object.AABB[6];
+		AABB[7] = Object.AABB[7];
 
 		// поправка в зависимости от скорости объекта до взрыва
-		VelocityOrientation = Object->Orientation;
+		VelocityOrientation = Object.Orientation;
 
 
 		// общее кол-во элементов прорисовки (т.к. может быть не один объект + разные настройки качества взрыва)
 		int TotalCount = 0;
 
 		// копируем данные
-		Texture = Object->Texture;
-		Model3DBlocks = Object->Model3DBlocks;
+		Texture = Object.Texture;
+		Model3DBlocks = Object.Model3DBlocks;
 
 		// смотрим по настройкам сколько пропускать
 		// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
@@ -557,12 +557,12 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			int tricount = 0;
 
 			// если 2 текстурных координаты, нужно убрать 2-ю...
-			if ((Object->Model3DBlocks[i].VertexFormat & 0x000000F) >= 2)
-				Model3DBlocks[i].VertexFormat = (Object->Model3DBlocks[i].VertexFormat & 0xFFFFFF0) | RI_1_TEX;
+			if ((Object.Model3DBlocks[i].VertexFormat & 0x000000F) >= 2)
+				Model3DBlocks[i].VertexFormat = (Object.Model3DBlocks[i].VertexFormat & 0xFFFFFF0) | RI_1_TEX;
 			else
-				Model3DBlocks[i].VertexFormat = Object->Model3DBlocks[i].VertexFormat;
+				Model3DBlocks[i].VertexFormat = Object.Model3DBlocks[i].VertexFormat;
 
-			Model3DBlocks[i].VertexStride = Object->Model3DBlocks[i].VertexStride;
+			Model3DBlocks[i].VertexStride = Object.Model3DBlocks[i].VertexStride;
 
 
 			// если у нас включены и работают шейдеры, надо приготовить место для данных + изменить формат и шаг
@@ -573,14 +573,14 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 
 			// выделяем память для данных
 			// в отличии от снарядов - тут работаем с VertexBufferLimitedBySizeTriangles, чтобы сделать более красивый взрыв из мелких треугольников
-			Model3DBlocks[i].VertexArray.reset(new float[Model3DBlocks[i].VertexStride * Object->Model3DBlocks[i].VertexArrayWithSmallTrianglesCount],
+			Model3DBlocks[i].VertexArray.reset(new float[Model3DBlocks[i].VertexStride * Object.Model3DBlocks[i].VertexArrayWithSmallTrianglesCount],
 							  std::default_delete<float[]>());
 
 
 			// матрица для учета внутреннего состояния объекта
-			float TransMat[16]{Object->CurrentRotationMat[0], Object->CurrentRotationMat[1], Object->CurrentRotationMat[2], 0.0f,
-					   Object->CurrentRotationMat[3], Object->CurrentRotationMat[4], Object->CurrentRotationMat[5], 0.0f,
-					   Object->CurrentRotationMat[6], Object->CurrentRotationMat[7], Object->CurrentRotationMat[8], 0.0f,
+			float TransMat[16]{Object.CurrentRotationMat[0], Object.CurrentRotationMat[1], Object.CurrentRotationMat[2], 0.0f,
+					   Object.CurrentRotationMat[3], Object.CurrentRotationMat[4], Object.CurrentRotationMat[5], 0.0f,
+					   Object.CurrentRotationMat[6], Object.CurrentRotationMat[7], Object.CurrentRotationMat[8], 0.0f,
 					   0.0f, 0.0f, 0.0f, 1.0f};
 
 			float TransMatTMP[16];
@@ -588,53 +588,53 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 			float TransMatNorm[9];
 			vw_Matrix33Identity(TransMatNorm);
 
-			if (Object->Model3DBlocks[i].Rotation.x != 0.0f ||
-			    Object->Model3DBlocks[i].Rotation.y != 0.0f ||
-			    Object->Model3DBlocks[i].Rotation.z != 0.0f) {
-				vw_Matrix44CreateRotate(TransMatTMP, Object->Model3DBlocks[i].Rotation);
-				vw_Matrix33CreateRotate(TransMatNorm, Object->Model3DBlocks[i].Rotation);
+			if (Object.Model3DBlocks[i].Rotation.x != 0.0f ||
+			    Object.Model3DBlocks[i].Rotation.y != 0.0f ||
+			    Object.Model3DBlocks[i].Rotation.z != 0.0f) {
+				vw_Matrix44CreateRotate(TransMatTMP, Object.Model3DBlocks[i].Rotation);
+				vw_Matrix33CreateRotate(TransMatNorm, Object.Model3DBlocks[i].Rotation);
 			}
-			if (Object->Model3DBlocks[i].GeometryAnimation.x != 0.0f ||
-			    Object->Model3DBlocks[i].GeometryAnimation.y != 0.0f ||
-			    Object->Model3DBlocks[i].GeometryAnimation.z != 0.0f) {
+			if (Object.Model3DBlocks[i].GeometryAnimation.x != 0.0f ||
+			    Object.Model3DBlocks[i].GeometryAnimation.y != 0.0f ||
+			    Object.Model3DBlocks[i].GeometryAnimation.z != 0.0f) {
 				float TransMatAnimTMP[16];
-				vw_Matrix44CreateRotate(TransMatAnimTMP, Object->Model3DBlocks[i].GeometryAnimation);
+				vw_Matrix44CreateRotate(TransMatAnimTMP, Object.Model3DBlocks[i].GeometryAnimation);
 				vw_Matrix44Mult(TransMatTMP, TransMatAnimTMP);
 				float TransMatAnimTMPNorm[9];
-				vw_Matrix33CreateRotate(TransMatAnimTMPNorm, Object->Model3DBlocks[i].GeometryAnimation);
+				vw_Matrix33CreateRotate(TransMatAnimTMPNorm, Object.Model3DBlocks[i].GeometryAnimation);
 				vw_Matrix33Mult(TransMatNorm, TransMatAnimTMPNorm);
 			}
 
 			vw_Matrix44Translate(TransMatTMP, Model3DBlocks[i].Location);
 			vw_Matrix44Mult(TransMat, TransMatTMP);
-			vw_Matrix33Mult(TransMatNorm, Object->CurrentRotationMat);
+			vw_Matrix33Mult(TransMatNorm, Object.CurrentRotationMat);
 
 
 			sVECTOR3D TMP;
-			for (unsigned int j = 0; j < Object->Model3DBlocks[i].VertexArrayWithSmallTrianglesCount; j++) {
+			for (unsigned int j = 0; j < Object.Model3DBlocks[i].VertexArrayWithSmallTrianglesCount; j++) {
 				if (NeedInCur <= 0) {
 					int j1 = k * Model3DBlocks[i].VertexStride;
-					int j2 = j * Object->Model3DBlocks[i].VertexStride;
+					int j2 = j * Object.Model3DBlocks[i].VertexStride;
 
-					TMP.x = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2];
-					TMP.y = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 1];
-					TMP.z = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 2];
+					TMP.x = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2];
+					TMP.y = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 1];
+					TMP.z = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 2];
 					vw_Matrix44CalcPoint(TMP, TransMat);
 					// координаты
 					Model3DBlocks[i].VertexArray.get()[j1] = TMP.x;
 					Model3DBlocks[i].VertexArray.get()[j1 + 1] = TMP.y;
 					Model3DBlocks[i].VertexArray.get()[j1 + 2] = TMP.z;
 					// нормали
-					TMP.x = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 3];
-					TMP.y = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 4];
-					TMP.z = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 5];
+					TMP.x = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 3];
+					TMP.y = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 4];
+					TMP.z = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 5];
 					vw_Matrix33CalcPoint(TMP, TransMatNorm);
 					Model3DBlocks[i].VertexArray.get()[j1 + 3] = TMP.x;
 					Model3DBlocks[i].VertexArray.get()[j1 + 4] = TMP.y;
 					Model3DBlocks[i].VertexArray.get()[j1 + 5] = TMP.z;
 					// текстура
-					Model3DBlocks[i].VertexArray.get()[j1 + 6] = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 6];
-					Model3DBlocks[i].VertexArray.get()[j1 + 7] = Object->Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 7];
+					Model3DBlocks[i].VertexArray.get()[j1 + 6] = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 6];
+					Model3DBlocks[i].VertexArray.get()[j1 + 7] = Object.Model3DBlocks[i].VertexArrayWithSmallTriangles.get()[j2 + 7];
 
 					Model3DBlocks[i].VertexQuantity++;
 					k++;
@@ -657,8 +657,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 		}
 
 		// расстояние от центра до крайней точки
-		float Diag = (Object->Length*Object->Length)+
-			     (Object->Height*Object->Height) + (Object->Width*Object->Width);
+		float Diag = Object.Length * Object.Length +
+			     Object.Height * Object.Height +
+			     Object.Width * Object.Width;
 
 		// для каждого треугольника - свои данные
 		int Count = 0;
@@ -684,7 +685,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D *Object, int ExplType, const sVECTOR3
 					     ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z + vw_fRand0();
 
 
-				float Acc = (MeshAcc/1000.0f)*(Diag/dist)*(MeshAcc/Object->Radius);
+				float Acc = (MeshAcc / 1000.0f) * (Diag / dist) * (MeshAcc / Object.Radius);
 				if (Acc > MeshAcc)
 					Acc = MeshAcc + vw_fRand0();
 				if (Acc < -MeshAcc)

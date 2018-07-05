@@ -416,7 +416,7 @@ void GamePlayerShip()
 		} else {
 			// делаем взрыв
 			// + 10.0f движение камеры
-			new cSpaceExplosion(PlayerFighter, 31, PlayerFighter->Location, PlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
+			new cSpaceExplosion(*PlayerFighter, 31, PlayerFighter->Location, PlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
 
 			// включаем музыку и отображение "миссия провалена"
 			PlayMusicTheme(eMusicTheme::FAILED, 2000, 2000);

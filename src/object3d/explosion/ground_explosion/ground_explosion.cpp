@@ -174,7 +174,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				if (ObjectPieceNum != -1)
 					if (ObjectPieceNum == (int)i) {
 						// а теперь взрываем ту, в которую попали...
-						new cSpaceExplosion(SpaceDebris, 32, SpaceDebris->Location, SpaceDebris->Speed, -1);
+						new cSpaceExplosion(*SpaceDebris, 32, SpaceDebris->Location, SpaceDebris->Speed, -1);
 						delete SpaceDebris;
 					}
 			}

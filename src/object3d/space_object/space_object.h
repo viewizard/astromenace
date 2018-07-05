@@ -25,8 +25,8 @@
 
 *************************************************************************************/
 
-// FIXME split backgroind big asteroid code, render with separate function (planets and
-//       backgroind big asteroid), remove related code from StarSystemDraw()
+// FIXME split backgroind big asteroid code, render with separate function ('planet' and
+//       'planetoid' (backgroind big asteroid)), remove related code from StarSystemDraw()
 
 // TODO translate comments
 
