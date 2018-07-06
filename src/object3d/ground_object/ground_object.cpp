@@ -48,8 +48,8 @@ std::list<std::shared_ptr<cGroundObject>> GroundObjectList{};
  */
 std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cCivilianBuilding>{new cCivilianBuilding{BuildingNum},
-									  [](cCivilianBuilding *p) {delete p;}});
+	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cCivilianBuilding{BuildingNum},
+								      [](cCivilianBuilding *p) {delete p;}});
 	return GroundObjectList.front();
 }
 
@@ -58,8 +58,8 @@ std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum)
  */
 std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cMilitaryBuilding>{new cMilitaryBuilding{MilitaryBuildingNum},
-									  [](cMilitaryBuilding *p) {delete p;}});
+	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cMilitaryBuilding{MilitaryBuildingNum},
+								      [](cMilitaryBuilding *p) {delete p;}});
 	return GroundObjectList.front();
 }
 
@@ -68,8 +68,8 @@ std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum)
  */
 std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cTracked>{new cTracked{TrackedNum},
-								 [](cTracked *p) {delete p;}});
+	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cTracked{TrackedNum},
+								      [](cTracked *p) {delete p;}});
 	return GroundObjectList.front();
 }
 
@@ -78,8 +78,8 @@ std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum)
  */
 std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cWheeled>{new cWheeled{WheeledNum},
-								 [](cWheeled *p) {delete p;}});
+	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cWheeled{WheeledNum},
+								      [](cWheeled *p) {delete p;}});
 	return GroundObjectList.front();
 }
 
