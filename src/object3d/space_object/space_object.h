@@ -56,14 +56,6 @@ enum class eSpacePairCycle {
 
 class cSpaceObject : public cObject3D
 {
-	friend void UpdateAllSpaceObject(float Time);
-	friend void ReleaseSpaceObject(cSpaceObject *Object);
-	friend void ReleaseAllSpaceObjects();
-	friend void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function);
-	friend void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
-							       cSpaceObject &SecondObject,
-							       eSpacePairCycle &Command)> function);
-
 protected:
 	// don't allow object of this class creation
 	cSpaceObject();
@@ -91,69 +83,70 @@ public:
 
 	// чтобы возрвать часть корабля босса пришельцев через время
 	float BossPartCountDown{-1.0f};
-
-	// для собственного списка
-	cSpaceObject *Next{nullptr};
-	cSpaceObject *Prev{nullptr};
 };
 
 class cSmallAsteroid final : public cSpaceObject
 {
-	friend cSmallAsteroid *CreateSmallAsteroid();
+	friend std::weak_ptr<cSpaceObject> CreateSmallAsteroid();
 private:
+	// Don't allow direct new/delete usage in code, only CreateSmallAsteroid()
+	// allowed for cSmallAsteroid creation and release setup (deleter must be provided).
 	cSmallAsteroid();
-	~cSmallAsteroid() = default;
 };
 
 class cBigAsteroid final : public cSpaceObject
 {
-	friend cBigAsteroid *CreateBigAsteroid(int AsteroidNum);
+	friend std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum);
 private:
+	// Don't allow direct new/delete usage in code, only CreateBigAsteroid()
+	// allowed for cBigAsteroid creation and release setup (deleter must be provided).
 	explicit cBigAsteroid(int AsteroidNum);
-	~cBigAsteroid() = default;
 };
 
 class cPlanet final : public cSpaceObject
 {
-	friend cPlanet *CreatePlanet(int PlanetNum);
+	friend std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum);
 private:
+	// Don't allow direct new/delete usage in code, only CreatePlanet()
+	// allowed for cPlanet creation and release setup (deleter must be provided).
 	explicit cPlanet(int PlanetNum);
-	~cPlanet() = default;
 };
 
 class cSpaceDebris final : public cSpaceObject
 {
-	friend cSpaceDebris *CreateSpaceDebris();
+	friend std::weak_ptr<cSpaceObject> CreateSpaceDebris();
 private:
+	// Don't allow direct new/delete usage in code, only CreateSpaceDebris()
+	// allowed for cSpaceDebris creation and release setup (deleter must be provided).
 	cSpaceDebris();
-	~cSpaceDebris() = default;
 };
 
 class cBasePart final : public cSpaceObject
 {
-	friend cBasePart *CreateBasePart(int BasePartNum);
+	friend std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum);
 private:
+	// Don't allow direct new/delete usage in code, only CreateBasePart()
+	// allowed for cBasePart creation and release setup (deleter must be provided).
 	explicit cBasePart(int BasePartNum);
-	~cBasePart() = default;
 };
 
 
 // Create cSmallAsteroid object.
-cSmallAsteroid *CreateSmallAsteroid();
+std::weak_ptr<cSpaceObject> CreateSmallAsteroid();
 // Create cBigAsteroid object.
-cBigAsteroid *CreateBigAsteroid(int AsteroidNum);
+std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum);
 // Create cPlanet object.
-cPlanet *CreatePlanet(int PlanetNum);
+std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum);
 // Create cSpaceDebris object.
-cSpaceDebris *CreateSpaceDebris();
+std::weak_ptr<cSpaceObject> CreateSpaceDebris();
 // Create cBasePart object.
-cBasePart *CreateBasePart(int BasePartNum);
+std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceObject(float Time);
 // Прорисовываем все объекты
 void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular space object.
-void ReleaseSpaceObject(cSpaceObject *Object);
+void ReleaseSpaceObject(std::weak_ptr<cSpaceObject> &Object);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceObjects();
 // установка эффекта, если нужно

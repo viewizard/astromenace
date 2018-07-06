@@ -246,25 +246,26 @@ bool cMissionScript::Update(float Time)
 		AsterRealNeed = NeedGener - static_cast<float>(NeedGenerInt);
 
 		while (NeedGenerInt > 0) {
-			cSmallAsteroid *CreateAsteroid = CreateSmallAsteroid();
-			if (AsterFastCount != 20)
-				CreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
-			else
-				CreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed * vw_fRand();
-			CreateAsteroid->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
-			CreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));
+			std::weak_ptr<cSpaceObject> CreateAsteroid = CreateSmallAsteroid();
+			if (auto sharedCreateAsteroid = CreateAsteroid.lock()) {
+				if (AsterFastCount != 20)
+					sharedCreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
+				else
+					sharedCreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed * vw_fRand();
+				sharedCreateAsteroid->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
+				sharedCreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));
 
-			if (AsterFastCount != 20)
-				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
-								      AsterYPos * 2 + AsterH * vw_fRand(),
-								      AsterZPos + 20.0f) +
-							    GamePoint);
-			else
-				CreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
-								      AsterYPos * 2 + AsterH * vw_fRand(),
-								      AsterZPos) +
-							    GamePoint);
-
+				if (AsterFastCount != 20)
+					sharedCreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
+										    AsterYPos * 2 + AsterH * vw_fRand(),
+										    AsterZPos + 20.0f) +
+									  GamePoint);
+				else
+					sharedCreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
+										    AsterYPos * 2 + AsterH * vw_fRand(),
+										    AsterZPos) +
+									  GamePoint);
+			}
 			NeedGenerInt--;
 		}
 
@@ -408,11 +409,13 @@ bool cMissionScript::Update(float Time)
 		case constexpr_hash_djb2a("CreatePlanet"): {
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
-					cPlanet *Planet = CreatePlanet(tmpType);
-					SetRotation(*Planet, xmlEntry, xmlDoc);
-					SetLocation(*Planet, xmlEntry, xmlDoc, 0.0f);
-					Planet->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
-					xmlDoc->fGetEntryAttribute(xmlEntry, "speed", Planet->Speed);
+					std::weak_ptr<cSpaceObject> Planet = CreatePlanet(tmpType);
+					if (auto sharedPlanet = Planet.lock()) {
+						SetRotation(*sharedPlanet, xmlEntry, xmlDoc);
+						SetLocation(*sharedPlanet, xmlEntry, xmlDoc, 0.0f);
+						sharedPlanet->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
+						xmlDoc->fGetEntryAttribute(xmlEntry, "speed", sharedPlanet->Speed);
+					}
 				}
 			}
 			break;
@@ -669,20 +672,25 @@ static void LoadGroundObjectScript(std::weak_ptr<cGroundObject> &GroundObject,
 /*
  * Load SpaceObject related script data.
  */
-static void LoadSpaceObjectScript(cSpaceObject &SpaceObject, const std::unique_ptr<cXMLDocument> &xmlDoc,
-				   const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag)
+static void LoadSpaceObjectScript(std::weak_ptr<cSpaceObject> &SpaceObject,
+				  const std::unique_ptr<cXMLDocument> &xmlDoc,
+				  const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag)
 {
+	auto sharedSpaceObject = SpaceObject.lock();
+	if (!sharedSpaceObject)
+		return;
+
 	if (ShowLineNumber)
-		SetDebugInformation(SpaceObject, xmlEntry, ShowLineNumber);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "speed", SpaceObject.Speed);
-	SetDeleteAfterLeaveScene(SpaceObject, xmlEntry, xmlDoc);
+		SetDebugInformation(*sharedSpaceObject, xmlEntry, ShowLineNumber);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "speed", sharedSpaceObject->Speed);
+	SetDeleteAfterLeaveScene(*sharedSpaceObject, xmlEntry, xmlDoc);
 
-	SetRotation(SpaceObject, xmlEntry, xmlDoc);
-	SetLocation(SpaceObject, xmlEntry, xmlDoc, TimeOpLag);
+	SetRotation(*sharedSpaceObject, xmlEntry, xmlDoc);
+	SetLocation(*sharedSpaceObject, xmlEntry, xmlDoc, TimeOpLag);
 
-	xmlDoc->fGetEntryAttribute(xmlEntry, "rotx", SpaceObject.RotationSpeed.x);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "roty", SpaceObject.RotationSpeed.y);
-	xmlDoc->fGetEntryAttribute(xmlEntry, "rotz", SpaceObject.RotationSpeed.z);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "rotx", sharedSpaceObject->RotationSpeed.x);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "roty", sharedSpaceObject->RotationSpeed.y);
+	xmlDoc->fGetEntryAttribute(xmlEntry, "rotz", sharedSpaceObject->RotationSpeed.z);
 }
 
 /*
@@ -734,22 +742,22 @@ void cMissionScript::UpdateTimeLine()
 			break;
 
 		case constexpr_hash_djb2a("CreateAsteroid"): {
-				cSmallAsteroid *SpaceObject = CreateSmallAsteroid();
-				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
+				std::weak_ptr<cSpaceObject> SpaceObject = CreateSmallAsteroid();
+				LoadSpaceObjectScript(SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBasePart"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBasePart *SpaceObject = CreateBasePart(tmpType);
-				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
+				std::weak_ptr<cSpaceObject> SpaceObject = CreateBasePart(tmpType);
+				LoadSpaceObjectScript(SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBigAsteroid"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBigAsteroid *SpaceObject = CreateBigAsteroid(tmpType);
-				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
+				std::weak_ptr<cSpaceObject> SpaceObject = CreateBigAsteroid(tmpType);
+				LoadSpaceObjectScript(SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 

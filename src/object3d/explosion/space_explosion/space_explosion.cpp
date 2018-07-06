@@ -432,26 +432,30 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
 		for (unsigned int i = 0; i < Object.Model3DBlocks.size(); i++) {
-			cSpaceDebris *SpaceDebris = CreateSpaceDebris();
-			SpaceDebris->ObjectType = eObjectType::SpaceDebris;
-			SpaceDebris->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
+			std::weak_ptr<cSpaceObject> SpaceDebris = CreateSpaceDebris();
+			auto sharedSpaceDebris = SpaceDebris.lock();
+			if (!sharedSpaceDebris)
+				return;
+
+			sharedSpaceDebris->ObjectType = eObjectType::SpaceDebris;
+			sharedSpaceDebris->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 
 			// только одна текстура (!) 2-ю для подстветки не тянем
-			SpaceDebris->Texture.resize(1, 0);
-			SpaceDebris->Texture[0] = Object.Texture[i];
+			sharedSpaceDebris->Texture.resize(1, 0);
+			sharedSpaceDebris->Texture[0] = Object.Texture[i];
 			if ((Object.NormalMap.size() > (unsigned)i) && Object.NormalMap[i]) {
-				SpaceDebris->NormalMap.resize(1, 0);
-				SpaceDebris->NormalMap[0] = Object.NormalMap[i];
+				sharedSpaceDebris->NormalMap.resize(1, 0);
+				sharedSpaceDebris->NormalMap[0] = Object.NormalMap[i];
 			}
 
 			// берем то, что нужно
-			SpaceDebris->Model3DBlocks.resize(1);
+			sharedSpaceDebris->Model3DBlocks.resize(1);
 			// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-			SpaceDebris->Model3DBlocks[0] = Object.Model3DBlocks[i];
+			sharedSpaceDebris->Model3DBlocks[0] = Object.Model3DBlocks[i];
 			// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
 			if (Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
 				Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
-				SpaceDebris->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
+				sharedSpaceDebris->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
 			}
 
 			// находим точку локального положения объекта в моделе
@@ -460,24 +464,24 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			LocalLocation = Object.HitBB[i].Location - LocalLocation;
 			vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 			// и меняем внутрее положение
-			SpaceDebris->Model3DBlocks[0].Location = LocalLocation^(-1.0f);
+			sharedSpaceDebris->Model3DBlocks[0].Location = LocalLocation^(-1.0f);
 
 			// находим все данные по геометрии
-			SpaceDebris->MetadataInitialization();
+			sharedSpaceDebris->MetadataInitialization();
 
 			// установка текущего положения и поворота
-			SpaceDebris->SetLocation(Object.Location + Object.HitBB[i].Location);
-			SpaceDebris->SetRotation(Object.Rotation);
+			sharedSpaceDebris->SetLocation(Object.Location + Object.HitBB[i].Location);
+			sharedSpaceDebris->SetRotation(Object.Rotation);
 
 
-			SpaceDebris->Speed = Speed - 2 * vw_fRand();
+			sharedSpaceDebris->Speed = Speed - 2 * vw_fRand();
 
-			SpaceDebris->RotationSpeed.x = 2.0f * vw_fRand0();
-			SpaceDebris->RotationSpeed.y = 2.0f * vw_fRand0();
+			sharedSpaceDebris->RotationSpeed.x = 2.0f * vw_fRand0();
+			sharedSpaceDebris->RotationSpeed.y = 2.0f * vw_fRand0();
 
-			SpaceDebris->StrengthStart = SpaceDebris->Strength = 1.0f;
-			SpaceDebris->ObjectStatus = Object.ObjectStatus;
-			SpaceDebris->ShowStrength = false;
+			sharedSpaceDebris->StrengthStart = sharedSpaceDebris->Strength = 1.0f;
+			sharedSpaceDebris->ObjectStatus = Object.ObjectStatus;
+			sharedSpaceDebris->ShowStrength = false;
 
 
 			// взрываем тот объект, в который попали
@@ -488,13 +492,13 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 				break;
 			case 33: // взрыв боссов пришельцев
 				// взорвем все в течении 3-х секунд
-				SpaceDebris->BossPartCountDown = 3.0f * vw_fRand();
+				sharedSpaceDebris->BossPartCountDown = 3.0f * vw_fRand();
 				NeedExplosionType = 34;
 				break;
 			}
 			if (ObjectPieceNum != -1)
 				if (ObjectPieceNum == (int)i) {
-					new cSpaceExplosion(*SpaceDebris, NeedExplosionType, SpaceDebris->Location, SpaceDebris->Speed, -1);
+					new cSpaceExplosion(*sharedSpaceDebris, NeedExplosionType, sharedSpaceDebris->Location, sharedSpaceDebris->Speed, -1);
 					ReleaseSpaceObject(SpaceDebris);
 				}
 		}

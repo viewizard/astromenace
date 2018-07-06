@@ -37,9 +37,8 @@ namespace astromenace {
 
 namespace {
 
-// Указатели на начальный и конечный объект в списке
-cSpaceObject *StartSpaceObject = nullptr;
-cSpaceObject *EndSpaceObject = nullptr;
+// all space object list
+std::list<std::shared_ptr<cSpaceObject>> SpaceObjectList{};
 
 } // unnamed namespace
 
@@ -47,87 +46,51 @@ cSpaceObject *EndSpaceObject = nullptr;
 /*
  * Create cSmallAsteroid object.
  */
-cSmallAsteroid *CreateSmallAsteroid()
+std::weak_ptr<cSpaceObject> CreateSmallAsteroid()
 {
-	return new cSmallAsteroid;
+	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cSmallAsteroid,
+								    [](cSmallAsteroid *p) {delete p;}});
+	return SpaceObjectList.front();
 }
 
 /*
  * Create cBigAsteroid object.
  */
-cBigAsteroid *CreateBigAsteroid(int AsteroidNum)
+std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum)
 {
-	return new cBigAsteroid{AsteroidNum};
+	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cBigAsteroid{AsteroidNum},
+								    [](cBigAsteroid *p) {delete p;}});
+	return SpaceObjectList.front();
 }
 
 /*
  * Create cPlanet object.
  */
-cPlanet *CreatePlanet(int PlanetNum)
+std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum)
 {
-	return new cPlanet{PlanetNum};
+	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cPlanet{PlanetNum},
+								    [](cPlanet *p) {delete p;}});
+	return SpaceObjectList.front();
 }
 
 /*
  * Create cSpaceDebris object.
  */
-cSpaceDebris *CreateSpaceDebris()
+std::weak_ptr<cSpaceObject> CreateSpaceDebris()
 {
-	return new cSpaceDebris;
+	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cSpaceDebris,
+								    [](cSpaceDebris *p) {delete p;}});
+	return SpaceObjectList.front();
 }
 
 /*
  * Create cBasePart object.
  */
-cBasePart *CreateBasePart(int BasePartNum)
+std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum)
 {
-	return new cBasePart{BasePartNum};
-}
-
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-static void AttachSpaceObject(cSpaceObject *SpaceObject)
-{
-	if (SpaceObject == nullptr)
-		return;
-
-	if (EndSpaceObject == nullptr) {
-		SpaceObject->Prev = nullptr;
-		SpaceObject->Next = nullptr;
-		StartSpaceObject = SpaceObject;
-		EndSpaceObject = SpaceObject;
-	} else {
-		SpaceObject->Prev = EndSpaceObject;
-		SpaceObject->Next = nullptr;
-		EndSpaceObject->Next = SpaceObject;
-		EndSpaceObject = SpaceObject;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-static void DetachSpaceObject(cSpaceObject *SpaceObject)
-{
-	if (SpaceObject == nullptr)
-		return;
-
-	if (StartSpaceObject == SpaceObject)
-		StartSpaceObject = SpaceObject->Next;
-	if (EndSpaceObject == SpaceObject)
-		EndSpaceObject = SpaceObject->Prev;
-
-
-	if (SpaceObject->Next != nullptr)
-		SpaceObject->Next->Prev = SpaceObject->Prev;
-	else if (SpaceObject->Prev != nullptr)
-		SpaceObject->Prev->Next = nullptr;
-
-	if (SpaceObject->Prev != nullptr)
-		SpaceObject->Prev->Next = SpaceObject->Next;
-	else if (SpaceObject->Next != nullptr)
-		SpaceObject->Next->Prev = nullptr;
+	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cBasePart{BasePartNum},
+								    [](cBasePart *p) {delete p;}});
+	return SpaceObjectList.front();
 }
 
 //-----------------------------------------------------------------------------
@@ -135,13 +98,11 @@ static void DetachSpaceObject(cSpaceObject *SpaceObject)
 //-----------------------------------------------------------------------------
 void UpdateAllSpaceObject(float Time)
 {
-	cSpaceObject *tmp = StartSpaceObject;
-	while (tmp != nullptr) {
-		cSpaceObject *tmp2 = tmp->Next;
-		// делаем обновление данных по объекту
-		if (!tmp->Update(Time))
-			delete tmp;
-		tmp = tmp2;
+	for (auto iter = SpaceObjectList.begin(); iter != SpaceObjectList.end();) {
+		if (!iter->get()->Update(Time))
+			iter = SpaceObjectList.erase(iter);
+		else
+			++iter;
 	}
 }
 
@@ -150,31 +111,30 @@ void UpdateAllSpaceObject(float Time)
 //-----------------------------------------------------------------------------
 void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 {
-	cSpaceObject *tmp = StartSpaceObject;
-	while (tmp != nullptr) {
-		cSpaceObject *tmp2 = tmp->Next;
-
+	for (auto &tmpObject : SpaceObjectList) {
 		// планеты и астероиды рисуем до тайловой анимации в игре!!!
-		if ((tmp->ObjectType != eObjectType::Planet) &&
-		    !((tmp->ObjectType == eObjectType::BigAsteroid) &&
-		      ((tmp->InternalType > 10) && (tmp->InternalType < 20))))
-			tmp->Draw(VertexOnlyPass, ShadowMap);
-
-		tmp = tmp2;
+		if ((tmpObject.get()->ObjectType != eObjectType::Planet) &&
+		    !((tmpObject.get()->ObjectType == eObjectType::BigAsteroid) &&
+		      ((tmpObject.get()->InternalType > 10) && (tmpObject.get()->InternalType < 20))))
+			tmpObject.get()->Draw(VertexOnlyPass, ShadowMap);
 	}
 }
 
 /*
  * Release particular space object.
  */
-void ReleaseSpaceObject(cSpaceObject *Object)
+void ReleaseSpaceObject(std::weak_ptr<cSpaceObject> &Object)
 {
-	cSpaceObject *tmp = StartSpaceObject;
-	while (tmp != nullptr) {
-		cSpaceObject *tmp2 = tmp->Next;
-		if (tmp == Object)
-			delete tmp;
-		tmp = tmp2;
+	auto sharedObject = Object.lock();
+	if (!sharedObject)
+		return;
+
+	for (auto iter = SpaceObjectList.begin(); iter != SpaceObjectList.end();) {
+		if (iter->get() == sharedObject.get()) {
+			SpaceObjectList.erase(iter);
+			return;
+		}
+		++iter;
 	}
 }
 
@@ -183,15 +143,7 @@ void ReleaseSpaceObject(cSpaceObject *Object)
 //-----------------------------------------------------------------------------
 void ReleaseAllSpaceObjects()
 {
-	cSpaceObject *tmp = StartSpaceObject;
-	while (tmp != nullptr) {
-		cSpaceObject *tmp2 = tmp->Next;
-		delete tmp;
-		tmp = tmp2;
-	}
-
-	StartSpaceObject = nullptr;
-	EndSpaceObject = nullptr;
+	SpaceObjectList.clear();
 }
 
 /*
@@ -199,24 +151,23 @@ void ReleaseAllSpaceObjects()
  */
 void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function)
 {
-	cSpaceObject *tmpSpace = StartSpaceObject;
-	while (tmpSpace) {
+	for (auto iter = SpaceObjectList.begin(); iter != SpaceObjectList.end();) {
 		eSpaceCycle Command{eSpaceCycle::Continue};
-		function(*tmpSpace, Command);
-		cSpaceObject *tmpSpaceNext = tmpSpace->Next;
+		function(*iter->get(), Command);
+
 		switch (Command) {
 		case eSpaceCycle::Continue:
+			++iter;
 			break;
 		case eSpaceCycle::Break:
 			return;
 		case eSpaceCycle::DeleteObjectAndContinue:
-			delete tmpSpace;
+			iter = SpaceObjectList.erase(iter);
 			break;
 		case eSpaceCycle::DeleteObjectAndBreak:
-			delete tmpSpace;
+			SpaceObjectList.erase(iter);
 			return;
 		}
-		tmpSpace = tmpSpaceNext;
 	}
 }
 
@@ -227,34 +178,30 @@ void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 						cSpaceObject &SecondObject,
 						eSpacePairCycle &Command)> function)
 {
-	cSpaceObject *tmpFirstSpace = StartSpaceObject;
-	while (tmpFirstSpace) {
+	for (auto iterFirst = SpaceObjectList.begin(); iterFirst != SpaceObjectList.end();) {
 		eSpacePairCycle Command{eSpacePairCycle::Continue};
-		cSpaceObject *tmpSecondSpace = tmpFirstSpace->Next;
-		while (tmpSecondSpace) {
+
+		for (auto iterSecond = std::next(iterFirst, 1); iterSecond != SpaceObjectList.end();) {
 			Command = eSpacePairCycle::Continue;
-			function(*tmpFirstSpace, *tmpSecondSpace, Command);
-			cSpaceObject *tmpSecondSpaceNext = tmpSecondSpace->Next;
+			function(*iterFirst->get(), *iterSecond->get(), Command);
 
 			if ((Command == eSpacePairCycle::DeleteSecondObjectAndContinue) ||
 			    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
-				delete tmpSecondSpace;
+				iterSecond = SpaceObjectList.erase(iterSecond);
+			else
+				++iterSecond;
 
 			// break second cycle
 			if ((Command == eSpacePairCycle::DeleteFirstObjectAndContinue) ||
 			    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
 				break;
-
-			tmpSecondSpace = tmpSecondSpaceNext;
 		}
-
-		cSpaceObject *tmpFirstSpaceNext = tmpFirstSpace->Next;
 
 		if ((Command == eSpacePairCycle::DeleteFirstObjectAndContinue) ||
 		    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
-			delete tmpFirstSpace;
-
-		tmpFirstSpace = tmpFirstSpaceNext;
+			iterFirst = SpaceObjectList.erase(iterFirst);
+		else
+			++iterFirst;
 	}
 }
 
@@ -330,9 +277,6 @@ cSpaceObject::cSpaceObject()
 	ObjectStatus = eObjectStatus::Enemy;
 
 	LastCameraPoint = GamePoint;
-
-	// подключаем к своему списку
-	AttachSpaceObject(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -348,8 +292,6 @@ cSpaceObject::~cSpaceObject()
 			}
 		}
 	}
-
-	DetachSpaceObject(this);
 }
 
 //-----------------------------------------------------------------------------
