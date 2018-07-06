@@ -567,6 +567,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	// торпеда пиратов
 	case 209: {
 		// убиваем всех, кто рядом
+		// FIXME this act as hidden trap (objects release), should be moved to collision detection code
 		DestroyRadiusCollisionAllObject3D(*Object, Projectile->Location, 75.0f, Projectile->DamageHull, Projectile->ObjectStatus);
 
 		VelocityOrientation = Projectile->Orientation^(-1);
@@ -620,6 +621,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	// бомба пиратов
 	case 210: {
 		// убиваем всех, кто рядом
+		// FIXME this act as hidden trap (objects release), should be moved to collision detection code
 		DestroyRadiusCollisionAllObject3D(*Object, Projectile->Location, 150.0f, Projectile->DamageHull, Projectile->ObjectStatus);
 
 		VelocityOrientation = Projectile->Orientation^(-1);

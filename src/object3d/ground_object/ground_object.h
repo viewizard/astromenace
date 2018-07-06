@@ -215,6 +215,7 @@ void ReleaseGroundObject(std::weak_ptr<cGroundObject> &Object);
 // Release all ground objects.
 void ReleaseAllGroundObjects();
 // Managed cycle for each ground object.
+// Note, caller must guarantee, that 'Object' will not released in callback function call.
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
 
 } // astromenace namespace

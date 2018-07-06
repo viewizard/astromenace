@@ -152,8 +152,10 @@ void ReleaseAllSpaceObjects();
 // установка эффекта, если нужно
 void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType);
 // Managed cycle for each space object.
+// Note, caller must guarantee, that 'Object' will not released in callback function call.
 void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function);
 // Managed cycle for each space object pair.
+// Note, caller must guarantee, that 'FirstObject' and 'SecondObject' will not released in callback function call.
 void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 						cSpaceObject &SecondObject,
 						eSpacePairCycle &Command)> function);
