@@ -432,7 +432,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
 		for (unsigned int i = 0; i < Object.Model3DBlocks.size(); i++) {
-			cSpaceDebris *SpaceDebris = new cSpaceDebris;
+			cSpaceDebris *SpaceDebris = CreateSpaceDebris();
 			SpaceDebris->ObjectType = eObjectType::SpaceDebris;
 			SpaceDebris->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 
@@ -495,7 +495,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			if (ObjectPieceNum != -1)
 				if (ObjectPieceNum == (int)i) {
 					new cSpaceExplosion(*SpaceDebris, NeedExplosionType, SpaceDebris->Location, SpaceDebris->Speed, -1);
-					delete SpaceDebris;
+					ReleaseSpaceObject(SpaceDebris);
 				}
 		}
 

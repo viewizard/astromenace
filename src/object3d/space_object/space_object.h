@@ -56,11 +56,20 @@ enum class eSpacePairCycle {
 
 class cSpaceObject : public cObject3D
 {
-public:
-	// базовые конструктор и деструктор объекта
+	friend void UpdateAllSpaceObject(float Time);
+	friend void ReleaseSpaceObject(cSpaceObject *Object);
+	friend void ReleaseAllSpaceObjects();
+	friend void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function);
+	friend void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
+							       cSpaceObject &SecondObject,
+							       eSpacePairCycle &Command)> function);
+
+protected:
+	// don't allow object of this class creation
 	cSpaceObject();
 	virtual ~cSpaceObject();
 
+public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 	// Установка положения объекта
@@ -88,41 +97,63 @@ public:
 	cSpaceObject *Prev{nullptr};
 };
 
-class cSmallAsteroid : public cSpaceObject
+class cSmallAsteroid final : public cSpaceObject
 {
-public:
+	friend cSmallAsteroid *CreateSmallAsteroid();
+private:
 	cSmallAsteroid();
+	~cSmallAsteroid() = default;
 };
 
-class cBigAsteroid : public cSpaceObject
+class cBigAsteroid final : public cSpaceObject
 {
-public:
+	friend cBigAsteroid *CreateBigAsteroid(int AsteroidNum);
+private:
 	explicit cBigAsteroid(int AsteroidNum);
+	~cBigAsteroid() = default;
 };
 
-class cPlanet : public cSpaceObject
+class cPlanet final : public cSpaceObject
 {
-public:
+	friend cPlanet *CreatePlanet(int PlanetNum);
+private:
 	explicit cPlanet(int PlanetNum);
+	~cPlanet() = default;
 };
 
-class cSpaceDebris : public cSpaceObject
+class cSpaceDebris final : public cSpaceObject
 {
-public:
+	friend cSpaceDebris *CreateSpaceDebris();
+private:
 	cSpaceDebris();
+	~cSpaceDebris() = default;
 };
 
-class cBasePart : public cSpaceObject
+class cBasePart final : public cSpaceObject
 {
-public:
+	friend cBasePart *CreateBasePart(int BasePartNum);
+private:
 	explicit cBasePart(int BasePartNum);
+	~cBasePart() = default;
 };
 
 
+// Create cSmallAsteroid object.
+cSmallAsteroid *CreateSmallAsteroid();
+// Create cBigAsteroid object.
+cBigAsteroid *CreateBigAsteroid(int AsteroidNum);
+// Create cPlanet object.
+cPlanet *CreatePlanet(int PlanetNum);
+// Create cSpaceDebris object.
+cSpaceDebris *CreateSpaceDebris();
+// Create cBasePart object.
+cBasePart *CreateBasePart(int BasePartNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceObject(float Time);
 // Прорисовываем все объекты
 void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
+// Release particular space object.
+void ReleaseSpaceObject(cSpaceObject *Object);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceObjects();
 // установка эффекта, если нужно

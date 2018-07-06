@@ -246,7 +246,7 @@ bool cMissionScript::Update(float Time)
 		AsterRealNeed = NeedGener - static_cast<float>(NeedGenerInt);
 
 		while (NeedGenerInt > 0) {
-			cSmallAsteroid *CreateAsteroid = new cSmallAsteroid;
+			cSmallAsteroid *CreateAsteroid = CreateSmallAsteroid();
 			if (AsterFastCount != 20)
 				CreateAsteroid->Speed = AsterMaxSpeed * vw_fRand();
 			else
@@ -408,7 +408,7 @@ bool cMissionScript::Update(float Time)
 		case constexpr_hash_djb2a("CreatePlanet"): {
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
-					cPlanet *Planet = new cPlanet{tmpType};
+					cPlanet *Planet = CreatePlanet(tmpType);
 					SetRotation(*Planet, xmlEntry, xmlDoc);
 					SetLocation(*Planet, xmlEntry, xmlDoc, 0.0f);
 					Planet->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
@@ -734,21 +734,21 @@ void cMissionScript::UpdateTimeLine()
 			break;
 
 		case constexpr_hash_djb2a("CreateAsteroid"): {
-				cSmallAsteroid *SpaceObject = new cSmallAsteroid;
+				cSmallAsteroid *SpaceObject = CreateSmallAsteroid();
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBasePart"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBasePart *SpaceObject = new cBasePart(tmpType);
+				cBasePart *SpaceObject = CreateBasePart(tmpType);
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;
 
 		case constexpr_hash_djb2a("CreateBigAsteroid"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cBigAsteroid *SpaceObject = new cBigAsteroid(tmpType);
+				cBigAsteroid *SpaceObject = CreateBigAsteroid(tmpType);
 				LoadSpaceObjectScript(*SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			}
 			break;

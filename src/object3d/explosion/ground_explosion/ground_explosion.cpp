@@ -81,7 +81,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				continue;
 			else {
 				// создаем часть
-				cSpaceDebris *SpaceDebris = new cSpaceDebris;
+				cSpaceDebris *SpaceDebris = CreateSpaceDebris();
 				SpaceDebris->ObjectType = eObjectType::SpaceDebris;
 				SpaceDebris->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
 
@@ -175,7 +175,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 					if (ObjectPieceNum == (int)i) {
 						// а теперь взрываем ту, в которую попали...
 						new cSpaceExplosion(*SpaceDebris, 32, SpaceDebris->Location, SpaceDebris->Speed, -1);
-						delete SpaceDebris;
+						ReleaseSpaceObject(SpaceDebris);
 					}
 			}
 		}

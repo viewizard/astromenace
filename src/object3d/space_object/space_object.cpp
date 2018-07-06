@@ -44,6 +44,46 @@ cSpaceObject *EndSpaceObject = nullptr;
 } // unnamed namespace
 
 
+/*
+ * Create cSmallAsteroid object.
+ */
+cSmallAsteroid *CreateSmallAsteroid()
+{
+	return new cSmallAsteroid;
+}
+
+/*
+ * Create cBigAsteroid object.
+ */
+cBigAsteroid *CreateBigAsteroid(int AsteroidNum)
+{
+	return new cBigAsteroid{AsteroidNum};
+}
+
+/*
+ * Create cPlanet object.
+ */
+cPlanet *CreatePlanet(int PlanetNum)
+{
+	return new cPlanet{PlanetNum};
+}
+
+/*
+ * Create cSpaceDebris object.
+ */
+cSpaceDebris *CreateSpaceDebris()
+{
+	return new cSpaceDebris;
+}
+
+/*
+ * Create cBasePart object.
+ */
+cBasePart *CreateBasePart(int BasePartNum)
+{
+	return new cBasePart{BasePartNum};
+}
+
 //-----------------------------------------------------------------------------
 // Включаем в список
 //-----------------------------------------------------------------------------
@@ -120,6 +160,20 @@ void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 		      ((tmp->InternalType > 10) && (tmp->InternalType < 20))))
 			tmp->Draw(VertexOnlyPass, ShadowMap);
 
+		tmp = tmp2;
+	}
+}
+
+/*
+ * Release particular space object.
+ */
+void ReleaseSpaceObject(cSpaceObject *Object)
+{
+	cSpaceObject *tmp = StartSpaceObject;
+	while (tmp != nullptr) {
+		cSpaceObject *tmp2 = tmp->Next;
+		if (tmp == Object)
+			delete tmp;
 		tmp = tmp2;
 	}
 }
