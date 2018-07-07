@@ -50,7 +50,6 @@ void WorkshopCreateNewWeapon();
 void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode);
 void WorkshopDrawWeapon(cWeapon *Weapon);
 
-char *GetWeaponGroupTitle(int Num);
 int GetWeaponHullDamage(int Num);
 int GetWeaponSystemsDamage(int Num);
 
@@ -204,6 +203,45 @@ int GetWeaponReloadCost(int Num, int Ammo, int AmmoStart)
 }
 
 
+// название типа оружия землян
+const char *GetWeaponGroupTitle(int Num)
+{
+	switch (Num) {
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		return "Kinetic";
+	case 5:
+	case 6:
+	case 7:
+		return "Ion";
+	case 8:
+	case 9:
+	case 10:
+		return "Plasma";
+	case 11:
+	case 12:
+		return "Maser";
+	case 13:
+		return "Antimatter";
+	case 14:
+		return "Laser";
+	case 15:
+		return "Gauss";
+
+	case 16:
+	case 17:
+	case 18:
+	case 19:
+		return "Propelled";
+
+	default:
+		std::cerr << __func__ << "(): " << "wrong Num.\n";
+		break;
+	}
+	return nullptr;
+}
 
 const char *GetWeaponName(int Num)
 {

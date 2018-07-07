@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "weapon.h"
 #include "../../assets/audio.h"
 #include "../../assets/texture.h"
@@ -33,52 +35,13 @@
 namespace viewizard {
 namespace astromenace {
 
-// название типа оружия землян
-const char *GetWeaponGroupTitle(int Num)
-{
-	switch (Num) {
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		return "Kinetic";
-	case 5:
-	case 6:
-	case 7:
-		return "Ion";
-	case 8:
-	case 9:
-	case 10:
-		return "Plasma";
-	case 11:
-	case 12:
-		return "Maser";
-	case 13:
-		return "Antimatter";
-	case 14:
-		return "Laser";
-	case 15:
-		return "Gauss";
+namespace {
 
-	case 16:
-	case 17:
-	case 18:
-	case 19:
-		return "Propelled";
+// Указатели на начальный и конечный объект в списке
+cWeapon *StartWeapon = nullptr;
+cWeapon *EndWeapon = nullptr;
 
-	default:
-		std::cerr << __func__ << "(): " << "wrong Num.\n";
-		break;
-	}
-	return nullptr;
-}
-
-
-
-
-
-
-
+} // unnamed namespace
 
 struct sWeaponData {
 	eGameSFX SFX;
@@ -192,28 +155,461 @@ static std::vector<sWeaponData> PresetPirateWeaponData{
 };
 
 
+//-----------------------------------------------------------------------------
+// Включаем в список
+//-----------------------------------------------------------------------------
+static void AttachWeapon(cWeapon *Weapon)
+{
+	if (Weapon == nullptr)
+		return;
+
+	// первый в списке...
+	if (EndWeapon == nullptr) {
+		Weapon->Prev = nullptr;
+		Weapon->Next = nullptr;
+		StartWeapon = Weapon;
+		EndWeapon = Weapon;
+	} else { // продолжаем заполнение...
+		Weapon->Prev = EndWeapon;
+		Weapon->Next = nullptr;
+		EndWeapon->Next = Weapon;
+		EndWeapon = Weapon;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Исключаем из списка
+//-----------------------------------------------------------------------------
+static void DetachWeapon(cWeapon *Weapon)
+{
+	if (Weapon == nullptr)
+		return;
+
+	// переустанавливаем указатели...
+	if (StartWeapon == Weapon) StartWeapon = Weapon->Next;
+	if (EndWeapon == Weapon) EndWeapon = Weapon->Prev;
+
+
+	if (Weapon->Next != nullptr)
+		Weapon->Next->Prev = Weapon->Prev;
+	else if (Weapon->Prev != nullptr)
+		Weapon->Prev->Next = nullptr;
+	if (Weapon->Prev != nullptr)
+		Weapon->Prev->Next = Weapon->Next;
+	else if (Weapon->Next != nullptr)
+		Weapon->Next->Prev = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// Проверяем все объекты, обновляем данные
+//-----------------------------------------------------------------------------
+void UpdateAllWeapon(float Time)
+{
+	cWeapon *tmp = StartWeapon;
+	while (tmp != nullptr) {
+		cWeapon *tmp2 = tmp->Next;
+		// делаем обновление данных по объекту
+		if (!tmp->Update(Time))
+			delete tmp;
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Прорисовываем все объекты
+//-----------------------------------------------------------------------------
+void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap)
+{
+	cWeapon *tmp = StartWeapon;
+	while (tmp != nullptr) {
+		cWeapon *tmp2 = tmp->Next;
+		tmp->Draw(VertexOnlyPass, ShadowMap);
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Удаляем все объекты в списке
+//-----------------------------------------------------------------------------
+void ReleaseAllWeapons()
+{
+	cWeapon *tmp = StartWeapon;
+	while (tmp != nullptr) {
+		cWeapon *tmp2 = tmp->Next;
+		delete tmp;
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Установка нужных данных для вспышки возле ствола
+//-----------------------------------------------------------------------------
+static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponNum)
+{
+	switch (WeaponNum) {
+	case 1:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.70f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.4f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
+		break;
+	case 2:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 0.10f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.50f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 40.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
+		break;
+	case 3:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 0.10f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.50f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.60f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 50.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
+		break;
+	case 4:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.70f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
+		break;
+	case 5:
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.70f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 4.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 10.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		break;
+	case 6:
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.70f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.20f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeEnd    = 0.20f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 20.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		break;
+	case 7:
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.70f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.20f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeEnd    = 0.20f;
+		ParticleSystem->Speed      = 6.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 10.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		break;
+	case 8:
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.2f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.2f;
+		ParticleSystem->Speed      = 4.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 0.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize       = sVECTOR3D(0.4f,0.4f,0.4f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		break;
+	case 9:
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.15f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.15f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 0.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		break;
+	case 10:
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.30f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 0.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		break;
 
 
 
+	case 11:
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.60f;
+		ParticleSystem->SizeStart  = 0.1f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->ParticlesPerSec = 20;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);
+		break;
+	case 12:
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.60f;
+		ParticleSystem->SizeStart  = 0.1f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->ParticlesPerSec = 20;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);
+		break;
+	case 13:
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.4f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.7f, 1.0f, 0.0f, 0.0f, 0.02f);
+		break;
+	case 14:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.10f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.20f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize       = sVECTOR3D(0.2f,0.2f,0.8f);
+		break;
+	case 15:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.50f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.4f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.0f, 0.0f, 0.02f);
+		break;
+	case 16:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.70f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.4f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.40f;
+		break;
+	case 17:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.70f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.4f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.40f;
+		break;
+	case 18:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.70f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.4f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.40f;
+		break;
+	case 19:
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.70f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 0.60f;
+		ParticleSystem->AlphaEnd   = 0.10f;
+		ParticleSystem->SizeStart  = 0.4f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 30.00f;
+		ParticleSystem->Life       = 0.40f;
+		break;
 
+	default:
+		std::cerr << __func__ << "(): " << "wrong WeaponNum.\n";
+		break;
+	}
 
+	ParticleSystem->IsSuppressed = true;
+	ParticleSystem->ParticlesPerSec = 50;
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -246,8 +642,6 @@ cWeapon::cWeapon(int WeaponNum)
 	}
 
 	InternalType = WeaponNum;
-
-
 
 
 	// 1-99 - это оружие землян
@@ -333,7 +727,6 @@ cWeapon::cWeapon(int WeaponNum)
 		}
 		break;
 
-
 		case 202: {
 			WeaponTurret = true;
 			TargetHorizBlocks = 0;
@@ -364,30 +757,15 @@ cWeapon::cWeapon(int WeaponNum)
 					MiddleBound = Model3DBlocks[TargetVertBlocks].Location;
 			}
 
-
 			if (TargetVertBlocks != -1)
 				WeaponBound = FireLocation - Model3DBlocks[TargetVertBlocks].Location;
 			else if (TargetHorizBlocks != -1)
 				WeaponBound = FireLocation - Model3DBlocks[TargetHorizBlocks].Location;
 			else
 				WeaponBound = FireLocation;
-
 		}
-
-
-
 	}
-
-
 }
-
-
-
-
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -419,20 +797,11 @@ cWeapon::~cWeapon()
 	DetachWeapon(this);
 }
 
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // выполнение действий
 //-----------------------------------------------------------------------------
 bool cWeapon::Update(float Time)
 {
-
 	// если лучевое оружие
 	if (LaserMaser != nullptr) {
 		if (LaserMaser->Lifetime <= 0.0f) {
@@ -441,23 +810,16 @@ bool cWeapon::Update(float Time)
 		}
 	}
 
-
 	// вызываем родительскую функцию
 	// если там передали удалить - выходим
 	if (!cObject3D::Update(Time)) {
 		return false;
 	}
 
-
-
 	// если запущено - выключаем прорисовку эффекта выстрела (вспышка возле ствола)
 	if (LastFireTime + TimeDelta <= Time)
 		if (auto sharedFire = Fire.lock())
 			sharedFire->IsSuppressed = true;
-
-
-
-
 
 	// для землян, создание эффекта повреждения оружия
 	// если оружие только повредили...
@@ -492,7 +854,6 @@ bool cWeapon::Update(float Time)
 		}
 	}
 
-
 	// для землян, создание эффекта уничтоженного оружия
 	// проверяем тут был ли выход из строя
 	if ((InternalType >= 1) &&
@@ -525,12 +886,6 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedSmoke->SetStartLocation(DestroyedFireLocation);
 		}
 	}
-
-
-
-
-
-
 
 	// если это swamp - запуск других ракет
 	if (InternalType == 17 && SwampNum > 0)
@@ -603,20 +958,14 @@ bool cWeapon::Update(float Time)
 				Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
 				Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
 
-
 				// звук...
 				if (SFX != eGameSFX::none) {
 					float fVol = 1.0f;
 					PlayGameSFX(SFX, fVol, Projectile->Location);
 				}
 
-
 				SwampNum--;
 			}
-
-
-
-
 
 	// если это фларес - выпускаем остальные
 	// SwampNum в этом случае используем с другой целью
@@ -670,12 +1019,6 @@ bool cWeapon::Update(float Time)
 			}
 
 
-
-
-
-
-
-
 	// для турелей
 	if (WeaponTurret) {
 
@@ -701,11 +1044,6 @@ bool cWeapon::Update(float Time)
 			TargetHorizBlocksNeedAngle = 0.0f;
 			TargetVertBlocksNeedAngle = 0.0f;
 		}*/
-
-
-
-
-
 
 		// собственно повороты элементов модели на углы
 
@@ -747,11 +1085,6 @@ bool cWeapon::Update(float Time)
 				}
 			}
 
-
-
-
-
-
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот стволов по вертикали
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -785,7 +1118,6 @@ bool cWeapon::Update(float Time)
 				Model3DBlocks[TargetVertBlocks].Location = tmp + Model3DBlocks[TargetVertBlocks].Location;
 			}
 
-
 		// турель
 		sVECTOR3D RotationBase = Rotation;
 		sVECTOR3D BaseBoundTMP = BaseBound;
@@ -815,35 +1147,17 @@ bool cWeapon::Update(float Time)
 		vw_RotatePoint(Orientation, RotationWeapon);
 	}
 
-
-
-
 	// объект в порядке - удалять не нужно
 	return true;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Установка положения
 //-----------------------------------------------------------------------------
 void cWeapon::SetRotation(sVECTOR3D NewRotation)
 {
-
 	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);
-
 
 	if (!WeaponTurret) {
 		// положение точки выстрела
@@ -885,8 +1199,6 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 	}
 
 
-
-
 	if (auto sharedDestroyedFire = DestroyedFire.lock()) {
 		vw_Matrix33CalcPoint(DestroyedFireLocation, OldInvRotationMat);
 		vw_Matrix33CalcPoint(DestroyedFireLocation, CurrentRotationMat);
@@ -907,12 +1219,6 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 		LaserMaser->SetRotation(NewRotation);
 	}
 }
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Установка положения
@@ -938,26 +1244,16 @@ void cWeapon::SetLocation(sVECTOR3D NewLocation)
 	if (LaserMaser != nullptr)
 		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
 
-
-
 	// звук... для мазеров-лазеров нужно учитывать перемещение
 	if (vw_IsSoundAvailable(LaserMaserSoundNum))  // уже играем, нужно изменить данные
 		vw_SetSoundLocation(LaserMaserSoundNum, Location.x, Location.y, Location.z);
-
 }
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // Выстрел
 //-----------------------------------------------------------------------------
 bool cWeapon::WeaponFire(float Time)
 {
-
 	// если оружие не установлено - нам тут делать нечего
 	if (InternalType == 0)
 		return false;
@@ -977,7 +1273,6 @@ bool cWeapon::WeaponFire(float Time)
 	if (Time < LastFireTime + NextFireTime*CurrentPenalty) return false;
 	// запоминаем время стрельбы
 	LastFireTime = Time;
-
 
 
 	// для оружия землян, делаем небольшие проверки...
@@ -1048,8 +1343,6 @@ bool cWeapon::WeaponFire(float Time)
 		}
 
 
-
-
 		// только для игрока! проверяем заряд энергии для выстрела
 		if (ObjectStatus == eObjectStatus::Player) {
 			if (CurrentEnergyAccumulated < EnergyUse)
@@ -1069,15 +1362,6 @@ bool cWeapon::WeaponFire(float Time)
 				sharedFire->IsSuppressed = false;
 
 	}
-
-
-
-
-
-
-
-
-
 
 
 	sVECTOR3D RotationWeapon = Rotation;
@@ -1110,13 +1394,6 @@ bool cWeapon::WeaponFire(float Time)
 	}
 
 
-
-
-
-
-
-
-
 	// создаем снаряд
 	cProjectile *Projectile = new cProjectile;
 	Projectile->Create(InternalType);
@@ -1143,10 +1420,6 @@ bool cWeapon::WeaponFire(float Time)
 		} else // для ракет и мин все без изменения
 			Projectile->SetLocation(Location+FireLocation);
 	}
-
-
-
-
 
 
 	// если это мина, то нужно делать немного по другому
@@ -1187,10 +1460,6 @@ bool cWeapon::WeaponFire(float Time)
 	}
 
 
-
-
-
-
 	// звук...
 	if (SFX != eGameSFX::none) {
 		float fVol = 1.0f;
@@ -1199,10 +1468,6 @@ bool cWeapon::WeaponFire(float Time)
 		if (LaserMaser == nullptr)
 			LaserMaserSoundNum = 0;
 	}
-
-
-
-
 
 
 	// если это груповой выстрел:
@@ -1214,10 +1479,6 @@ bool cWeapon::WeaponFire(float Time)
 	// нужно создать еще 4 фларес
 	if (InternalType == 203)
 		SwampNum = 4;
-
-
-
-
 
 
 	// выстрел был

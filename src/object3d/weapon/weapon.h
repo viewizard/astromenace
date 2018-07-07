@@ -25,6 +25,16 @@
 
 *************************************************************************************/
 
+// TODO split to projectile/beam
+
+// TODO split to internal/external->turret
+
+// TODO split to earth/pirate/alien
+
+// TODO switch to enumeration for weapon type
+
+// TODO translate comments
+
 #ifndef OBJECT3D_WEAPON_WEAPON_H
 #define OBJECT3D_WEAPON_WEAPON_H
 
@@ -59,7 +69,7 @@ public:
 	// начальное значение боекомплекта
 	int AmmoStart{100};
 
-	// скорострельность, в мили секундах - время между выстрелами
+	// скорострельность, в секундах - время между выстрелами
 	float NextFireTime{0.3f};
 	// время последнего выстрела
 	float LastFireTime{-10.0f};
@@ -114,28 +124,12 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
-// Дополнительные функции для cWeapon
-//-----------------------------------------------------------------------------
-
-// Установка нужных данных для вспышки возле ствола
-void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponNum);
-
-
-//-----------------------------------------------------------------------------
-// Менеджер cWeapon, дополнительный
-//-----------------------------------------------------------------------------
-
-// Включаем в список
-void	AttachWeapon(cWeapon* Weapon);
-// Исключаем из списка
-void	DetachWeapon(cWeapon* Weapon);
 // Проверяем все объекты, обновляем данные
-void	UpdateAllWeapon(float Time);
+void UpdateAllWeapon(float Time);
 // Прорисовываем все объекты
-void	DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap);
+void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
-void	ReleaseAllWeapons();
+void ReleaseAllWeapons();
 
 } // astromenace namespace
 } // viewizard namespace
