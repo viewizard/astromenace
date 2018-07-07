@@ -51,6 +51,21 @@ enum class eGroundCycle {
 	DeleteObjectAndBreak
 };
 
+struct sGroundObjectWeapon {
+	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
+	bool SetFire{false};
+	// указатель на массив оружия
+	cWeapon *Weapon{nullptr};
+	// расположение оружия (относительное)
+	sVECTOR3D Location{};
+	sVECTOR3D Bound{};
+
+	sGroundObjectWeapon(cWeapon *_Weapon, const sVECTOR3D &_Location) :
+		Weapon{_Weapon},
+		Location{_Location}
+	{}
+};
+
 class cGroundObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
@@ -111,14 +126,7 @@ public:
 	// нужное ускорение
 	float NeedAcceler{1.0f};
 
-	// кол-во оружия доступного на данной моделе
-	int WeaponQuantity{0};
-	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool *WeaponSetFire{nullptr};
-	// указатель на массив оружия
-	cWeapon **Weapon{nullptr};
-	// расположение оружия (относительное)
-	sVECTOR3D *WeaponLocation{nullptr};
+	std::vector<sGroundObjectWeapon> Weapon{};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
 	int WeaponFireType{2};
 	int WeaponGroupCurrentFireNum{-1};
@@ -129,7 +137,6 @@ public:
 	// для просчета положения точки стрельбы, считаем как кости
 	sVECTOR3D BaseBound{0.0f, 0.0f, 0.0f};
 	sVECTOR3D MiddleBound{0.0f, 0.0f, 0.0f};
-	sVECTOR3D *WeaponBound{nullptr};
 	// если точки фиксированы, не нужно менять направление точки выстрела
 	// только учитываем общий поворот модели и соотв. точку выстрела
 	// работает только если объекты поворота башни и ствола не заданы!

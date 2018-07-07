@@ -35,7 +35,6 @@ namespace astromenace {
 
 struct sWheeledData {
 	float Strength;
-	int WeaponQuantity;
 	float SpeedToRotate;
 	std::string Model3DFileName;
 	std::string TextureFileName;
@@ -44,14 +43,14 @@ struct sWheeledData {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWheeledData> PresetWheeledData{
-	{120,	4,	50.0f,	"models/wheeled/jeep-01.vw3d", "models/gr-02.vw2d"},
-	{70,	2,	50.0f,	"models/wheeled/jeep-02.vw3d", "models/gr-02.vw2d"},
-	{100,	2,	50.0f,	"models/wheeled/jeep-03.vw3d", "models/gr-02.vw2d"},
-	{100,	1,	50.0f,	"models/wheeled/jeep-04.vw3d", "models/gr-07.vw2d"},
-	{150,	1,	50.0f,	"models/wheeled/jeep-05.vw3d", "models/gr-03.vw2d"},
-	{250,	1,	30.0f,	"models/wheeled/apc-02.vw3d", "models/gr-03.vw2d"},
-	{200,	2,	30.0f,	"models/wheeled/apc-04.vw3d", "models/gr-01.vw2d"},
-	{400,	2,	34.0f,	"models/wheeled/r-launcher-01.vw3d", "models/gr-02.vw2d"}
+	{120,	50.0f,	"models/wheeled/jeep-01.vw3d", "models/gr-02.vw2d"},
+	{70,	50.0f,	"models/wheeled/jeep-02.vw3d", "models/gr-02.vw2d"},
+	{100,	50.0f,	"models/wheeled/jeep-03.vw3d", "models/gr-02.vw2d"},
+	{100,	50.0f,	"models/wheeled/jeep-04.vw3d", "models/gr-07.vw2d"},
+	{150,	50.0f,	"models/wheeled/jeep-05.vw3d", "models/gr-03.vw2d"},
+	{250,	30.0f,	"models/wheeled/apc-02.vw3d", "models/gr-03.vw2d"},
+	{200,	30.0f,	"models/wheeled/apc-04.vw3d", "models/gr-01.vw2d"},
+	{400,	34.0f,	"models/wheeled/r-launcher-01.vw3d", "models/gr-02.vw2d"}
 };
 #pragma GCC diagnostic pop
 
@@ -83,28 +82,13 @@ cWheeled::cWheeled(int WheeledNum)
 
 	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength/GameEnemyArmorPenalty;
 
-	WeaponQuantity = PresetWheeledData[WheeledNum - 1].WeaponQuantity;
-	// начальные установки для оружия
-	WeaponSetFire = new bool[WeaponQuantity];
-	WeaponLocation = new sVECTOR3D[WeaponQuantity];
-	Weapon = new cWeapon*[WeaponQuantity];
-	WeaponBound = new sVECTOR3D[WeaponQuantity];
-	for (int i = 0; i < WeaponQuantity; i++) {
-		WeaponSetFire[i] = false;
-		Weapon[i] = nullptr;
-	}
-
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (WheeledNum) {
 	case 1:
-		WeaponLocation[0] = sVECTOR3D(0.3f, 4.5f, -1.5f);
-		Weapon[0] = CreateWeapon(206);
-		WeaponLocation[1] = sVECTOR3D(-0.3f, 4.5f, -1.5f);
-		Weapon[1] = CreateWeapon(206);
-		WeaponLocation[2] = sVECTOR3D(0.9f, 4.5f, -1.5f);
-		Weapon[2] = CreateWeapon(206);
-		WeaponLocation[3] = sVECTOR3D(-0.9f, 4.5f, -1.5f);
-		Weapon[3] = CreateWeapon(206);
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(0.3f, 4.5f, -1.5f));
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-0.3f, 4.5f, -1.5f));
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(0.9f, 4.5f, -1.5f));
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
 		WeaponFireType = 3;
 
 		WheelQuantity = 4;
@@ -127,10 +111,8 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 2:
-		WeaponLocation[0] = sVECTOR3D(1.3f, 3.5f, -1.5f);
-		Weapon[0] = CreateWeapon(206);
-		WeaponLocation[1] = sVECTOR3D(-1.3f, 3.5f, -1.5f);
-		Weapon[1] = CreateWeapon(206);
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(1.3f, 3.5f, -1.5f));
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-1.3f, 3.5f, -1.5f));
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
@@ -149,10 +131,8 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 3:
-		WeaponLocation[0] = sVECTOR3D(0.8f, 4.2f, -1.0f);
-		Weapon[0] = CreateWeapon(204);
-		WeaponLocation[1] = sVECTOR3D(-0.8f, 4.2f, -1.0f);
-		Weapon[1] = CreateWeapon(204);
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.8f, 4.2f, -1.0f));
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
 		WeaponFireType = 2;
 
 		WheelQuantity = 4;
@@ -180,8 +160,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 4:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 4.5f, -4.0f);
-		Weapon[0] = CreateWeapon(207);
+		Weapon.emplace_back(CreateWeapon(207), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
 		WheelQuantity = 4;
 		WheelObjectsNum = new int[4];
@@ -198,8 +177,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 5:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 4.5f, -4.0f);
-		Weapon[0] = CreateWeapon(208);
+		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
 		WheelQuantity = 4;
 		WheelObjectsNum = new int[4];
@@ -216,8 +194,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 6:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 6.0f, -3.0f);
-		Weapon[0] = CreateWeapon(204);
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.0f, -3.0f));
 
 		WheelQuantity = 4;
 		WheelObjectsNum = new int[4];
@@ -244,10 +221,8 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 7:
-		WeaponLocation[0] = sVECTOR3D(0.1f, 5.0f, -1.0f);
-		Weapon[0] = CreateWeapon(204);
-		WeaponLocation[1] = sVECTOR3D(-0.1f, 5.0f, -1.0f);
-		Weapon[1] = CreateWeapon(204);
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.1f, 5.0f, -1.0f));
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
 		WeaponFireType = 2;
 
 		WheelQuantity = 4;
@@ -275,10 +250,8 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 8:
-		WeaponLocation[0] = sVECTOR3D(1.5f, 5.2f, 7.0f);
-		Weapon[0] = CreateWeapon(210);
-		WeaponLocation[1] = sVECTOR3D(-1.5f, 5.2f, 7.0f);
-		Weapon[1] = CreateWeapon(210);
+		Weapon.emplace_back(CreateWeapon(210), sVECTOR3D(1.5f, 5.2f, 7.0f));
+		Weapon.emplace_back(CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
 		WeaponFireType = 3;
 
 		WheelQuantity = 8;
@@ -339,15 +312,13 @@ cWheeled::cWheeled(int WheeledNum)
 		}
 	}
 
-	if (WeaponBound != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (TargetVertBlocks != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetVertBlocks[0]].Location;
-			else if (TargetHorizBlocks != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetHorizBlocks[0]].Location;
-			else
-				WeaponBound[i] = WeaponLocation[i];
-		}
+	for (auto &tmpWeapon : Weapon) {
+		if (TargetVertBlocks != nullptr)
+			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
+		else if (TargetHorizBlocks != nullptr)
+			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
+		else
+			tmpWeapon.Bound = tmpWeapon.Location;
 	}
 }
 

@@ -35,27 +35,26 @@ namespace astromenace {
 
 struct sTrackedData {
 	float Strength;
-	int WeaponQuantity;
 	float SpeedToRotate;
 	std::string Model3DFileName;
 	std::string TextureFileName;
 };
 
 const std::vector<sTrackedData> PresetTrackedData{
-	{250,	1,	60.0f,	"models/tracked/tank-01.vw3d", "models/gr-01.vw2d"},
-	{200,	2,	45.0f,	"models/tracked/tank-03.vw3d", "models/gr-01.vw2d"},
-	{300,	1,	45.0f,	"models/tracked/tank-05.vw3d", "models/gr-06.vw2d"},
-	{300,	1,	55.0f,	"models/tracked/tank-06.vw3d", "models/gr-03.vw2d"},
-	{400,	1,	60.0f,	"models/tracked/tank-07.vw3d", "models/gr-06.vw2d"},
-	{250,	1,	70.0f,	"models/tracked/tank-08.vw3d", "models/gr-01.vw2d"},
-	{400,	1,	60.0f,	"models/tracked/tank-09.vw3d", "models/gr-01.vw2d"},
-	{300,	1,	60.0f,	"models/tracked/tank-10.vw3d", "models/gr-03.vw2d"},
-	{350,	1,	60.0f,	"models/tracked/tank-11.vw3d", "models/gr-03.vw2d"},
-	{300,	1,	60.0f,	"models/tracked/apc-01.vw3d", "models/gr-03.vw2d"},
-	{400,	2,	60.0f,	"models/tracked/apc-03.vw3d", "models/gr-03.vw2d"},
-	{250,	4,	60.0f,	"models/tracked/apc-aa-01.vw3d", "models/gr-03.vw2d"},
-	{200,	2,	42.0f,	"models/tracked/apc-aa-02.vw3d", "models/gr-02.vw2d"},
-	{50,	1,	50.0f,	"models/tracked/engineering-01.vw3d", "models/gr-03.vw2d"}
+	{250,	60.0f,	"models/tracked/tank-01.vw3d", "models/gr-01.vw2d"},
+	{200,	45.0f,	"models/tracked/tank-03.vw3d", "models/gr-01.vw2d"},
+	{300,	45.0f,	"models/tracked/tank-05.vw3d", "models/gr-06.vw2d"},
+	{300,	55.0f,	"models/tracked/tank-06.vw3d", "models/gr-03.vw2d"},
+	{400,	60.0f,	"models/tracked/tank-07.vw3d", "models/gr-06.vw2d"},
+	{250,	70.0f,	"models/tracked/tank-08.vw3d", "models/gr-01.vw2d"},
+	{400,	60.0f,	"models/tracked/tank-09.vw3d", "models/gr-01.vw2d"},
+	{300,	60.0f,	"models/tracked/tank-10.vw3d", "models/gr-03.vw2d"},
+	{350,	60.0f,	"models/tracked/tank-11.vw3d", "models/gr-03.vw2d"},
+	{300,	60.0f,	"models/tracked/apc-01.vw3d", "models/gr-03.vw2d"},
+	{400,	60.0f,	"models/tracked/apc-03.vw3d", "models/gr-03.vw2d"},
+	{250,	60.0f,	"models/tracked/apc-aa-01.vw3d", "models/gr-03.vw2d"},
+	{200,	42.0f,	"models/tracked/apc-aa-02.vw3d", "models/gr-02.vw2d"},
+	{50,	50.0f,	"models/tracked/engineering-01.vw3d", "models/gr-03.vw2d"}
 };
 
 
@@ -89,22 +88,10 @@ cTracked::cTracked(int TrackedNum)
 
 	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength/GameEnemyArmorPenalty;
 
-	WeaponQuantity = PresetTrackedData[TrackedNum - 1].WeaponQuantity;
-	// начальные установки для оружия
-	WeaponSetFire = new bool[WeaponQuantity];
-	WeaponLocation = new sVECTOR3D[WeaponQuantity];
-	Weapon = new cWeapon*[WeaponQuantity];
-	WeaponBound = new sVECTOR3D[WeaponQuantity];
-	for (int i = 0; i < WeaponQuantity; i++) {
-		WeaponSetFire[i] = false;
-		Weapon[i] = nullptr;
-	}
-
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (TrackedNum) {
 	case 1:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 5.5f, 9.0f);
-		Weapon[0] = CreateWeapon(211);
+		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.5f, 9.0f));
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -140,10 +127,8 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 2:
-		WeaponLocation[0] = sVECTOR3D(0.1f, 6.1f, -0.4f);
-		Weapon[0] = CreateWeapon(204);
-		WeaponLocation[1] = sVECTOR3D(-0.1f, 6.1f, -0.4f);
-		Weapon[1] = CreateWeapon(204);
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.1f, 6.1f, -0.4f));
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.1f, 6.1f, -0.4f));
 		WeaponFireType = 2;
 
 		WheelQuantity = 10;
@@ -174,8 +159,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 3:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 5.2f, 3.7f);
-		Weapon[0] = CreateWeapon(213);
+		Weapon.emplace_back(CreateWeapon(213), sVECTOR3D(0.0f, 5.2f, 3.7f));
 
 		WheelQuantity = 14;
 		WheelObjectsNum = new int[14];
@@ -209,8 +193,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 4:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 5.3f, 6.5f);
-		Weapon[0] = CreateWeapon(208);
+		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.3f, 6.5f));
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -250,8 +233,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 5:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 5.8f, 4.5f);
-		Weapon[0] = CreateWeapon(208);
+		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.8f, 4.5f));
 
 		WheelQuantity = 14;
 		WheelObjectsNum = new int[14];
@@ -285,8 +267,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 6:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 4.9f, 4.0f);
-		Weapon[0] = CreateWeapon(211);
+		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 4.9f, 4.0f));
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -322,8 +303,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 7:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 7.6f, 5.5f);
-		Weapon[0] = CreateWeapon(212);
+		Weapon.emplace_back(CreateWeapon(212), sVECTOR3D(0.0f, 7.6f, 5.5f));
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -359,8 +339,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 8:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 7.0f, 8.5f);
-		Weapon[0] = CreateWeapon(208);
+		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 7.0f, 8.5f));
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -396,9 +375,8 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 9:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 6.7f, 6.8f);
-		Weapon[0] = CreateWeapon(211);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
+		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 6.7f, 6.8f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -434,9 +412,8 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 10:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 6.1f, 0.5f);
-		Weapon[0] = CreateWeapon(204);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.1f, 0.5f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -472,10 +449,8 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 11:
-		WeaponLocation[0] = sVECTOR3D(2.2f, 5.4f, 7.0f);
-		Weapon[0] = CreateWeapon(209);
-		WeaponLocation[1] = sVECTOR3D(-2.2f, 5.4f, 7.0f);
-		Weapon[1] = CreateWeapon(209);
+		Weapon.emplace_back(CreateWeapon(209), sVECTOR3D(2.2f, 5.4f, 7.0f));
+		Weapon.emplace_back(CreateWeapon(209), sVECTOR3D(-2.2f, 5.4f, 7.0f));
 		WeaponFireType = 3;
 
 		WheelQuantity = 16;
@@ -507,18 +482,14 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 12:
-		WeaponLocation[0] = sVECTOR3D(0.55f, 5.0f, 2.0f);
-		Weapon[0] = CreateWeapon(206);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-		WeaponLocation[1] = sVECTOR3D(-0.55f, 5.0f, 2.0f);
-		Weapon[1] = CreateWeapon(206);
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
-		WeaponLocation[2] = sVECTOR3D(1.65f, 5.0f, 2.0f);
-		Weapon[2] = CreateWeapon(206);
-		Weapon[2]->NextFireTime = Weapon[2]->NextFireTime / 2.0f;
-		WeaponLocation[3] = sVECTOR3D(-1.65f, 5.0f, 2.0f);
-		Weapon[3] = CreateWeapon(206);
-		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime / 2.0f;
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(0.55f, 5.0f, 2.0f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-0.55f, 5.0f, 2.0f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(1.65f, 5.0f, 2.0f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-1.65f, 5.0f, 2.0f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelQuantity = 16;
@@ -552,12 +523,10 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 13:
-		WeaponLocation[0] = sVECTOR3D(1.4f, 5.0f, 0.4f);
-		Weapon[0] = CreateWeapon(206);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-		WeaponLocation[1] = sVECTOR3D(-1.4f, 5.0f, 0.4f);
-		Weapon[1] = CreateWeapon(206);
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(1.4f, 5.0f, 0.4f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-1.4f, 5.0f, 0.4f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelQuantity = 14;
@@ -592,8 +561,6 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 14:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 0.0f, 0.0f);
-
 		WheelQuantity = 8;
 		WheelObjectsNum = new int[8];
 		WheelObjectsNum[0] = 0;
@@ -643,15 +610,13 @@ cTracked::cTracked(int TrackedNum)
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
 	}
 
-	if (WeaponBound != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (TargetVertBlocks != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetVertBlocks[0]].Location;
-			else if (TargetHorizBlocks != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetHorizBlocks[0]].Location;
-			else
-				WeaponBound[i] = WeaponLocation[i];
-		}
+	for (auto &tmpWeapon : Weapon) {
+		if (TargetVertBlocks != nullptr)
+			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
+		else if (TargetHorizBlocks != nullptr)
+			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
+		else
+			tmpWeapon.Bound = tmpWeapon.Location;
 	}
 }
 

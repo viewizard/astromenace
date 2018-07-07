@@ -35,7 +35,6 @@ namespace astromenace {
 
 struct sMilitaryBuildingData {
 	float Strength;
-	int WeaponQuantity;
 	std::string Model3DFileName;
 	std::string TextureFileName;
 };
@@ -43,13 +42,13 @@ struct sMilitaryBuildingData {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData{
-	{80,	2,	"models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
-	{120,	1,	"models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
-	{80,	2,	"models/militarybuilding/aa-gun-03.vw3d", "models/gr-02.vw2d"},
-	{150,	2,	"models/militarybuilding/aa-gun-04.vw3d", "models/gr-01.vw2d"},
-	{250,	2,	"models/militarybuilding/aa-gun-05.vw3d", "models/gr-03.vw2d"},
-	{50,	1,	"models/militarybuilding/artiler-gun-01.vw3d", "models/gr-03.vw2d"},
-	{200,	1,	"models/militarybuilding/artiler-gun-02.vw3d", "models/gr-01.vw2d"}
+	{80,	"models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
+	{120,	"models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
+	{80,	"models/militarybuilding/aa-gun-03.vw3d", "models/gr-02.vw2d"},
+	{150,	"models/militarybuilding/aa-gun-04.vw3d", "models/gr-01.vw2d"},
+	{250,	"models/militarybuilding/aa-gun-05.vw3d", "models/gr-03.vw2d"},
+	{50,	"models/militarybuilding/artiler-gun-01.vw3d", "models/gr-03.vw2d"},
+	{200,	"models/militarybuilding/artiler-gun-02.vw3d", "models/gr-01.vw2d"}
 };
 #pragma GCC diagnostic pop
 
@@ -79,24 +78,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 
 	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Strength/GameEnemyArmorPenalty;
 
-	WeaponQuantity = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].WeaponQuantity;
-	// начальные установки для оружия
-	WeaponSetFire = new bool[WeaponQuantity];
-	WeaponLocation = new sVECTOR3D[WeaponQuantity];
-	Weapon = new cWeapon*[WeaponQuantity];
-	WeaponBound = new sVECTOR3D[WeaponQuantity];
-	for (int i = 0; i < WeaponQuantity; i++) {
-		WeaponSetFire[i] = false;
-		Weapon[i] = nullptr;
-	}
-
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (MilitaryBuildingNum) {
 	case 1:
-		WeaponLocation[0] = sVECTOR3D(0.3f, 4.6f, 2.6f);
-		Weapon[0] = CreateWeapon(204);
-		WeaponLocation[1] = sVECTOR3D(-0.3f, 4.6f, 2.6f);
-		Weapon[1] = CreateWeapon(204);
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.3f, 4.6f, 2.6f));
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.3f, 4.6f, 2.6f));
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 4;
@@ -115,9 +101,8 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 2:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 4.6f, 4.5f);
-		Weapon[0] = CreateWeapon(204);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 4.6f, 4.5f));
+		Weapon.back().Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 4;
@@ -140,12 +125,10 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 3:
-		WeaponLocation[0] = sVECTOR3D(2.8f, 5.3f, 7.5f);
-		Weapon[0] = CreateWeapon(205);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-		WeaponLocation[1] = sVECTOR3D(-2.8f, 5.3f, 7.5f);
-		Weapon[1] = CreateWeapon(205);
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
+		Weapon.emplace_back(CreateWeapon(205), sVECTOR3D(2.8f, 5.3f, 7.5f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.emplace_back(CreateWeapon(205), sVECTOR3D(-2.8f, 5.3f, 7.5f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		TargetHorizBlocksQuantity = 2;
@@ -160,12 +143,10 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 4:
-		WeaponLocation[0] = sVECTOR3D(3.6f, 8.5f, 4.0f);
-		Weapon[0] = CreateWeapon(204);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
-		WeaponLocation[1] = sVECTOR3D(-3.6f, 8.5f, 4.0f);
-		Weapon[1] = CreateWeapon(204);
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(3.6f, 8.5f, 4.0f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-3.6f, 8.5f, 4.0f));
+		Weapon.back().Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 4;
@@ -189,12 +170,10 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 5:
-		WeaponLocation[0] = sVECTOR3D(1.95f, 6.5f, 3.7f);
-		Weapon[0] = CreateWeapon(204);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.0f;
-		WeaponLocation[1] = sVECTOR3D(-1.95f, 6.5f, 3.7f);
-		Weapon[1] = CreateWeapon(204);
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 3.0f;
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(1.95f, 6.5f, 3.7f));
+		Weapon.back().Weapon->NextFireTime /= 3.0f;
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-1.95f, 6.5f, 3.7f));
+		Weapon.back().Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 2;
@@ -209,9 +188,8 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 6:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 3.0f, 7.0f);
-		Weapon[0] = CreateWeapon(204);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 3.5f;
+		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 3.0f, 7.0f));
+		Weapon.back().Weapon->NextFireTime /= 3.5f;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -225,9 +203,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 7:
-		WeaponLocation[0] = sVECTOR3D(0.0f, 5.2f, 10.3f);
-		Weapon[0] = CreateWeapon(211);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime;
+		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.2f, 10.3f));
 
 		TargetHorizBlocksQuantity = 4;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -261,15 +237,13 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
 	}
 
-	if (WeaponBound != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (TargetVertBlocks != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetVertBlocks[0]].Location;
-			else if (TargetHorizBlocks != nullptr)
-				WeaponBound[i] = WeaponLocation[i] - Model3DBlocks[TargetHorizBlocks[0]].Location;
-			else
-				WeaponBound[i] = WeaponLocation[i];
-		}
+	for (auto &tmpWeapon : Weapon) {
+		if (TargetVertBlocks != nullptr)
+			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
+		else if (TargetHorizBlocks != nullptr)
+			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
+		else
+			tmpWeapon.Bound = tmpWeapon.Location;
 	}
 }
 

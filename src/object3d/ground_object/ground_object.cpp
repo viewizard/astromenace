@@ -29,6 +29,7 @@
 
 #include "ground_object.h"
 #include "../../script/script.h"
+#include "../../config/config.h"
 #include "../weapon/weapon.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
@@ -171,23 +172,12 @@ cGroundObject::cGroundObject()
 //-----------------------------------------------------------------------------
 cGroundObject::~cGroundObject()
 {
-	if (WeaponSetFire != nullptr) {
-		delete [] WeaponSetFire;
-		WeaponSetFire = nullptr;
-	}
-	if (WeaponLocation != nullptr) {
-		delete [] WeaponLocation;
-		WeaponLocation = nullptr;
-	}
-	if (Weapon != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++)
-			if (Weapon[i] != nullptr) {
-				ReleaseWeapon(Weapon[i]);
-				Weapon[i] = nullptr;
-			}
-
-		delete [] Weapon;
-		Weapon = nullptr;
+	if (!Weapon.empty()) {
+		for (auto &tmpWeapon : Weapon) {
+			if (tmpWeapon.Weapon != nullptr)
+				ReleaseWeapon(tmpWeapon.Weapon);
+		}
+		Weapon.clear();
 	}
 	if (WheelObjectsNum != nullptr) {
 		delete [] WheelObjectsNum;
@@ -196,10 +186,6 @@ cGroundObject::~cGroundObject()
 	if (WheelRotateObjectsNum != nullptr) {
 		delete [] WheelRotateObjectsNum;
 		WheelRotateObjectsNum = nullptr;
-	};
-	if (WeaponBound != nullptr) {
-		delete [] WeaponBound;
-		WeaponBound = nullptr;
 	};
 
 	if (TargetHorizBlocks != nullptr) {
@@ -238,12 +224,12 @@ void cGroundObject::SetLocation(sVECTOR3D NewLocation)
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
 
-	// если оружие вообще есть
-	if (Weapon != nullptr)
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (Weapon[i] != nullptr)
-				Weapon[i]->SetLocation(NewLocation + WeaponLocation[i]);
+	if (!Weapon.empty()) {
+		for (auto &tmpWeapon : Weapon) {
+			if (tmpWeapon.Weapon != nullptr)
+				tmpWeapon.Weapon->SetLocation(NewLocation + tmpWeapon.Location);
 		}
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -269,23 +255,22 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 	if (TargetVertBlocks != nullptr)
 		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
 
-	if (Weapon != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (Weapon[i] != nullptr) {
-				sVECTOR3D WeaponBoundTMP = WeaponBound[i];
+	if (!Weapon.empty()) {
+		for (auto &tmpWeapon : Weapon) {
+			if (tmpWeapon.Weapon != nullptr) {
+				sVECTOR3D WeaponBoundTMP{tmpWeapon.Bound};
 				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
-				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
+				tmpWeapon.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
 				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 				if ((TargetHorizBlocks == nullptr) &&
 				    (TargetVertBlocks == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
 					RotationWeapon = sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f) + Rotation;
-				Weapon[i]->SetRotation(Weapon[i]->Rotation ^ (-1.0f));
-				Weapon[i]->SetRotation(RotationWeapon);
-
-				Weapon[i]->SetLocation(Location + WeaponLocation[i]);
+				tmpWeapon.Weapon->SetRotation(tmpWeapon.Weapon->Rotation ^ (-1.0f));
+				tmpWeapon.Weapon->SetRotation(RotationWeapon);
+				tmpWeapon.Weapon->SetLocation(Location + tmpWeapon.Location);
 			}
 		}
 	}
@@ -317,10 +302,10 @@ bool cGroundObject::Update(float Time)
 		RotationSpeed = TimeSheetList.front().RotationAcceler;
 		WeaponTargeting = TimeSheetList.front().Targeting;
 
-		if (Weapon != nullptr) {
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if (Weapon[i] != nullptr)
-					WeaponSetFire[i] = TimeSheetList.front().Fire;
+		if (!Weapon.empty()) {
+			for (auto &tmpWeapon : Weapon) {
+				if (tmpWeapon.Weapon != nullptr)
+					tmpWeapon.SetFire = TimeSheetList.front().Fire;
 			}
 		}
 	}
@@ -335,14 +320,14 @@ bool cGroundObject::Update(float Time)
 		// находимся в начальном состоянии поворота ствола
 		int WeapNum{204}; // номер самого простого из пиратского оружия
 		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
-		if (Weapon != nullptr) {
-			if (Weapon[0] != nullptr)
-				WeapNum = Weapon[0]->InternalType;
+		if (!Weapon.empty()) {
+			if (Weapon[0].Weapon != nullptr)
+				WeapNum = Weapon[0].Weapon->InternalType;
 
 			int Count{0};
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if (Weapon[i] != nullptr) {
-					FirePos += WeaponLocation[i];
+			for (auto &tmpWeapon : Weapon) {
+				if (tmpWeapon.Weapon != nullptr) {
+					FirePos += tmpWeapon.Location;
 					Count++;
 				}
 			}
@@ -474,13 +459,13 @@ bool cGroundObject::Update(float Time)
 	if (TargetVertBlocks != nullptr)
 		RotationWeapon = Model3DBlocks[TargetVertBlocks[0]].Rotation + Rotation;
 
-	if (Weapon != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (Weapon[i] != nullptr) {
-				sVECTOR3D WeaponBoundTMP = WeaponBound[i];
+	if (!Weapon.empty()) {
+		for (auto &tmpWeapon : Weapon) {
+			if (tmpWeapon.Weapon != nullptr) {
+				sVECTOR3D WeaponBoundTMP = tmpWeapon.Bound;
 				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
-				WeaponLocation[i] = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
+				tmpWeapon.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
 				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 				if ((TargetHorizBlocks == nullptr) &&
@@ -488,10 +473,9 @@ bool cGroundObject::Update(float Time)
 				    !DoNotCalculateRotation) // и если нужно считать...
 					RotationWeapon = Rotation - sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f);
 
-				Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1.0f));
-				Weapon[i]->SetRotation(RotationWeapon);
-
-				Weapon[i]->SetLocation(Location + WeaponLocation[i]);
+				tmpWeapon.Weapon->SetRotation(tmpWeapon.Weapon->Rotation ^ (-1.0f));
+				tmpWeapon.Weapon->SetRotation(RotationWeapon);
+				tmpWeapon.Weapon->SetLocation(Location + tmpWeapon.Location);
 			}
 		}
 	}
@@ -499,28 +483,28 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// смотрим, есть ли команда открыть огонь
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Weapon != nullptr) {
+	if (!Weapon.empty()) {
 		// если залп или игрок (игроку регулируем сами)
 		// FIXME switch from if-else-if to case (?)
 		if (WeaponFireType == 1) {
-			for (int i=0; i<WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (WeaponSetFire[i]))
-					Weapon[i]->WeaponFire(Time);
+			for (auto &tmpWeapon : Weapon) {
+				if ((tmpWeapon.Weapon != nullptr) &&
+				    tmpWeapon.SetFire)
+					tmpWeapon.Weapon->WeaponFire(Time);
 			}
 		} else if (WeaponFireType == 2) { // переменный огонь
 			int PrimCount{0};
 			float PrimTime{0.0f};
-			int FirstWeapon{6};
-			int LastWeapon{0};
+			unsigned FirstWeapon{config::MAX_WEAPONS};
+			unsigned LastWeapon{0};
 
 			WeaponGroupCurrentFireDelay -= TimeDelta;
 
 			// находим кол-во оружия
-			for (int i=0; i<WeaponQuantity; i++) {
-				if (Weapon[i] != nullptr) {
+			for (unsigned i = 0; i < Weapon.size(); i++) {
+				if (Weapon[i].Weapon != nullptr) {
 					PrimCount++;
-					PrimTime += Weapon[i]->NextFireTime;
+					PrimTime += Weapon[i].Weapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
@@ -532,26 +516,26 @@ bool cGroundObject::Update(float Time)
 				WeaponGroupCurrentFireNum = FirstWeapon;
 
 			// стреляем
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (WeaponSetFire[i])) {
-					if (WeaponGroupCurrentFireNum == i &&
-					    WeaponGroupCurrentFireDelay <= 0.0f) {
-						Weapon[i]->WeaponFire(Time);
+			for (unsigned i = 0; i < Weapon.size(); i++) {
+				if ((Weapon[i].Weapon != nullptr) &&
+				    Weapon[i].SetFire) {
+					if ((WeaponGroupCurrentFireNum == static_cast<int>(i)) &&
+					    (WeaponGroupCurrentFireDelay <= 0.0f)) {
+						Weapon[i].Weapon->WeaponFire(Time);
 
 						WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameEnemyWeaponPenalty)/2.0f);
 						WeaponGroupCurrentFireNum++;
-						if (WeaponGroupCurrentFireNum > LastWeapon)
+						if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 							WeaponGroupCurrentFireNum = FirstWeapon;
 
 						// если такого оружия нет, берем что есть
-						if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
+						if (Weapon[WeaponGroupCurrentFireNum].Weapon == nullptr) {
 							bool exit = false;
 							while (!exit) {
 								WeaponGroupCurrentFireNum++;
-								if (WeaponGroupCurrentFireNum > LastWeapon)
+								if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 									WeaponGroupCurrentFireNum = FirstWeapon;
-								if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
+								if (Weapon[WeaponGroupCurrentFireNum].Weapon != nullptr)
 									exit = true;
 							}
 						}
@@ -561,16 +545,16 @@ bool cGroundObject::Update(float Time)
 		} else if (WeaponFireType == 3) { // переменный огонь2 (залп ракет или чего-то еще)
 			int PrimCount{0};
 			float PrimTime{0.0f};
-			int FirstWeapon{6};
-			int LastWeapon{0};
+			unsigned FirstWeapon{config::MAX_WEAPONS};
+			unsigned LastWeapon{0};
 
 			WeaponGroupCurrentFireDelay -= TimeDelta;
 
 			// находим кол-во оружия
-			for (int i=0; i<WeaponQuantity; i++) {
-				if (Weapon[i] != nullptr) {
+			for (unsigned i = 0; i < Weapon.size(); i++) {
+				if (Weapon[i].Weapon != nullptr) {
 					PrimCount++;
-					PrimTime += Weapon[i]->NextFireTime;
+					PrimTime += Weapon[i].Weapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
@@ -582,26 +566,26 @@ bool cGroundObject::Update(float Time)
 				WeaponGroupCurrentFireNum = FirstWeapon;
 
 			// стреляем
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (WeaponSetFire[i])) {
-				if (WeaponGroupCurrentFireNum == i &&
-					    WeaponGroupCurrentFireDelay <= 0.0f) {
-						Weapon[i]->WeaponFire(Time);
+			for (unsigned i = 0; i < Weapon.size(); i++) {
+				if ((Weapon[i].Weapon != nullptr) &&
+				    Weapon[i].SetFire) {
+					if ((WeaponGroupCurrentFireNum == static_cast<int>(i)) &&
+					    (WeaponGroupCurrentFireDelay <= 0.0f)) {
+						Weapon[i].Weapon->WeaponFire(Time);
 
 						WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
 						WeaponGroupCurrentFireNum++;
-						if (WeaponGroupCurrentFireNum > LastWeapon)
+						if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 							WeaponGroupCurrentFireNum = FirstWeapon;
 
 						// если такого оружия нет, берем что есть
-						if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
+						if (Weapon[WeaponGroupCurrentFireNum].Weapon == nullptr) {
 							bool exit = false;
 							while (!exit) {
 								WeaponGroupCurrentFireNum++;
-								if (WeaponGroupCurrentFireNum > LastWeapon)
+								if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 									WeaponGroupCurrentFireNum = FirstWeapon;
-								if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
+								if (Weapon[WeaponGroupCurrentFireNum].Weapon != nullptr)
 									exit = true;
 							}
 						}
