@@ -182,7 +182,7 @@ cGroundObject::~cGroundObject()
 	if (Weapon != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++)
 			if (Weapon[i] != nullptr) {
-				delete Weapon[i];
+				ReleaseWeapon(Weapon[i]);
 				Weapon[i] = nullptr;
 			}
 

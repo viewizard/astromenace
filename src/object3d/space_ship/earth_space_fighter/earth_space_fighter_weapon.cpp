@@ -45,16 +45,16 @@ bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, i
 
 	// удаляем оружие, если оно уже тут есть
 	if (SpaceShip->Weapon[WeaponSlot-1] != nullptr) {
-		delete SpaceShip->Weapon[WeaponSlot-1];
+		ReleaseWeapon(SpaceShip->Weapon[WeaponSlot-1]);
 		SpaceShip->Weapon[WeaponSlot-1] = nullptr;
 	}
 
 	// создаем нужное оружие
-	SpaceShip->Weapon[WeaponSlot-1] = new cWeapon(WeaponNum);
+	SpaceShip->Weapon[WeaponSlot-1] = CreateWeapon(WeaponNum);
 
 	// проверяем уровень оружия и уровень слота
 	if (SpaceShip->WeaponType[WeaponSlot-1] < SpaceShip->Weapon[WeaponSlot-1]->WeaponLevel) {
-		delete SpaceShip->Weapon[WeaponSlot-1];
+		ReleaseWeapon(SpaceShip->Weapon[WeaponSlot-1]);
 		SpaceShip->Weapon[WeaponSlot-1] = nullptr;
 		return false;
 	}

@@ -266,7 +266,7 @@ void DestroyInfoObject()
 		InfoFighter = nullptr;
 	}
 	if (InfoWeapon != nullptr) {
-		delete InfoWeapon;
+		ReleaseWeapon(InfoWeapon);
 		InfoWeapon = nullptr;
 	}
 	if (InfoMine != nullptr) {
@@ -338,7 +338,7 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
-		InfoWeapon = new cWeapon(tmpCreateNum);
+		InfoWeapon = CreateWeapon(tmpCreateNum);
 		InfoWeapon->ObjectStatus = eObjectStatus::none;
 		ObjectBaseLocation = sVECTOR3D(0.0f,-InfoWeapon->AABB[6].y, -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z));
 

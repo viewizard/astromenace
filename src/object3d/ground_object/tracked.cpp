@@ -104,7 +104,7 @@ cTracked::cTracked(int TrackedNum)
 	switch (TrackedNum) {
 	case 1:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 5.5f, 9.0f);
-		Weapon[0] = new cWeapon(211);
+		Weapon[0] = CreateWeapon(211);
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -141,9 +141,9 @@ cTracked::cTracked(int TrackedNum)
 
 	case 2:
 		WeaponLocation[0] = sVECTOR3D(0.1f, 6.1f, -0.4f);
-		Weapon[0] = new cWeapon(204);
+		Weapon[0] = CreateWeapon(204);
 		WeaponLocation[1] = sVECTOR3D(-0.1f, 6.1f, -0.4f);
-		Weapon[1] = new cWeapon(204);
+		Weapon[1] = CreateWeapon(204);
 		WeaponFireType = 2;
 
 		WheelQuantity = 10;
@@ -175,7 +175,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 3:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 5.2f, 3.7f);
-		Weapon[0] = new cWeapon(213);
+		Weapon[0] = CreateWeapon(213);
 
 		WheelQuantity = 14;
 		WheelObjectsNum = new int[14];
@@ -210,7 +210,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 4:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 5.3f, 6.5f);
-		Weapon[0] = new cWeapon(208);
+		Weapon[0] = CreateWeapon(208);
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -251,7 +251,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 5:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 5.8f, 4.5f);
-		Weapon[0] = new cWeapon(208);
+		Weapon[0] = CreateWeapon(208);
 
 		WheelQuantity = 14;
 		WheelObjectsNum = new int[14];
@@ -286,7 +286,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 6:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 4.9f, 4.0f);
-		Weapon[0] = new cWeapon(211);
+		Weapon[0] = CreateWeapon(211);
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -323,7 +323,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 7:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 7.6f, 5.5f);
-		Weapon[0] = new cWeapon(212);
+		Weapon[0] = CreateWeapon(212);
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -360,7 +360,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 8:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 7.0f, 8.5f);
-		Weapon[0] = new cWeapon(208);
+		Weapon[0] = CreateWeapon(208);
 
 		WheelQuantity = 16;
 		WheelObjectsNum = new int[16];
@@ -397,7 +397,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 9:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 6.7f, 6.8f);
-		Weapon[0] = new cWeapon(211);
+		Weapon[0] = CreateWeapon(211);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 
 		WheelQuantity = 16;
@@ -435,7 +435,7 @@ cTracked::cTracked(int TrackedNum)
 
 	case 10:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 6.1f, 0.5f);
-		Weapon[0] = new cWeapon(204);
+		Weapon[0] = CreateWeapon(204);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 
 		WheelQuantity = 16;
@@ -473,9 +473,9 @@ cTracked::cTracked(int TrackedNum)
 
 	case 11:
 		WeaponLocation[0] = sVECTOR3D(2.2f, 5.4f, 7.0f);
-		Weapon[0] = new cWeapon(209);
+		Weapon[0] = CreateWeapon(209);
 		WeaponLocation[1] = sVECTOR3D(-2.2f, 5.4f, 7.0f);
-		Weapon[1] = new cWeapon(209);
+		Weapon[1] = CreateWeapon(209);
 		WeaponFireType = 3;
 
 		WheelQuantity = 16;
@@ -508,16 +508,16 @@ cTracked::cTracked(int TrackedNum)
 
 	case 12:
 		WeaponLocation[0] = sVECTOR3D(0.55f, 5.0f, 2.0f);
-		Weapon[0] = new cWeapon(206);
+		Weapon[0] = CreateWeapon(206);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 		WeaponLocation[1] = sVECTOR3D(-0.55f, 5.0f, 2.0f);
-		Weapon[1] = new cWeapon(206);
+		Weapon[1] = CreateWeapon(206);
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
 		WeaponLocation[2] = sVECTOR3D(1.65f, 5.0f, 2.0f);
-		Weapon[2] = new cWeapon(206);
+		Weapon[2] = CreateWeapon(206);
 		Weapon[2]->NextFireTime = Weapon[2]->NextFireTime / 2.0f;
 		WeaponLocation[3] = sVECTOR3D(-1.65f, 5.0f, 2.0f);
-		Weapon[3] = new cWeapon(206);
+		Weapon[3] = CreateWeapon(206);
 		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime / 2.0f;
 		WeaponFireType = 3;
 
@@ -553,10 +553,10 @@ cTracked::cTracked(int TrackedNum)
 
 	case 13:
 		WeaponLocation[0] = sVECTOR3D(1.4f, 5.0f, 0.4f);
-		Weapon[0] = new cWeapon(206);
+		Weapon[0] = CreateWeapon(206);
 		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime / 2.0f;
 		WeaponLocation[1] = sVECTOR3D(-1.4f, 5.0f, 0.4f);
-		Weapon[1] = new cWeapon(206);
+		Weapon[1] = CreateWeapon(206);
 		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime / 2.0f;
 		WeaponFireType = 3;
 

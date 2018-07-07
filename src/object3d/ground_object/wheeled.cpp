@@ -98,13 +98,13 @@ cWheeled::cWheeled(int WheeledNum)
 	switch (WheeledNum) {
 	case 1:
 		WeaponLocation[0] = sVECTOR3D(0.3f, 4.5f, -1.5f);
-		Weapon[0] = new cWeapon(206);
+		Weapon[0] = CreateWeapon(206);
 		WeaponLocation[1] = sVECTOR3D(-0.3f, 4.5f, -1.5f);
-		Weapon[1] = new cWeapon(206);
+		Weapon[1] = CreateWeapon(206);
 		WeaponLocation[2] = sVECTOR3D(0.9f, 4.5f, -1.5f);
-		Weapon[2] = new cWeapon(206);
+		Weapon[2] = CreateWeapon(206);
 		WeaponLocation[3] = sVECTOR3D(-0.9f, 4.5f, -1.5f);
-		Weapon[3] = new cWeapon(206);
+		Weapon[3] = CreateWeapon(206);
 		WeaponFireType = 3;
 
 		WheelQuantity = 4;
@@ -128,9 +128,9 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 2:
 		WeaponLocation[0] = sVECTOR3D(1.3f, 3.5f, -1.5f);
-		Weapon[0] = new cWeapon(206);
+		Weapon[0] = CreateWeapon(206);
 		WeaponLocation[1] = sVECTOR3D(-1.3f, 3.5f, -1.5f);
-		Weapon[1] = new cWeapon(206);
+		Weapon[1] = CreateWeapon(206);
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
@@ -150,9 +150,9 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 3:
 		WeaponLocation[0] = sVECTOR3D(0.8f, 4.2f, -1.0f);
-		Weapon[0] = new cWeapon(204);
+		Weapon[0] = CreateWeapon(204);
 		WeaponLocation[1] = sVECTOR3D(-0.8f, 4.2f, -1.0f);
-		Weapon[1] = new cWeapon(204);
+		Weapon[1] = CreateWeapon(204);
 		WeaponFireType = 2;
 
 		WheelQuantity = 4;
@@ -181,7 +181,7 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 4:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 4.5f, -4.0f);
-		Weapon[0] = new cWeapon(207);
+		Weapon[0] = CreateWeapon(207);
 
 		WheelQuantity = 4;
 		WheelObjectsNum = new int[4];
@@ -199,7 +199,7 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 5:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 4.5f, -4.0f);
-		Weapon[0] = new cWeapon(208);
+		Weapon[0] = CreateWeapon(208);
 
 		WheelQuantity = 4;
 		WheelObjectsNum = new int[4];
@@ -217,7 +217,7 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 6:
 		WeaponLocation[0] = sVECTOR3D(0.0f, 6.0f, -3.0f);
-		Weapon[0] = new cWeapon(204);
+		Weapon[0] = CreateWeapon(204);
 
 		WheelQuantity = 4;
 		WheelObjectsNum = new int[4];
@@ -245,9 +245,9 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 7:
 		WeaponLocation[0] = sVECTOR3D(0.1f, 5.0f, -1.0f);
-		Weapon[0] = new cWeapon(204);
+		Weapon[0] = CreateWeapon(204);
 		WeaponLocation[1] = sVECTOR3D(-0.1f, 5.0f, -1.0f);
-		Weapon[1] = new cWeapon(204);
+		Weapon[1] = CreateWeapon(204);
 		WeaponFireType = 2;
 
 		WheelQuantity = 4;
@@ -276,9 +276,9 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 8:
 		WeaponLocation[0] = sVECTOR3D(1.5f, 5.2f, 7.0f);
-		Weapon[0] = new cWeapon(210);
+		Weapon[0] = CreateWeapon(210);
 		WeaponLocation[1] = sVECTOR3D(-1.5f, 5.2f, 7.0f);
-		Weapon[1] = new cWeapon(210);
+		Weapon[1] = CreateWeapon(210);
 		WeaponFireType = 3;
 
 		WheelQuantity = 8;

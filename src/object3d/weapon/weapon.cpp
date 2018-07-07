@@ -200,6 +200,14 @@ static void DetachWeapon(cWeapon *Weapon)
 		Weapon->Next->Prev = nullptr;
 }
 
+/*
+ * Create cWeapon object.
+ */
+cWeapon *CreateWeapon(int WeaponNum)
+{
+	return new cWeapon{WeaponNum};
+}
+
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------
@@ -226,6 +234,14 @@ void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap)
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
+}
+
+/*
+ * Release particular weapon object.
+ */
+void ReleaseWeapon(cWeapon *Object)
+{
+	delete Object;
 }
 
 //-----------------------------------------------------------------------------

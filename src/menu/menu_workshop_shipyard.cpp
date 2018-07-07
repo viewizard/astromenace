@@ -317,7 +317,7 @@ void WorkshopCreateBuyShip()
 									    WorkshopFighterGame->Weapon[i]->InternalType,
 									    WorkshopFighterGame->Weapon[i]->Ammo,
 									    WorkshopFighterGame->Weapon[i]->AmmoStart);
-			delete WorkshopFighterGame->Weapon[i];
+			ReleaseWeapon(WorkshopFighterGame->Weapon[i]);
 			WorkshopFighterGame->Weapon[i] = nullptr;
 		}
 

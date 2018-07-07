@@ -452,7 +452,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 						GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 							      WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 							      WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-					delete WorkshopFighterGame->Weapon[SlotNum];
+					ReleaseWeapon(WorkshopFighterGame->Weapon[SlotNum]);
 					WorkshopFighterGame->Weapon[SlotNum] = nullptr;
 					ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = 0;
 					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
@@ -533,7 +533,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 					      WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 					      WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-			delete WorkshopFighterGame->Weapon[SlotNum];
+			ReleaseWeapon(WorkshopFighterGame->Weapon[SlotNum]);
 			WorkshopFighterGame->Weapon[SlotNum] = nullptr;
 			ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = 0;
 			ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
@@ -841,7 +841,7 @@ void ShipSlotSetupWeapon(int Slot)
 					ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
 									       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
 									       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-					delete WorkshopFighterGame->Weapon[SlotNum];
+					ReleaseWeapon(WorkshopFighterGame->Weapon[SlotNum]);
 					WorkshopFighterGame->Weapon[SlotNum] = nullptr;
 					ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = 0;
 					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;

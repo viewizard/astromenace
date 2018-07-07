@@ -47,10 +47,17 @@ namespace astromenace {
 
 enum class eGameSFX;
 
-class cWeapon : public cObject3D {
-public:
+class cWeapon final : public cObject3D {
+	friend cWeapon *CreateWeapon(int WeaponNum);
+	friend void UpdateAllWeapon(float Time);
+	friend void ReleaseWeapon(cWeapon *Object);
+	friend void ReleaseAllWeapons();
+
+private:
 	explicit cWeapon(int WeaponNum);
 	virtual ~cWeapon();
+
+public:
 
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
@@ -124,10 +131,14 @@ public:
 };
 
 
+// Create cWeapon object.
+cWeapon *CreateWeapon(int WeaponNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllWeapon(float Time);
 // Прорисовываем все объекты
 void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap);
+// Release particular weapon object.
+void ReleaseWeapon(cWeapon *Object);
 // Удаляем все объекты в списке
 void ReleaseAllWeapons();
 

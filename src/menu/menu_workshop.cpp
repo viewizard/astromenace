@@ -179,14 +179,14 @@ void WorkshopCreateNewWeapon()
 {
 	// создаем объект
 	if (WorkshopNewWeapon != nullptr) {
-		delete WorkshopNewWeapon;
+		ReleaseWeapon(WorkshopNewWeapon);
 		WorkshopNewWeapon = nullptr;
 	}
 
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopNewWeapon = new cWeapon(CurrentWorkshopNewWeapon);
+	WorkshopNewWeapon = CreateWeapon(CurrentWorkshopNewWeapon);
 
 	WorkshopNewWeapon->ObjectStatus = eObjectStatus::none;
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
@@ -262,7 +262,7 @@ void WorkshopDestroyData()
 		WorkshopNewFighter = nullptr;
 	}
 	if (WorkshopNewWeapon != nullptr) {
-		delete WorkshopNewWeapon;
+		ReleaseWeapon(WorkshopNewWeapon);
 		WorkshopNewWeapon = nullptr;
 	}
 }

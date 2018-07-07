@@ -513,7 +513,7 @@ void DetectCollisionAllObject3D()
 					// если есть фларес, есть шанс его вырубить
 					if (tmpShip->WeaponFlare &&
 					    (Rand > 0.5f-DR) && (Rand < 0.8f)) {
-						delete tmpShip->WeaponFlare;
+						ReleaseWeapon(tmpShip->WeaponFlare);
 						tmpShip->WeaponFlare = nullptr;
 					}
 				}

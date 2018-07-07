@@ -90,7 +90,7 @@ cSpaceShip::~cSpaceShip()
 	if (Weapon != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++)
 			if (Weapon[i] != nullptr) {
-				delete Weapon[i];
+				ReleaseWeapon(Weapon[i]);
 				Weapon[i] = nullptr;
 			}
 
@@ -116,7 +116,7 @@ cSpaceShip::~cSpaceShip()
 	if (BossWeapon != nullptr) {
 		for (int i = 0; i < BossWeaponQuantity; i++)
 			if (BossWeapon[i] != nullptr) {
-				delete BossWeapon[i];
+				ReleaseWeapon(BossWeapon[i]);
 				BossWeapon[i] = nullptr;
 			}
 
@@ -124,7 +124,7 @@ cSpaceShip::~cSpaceShip()
 		BossWeapon = nullptr;
 	}
 	if (WeaponFlare != nullptr) {
-		delete WeaponFlare;
+		ReleaseWeapon(WeaponFlare);
 		WeaponFlare = nullptr;
 	}
 
