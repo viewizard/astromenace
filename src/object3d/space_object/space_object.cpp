@@ -287,7 +287,7 @@ cSpaceObject::cSpaceObject()
 cSpaceObject::~cSpaceObject()
 {
 	if (!GraphicFX.empty()) {
-		for (auto tmpGFX : GraphicFX) {
+		for (auto &tmpGFX : GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock()) {
 				sharedGFX->IsSuppressed = true;
 				sharedGFX->DestroyIfNoParticles = true;

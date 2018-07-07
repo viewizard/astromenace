@@ -1399,7 +1399,7 @@ static bool SetupShaderUniformLocation(std::weak_ptr<cGLSL> &Shader,
 	// find and store uniform location for all shaders, we don't really need
 	// store internal storage number for uniforms usage, since we load them
 	// one-by-one, and we know sequence, we could use 0-1-2-3-4 numbers directly
-	for (auto tmpName : UniformLocationNameArray) {
+	for (const auto &tmpName : UniformLocationNameArray) {
 		if (vw_FindShaderUniformLocation(Shader, tmpName) < 0) {
 			std::cerr << __func__ << "(): " << "failed to find uniform location " << tmpName
 				  << " in shader " << ShaderName << ".\n";

@@ -126,7 +126,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					Projectile.ObjectStatus = Object.ObjectStatus;
 					Projectile.SetRotation(Projectile.Rotation ^ (-1));
 
-					for (auto tmpGFX : Projectile.GraphicFX) {
+					for (auto &tmpGFX : Projectile.GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
 							sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameEnemyWeaponPenalty);
 							sharedGFX->Speed = sharedGFX->Speed * GameEnemyWeaponPenalty;

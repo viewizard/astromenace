@@ -323,18 +323,18 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 {
 	// если нужен сброс установки двигателя
 	if (EngineType == 0) {
-		for (auto tmpEngine : SpaceShip->Engines) {
+		for (auto &tmpEngine : SpaceShip->Engines) {
 			vw_ReleaseParticleSystem(tmpEngine);
 		}
 
 		if (!SpaceShip->EnginesLeft.empty()) {
-			for (auto tmpEngineLeft : SpaceShip->EnginesLeft) {
+			for (auto &tmpEngineLeft : SpaceShip->EnginesLeft) {
 				vw_ReleaseParticleSystem(tmpEngineLeft);
 			}
 		}
 
 		if (!SpaceShip->EnginesRight.empty()) {
-			for (auto tmpEngineRight : SpaceShip->EnginesRight) {
+			for (auto &tmpEngineRight : SpaceShip->EnginesRight) {
 				vw_ReleaseParticleSystem(tmpEngineRight);
 			}
 		}

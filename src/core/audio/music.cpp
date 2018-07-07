@@ -324,7 +324,7 @@ void vw_SetMusicFadeIn(const std::string &Name, float EndVol, uint32_t Ticks)
  */
 void vw_SetMusicGlobalVolume(float NewGlobalVolume)
 {
-	for (auto & tmpMusic : MusicMap) {
+	for (auto &tmpMusic : MusicMap) {
 		tmpMusic.second.SetGlobalVolume(NewGlobalVolume);
 	}
 }

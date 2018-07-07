@@ -953,7 +953,7 @@ bool cWeapon::Update(float Time)
 				Projectile->Create(InternalType);
 				Projectile->SetLocation(Location+FireLocation);
 				Projectile->SetRotation(Rotation);
-				for (auto tmpGFX : Projectile->GraphicFX) {
+				for (auto &tmpGFX : Projectile->GraphicFX) {
 					if (auto sharedGFX = tmpGFX.lock()) {
 						if (auto sharedFire = Fire.lock())
 							sharedGFX->Direction = sharedFire->Direction ^ -1;
@@ -1004,7 +1004,7 @@ bool cWeapon::Update(float Time)
 				Projectile->SetLocation(Location + FireLocation);
 				Projectile->SetRotation(Rotation + sVECTOR3D(vw_fRand0() * 30.0f, 0.0f, vw_fRand0() * 30.0f));
 
-				for (auto tmpGFX : Projectile->GraphicFX) {
+				for (auto &tmpGFX : Projectile->GraphicFX) {
 					if (auto sharedGFX = tmpGFX.lock()) {
 						sharedGFX->Direction = Orientation ^ -1;
 						// учитываем пенальти для визуальных эффектов
@@ -1441,7 +1441,7 @@ bool cWeapon::WeaponFire(float Time)
 	// если это мина, то нужно делать немного по другому
 	if (Projectile->ProjectileType == 3 || Projectile->ProjectileType == 4) {
 		Projectile->SetRotation(RotationWeapon);
-		for (auto tmpGFX : Projectile->GraphicFX) {
+		for (auto &tmpGFX : Projectile->GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock())
 				sharedGFX->Direction = Orientation;
 		}
@@ -1456,7 +1456,7 @@ bool cWeapon::WeaponFire(float Time)
 		Projectile->ProjectileType = Projectile->ProjectileType - 3;
 	} else {
 		Projectile->SetRotation(RotationWeapon);
-		for (auto tmpGFX : Projectile->GraphicFX) {
+		for (auto &tmpGFX : Projectile->GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock()) {
 				sharedGFX->Direction = Orientation;
 				// учитываем пенальти для визуальных эффектов

@@ -329,7 +329,7 @@ void CreateInfoObject()
 		InfoObjectWeaponQuantity = InfoFighter->WeaponQuantity;
 		InfoObjectEngineQuantity = InfoFighter->Engines.size();
 
-		for (auto tmpEngine : InfoFighter->Engines) {
+		for (auto &tmpEngine : InfoFighter->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
@@ -413,7 +413,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoAlien->Height;
 		InfoObjectStrength = InfoAlien->StrengthStart;
 
-		for (auto tmpEngine : InfoAlien->Engines) {
+		for (auto &tmpEngine : InfoAlien->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
@@ -441,7 +441,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoAlienMotherShip->Height;
 		InfoObjectStrength = InfoAlienMotherShip->StrengthStart;
 
-		for (auto tmpEngine : InfoAlienMotherShip->Engines) {
+		for (auto &tmpEngine : InfoAlienMotherShip->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
@@ -469,7 +469,7 @@ void CreateInfoObject()
 		InfoObjectHeight = InfoPirateShip->Height;
 		InfoObjectStrength = InfoPirateShip->StrengthStart;
 
-		for (auto tmpEngine : InfoPirateShip->Engines) {
+		for (auto &tmpEngine : InfoPirateShip->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}

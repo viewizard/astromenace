@@ -62,7 +62,7 @@ cExplosion::~cExplosion()
 		ExplosionPieceData = nullptr;
 	}
 
-	for (auto tmpGFX : GraphicFX) {
+	for (auto &tmpGFX : GraphicFX) {
 		if (auto sharedGFX = tmpGFX.lock()) {
 			sharedGFX->IsSuppressed = true;
 			sharedGFX->DestroyIfNoParticles = true;
@@ -89,7 +89,7 @@ bool cExplosion::Update(float Time)
 	// если там передали удалить - выходим
 	if (!cObject3D::Update(Time)) {
 		// делаем правильную остановку частиц...
-		for (auto tmpGFX : GraphicFX) {
+		for (auto &tmpGFX : GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock()) {
 				sharedGFX->StopAllParticles();
 
@@ -119,7 +119,7 @@ bool cExplosion::Update(float Time)
 					   || ExplosionType == -205 || ExplosionType == -206 || ExplosionType == -209 || ExplosionType == -210
 					   || ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
 					   || ExplosionType == -217))) {
-		for (auto tmpGFX : GraphicFX) {
+		for (auto &tmpGFX : GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock()) {
 				if (Lifetime < sharedGFX->Life) {
 					// только говорим, чтобы больше не создавал частиц!!!

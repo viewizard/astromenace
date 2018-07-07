@@ -1688,7 +1688,7 @@ missile:
 					Projectile->SetLocation(Location + sVECTOR3D(0.0f, -2.0f, 0.0f));
 
 					Projectile->SetRotation(Rotation);
-					for (auto tmpGFX : Projectile->GraphicFX) {
+					for (auto &tmpGFX : Projectile->GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
 							sharedGFX->Direction = Orientation;
 							// учитываем пенальти для визуальных эффектов
@@ -1789,7 +1789,7 @@ missile:
 					Projectile->SetLocation(Location + sVECTOR3D(0.0f, 0.0f, 0.0f));
 
 					Projectile->SetRotation(Rotation);
-					for (auto tmpGFX : Projectile->GraphicFX) {
+					for (auto &tmpGFX : Projectile->GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
 							sharedGFX->Direction = Orientation;
 							// учитываем пенальти для визуальных эффектов

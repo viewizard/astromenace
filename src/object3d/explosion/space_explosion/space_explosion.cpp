@@ -109,7 +109,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius * 6.0f));
 			Projectile->Orientation.Normalize();
 
-			for (auto tmpGFX : Projectile->GraphicFX) {
+			for (auto &tmpGFX : Projectile->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = Projectile->Orientation ^ -1;
 					sharedGFX->Speed = 1.5f;
@@ -194,7 +194,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius / 4.0f));
 			Projectile->Orientation.Normalize();
 
-			for (auto tmpGFX : Projectile->GraphicFX) {
+			for (auto &tmpGFX : Projectile->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = Projectile->Orientation ^ -1;
 					sharedGFX->Speed = 2.5f;
@@ -376,7 +376,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius / 2.0f));
 			Projectile->Orientation.Normalize();
 
-			for (auto tmpGFX : Projectile->GraphicFX) {
+			for (auto &tmpGFX : Projectile->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = Projectile->Orientation ^ -1;
 					sharedGFX->Speed = 2.5f;

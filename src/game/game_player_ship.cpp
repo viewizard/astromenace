@@ -975,18 +975,18 @@ void GamePlayerShip()
 			PlayerFighter->MaxAcceler = 0.0f;
 			PlayerFighter->MaxSpeedRotate = 0.0f;
 			// глушим двигатели
-			for (auto tmpEngine : PlayerFighter->Engines) {
+			for (auto &tmpEngine : PlayerFighter->Engines) {
 				if (auto sharedEngine = tmpEngine.lock())
 					sharedEngine->IsSuppressed = true;
 			}
 			if (!PlayerFighter->EnginesLeft.empty()) {
-				for (auto tmpEngineLeft : PlayerFighter->EnginesLeft) {
+				for (auto &tmpEngineLeft : PlayerFighter->EnginesLeft) {
 					if (auto sharedEngineLeft = tmpEngineLeft.lock())
 						sharedEngineLeft->IsSuppressed = true;
 				}
 			}
 			if (!PlayerFighter->EnginesRight.empty()) {
-				for (auto tmpEngineRight : PlayerFighter->EnginesRight) {
+				for (auto &tmpEngineRight : PlayerFighter->EnginesRight) {
 					if (auto sharedEngineRight = tmpEngineRight.lock())
 						sharedEngineRight->IsSuppressed = true;
 				}
@@ -996,18 +996,18 @@ void GamePlayerShip()
 			PlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			PlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem)*2.0f - PlayerFighter->Weight/1000.0f;
 			// запускаем прорисовку
-			for (auto tmpEngine : PlayerFighter->Engines) {
+			for (auto &tmpEngine : PlayerFighter->Engines) {
 				if (auto sharedEngine = tmpEngine.lock())
 					sharedEngine->IsSuppressed = false;
 			}
 			if (!PlayerFighter->EnginesLeft.empty()) {
-				for (auto tmpEngineLeft : PlayerFighter->EnginesLeft) {
+				for (auto &tmpEngineLeft : PlayerFighter->EnginesLeft) {
 					if (auto sharedEngineLeft = tmpEngineLeft.lock())
 						sharedEngineLeft->IsSuppressed = false;
 				}
 			}
 			if (!PlayerFighter->EnginesRight.empty()) {
-				for (auto tmpEngineRight : PlayerFighter->EnginesRight) {
+				for (auto &tmpEngineRight : PlayerFighter->EnginesRight) {
 					if (auto sharedEngineRight = tmpEngineRight.lock())
 						sharedEngineRight->IsSuppressed = false;
 				}

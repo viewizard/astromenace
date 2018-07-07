@@ -287,7 +287,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = 1.5f;
@@ -493,7 +493,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
@@ -544,7 +544,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
@@ -597,7 +597,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
@@ -656,7 +656,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
 			ProjectileTMP->Orientation.Normalize();
 
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
@@ -677,7 +677,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
@@ -698,7 +698,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
@@ -718,7 +718,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
@@ -740,7 +740,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
-			for (auto tmpGFX : ProjectileTMP->GraphicFX) {
+			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
 					sharedGFX->Speed = sharedGFX->Speed / 2.0f;

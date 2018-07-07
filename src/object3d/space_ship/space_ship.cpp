@@ -128,7 +128,7 @@ cSpaceShip::~cSpaceShip()
 		WeaponFlare = nullptr;
 	}
 
-	for (auto tmpEngine : Engines) {
+	for (auto &tmpEngine : Engines) {
 		if (auto sharedEngine = tmpEngine.lock()) {
 			if (!EngineDestroyType) {
 				sharedEngine->IsSuppressed = true;
@@ -139,7 +139,7 @@ cSpaceShip::~cSpaceShip()
 	}
 
 	if (!EnginesLeft.empty()) {
-		for (auto tmpEngineLeft : EnginesLeft) {
+		for (auto &tmpEngineLeft : EnginesLeft) {
 			if (auto sharedEngineLeft = tmpEngineLeft.lock()) {
 				if (!EngineDestroyType) {
 					sharedEngineLeft->IsSuppressed = true;
@@ -151,7 +151,7 @@ cSpaceShip::~cSpaceShip()
 	}
 
 	if (!EnginesRight.empty()) {
-		for (auto tmpEngineRight : EnginesRight) {
+		for (auto &tmpEngineRight : EnginesRight) {
 			if (auto sharedEngineRight = tmpEngineRight.lock()) {
 				if (!EngineDestroyType) {
 					sharedEngineRight->IsSuppressed = true;
@@ -517,13 +517,13 @@ bool cSpaceShip::Update(float Time)
 
 		// выключаем двигатели, если нужно - включим
 		if (!EnginesLeft.empty()) {
-			for (auto tmpEngineLeft : EnginesLeft) {
+			for (auto &tmpEngineLeft : EnginesLeft) {
 				if (auto sharedEngineLeft = tmpEngineLeft.lock())
 					sharedEngineLeft->IsSuppressed = true;
 			}
 		}
 		if (!EnginesRight.empty()) {
-			for (auto tmpEngineRight : EnginesRight) {
+			for (auto &tmpEngineRight : EnginesRight) {
 				if (auto sharedEngineRight = tmpEngineRight.lock())
 					sharedEngineRight->IsSuppressed = true;
 			}
@@ -581,14 +581,14 @@ bool cSpaceShip::Update(float Time)
 				// включаем двигатель на поворот
 				if (NeedRotate.y < 0.0f) {
 					if (!EnginesLeft.empty()) {
-						for (auto tmpEngineLeft : EnginesLeft) {
+						for (auto &tmpEngineLeft : EnginesLeft) {
 							if (auto sharedEngineLeft = tmpEngineLeft.lock())
 								sharedEngineLeft->IsSuppressed = false;
 						}
 					}
 				} else {
 					if (!EnginesRight.empty()) {
-						for (auto tmpEngineRight : EnginesRight) {
+						for (auto &tmpEngineRight : EnginesRight) {
 							if (auto sharedEngineRight = tmpEngineRight.lock())
 								sharedEngineRight->IsSuppressed = false;
 						}
@@ -627,13 +627,13 @@ bool cSpaceShip::Update(float Time)
 		}
 	} else {
 		if (!EnginesLeft.empty()) {
-			for (auto tmpEngineLeft : EnginesLeft) {
+			for (auto &tmpEngineLeft : EnginesLeft) {
 				if (auto sharedEngineLeft = tmpEngineLeft.lock())
 					sharedEngineLeft->IsSuppressed = !PlayerFighterLeftEng;
 			}
 		}
 		if (!EnginesRight.empty()) {
-			for (auto tmpEngineRight : EnginesRight) {
+			for (auto &tmpEngineRight : EnginesRight) {
 				if (auto sharedEngineRight = tmpEngineRight.lock())
 					sharedEngineRight->IsSuppressed = !PlayerFighterRightEng;
 			}
@@ -700,13 +700,13 @@ bool cSpaceShip::Update(float Time)
 		// если нужны двигатели торможения - включаем маневровые
 		if (Sign == -1.0f) {
 			if (!EnginesLeft.empty()) {
-				for (auto tmpEngineLeft : EnginesLeft) {
+				for (auto &tmpEngineLeft : EnginesLeft) {
 					if (auto sharedEngineLeft = tmpEngineLeft.lock())
 						sharedEngineLeft->IsSuppressed = false;
 				}
 			}
 			if (!EnginesRight.empty()) {
-				for (auto tmpEngineRight : EnginesRight) {
+				for (auto &tmpEngineRight : EnginesRight) {
 					if (auto sharedEngineRight = tmpEngineRight.lock())
 						sharedEngineRight->IsSuppressed = false;
 				}
@@ -1171,7 +1171,7 @@ bool cSpaceShip::Update(float Time)
 			tmpSpeed=-6.0f;
 		tmpSpeed/=2.0f;
 
-		for (auto tmpEngine : Engines) {
+		for (auto &tmpEngine : Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				if (sharedEngine->SpeedOnCreation != -1.0f)
 					sharedEngine->Speed = sharedEngine->SpeedOnCreation + tmpSpeed;
