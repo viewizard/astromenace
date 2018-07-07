@@ -127,8 +127,9 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 2:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.1f, 6.1f, -0.4f));
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.1f, 6.1f, -0.4f));
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(204), sVECTOR3D(0.1f, 6.1f, -0.4f));
+		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.1f, 6.1f, -0.4f));
 		WeaponFireType = 2;
 
 		WheelQuantity = 10;
@@ -449,8 +450,9 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 11:
-		Weapon.emplace_back(CreateWeapon(209), sVECTOR3D(2.2f, 5.4f, 7.0f));
-		Weapon.emplace_back(CreateWeapon(209), sVECTOR3D(-2.2f, 5.4f, 7.0f));
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(209), sVECTOR3D(2.2f, 5.4f, 7.0f));
+		Weapon[1](CreateWeapon(209), sVECTOR3D(-2.2f, 5.4f, 7.0f));
 		WeaponFireType = 3;
 
 		WheelQuantity = 16;
@@ -482,14 +484,15 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 12:
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(0.55f, 5.0f, 2.0f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-0.55f, 5.0f, 2.0f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(1.65f, 5.0f, 2.0f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-1.65f, 5.0f, 2.0f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.resize(4);
+		Weapon[0](CreateWeapon(206), sVECTOR3D(0.55f, 5.0f, 2.0f));
+		Weapon[0].Weapon->NextFireTime /= 2.0f;
+		Weapon[1](CreateWeapon(206), sVECTOR3D(-0.55f, 5.0f, 2.0f));
+		Weapon[1].Weapon->NextFireTime /= 2.0f;
+		Weapon[2](CreateWeapon(206), sVECTOR3D(1.65f, 5.0f, 2.0f));
+		Weapon[2].Weapon->NextFireTime /= 2.0f;
+		Weapon[3](CreateWeapon(206), sVECTOR3D(-1.65f, 5.0f, 2.0f));
+		Weapon[3].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelQuantity = 16;
@@ -523,10 +526,11 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 13:
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(1.4f, 5.0f, 0.4f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-1.4f, 5.0f, 0.4f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(206), sVECTOR3D(1.4f, 5.0f, 0.4f));
+		Weapon[0].Weapon->NextFireTime /= 2.0f;
+		Weapon[1](CreateWeapon(206), sVECTOR3D(-1.4f, 5.0f, 0.4f));
+		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelQuantity = 14;

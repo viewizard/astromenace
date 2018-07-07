@@ -85,10 +85,11 @@ cWheeled::cWheeled(int WheeledNum)
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (WheeledNum) {
 	case 1:
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(0.3f, 4.5f, -1.5f));
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-0.3f, 4.5f, -1.5f));
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(0.9f, 4.5f, -1.5f));
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
+		Weapon.resize(4);
+		Weapon[0](CreateWeapon(206), sVECTOR3D(0.3f, 4.5f, -1.5f));
+		Weapon[1](CreateWeapon(206), sVECTOR3D(-0.3f, 4.5f, -1.5f));
+		Weapon[2](CreateWeapon(206), sVECTOR3D(0.9f, 4.5f, -1.5f));
+		Weapon[3](CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
 		WeaponFireType = 3;
 
 		WheelQuantity = 4;
@@ -111,8 +112,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 2:
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(1.3f, 3.5f, -1.5f));
-		Weapon.emplace_back(CreateWeapon(206), sVECTOR3D(-1.3f, 3.5f, -1.5f));
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(206), sVECTOR3D(1.3f, 3.5f, -1.5f));
+		Weapon[1](CreateWeapon(206), sVECTOR3D(-1.3f, 3.5f, -1.5f));
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
@@ -131,8 +133,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 3:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.8f, 4.2f, -1.0f));
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(204), sVECTOR3D(0.8f, 4.2f, -1.0f));
+		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
 		WeaponFireType = 2;
 
 		WheelQuantity = 4;
@@ -221,8 +224,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 7:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.1f, 5.0f, -1.0f));
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(204), sVECTOR3D(0.1f, 5.0f, -1.0f));
+		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
 		WeaponFireType = 2;
 
 		WheelQuantity = 4;
@@ -250,8 +254,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 8:
-		Weapon.emplace_back(CreateWeapon(210), sVECTOR3D(1.5f, 5.2f, 7.0f));
-		Weapon.emplace_back(CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(210), sVECTOR3D(1.5f, 5.2f, 7.0f));
+		Weapon[1](CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
 		WeaponFireType = 3;
 
 		WheelQuantity = 8;

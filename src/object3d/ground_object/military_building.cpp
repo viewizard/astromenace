@@ -81,8 +81,9 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (MilitaryBuildingNum) {
 	case 1:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.3f, 4.6f, 2.6f));
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-0.3f, 4.6f, 2.6f));
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(204), sVECTOR3D(0.3f, 4.6f, 2.6f));
+		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.3f, 4.6f, 2.6f));
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 4;
@@ -125,10 +126,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 3:
-		Weapon.emplace_back(CreateWeapon(205), sVECTOR3D(2.8f, 5.3f, 7.5f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
-		Weapon.emplace_back(CreateWeapon(205), sVECTOR3D(-2.8f, 5.3f, 7.5f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(205), sVECTOR3D(2.8f, 5.3f, 7.5f));
+		Weapon[0].Weapon->NextFireTime /= 2.0f;
+		Weapon[1](CreateWeapon(205), sVECTOR3D(-2.8f, 5.3f, 7.5f));
+		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		TargetHorizBlocksQuantity = 2;
@@ -143,10 +145,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 4:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(3.6f, 8.5f, 4.0f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-3.6f, 8.5f, 4.0f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(204), sVECTOR3D(3.6f, 8.5f, 4.0f));
+		Weapon[0].Weapon->NextFireTime /= 2.0f;
+		Weapon[1](CreateWeapon(204), sVECTOR3D(-3.6f, 8.5f, 4.0f));
+		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 4;
@@ -170,10 +173,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 5:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(1.95f, 6.5f, 3.7f));
-		Weapon.back().Weapon->NextFireTime /= 3.0f;
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(-1.95f, 6.5f, 3.7f));
-		Weapon.back().Weapon->NextFireTime /= 3.0f;
+		Weapon.resize(2);
+		Weapon[0](CreateWeapon(204), sVECTOR3D(1.95f, 6.5f, 3.7f));
+		Weapon[0].Weapon->NextFireTime /= 3.0f;
+		Weapon[1](CreateWeapon(204), sVECTOR3D(-1.95f, 6.5f, 3.7f));
+		Weapon[1].Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
 		TargetHorizBlocksQuantity = 2;

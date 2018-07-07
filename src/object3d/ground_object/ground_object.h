@@ -60,10 +60,17 @@ struct sGroundObjectWeapon {
 	sVECTOR3D Location{};
 	sVECTOR3D Bound{};
 
+	sGroundObjectWeapon() = default;
 	sGroundObjectWeapon(cWeapon *_Weapon, const sVECTOR3D &_Location) :
 		Weapon{_Weapon},
 		Location{_Location}
 	{}
+
+	void operator () (cWeapon *_Weapon, const sVECTOR3D &_Location)
+	{
+		Weapon = _Weapon;
+		Location = _Location;
+	}
 };
 
 class cGroundObject : public cObject3D {
