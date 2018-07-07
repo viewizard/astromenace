@@ -887,8 +887,8 @@ bool cWeapon::Update(float Time)
 		}
 	}
 
-	// если это swamp - запуск других ракет
-	if (InternalType == 17 && SwampNum > 0)
+	// если это swarm - запуск других ракет
+	if (InternalType == 17 && SwarmNum > 0)
 		if (LastFireTime + 0.15f < Time)
 			if (Ammo > 0 || !GameUnlimitedAmmo) {
 				LastFireTime = Time;
@@ -901,7 +901,7 @@ bool cWeapon::Update(float Time)
 				if (ObjectStatus == eObjectStatus::Enemy)
 					CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty);
 
-				switch (SwampNum) {
+				switch (SwarmNum) {
 				case 9:
 					FireLocation = sVECTOR3D(-0.5f, -0.5f, 2.6f);
 					break;
@@ -964,12 +964,12 @@ bool cWeapon::Update(float Time)
 					PlayGameSFX(SFX, fVol, Projectile->Location);
 				}
 
-				SwampNum--;
+				SwarmNum--;
 			}
 
 	// если это фларес - выпускаем остальные
-	// SwampNum в этом случае используем с другой целью
-	if (InternalType == 203 && SwampNum > 0)
+	// SwarmNum в этом случае используем с другой целью
+	if (InternalType == 203 && SwarmNum > 0)
 		if (LastFireTime + 0.4f < Time)
 			if (Ammo > 0 || !GameUnlimitedAmmo) {
 				LastFireTime = Time;
@@ -1015,7 +1015,7 @@ bool cWeapon::Update(float Time)
 					PlayGameSFX(SFX, fVol, Projectile->Location);
 				}
 
-				SwampNum--;
+				SwarmNum--;
 			}
 
 
@@ -1474,11 +1474,11 @@ bool cWeapon::WeaponFire(float Time)
 
 	// нужно создать еще 9 ракет
 	if (InternalType == 17)
-		SwampNum = 9;
+		SwarmNum = 9;
 
 	// нужно создать еще 4 фларес
 	if (InternalType == 203)
-		SwampNum = 4;
+		SwarmNum = 4;
 
 
 	// выстрел был

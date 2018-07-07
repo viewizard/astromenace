@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO split to projectile/beam
+// TODO split to projectile/swarm/beam
 
 // TODO split to internal/external->turret
 
@@ -79,8 +79,8 @@ public:
 	// текущее состояние энергии
 	float CurrentEnergyAccumulated{0.0f};
 
-	// swamp
-	int SwampNum{0};
+	// swarm
+	int SwarmNum{0};
 
 	// нужно вращать-поворачивать при наведении внешне ( не нужно для турелей и ракетных систем)
 	bool NeedRotateOnTargeting{true};

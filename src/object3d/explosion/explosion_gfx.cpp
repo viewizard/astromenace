@@ -261,7 +261,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
-	case 10: // missile, swamp
+	case 10: // missile, swarm
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;

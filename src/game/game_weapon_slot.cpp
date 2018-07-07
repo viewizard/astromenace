@@ -114,7 +114,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// перезарядка
 			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 56;
+			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,56);
 			DstRect(Xpos+12,Ypos+16+ReloadShow,Xpos+12+8,Ypos+56+16);
@@ -180,7 +180,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// перезарядка
 			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
+			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
@@ -218,7 +218,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// перезарядка
 			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
+			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
@@ -308,7 +308,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// перезарядка
 			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 56;
+			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,56);
 			DstRect(Xpos+144,Ypos+16+ReloadShow,Xpos+144+8,Ypos+56+16);
@@ -373,7 +373,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// перезарядка
 			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
+			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
@@ -412,7 +412,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// перезарядка
 			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwampNum > 0) ReloadShow = 64;
+			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
