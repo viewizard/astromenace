@@ -802,21 +802,19 @@ bool cGroundObject::Update(float Time)
 			if (Sign == 1.0f) {
 				if (tmpWheelDeviation.Need <= tmpWheelDeviation.Current + tmpDeviation) {
 					tmpDeviation -= tmpWheelDeviation.Current + tmpDeviation - tmpWheelDeviation.Need;
-					tmpWheelDeviation.Current += tmpDeviation;
 					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
-				} else
-					tmpWheelDeviation.Current += tmpDeviation;
+				}
 			} else {
 				if (tmpWheelDeviation.Need >= tmpWheelDeviation.Current + tmpDeviation) {
 					tmpDeviation += tmpWheelDeviation.Current + tmpDeviation - tmpWheelDeviation.Need;
-					tmpWheelDeviation.Current += tmpDeviation;
 					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
-				} else
-					tmpWheelDeviation.Current += tmpDeviation;
+				}
 			}
+			tmpWheelDeviation.Current += tmpDeviation;
 
-			sVECTOR3D Tmp = tmpWheelDeviation.Deviation ^ tmpDeviation;
-			SetObjectLocation(Model3DBlocks[tmpWheelDeviation.Object].Location + Tmp, tmpWheelDeviation.Object);
+			sVECTOR3D tmpLocation = tmpWheelDeviation.Direction ^ tmpDeviation;
+			SetObjectLocation(Model3DBlocks[tmpWheelDeviation.Object].Location + tmpLocation,
+					  tmpWheelDeviation.Object);
 		}
 	}
 

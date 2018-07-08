@@ -540,7 +540,7 @@ void CreateInfoObject()
 		if (auto sharedObject = InfoGroundObject.lock()) {
 			sharedObject->WheelDeviation.resize(sharedObject->WheelObjects.size());
 			for (unsigned i = 0; i < sharedObject->WheelDeviation.size(); i++) {
-				sharedObject->WheelDeviation[i].Deviation = sVECTOR3D(0.0f, 1.0f, 0.0f);
+				sharedObject->WheelDeviation[i].Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
 				sharedObject->WheelDeviation[i].Need = vw_fRand0() * 0.1f;
 				sharedObject->WheelDeviation[i].Current = 0.0f;
 				sharedObject->WheelDeviation[i].Object = sharedObject->WheelObjects[i];
@@ -573,7 +573,7 @@ void CreateInfoObject()
 		if (auto sharedObject = InfoGroundObject.lock()) {
 			sharedObject->WheelDeviation.resize(sharedObject->WheelObjects.size());
 			for (unsigned i = 0; i < sharedObject->WheelDeviation.size(); i++) {
-				sharedObject->WheelDeviation[i].Deviation = sVECTOR3D(0.0f, 1.0f, 0.0f);
+				sharedObject->WheelDeviation[i].Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
 				sharedObject->WheelDeviation[i].Need = vw_fRand0() * 0.1f;
 				sharedObject->WheelDeviation[i].Current = 0.0f;
 				sharedObject->WheelDeviation[i].Object = sharedObject->WheelObjects[i];

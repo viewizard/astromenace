@@ -74,7 +74,7 @@ struct sGroundObjectWeapon {
 };
 
 struct sWheelDeviation {
-	sVECTOR3D Deviation{};
+	sVECTOR3D Direction{};
 	float Need{0.0f};
 	float Current{0.0f};
 	unsigned Object{0};
