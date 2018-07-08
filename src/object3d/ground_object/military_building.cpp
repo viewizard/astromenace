@@ -86,8 +86,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.3f, 4.6f, 2.6f));
 		WeaponFireType = 2;
 
-		TargetHorizBlocksQuantity = 4;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(4);
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 2;
 		TargetHorizBlocks[2] = 3;
@@ -106,8 +105,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon.back().Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
-		TargetHorizBlocksQuantity = 4;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(4);
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 2;
 		TargetHorizBlocks[2] = 3;
@@ -131,8 +129,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 2;
 
@@ -150,8 +147,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 2;
 
-		TargetHorizBlocksQuantity = 4;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(4);
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 2;
 		TargetHorizBlocks[2] = 3;
@@ -177,8 +173,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1].Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 2;
 
@@ -192,8 +187,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 3.0f, 7.0f));
 		Weapon.back().Weapon->NextFireTime /= 3.5f;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 2;
 		TargetHorizBlocks[1] = 1;
 
@@ -206,8 +200,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	case 7:
 		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.2f, 10.3f));
 
-		TargetHorizBlocksQuantity = 4;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(4);
 		TargetHorizBlocks[0] = 4;
 		TargetHorizBlocks[1] = 2;
 		TargetHorizBlocks[2] = 3;
@@ -225,12 +218,12 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizBlocks != nullptr) {
+	if (!TargetHorizBlocks.empty()) {
 		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 	}
 
 	if (TargetVertBlocks != nullptr) {
-		if (TargetHorizBlocks != nullptr)
+		if (!TargetHorizBlocks.empty())
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
@@ -239,7 +232,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	for (auto &tmpWeapon : Weapon) {
 		if (TargetVertBlocks != nullptr)
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
-		else if (TargetHorizBlocks != nullptr)
+		else if (!TargetHorizBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
 			tmpWeapon.Bound = tmpWeapon.Location;

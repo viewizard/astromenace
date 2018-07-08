@@ -180,10 +180,6 @@ cGroundObject::~cGroundObject()
 		Weapon.clear();
 	}
 
-	if (TargetHorizBlocks != nullptr) {
-		delete [] TargetHorizBlocks;
-		TargetHorizBlocks = nullptr;
-	};
 	if (TargetVertBlocks != nullptr) {
 		delete [] TargetVertBlocks;
 		TargetVertBlocks = nullptr;
@@ -221,7 +217,7 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 
 	sVECTOR3D RotationMiddle = Rotation;
 	sVECTOR3D MiddleBoundTMP = MiddleBound;
-	if (TargetHorizBlocks != nullptr)
+	if (!TargetHorizBlocks.empty())
 		RotationMiddle = Model3DBlocks[TargetHorizBlocks[0]].Rotation + Rotation;
 	vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
@@ -238,7 +234,7 @@ void cGroundObject::SetRotation(sVECTOR3D NewRotation)
 				tmpWeapon.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
 				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-				if ((TargetHorizBlocks == nullptr) &&
+				if (TargetHorizBlocks.empty() &&
 				    (TargetVertBlocks == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
 					RotationWeapon = sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f) + Rotation;
@@ -329,7 +325,7 @@ bool cGroundObject::Update(float Time)
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот башни по горизонтале
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if ((TargetHorizBlocks != nullptr) &&
+		if (!TargetHorizBlocks.empty() &&
 		    (TargetHorizBlocksNeedAngle != TargetHorizBlocksCurrentAngle)) {
 			if (fabsf(TargetHorizBlocksNeedAngle-TargetHorizBlocksCurrentAngle) > 180.0f) {
 				if (TargetHorizBlocksCurrentAngle - TargetHorizBlocksNeedAngle > 180.0f)
@@ -355,20 +351,21 @@ bool cGroundObject::Update(float Time)
 			TargetHorizBlocksCurrentAngle = NeedRotateCalculation;
 
 			// поворачиваем все объекты
-			for (int i = 0; i < TargetHorizBlocksQuantity; i++) {
+			for (auto tmpBlock : TargetHorizBlocks) {
 
-				sVECTOR3D tmp = Model3DBlocks[TargetHorizBlocks[i]].Location -
-						Model3DBlocks[TargetHorizBlocks[0]].Location;
+				sVECTOR3D tmpLocation = Model3DBlocks[tmpBlock].Location -
+							Model3DBlocks[TargetHorizBlocks[0]].Location;
 
-				vw_RotatePointInv(tmp, Model3DBlocks[TargetHorizBlocks[i]].Rotation ^ (-1.0f));
+				vw_RotatePointInv(tmpLocation, Model3DBlocks[tmpBlock].Rotation ^ (-1.0f));
 
-				SetObjectRotation(sVECTOR3D(Model3DBlocks[TargetHorizBlocks[i]].Rotation.x,
+				SetObjectRotation(sVECTOR3D(Model3DBlocks[tmpBlock].Rotation.x,
 							    -NeedRotateCalculation,
-							    Model3DBlocks[TargetHorizBlocks[i]].Rotation.z), TargetHorizBlocks[i]);
+							    Model3DBlocks[tmpBlock].Rotation.z),
+						  tmpBlock);
 
-				vw_RotatePoint(tmp, Model3DBlocks[TargetHorizBlocks[i]].Rotation);
+				vw_RotatePoint(tmpLocation, Model3DBlocks[tmpBlock].Rotation);
 
-				SetObjectLocation(tmp + Model3DBlocks[TargetHorizBlocks[0]].Location, TargetHorizBlocks[i]);
+				SetObjectLocation(tmpLocation + Model3DBlocks[TargetHorizBlocks[0]].Location, tmpBlock);
 			}
 		}
 
@@ -425,7 +422,7 @@ bool cGroundObject::Update(float Time)
 
 	sVECTOR3D RotationMiddle = Rotation;
 	sVECTOR3D MiddleBoundTMP = MiddleBound;
-	if (TargetHorizBlocks != nullptr)
+	if (!TargetHorizBlocks.empty())
 		RotationMiddle = Model3DBlocks[TargetHorizBlocks[0]].Rotation + Rotation;
 	vw_RotatePoint(MiddleBoundTMP, RotationMiddle);
 
@@ -442,7 +439,7 @@ bool cGroundObject::Update(float Time)
 				tmpWeapon.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
 				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
-				if ((TargetHorizBlocks == nullptr) &&
+				if (TargetHorizBlocks.empty() &&
 				    (TargetVertBlocks == nullptr) &&
 				    !DoNotCalculateRotation) // и если нужно считать...
 					RotationWeapon = Rotation - sVECTOR3D(TargetVertBlocksNeedAngle, TargetHorizBlocksNeedAngle, 0.0f);

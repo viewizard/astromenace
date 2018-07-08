@@ -145,8 +145,7 @@ cWheeled::cWheeled(int WheeledNum)
 		SteerableWheelObjects[1] = 1;
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 3;
 		TargetHorizBlocks[1] = 6;
 
@@ -200,8 +199,7 @@ cWheeled::cWheeled(int WheeledNum)
 		SteerableWheelObjects[1] = 4;
 		MaxSteerableWheelAngle = 30.0f;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 5;
 		TargetHorizBlocks[1] = 6;
 
@@ -228,8 +226,7 @@ cWheeled::cWheeled(int WheeledNum)
 		SteerableWheelObjects[1] = 4;
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 5;
 		TargetHorizBlocks[1] = 6;
 
@@ -275,11 +272,11 @@ cWheeled::cWheeled(int WheeledNum)
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizBlocks != nullptr)
+	if (!TargetHorizBlocks.empty())
 		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 
 	if (TargetVertBlocks != nullptr) {
-		if (TargetHorizBlocks != nullptr)
+		if (!TargetHorizBlocks.empty())
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
@@ -288,7 +285,7 @@ cWheeled::cWheeled(int WheeledNum)
 	for (auto &tmpWeapon : Weapon) {
 		if (TargetVertBlocks != nullptr)
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
-		else if (TargetHorizBlocks != nullptr)
+		else if (!TargetHorizBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
 			tmpWeapon.Bound = tmpWeapon.Location;

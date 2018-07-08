@@ -111,8 +111,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 17;
 		WheelObjects[15] = 18;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 5;
 
@@ -143,8 +142,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[8] = 9;
 		WheelObjects[9] = 10;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 11;
 		TargetHorizBlocks[1] = 12;
 
@@ -176,8 +174,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[12] = 15;
 		WheelObjects[13] = 16;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 8;
 		TargetHorizBlocks[1] = 9;
 
@@ -211,8 +208,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 15;
 		WheelObjects[15] = 16;
 
-		TargetHorizBlocksQuantity = 3;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(3);
 		TargetHorizBlocks[0] = 17;
 		TargetHorizBlocks[1] = 18;
 		TargetHorizBlocks[2] = 19;
@@ -248,8 +244,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[12] = 15;
 		WheelObjects[13] = 16;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 9;
 		TargetHorizBlocks[1] = 8;
 
@@ -283,8 +278,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 16;
 		WheelObjects[15] = 17;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 18;
 
@@ -318,8 +312,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 17;
 		WheelObjects[15] = 18;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 12;
 		TargetHorizBlocks[1] = 11;
 
@@ -353,8 +346,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 15;
 		WheelObjects[15] = 16;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 17;
 		TargetHorizBlocks[1] = 18;
 
@@ -389,8 +381,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 15;
 		WheelObjects[15] = 16;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 18;
 		TargetHorizBlocks[1] = 0;
 
@@ -425,8 +416,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 15;
 		WheelObjects[15] = 16;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 18;
 		TargetHorizBlocks[1] = 0;
 
@@ -537,8 +527,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[12] = 14;
 		WheelObjects[13] = 15;
 
-		TargetHorizBlocksQuantity = 2;
-		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
+		TargetHorizBlocks.resize(2);
 		TargetHorizBlocks[0] = 0;
 		TargetHorizBlocks[1] = 16;
 
@@ -574,12 +563,12 @@ cTracked::cTracked(int TrackedNum)
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (TargetHorizBlocks != nullptr) {
+	if (!TargetHorizBlocks.empty()) {
 		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 	}
 
 	if (TargetVertBlocks != nullptr) {
-		if (TargetHorizBlocks != nullptr)
+		if (!TargetHorizBlocks.empty())
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
@@ -588,7 +577,7 @@ cTracked::cTracked(int TrackedNum)
 	for (auto &tmpWeapon : Weapon) {
 		if (TargetVertBlocks != nullptr)
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
-		else if (TargetHorizBlocks != nullptr)
+		else if (!TargetHorizBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
 			tmpWeapon.Bound = tmpWeapon.Location;

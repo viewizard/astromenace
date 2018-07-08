@@ -150,8 +150,7 @@ public:
 	float SpeedToRotate{0.0f};
 
 	// horizontal targeting related (turret can rotate at 360 deg)
-	int TargetHorizBlocksQuantity{0};
-	int *TargetHorizBlocks{nullptr};
+	std::vector<unsigned> TargetHorizBlocks{};
 	float TargetHorizBlocksCurrentAngle{0.0f};
 	float TargetHorizBlocksNeedAngle{0.0f};
 	// vertical targeting related
