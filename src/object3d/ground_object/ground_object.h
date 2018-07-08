@@ -154,8 +154,7 @@ public:
 	float TargetHorizBlocksCurrentAngle{0.0f};
 	float TargetHorizBlocksNeedAngle{0.0f};
 	// vertical targeting related
-	int TargetVertBlocksQuantity{0};
-	int *TargetVertBlocks{nullptr};
+	std::vector<unsigned> TargetVertBlocks{};
 	float TargetVertBlocksMaxAngle{80.0f};
 	float TargetVertBlocksMinAngle{0.0f};
 	float TargetVertBlocksCurrentAngle{0.0f};

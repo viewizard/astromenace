@@ -103,9 +103,7 @@ cWheeled::cWheeled(int WheeledNum)
 		SteerableWheelObjects[1] = 4;
 		MaxSteerableWheelAngle = 30.0f;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 5;
+		TargetVertBlocks.emplace_back(5);
 		TargetVertBlocksMaxAngle = 30.0f;
 		break;
 
@@ -149,9 +147,7 @@ cWheeled::cWheeled(int WheeledNum)
 		TargetHorizBlocks[0] = 3;
 		TargetHorizBlocks[1] = 6;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 6;
+		TargetVertBlocks.emplace_back(6);
 		TargetVertBlocksMaxAngle = 60.0f;
 		break;
 
@@ -203,9 +199,7 @@ cWheeled::cWheeled(int WheeledNum)
 		TargetHorizBlocks[0] = 5;
 		TargetHorizBlocks[1] = 6;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 6;
+		TargetVertBlocks.emplace_back(6);
 		TargetVertBlocksMaxAngle = 40.0f;
 		break;
 
@@ -230,9 +224,7 @@ cWheeled::cWheeled(int WheeledNum)
 		TargetHorizBlocks[0] = 5;
 		TargetHorizBlocks[1] = 6;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 6;
+		TargetVertBlocks.emplace_back(6);
 		TargetVertBlocksMaxAngle = 40.0f;
 		break;
 
@@ -259,9 +251,7 @@ cWheeled::cWheeled(int WheeledNum)
 		SteerableWheelObjects[3] = 7;
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 2;
+		TargetVertBlocks.emplace_back(2);
 		TargetVertBlocksMaxAngle = 90.0f;
 		break;
 	}
@@ -275,7 +265,7 @@ cWheeled::cWheeled(int WheeledNum)
 	if (!TargetHorizBlocks.empty())
 		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 
-	if (TargetVertBlocks != nullptr) {
+	if (!TargetVertBlocks.empty()) {
 		if (!TargetHorizBlocks.empty())
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
@@ -283,7 +273,7 @@ cWheeled::cWheeled(int WheeledNum)
 	}
 
 	for (auto &tmpWeapon : Weapon) {
-		if (TargetVertBlocks != nullptr)
+		if (!TargetVertBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
 		else if (!TargetHorizBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;

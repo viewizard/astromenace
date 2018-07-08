@@ -115,9 +115,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 5;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 5;
+		TargetVertBlocks.emplace_back(5);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
@@ -146,9 +144,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 11;
 		TargetHorizBlocks[1] = 12;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 12;
+		TargetVertBlocks.emplace_back(12);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 13;
@@ -178,9 +174,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 8;
 		TargetHorizBlocks[1] = 9;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 9;
+		TargetVertBlocks.emplace_back(9);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 17;
@@ -213,10 +207,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[1] = 18;
 		TargetHorizBlocks[2] = 19;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 18;
-		//TargetVertBlocks[1] = 19; // пулемет
+		TargetVertBlocks.emplace_back(18);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		Model3DBlocks[19].Location.z -= 1.0f;
@@ -248,9 +239,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 9;
 		TargetHorizBlocks[1] = 8;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 8;
+		TargetVertBlocks.emplace_back(8);
 		TargetVertBlocksMaxAngle = 30.0f;
 
 		TrackObjectNum = 17;
@@ -282,9 +271,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 18;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 18;
+		TargetVertBlocks.emplace_back(18);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
@@ -316,9 +303,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 12;
 		TargetHorizBlocks[1] = 11;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 11;
+		TargetVertBlocks.emplace_back(11);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
@@ -350,9 +335,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 17;
 		TargetHorizBlocks[1] = 18;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 18;
+		TargetVertBlocks.emplace_back(18);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
@@ -385,9 +368,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 18;
 		TargetHorizBlocks[1] = 0;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 0;
+		TargetVertBlocks.emplace_back(0);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
@@ -420,9 +401,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 18;
 		TargetHorizBlocks[1] = 0;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 0;
+		TargetVertBlocks.emplace_back(0);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 19;
@@ -453,9 +432,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[14] = 15;
 		WheelObjects[15] = 16;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 0;
+		TargetVertBlocks.emplace_back(0);
 		TargetVertBlocksMaxAngle = 55.0f;
 
 		TrackObjectNum = 18;
@@ -493,8 +470,7 @@ cTracked::cTracked(int TrackedNum)
 		WheelObjects[15] = 16;
 
 
-		TargetVertBlocksQuantity = 2;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks.resize(2);
 		TargetVertBlocks[0] = 18;
 		TargetVertBlocks[1] = 0;
 		TargetVertBlocksMaxAngle = 40.0f;
@@ -531,9 +507,7 @@ cTracked::cTracked(int TrackedNum)
 		TargetHorizBlocks[0] = 0;
 		TargetHorizBlocks[1] = 16;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 16;
+		TargetVertBlocks.emplace_back(16);
 		TargetVertBlocksMaxAngle = 50.0f;
 
 		TrackObjectNum = 17;
@@ -567,7 +541,7 @@ cTracked::cTracked(int TrackedNum)
 		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 	}
 
-	if (TargetVertBlocks != nullptr) {
+	if (!TargetVertBlocks.empty()) {
 		if (!TargetHorizBlocks.empty())
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
@@ -575,7 +549,7 @@ cTracked::cTracked(int TrackedNum)
 	}
 
 	for (auto &tmpWeapon : Weapon) {
-		if (TargetVertBlocks != nullptr)
+		if (!TargetVertBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
 		else if (!TargetHorizBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;

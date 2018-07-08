@@ -92,8 +92,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetHorizBlocks[2] = 3;
 		TargetHorizBlocks[3] = 4;
 
-		TargetVertBlocksQuantity = 3;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks.resize(3);
 		TargetVertBlocks[0] = 2;
 		TargetVertBlocks[1] = 3;
 		TargetVertBlocks[2] = 4;
@@ -111,8 +110,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetHorizBlocks[2] = 3;
 		TargetHorizBlocks[3] = 4;
 
-		TargetVertBlocksQuantity = 3;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks.resize(3);
 		TargetVertBlocks[0] = 2;
 		TargetVertBlocks[1] = 3;
 		TargetVertBlocks[2] = 4;
@@ -133,9 +131,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 2;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 2;
+		TargetVertBlocks.emplace_back(2);
 		TargetVertBlocksMaxAngle = 60.0f;
 		break;
 
@@ -153,8 +149,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetHorizBlocks[2] = 3;
 		TargetHorizBlocks[3] = 4;
 
-		TargetVertBlocksQuantity = 3;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks.resize(3);
 		TargetVertBlocks[0] = 2;
 		TargetVertBlocks[1] = 3;
 		TargetVertBlocks[2] = 4;
@@ -177,9 +172,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetHorizBlocks[0] = 1;
 		TargetHorizBlocks[1] = 2;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 2;
+		TargetVertBlocks.emplace_back(2);
 		TargetVertBlocksMaxAngle = 60.0f;
 		break;
 
@@ -191,9 +184,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetHorizBlocks[0] = 2;
 		TargetHorizBlocks[1] = 1;
 
-		TargetVertBlocksQuantity = 1;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
-		TargetVertBlocks[0] = 1;
+		TargetVertBlocks.emplace_back(1);
 		TargetVertBlocksMaxAngle = 80.0f;
 		break;
 
@@ -206,8 +197,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetHorizBlocks[2] = 3;
 		TargetHorizBlocks[3] = 1;
 
-		TargetVertBlocksQuantity = 3;
-		TargetVertBlocks = new int[TargetVertBlocksQuantity];
+		TargetVertBlocks.resize(3);
 		TargetVertBlocks[0] = 3;
 		TargetVertBlocks[1] = 2;
 		TargetVertBlocks[2] = 1;
@@ -222,7 +212,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 	}
 
-	if (TargetVertBlocks != nullptr) {
+	if (!TargetVertBlocks.empty()) {
 		if (!TargetHorizBlocks.empty())
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
 		else
@@ -230,7 +220,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	}
 
 	for (auto &tmpWeapon : Weapon) {
-		if (TargetVertBlocks != nullptr)
+		if (!TargetVertBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
 		else if (!TargetHorizBlocks.empty())
 			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
