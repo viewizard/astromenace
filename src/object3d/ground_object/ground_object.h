@@ -171,7 +171,7 @@ public:
 	unsigned DeviationObjQuantity{0};
 	sVECTOR3D *Deviation{nullptr};
 	float *NeedDeviation{nullptr};
-	float *CurentDeviationSum{nullptr};
+	float *CurentDeviation{nullptr};
 	// ассоциированный объект (если нужно)
 	int *DeviationObjNum{nullptr};
 };

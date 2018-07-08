@@ -542,13 +542,13 @@ void CreateInfoObject()
 			sharedObject->DeviationObjQuantity = sharedObject->WheelObjects.size();
 			sharedObject->Deviation = new sVECTOR3D[sharedObject->DeviationObjQuantity];
 			sharedObject->NeedDeviation = new float[sharedObject->DeviationObjQuantity];
-			sharedObject->CurentDeviationSum = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->CurentDeviation = new float[sharedObject->DeviationObjQuantity];
 			sharedObject->DeviationObjNum = new int[sharedObject->DeviationObjQuantity];
 
 			for (unsigned i = 0; i < sharedObject->DeviationObjQuantity; i++) {
 				sharedObject->Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
 				sharedObject->NeedDeviation[i] = vw_fRand0() * 0.1f;
-				sharedObject->CurentDeviationSum[i] = 0.0f;
+				sharedObject->CurentDeviation[i] = 0.0f;
 				sharedObject->DeviationObjNum[i] = sharedObject->WheelObjects[i];
 			}
 
@@ -581,13 +581,13 @@ void CreateInfoObject()
 			sharedObject->DeviationObjQuantity = sharedObject->WheelObjects.size();
 			sharedObject->Deviation = new sVECTOR3D[sharedObject->DeviationObjQuantity];
 			sharedObject->NeedDeviation = new float[sharedObject->DeviationObjQuantity];
-			sharedObject->CurentDeviationSum = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->CurentDeviation = new float[sharedObject->DeviationObjQuantity];
 			sharedObject->DeviationObjNum = new int[sharedObject->DeviationObjQuantity];
 
 			for (unsigned i = 0; i < sharedObject->DeviationObjQuantity; i++) {
 				sharedObject->Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
 				sharedObject->NeedDeviation[i] = vw_fRand0() * 0.1f;
-				sharedObject->CurentDeviationSum[i] = 0.0f;
+				sharedObject->CurentDeviation[i] = 0.0f;
 				sharedObject->DeviationObjNum[i] = sharedObject->WheelObjects[i];
 			}
 
