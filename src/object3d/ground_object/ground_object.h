@@ -96,8 +96,8 @@ public:
 
 	// колеса, для транспорта
 
-	// скорость вращения колес
-	float WheelTrackSpeed{0.0f};
+	// rotary speed (deg/sec) for all wheels (for both, wheeled and tracked)
+	float WheelRotarySpeed{0.0f};
 
 	// wheel objects (for both, wheeled and tracked)
 	std::vector<unsigned> WheelObjects{};

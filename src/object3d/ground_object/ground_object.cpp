@@ -591,10 +591,10 @@ bool cGroundObject::Update(float Time)
 	// вращение колес в транспорте
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if ((!WheelObjects.empty() &&
-	    ((WheelTrackSpeed >= 0.00001f) || (WheelTrackSpeed <= -0.00001f)))) {
+	    ((WheelRotarySpeed >= 0.00001f) || (WheelRotarySpeed <= -0.00001f)))) {
 		// перебираем все и ув. их угол вращения
 		for (auto tmpObjects : WheelObjects) {
-			Model3DBlocks[tmpObjects].Rotation.x += WheelTrackSpeed * TimeDelta;
+			Model3DBlocks[tmpObjects].Rotation.x += WheelRotarySpeed * TimeDelta;
 
 			if (Model3DBlocks[tmpObjects].Rotation.x > 360.0f)
 				Model3DBlocks[tmpObjects].Rotation.x -= 360.0f;
@@ -606,10 +606,10 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// тайловая анимация для траков
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((TrackObjectNum != -1) && ((WheelTrackSpeed >= 0.00001f) || (WheelTrackSpeed <= -0.00001f))) {
+	if ((TrackObjectNum != -1) && ((WheelRotarySpeed >= 0.00001f) || (WheelRotarySpeed <= -0.00001f))) {
 		Model3DBlocks[TrackObjectNum].NeedTextureAnimation = true;
 		Model3DBlocks[TrackObjectNum].TextureAnimation.x +=
-				(WheelTrackSpeed / 500.0f) * TimeDelta * TrackRotationDirection;
+				(WheelRotarySpeed / 500.0f) * TimeDelta * TrackRotationDirection;
 		if (Model3DBlocks[TrackObjectNum].TextureAnimation.x > 1.0f)
 			Model3DBlocks[TrackObjectNum].TextureAnimation.x -= 1.0f;
 		if (Model3DBlocks[TrackObjectNum].TextureAnimation.x < -1.0f)
@@ -821,7 +821,7 @@ bool cGroundObject::Update(float Time)
 
 	// перемещение объекта, если нужно
 	if ((Velocity.x != 0.0f) || (Velocity.y != 0.0f) || (Velocity.z != 0.0f)) {
-		WheelTrackSpeed = Speed * SpeedToRotate;
+		WheelRotarySpeed = Speed * SpeedToRotate;
 		// делаем сдвиг модели в указанную точку
 		SetLocation(Location + Velocity);
 	}

@@ -549,7 +549,7 @@ void CreateInfoObject()
 			sharedObject->ObjectStatus = eObjectStatus::none;
 			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
 			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
-			sharedObject->WheelTrackSpeed = 350.0f;
+			sharedObject->WheelRotarySpeed = 350.0f;
 
 			Point = sVECTOR3D(1000,-1000+sharedObject->Height/3.0f,0);
 
@@ -582,7 +582,7 @@ void CreateInfoObject()
 			sharedObject->ObjectStatus = eObjectStatus::none;
 			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
 			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
-			sharedObject->WheelTrackSpeed = 350.0f;
+			sharedObject->WheelRotarySpeed = 350.0f;
 
 			Point = sVECTOR3D(1000,-1000+sharedObject->Height/3.0f,0);
 
