@@ -43,9 +43,6 @@ public:
 	explicit cAlienSpaceMotherShip(int SpaceShipNum);
 };
 
-// Создание двигателя
-void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
-
 } // astromenace namespace
 } // viewizard namespace
 

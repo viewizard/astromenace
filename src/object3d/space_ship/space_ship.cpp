@@ -35,11 +35,107 @@
 namespace viewizard {
 namespace astromenace {
 
+// Указатели на начальный и конечный объект в списке
+cSpaceShip *StartSpaceShip = nullptr;
+cSpaceShip *EndSpaceShip = nullptr;
+
 extern bool PlayerFighterLeftEng;
 extern bool PlayerFighterRightEng;
 extern cProjectile *StartProjectile;
 extern cProjectile *EndProjectile;
 
+
+//-----------------------------------------------------------------------------
+// Включаем в список
+//-----------------------------------------------------------------------------
+static void AttachSpaceShip(cSpaceShip *SpaceShip)
+{
+	if (SpaceShip == nullptr)
+		return;
+
+	// первый в списке...
+	if (EndSpaceShip == nullptr) {
+		SpaceShip->Prev = nullptr;
+		SpaceShip->Next = nullptr;
+		StartSpaceShip = SpaceShip;
+		EndSpaceShip = SpaceShip;
+	} else { // продолжаем заполнение...
+		SpaceShip->Prev = EndSpaceShip;
+		SpaceShip->Next = nullptr;
+		EndSpaceShip->Next = SpaceShip;
+		EndSpaceShip = SpaceShip;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Исключаем из списка
+//-----------------------------------------------------------------------------
+static void DetachSpaceShip(cSpaceShip *SpaceShip)
+{
+	if (SpaceShip == nullptr)
+		return;
+
+	// переустанавливаем указатели...
+	if (StartSpaceShip == SpaceShip)
+		StartSpaceShip = SpaceShip->Next;
+	if (EndSpaceShip == SpaceShip)
+		EndSpaceShip = SpaceShip->Prev;
+
+	if (SpaceShip->Next != nullptr)
+		SpaceShip->Next->Prev = SpaceShip->Prev;
+	else if (SpaceShip->Prev != nullptr)
+		SpaceShip->Prev->Next = nullptr;
+
+	if (SpaceShip->Prev != nullptr)
+		SpaceShip->Prev->Next = SpaceShip->Next;
+	else if (SpaceShip->Next != nullptr)
+		SpaceShip->Next->Prev = nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// Проверяем все объекты, обновляем данные
+//-----------------------------------------------------------------------------
+void UpdateAllSpaceShip(float Time)
+{
+	cSpaceShip *tmp = StartSpaceShip;
+	while (tmp != nullptr) {
+		cSpaceShip *tmp2 = tmp->Next;
+		// делаем обновление данных по объекту
+		if (!tmp->Update(Time))
+			// если его нужно уничтожить - делаем это
+			delete tmp;
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Прорисовываем все объекты
+//-----------------------------------------------------------------------------
+void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap)
+{
+	cSpaceShip *tmp = StartSpaceShip;
+	while (tmp != nullptr) {
+		cSpaceShip *tmp2 = tmp->Next;
+		tmp->Draw(VertexOnlyPass, ShadowMap);
+		tmp = tmp2;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Удаляем все объекты в списке
+//-----------------------------------------------------------------------------
+void ReleaseAllSpaceShips()
+{
+	cSpaceShip *tmp = StartSpaceShip;
+	while (tmp != nullptr) {
+		cSpaceShip *tmp2 = tmp->Next;
+		delete tmp;
+		tmp = tmp2;
+	}
+
+	StartSpaceShip = nullptr;
+	EndSpaceShip = nullptr;
+}
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
@@ -62,15 +158,11 @@ cSpaceShip::cSpaceShip()
 	AttachSpaceShip(this);
 }
 
-
-
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
 cSpaceShip::~cSpaceShip()
 {
-
-
 	if (WeaponSetFire != nullptr) {
 		delete [] WeaponSetFire;
 		WeaponSetFire = nullptr;
@@ -178,15 +270,6 @@ cSpaceShip::~cSpaceShip()
 	DetachSpaceShip(this);
 }
 
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
@@ -194,7 +277,6 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
-
 
 	// если оружие вообще есть
 	if (Weapon != nullptr)
@@ -209,7 +291,6 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 		}
 	if (WeaponFlare != nullptr)
 		WeaponFlare->SetLocation(NewLocation + WeaponFlareLocation);
-
 
 	// положение двигателей
 	for (unsigned int i = 0; i < Engines.size(); i++) {
@@ -236,9 +317,6 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 	}
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 // Установка положения объекта, для аркадного режима
 //-----------------------------------------------------------------------------
@@ -246,7 +324,6 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
-
 
 	// если оружие вообще есть
 	if (Weapon != nullptr)
@@ -260,7 +337,6 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 	if (WeaponFlare != nullptr) {
 		WeaponFlare->SetLocation(NewLocation + WeaponFlareLocation);
 	}
-
 
 	// положение двигателей
 	for (unsigned int i = 0; i < Engines.size(); i++) {
@@ -287,11 +363,6 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 	}
 }
 
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
@@ -299,8 +370,6 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);
-
-
 
 	// оружие
 	if (Weapon != nullptr)
@@ -333,9 +402,6 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 		WeaponFlare->SetRotation(NewRotation);
 		WeaponFlare->SetLocation(Location + WeaponFlareLocation);
 	}
-
-
-
 
 	// двигатели
 	for (unsigned int i = 0; i < Engines.size(); i++) {
@@ -379,13 +445,6 @@ void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
 	}
 }
 
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Обновление данных объектa Object3D
 //-----------------------------------------------------------------------------
@@ -396,8 +455,6 @@ bool cSpaceShip::Update(float Time)
 	if (!cObject3D::Update(Time)) return false;
 	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
 	if (TimeDelta == 0.0f) return true;
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// обработка скрипта
@@ -437,9 +494,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// если у корабля есть спец средства против ракет...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -463,7 +517,6 @@ bool cSpaceShip::Update(float Time)
 			tmpProjectile = tmpProjectile2;
 		}
 
-
 		tmpProjectile = StartProjectile;
 		if (NeedFlare)
 			while (tmpProjectile != nullptr) {
@@ -481,12 +534,6 @@ bool cSpaceShip::Update(float Time)
 			WeaponFlareSetFire = false;
 	}
 
-
-
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// обработка указателей действия, нужно для управления кораблем игрока
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -503,10 +550,6 @@ bool cSpaceShip::Update(float Time)
 			NeedRotate.x = MaxAcceler*MaxSpeed*MoveUp-MaxAcceler*MaxSpeed*MoveDown;
 		} else NeedRotate.x = 0.0f;
 	}
-
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// повотор
@@ -596,7 +639,6 @@ bool cSpaceShip::Update(float Time)
 				}
 			}
 
-
 			// угол по z
 			if (NeedRotate.z != 0.0f) {
 				float Sign = 1.0f;
@@ -640,15 +682,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-
-
-
-
-
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// ускорение-замедление
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -676,7 +709,6 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-
 		// даем полный газ, учитывая сколько процентов можем выдать
 		Acceler = Sign*MaxAcceler*NeedAcceler;
 
@@ -695,7 +727,6 @@ bool cSpaceShip::Update(float Time)
 				NeedSpeed = 0.0f;
 			}
 		}
-
 
 		// если нужны двигатели торможения - включаем маневровые
 		if (Sign == -1.0f) {
@@ -733,7 +764,6 @@ bool cSpaceShip::Update(float Time)
 			if (NeedSpeedLR > SpeedLR) Sign = 1.0f;
 		}
 
-
 		// даем полный газ, учитывая сколько процентов можем выдать
 		AccelerLR = Sign*MaxAcceler*NeedAccelerLR;
 
@@ -752,7 +782,6 @@ bool cSpaceShip::Update(float Time)
 				NeedSpeedLR = 0.0f;
 			}
 		}
-
 	}
 	// вверх-вниз
 	if (NeedSpeedUD != 0.0f) {
@@ -775,7 +804,6 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-
 		// даем полный газ, учитывая сколько процентов можем выдать
 		AccelerUD = Sign*MaxAcceler*NeedAccelerUD;
 
@@ -795,8 +823,6 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	}
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// ускорение-замедление по вектору камеры
@@ -822,7 +848,6 @@ bool cSpaceShip::Update(float Time)
 			if (NeedSpeedByCamFB > SpeedByCamFB)
 				Sign = 1.0f;
 		}
-
 
 		// даем полный газ, учитывая сколько процентов можем выдать
 		AccelerByCamFB = Sign*MaxAcceler*NeedAccelerByCamFB;
@@ -864,7 +889,6 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-
 		// даем полный газ, учитывая сколько процентов можем выдать
 		AccelerByCamLR = Sign*MaxAcceler*NeedAccelerByCamLR;
 
@@ -883,7 +907,6 @@ bool cSpaceShip::Update(float Time)
 				NeedSpeedByCamLR = 0.0f;
 			}
 		}
-
 	}
 	// вверх-вниз
 	if (NeedSpeedByCamUD != 0.0f) {
@@ -906,7 +929,6 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-
 		// даем полный газ, учитывая сколько процентов можем выдать
 		AccelerByCamUD = Sign*MaxAcceler*NeedAccelerByCamUD;
 
@@ -926,18 +948,6 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// смотрим, есть ли команда открыть огонь
@@ -999,7 +1009,6 @@ bool cSpaceShip::Update(float Time)
 						}
 					}
 				}
-
 		}
 	}
 	if (BossWeapon != nullptr) {
@@ -1032,7 +1041,6 @@ bool cSpaceShip::Update(float Time)
 			// если еще не было начальной установки
 			if (BossWeaponGroupCurrentFireNum == -1)
 				BossWeaponGroupCurrentFireNum = FirstWeapon;
-
 
 			// стреляем
 			for (int i = 0; i < BossWeaponQuantity; i++) {
@@ -1067,10 +1075,6 @@ bool cSpaceShip::Update(float Time)
 	    (WeaponFlareSetFire))
 		WeaponFlare->WeaponFire(Time);
 
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание корпуса
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1100,7 +1104,6 @@ bool cSpaceShip::Update(float Time)
 					NeedDeviation[i] = vw_fRand0()*0.1f;
 				} else CurrentDeviationSum[i] += CurrentDeviation[i];
 			}
-
 		}
 
 	// только для корабля игрока - небольшое болтание во время полета
@@ -1108,9 +1111,6 @@ bool cSpaceShip::Update(float Time)
 		NeedWeaponRotate = false;
 		SetRotation((Deviation[0]^(CurrentDeviation[0]*50.0f)));
 	}
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// считаем вектор движения
@@ -1127,7 +1127,6 @@ bool cSpaceShip::Update(float Time)
 		Velocity += tmp;
 	}
 
-
 	if (fabs(SpeedByCamFB) > 0.01f) {
 		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamFB*TimeDelta);
 		Velocity += tmp;
@@ -1143,22 +1142,15 @@ bool cSpaceShip::Update(float Time)
 		Velocity += tmp;
 	}
 
-
 	// если это не корабль игрока и включена девиация
 	if ((ObjectStatus != eObjectStatus::Player) && DeviationOn)
 		Velocity += Deviation[0]^CurrentDeviation[0];
-
-
 
 	// перемещение объекта, если нужно
 	if (Velocity.x != 0.0f || Velocity.y != 0.0f  || Velocity.z != 0.0f ) {
 		// делаем сдвиг модели в указанную точку
 		SetLocation(Location+Velocity);
 	}
-
-
-
-
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Делаем установку работы двигателей, согласуем со скоростью корабля
@@ -1178,14 +1170,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-
-
-
-
-
-
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// работа с оружием - наведение его на ближайшую цель
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1202,8 +1186,6 @@ bool cSpaceShip::Update(float Time)
 			if (BossWeapon[i] != nullptr)
 				if (BossWeaponSetFire[i]) NeedBossFire = true;
 		}
-
-
 
 	// если не игрок игрок и есть режим действия - нужно "искать" противника
 	if ((ObjectStatus == eObjectStatus::Enemy) && NeedFire) {
@@ -1333,10 +1315,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-
-
-
-
 	// так стреляют только свои :)
 	if (ObjectStatus == eObjectStatus::Ally) {
 
@@ -1427,11 +1405,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-
-
-
-
-
 	// если корабль игрока
 	if (ObjectStatus == eObjectStatus::Player) {
 
@@ -1453,10 +1426,7 @@ bool cSpaceShip::Update(float Time)
 		WeaponAvLocation.y = WeaponAvLocation.y / UsedWeaponQunt;
 		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
 
-
 		sVECTOR3D NeedAngle = Rotation;
-
-
 
 // у оружия есть (для каждого слота в корабле свои)
 // мин-макс и базовый (выставляет пользователь) углы поворота орудия
@@ -1480,8 +1450,6 @@ bool cSpaceShip::Update(float Time)
 
 			vw_Matrix33CreateRotate(RotationMat2, Rotation2);
 		}
-
-
 
 		// всему оружию ставим нужную ориентацию
 		if (Weapon != nullptr) {
@@ -1515,7 +1483,6 @@ bool cSpaceShip::Update(float Time)
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					}
-
 
 					sVECTOR3D NeedAngleTmp = NeedAngle;
 
@@ -1557,11 +1524,9 @@ bool cSpaceShip::Update(float Time)
 							NeedAngle.y = Min+Weapon[i]->Rotation.y;
 					}
 
-
 					// если выключен прикол с поворотом - моментально поворачиваем ствол
 					if (GameWeaponTargetingMode == 1)
 						NeedAngle = NeedAngleTmp;
-
 
 					Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1));
 					Weapon[i]->SetRotation(NeedAngle);
@@ -1569,9 +1534,6 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	}
-
-
-
 
 	// объект в порядке - удалять не нужно
 	return true;

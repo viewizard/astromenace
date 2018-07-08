@@ -43,9 +43,6 @@ public:
 	explicit cAlienSpaceFighter(int SpaceShipNum);
 };
 
-// Создание двигателя
-void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
-
 } // astromenace namespace
 } // viewizard namespace
 

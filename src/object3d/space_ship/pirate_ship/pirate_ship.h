@@ -43,9 +43,6 @@ public:
 	explicit cPirateShip(int PirateShipNum);
 };
 
-// Создание двигателя
-void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType);
-
 } // astromenace namespace
 } // viewizard namespace
 

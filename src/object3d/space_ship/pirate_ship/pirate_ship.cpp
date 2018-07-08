@@ -67,6 +67,141 @@ const sPirateShipData PresetPirateShipData[] = {
 
 
 
+//-----------------------------------------------------------------------------
+// Создание двигателя
+//-----------------------------------------------------------------------------
+static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
+{
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+	ParticleSystem->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+
+	switch(EngineType) {
+	case 1:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.10f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.40f;
+		ParticleSystem->Speed      = 6.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 5.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.4f,0.4f);
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->LightNeedDeviation = true;
+		break;
+	case 2:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.30f;
+		ParticleSystem->SizeEnd    = 0.60f;
+		ParticleSystem->Speed      = 8.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 5.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->LightNeedDeviation = true;
+		break;
+	case 3:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.30f;
+		ParticleSystem->SizeEnd    = 0.60f;
+		ParticleSystem->Speed      = 10.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 5.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D(1.0f,0.1f,1.0f);
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
+		ParticleSystem->LightNeedDeviation = true;
+		break;
+	case 4:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 180.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->LightNeedDeviation = true;
+		break;
+	case 5:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.30f;
+		ParticleSystem->SizeEnd    = 0.60f;
+		ParticleSystem->Speed      = 8.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 5.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D(1.0f,1.0f,1.0f);
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
+		ParticleSystem->LightNeedDeviation = true;
+		break;
+
+	default:
+		std::cerr << __func__ << "(): " << "wrong EngineType.\n";
+		break;
+	}
+}
 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
