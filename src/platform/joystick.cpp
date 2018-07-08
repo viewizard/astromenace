@@ -50,7 +50,7 @@ int JoystickAxisY{0};
 int JoystickButtonsQuantity{0};
 std::vector<bool> JoystickButtons{};
 
-float JoystickCurentTime{0.0f};
+float JoystickCurrentTime{0.0f};
 float JoystickTimeDelta{0.0f};
 
 } // unnamed namespace
@@ -88,7 +88,7 @@ bool JoystickInit(float InitialTime)
 		return false;
 	}
 
-	JoystickCurentTime = InitialTime;
+	JoystickCurrentTime = InitialTime;
 	JoystickTimeDelta = 0.0f;
 
 	JoystickAxisX = SDL_JoystickGetAxis(Joystick, 0);
@@ -171,8 +171,8 @@ void JoystickEmulateMouseMovement(float Time)
 	if (!Joystick)
 		return;
 
-	JoystickTimeDelta = Time - JoystickCurentTime;
-	JoystickCurentTime = Time;
+	JoystickTimeDelta = Time - JoystickCurrentTime;
+	JoystickCurrentTime = Time;
 
 	int X = SDL_JoystickGetAxis(Joystick, 0);
 	int Y = SDL_JoystickGetAxis(Joystick, 1);

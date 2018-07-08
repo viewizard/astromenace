@@ -51,12 +51,12 @@ cSpaceShip::cSpaceShip()
 	DeviationObjQuantity = 1;
 	Deviation = new sVECTOR3D[DeviationObjQuantity];
 	NeedDeviation = new float[DeviationObjQuantity];
-	CurentDeviation = new float[DeviationObjQuantity];
-	CurentDeviationSum = new float[DeviationObjQuantity];
+	CurrentDeviation = new float[DeviationObjQuantity];
+	CurrentDeviationSum = new float[DeviationObjQuantity];
 
 	Deviation[0].Set(0.0f, 1.0f, 0.0f);
 	NeedDeviation[0] = vw_fRand0()*0.1f;
-	CurentDeviation[0] = CurentDeviationSum[0] = 0.0f;
+	CurrentDeviation[0] = CurrentDeviationSum[0] = 0.0f;
 
 	// подключаем к своему списку
 	AttachSpaceShip(this);
@@ -167,10 +167,10 @@ cSpaceShip::~cSpaceShip()
 			delete [] Deviation;
 		if (NeedDeviation != nullptr)
 			delete [] NeedDeviation;
-		if (CurentDeviation != nullptr)
-			delete [] CurentDeviation;
-		if (CurentDeviationSum != nullptr)
-			delete [] CurentDeviationSum;
+		if (CurrentDeviation != nullptr)
+			delete [] CurrentDeviation;
+		if (CurrentDeviationSum != nullptr)
+			delete [] CurrentDeviationSum;
 		if (DeviationObjNum != nullptr)
 			delete [] DeviationObjNum;
 	}
@@ -1080,25 +1080,25 @@ bool cSpaceShip::Update(float Time)
 			// нужно двигать
 			if (NeedDeviation[i] < 0.0f) Sign = -1.0f;
 			if (Sign == 1.0f) {
-				if (NeedDeviation[i] < CurentDeviationSum[i]) Sign = -1.0f;
+				if (NeedDeviation[i] < CurrentDeviationSum[i]) Sign = -1.0f;
 			} else {
-				if (NeedDeviation[i] > CurentDeviationSum[i]) Sign = 1.0f;
+				if (NeedDeviation[i] > CurrentDeviationSum[i]) Sign = 1.0f;
 			}
 
-			CurentDeviation[i] = Sign*0.035f*TimeDelta;
+			CurrentDeviation[i] = Sign*0.035f*TimeDelta;
 
 			if (Sign == 1.0f) {
-				if (NeedDeviation[i] <= CurentDeviationSum[i]+CurentDeviation[i]) {
-					CurentDeviation[i] -= CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
-					CurentDeviationSum[i] += CurentDeviation[i];
+				if (NeedDeviation[i] <= CurrentDeviationSum[i]+CurrentDeviation[i]) {
+					CurrentDeviation[i] -= CurrentDeviationSum[i]+CurrentDeviation[i]-NeedDeviation[i];
+					CurrentDeviationSum[i] += CurrentDeviation[i];
 					NeedDeviation[i] = vw_fRand0()*0.1f;
-				} else CurentDeviationSum[i] += CurentDeviation[i];
+				} else CurrentDeviationSum[i] += CurrentDeviation[i];
 			} else {
-				if (NeedDeviation[i] >= CurentDeviationSum[i]+CurentDeviation[i]) {
-					CurentDeviation[i] += CurentDeviationSum[i]+CurentDeviation[i]-NeedDeviation[i];
-					CurentDeviationSum[i] += CurentDeviation[i];
+				if (NeedDeviation[i] >= CurrentDeviationSum[i]+CurrentDeviation[i]) {
+					CurrentDeviation[i] += CurrentDeviationSum[i]+CurrentDeviation[i]-NeedDeviation[i];
+					CurrentDeviationSum[i] += CurrentDeviation[i];
 					NeedDeviation[i] = vw_fRand0()*0.1f;
-				} else CurentDeviationSum[i] += CurentDeviation[i];
+				} else CurrentDeviationSum[i] += CurrentDeviation[i];
 			}
 
 		}
@@ -1106,7 +1106,7 @@ bool cSpaceShip::Update(float Time)
 	// только для корабля игрока - небольшое болтание во время полета
 	if ((ObjectStatus == eObjectStatus::Player) && DeviationOn) {
 		NeedWeaponRotate = false;
-		SetRotation((Deviation[0]^(CurentDeviation[0]*50.0f)));
+		SetRotation((Deviation[0]^(CurrentDeviation[0]*50.0f)));
 	}
 
 
@@ -1146,7 +1146,7 @@ bool cSpaceShip::Update(float Time)
 
 	// если это не корабль игрока и включена девиация
 	if ((ObjectStatus != eObjectStatus::Player) && DeviationOn)
-		Velocity += Deviation[0]^CurentDeviation[0];
+		Velocity += Deviation[0]^CurrentDeviation[0];
 
 
 
@@ -1476,7 +1476,7 @@ bool cSpaceShip::Update(float Time)
 		sVECTOR3D Rotation2 = Rotation;
 
 		if (DeviationOn) {
-			Rotation2 = Rotation - (Deviation[0]^(CurentDeviation[0]*50.0f));
+			Rotation2 = Rotation - (Deviation[0]^(CurrentDeviation[0]*50.0f));
 
 			vw_Matrix33CreateRotate(RotationMat2, Rotation2);
 		}

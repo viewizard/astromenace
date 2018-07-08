@@ -52,10 +52,10 @@ int CurrentWorkshop = 3;
 
 
 // небольшая девиация оружия в слотах
-float CurentDeviation = 0.0f;
+float CurrentDeviation = 0.0f;
 float NeedDeviation = vw_fRand0()*5.0f;
-float CurentDeviationSum = 0.0f;
-float CurentTime = 0.0f;
+float CurrentDeviationSum = 0.0f;
+float CurrentTime = 0.0f;
 
 // для индикации нужных надписей
 float CurrentAlert2 = 1.0f;
@@ -217,10 +217,10 @@ void WorkshopCreate()
 	// все установки в исходные
 	CurrentWorkshopNewFighter = 1;
 	CurrentWorkshopNewWeapon = 1;
-	CurentDeviation = 0.0f;
+	CurrentDeviation = 0.0f;
 	NeedDeviation = vw_fRand0()*5.0f;
-	CurentDeviationSum = 0.0f;
-	CurentTime = 0.0f;
+	CurrentDeviationSum = 0.0f;
+	CurrentTime = 0.0f;
 	CurrentAlert2 = 1.0f;
 	CurrentAlert3 = 1.0f;
 
@@ -283,34 +283,36 @@ void WorkshopMenu()
 {
 
 	// небольшое качение... девиация
-	float TimeDelta = vw_GetTimeThread(0) - CurentTime;
-	if (CurentTime==0.0f) {
-		CurentTime = vw_GetTimeThread(0);
+	float TimeDelta = vw_GetTimeThread(0) - CurrentTime;
+	if (CurrentTime==0.0f) {
+		CurrentTime = vw_GetTimeThread(0);
 	} else {
-		CurentTime = vw_GetTimeThread(0);
+		CurrentTime = vw_GetTimeThread(0);
 		float Sign = 1.0f;
 		// нужно двигать
 		if (NeedDeviation < 0.0f) Sign = -1.0f;
 		if (Sign == 1.0f) {
-			if (NeedDeviation < CurentDeviationSum) Sign = -1.0f;
+			if (NeedDeviation < CurrentDeviationSum)
+				Sign = -1.0f;
 		} else {
-			if (NeedDeviation > CurentDeviationSum) Sign = 1.0f;
+			if (NeedDeviation > CurrentDeviationSum)
+				Sign = 1.0f;
 		}
 
-		CurentDeviation = Sign*0.7f*TimeDelta;
+		CurrentDeviation = Sign*0.7f*TimeDelta;
 
 		if (Sign == 1.0f) {
-			if (NeedDeviation <= CurentDeviationSum+CurentDeviation) {
-				CurentDeviation -= CurentDeviationSum+CurentDeviation-NeedDeviation;
-				CurentDeviationSum += CurentDeviation;
+			if (NeedDeviation <= CurrentDeviationSum+CurrentDeviation) {
+				CurrentDeviation -= CurrentDeviationSum+CurrentDeviation-NeedDeviation;
+				CurrentDeviationSum += CurrentDeviation;
 				NeedDeviation = vw_fRand0()*5.0f;
-			} else CurentDeviationSum += CurentDeviation;
+			} else CurrentDeviationSum += CurrentDeviation;
 		} else {
-			if (NeedDeviation >= CurentDeviationSum+CurentDeviation) {
-				CurentDeviation += CurentDeviationSum+CurentDeviation-NeedDeviation;
-				CurentDeviationSum += CurentDeviation;
+			if (NeedDeviation >= CurrentDeviationSum+CurrentDeviation) {
+				CurrentDeviation += CurrentDeviationSum+CurrentDeviation-NeedDeviation;
+				CurrentDeviationSum += CurrentDeviation;
 				NeedDeviation = vw_fRand0()*5.0f;
-			} else CurentDeviationSum += CurentDeviation;
+			} else CurrentDeviationSum += CurrentDeviation;
 		}
 	}
 
@@ -469,8 +471,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Mode == 1) {
 		WorkShopPointCamera = sVECTOR3D(0.0f, 4.0f, -32.0f);
-		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurentDeviation));
-		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurrentDeviation));
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurrentDeviation/2.0f,0.0f));
 
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
@@ -526,7 +528,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Mode == 4) {
 		WorkShopPointCamera = sVECTOR3D(0.0f, 35.0f, -0.01f);
-		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurentDeviation));
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f, 0.0f, CurrentDeviation));
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       (GLint)(30 * (tmpViewportHeight / GameConfig().InternalHeight)),
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -583,7 +585,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Mode == 3) {
 		WorkShopPointCamera = sVECTOR3D(0.0f, 10.0f, -34.0f);
-		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurrentDeviation/2.0f,0.0f));
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -598,7 +600,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		WorkShopPointCamera = sVECTOR3D(0.0f, 10.0f, -34.0f);
 		sVECTOR3D PointCameraTMP = WorkShopPointCamera;
 		vw_RotatePoint(PointCameraTMP, sVECTOR3D(0.0f, -90.0f, 0.0f));
-		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+		SpaceFighter->SetRotation(sVECTOR3D(0.0f,CurrentDeviation/2.0f,0.0f));
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -668,7 +670,7 @@ void WorkshopDrawWeapon(cWeapon *Weapon)
 	sVECTOR3D PointCameraTMP = WorkShopPointCamera;
 	vw_RotatePoint(PointCameraTMP, sVECTOR3D(0.0f, -90.0f, 0.0f));
 
-	Weapon->SetRotation(sVECTOR3D(0.0f,CurentDeviation/2.0f,0.0f));
+	Weapon->SetRotation(sVECTOR3D(0.0f,CurrentDeviation/2.0f,0.0f));
 	vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 448) * (tmpViewportWidth / GameConfig().InternalWidth)),
 		       (GLint)(105 * (tmpViewportHeight / GameConfig().InternalHeight)),
 		       (GLsizei)(384 * (tmpViewportWidth / GameConfig().InternalWidth)),

@@ -41,7 +41,7 @@ namespace astromenace {
 extern cEarthSpaceFighter *WorkshopFighterGame;
 extern cWeapon *WorkshopNewWeapon;
 extern int	CurrentWorkshopNewWeapon;
-extern float CurentDeviationSum;
+extern float CurrentDeviationSum;
 extern sVECTOR3D WorkShopPointCamera;
 extern float CurrentAlert2;
 extern float CurrentAlert3;

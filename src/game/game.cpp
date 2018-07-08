@@ -133,7 +133,7 @@ bool NeedHideGameMenu = false;
 // работа с морганием вывода
 extern float CurrentAlert2;
 extern float CurrentAlert3;
-extern float CurentTime;
+extern float CurrentTime;
 
 // прорисовка эмблем энергии и жизни
 std::weak_ptr<cParticleSystem2D> EnergyParticleSystem2D{};
@@ -843,7 +843,7 @@ void InitGame()
 	if (GamePowerSystem == 0) CurrentDrawEnergNumFull = 0.0f;
 	CurrentDrawLifeNumFull = PlayerFighter->Strength/PlayerFighter->StrengthStart;
 
-	CurentTime = vw_GetTimeThread(0);
+	CurrentTime = vw_GetTimeThread(0);
 	CurrentAlert2 = 1.0f;
 	CurrentAlert3 = 1.0f;
 
@@ -1003,8 +1003,8 @@ void SetGameMissionComplete()
 void DrawGame()
 {
 
-	float TimeDelta = vw_GetTimeThread(0) - CurentTime;
-	CurentTime = vw_GetTimeThread(0);
+	float TimeDelta = vw_GetTimeThread(0) - CurrentTime;
+	CurrentTime = vw_GetTimeThread(0);
 
 
 	// если не в меню - считаем время
