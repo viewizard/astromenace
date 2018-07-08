@@ -73,6 +73,13 @@ struct sGroundObjectWeapon {
 	}
 };
 
+struct sWheelDeviation {
+	sVECTOR3D Deviation{};
+	float Need{0.0f};
+	float Current{0.0f};
+	unsigned Object{0};
+};
+
 class cGroundObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
@@ -94,6 +101,8 @@ public:
 
 	// перечень номеров объектов с колесами
 	std::vector<unsigned> WheelObjects{};
+	// небольшая девиация-болтание колес
+	std::vector<sWheelDeviation> WheelDeviation{};
 
 	// колеса поворотные, для установки угла поворота
 	// кол-во колес
@@ -165,15 +174,6 @@ public:
 	// если нужно вращать ствол (многоствольный пулемет)
 	int BarrelBlocksQuantity{0};
 	int *BarrelBlocks{nullptr};
-
-	// небольшая девиация-болтание колес
-	bool DeviationOn{false};
-	unsigned DeviationObjQuantity{0};
-	sVECTOR3D *Deviation{nullptr};
-	float *NeedDeviation{nullptr};
-	float *CurentDeviation{nullptr};
-	// ассоциированный объект (если нужно)
-	int *DeviationObjNum{nullptr};
 };
 
 class cCivilianBuilding final : public cGroundObject {

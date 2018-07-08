@@ -538,18 +538,12 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoWheeledStart+1;
 		InfoGroundObject = CreateWheeled(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
-			sharedObject->DeviationOn = true;
-			sharedObject->DeviationObjQuantity = sharedObject->WheelObjects.size();
-			sharedObject->Deviation = new sVECTOR3D[sharedObject->DeviationObjQuantity];
-			sharedObject->NeedDeviation = new float[sharedObject->DeviationObjQuantity];
-			sharedObject->CurentDeviation = new float[sharedObject->DeviationObjQuantity];
-			sharedObject->DeviationObjNum = new int[sharedObject->DeviationObjQuantity];
-
-			for (unsigned i = 0; i < sharedObject->DeviationObjQuantity; i++) {
-				sharedObject->Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
-				sharedObject->NeedDeviation[i] = vw_fRand0() * 0.1f;
-				sharedObject->CurentDeviation[i] = 0.0f;
-				sharedObject->DeviationObjNum[i] = sharedObject->WheelObjects[i];
+			sharedObject->WheelDeviation.resize(sharedObject->WheelObjects.size());
+			for (unsigned i = 0; i < sharedObject->WheelDeviation.size(); i++) {
+				sharedObject->WheelDeviation[i].Deviation = sVECTOR3D(0.0f, 1.0f, 0.0f);
+				sharedObject->WheelDeviation[i].Need = vw_fRand0() * 0.1f;
+				sharedObject->WheelDeviation[i].Current = 0.0f;
+				sharedObject->WheelDeviation[i].Object = sharedObject->WheelObjects[i];
 			}
 
 			sharedObject->ObjectStatus = eObjectStatus::none;
@@ -577,18 +571,12 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoTrackedStart+1;
 		InfoGroundObject = CreateTracked(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
-			sharedObject->DeviationOn = true;
-			sharedObject->DeviationObjQuantity = sharedObject->WheelObjects.size();
-			sharedObject->Deviation = new sVECTOR3D[sharedObject->DeviationObjQuantity];
-			sharedObject->NeedDeviation = new float[sharedObject->DeviationObjQuantity];
-			sharedObject->CurentDeviation = new float[sharedObject->DeviationObjQuantity];
-			sharedObject->DeviationObjNum = new int[sharedObject->DeviationObjQuantity];
-
-			for (unsigned i = 0; i < sharedObject->DeviationObjQuantity; i++) {
-				sharedObject->Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
-				sharedObject->NeedDeviation[i] = vw_fRand0() * 0.1f;
-				sharedObject->CurentDeviation[i] = 0.0f;
-				sharedObject->DeviationObjNum[i] = sharedObject->WheelObjects[i];
+			sharedObject->WheelDeviation.resize(sharedObject->WheelObjects.size());
+			for (unsigned i = 0; i < sharedObject->WheelDeviation.size(); i++) {
+				sharedObject->WheelDeviation[i].Deviation = sVECTOR3D(0.0f, 1.0f, 0.0f);
+				sharedObject->WheelDeviation[i].Need = vw_fRand0() * 0.1f;
+				sharedObject->WheelDeviation[i].Current = 0.0f;
+				sharedObject->WheelDeviation[i].Object = sharedObject->WheelObjects[i];
 			}
 
 			sharedObject->ObjectStatus = eObjectStatus::none;

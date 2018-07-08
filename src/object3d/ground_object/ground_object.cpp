@@ -197,17 +197,6 @@ cGroundObject::~cGroundObject()
 		delete [] BarrelBlocks;
 		BarrelBlocks = nullptr;
 	};
-
-	if (DeviationObjQuantity != 0) {
-		if (Deviation != nullptr)
-			delete [] Deviation;
-		if (NeedDeviation != nullptr)
-			delete [] NeedDeviation;
-		if (CurentDeviation != nullptr)
-			delete [] CurentDeviation;
-		if (DeviationObjNum != nullptr)
-			delete [] DeviationObjNum;
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -794,38 +783,40 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание колес, если нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (DeviationOn) {
-		for (unsigned i = 0; i < DeviationObjQuantity; i++) {
+	if (!WheelDeviation.empty()) {
+		for (auto &tmpWheelDeviation : WheelDeviation) {
 			float Sign{1.0f};
 			// нужно двигать
-			if (NeedDeviation[i] < 0.0f)
+			if (tmpWheelDeviation.Need < 0.0f)
 				Sign = -1.0f;
 			if (Sign == 1.0f) {
-				if (NeedDeviation[i] < CurentDeviation[i])
+				if (tmpWheelDeviation.Need < tmpWheelDeviation.Current)
 					Sign = -1.0f;
 			} else {
-				if (NeedDeviation[i] > CurentDeviation[i])
+				if (tmpWheelDeviation.Need > tmpWheelDeviation.Current)
 					Sign = 1.0f;
 			}
 
 			float tmpDeviation = Sign * 0.35f * TimeDelta;
 
 			if (Sign == 1.0f) {
-				if (NeedDeviation[i] <= CurentDeviation[i] + tmpDeviation) {
-					tmpDeviation -= CurentDeviation[i] + tmpDeviation - NeedDeviation[i];
-					CurentDeviation[i] += tmpDeviation;
-					NeedDeviation[i] = vw_fRand0() * 0.1f;
-				} else CurentDeviation[i] += tmpDeviation;
+				if (tmpWheelDeviation.Need <= tmpWheelDeviation.Current + tmpDeviation) {
+					tmpDeviation -= tmpWheelDeviation.Current + tmpDeviation - tmpWheelDeviation.Need;
+					tmpWheelDeviation.Current += tmpDeviation;
+					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
+				} else
+					tmpWheelDeviation.Current += tmpDeviation;
 			} else {
-				if (NeedDeviation[i] >= CurentDeviation[i] + tmpDeviation) {
-					tmpDeviation += CurentDeviation[i] + tmpDeviation - NeedDeviation[i];
-					CurentDeviation[i] += tmpDeviation;
-					NeedDeviation[i] = vw_fRand0() * 0.1f;
-				} else CurentDeviation[i] += tmpDeviation;
+				if (tmpWheelDeviation.Need >= tmpWheelDeviation.Current + tmpDeviation) {
+					tmpDeviation += tmpWheelDeviation.Current + tmpDeviation - tmpWheelDeviation.Need;
+					tmpWheelDeviation.Current += tmpDeviation;
+					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
+				} else
+					tmpWheelDeviation.Current += tmpDeviation;
 			}
 
-			sVECTOR3D Tmp = Deviation[i] ^ tmpDeviation;
-			SetObjectLocation(Model3DBlocks[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
+			sVECTOR3D Tmp = tmpWheelDeviation.Deviation ^ tmpDeviation;
+			SetObjectLocation(Model3DBlocks[tmpWheelDeviation.Object].Location + Tmp, tmpWheelDeviation.Object);
 		}
 	}
 
