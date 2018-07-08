@@ -35,7 +35,7 @@ namespace astromenace {
 
 struct sTrackedData {
 	float Strength;
-	float SpeedToRotate;
+	float SpeedToWheelRotarySpeedFactor;
 	std::string Model3DFileName;
 	std::string TextureFileName;
 };
@@ -84,7 +84,7 @@ cTracked::cTracked(int TrackedNum)
 	}
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
-	SpeedToRotate = PresetTrackedData[TrackedNum - 1].SpeedToRotate;
+	SpeedToWheelRotarySpeedFactor = PresetTrackedData[TrackedNum - 1].SpeedToWheelRotarySpeedFactor;
 
 	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength/GameEnemyArmorPenalty;
 

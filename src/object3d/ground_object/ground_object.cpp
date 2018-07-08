@@ -808,7 +808,7 @@ bool cGroundObject::Update(float Time)
 
 	// перемещение объекта, если нужно
 	if ((Velocity.x != 0.0f) || (Velocity.y != 0.0f) || (Velocity.z != 0.0f)) {
-		WheelRotarySpeed = Speed * SpeedToRotate;
+		WheelRotarySpeed = Speed * SpeedToWheelRotarySpeedFactor;
 		// делаем сдвиг модели в указанную точку
 		SetLocation(Location + Velocity);
 	}

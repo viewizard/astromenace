@@ -35,7 +35,7 @@ namespace astromenace {
 
 struct sWheeledData {
 	float Strength;
-	float SpeedToRotate;
+	float SpeedToWheelRotarySpeedFactor;
 	std::string Model3DFileName;
 	std::string TextureFileName;
 };
@@ -78,7 +78,7 @@ cWheeled::cWheeled(int WheeledNum)
 	}
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
-	SpeedToRotate = PresetWheeledData[WheeledNum - 1].SpeedToRotate;
+	SpeedToWheelRotarySpeedFactor = PresetWheeledData[WheeledNum - 1].SpeedToWheelRotarySpeedFactor;
 
 	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength/GameEnemyArmorPenalty;
 

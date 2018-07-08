@@ -95,6 +95,7 @@ public:
 
 	// rotary speed (deg/sec) for all wheels (for both, wheeled and tracked)
 	float WheelRotarySpeed{0.0f};
+	float SpeedToWheelRotarySpeedFactor{0.0f};
 
 	// wheel objects (for both, wheeled and tracked)
 	std::vector<unsigned> WheelObjects{};
@@ -145,9 +146,6 @@ public:
 	// только учитываем общий поворот модели и соотв. точку выстрела
 	// работает только если объекты поворота башни и ствола не заданы!
 	bool DoNotCalculateRotation{false};
-
-	// коэф. преобразования скорость в скорость вращения колес
-	float SpeedToRotate{0.0f};
 
 	// horizontal targeting related (turret can rotate at 360 deg)
 	std::vector<unsigned> TargetHorizBlocks{};
