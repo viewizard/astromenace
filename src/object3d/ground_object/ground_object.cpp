@@ -188,11 +188,6 @@ cGroundObject::~cGroundObject()
 		delete [] TargetVertBlocks;
 		TargetVertBlocks = nullptr;
 	};
-
-	if (BarrelBlocks != nullptr) {
-		delete [] BarrelBlocks;
-		BarrelBlocks = nullptr;
-	};
 }
 
 //-----------------------------------------------------------------------------
@@ -577,13 +572,12 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вращение стволов пулемета
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((BarrelBlocksQuantity != 0) &&
-	    (BarrelBlocks != nullptr)) {
-		for (int i = 0; i < BarrelBlocksQuantity; i++) {
-			Model3DBlocks[BarrelBlocks[i]].NeedGeometryAnimation = true;
-			Model3DBlocks[BarrelBlocks[i]].GeometryAnimation += sVECTOR3D(0.0f, 0.0f, 500.0f * TimeDelta);
-			if (Model3DBlocks[BarrelBlocks[i]].GeometryAnimation.z > 360.0f)
-				Model3DBlocks[BarrelBlocks[i]].GeometryAnimation.z -= 360.0f;
+	if (!BarrelBlocks.empty()) {
+		for (auto tmpBarrel : BarrelBlocks) {
+			Model3DBlocks[tmpBarrel].NeedGeometryAnimation = true;
+			Model3DBlocks[tmpBarrel].GeometryAnimation.z += 500.0f * TimeDelta;
+			if (Model3DBlocks[tmpBarrel].GeometryAnimation.z > 360.0f)
+				Model3DBlocks[tmpBarrel].GeometryAnimation.z -= 360.0f;
 		}
 	}
 

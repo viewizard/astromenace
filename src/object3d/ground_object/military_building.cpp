@@ -120,9 +120,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetVertBlocks[2] = 4;
 		TargetVertBlocksMaxAngle = 60.0f;
 
-		BarrelBlocksQuantity = 1;
-		BarrelBlocks = new int[BarrelBlocksQuantity];
-		BarrelBlocks[0] = 4;
+		BarrelBlocks.emplace_back(4);
 		break;
 
 	case 3:
@@ -166,8 +164,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetVertBlocks[2] = 4;
 		TargetVertBlocksMaxAngle = 60.0f;
 
-		BarrelBlocksQuantity = 2;
-		BarrelBlocks = new int[BarrelBlocksQuantity];
+		BarrelBlocks.resize(2);
 		BarrelBlocks[0] = 3;
 		BarrelBlocks[1] = 4;
 		break;
@@ -223,9 +220,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		TargetVertBlocks[2] = 1;
 		TargetVertBlocksMaxAngle = 60.0f;
 
-		BarrelBlocksQuantity = 1;
-		BarrelBlocks = new int[BarrelBlocksQuantity];
-		BarrelBlocks[0] = 1;
+		BarrelBlocks.emplace_back(1);
 		break;
 	}
 

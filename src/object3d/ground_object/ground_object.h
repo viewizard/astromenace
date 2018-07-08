@@ -164,9 +164,8 @@ public:
 	float TargetVertBlocksMinAngle{0.0f};
 	float TargetVertBlocksCurrentAngle{0.0f};
 	float TargetVertBlocksNeedAngle{0.0f};
-	// если нужно вращать ствол (многоствольный пулемет)
-	int BarrelBlocksQuantity{0};
-	int *BarrelBlocks{nullptr};
+	// barrel blocks (we may need rotate barrels)
+	std::vector<unsigned> BarrelBlocks{};
 };
 
 class cCivilianBuilding final : public cGroundObject {
