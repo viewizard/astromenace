@@ -179,10 +179,6 @@ cGroundObject::~cGroundObject()
 		}
 		Weapon.clear();
 	}
-	if (WheelObjectsNum != nullptr) {
-		delete [] WheelObjectsNum;
-		WheelObjectsNum = nullptr;
-	};
 	if (WheelRotateObjectsNum != nullptr) {
 		delete [] WheelRotateObjectsNum;
 		WheelRotateObjectsNum = nullptr;
@@ -611,16 +607,16 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// вращение колес в транспорте
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (((WheelObjectsNum != nullptr) &&
+	if ((!WheelObjects.empty() &&
 	    ((WheelTrackSpeed >= 0.00001f) || (WheelTrackSpeed <= -0.00001f)))) {
 		// перебираем все и ув. их угол вращения
-		for (int i = 0; i < WheelQuantity; i++) {
-			Model3DBlocks[WheelObjectsNum[i]].Rotation.x += WheelTrackSpeed * TimeDelta;
+		for (auto tmpObjects : WheelObjects) {
+			Model3DBlocks[tmpObjects].Rotation.x += WheelTrackSpeed * TimeDelta;
 
-			if (Model3DBlocks[WheelObjectsNum[i]].Rotation.x > 360.0f)
-				Model3DBlocks[WheelObjectsNum[i]].Rotation.x -= 360.0f;
-			if (Model3DBlocks[WheelObjectsNum[i]].Rotation.x < -360.0f)
-				Model3DBlocks[WheelObjectsNum[i]].Rotation.x += 360.0f;
+			if (Model3DBlocks[tmpObjects].Rotation.x > 360.0f)
+				Model3DBlocks[tmpObjects].Rotation.x -= 360.0f;
+			if (Model3DBlocks[tmpObjects].Rotation.x < -360.0f)
+				Model3DBlocks[tmpObjects].Rotation.x += 360.0f;
 		}
 	}
 
@@ -801,7 +797,7 @@ bool cGroundObject::Update(float Time)
 	// небольшая девиация-болтание колес, если нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (DeviationOn) {
-		for (int i = 0; i < DeviationObjQuantity; i++) {
+		for (unsigned i = 0; i < DeviationObjQuantity; i++) {
 			float Sign{1.0f};
 			// нужно двигать
 			if (NeedDeviation[i] < 0.0f)

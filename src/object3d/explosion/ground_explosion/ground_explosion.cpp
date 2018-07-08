@@ -138,10 +138,9 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				}
 				if (ExplType == 2) {
 					// проверяем, это колесо или нет
-					bool Wheel = false;
-					for (int k = 0; k < Object.WheelQuantity; k++) {
-						if (Object.WheelObjectsNum[k] == (int)i)
-							Wheel = true;
+					bool Wheel{false};
+					for (unsigned j = 0; (j < Object.WheelObjects.size()) && !Wheel; j++) {
+						Wheel = (Object.WheelObjects[j] == i);
 					}
 
 					if (Wheel) {

@@ -92,10 +92,8 @@ public:
 	// скорость вращения колес
 	float WheelTrackSpeed{0.0f};
 
-	// кол-во колес
-	int WheelQuantity{0};
 	// перечень номеров объектов с колесами
-	int *WheelObjectsNum{nullptr};
+	std::vector<unsigned> WheelObjects{};
 
 	// колеса поворотные, для установки угла поворота
 	// кол-во колес
@@ -170,7 +168,7 @@ public:
 
 	// небольшая девиация-болтание колес
 	bool DeviationOn{false};
-	int DeviationObjQuantity{0};
+	unsigned DeviationObjQuantity{0};
 	sVECTOR3D *Deviation{nullptr};
 	float *CurentDeviation{nullptr};
 	float *NeedDeviation{nullptr};

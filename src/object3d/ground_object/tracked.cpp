@@ -93,24 +93,23 @@ cTracked::cTracked(int TrackedNum)
 	case 1:
 		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.5f, 9.0f));
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 2;
-		WheelObjectsNum[1] = 3;
-		WheelObjectsNum[2] = 4;
-		WheelObjectsNum[3] = 6;
-		WheelObjectsNum[4] = 7;
-		WheelObjectsNum[5] = 8;
-		WheelObjectsNum[6] = 9;
-		WheelObjectsNum[7] = 10;
-		WheelObjectsNum[8] = 11;
-		WheelObjectsNum[9] = 12;
-		WheelObjectsNum[10] = 13;
-		WheelObjectsNum[11] = 14;
-		WheelObjectsNum[12] = 15;
-		WheelObjectsNum[13] = 16;
-		WheelObjectsNum[14] = 17;
-		WheelObjectsNum[15] = 18;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 2;
+		WheelObjects[1] = 3;
+		WheelObjects[2] = 4;
+		WheelObjects[3] = 6;
+		WheelObjects[4] = 7;
+		WheelObjects[5] = 8;
+		WheelObjects[6] = 9;
+		WheelObjects[7] = 10;
+		WheelObjects[8] = 11;
+		WheelObjects[9] = 12;
+		WheelObjects[10] = 13;
+		WheelObjects[11] = 14;
+		WheelObjects[12] = 15;
+		WheelObjects[13] = 16;
+		WheelObjects[14] = 17;
+		WheelObjects[15] = 18;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -132,18 +131,17 @@ cTracked::cTracked(int TrackedNum)
 		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.1f, 6.1f, -0.4f));
 		WeaponFireType = 2;
 
-		WheelQuantity = 10;
-		WheelObjectsNum = new int[10];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
+		WheelObjects.resize(10);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -162,22 +160,21 @@ cTracked::cTracked(int TrackedNum)
 	case 3:
 		Weapon.emplace_back(CreateWeapon(213), sVECTOR3D(0.0f, 5.2f, 3.7f));
 
-		WheelQuantity = 14;
-		WheelObjectsNum = new int[14];
-		WheelObjectsNum[0] = 0;
-		WheelObjectsNum[1] = 1;
-		WheelObjectsNum[2] = 2;
-		WheelObjectsNum[3] = 3;
-		WheelObjectsNum[4] = 4;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 10;
-		WheelObjectsNum[8] = 11;
-		WheelObjectsNum[9] = 12;
-		WheelObjectsNum[10] = 13;
-		WheelObjectsNum[11] = 14;
-		WheelObjectsNum[12] = 15;
-		WheelObjectsNum[13] = 16;
+		WheelObjects.resize(14);
+		WheelObjects[0] = 0;
+		WheelObjects[1] = 1;
+		WheelObjects[2] = 2;
+		WheelObjects[3] = 3;
+		WheelObjects[4] = 4;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 10;
+		WheelObjects[8] = 11;
+		WheelObjects[9] = 12;
+		WheelObjects[10] = 13;
+		WheelObjects[11] = 14;
+		WheelObjects[12] = 15;
+		WheelObjects[13] = 16;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -196,24 +193,23 @@ cTracked::cTracked(int TrackedNum)
 	case 4:
 		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.3f, 6.5f));
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
-		WheelObjectsNum[10] = 11;
-		WheelObjectsNum[11] = 12;
-		WheelObjectsNum[12] = 13;
-		WheelObjectsNum[13] = 14;
-		WheelObjectsNum[14] = 15;
-		WheelObjectsNum[15] = 16;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
+		WheelObjects[10] = 11;
+		WheelObjects[11] = 12;
+		WheelObjects[12] = 13;
+		WheelObjects[13] = 14;
+		WheelObjects[14] = 15;
+		WheelObjects[15] = 16;
 
 		TargetHorizBlocksQuantity = 3;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -236,22 +232,21 @@ cTracked::cTracked(int TrackedNum)
 	case 5:
 		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.8f, 4.5f));
 
-		WheelQuantity = 14;
-		WheelObjectsNum = new int[14];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 10;
-		WheelObjectsNum[8] = 11;
-		WheelObjectsNum[9] = 12;
-		WheelObjectsNum[10] = 13;
-		WheelObjectsNum[11] = 14;
-		WheelObjectsNum[12] = 15;
-		WheelObjectsNum[13] = 16;
+		WheelObjects.resize(14);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 10;
+		WheelObjects[8] = 11;
+		WheelObjects[9] = 12;
+		WheelObjects[10] = 13;
+		WheelObjects[11] = 14;
+		WheelObjects[12] = 15;
+		WheelObjects[13] = 16;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -270,24 +265,23 @@ cTracked::cTracked(int TrackedNum)
 	case 6:
 		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 4.9f, 4.0f));
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 2;
-		WheelObjectsNum[1] = 3;
-		WheelObjectsNum[2] = 4;
-		WheelObjectsNum[3] = 5;
-		WheelObjectsNum[4] = 6;
-		WheelObjectsNum[5] = 7;
-		WheelObjectsNum[6] = 8;
-		WheelObjectsNum[7] = 9;
-		WheelObjectsNum[8] = 10;
-		WheelObjectsNum[9] = 11;
-		WheelObjectsNum[10] = 12;
-		WheelObjectsNum[11] = 13;
-		WheelObjectsNum[12] = 14;
-		WheelObjectsNum[13] = 15;
-		WheelObjectsNum[14] = 16;
-		WheelObjectsNum[15] = 17;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 2;
+		WheelObjects[1] = 3;
+		WheelObjects[2] = 4;
+		WheelObjects[3] = 5;
+		WheelObjects[4] = 6;
+		WheelObjects[5] = 7;
+		WheelObjects[6] = 8;
+		WheelObjects[7] = 9;
+		WheelObjects[8] = 10;
+		WheelObjects[9] = 11;
+		WheelObjects[10] = 12;
+		WheelObjects[11] = 13;
+		WheelObjects[12] = 14;
+		WheelObjects[13] = 15;
+		WheelObjects[14] = 16;
+		WheelObjects[15] = 17;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -306,24 +300,23 @@ cTracked::cTracked(int TrackedNum)
 	case 7:
 		Weapon.emplace_back(CreateWeapon(212), sVECTOR3D(0.0f, 7.6f, 5.5f));
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
-		WheelObjectsNum[10] = 13;
-		WheelObjectsNum[11] = 14;
-		WheelObjectsNum[12] = 15;
-		WheelObjectsNum[13] = 16;
-		WheelObjectsNum[14] = 17;
-		WheelObjectsNum[15] = 18;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
+		WheelObjects[10] = 13;
+		WheelObjects[11] = 14;
+		WheelObjects[12] = 15;
+		WheelObjects[13] = 16;
+		WheelObjects[14] = 17;
+		WheelObjects[15] = 18;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -342,24 +335,23 @@ cTracked::cTracked(int TrackedNum)
 	case 8:
 		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 7.0f, 8.5f));
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
-		WheelObjectsNum[10] = 11;
-		WheelObjectsNum[11] = 12;
-		WheelObjectsNum[12] = 13;
-		WheelObjectsNum[13] = 14;
-		WheelObjectsNum[14] = 15;
-		WheelObjectsNum[15] = 16;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
+		WheelObjects[10] = 11;
+		WheelObjects[11] = 12;
+		WheelObjects[12] = 13;
+		WheelObjects[13] = 14;
+		WheelObjects[14] = 15;
+		WheelObjects[15] = 16;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -379,24 +371,23 @@ cTracked::cTracked(int TrackedNum)
 		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 6.7f, 6.8f));
 		Weapon.back().Weapon->NextFireTime /= 2.0f;
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
-		WheelObjectsNum[10] = 11;
-		WheelObjectsNum[11] = 12;
-		WheelObjectsNum[12] = 13;
-		WheelObjectsNum[13] = 14;
-		WheelObjectsNum[14] = 15;
-		WheelObjectsNum[15] = 16;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
+		WheelObjects[10] = 11;
+		WheelObjects[11] = 12;
+		WheelObjects[12] = 13;
+		WheelObjects[13] = 14;
+		WheelObjects[14] = 15;
+		WheelObjects[15] = 16;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -416,24 +407,23 @@ cTracked::cTracked(int TrackedNum)
 		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.1f, 0.5f));
 		Weapon.back().Weapon->NextFireTime /= 2.0f;
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
-		WheelObjectsNum[10] = 11;
-		WheelObjectsNum[11] = 12;
-		WheelObjectsNum[12] = 13;
-		WheelObjectsNum[13] = 14;
-		WheelObjectsNum[14] = 15;
-		WheelObjectsNum[15] = 16;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
+		WheelObjects[10] = 11;
+		WheelObjects[11] = 12;
+		WheelObjects[12] = 13;
+		WheelObjects[13] = 14;
+		WheelObjects[14] = 15;
+		WheelObjects[15] = 16;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -455,24 +445,23 @@ cTracked::cTracked(int TrackedNum)
 		Weapon[1](CreateWeapon(209), sVECTOR3D(-2.2f, 5.4f, 7.0f));
 		WeaponFireType = 3;
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
-		WheelObjectsNum[10] = 11;
-		WheelObjectsNum[11] = 12;
-		WheelObjectsNum[12] = 13;
-		WheelObjectsNum[13] = 14;
-		WheelObjectsNum[14] = 15;
-		WheelObjectsNum[15] = 16;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
+		WheelObjects[10] = 11;
+		WheelObjects[11] = 12;
+		WheelObjects[12] = 13;
+		WheelObjects[13] = 14;
+		WheelObjects[14] = 15;
+		WheelObjects[15] = 16;
 
 		TargetVertBlocksQuantity = 1;
 		TargetVertBlocks = new int[TargetVertBlocksQuantity];
@@ -495,24 +484,23 @@ cTracked::cTracked(int TrackedNum)
 		Weapon[3].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
-		WheelQuantity = 16;
-		WheelObjectsNum = new int[16];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
-		WheelObjectsNum[8] = 9;
-		WheelObjectsNum[9] = 10;
-		WheelObjectsNum[10] = 11;
-		WheelObjectsNum[11] = 12;
-		WheelObjectsNum[12] = 13;
-		WheelObjectsNum[13] = 14;
-		WheelObjectsNum[14] = 15;
-		WheelObjectsNum[15] = 16;
+		WheelObjects.resize(16);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
+		WheelObjects[8] = 9;
+		WheelObjects[9] = 10;
+		WheelObjects[10] = 11;
+		WheelObjects[11] = 12;
+		WheelObjects[12] = 13;
+		WheelObjects[13] = 14;
+		WheelObjects[14] = 15;
+		WheelObjects[15] = 16;
 
 
 		TargetVertBlocksQuantity = 2;
@@ -533,22 +521,21 @@ cTracked::cTracked(int TrackedNum)
 		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
-		WheelQuantity = 14;
-		WheelObjectsNum = new int[14];
-		WheelObjectsNum[0] = 2;
-		WheelObjectsNum[1] = 3;
-		WheelObjectsNum[2] = 4;
-		WheelObjectsNum[3] = 5;
-		WheelObjectsNum[4] = 6;
-		WheelObjectsNum[5] = 7;
-		WheelObjectsNum[6] = 8;
-		WheelObjectsNum[7] = 9;
-		WheelObjectsNum[8] = 10;
-		WheelObjectsNum[9] = 11;
-		WheelObjectsNum[10] = 12;
-		WheelObjectsNum[11] = 13;
-		WheelObjectsNum[12] = 14;
-		WheelObjectsNum[13] = 15;
+		WheelObjects.resize(14);
+		WheelObjects[0] = 2;
+		WheelObjects[1] = 3;
+		WheelObjects[2] = 4;
+		WheelObjects[3] = 5;
+		WheelObjects[4] = 6;
+		WheelObjects[5] = 7;
+		WheelObjects[6] = 8;
+		WheelObjects[7] = 9;
+		WheelObjects[8] = 10;
+		WheelObjects[9] = 11;
+		WheelObjects[10] = 12;
+		WheelObjects[11] = 13;
+		WheelObjects[12] = 14;
+		WheelObjects[13] = 15;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -565,16 +552,15 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 14:
-		WheelQuantity = 8;
-		WheelObjectsNum = new int[8];
-		WheelObjectsNum[0] = 0;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
-		WheelObjectsNum[4] = 5;
-		WheelObjectsNum[5] = 6;
-		WheelObjectsNum[6] = 7;
-		WheelObjectsNum[7] = 8;
+		WheelObjects.resize(8);
+		WheelObjects[0] = 0;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
+		WheelObjects[4] = 5;
+		WheelObjects[5] = 6;
+		WheelObjects[6] = 7;
+		WheelObjects[7] = 8;
 
 		TrackObjectNum = 10;
 		Texture[10] = GetPreloadedTextureAsset("models/track.vw2d");
@@ -584,23 +570,23 @@ cTracked::cTracked(int TrackedNum)
 
 	// установка остальных параметров девиации
 	DeviationOn = false;
-	DeviationObjQuantity = WheelQuantity;
+	DeviationObjQuantity = WheelObjects.size();
 	Deviation = new sVECTOR3D[DeviationObjQuantity];
 	NeedDeviation = new float[DeviationObjQuantity];
 	CurentDeviation = new float[DeviationObjQuantity];
 	CurentDeviationSum = new float[DeviationObjQuantity];
 	DeviationObjNum = new int[DeviationObjQuantity];
 
-	for (int i = 0; i < DeviationObjQuantity; i++) {
+	for (unsigned i = 0; i < DeviationObjQuantity; i++) {
 		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
 		NeedDeviation[i] = vw_fRand0() * 0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
-		DeviationObjNum[i] = WheelObjectsNum[i];
+		DeviationObjNum[i] = WheelObjects[i];
 	}
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
-	for (int i = 0; i < WheelQuantity; i++)
-		Model3DBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
+	for (unsigned i = 0; i < WheelObjects.size(); i++)
+		Model3DBlocks[WheelObjects[i]].Rotation.x = vw_fRandNum(360.0f);
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizBlocks != nullptr) {

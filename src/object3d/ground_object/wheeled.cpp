@@ -92,12 +92,11 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[3](CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
 		WeaponFireType = 3;
 
-		WheelQuantity = 4;
-		WheelObjectsNum = new int[4];
-		WheelObjectsNum[0] = 0;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
+		WheelObjects.resize(4);
+		WheelObjects[0] = 0;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
 
 		WheelRotateQuantity = 2;
 		WheelRotateObjectsNum = new int[2];
@@ -118,12 +117,11 @@ cWheeled::cWheeled(int WheeledNum)
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
-		WheelQuantity = 4;
-		WheelObjectsNum = new int[4];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
+		WheelObjects.resize(4);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
 
 		WheelRotateQuantity = 2;
 		WheelRotateObjectsNum = new int[2];
@@ -138,12 +136,11 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
 		WeaponFireType = 2;
 
-		WheelQuantity = 4;
-		WheelObjectsNum = new int[4];
-		WheelObjectsNum[0] = 0;
-		WheelObjectsNum[1] = 1;
-		WheelObjectsNum[2] = 2;
-		WheelObjectsNum[3] = 5;
+		WheelObjects.resize(4);
+		WheelObjects[0] = 0;
+		WheelObjects[1] = 1;
+		WheelObjects[2] = 2;
+		WheelObjects[3] = 5;
 
 		WheelRotateQuantity = 2;
 		WheelRotateObjectsNum = new int[2];
@@ -165,12 +162,11 @@ cWheeled::cWheeled(int WheeledNum)
 	case 4:
 		Weapon.emplace_back(CreateWeapon(207), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
-		WheelQuantity = 4;
-		WheelObjectsNum = new int[4];
-		WheelObjectsNum[0] = 0;
-		WheelObjectsNum[1] = 1;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
+		WheelObjects.resize(4);
+		WheelObjects[0] = 0;
+		WheelObjects[1] = 1;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
 
 		WheelRotateQuantity = 2;
 		WheelRotateObjectsNum = new int[2];
@@ -182,12 +178,11 @@ cWheeled::cWheeled(int WheeledNum)
 	case 5:
 		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
-		WheelQuantity = 4;
-		WheelObjectsNum = new int[4];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
+		WheelObjects.resize(4);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
 
 		WheelRotateQuantity = 2;
 		WheelRotateObjectsNum = new int[2];
@@ -199,12 +194,11 @@ cWheeled::cWheeled(int WheeledNum)
 	case 6:
 		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.0f, -3.0f));
 
-		WheelQuantity = 4;
-		WheelObjectsNum = new int[4];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
+		WheelObjects.resize(4);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
 
 		WheelRotateQuantity = 2;
 		WheelRotateObjectsNum = new int[2];
@@ -229,12 +223,11 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
 		WeaponFireType = 2;
 
-		WheelQuantity = 4;
-		WheelObjectsNum = new int[4];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 2;
-		WheelObjectsNum[2] = 3;
-		WheelObjectsNum[3] = 4;
+		WheelObjects.resize(4);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 2;
+		WheelObjects[2] = 3;
+		WheelObjects[3] = 4;
 
 		WheelRotateQuantity = 2;
 		WheelRotateObjectsNum = new int[2];
@@ -259,16 +252,15 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[1](CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
 		WeaponFireType = 3;
 
-		WheelQuantity = 8;
-		WheelObjectsNum = new int[8];
-		WheelObjectsNum[0] = 1;
-		WheelObjectsNum[1] = 3;
-		WheelObjectsNum[2] = 4;
-		WheelObjectsNum[3] = 5;
-		WheelObjectsNum[4] = 6;
-		WheelObjectsNum[5] = 7;
-		WheelObjectsNum[6] = 8;
-		WheelObjectsNum[7] = 9;
+		WheelObjects.resize(8);
+		WheelObjects[0] = 1;
+		WheelObjects[1] = 3;
+		WheelObjects[2] = 4;
+		WheelObjects[3] = 5;
+		WheelObjects[4] = 6;
+		WheelObjects[5] = 7;
+		WheelObjects[6] = 8;
+		WheelObjects[7] = 9;
 
 		WheelRotateQuantity = 4;
 		WheelRotateObjectsNum = new int[4];
@@ -287,23 +279,24 @@ cWheeled::cWheeled(int WheeledNum)
 
 	// установка остальных параметров девиации
 	DeviationOn = false;
-	DeviationObjQuantity = WheelQuantity;
+	DeviationObjQuantity = WheelObjects.size();
 	Deviation = new sVECTOR3D[DeviationObjQuantity];
 	NeedDeviation = new float[DeviationObjQuantity];
 	CurentDeviation = new float[DeviationObjQuantity];
 	CurentDeviationSum = new float[DeviationObjQuantity];
 	DeviationObjNum = new int[DeviationObjQuantity];
 
-	for (int i = 0; i < DeviationObjQuantity; i++) {
+	for (unsigned i = 0; i < DeviationObjQuantity; i++) {
 		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
 		NeedDeviation[i] = vw_fRand0() * 0.1f;
 		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
-		DeviationObjNum[i] = WheelObjectsNum[i];
+		DeviationObjNum[i] = WheelObjects[i];
 	}
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
-	for (int i = 0; i < WheelQuantity; i++)
-		Model3DBlocks[WheelObjectsNum[i]].Rotation.x = vw_fRandNum(360.0f);
+	for (unsigned i = 0; i < WheelObjects.size(); i++) {
+		Model3DBlocks[WheelObjects[i]].Rotation.x = vw_fRandNum(360.0f);
+	}
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizBlocks != nullptr)
