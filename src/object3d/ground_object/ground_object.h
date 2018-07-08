@@ -170,7 +170,6 @@ public:
 	bool DeviationOn{false};
 	unsigned DeviationObjQuantity{0};
 	sVECTOR3D *Deviation{nullptr};
-	float *CurentDeviation{nullptr};
 	float *NeedDeviation{nullptr};
 	float *CurentDeviationSum{nullptr};
 	// ассоциированный объект (если нужно)

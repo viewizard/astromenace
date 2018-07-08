@@ -203,8 +203,6 @@ cGroundObject::~cGroundObject()
 			delete [] Deviation;
 		if (NeedDeviation != nullptr)
 			delete [] NeedDeviation;
-		if (CurentDeviation != nullptr)
-			delete [] CurentDeviation;
 		if (CurentDeviationSum != nullptr)
 			delete [] CurentDeviationSum;
 		if (DeviationObjNum != nullptr)
@@ -810,23 +808,23 @@ bool cGroundObject::Update(float Time)
 					Sign = 1.0f;
 			}
 
-			CurentDeviation[i] = Sign * 0.35f * TimeDelta;
+			float tmpDeviation = Sign * 0.35f * TimeDelta;
 
 			if (Sign == 1.0f) {
-				if (NeedDeviation[i] <= CurentDeviationSum[i] + CurentDeviation[i]) {
-					CurentDeviation[i] -= CurentDeviationSum[i] + CurentDeviation[i] - NeedDeviation[i];
-					CurentDeviationSum[i] += CurentDeviation[i];
+				if (NeedDeviation[i] <= CurentDeviationSum[i] + tmpDeviation) {
+					tmpDeviation -= CurentDeviationSum[i] + tmpDeviation - NeedDeviation[i];
+					CurentDeviationSum[i] += tmpDeviation;
 					NeedDeviation[i] = vw_fRand0() * 0.1f;
-				} else CurentDeviationSum[i] += CurentDeviation[i];
+				} else CurentDeviationSum[i] += tmpDeviation;
 			} else {
-				if (NeedDeviation[i] >= CurentDeviationSum[i] + CurentDeviation[i]) {
-					CurentDeviation[i] += CurentDeviationSum[i] + CurentDeviation[i] - NeedDeviation[i];
-					CurentDeviationSum[i] += CurentDeviation[i];
+				if (NeedDeviation[i] >= CurentDeviationSum[i] + tmpDeviation) {
+					tmpDeviation += CurentDeviationSum[i] + tmpDeviation - NeedDeviation[i];
+					CurentDeviationSum[i] += tmpDeviation;
 					NeedDeviation[i] = vw_fRand0() * 0.1f;
-				} else CurentDeviationSum[i] += CurentDeviation[i];
+				} else CurentDeviationSum[i] += tmpDeviation;
 			}
 
-			sVECTOR3D Tmp = Deviation[i] ^ CurentDeviation[i];
+			sVECTOR3D Tmp = Deviation[i] ^ tmpDeviation;
 			SetObjectLocation(Model3DBlocks[DeviationObjNum[i]].Location + Tmp, DeviationObjNum[i]);
 		}
 	}
