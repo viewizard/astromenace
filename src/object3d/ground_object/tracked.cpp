@@ -568,22 +568,6 @@ cTracked::cTracked(int TrackedNum)
 		break;
 	}
 
-	// установка остальных параметров девиации
-	DeviationOn = false;
-	DeviationObjQuantity = WheelObjects.size();
-	Deviation = new sVECTOR3D[DeviationObjQuantity];
-	NeedDeviation = new float[DeviationObjQuantity];
-	CurentDeviation = new float[DeviationObjQuantity];
-	CurentDeviationSum = new float[DeviationObjQuantity];
-	DeviationObjNum = new int[DeviationObjQuantity];
-
-	for (unsigned i = 0; i < DeviationObjQuantity; i++) {
-		Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
-		NeedDeviation[i] = vw_fRand0() * 0.1f;
-		CurentDeviation[i] = CurentDeviationSum[i] = 0.0f;
-		DeviationObjNum[i] = WheelObjects[i];
-	}
-
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
 	for (unsigned i = 0; i < WheelObjects.size(); i++)
 		Model3DBlocks[WheelObjects[i]].Rotation.x = vw_fRandNum(360.0f);

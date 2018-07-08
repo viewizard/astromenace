@@ -539,6 +539,20 @@ void CreateInfoObject()
 		InfoGroundObject = CreateWheeled(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
 			sharedObject->DeviationOn = true;
+			sharedObject->DeviationObjQuantity = sharedObject->WheelObjects.size();
+			sharedObject->Deviation = new sVECTOR3D[sharedObject->DeviationObjQuantity];
+			sharedObject->NeedDeviation = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->CurentDeviation = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->CurentDeviationSum = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->DeviationObjNum = new int[sharedObject->DeviationObjQuantity];
+
+			for (unsigned i = 0; i < sharedObject->DeviationObjQuantity; i++) {
+				sharedObject->Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
+				sharedObject->NeedDeviation[i] = vw_fRand0() * 0.1f;
+				sharedObject->CurentDeviation[i] = sharedObject->CurentDeviationSum[i] = 0.0f;
+				sharedObject->DeviationObjNum[i] = sharedObject->WheelObjects[i];
+			}
+
 			sharedObject->ObjectStatus = eObjectStatus::none;
 			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
 			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
@@ -565,6 +579,20 @@ void CreateInfoObject()
 		InfoGroundObject = CreateTracked(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
 			sharedObject->DeviationOn = true;
+			sharedObject->DeviationObjQuantity = sharedObject->WheelObjects.size();
+			sharedObject->Deviation = new sVECTOR3D[sharedObject->DeviationObjQuantity];
+			sharedObject->NeedDeviation = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->CurentDeviation = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->CurentDeviationSum = new float[sharedObject->DeviationObjQuantity];
+			sharedObject->DeviationObjNum = new int[sharedObject->DeviationObjQuantity];
+
+			for (unsigned i = 0; i < sharedObject->DeviationObjQuantity; i++) {
+				sharedObject->Deviation[i] = sVECTOR3D(0.0f, 1.0f, 0.0f);
+				sharedObject->NeedDeviation[i] = vw_fRand0() * 0.1f;
+				sharedObject->CurentDeviation[i] = sharedObject->CurentDeviationSum[i] = 0.0f;
+				sharedObject->DeviationObjNum[i] = sharedObject->WheelObjects[i];
+			}
+
 			sharedObject->ObjectStatus = eObjectStatus::none;
 			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
 			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
