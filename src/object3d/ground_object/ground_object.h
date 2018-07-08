@@ -99,20 +99,13 @@ public:
 	// скорость вращения колес
 	float WheelTrackSpeed{0.0f};
 
-	// перечень номеров объектов с колесами
+	// wheel objects (for both, wheeled and tracked)
 	std::vector<unsigned> WheelObjects{};
-	// небольшая девиация-болтание колес
+	// small wheel deviation (for both, wheeled and tracked)
 	std::vector<sWheelDeviation> WheelDeviation{};
-
-	// колеса поворотные, для установки угла поворота
-	// кол-во колес
-	int WheelRotateQuantity{0};
-	// перечень номеров объектов с колесами
-	int *WheelRotateObjectsNum{nullptr};
-	// скорость вращения колес
-	float WheelRotateSpeed{0.0f};
-	// максимальный угол поворота колес для модели
-	float MaxWheelRotateAngle{20.0f};
+	// steerable wheel objects (for wheeled only)
+	std::vector<unsigned> SteerableWheelObjects{};
+	float MaxSteerableWheelAngle{20.0f};
 
 	// если нужно, номер объекта с траком для тайловой анимации
 	int TrackObjectNum{-1};

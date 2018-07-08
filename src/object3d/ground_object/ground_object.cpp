@@ -179,10 +179,6 @@ cGroundObject::~cGroundObject()
 		}
 		Weapon.clear();
 	}
-	if (WheelRotateObjectsNum != nullptr) {
-		delete [] WheelRotateObjectsNum;
-		WheelRotateObjectsNum = nullptr;
-	};
 
 	if (TargetHorizBlocks != nullptr) {
 		delete [] TargetHorizBlocks;
@@ -621,7 +617,7 @@ bool cGroundObject::Update(float Time)
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// повотор
+	// поворот
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if ((NeedRotate.x != 0.0f) || (NeedRotate.y != 0.0f) || (NeedRotate.z != 0.0f)) {
 		// Находим допустимый поворот по углу
@@ -705,29 +701,29 @@ bool cGroundObject::Update(float Time)
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// поворот колес в транспорте
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (WheelRotateObjectsNum != nullptr) {
-			// перебираем все и ув. их угол вращения
-			for (int i = 0; i < WheelRotateQuantity; i++) {
-				float NeedRotateY = Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.y;
-				if (Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.y > NeedRotate.y) {
-					NeedRotateY -= 90.0f * TimeDelta;
-					if (NeedRotateY < NeedRotate.y)
-						NeedRotateY = NeedRotate.y;
-				} else if (Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.y < NeedRotate.y) {
-					NeedRotateY += 90.0f * TimeDelta;
-					if (NeedRotateY > NeedRotate.y)
-						NeedRotateY = NeedRotate.y;
+		if (!SteerableWheelObjects.empty()) {
+			for (auto tmpWheel : SteerableWheelObjects) {
+				float tmpRotateY = Model3DBlocks[tmpWheel].Rotation.y;
+
+				if (Model3DBlocks[tmpWheel].Rotation.y > NeedRotate.y) {
+					tmpRotateY -= 90.0f * TimeDelta;
+					if (tmpRotateY < NeedRotate.y)
+						tmpRotateY = NeedRotate.y;
+				} else if (Model3DBlocks[tmpWheel].Rotation.y < NeedRotate.y) {
+					tmpRotateY += 90.0f * TimeDelta;
+					if (tmpRotateY > NeedRotate.y)
+						tmpRotateY = NeedRotate.y;
 				}
 
-				if (NeedRotateY>MaxWheelRotateAngle)
-					NeedRotateY = MaxWheelRotateAngle;
-				if (NeedRotateY<-MaxWheelRotateAngle)
-					NeedRotateY = -MaxWheelRotateAngle;
+				if (tmpRotateY > MaxSteerableWheelAngle)
+					tmpRotateY = MaxSteerableWheelAngle;
+				if (tmpRotateY < -MaxSteerableWheelAngle)
+					tmpRotateY = -MaxSteerableWheelAngle;
 
-				SetObjectRotation(sVECTOR3D(Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.x,
-							    NeedRotateY,
-							    Model3DBlocks[WheelRotateObjectsNum[i]].Rotation.z),
-						  WheelRotateObjectsNum[i]);
+				SetObjectRotation(sVECTOR3D(Model3DBlocks[tmpWheel].Rotation.x,
+							    tmpRotateY,
+							    Model3DBlocks[tmpWheel].Rotation.z),
+						  tmpWheel);
 			}
 		}
 	}

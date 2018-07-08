@@ -98,11 +98,10 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[2] = 3;
 		WheelObjects[3] = 4;
 
-		WheelRotateQuantity = 2;
-		WheelRotateObjectsNum = new int[2];
-		WheelRotateObjectsNum[0] = 3;
-		WheelRotateObjectsNum[1] = 4;
-		MaxWheelRotateAngle = 30.0f;
+		SteerableWheelObjects.resize(2);
+		SteerableWheelObjects[0] = 3;
+		SteerableWheelObjects[1] = 4;
+		MaxSteerableWheelAngle = 30.0f;
 
 		TargetVertBlocksQuantity = 1;
 		TargetVertBlocks = new int[TargetVertBlocksQuantity];
@@ -123,11 +122,10 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[2] = 3;
 		WheelObjects[3] = 4;
 
-		WheelRotateQuantity = 2;
-		WheelRotateObjectsNum = new int[2];
-		WheelRotateObjectsNum[0] = 1;
-		WheelRotateObjectsNum[1] = 4;
-		MaxWheelRotateAngle = 20.0f;
+		SteerableWheelObjects.resize(2);
+		SteerableWheelObjects[0] = 1;
+		SteerableWheelObjects[1] = 4;
+		MaxSteerableWheelAngle = 20.0f;
 		break;
 
 	case 3:
@@ -142,11 +140,10 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[2] = 2;
 		WheelObjects[3] = 5;
 
-		WheelRotateQuantity = 2;
-		WheelRotateObjectsNum = new int[2];
-		WheelRotateObjectsNum[0] = 0;
-		WheelRotateObjectsNum[1] = 1;
-		MaxWheelRotateAngle = 20.0f;
+		SteerableWheelObjects.resize(2);
+		SteerableWheelObjects[0] = 0;
+		SteerableWheelObjects[1] = 1;
+		MaxSteerableWheelAngle = 20.0f;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -168,11 +165,10 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[2] = 3;
 		WheelObjects[3] = 4;
 
-		WheelRotateQuantity = 2;
-		WheelRotateObjectsNum = new int[2];
-		WheelRotateObjectsNum[0] = 0;
-		WheelRotateObjectsNum[1] = 3;
-		MaxWheelRotateAngle = 20.0f;
+		SteerableWheelObjects.resize(2);
+		SteerableWheelObjects[0] = 0;
+		SteerableWheelObjects[1] = 3;
+		MaxSteerableWheelAngle = 20.0f;
 		break;
 
 	case 5:
@@ -184,11 +180,10 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[2] = 3;
 		WheelObjects[3] = 4;
 
-		WheelRotateQuantity = 2;
-		WheelRotateObjectsNum = new int[2];
-		WheelRotateObjectsNum[0] = 1;
-		WheelRotateObjectsNum[1] = 2;
-		MaxWheelRotateAngle = 30.0f;
+		SteerableWheelObjects.resize(2);
+		SteerableWheelObjects[0] = 1;
+		SteerableWheelObjects[1] = 2;
+		MaxSteerableWheelAngle = 30.0f;
 		break;
 
 	case 6:
@@ -200,11 +195,10 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[2] = 3;
 		WheelObjects[3] = 4;
 
-		WheelRotateQuantity = 2;
-		WheelRotateObjectsNum = new int[2];
-		WheelRotateObjectsNum[0] = 1;
-		WheelRotateObjectsNum[1] = 4;
-		MaxWheelRotateAngle = 30.0f;
+		SteerableWheelObjects.resize(2);
+		SteerableWheelObjects[0] = 1;
+		SteerableWheelObjects[1] = 4;
+		MaxSteerableWheelAngle = 30.0f;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -229,11 +223,10 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[2] = 3;
 		WheelObjects[3] = 4;
 
-		WheelRotateQuantity = 2;
-		WheelRotateObjectsNum = new int[2];
-		WheelRotateObjectsNum[0] = 1;
-		WheelRotateObjectsNum[1] = 4;
-		MaxWheelRotateAngle = 20.0f;
+		SteerableWheelObjects.resize(2);
+		SteerableWheelObjects[0] = 1;
+		SteerableWheelObjects[1] = 4;
+		MaxSteerableWheelAngle = 20.0f;
 
 		TargetHorizBlocksQuantity = 2;
 		TargetHorizBlocks = new int[TargetHorizBlocksQuantity];
@@ -262,13 +255,12 @@ cWheeled::cWheeled(int WheeledNum)
 		WheelObjects[6] = 8;
 		WheelObjects[7] = 9;
 
-		WheelRotateQuantity = 4;
-		WheelRotateObjectsNum = new int[4];
-		WheelRotateObjectsNum[0] = 1;
-		WheelRotateObjectsNum[1] = 3;
-		WheelRotateObjectsNum[2] = 6;
-		WheelRotateObjectsNum[3] = 7;
-		MaxWheelRotateAngle = 20.0f;
+		SteerableWheelObjects.resize(4);
+		SteerableWheelObjects[0] = 1;
+		SteerableWheelObjects[1] = 3;
+		SteerableWheelObjects[2] = 6;
+		SteerableWheelObjects[3] = 7;
+		MaxSteerableWheelAngle = 20.0f;
 
 		TargetVertBlocksQuantity = 1;
 		TargetVertBlocks = new int[TargetVertBlocksQuantity];
