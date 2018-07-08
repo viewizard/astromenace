@@ -31,6 +31,8 @@
 //                   cMilitaryBuilding + wheels code -> cWheeled
 //                   cWheeled + tracks code -> cTracked
 
+// TODO WeaponFireType should be enumeration
+
 // TODO translate comments
 
 #ifndef OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
@@ -52,11 +54,8 @@ enum class eGroundCycle {
 };
 
 struct sGroundObjectWeapon {
-	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
 	bool SetFire{false};
-	// указатель на массив оружия
 	cWeapon *Weapon{nullptr};
-	// расположение оружия (относительное)
 	sVECTOR3D Location{};
 	sVECTOR3D Bound{};
 
@@ -93,8 +92,6 @@ public:
 	virtual void SetLocation(sVECTOR3D NewLocation) override;
 	// Установка углов поворота объекта
 	virtual void SetRotation(sVECTOR3D NewRotation) override;
-
-	// колеса, для транспорта
 
 	// rotary speed (deg/sec) for all wheels (for both, wheeled and tracked)
 	float WheelRotarySpeed{0.0f};
@@ -152,12 +149,12 @@ public:
 	// коэф. преобразования скорость в скорость вращения колес
 	float SpeedToRotate{0.0f};
 
-	// набор указателей на номера частей, которыми нацеливаемся по горизонтале
+	// horizontal targeting related (turret can rotate at 360 deg)
 	int TargetHorizBlocksQuantity{0};
 	int *TargetHorizBlocks{nullptr};
 	float TargetHorizBlocksCurrentAngle{0.0f};
 	float TargetHorizBlocksNeedAngle{0.0f};
-	// набор указателей на номера частей, которыми нацеливаемся по вертикали
+	// vertical targeting related
 	int TargetVertBlocksQuantity{0};
 	int *TargetVertBlocks{nullptr};
 	float TargetVertBlocksMaxAngle{80.0f};

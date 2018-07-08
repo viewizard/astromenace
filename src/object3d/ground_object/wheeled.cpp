@@ -279,11 +279,10 @@ cWheeled::cWheeled(int WheeledNum)
 		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
 
 	if (TargetVertBlocks != nullptr) {
-		if (TargetHorizBlocks != nullptr) {
+		if (TargetHorizBlocks != nullptr)
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
-		} else {
+		else
 			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
-		}
 	}
 
 	for (auto &tmpWeapon : Weapon) {

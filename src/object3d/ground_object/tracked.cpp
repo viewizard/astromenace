@@ -569,8 +569,9 @@ cTracked::cTracked(int TrackedNum)
 	}
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
-	for (unsigned i = 0; i < WheelObjects.size(); i++)
+	for (unsigned i = 0; i < WheelObjects.size(); i++) {
 		Model3DBlocks[WheelObjects[i]].Rotation.x = vw_fRandNum(360.0f);
+	}
 
 	// вычисляем данные для нахождения точки стрельбы
 	if (TargetHorizBlocks != nullptr) {
