@@ -103,20 +103,20 @@ protected:
 
 public:
 	// Прорисовка объектa Object3D
-	virtual void Draw(bool VertexOnlyPass, bool ShadowMap=false);
+	virtual void Draw(bool VertexOnlyPass, bool ShadowMap = false);
 	bool NeedCullFaces{true}; // нужно резать бэк фейсы
 	bool NeedAlphaTest{false}; // нужно включить альфа тест
 	// Обновление данных объектa Object3D
 	virtual bool Update(float Time);
 
 	// Установка положения 1 объекта модели
-	void SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum);
+	void SetObjectLocation(const sVECTOR3D &NewLocation, unsigned ObjectNum);
 	// Установка углов поворота 1 объекта модели
-	void SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum);
+	void SetObjectRotation(const sVECTOR3D &NewRotation, unsigned ObjectNum);
 	// Установка положения модели
-	virtual void SetLocation(sVECTOR3D NewLocation);
+	virtual void SetLocation(const sVECTOR3D &NewLocation);
 	// Установка углов поворота модели
-	virtual void SetRotation(sVECTOR3D NewRotation);
+	virtual void SetRotation(const sVECTOR3D &NewRotation);
 
 	// in-game object's status relatively to player
 	eObjectStatus ObjectStatus{eObjectStatus::none};
@@ -220,25 +220,29 @@ bool NeedCheckCollision(const cObject3D &Object3D);
 // Загрузка в модель нужной геометрии
 void LoadObjectData(const std::string &FileName, cObject3D *Object3D);
 // Получение угла поворота оружия на врага
-void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
-				 float MinDistance, float (&RotationMatrix)[9], sVECTOR3D *NeedAngle,
-				 float ObjectWidth, bool NeedCenterOrientation,
-				 bool NeedByWeaponOrientation, sVECTOR3D WeponLocation, int WeaponType);
+void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+				 const sVECTOR3D &CurrentObjectRotation,
+				 float MinDistance, const float (&RotationMatrix)[9],
+				 sVECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
+				 bool NeedByWeaponOrientation, const sVECTOR3D &WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
-void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
-				      float (&RotationMatrix)[9], sVECTOR3D *NeedAngle, int WeaponType);
+void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+				      const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
+				      sVECTOR3D *NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
-bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location, sVECTOR3D CurrentObjectRotation,
-				   float (&RotationMatrix)[9], sVECTOR3D *NeedAngle, int WeaponType);
+bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+				   const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
+				   sVECTOR3D *NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
-cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, sVECTOR3D Location,
-					  sVECTOR3D CurrentObjectRotation, float (&RotationMatrix)[9],
+cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+					  const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
 					  sVECTOR3D *NeedAngle, float MaxDistance);
-bool GetMissileOnTargetOrientateion(sVECTOR3D Location, sVECTOR3D CurrentObjectRotation, float (&RotationMatrix)[9],
+bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, const sVECTOR3D &CurrentObjectRotation,
+				    const float (&RotationMatrix)[9],
 				    cObject3D *TargetObject, sVECTOR3D *NeedAngle);
-bool GetMissileTargetStatus(cObject3D *TargetObject, sVECTOR3D Location, float (&RotationMatrix)[9]);
+bool GetMissileTargetStatus(cObject3D *TargetObject, const sVECTOR3D &Location, const float (&RotationMatrix)[9]);
 // Получение положения ближайшего врага, для мин
-cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, sVECTOR3D Location);
+cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, const sVECTOR3D &Location);
 // Setup shaders.
 bool SetupObject3DShaders();
 

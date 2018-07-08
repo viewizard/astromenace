@@ -299,7 +299,7 @@ cSpaceObject::~cSpaceObject()
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
-void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
+void cSpaceObject::SetLocation(const sVECTOR3D &NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
@@ -317,7 +317,7 @@ void cSpaceObject::SetLocation(sVECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
-void cSpaceObject::SetRotation(sVECTOR3D NewRotation)
+void cSpaceObject::SetRotation(const sVECTOR3D &NewRotation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);

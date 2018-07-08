@@ -49,7 +49,7 @@ extern std::weak_ptr<cGLSL> GLSLShaderType3;
 //-----------------------------------------------------------------------------
 // Установка положения 1 объекта модели
 //-----------------------------------------------------------------------------
-void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
+void cObject3D::SetObjectLocation(const sVECTOR3D &NewLocation, unsigned ObjectNum)
 {
 	// пересчет HitBB
 	if (!HitBB.empty()) {
@@ -164,7 +164,7 @@ void cObject3D::SetObjectLocation(sVECTOR3D NewLocation, int ObjectNum)
 //-----------------------------------------------------------------------------
 // Установка углов поворота 1 объекта модели
 //-----------------------------------------------------------------------------
-void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
+void cObject3D::SetObjectRotation(const sVECTOR3D &NewRotation, unsigned ObjectNum)
 {
 	// пересчет HitBB
 	if (!HitBB.empty()) {
@@ -297,7 +297,7 @@ void cObject3D::SetObjectRotation(sVECTOR3D NewRotation, int ObjectNum)
 //-----------------------------------------------------------------------------
 // Установка положения модели
 //-----------------------------------------------------------------------------
-void cObject3D::SetLocation(sVECTOR3D NewLocation)
+void cObject3D::SetLocation(const sVECTOR3D &NewLocation)
 {
 	PrevLocation = Location;
 	// новое положение объекта
@@ -307,7 +307,7 @@ void cObject3D::SetLocation(sVECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота модели
 //-----------------------------------------------------------------------------
-void cObject3D::SetRotation(sVECTOR3D NewRotation)
+void cObject3D::SetRotation(const sVECTOR3D &NewRotation)
 {
 	// Записываем данные в Rotation
 	OldRotationInv = sVECTOR3D(-Rotation.x, -Rotation.y, -Rotation.z);

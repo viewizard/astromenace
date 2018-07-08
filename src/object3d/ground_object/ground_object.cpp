@@ -184,7 +184,7 @@ cGroundObject::~cGroundObject()
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
-void cGroundObject::SetLocation(sVECTOR3D NewLocation)
+void cGroundObject::SetLocation(const sVECTOR3D &NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
@@ -200,7 +200,7 @@ void cGroundObject::SetLocation(sVECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
-void cGroundObject::SetRotation(sVECTOR3D NewRotation)
+void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);

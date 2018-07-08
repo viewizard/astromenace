@@ -273,7 +273,7 @@ cSpaceShip::~cSpaceShip()
 //-----------------------------------------------------------------------------
 // Установка положения объекта
 //-----------------------------------------------------------------------------
-void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
+void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
@@ -320,7 +320,7 @@ void cSpaceShip::SetLocation(sVECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка положения объекта, для аркадного режима
 //-----------------------------------------------------------------------------
-void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
+void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
@@ -366,7 +366,7 @@ void cSpaceShip::SetLocationArcadePlayer(sVECTOR3D NewLocation)
 //-----------------------------------------------------------------------------
 // Установка углов поворота объекта
 //-----------------------------------------------------------------------------
-void cSpaceShip::SetRotation(sVECTOR3D NewRotation)
+void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);

@@ -65,9 +65,9 @@ public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 	// Установка положения объекта
-	virtual void SetLocation(sVECTOR3D NewLocation) override;
+	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
 	// Установка углов поворота объекта
-	virtual void SetRotation(sVECTOR3D NewRotation) override;
+	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 
 	// скорость
 	float Speed{0.0f};

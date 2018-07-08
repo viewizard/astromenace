@@ -983,7 +983,7 @@ cProjectile::~cProjectile()
 //-----------------------------------------------------------------------------
 // Установка положения
 //-----------------------------------------------------------------------------
-void cProjectile::SetRotation(sVECTOR3D NewRotation)
+void cProjectile::SetRotation(const sVECTOR3D &NewRotation)
 {
 
 	// вызываем родительскую функцию
@@ -1013,7 +1013,7 @@ void cProjectile::SetRotation(sVECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Установка положения
 //-----------------------------------------------------------------------------
-void cProjectile::SetLocation(sVECTOR3D NewLocation)
+void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);

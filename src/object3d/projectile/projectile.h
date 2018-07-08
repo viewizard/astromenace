@@ -46,9 +46,9 @@ public:
 	// Обновление данных объектa
 	virtual bool	Update(float Time) override;
 	// Установка углов поворота
-	virtual void	SetRotation(sVECTOR3D NewRotation) override;
+	virtual void	SetRotation(const sVECTOR3D &NewRotation) override;
 	// Установка положения
-	virtual void	SetLocation(sVECTOR3D NewLocation) override;
+	virtual void	SetLocation(const sVECTOR3D &NewLocation) override;
 	// Создание нужного объекта
 	virtual void	Create(int ProjectileNum);
 

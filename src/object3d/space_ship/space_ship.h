@@ -47,10 +47,10 @@ public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 	// Установка положения объекта
-	virtual void SetLocation(sVECTOR3D NewLocation) override;
-	virtual void SetLocationArcadePlayer(sVECTOR3D NewLocation);
+	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
+	virtual void SetLocationArcadePlayer(const sVECTOR3D &NewLocation);
 	// Установка углов поворота объекта
-	virtual void SetRotation(sVECTOR3D NewRotation) override;
+	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 
 	// текущей вектор движения корабля
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};

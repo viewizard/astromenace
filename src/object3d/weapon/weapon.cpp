@@ -1170,7 +1170,7 @@ bool cWeapon::Update(float Time)
 //-----------------------------------------------------------------------------
 // Установка положения
 //-----------------------------------------------------------------------------
-void cWeapon::SetRotation(sVECTOR3D NewRotation)
+void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);
@@ -1239,7 +1239,7 @@ void cWeapon::SetRotation(sVECTOR3D NewRotation)
 //-----------------------------------------------------------------------------
 // Установка положения
 //-----------------------------------------------------------------------------
-void cWeapon::SetLocation(sVECTOR3D NewLocation)
+void cWeapon::SetLocation(const sVECTOR3D &NewLocation)
 {
 	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
