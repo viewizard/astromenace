@@ -527,7 +527,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	unsigned int EngineQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity;
 
 
-	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, this);
+	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, *this);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {

@@ -71,7 +71,7 @@ cWheeled::cWheeled(int WheeledNum)
 	MaxAcceler = 5.0f;
 	MaxSpeedRotate = 20.0f;
 
-	LoadObjectData(PresetWheeledData[WheeledNum - 1].Model3DFileName, this);
+	LoadObjectData(PresetWheeledData[WheeledNum - 1].Model3DFileName, *this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureFileName);

@@ -118,7 +118,7 @@ bool NeedCheckCollision(const cObject3D &Object3D)
 //-----------------------------------------------------------------------------
 // Загрузка в модель нужной геометрии
 //-----------------------------------------------------------------------------
-void LoadObjectData(const std::string &FileName, cObject3D *Object3D)
+void LoadObjectData(const std::string &FileName, cObject3D &Object3D)
 {
 	// получение геометрии модели
 	std::weak_ptr<sModel3D> Model = GetPreloadedModel3DAsset(FileName);
@@ -127,29 +127,29 @@ void LoadObjectData(const std::string &FileName, cObject3D *Object3D)
 		return;
 
 	// берем то, что нужно
-	Object3D->GlobalVertexArray = sharedModel->GlobalVertexArray;
-	Object3D->GlobalVertexArrayCount = sharedModel->GlobalVertexArrayCount;
-	Object3D->GlobalVBO = sharedModel->GlobalVBO;
-	Object3D->GlobalIndexArray = sharedModel->GlobalIndexArray;
-	Object3D->GlobalIndexArrayCount = sharedModel->GlobalIndexArrayCount;
-	Object3D->GlobalIBO = sharedModel->GlobalIBO;
-	Object3D->GlobalVAO = sharedModel->GlobalVAO;
-	Object3D->Model3DBlocks = sharedModel->Model3DBlocks;
+	Object3D.GlobalVertexArray = sharedModel->GlobalVertexArray;
+	Object3D.GlobalVertexArrayCount = sharedModel->GlobalVertexArrayCount;
+	Object3D.GlobalVBO = sharedModel->GlobalVBO;
+	Object3D.GlobalIndexArray = sharedModel->GlobalIndexArray;
+	Object3D.GlobalIndexArrayCount = sharedModel->GlobalIndexArrayCount;
+	Object3D.GlobalIBO = sharedModel->GlobalIBO;
+	Object3D.GlobalVAO = sharedModel->GlobalVAO;
+	Object3D.Model3DBlocks = sharedModel->Model3DBlocks;
 
 	// резервируем память для текстур
-	Object3D->Texture.resize(Object3D->Model3DBlocks.size(), 0);
-	Object3D->TextureIllum.resize(Object3D->Model3DBlocks.size(), 0);
-	Object3D->NormalMap.resize(Object3D->Model3DBlocks.size(), 0);
+	Object3D.Texture.resize(Object3D.Model3DBlocks.size(), 0);
+	Object3D.TextureIllum.resize(Object3D.Model3DBlocks.size(), 0);
+	Object3D.NormalMap.resize(Object3D.Model3DBlocks.size(), 0);
 
 	// metadata
-	Object3D->AABB = sharedModel->AABB;
-	Object3D->OBB = sharedModel->OBB;
-	Object3D->HitBB = sharedModel->HitBB;
-	Object3D->GeometryCenter = sharedModel->GeometryCenter;
-	Object3D->Radius = sharedModel->Radius;
-	Object3D->Width = sharedModel->Width;
-	Object3D->Length = sharedModel->Length;
-	Object3D->Height = sharedModel->Height;
+	Object3D.AABB = sharedModel->AABB;
+	Object3D.OBB = sharedModel->OBB;
+	Object3D.HitBB = sharedModel->HitBB;
+	Object3D.GeometryCenter = sharedModel->GeometryCenter;
+	Object3D.Radius = sharedModel->Radius;
+	Object3D.Width = sharedModel->Width;
+	Object3D.Length = sharedModel->Length;
+	Object3D.Height = sharedModel->Height;
 }
 
 //-----------------------------------------------------------------------------

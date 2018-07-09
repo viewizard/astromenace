@@ -529,7 +529,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum-1].Strength; // GameEnemyArmorPenalty for enemies only
 	WeaponQuantity = PresetEarthSpaceFighterData[SpaceShipNum-1].WeaponQuantity;
 	unsigned int EngineQuantity = PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
-	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum-1].Name, this);
+	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum-1].Name, *this);
 
 
 	// начальные установки для оружия

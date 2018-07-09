@@ -267,7 +267,7 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	unsigned int EngineQuantity = PresetAlienSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
 
 
-	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum-1].Name, this);
+	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum-1].Name, *this);
 
 	// всегда только эти текстуры и 1 объект
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {

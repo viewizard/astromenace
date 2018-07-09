@@ -56,19 +56,19 @@ cBasePart::cBasePart(int BasePartNum)
 	// перебираем и ставим нужные данные
 	switch (BasePartNum) {
 	case 11:
-		LoadObjectData("models/spacebase/1/1.vw3d", this);
+		LoadObjectData("models/spacebase/1/1.vw3d", *this);
 		goto case1next;
 	case 12:
-		LoadObjectData("models/spacebase/1/2.vw3d", this);
+		LoadObjectData("models/spacebase/1/2.vw3d", *this);
 		goto case1next;
 	case 13:
-		LoadObjectData("models/spacebase/1/3.vw3d", this);
+		LoadObjectData("models/spacebase/1/3.vw3d", *this);
 		goto case1next;
 	case 14:
-		LoadObjectData("models/spacebase/1/4.vw3d", this);
+		LoadObjectData("models/spacebase/1/4.vw3d", *this);
 		goto case1next;
 	case 15:
-		LoadObjectData("models/spacebase/1/5.vw3d", this);
+		LoadObjectData("models/spacebase/1/5.vw3d", *this);
 
 case1next:
 
@@ -119,19 +119,19 @@ case1next:
 		break;
 
 	case 21:
-		LoadObjectData("models/spacebase/2/1.vw3d", this);
+		LoadObjectData("models/spacebase/2/1.vw3d", *this);
 		goto case2next;
 	case 22:
-		LoadObjectData("models/spacebase/2/2.vw3d", this);
+		LoadObjectData("models/spacebase/2/2.vw3d", *this);
 		goto case2next;
 	case 23:
-		LoadObjectData("models/spacebase/2/3.vw3d", this);
+		LoadObjectData("models/spacebase/2/3.vw3d", *this);
 		goto case2next;
 	case 24:
-		LoadObjectData("models/spacebase/2/4.vw3d", this);
+		LoadObjectData("models/spacebase/2/4.vw3d", *this);
 		goto case2next;
 	case 25:
-		LoadObjectData("models/spacebase/2/5.vw3d", this);
+		LoadObjectData("models/spacebase/2/5.vw3d", *this);
 
 case2next:
 
@@ -146,7 +146,7 @@ case2next:
 
 	case 3:
 		// геометрия
-		LoadObjectData("models/spacebase/3/1.vw3d", this);
+		LoadObjectData("models/spacebase/3/1.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
 		TextureIllum[0] = 0;
 		Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
@@ -168,32 +168,32 @@ case2next:
 
 	case 4:
 		// геометрия
-		LoadObjectData("models/spacebase/4/1.vw3d", this);
+		LoadObjectData("models/spacebase/4/1.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
 		break;
 
 	case 5:
 		// геометрия
-		LoadObjectData("models/spacebase/5/1.vw3d", this);
+		LoadObjectData("models/spacebase/5/1.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
 		break;
 
 	case 61:
-		LoadObjectData("models/spacebase/6/1.vw3d", this);
+		LoadObjectData("models/spacebase/6/1.vw3d", *this);
 		goto case6next;
 	case 62:
-		LoadObjectData("models/spacebase/6/2.vw3d", this);
+		LoadObjectData("models/spacebase/6/2.vw3d", *this);
 		goto case6next;
 	case 63:
-		LoadObjectData("models/spacebase/6/3.vw3d", this);
+		LoadObjectData("models/spacebase/6/3.vw3d", *this);
 		goto case6next;
 	case 64:
-		LoadObjectData("models/spacebase/6/4.vw3d", this);
+		LoadObjectData("models/spacebase/6/4.vw3d", *this);
 		goto case6next;
 	case 65:
-		LoadObjectData("models/spacebase/6/5.vw3d", this);
+		LoadObjectData("models/spacebase/6/5.vw3d", *this);
 
 case6next:
 
@@ -206,25 +206,25 @@ case6next:
 
 	case 7:
 		// геометрия
-		LoadObjectData("models/spacebase/7/1.vw3d", this);
+		LoadObjectData("models/spacebase/7/1.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
 		TextureIllum[0] = 0;
 		break;
 
 	case 81:
-		LoadObjectData("models/spacebase/8/1.vw3d", this);
+		LoadObjectData("models/spacebase/8/1.vw3d", *this);
 		goto case8next;
 	case 82:
-		LoadObjectData("models/spacebase/8/2.vw3d", this);
+		LoadObjectData("models/spacebase/8/2.vw3d", *this);
 		goto case8next;
 	case 83:
-		LoadObjectData("models/spacebase/8/3.vw3d", this);
+		LoadObjectData("models/spacebase/8/3.vw3d", *this);
 		goto case8next;
 	case 84:
-		LoadObjectData("models/spacebase/8/4.vw3d", this);
+		LoadObjectData("models/spacebase/8/4.vw3d", *this);
 		goto case8next;
 	case 85:
-		LoadObjectData("models/spacebase/8/5.vw3d", this);
+		LoadObjectData("models/spacebase/8/5.vw3d", *this);
 
 case8next:
 

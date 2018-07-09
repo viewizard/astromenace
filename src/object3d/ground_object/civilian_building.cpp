@@ -71,7 +71,7 @@ cCivilianBuilding::cCivilianBuilding(int BuildingNum)
 	ShowStrength = false;
 	PromptDrawDist2 = 100.0f;
 
-	LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileName, this);
+	LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileName, *this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset("models/building/bld.vw2d");

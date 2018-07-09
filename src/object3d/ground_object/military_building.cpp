@@ -67,7 +67,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	ObjectType = eObjectType::PirateBuilding;
 	InternalType = MilitaryBuildingNum;
 
-	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Model3DFileName, this);
+	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Model3DFileName, *this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileName);

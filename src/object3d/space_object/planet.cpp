@@ -51,7 +51,7 @@ cPlanet::cPlanet(int PlanetNum)
 	case 1:
 		NeedCullFaces = false;
 		NeedAlphaTest = true;
-		LoadObjectData("models/planet/aplanet.vw3d", this);
+		LoadObjectData("models/planet/aplanet.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
 		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
@@ -68,7 +68,7 @@ cPlanet::cPlanet(int PlanetNum)
 	// полу-разрушенная планета
 	case 2:
 		PromptDrawDist2 = 100.0f; // только для этой планеты ставим такое !!!
-		LoadObjectData("models/planet/dplanet.vw3d", this);
+		LoadObjectData("models/planet/dplanet.vw3d", *this);
 		for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 			Texture[i] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 			TextureIllum[i] = 0;
@@ -78,7 +78,7 @@ cPlanet::cPlanet(int PlanetNum)
 	// планета с атмосферой
 	case 3:
 		NeedCullFaces = false;
-		LoadObjectData("models/planet/gplanet.vw3d", this);
+		LoadObjectData("models/planet/gplanet.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/m_class7.tga");
 		TextureIllum[0] = 0;
 		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/m_class7_nm.tga");
@@ -89,21 +89,21 @@ cPlanet::cPlanet(int PlanetNum)
 		break;
 	// "красная" планета
 	case 4:
-		LoadObjectData("models/planet/moon.vw3d", this);
+		LoadObjectData("models/planet/moon.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/q_class2.tga");
 		TextureIllum[0] = 0;
 		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/q_class2_nm.tga");
 		break;
 	// планета пришельцев, лава
 	case 5:
-		LoadObjectData("models/planet/planet5.vw3d", this);
+		LoadObjectData("models/planet/planet5.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/a_class4.tga");
 		TextureIllum[0] = 0;
 		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/a_class4_nm.tga");
 		break;
 	// планета пришельцев
 	case 6:
-		LoadObjectData("models/planet/planet6.vw3d", this);
+		LoadObjectData("models/planet/planet6.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 		TextureIllum[0] = 0;
 		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");

@@ -682,7 +682,7 @@ cWeapon::cWeapon(int WeaponNum)
 			SetWeaponFire(sharedFire, WeaponNum);
 		}
 
-		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, this);
+		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, *this);
 
 		for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 			Texture[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum-1].TextureName);
@@ -735,7 +735,7 @@ cWeapon::cWeapon(int WeaponNum)
 			TargetVertBlocksMaxAngle = 89.0f;
 			TargetVertBlocksMinAngle = 0.0f;
 
-			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this);
+			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, *this);
 			for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;
@@ -750,7 +750,7 @@ cWeapon::cWeapon(int WeaponNum)
 			TargetVertBlocksMaxAngle = 89.0f;
 			TargetVertBlocksMinAngle = 20.0f;
 
-			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, this);
+			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, *this);
 			for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
 				TextureIllum[i] = 0;

@@ -232,7 +232,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
 
 
-	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, this);
+	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, *this);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {

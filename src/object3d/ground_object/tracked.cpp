@@ -77,7 +77,7 @@ cTracked::cTracked(int TrackedNum)
 	// ставим без оптимизации, иначе не увидим гусениц
 	NeedCullFaces = false;
 
-	LoadObjectData(PresetTrackedData[TrackedNum - 1].Model3DFileName, this);
+	LoadObjectData(PresetTrackedData[TrackedNum - 1].Model3DFileName, *this);
 
 	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetTrackedData[TrackedNum - 1].TextureFileName);
