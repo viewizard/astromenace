@@ -300,7 +300,7 @@ bool cGroundObject::Update(float Time)
 		}
 		sVECTOR3D NeedAngle(TargetVertBlocksNeedAngle,TargetHorizBlocksNeedAngle,0);
 		if (GetTurretOnTargetOrientateion(ObjectStatus, Location + FirePos, Rotation,
-						  CurrentRotationMat, &NeedAngle, WeapNum)) {
+						  CurrentRotationMat, NeedAngle, WeapNum)) {
 			// наводим на цель
 			TargetHorizBlocksNeedAngle = NeedAngle.y;
 			TargetVertBlocksNeedAngle = NeedAngle.x;

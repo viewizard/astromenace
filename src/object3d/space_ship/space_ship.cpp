@@ -1235,7 +1235,7 @@ bool cSpaceShip::Update(float Time)
 		}
 
 		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-						 CurrentRotationMat, &NeedAngle, WeapNum);
+						 CurrentRotationMat, NeedAngle, WeapNum);
 
 		// всему оружию ставим нужную ориентацию
 		if (Weapon != nullptr) {
@@ -1298,7 +1298,7 @@ bool cSpaceShip::Update(float Time)
 		}
 
 		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-						 CurrentRotationMat, &NeedAngle,	WeapNum);
+						 CurrentRotationMat, NeedAngle, WeapNum);
 
 		// всему оружию ставим нужную ориентацию
 		if (BossWeapon != nullptr) {
@@ -1348,7 +1348,7 @@ bool cSpaceShip::Update(float Time)
 					NeedAngle.y += WeaponYAngle[i];
 
 					GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Rotation,
-								    Length, CurrentRotationMat, &NeedAngle, Width, true, true,
+								    Length, CurrentRotationMat, NeedAngle, Width, true, true,
 								    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 
 					sVECTOR3D NeedAngleTmp = NeedAngle;
@@ -1463,23 +1463,23 @@ bool cSpaceShip::Update(float Time)
 					switch (GameTargetingSystem) {
 					case 1:
 						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
-									    Length, RotationMat2, &NeedAngle, Width, false, true,
+									    Length, RotationMat2, NeedAngle, Width, false, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 2:
 						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
-									    Length, RotationMat2, &NeedAngle, Width, true, true,
+									    Length, RotationMat2, NeedAngle, Width, true, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 3:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->Rotation,
-									    Length,Weapon[i]->CurrentRotationMat, &NeedAngle, Weapon[i]->Width, false, true,
+									    Length,Weapon[i]->CurrentRotationMat, NeedAngle, Weapon[i]->Width, false, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 4:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation,
 									    sVECTOR3D(Weapon[i]->Rotation.x, 0 , Weapon[i]->Rotation.z) + sVECTOR3D(0,WeaponYAngle[i],0),
-									    Length,Weapon[i]->CurrentRotationMat, &NeedAngle, Width, false, true,
+									    Length,Weapon[i]->CurrentRotationMat, NeedAngle, Width, false, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					}

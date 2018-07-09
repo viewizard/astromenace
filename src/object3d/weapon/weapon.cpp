@@ -1048,7 +1048,7 @@ bool cWeapon::Update(float Time)
 			// находимся в начальном состоянии поворота ствола
 			sVECTOR3D NeedAngle(TargetVertBlocksNeedAngle,TargetHorizBlocksNeedAngle,0);
 			GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
-						      CurrentRotationMat, &NeedAngle, InternalType);
+						      CurrentRotationMat, NeedAngle, InternalType);
 
 			// наводим на цель
 			TargetHorizBlocksNeedAngle = NeedAngle.y;

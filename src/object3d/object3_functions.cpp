@@ -160,7 +160,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 				 const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
 				 float MinDistance, // минимальное расстояние, с которого начинаем прицеливание
 				 const float (&RotationMatrix)[9], // матрица вращения объекта
-				 sVECTOR3D *NeedAngle,// нужные углы, чтобы получить нужное направление
+				 sVECTOR3D &NeedAngle,// нужные углы, чтобы получить нужное направление
 				 float Width, // ширина объекта
 				 bool NeedCenterOrientation, // нужен доворот на центр
 				 bool NeedByWeaponOrientation, // нужно делать доворот с учетом положения орудия
@@ -563,7 +563,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 
 	// находим направление и углы нацеливания на цель, если нужно
 	if (TargetLocked)
-		(*NeedAngle) = TargetAngle;
+		NeedAngle = TargetAngle;
 }
 
 //-----------------------------------------------------------------------------
@@ -574,7 +574,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 				      const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				      const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
 				      const float (&RotationMatrix)[9], // матрица вращения объекта
-				      sVECTOR3D *NeedAngle, // нужные углы, чтобы получить нужное направление
+				      sVECTOR3D &NeedAngle, // нужные углы, чтобы получить нужное направление
 				      int WeaponType) // номер оружия
 {
 	// получаем точки для создания плоскости
@@ -669,10 +669,10 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 			float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
 			if ((ttt >= -1.0f) && (ttt <= 1.0f))
-				(*NeedAngle).x = CurrentObjectRotation.x - asinf(ttt) * 57.32f;
+				NeedAngle.x = CurrentObjectRotation.x - asinf(ttt) * 57.32f;
 		}
 
-		(*NeedAngle).z = CurrentObjectRotation.z;
+		NeedAngle.z = CurrentObjectRotation.z;
 
 		// нужно найти точку на плоскости, образованную перпендикуляром с точки TargetLocation
 		// иначе не правильно будем ориентировать
@@ -700,7 +700,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f))
-						(*NeedAngle).y = 180.0f - asinf(ttt) * 57.32f;
+						NeedAngle.y = 180.0f - asinf(ttt) * 57.32f;
 				}
 			} else {
 				// находим угол поворота
@@ -709,9 +709,9 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f)) {
-						(*NeedAngle).y = asinf(ttt) * 57.32f;
-						if ((*NeedAngle).y < 0.0f)
-							(*NeedAngle).y += 360.0f;
+						NeedAngle.y = asinf(ttt) * 57.32f;
+						if (NeedAngle.y < 0.0f)
+							NeedAngle.y += 360.0f;
 					}
 				}
 			}
@@ -726,7 +726,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 				   const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				   const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
 				   const float (&RotationMatrix)[9], // матрица вращения объекта
-				   sVECTOR3D *NeedAngle, // нужные углы, чтобы получить нужное направление
+				   sVECTOR3D &NeedAngle, // нужные углы, чтобы получить нужное направление
 				   int WeaponType) // номер оружия
 {
 	// получаем точки для создания плоскости
@@ -830,10 +830,10 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 			float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
 			if ((ttt >= -1.0f) && (ttt <= 1.0f))
-				(*NeedAngle).x = CurrentObjectRotation.x + asinf(ttt) * 57.32f;
+				NeedAngle.x = CurrentObjectRotation.x + asinf(ttt) * 57.32f;
 		}
 
-		(*NeedAngle).z = CurrentObjectRotation.z;
+		NeedAngle.z = CurrentObjectRotation.z;
 
 		// нужно найти точку на плоскости, образованную перпендикуляром с точки TargetLocation
 		// иначе не правильно будем ориентировать
@@ -861,7 +861,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f))
-						(*NeedAngle).y = 180.0f - asinf(ttt) * 57.32f;
+						NeedAngle.y = 180.0f - asinf(ttt) * 57.32f;
 				}
 			} else {
 				// находим угол поворота
@@ -870,9 +870,9 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f)) {
-						(*NeedAngle).y = asinf(ttt) * 57.32f;
-						if ((*NeedAngle).y < 0.0f)
-							(*NeedAngle).y += 360.0f;
+						NeedAngle.y = asinf(ttt) * 57.32f;
+						if (NeedAngle.y < 0.0f)
+							NeedAngle.y += 360.0f;
 					}
 				}
 			}
@@ -890,7 +890,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 					  const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 					  const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
 					  const float (&RotationMatrix)[9], // матрица вращения объекта
-					  sVECTOR3D *NeedAngle, // нужные углы, чтобы получить нужное направление
+					  sVECTOR3D &NeedAngle, // нужные углы, чтобы получить нужное направление
 					  float MaxDistance) // максимальная дистанция, на которую может лететь снаряд
 {
 	// получаем точки для создания плоскости
@@ -1205,7 +1205,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 
 	// находим направление и углы нацеливания на цель, если нужно
 	if (TargetLocked)
-		(*NeedAngle) = TargetAngle;
+		NeedAngle = TargetAngle;
 
 	return Target;
 }
@@ -1217,8 +1217,11 @@ bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, // положен
 				    const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
 				    const float (&RotationMatrix)[9], // матрица вращения объекта
 				    cObject3D *TargetObject, // объект на который прицеливаемся
-				    sVECTOR3D *NeedAngle) // нужные углы, чтобы получить нужное направление
+				    sVECTOR3D &NeedAngle) // нужные углы, чтобы получить нужное направление
 {
+	if (!TargetObject)
+		return false;
+
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
 	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
@@ -1237,7 +1240,7 @@ bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, // положен
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
 	sVECTOR3D TargetLocation = Location;
-	*NeedAngle = CurrentObjectRotation;
+	NeedAngle = CurrentObjectRotation;
 
 	// проверяем, спереди или сзади стоит противник
 	float tmp1 = A2 * TargetObject->Location.x + B2 * TargetObject->Location.y + C2 * TargetObject->Location.z + D2;
@@ -1257,19 +1260,19 @@ bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, // положен
 		// поправки к существующим углам поворота оружия
 		float sss1 = vw_sqrtf(m * m + n * n + p * p);
 		float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-		(*NeedAngle).x = CurrentObjectRotation.x;
+		NeedAngle.x = CurrentObjectRotation.x;
 		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 			float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 			if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-				(*NeedAngle).x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+				NeedAngle.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
 		}
 
 		float sss4 = vw_sqrtf(A * A + B * B + C * C);
-		(*NeedAngle).y = CurrentObjectRotation.y;
+		NeedAngle.y = CurrentObjectRotation.y;
 		if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 			float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 			if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-				(*NeedAngle).y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+				NeedAngle.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
 		}
 
 		return true;
@@ -1311,6 +1314,9 @@ bool GetMissileTargetStatus(cObject3D *TargetObject,
 			    const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 			    const float (&RotationMatrix)[9]) // матрица вращения объекта
 {
+	if (!TargetObject)
+		return false;
+
 	cProjectile *tmpProjectile = StartProjectile;
 	while (tmpProjectile) {
 		cProjectile *tmpProjectile2 = tmpProjectile->Next;

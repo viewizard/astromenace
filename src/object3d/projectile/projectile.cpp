@@ -1440,17 +1440,17 @@ missile:
 
 			// устанавливаем в Target на что наведен этот снаряд, если еще ничего не выбрано
 			if (Target == nullptr) {
-				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
+				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, EffectiveRange);
 			} else { // если уже что-то выбрали
 				// 1. надо проверить, есть ли еще вообще этот объект и где по отношению ракеты он находится, если он есть и впереди - летим к нему
 				if (GetMissileTargetStatus(Target, Location, CurrentRotationMat)) {
 					// получаем углы, возвращает false - значит цель уже проскочили, и надо навестись на новую
-					if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat, Target, &NeedAngle))
-						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
+					if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat, Target, NeedAngle))
+						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, EffectiveRange);
 				}
 				// 2. если объекта нет (уже взорвали) или мы его уже проскочили, надо наводить на другой
 				else {
-					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, EffectiveRange);
+					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, EffectiveRange);
 				}
 			}
 
@@ -1562,7 +1562,7 @@ missile:
 		{
 			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, 1000000);
 
 
 			// учитываем скорость поворота по вертикали
@@ -1636,7 +1636,7 @@ missile:
 		{
 			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, 1000000);
 
 
 			// учитываем скорость поворота по вертикали
@@ -1737,7 +1737,7 @@ missile:
 		{
 			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, &NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, 1000000);
 
 
 			// учитываем скорость поворота по вертикали

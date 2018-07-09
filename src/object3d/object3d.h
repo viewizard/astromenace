@@ -223,23 +223,23 @@ void LoadObjectData(const std::string &FileName, cObject3D &Object3D);
 void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 				 const sVECTOR3D &CurrentObjectRotation,
 				 float MinDistance, const float (&RotationMatrix)[9],
-				 sVECTOR3D *NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
+				 sVECTOR3D &NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
 				 bool NeedByWeaponOrientation, const sVECTOR3D &WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
 void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 				      const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-				      sVECTOR3D *NeedAngle, int WeaponType);
+				      sVECTOR3D &NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
 bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 				   const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-				   sVECTOR3D *NeedAngle, int WeaponType);
+				   sVECTOR3D &NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
 cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 					  const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-					  sVECTOR3D *NeedAngle, float MaxDistance);
+					  sVECTOR3D &NeedAngle, float MaxDistance);
 bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, const sVECTOR3D &CurrentObjectRotation,
 				    const float (&RotationMatrix)[9],
-				    cObject3D *TargetObject, sVECTOR3D *NeedAngle);
+				    cObject3D *TargetObject, sVECTOR3D &NeedAngle);
 bool GetMissileTargetStatus(cObject3D *TargetObject, const sVECTOR3D &Location, const float (&RotationMatrix)[9]);
 // Получение положения ближайшего врага, для мин
 cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, const sVECTOR3D &Location);
