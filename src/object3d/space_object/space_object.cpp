@@ -423,11 +423,11 @@ bool cSpaceObject::Update(float Time)
 			switch (InternalType) {
 			// планета с астероидным кольцом
 			case 1:
-				Model3DBlocks[0].Rotation.y += 0.5f * TimeDelta;
+				Chunks[0].Rotation.y += 0.5f * TimeDelta;
 				// кольца
-				Model3DBlocks[1].Rotation.y += 0.7f * TimeDelta;
-				Model3DBlocks[2].Rotation.y += 0.8f * TimeDelta;
-				Model3DBlocks[3].Rotation.y += 0.9f * TimeDelta;
+				Chunks[1].Rotation.y += 0.7f * TimeDelta;
+				Chunks[2].Rotation.y += 0.8f * TimeDelta;
+				Chunks[3].Rotation.y += 0.9f * TimeDelta;
 				break;
 			// полу разрушенная планета
 			case 2:
@@ -437,33 +437,33 @@ bool cSpaceObject::Update(float Time)
 				break;
 			// планета с атмосферой
 			case 3:
-				Model3DBlocks[0].Rotation.y += 0.5f * TimeDelta;
+				Chunks[0].Rotation.y += 0.5f * TimeDelta;
 				// атмосфера
-				Model3DBlocks[1].Rotation.y -= 0.7 * TimeDelta;
+				Chunks[1].Rotation.y -= 0.7 * TimeDelta;
 				break;
 			// луна
 			case 4:
-				Model3DBlocks[0].Rotation.y += TimeDelta;
+				Chunks[0].Rotation.y += TimeDelta;
 				break;
 			// планета пришельцев, с подсветкой
 			case 5:
-				Model3DBlocks[0].Rotation.y += 0.5f * TimeDelta;
+				Chunks[0].Rotation.y += 0.5f * TimeDelta;
 				break;
 			// планета пришельцев
 			case 6:
-				Model3DBlocks[0].Rotation.y += 0.5f * TimeDelta;
+				Chunks[0].Rotation.y += 0.5f * TimeDelta;
 				break;
 			}
 
-			for (auto &tmpModel3DBlock : Model3DBlocks) {
-				if (tmpModel3DBlock.Rotation.x >= 360.0f)
-					tmpModel3DBlock.Rotation.x -= 360.0f;
-				if (tmpModel3DBlock.Rotation.x <= -360.0f)
-					tmpModel3DBlock.Rotation.x += 360.0f;
-				if (tmpModel3DBlock.Rotation.y >= 360.0f)
-					tmpModel3DBlock.Rotation.y -= 360.0f;
-				if (tmpModel3DBlock.Rotation.y <= -360.0f)
-					tmpModel3DBlock.Rotation.y += 360.0f;
+			for (auto &tmpChunk : Chunks) {
+				if (tmpChunk.Rotation.x >= 360.0f)
+					tmpChunk.Rotation.x -= 360.0f;
+				if (tmpChunk.Rotation.x <= -360.0f)
+					tmpChunk.Rotation.x += 360.0f;
+				if (tmpChunk.Rotation.y >= 360.0f)
+					tmpChunk.Rotation.y -= 360.0f;
+				if (tmpChunk.Rotation.y <= -360.0f)
+					tmpChunk.Rotation.y += 360.0f;
 			}
 		}
 	} else {

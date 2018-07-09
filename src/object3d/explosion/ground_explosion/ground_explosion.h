@@ -42,7 +42,7 @@ class cGroundExplosion : public cExplosion
 {
 public:
 	explicit cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
-				  int ObjectPieceNum, bool NeedExplosionSFX = true);
+				  int ObjectChunkNum, bool NeedExplosionSFX = true);
 };
 
 } // astromenace namespace

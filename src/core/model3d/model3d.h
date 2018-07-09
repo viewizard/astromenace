@@ -42,7 +42,7 @@ struct sOBB {
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
 };
 
-// Hit Bounding Box, coordinates are related to model block's center
+// Hit Bounding Box, coordinates are related to model chunk's center
 struct sHitBB {
 	bounding_box Box{};
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
@@ -55,8 +55,8 @@ enum class eModel3DDrawType {
 	Blend	// with blend (for planet's sky)
 };
 
-struct sModel3DBlock {
-	~sModel3DBlock();
+struct sChunk3D {
+	~sChunk3D();
 
 	// GLSL-related
 	int ShaderType{1};
@@ -79,7 +79,7 @@ struct sModel3DBlock {
 	// indexes at all, initial vertex in global/local vertex array/vertexbo
 	unsigned int RangeStart{0};
 
-	// if vbo/ibo/vao was built personally for this block - release this resources
+	// if vbo/ibo/vao was built personally for this chunk - release this resources
 	bool NeedReleaseOpenGLBuffers{false};
 
 	// vertex quantity, that should be rendered
@@ -105,8 +105,8 @@ struct sModel3DBlock {
 struct sModel3D {
 	virtual ~sModel3D() = default;
 
-	// attached blocks
-	std::vector<sModel3DBlock> Model3DBlocks{};
+	// attached chunks
+	std::vector<sChunk3D> Chunks{};
 
 	// vertex-related
 	std::shared_ptr<float> GlobalVertexArray{}; // float[], make sure, that custom deleter are used
@@ -123,7 +123,7 @@ struct sModel3D {
 	bounding_box AABB{};
 	// Oriented Bounding Box, coordinates are related to model's center
 	sOBB OBB{};
-	// Hit Bounding Box, same as OBB, but for each model block's in the 3D model
+	// Hit Bounding Box, same as OBB, but for each model chunk's in the 3D model
 	std::vector<sHitBB> HitBB{};
 	// geometry center of all vertices in the model, related to model's location
 	sVECTOR3D GeometryCenter{0.0f, 0.0f, 0.0f};

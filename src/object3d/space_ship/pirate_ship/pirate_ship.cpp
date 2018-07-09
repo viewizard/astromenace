@@ -235,7 +235,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, *this);
 
 	// всегда только эти текстуры
-	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[PirateShipNum - 1].TextureName);
 		if (!PresetPirateShipData[PirateShipNum - 1].NormalMapName.empty() && GameConfig().UseGLSL120)
 			NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[PirateShipNum - 1].NormalMapName);

@@ -53,14 +53,14 @@ enum class eGroundCycle {
 	DeleteObjectAndBreak
 };
 
-struct sGroundObjectWeapon {
+struct sGroundWeapon {
 	bool SetFire{false};
 	cWeapon *Weapon{nullptr};
 	sVECTOR3D Location{};
 	sVECTOR3D Bound{};
 
-	sGroundObjectWeapon() = default;
-	sGroundObjectWeapon(cWeapon *_Weapon, const sVECTOR3D &_Location) :
+	sGroundWeapon() = default;
+	sGroundWeapon(cWeapon *_Weapon, const sVECTOR3D &_Location) :
 		Weapon{_Weapon},
 		Location{_Location}
 	{}
@@ -76,7 +76,7 @@ struct sWheelDeviation {
 	sVECTOR3D Direction{};
 	float Need{0.0f};
 	float Current{0.0f};
-	unsigned Object{0};
+	unsigned ChunkNum{0};
 };
 
 class cGroundObject : public cObject3D {
@@ -97,16 +97,16 @@ public:
 	float WheelRotarySpeed{0.0f};
 	float SpeedToWheelRotarySpeedFactor{0.0f};
 
-	// wheel objects (for both, wheeled and tracked)
-	std::vector<unsigned> WheelObjects{};
+	// wheel chunks (for both, wheeled and tracked)
+	std::vector<unsigned> WheelChunkNums{};
 	// small wheel deviation (for both, wheeled and tracked)
 	std::vector<sWheelDeviation> WheelDeviation{};
-	// steerable wheel objects (for wheeled only)
-	std::vector<unsigned> SteerableWheelObjects{};
+	// steerable wheel chunks (for wheeled only)
+	std::vector<unsigned> SteerableWheelChunkNums{};
 	float MaxSteerableWheelAngle{20.0f};
 
 	// если нужно, номер объекта с траком для тайловой анимации
-	int TrackObjectNum{-1};
+	int TrackChunkNum{-1};
 	int TrackRotationDirection{1};// направление вращения траков
 
 	// нужно повернуть (пересчитать мэш) при следующем проходе
@@ -131,7 +131,7 @@ public:
 	// нужное ускорение
 	float NeedAcceler{1.0f};
 
-	std::vector<sGroundObjectWeapon> Weapon{};
+	std::vector<sGroundWeapon> Weapon{};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
 	int WeaponFireType{2};
 	int WeaponGroupCurrentFireNum{-1};
@@ -148,17 +148,17 @@ public:
 	bool DoNotCalculateRotation{false};
 
 	// horizontal targeting related (turret can rotate at 360 deg)
-	std::vector<unsigned> TargetHorizBlocks{};
-	float TargetHorizBlocksCurrentAngle{0.0f};
-	float TargetHorizBlocksNeedAngle{0.0f};
+	std::vector<unsigned> TargetHorizChunkNums{};
+	float TargetHorizChunksCurrentAngle{0.0f};
+	float TargetHorizChunksNeedAngle{0.0f};
 	// vertical targeting related
-	std::vector<unsigned> TargetVertBlocks{};
-	float TargetVertBlocksMaxAngle{80.0f};
-	float TargetVertBlocksMinAngle{0.0f};
-	float TargetVertBlocksCurrentAngle{0.0f};
-	float TargetVertBlocksNeedAngle{0.0f};
-	// barrel blocks (we may need rotate barrels)
-	std::vector<unsigned> BarrelBlocks{};
+	std::vector<unsigned> TargetVertChunkNums{};
+	float TargetVertChunksMaxAngle{80.0f};
+	float TargetVertChunksMinAngle{0.0f};
+	float TargetVertChunksCurrentAngle{0.0f};
+	float TargetVertChunksNeedAngle{0.0f};
+	// barrel chunks (we may need rotate barrels)
+	std::vector<unsigned> BarrelChunkNums{};
 };
 
 class cCivilianBuilding final : public cGroundObject {

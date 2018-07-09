@@ -73,7 +73,7 @@ cWheeled::cWheeled(int WheeledNum)
 
 	LoadObjectData(PresetWheeledData[WheeledNum - 1].Model3DFileName, *this);
 
-	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureFileName);
 	}
 	ResistanceHull = 1.0f;
@@ -92,19 +92,19 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[3](CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
 		WeaponFireType = 3;
 
-		WheelObjects.resize(4);
-		WheelObjects[0] = 0;
-		WheelObjects[1] = 2;
-		WheelObjects[2] = 3;
-		WheelObjects[3] = 4;
+		WheelChunkNums.resize(4);
+		WheelChunkNums[0] = 0;
+		WheelChunkNums[1] = 2;
+		WheelChunkNums[2] = 3;
+		WheelChunkNums[3] = 4;
 
-		SteerableWheelObjects.resize(2);
-		SteerableWheelObjects[0] = 3;
-		SteerableWheelObjects[1] = 4;
+		SteerableWheelChunkNums.resize(2);
+		SteerableWheelChunkNums[0] = 3;
+		SteerableWheelChunkNums[1] = 4;
 		MaxSteerableWheelAngle = 30.0f;
 
-		TargetVertBlocks.emplace_back(5);
-		TargetVertBlocksMaxAngle = 30.0f;
+		TargetVertChunkNums.emplace_back(5);
+		TargetVertChunksMaxAngle = 30.0f;
 		break;
 
 	case 2:
@@ -114,15 +114,15 @@ cWheeled::cWheeled(int WheeledNum)
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
-		WheelObjects.resize(4);
-		WheelObjects[0] = 1;
-		WheelObjects[1] = 2;
-		WheelObjects[2] = 3;
-		WheelObjects[3] = 4;
+		WheelChunkNums.resize(4);
+		WheelChunkNums[0] = 1;
+		WheelChunkNums[1] = 2;
+		WheelChunkNums[2] = 3;
+		WheelChunkNums[3] = 4;
 
-		SteerableWheelObjects.resize(2);
-		SteerableWheelObjects[0] = 1;
-		SteerableWheelObjects[1] = 4;
+		SteerableWheelChunkNums.resize(2);
+		SteerableWheelChunkNums[0] = 1;
+		SteerableWheelChunkNums[1] = 4;
 		MaxSteerableWheelAngle = 20.0f;
 		break;
 
@@ -132,75 +132,75 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
 		WeaponFireType = 2;
 
-		WheelObjects.resize(4);
-		WheelObjects[0] = 0;
-		WheelObjects[1] = 1;
-		WheelObjects[2] = 2;
-		WheelObjects[3] = 5;
+		WheelChunkNums.resize(4);
+		WheelChunkNums[0] = 0;
+		WheelChunkNums[1] = 1;
+		WheelChunkNums[2] = 2;
+		WheelChunkNums[3] = 5;
 
-		SteerableWheelObjects.resize(2);
-		SteerableWheelObjects[0] = 0;
-		SteerableWheelObjects[1] = 1;
+		SteerableWheelChunkNums.resize(2);
+		SteerableWheelChunkNums[0] = 0;
+		SteerableWheelChunkNums[1] = 1;
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetHorizBlocks.resize(2);
-		TargetHorizBlocks[0] = 3;
-		TargetHorizBlocks[1] = 6;
+		TargetHorizChunkNums.resize(2);
+		TargetHorizChunkNums[0] = 3;
+		TargetHorizChunkNums[1] = 6;
 
-		TargetVertBlocks.emplace_back(6);
-		TargetVertBlocksMaxAngle = 60.0f;
+		TargetVertChunkNums.emplace_back(6);
+		TargetVertChunksMaxAngle = 60.0f;
 		break;
 
 	case 4:
 		Weapon.emplace_back(CreateWeapon(207), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
-		WheelObjects.resize(4);
-		WheelObjects[0] = 0;
-		WheelObjects[1] = 1;
-		WheelObjects[2] = 3;
-		WheelObjects[3] = 4;
+		WheelChunkNums.resize(4);
+		WheelChunkNums[0] = 0;
+		WheelChunkNums[1] = 1;
+		WheelChunkNums[2] = 3;
+		WheelChunkNums[3] = 4;
 
-		SteerableWheelObjects.resize(2);
-		SteerableWheelObjects[0] = 0;
-		SteerableWheelObjects[1] = 3;
+		SteerableWheelChunkNums.resize(2);
+		SteerableWheelChunkNums[0] = 0;
+		SteerableWheelChunkNums[1] = 3;
 		MaxSteerableWheelAngle = 20.0f;
 		break;
 
 	case 5:
 		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
-		WheelObjects.resize(4);
-		WheelObjects[0] = 1;
-		WheelObjects[1] = 2;
-		WheelObjects[2] = 3;
-		WheelObjects[3] = 4;
+		WheelChunkNums.resize(4);
+		WheelChunkNums[0] = 1;
+		WheelChunkNums[1] = 2;
+		WheelChunkNums[2] = 3;
+		WheelChunkNums[3] = 4;
 
-		SteerableWheelObjects.resize(2);
-		SteerableWheelObjects[0] = 1;
-		SteerableWheelObjects[1] = 2;
+		SteerableWheelChunkNums.resize(2);
+		SteerableWheelChunkNums[0] = 1;
+		SteerableWheelChunkNums[1] = 2;
 		MaxSteerableWheelAngle = 30.0f;
 		break;
 
 	case 6:
 		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.0f, -3.0f));
 
-		WheelObjects.resize(4);
-		WheelObjects[0] = 1;
-		WheelObjects[1] = 2;
-		WheelObjects[2] = 3;
-		WheelObjects[3] = 4;
+		WheelChunkNums.resize(4);
+		WheelChunkNums[0] = 1;
+		WheelChunkNums[1] = 2;
+		WheelChunkNums[2] = 3;
+		WheelChunkNums[3] = 4;
 
-		SteerableWheelObjects.resize(2);
-		SteerableWheelObjects[0] = 1;
-		SteerableWheelObjects[1] = 4;
+		SteerableWheelChunkNums.resize(2);
+		SteerableWheelChunkNums[0] = 1;
+		SteerableWheelChunkNums[1] = 4;
 		MaxSteerableWheelAngle = 30.0f;
 
-		TargetHorizBlocks.resize(2);
-		TargetHorizBlocks[0] = 5;
-		TargetHorizBlocks[1] = 6;
+		TargetHorizChunkNums.resize(2);
+		TargetHorizChunkNums[0] = 5;
+		TargetHorizChunkNums[1] = 6;
 
-		TargetVertBlocks.emplace_back(6);
-		TargetVertBlocksMaxAngle = 40.0f;
+		TargetVertChunkNums.emplace_back(6);
+		TargetVertChunksMaxAngle = 40.0f;
 		break;
 
 	case 7:
@@ -209,23 +209,23 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
 		WeaponFireType = 2;
 
-		WheelObjects.resize(4);
-		WheelObjects[0] = 1;
-		WheelObjects[1] = 2;
-		WheelObjects[2] = 3;
-		WheelObjects[3] = 4;
+		WheelChunkNums.resize(4);
+		WheelChunkNums[0] = 1;
+		WheelChunkNums[1] = 2;
+		WheelChunkNums[2] = 3;
+		WheelChunkNums[3] = 4;
 
-		SteerableWheelObjects.resize(2);
-		SteerableWheelObjects[0] = 1;
-		SteerableWheelObjects[1] = 4;
+		SteerableWheelChunkNums.resize(2);
+		SteerableWheelChunkNums[0] = 1;
+		SteerableWheelChunkNums[1] = 4;
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetHorizBlocks.resize(2);
-		TargetHorizBlocks[0] = 5;
-		TargetHorizBlocks[1] = 6;
+		TargetHorizChunkNums.resize(2);
+		TargetHorizChunkNums[0] = 5;
+		TargetHorizChunkNums[1] = 6;
 
-		TargetVertBlocks.emplace_back(6);
-		TargetVertBlocksMaxAngle = 40.0f;
+		TargetVertChunkNums.emplace_back(6);
+		TargetVertChunksMaxAngle = 40.0f;
 		break;
 
 	case 8:
@@ -234,49 +234,49 @@ cWheeled::cWheeled(int WheeledNum)
 		Weapon[1](CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
 		WeaponFireType = 3;
 
-		WheelObjects.resize(8);
-		WheelObjects[0] = 1;
-		WheelObjects[1] = 3;
-		WheelObjects[2] = 4;
-		WheelObjects[3] = 5;
-		WheelObjects[4] = 6;
-		WheelObjects[5] = 7;
-		WheelObjects[6] = 8;
-		WheelObjects[7] = 9;
+		WheelChunkNums.resize(8);
+		WheelChunkNums[0] = 1;
+		WheelChunkNums[1] = 3;
+		WheelChunkNums[2] = 4;
+		WheelChunkNums[3] = 5;
+		WheelChunkNums[4] = 6;
+		WheelChunkNums[5] = 7;
+		WheelChunkNums[6] = 8;
+		WheelChunkNums[7] = 9;
 
-		SteerableWheelObjects.resize(4);
-		SteerableWheelObjects[0] = 1;
-		SteerableWheelObjects[1] = 3;
-		SteerableWheelObjects[2] = 6;
-		SteerableWheelObjects[3] = 7;
+		SteerableWheelChunkNums.resize(4);
+		SteerableWheelChunkNums[0] = 1;
+		SteerableWheelChunkNums[1] = 3;
+		SteerableWheelChunkNums[2] = 6;
+		SteerableWheelChunkNums[3] = 7;
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetVertBlocks.emplace_back(2);
-		TargetVertBlocksMaxAngle = 90.0f;
+		TargetVertChunkNums.emplace_back(2);
+		TargetVertChunksMaxAngle = 90.0f;
 		break;
 	}
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
-	for (unsigned i = 0; i < WheelObjects.size(); i++) {
-		Model3DBlocks[WheelObjects[i]].Rotation.x = vw_fRandNum(360.0f);
+	for (unsigned i = 0; i < WheelChunkNums.size(); i++) {
+		Chunks[WheelChunkNums[i]].Rotation.x = vw_fRandNum(360.0f);
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (!TargetHorizBlocks.empty())
-		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
+	if (!TargetHorizChunkNums.empty())
+		BaseBound = Chunks[TargetHorizChunkNums[0]].Location;
 
-	if (!TargetVertBlocks.empty()) {
-		if (!TargetHorizBlocks.empty())
-			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
+	if (!TargetVertChunkNums.empty()) {
+		if (!TargetHorizChunkNums.empty())
+			MiddleBound = Chunks[TargetVertChunkNums[0]].Location - Chunks[TargetHorizChunkNums[0]].Location;
 		else
-			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
+			MiddleBound = Chunks[TargetVertChunkNums[0]].Location;
 	}
 
 	for (auto &tmpWeapon : Weapon) {
-		if (!TargetVertBlocks.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
-		else if (!TargetHorizBlocks.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
+		if (!TargetVertChunkNums.empty())
+			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetVertChunkNums[0]].Location;
+		else if (!TargetHorizChunkNums.empty())
+			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetHorizChunkNums[0]].Location;
 		else
 			tmpWeapon.Bound = tmpWeapon.Location;
 	}

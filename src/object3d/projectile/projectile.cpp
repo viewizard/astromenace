@@ -1504,9 +1504,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		Model3DBlocks[0].Rotation.y += 90.0f * TimeDelta;
-		while (Model3DBlocks[0].Rotation.y > 360.0f) {
-			Model3DBlocks[0].Rotation.y -= 360.0f;
+		Chunks[0].Rotation.y += 90.0f * TimeDelta;
+		while (Chunks[0].Rotation.y > 360.0f) {
+			Chunks[0].Rotation.y -= 360.0f;
 		}
 		// wip, disabled for now
 	break;
@@ -1550,9 +1550,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		Model3DBlocks[0].Rotation.y += 90.0f * TimeDelta;
-		while (Model3DBlocks[0].Rotation.y > 360.0f) {
-			Model3DBlocks[0].Rotation.y -= 360.0f;
+		Chunks[0].Rotation.y += 90.0f * TimeDelta;
+		while (Chunks[0].Rotation.y > 360.0f) {
+			Chunks[0].Rotation.y -= 360.0f;
 		}
 		// wip, disabled for now
 	break;
@@ -1627,9 +1627,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		Model3DBlocks[0].Rotation.y += 120.0f * TimeDelta;
-		while (Model3DBlocks[0].Rotation.y > 360.0f) {
-			Model3DBlocks[0].Rotation.y -= 360.0f;
+		Chunks[0].Rotation.y += 120.0f * TimeDelta;
+		while (Chunks[0].Rotation.y > 360.0f) {
+			Chunks[0].Rotation.y -= 360.0f;
 		}
 
 		RotationSpeed = 180.0f;
@@ -1728,9 +1728,9 @@ missile:
 				TextureIllum[0] = 0;
 			MineIData = 0.0f;
 		}
-		Model3DBlocks[0].Rotation.y += 90.0f * TimeDelta;
-		while (Model3DBlocks[0].Rotation.y > 360.0f) {
-			Model3DBlocks[0].Rotation.y -= 360.0f;
+		Chunks[0].Rotation.y += 90.0f * TimeDelta;
+		while (Chunks[0].Rotation.y > 360.0f) {
+			Chunks[0].Rotation.y -= 360.0f;
 		}
 
 		RotationSpeed = 180.0f;

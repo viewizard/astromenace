@@ -69,7 +69,7 @@ cPlanet::cPlanet(int PlanetNum)
 	case 2:
 		PromptDrawDist2 = 100.0f; // только для этой планеты ставим такое !!!
 		LoadObjectData("models/planet/dplanet.vw3d", *this);
-		for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
+		for (unsigned int i = 0; i < Chunks.size(); i++) {
 			Texture[i] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
 			TextureIllum[i] = 0;
 			NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
@@ -85,7 +85,7 @@ cPlanet::cPlanet(int PlanetNum)
 
 		Texture[1] = GetPreloadedTextureAsset("models/planet/clouds.tga");
 		TextureIllum[1] = 0;
-		Model3DBlocks[1].DrawType = eModel3DDrawType::Blend; // рисуем прозрачным
+		Chunks[1].DrawType = eModel3DDrawType::Blend; // рисуем прозрачным
 		break;
 	// "красная" планета
 	case 4:

@@ -181,12 +181,12 @@ bool cExplosion::Update(float Time)
 
 
 			// расчет физики для каждой частицы
-			if (!Model3DBlocks.empty()) {
+			if (!Chunks.empty()) {
 				sVECTOR3D TMP;
 				int Count = 0;
 
-				for (auto &tmpModel3DBlock : Model3DBlocks) {
-					for (unsigned int i = 0; i < tmpModel3DBlock.VertexQuantity; i+=3) {
+				for (auto &tmpChunk : Chunks) {
+					for (unsigned int i = 0; i < tmpChunk.VertexQuantity; i+=3) {
 						if (ExplosionPieceData[Count].Life > 0.0f) {
 							// получаем текущий вектор движения данного треугольника
 							TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
@@ -199,42 +199,42 @@ bool cExplosion::Update(float Time)
 							if (ExplosionPieceData[Count].Life<=0.001f) {
 								ExplosionPieceData[Count].Life = 0.0f;
 
-								tmpModel3DBlock.VertexArray.get()[(i + 1) * tmpModel3DBlock.VertexStride] = tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride];
-								tmpModel3DBlock.VertexArray.get()[(i + 1) * tmpModel3DBlock.VertexStride + 1] = tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride + 1];
-								tmpModel3DBlock.VertexArray.get()[(i + 1) * tmpModel3DBlock.VertexStride + 2] = tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride + 2];
+								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride];
+								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride + 1] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 1];
+								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride + 2] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 2];
 
-								tmpModel3DBlock.VertexArray.get()[(i + 2) * tmpModel3DBlock.VertexStride] = tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride];
-								tmpModel3DBlock.VertexArray.get()[(i + 2) * tmpModel3DBlock.VertexStride + 1] = tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride + 1];
-								tmpModel3DBlock.VertexArray.get()[(i + 2) * tmpModel3DBlock.VertexStride + 2] = tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride + 2];
+								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride];
+								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 1] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 1];
+								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 2] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 2];
 							} else {
 								// уменьшаем частицу, перебираем размер и текстурные координаты
 								{
-									float tmp = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 1)] - tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i];
-									tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
-									tmp = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride*(i + 1) + 1] - tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 1];
-									tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
-									tmp = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 1) + 2] - tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 2];
-									tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									float tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride*(i + 1) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
 
-									tmp = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2)] - tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i];
-									tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
-									tmp = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2) + 1] - tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 1];
-									tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
-									tmp = tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2) + 2] - tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * i + 2];
-									tmpModel3DBlock.VertexArray.get()[tmpModel3DBlock.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
 								}
 
-								tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride] += TMP.x;
-								tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride + 1] += TMP.y;
-								tmpModel3DBlock.VertexArray.get()[i * tmpModel3DBlock.VertexStride + 2] += TMP.z;
+								tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride] += TMP.x;
+								tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 1] += TMP.y;
+								tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 2] += TMP.z;
 
-								tmpModel3DBlock.VertexArray.get()[(i + 1) * tmpModel3DBlock.VertexStride] += TMP.x;
-								tmpModel3DBlock.VertexArray.get()[(i + 1) * tmpModel3DBlock.VertexStride + 1] += TMP.y;
-								tmpModel3DBlock.VertexArray.get()[(i + 1) * tmpModel3DBlock.VertexStride + 2] += TMP.z;
+								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride] += TMP.x;
+								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride + 1] += TMP.y;
+								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride + 2] += TMP.z;
 
-								tmpModel3DBlock.VertexArray.get()[(i + 2) * tmpModel3DBlock.VertexStride] += TMP.x;
-								tmpModel3DBlock.VertexArray.get()[(i + 2) * tmpModel3DBlock.VertexStride + 1] += TMP.y;
-								tmpModel3DBlock.VertexArray.get()[(i + 2) * tmpModel3DBlock.VertexStride + 2] += TMP.z;
+								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride] += TMP.x;
+								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 1] += TMP.y;
+								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 2] += TMP.z;
 							}
 
 						}
@@ -247,37 +247,37 @@ bool cExplosion::Update(float Time)
 					// удаляем старые буферы, если они есть, создаем новые
 					// ! индексный буфер не трогаем, его не надо пересоздавать вообще
 
-					if (tmpModel3DBlock.VBO)
-						vw_DeleteBufferObject(tmpModel3DBlock.VBO);
-					if (tmpModel3DBlock.VAO)
-						vw_DeleteVAO(tmpModel3DBlock.VAO);
+					if (tmpChunk.VBO)
+						vw_DeleteBufferObject(tmpChunk.VBO);
+					if (tmpChunk.VAO)
+						vw_DeleteVAO(tmpChunk.VAO);
 
 
 					// делаем VBO
-					if (!vw_BuildBufferObject(eBufferObject::Vertex, tmpModel3DBlock.VertexQuantity * tmpModel3DBlock.VertexStride * sizeof(float), tmpModel3DBlock.VertexArray.get(), tmpModel3DBlock.VBO))
-						tmpModel3DBlock.VBO = 0;
+					if (!vw_BuildBufferObject(eBufferObject::Vertex, tmpChunk.VertexQuantity * tmpChunk.VertexStride * sizeof(float), tmpChunk.VertexArray.get(), tmpChunk.VBO))
+						tmpChunk.VBO = 0;
 
 					// делаем IBO, создаем его один раз, если его нет
-					if (!tmpModel3DBlock.IBO) {
-						if (!vw_BuildBufferObject(eBufferObject::Index, tmpModel3DBlock.VertexQuantity * sizeof(unsigned), tmpModel3DBlock.IndexArray.get(), tmpModel3DBlock.IBO))
-							tmpModel3DBlock.IBO = 0;
+					if (!tmpChunk.IBO) {
+						if (!vw_BuildBufferObject(eBufferObject::Index, tmpChunk.VertexQuantity * sizeof(unsigned), tmpChunk.IndexArray.get(), tmpChunk.IBO))
+							tmpChunk.IBO = 0;
 					}
 
 					// делаем VAO
-					if (!vw_BuildVAO(tmpModel3DBlock.VAO, tmpModel3DBlock.VertexFormat,
-							 tmpModel3DBlock.VertexStride * sizeof(float),
-							 tmpModel3DBlock.VBO, tmpModel3DBlock.IBO))
-						tmpModel3DBlock.VAO = 0;
+					if (!vw_BuildVAO(tmpChunk.VAO, tmpChunk.VertexFormat,
+							 tmpChunk.VertexStride * sizeof(float),
+							 tmpChunk.VBO, tmpChunk.IBO))
+						tmpChunk.VAO = 0;
 				}
 			}
 		}
 	} else {
 		// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
-		for (auto &tmpModel3DBlock : Model3DBlocks) {
+		for (auto &tmpChunk : Chunks) {
 			// общий коэф. расстояния
-			tmpModel3DBlock.ShaderData[1] += tmpModel3DBlock.ShaderData[0]*TimeDelta;
+			tmpChunk.ShaderData[1] += tmpChunk.ShaderData[0] * TimeDelta;
 			// дельта скорости
-			tmpModel3DBlock.ShaderData[0] -= tmpModel3DBlock.ShaderData[0]*TimeDelta;
+			tmpChunk.ShaderData[0] -= tmpChunk.ShaderData[0] * TimeDelta;
 		}
 	}
 
@@ -289,7 +289,7 @@ bool cExplosion::Update(float Time)
 	// делаем AABB по упращенной схеме, главное для нас - скорость
 	float AABBSpeedTmp = AABBSpeed*TimeDelta;
 	AABBSpeed -= AABBSpeedTmp;
-	if (!Model3DBlocks.empty()) {
+	if (!Chunks.empty()) {
 		float MinX = AABB[6].x - AABBSpeedTmp;
 		float MaxX = AABB[0].x + AABBSpeedTmp;
 		float MinY = AABB[6].y - AABBSpeedTmp;

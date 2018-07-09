@@ -40,7 +40,7 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 // Создание взрыва из частей объекта
 //-----------------------------------------------------------------------------
 cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
-				   int ObjectPieceNum, bool NeedExplosionSFX)
+				   int ObjectChunkNum, bool NeedExplosionSFX)
 {
 	TimeLastUpdate = Object.TimeLastUpdate;
 	ExplosionTypeByClass = 3;
@@ -75,9 +75,9 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 
 		// содаем части, отделяем их от общей модели
 		// ставим свои ориентейшины и скорость
-		for (unsigned int i = 0; i < Object.Model3DBlocks.size(); i++) {
+		for (unsigned int i = 0; i < Object.Chunks.size(); i++) {
 			// трак, пропускаем
-			if (Object.TrackObjectNum == static_cast<int>(i))
+			if (Object.TrackChunkNum == static_cast<int>(i))
 				continue;
 			else {
 				// создаем часть
@@ -98,24 +98,24 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				}
 
 				// берем то, что нужно
-				sharedSpaceDebris->Model3DBlocks.resize(1);
+				sharedSpaceDebris->Chunks.resize(1);
 				// копируем данные (тут уже все есть, с указателями на вбо и массив геометрии)
-				sharedSpaceDebris->Model3DBlocks[0] = Object.Model3DBlocks[i];
+				sharedSpaceDebris->Chunks[0] = Object.Chunks[i];
 				// берем стандартные шейдеры
-				sharedSpaceDebris->Model3DBlocks[0].ShaderType = 1;
+				sharedSpaceDebris->Chunks[0].ShaderType = 1;
 				// если надо было удалить в объекте - ставим не удалять, удалим вместе с этой частью
-				if (Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers) {
-					Object.Model3DBlocks[i].NeedReleaseOpenGLBuffers = false;
-					sharedSpaceDebris->Model3DBlocks[0].NeedReleaseOpenGLBuffers = true;
+				if (Object.Chunks[i].NeedReleaseOpenGLBuffers) {
+					Object.Chunks[i].NeedReleaseOpenGLBuffers = false;
+					sharedSpaceDebris->Chunks[0].NeedReleaseOpenGLBuffers = true;
 				}
 
 				// находим точку локального положения объекта в моделе
-				sVECTOR3D LocalLocation = Object.Model3DBlocks[i].Location;
+				sVECTOR3D LocalLocation = Object.Chunks[i].Location;
 				vw_Matrix33CalcPoint(LocalLocation, Object.CurrentRotationMat);
 				LocalLocation = Object.HitBB[i].Location - LocalLocation;
 				vw_Matrix33CalcPoint(LocalLocation, InvRotationMat);
 				// и меняем внутрее положение
-				sharedSpaceDebris->Model3DBlocks[0].Location = LocalLocation ^ (-1.0f);
+				sharedSpaceDebris->Chunks[0].Location = LocalLocation ^ (-1.0f);
 
 				// находим все данные по геометрии
 				sharedSpaceDebris->MetadataInitialization();
@@ -139,8 +139,8 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				if (ExplType == 2) {
 					// проверяем, это колесо или нет
 					bool Wheel{false};
-					for (unsigned j = 0; (j < Object.WheelObjects.size()) && !Wheel; j++) {
-						Wheel = (Object.WheelObjects[j] == i);
+					for (unsigned j = 0; (j < Object.WheelChunkNums.size()) && !Wheel; j++) {
+						Wheel = (Object.WheelChunkNums[j] == i);
 					}
 
 					if (Wheel) {
@@ -174,8 +174,8 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				sharedSpaceDebris->ShowStrength = false;
 
 
-				if (ObjectPieceNum != -1)
-					if (ObjectPieceNum == (int)i) {
+				if (ObjectChunkNum != -1)
+					if (ObjectChunkNum == (int)i) {
 						// а теперь взрываем ту, в которую попали...
 						new cSpaceExplosion(*sharedSpaceDebris, 32, sharedSpaceDebris->Location, sharedSpaceDebris->Speed, -1);
 						ReleaseSpaceObject(SpaceDebris);

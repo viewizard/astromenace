@@ -177,7 +177,7 @@ void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType)
 	SpaceShip->ResistanceHull = GetHullResistance(ArmourType);
 	SpaceShip->ResistanceSystems = GetSystemsResistance(ArmourType);
 
-	for (unsigned int i = 0; i < SpaceShip->Model3DBlocks.size(); i++) {
+	for (unsigned int i = 0; i < SpaceShip->Chunks.size(); i++) {
 		SpaceShip->Texture[i] = GetArmourTexture(ArmourType);
 		SpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmourType);
 	}

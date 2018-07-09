@@ -110,9 +110,9 @@ public:
 	virtual bool Update(float Time);
 
 	// Установка положения 1 объекта модели
-	void SetObjectLocation(const sVECTOR3D &NewLocation, unsigned ObjectNum);
+	void SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum);
 	// Установка углов поворота 1 объекта модели
-	void SetObjectRotation(const sVECTOR3D &NewRotation, unsigned ObjectNum);
+	void SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum);
 	// Установка положения модели
 	virtual void SetLocation(const sVECTOR3D &NewLocation);
 	// Установка углов поворота модели

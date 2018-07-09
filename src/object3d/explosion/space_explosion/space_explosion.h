@@ -42,7 +42,7 @@ class cSpaceExplosion : public cExplosion
 public:
 	explicit cSpaceExplosion(cObject3D &Object, int ExplType,
 				 const sVECTOR3D &ExplLocation, float Speed,
-				 int ObjectPieceNum, bool NeedExplosionSFX = true);
+				 int ObjectChunkNum, bool NeedExplosionSFX = true);
 };
 
 } // astromenace namespace

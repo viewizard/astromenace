@@ -368,7 +368,7 @@ bool vw_SphereOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Obje
 /*
  * Sphere-Mesh collision detection.
  */
-bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBlock &Object1DrawObjectList,
+bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sChunk3D &Object1Chunks,
 			    const float (&Object1RotationMatrix)[9], float Object2Radius, const sVECTOR3D &Object2Location,
 			    const sVECTOR3D &Object2PrevLocation, sVECTOR3D &CollisionLocation)
 {
@@ -382,51 +382,51 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sModel3DBloc
 	vw_Matrix44Identity(TransMatTMP);
 
 	// care about rotation
-	if ((Object1DrawObjectList.Rotation.x != 0.0f) ||
-	    (Object1DrawObjectList.Rotation.y != 0.0f) ||
-	    (Object1DrawObjectList.Rotation.z != 0.0f))
-		vw_Matrix44CreateRotate(TransMatTMP, Object1DrawObjectList.Rotation);
+	if ((Object1Chunks.Rotation.x != 0.0f) ||
+	    (Object1Chunks.Rotation.y != 0.0f) ||
+	    (Object1Chunks.Rotation.z != 0.0f))
+		vw_Matrix44CreateRotate(TransMatTMP, Object1Chunks.Rotation);
 
 	// don't care about GeometryAnimation here, for more speed
 
 	// generate final translation matrix
-	vw_Matrix44Translate(TransMatTMP, Object1DrawObjectList.Location);
+	vw_Matrix44Translate(TransMatTMP, Object1Chunks.Location);
 	vw_Matrix44Mult(TransMat, TransMatTMP);
 
 	// detect collision with mesh triangles
-	for (unsigned int i = 0; i < Object1DrawObjectList.VertexQuantity; i += 3) {
+	for (unsigned int i = 0; i < Object1Chunks.VertexQuantity; i += 3) {
 		// we use index buffer here in order to find triangle's vertices in mesh
-		unsigned int IndexPos = Object1DrawObjectList.RangeStart + i; // index buffer position
+		unsigned int IndexPos = Object1Chunks.RangeStart + i; // index buffer position
 		unsigned int VertexPos{0}; // vertex buffer position
-		if (Object1DrawObjectList.IndexArray)
-			VertexPos = Object1DrawObjectList.IndexArray.get()[IndexPos] * Object1DrawObjectList.VertexStride;
+		if (Object1Chunks.IndexArray)
+			VertexPos = Object1Chunks.IndexArray.get()[IndexPos] * Object1Chunks.VertexStride;
 		else
-			VertexPos = (IndexPos) * Object1DrawObjectList.VertexStride;
+			VertexPos = (IndexPos) * Object1Chunks.VertexStride;
 
 		// translate triangle's vertices in proper coordinates for collision detection
-		sVECTOR3D Point1{Object1DrawObjectList.VertexArray.get()[VertexPos],
-				 Object1DrawObjectList.VertexArray.get()[VertexPos + 1],
-				 Object1DrawObjectList.VertexArray.get()[VertexPos + 2]};
+		sVECTOR3D Point1{Object1Chunks.VertexArray.get()[VertexPos],
+				 Object1Chunks.VertexArray.get()[VertexPos + 1],
+				 Object1Chunks.VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point1, TransMat);
 
-		if (Object1DrawObjectList.IndexArray)
-			VertexPos = Object1DrawObjectList.IndexArray.get()[IndexPos + 1] * Object1DrawObjectList.VertexStride;
+		if (Object1Chunks.IndexArray)
+			VertexPos = Object1Chunks.IndexArray.get()[IndexPos + 1] * Object1Chunks.VertexStride;
 		else
-			VertexPos = (IndexPos + 1) * Object1DrawObjectList.VertexStride;
+			VertexPos = (IndexPos + 1) * Object1Chunks.VertexStride;
 
-		sVECTOR3D Point2{Object1DrawObjectList.VertexArray.get()[VertexPos],
-				 Object1DrawObjectList.VertexArray.get()[VertexPos + 1],
-				 Object1DrawObjectList.VertexArray.get()[VertexPos + 2]};
+		sVECTOR3D Point2{Object1Chunks.VertexArray.get()[VertexPos],
+				 Object1Chunks.VertexArray.get()[VertexPos + 1],
+				 Object1Chunks.VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point2, TransMat);
 
-		if (Object1DrawObjectList.IndexArray)
-			VertexPos = Object1DrawObjectList.IndexArray.get()[IndexPos + 2] * Object1DrawObjectList.VertexStride;
+		if (Object1Chunks.IndexArray)
+			VertexPos = Object1Chunks.IndexArray.get()[IndexPos + 2] * Object1Chunks.VertexStride;
 		else
-			VertexPos = (IndexPos + 2) * Object1DrawObjectList.VertexStride;
+			VertexPos = (IndexPos + 2) * Object1Chunks.VertexStride;
 
-		sVECTOR3D Point3{Object1DrawObjectList.VertexArray.get()[VertexPos],
-				 Object1DrawObjectList.VertexArray.get()[VertexPos + 1],
-				 Object1DrawObjectList.VertexArray.get()[VertexPos + 2]};
+		sVECTOR3D Point3{Object1Chunks.VertexArray.get()[VertexPos],
+				 Object1Chunks.VertexArray.get()[VertexPos + 1],
+				 Object1Chunks.VertexArray.get()[VertexPos + 2]};
 		vw_Matrix44CalcPoint(Point3, TransMat);
 
 		// calculate 2 vectors for plane

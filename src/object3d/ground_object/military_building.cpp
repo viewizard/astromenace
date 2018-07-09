@@ -69,7 +69,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 
 	LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Model3DFileName, *this);
 
-	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileName);
 	}
 
@@ -86,17 +86,17 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.3f, 4.6f, 2.6f));
 		WeaponFireType = 2;
 
-		TargetHorizBlocks.resize(4);
-		TargetHorizBlocks[0] = 1;
-		TargetHorizBlocks[1] = 2;
-		TargetHorizBlocks[2] = 3;
-		TargetHorizBlocks[3] = 4;
+		TargetHorizChunkNums.resize(4);
+		TargetHorizChunkNums[0] = 1;
+		TargetHorizChunkNums[1] = 2;
+		TargetHorizChunkNums[2] = 3;
+		TargetHorizChunkNums[3] = 4;
 
-		TargetVertBlocks.resize(3);
-		TargetVertBlocks[0] = 2;
-		TargetVertBlocks[1] = 3;
-		TargetVertBlocks[2] = 4;
-		TargetVertBlocksMaxAngle = 60.0f;
+		TargetVertChunkNums.resize(3);
+		TargetVertChunkNums[0] = 2;
+		TargetVertChunkNums[1] = 3;
+		TargetVertChunkNums[2] = 4;
+		TargetVertChunksMaxAngle = 60.0f;
 		break;
 
 	case 2:
@@ -104,19 +104,19 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon.back().Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
-		TargetHorizBlocks.resize(4);
-		TargetHorizBlocks[0] = 1;
-		TargetHorizBlocks[1] = 2;
-		TargetHorizBlocks[2] = 3;
-		TargetHorizBlocks[3] = 4;
+		TargetHorizChunkNums.resize(4);
+		TargetHorizChunkNums[0] = 1;
+		TargetHorizChunkNums[1] = 2;
+		TargetHorizChunkNums[2] = 3;
+		TargetHorizChunkNums[3] = 4;
 
-		TargetVertBlocks.resize(3);
-		TargetVertBlocks[0] = 2;
-		TargetVertBlocks[1] = 3;
-		TargetVertBlocks[2] = 4;
-		TargetVertBlocksMaxAngle = 60.0f;
+		TargetVertChunkNums.resize(3);
+		TargetVertChunkNums[0] = 2;
+		TargetVertChunkNums[1] = 3;
+		TargetVertChunkNums[2] = 4;
+		TargetVertChunksMaxAngle = 60.0f;
 
-		BarrelBlocks.emplace_back(4);
+		BarrelChunkNums.emplace_back(4);
 		break;
 
 	case 3:
@@ -127,12 +127,12 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
-		TargetHorizBlocks.resize(2);
-		TargetHorizBlocks[0] = 1;
-		TargetHorizBlocks[1] = 2;
+		TargetHorizChunkNums.resize(2);
+		TargetHorizChunkNums[0] = 1;
+		TargetHorizChunkNums[1] = 2;
 
-		TargetVertBlocks.emplace_back(2);
-		TargetVertBlocksMaxAngle = 60.0f;
+		TargetVertChunkNums.emplace_back(2);
+		TargetVertChunksMaxAngle = 60.0f;
 		break;
 
 	case 4:
@@ -143,21 +143,21 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 2;
 
-		TargetHorizBlocks.resize(4);
-		TargetHorizBlocks[0] = 1;
-		TargetHorizBlocks[1] = 2;
-		TargetHorizBlocks[2] = 3;
-		TargetHorizBlocks[3] = 4;
+		TargetHorizChunkNums.resize(4);
+		TargetHorizChunkNums[0] = 1;
+		TargetHorizChunkNums[1] = 2;
+		TargetHorizChunkNums[2] = 3;
+		TargetHorizChunkNums[3] = 4;
 
-		TargetVertBlocks.resize(3);
-		TargetVertBlocks[0] = 2;
-		TargetVertBlocks[1] = 3;
-		TargetVertBlocks[2] = 4;
-		TargetVertBlocksMaxAngle = 60.0f;
+		TargetVertChunkNums.resize(3);
+		TargetVertChunkNums[0] = 2;
+		TargetVertChunkNums[1] = 3;
+		TargetVertChunkNums[2] = 4;
+		TargetVertChunksMaxAngle = 60.0f;
 
-		BarrelBlocks.resize(2);
-		BarrelBlocks[0] = 3;
-		BarrelBlocks[1] = 4;
+		BarrelChunkNums.resize(2);
+		BarrelChunkNums[0] = 3;
+		BarrelChunkNums[1] = 4;
 		break;
 
 	case 5:
@@ -168,62 +168,62 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		Weapon[1].Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
-		TargetHorizBlocks.resize(2);
-		TargetHorizBlocks[0] = 1;
-		TargetHorizBlocks[1] = 2;
+		TargetHorizChunkNums.resize(2);
+		TargetHorizChunkNums[0] = 1;
+		TargetHorizChunkNums[1] = 2;
 
-		TargetVertBlocks.emplace_back(2);
-		TargetVertBlocksMaxAngle = 60.0f;
+		TargetVertChunkNums.emplace_back(2);
+		TargetVertChunksMaxAngle = 60.0f;
 		break;
 
 	case 6:
 		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 3.0f, 7.0f));
 		Weapon.back().Weapon->NextFireTime /= 3.5f;
 
-		TargetHorizBlocks.resize(2);
-		TargetHorizBlocks[0] = 2;
-		TargetHorizBlocks[1] = 1;
+		TargetHorizChunkNums.resize(2);
+		TargetHorizChunkNums[0] = 2;
+		TargetHorizChunkNums[1] = 1;
 
-		TargetVertBlocks.emplace_back(1);
-		TargetVertBlocksMaxAngle = 80.0f;
+		TargetVertChunkNums.emplace_back(1);
+		TargetVertChunksMaxAngle = 80.0f;
 		break;
 
 	case 7:
 		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.2f, 10.3f));
 
-		TargetHorizBlocks.resize(4);
-		TargetHorizBlocks[0] = 4;
-		TargetHorizBlocks[1] = 2;
-		TargetHorizBlocks[2] = 3;
-		TargetHorizBlocks[3] = 1;
+		TargetHorizChunkNums.resize(4);
+		TargetHorizChunkNums[0] = 4;
+		TargetHorizChunkNums[1] = 2;
+		TargetHorizChunkNums[2] = 3;
+		TargetHorizChunkNums[3] = 1;
 
-		TargetVertBlocks.resize(3);
-		TargetVertBlocks[0] = 3;
-		TargetVertBlocks[1] = 2;
-		TargetVertBlocks[2] = 1;
-		TargetVertBlocksMaxAngle = 60.0f;
+		TargetVertChunkNums.resize(3);
+		TargetVertChunkNums[0] = 3;
+		TargetVertChunkNums[1] = 2;
+		TargetVertChunkNums[2] = 1;
+		TargetVertChunksMaxAngle = 60.0f;
 
-		BarrelBlocks.emplace_back(1);
+		BarrelChunkNums.emplace_back(1);
 		break;
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (!TargetHorizBlocks.empty()) {
-		BaseBound = Model3DBlocks[TargetHorizBlocks[0]].Location;
+	if (!TargetHorizChunkNums.empty()) {
+		BaseBound = Chunks[TargetHorizChunkNums[0]].Location;
 	}
 
-	if (!TargetVertBlocks.empty()) {
-		if (!TargetHorizBlocks.empty())
-			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
+	if (!TargetVertChunkNums.empty()) {
+		if (!TargetHorizChunkNums.empty())
+			MiddleBound = Chunks[TargetVertChunkNums[0]].Location - Chunks[TargetHorizChunkNums[0]].Location;
 		else
-			MiddleBound = Model3DBlocks[TargetVertBlocks[0]].Location;
+			MiddleBound = Chunks[TargetVertChunkNums[0]].Location;
 	}
 
 	for (auto &tmpWeapon : Weapon) {
-		if (!TargetVertBlocks.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetVertBlocks[0]].Location;
-		else if (!TargetHorizBlocks.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Model3DBlocks[TargetHorizBlocks[0]].Location;
+		if (!TargetVertChunkNums.empty())
+			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetVertChunkNums[0]].Location;
+		else if (!TargetHorizChunkNums.empty())
+			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetHorizChunkNums[0]].Location;
 		else
 			tmpWeapon.Bound = tmpWeapon.Location;
 	}

@@ -134,12 +134,12 @@ void LoadObjectData(const std::string &FileName, cObject3D &Object3D)
 	Object3D.GlobalIndexArrayCount = sharedModel->GlobalIndexArrayCount;
 	Object3D.GlobalIBO = sharedModel->GlobalIBO;
 	Object3D.GlobalVAO = sharedModel->GlobalVAO;
-	Object3D.Model3DBlocks = sharedModel->Model3DBlocks;
+	Object3D.Chunks = sharedModel->Chunks;
 
 	// резервируем память для текстур
-	Object3D.Texture.resize(Object3D.Model3DBlocks.size(), 0);
-	Object3D.TextureIllum.resize(Object3D.Model3DBlocks.size(), 0);
-	Object3D.NormalMap.resize(Object3D.Model3DBlocks.size(), 0);
+	Object3D.Texture.resize(Object3D.Chunks.size(), 0);
+	Object3D.TextureIllum.resize(Object3D.Chunks.size(), 0);
+	Object3D.NormalMap.resize(Object3D.Chunks.size(), 0);
 
 	// metadata
 	Object3D.AABB = sharedModel->AABB;

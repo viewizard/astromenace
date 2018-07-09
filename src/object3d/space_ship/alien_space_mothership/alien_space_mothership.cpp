@@ -530,7 +530,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, *this);
 
 	// всегда только эти текстуры
-	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Texture);
 		TextureIllum[i] = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].TextureIllum);
 		// если шейдеры выключены - вернет ноль (не загружаем текстуры нормал мепов если нет шейдеров)

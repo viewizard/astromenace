@@ -73,7 +73,7 @@ cCivilianBuilding::cCivilianBuilding(int BuildingNum)
 
 	LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileName, *this);
 
-	for (unsigned int i = 0; i < Model3DBlocks.size(); i++) {
+	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset("models/building/bld.vw2d");
 		TextureIllum[i] = GetPreloadedTextureAsset("models/building/bld_illum.vw2d");
 		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/buildings_nm.tga");
