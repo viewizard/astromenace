@@ -142,18 +142,6 @@ void ReleaseAllSpaceShips()
 //-----------------------------------------------------------------------------
 cSpaceShip::cSpaceShip()
 {
-	// болтание объекта, в случае кораблей болтаем всю модель
-	DeviationOn = false;
-	DeviationObjQuantity = 1;
-	Deviation = new sVECTOR3D[DeviationObjQuantity];
-	NeedDeviation = new float[DeviationObjQuantity];
-	CurrentDeviation = new float[DeviationObjQuantity];
-	CurrentDeviationSum = new float[DeviationObjQuantity];
-
-	Deviation[0].Set(0.0f, 1.0f, 0.0f);
-	NeedDeviation[0] = vw_fRand0()*0.1f;
-	CurrentDeviation[0] = CurrentDeviationSum[0] = 0.0f;
-
 	// подключаем к своему списку
 	AttachSpaceShip(this);
 }
@@ -252,19 +240,6 @@ cSpaceShip::~cSpaceShip()
 					vw_ReleaseParticleSystem(sharedEngineRight);
 			}
 		}
-	}
-
-	if (DeviationObjQuantity != 0) {
-		if (Deviation != nullptr)
-			delete [] Deviation;
-		if (NeedDeviation != nullptr)
-			delete [] NeedDeviation;
-		if (CurrentDeviation != nullptr)
-			delete [] CurrentDeviation;
-		if (CurrentDeviationSum != nullptr)
-			delete [] CurrentDeviationSum;
-		if (DeviationObjNum != nullptr)
-			delete [] DeviationObjNum;
 	}
 
 	DetachSpaceShip(this);
@@ -372,30 +347,28 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 	cObject3D::SetRotation(NewRotation);
 
 	// оружие
-	if (Weapon != nullptr)
+	if (Weapon != nullptr) {
 		for (int i = 0; i < WeaponQuantity; i++) {
 			vw_Matrix33CalcPoint(WeaponLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(WeaponLocation[i], CurrentRotationMat);
 
-			if (Weapon[i] != nullptr)
-				// если нужно поворачивать, или не нужно и в этом оружие наведение не используем (ракетная система)
-				if (NeedWeaponRotate || (!NeedWeaponRotate && !Weapon[i]->NeedRotateOnTargeting)) {
-					Weapon[i]->SetRotation(NewRotation);
-					Weapon[i]->SetLocation(Location + WeaponLocation[i]);
-				}
+			if (Weapon[i] != nullptr) {
+				Weapon[i]->SetRotation(NewRotation);
+				Weapon[i]->SetLocation(Location + WeaponLocation[i]);
+			}
 		}
-	if (BossWeapon != nullptr)
+	}
+	if (BossWeapon != nullptr) {
 		for (int i = 0; i < BossWeaponQuantity; i++) {
 			vw_Matrix33CalcPoint(BossWeaponLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(BossWeaponLocation[i], CurrentRotationMat);
 
-			if (BossWeapon[i] != nullptr)
-				// если нужно поворачивать, или не нужно и в этом оружие наведение не используем (ракетная система)
-				if (NeedWeaponRotate || (!NeedWeaponRotate && !BossWeapon[i]->NeedRotateOnTargeting)) {
-					BossWeapon[i]->SetRotation(NewRotation);
-					BossWeapon[i]->SetLocation(Location + BossWeaponLocation[i]);
-				}
+			if (BossWeapon[i] != nullptr) {
+				BossWeapon[i]->SetRotation(NewRotation);
+				BossWeapon[i]->SetLocation(Location + BossWeaponLocation[i]);
+			}
 		}
+	}
 	if (WeaponFlare != nullptr) {
 		vw_Matrix33CalcPoint(WeaponFlareLocation, OldInvRotationMat);
 		vw_Matrix33CalcPoint(WeaponFlareLocation, CurrentRotationMat);
@@ -1078,38 +1051,34 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание корпуса
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (DeviationOn)
-		for (int i=0; i<DeviationObjQuantity; i++) {
-			float Sign = 1.0f;
-			// нужно двигать
-			if (NeedDeviation[i] < 0.0f) Sign = -1.0f;
-			if (Sign == 1.0f) {
-				if (NeedDeviation[i] < CurrentDeviationSum[i]) Sign = -1.0f;
-			} else {
-				if (NeedDeviation[i] > CurrentDeviationSum[i]) Sign = 1.0f;
-			}
-
-			CurrentDeviation[i] = Sign*0.035f*TimeDelta;
-
-			if (Sign == 1.0f) {
-				if (NeedDeviation[i] <= CurrentDeviationSum[i]+CurrentDeviation[i]) {
-					CurrentDeviation[i] -= CurrentDeviationSum[i]+CurrentDeviation[i]-NeedDeviation[i];
-					CurrentDeviationSum[i] += CurrentDeviation[i];
-					NeedDeviation[i] = vw_fRand0()*0.1f;
-				} else CurrentDeviationSum[i] += CurrentDeviation[i];
-			} else {
-				if (NeedDeviation[i] >= CurrentDeviationSum[i]+CurrentDeviation[i]) {
-					CurrentDeviation[i] += CurrentDeviationSum[i]+CurrentDeviation[i]-NeedDeviation[i];
-					CurrentDeviationSum[i] += CurrentDeviation[i];
-					NeedDeviation[i] = vw_fRand0()*0.1f;
-				} else CurrentDeviationSum[i] += CurrentDeviation[i];
-			}
+	if (!Deviation.empty()) {
+		float Sign = 1.0f;
+		// нужно двигать
+		if (Deviation[0].Need < 0.0f)
+			Sign = -1.0f;
+		if (Sign == 1.0f) {
+			if (Deviation[0].Need < Deviation[0].Current)
+				Sign = -1.0f;
+		} else {
+			if (Deviation[0].Need > Deviation[0].Current)
+				Sign = 1.0f;
 		}
 
-	// только для корабля игрока - небольшое болтание во время полета
-	if ((ObjectStatus == eObjectStatus::Player) && DeviationOn) {
-		NeedWeaponRotate = false;
-		SetRotation((Deviation[0]^(CurrentDeviation[0]*50.0f)));
+		float tmpIncrement = Sign * 0.035f * TimeDelta;
+
+		if (Sign == 1.0f) {
+			if (Deviation[0].Need <= Deviation[0].Current + tmpIncrement) {
+				tmpIncrement -= Deviation[0].Current + tmpIncrement - Deviation[0].Need;
+				Deviation[0].Need = vw_fRand0() * 0.1f;
+			}
+		} else {
+			if (Deviation[0].Need >= Deviation[0].Current + tmpIncrement) {
+				tmpIncrement += Deviation[0].Current + tmpIncrement - Deviation[0].Need;
+				Deviation[0].Need = vw_fRand0() * 0.1f;
+			}
+		}
+		Deviation[0].Current += tmpIncrement;
+		SetRotation(Deviation[0].Direction ^ (tmpIncrement * 50.0f));
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1141,10 +1110,6 @@ bool cSpaceShip::Update(float Time)
 		vw_RotatePoint(tmp, sVECTOR3D(90.0f,0.0f,0.0f));
 		Velocity += tmp;
 	}
-
-	// если это не корабль игрока и включена девиация
-	if ((ObjectStatus != eObjectStatus::Player) && DeviationOn)
-		Velocity += Deviation[0]^CurrentDeviation[0];
 
 	// перемещение объекта, если нужно
 	if (Velocity.x != 0.0f || Velocity.y != 0.0f  || Velocity.z != 0.0f ) {
@@ -1440,46 +1405,35 @@ bool cSpaceShip::Update(float Time)
 
 		*/
 
-		// т.к. у нас включена девиация, нужно принять меры
-		float RotationMat2[9];
-		memcpy(RotationMat2, CurrentRotationMat, sizeof(CurrentRotationMat[0])*9);
-		sVECTOR3D Rotation2 = Rotation;
-
-		if (DeviationOn) {
-			Rotation2 = Rotation - (Deviation[0]^(CurrentDeviation[0]*50.0f));
-
-			vw_Matrix33CreateRotate(RotationMat2, Rotation2);
-		}
-
 		// всему оружию ставим нужную ориентацию
 		if (Weapon != nullptr) {
 			for (int i = 0; i < WeaponQuantity; i++) {
 				if ((Weapon[i] != nullptr) &&
 				    (Weapon[i]->NeedRotateOnTargeting)) {
-					NeedAngle = Rotation2;
+					NeedAngle = Rotation;
 					// добавляем базовый угол, чтобы по умолчанию устанавливало его
 					NeedAngle.y += WeaponYAngle[i];
 
 					switch (GameTargetingSystem) {
 					case 1:
-						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
-									    Length, RotationMat2, NeedAngle, Width, false, true,
+						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
+									    Length, CurrentRotationMat, NeedAngle, Width, false, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 2:
-						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation2,
-									    Length, RotationMat2, NeedAngle, Width, true, true,
+						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
+									    Length, CurrentRotationMat, NeedAngle, Width, true, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 3:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->Rotation,
-									    Length,Weapon[i]->CurrentRotationMat, NeedAngle, Weapon[i]->Width, false, true,
+									    Length, Weapon[i]->CurrentRotationMat, NeedAngle, Weapon[i]->Width, false, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					case 4:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation,
 									    sVECTOR3D(Weapon[i]->Rotation.x, 0 , Weapon[i]->Rotation.z) + sVECTOR3D(0,WeaponYAngle[i],0),
-									    Length,Weapon[i]->CurrentRotationMat, NeedAngle, Width, false, true,
+									    Length, Weapon[i]->CurrentRotationMat, NeedAngle, Width, false, true,
 									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
 						break;
 					}

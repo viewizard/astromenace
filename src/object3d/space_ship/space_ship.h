@@ -37,6 +37,13 @@
 namespace viewizard {
 namespace astromenace {
 
+struct sShipDeviation {
+	sVECTOR3D Direction{};
+	float Need{0.0f};
+	float Current{0.0f};
+	unsigned ChunkNum{0};
+};
+
 class cSpaceShip : public cObject3D
 {
 public:
@@ -138,14 +145,7 @@ public:
 	float MoveDown{0.0f};
 
 	// небольшая девиация-болтание корабля
-	bool DeviationOn{false};
-	int DeviationObjQuantity{0};
-	sVECTOR3D *Deviation{nullptr};
-	float *CurrentDeviation{nullptr};
-	float *NeedDeviation{nullptr};
-	float *CurrentDeviationSum{nullptr};
-	// ассоциированный объект (если нужно)
-	int *DeviationObjNum{nullptr};
+	std::vector<sShipDeviation> Deviation{};
 
 	// кол-во оружия доступного на данной моделе
 	int WeaponQuantity{0};
@@ -163,8 +163,6 @@ public:
 	int WeaponFireType{2};
 	int WeaponGroupCurrentFireNum{-1};
 	float WeaponGroupCurrentFireDelay{0.0f};
-	// поворот оружия
-	bool NeedWeaponRotate{true};
 
 	// кол-во оружия доступного на данной моделе
 	int BossWeaponQuantity{0};

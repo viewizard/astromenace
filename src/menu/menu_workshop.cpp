@@ -92,7 +92,6 @@ void WorkshopCreateShip(int Num)
 	GameEnemyArmorPenalty = 1;
 
 	WorkshopFighterGame = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
-	WorkshopFighterGame->DeviationOn = true;
 
 	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	WorkshopFighterGame->EngineDestroyType = true;
@@ -158,7 +157,6 @@ void WorkshopCreateNewShip()
 	GameEnemyArmorPenalty = 1;
 
 	WorkshopNewFighter = new cEarthSpaceFighter(CurrentWorkshopNewFighter);
-	WorkshopNewFighter->DeviationOn = true;
 
 	WorkshopNewFighter->ObjectStatus = eObjectStatus::none;
 	WorkshopNewFighter->EngineDestroyType = true;
