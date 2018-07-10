@@ -780,22 +780,22 @@ bool cGroundObject::Update(float Time)
 					Sign = 1.0f;
 			}
 
-			float tmpDeviation = Sign * 0.35f * TimeDelta;
+			float tmpIncrement = Sign * 0.35f * TimeDelta;
 
 			if (Sign == 1.0f) {
-				if (tmpWheelDeviation.Need <= tmpWheelDeviation.Current + tmpDeviation) {
-					tmpDeviation -= tmpWheelDeviation.Current + tmpDeviation - tmpWheelDeviation.Need;
+				if (tmpWheelDeviation.Need <= tmpWheelDeviation.Current + tmpIncrement) {
+					tmpIncrement -= tmpWheelDeviation.Current + tmpIncrement - tmpWheelDeviation.Need;
 					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
 				}
 			} else {
-				if (tmpWheelDeviation.Need >= tmpWheelDeviation.Current + tmpDeviation) {
-					tmpDeviation += tmpWheelDeviation.Current + tmpDeviation - tmpWheelDeviation.Need;
+				if (tmpWheelDeviation.Need >= tmpWheelDeviation.Current + tmpIncrement) {
+					tmpIncrement += tmpWheelDeviation.Current + tmpIncrement - tmpWheelDeviation.Need;
 					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
 				}
 			}
-			tmpWheelDeviation.Current += tmpDeviation;
+			tmpWheelDeviation.Current += tmpIncrement;
 
-			sVECTOR3D tmpLocation = tmpWheelDeviation.Direction ^ tmpDeviation;
+			sVECTOR3D tmpLocation = tmpWheelDeviation.Direction ^ tmpIncrement;
 			SetChunkLocation(Chunks[tmpWheelDeviation.ChunkNum].Location + tmpLocation,
 					 tmpWheelDeviation.ChunkNum);
 		}
