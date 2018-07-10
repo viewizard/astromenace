@@ -85,11 +85,11 @@ cWheeled::cWheeled(int WheeledNum)
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (WheeledNum) {
 	case 1:
-		Weapon.resize(4);
-		Weapon[0](CreateWeapon(206), sVECTOR3D(0.3f, 4.5f, -1.5f));
-		Weapon[1](CreateWeapon(206), sVECTOR3D(-0.3f, 4.5f, -1.5f));
-		Weapon[2](CreateWeapon(206), sVECTOR3D(0.9f, 4.5f, -1.5f));
-		Weapon[3](CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
+		WeaponSlots.resize(4);
+		WeaponSlots[0](CreateWeapon(206), sVECTOR3D(0.3f, 4.5f, -1.5f));
+		WeaponSlots[1](CreateWeapon(206), sVECTOR3D(-0.3f, 4.5f, -1.5f));
+		WeaponSlots[2](CreateWeapon(206), sVECTOR3D(0.9f, 4.5f, -1.5f));
+		WeaponSlots[3](CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(4);
@@ -108,9 +108,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 2:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(206), sVECTOR3D(1.3f, 3.5f, -1.5f));
-		Weapon[1](CreateWeapon(206), sVECTOR3D(-1.3f, 3.5f, -1.5f));
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(206), sVECTOR3D(1.3f, 3.5f, -1.5f));
+		WeaponSlots[1](CreateWeapon(206), sVECTOR3D(-1.3f, 3.5f, -1.5f));
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
@@ -127,9 +127,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 3:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(204), sVECTOR3D(0.8f, 4.2f, -1.0f));
-		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(0.8f, 4.2f, -1.0f));
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
 		WeaponFireType = 2;
 
 		WheelChunkNums.resize(4);
@@ -152,7 +152,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 4:
-		Weapon.emplace_back(CreateWeapon(207), sVECTOR3D(0.0f, 4.5f, -4.0f));
+		WeaponSlots.emplace_back(CreateWeapon(207), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
 		WheelChunkNums.resize(4);
 		WheelChunkNums[0] = 0;
@@ -167,7 +167,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 5:
-		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 4.5f, -4.0f));
+		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 4.5f, -4.0f));
 
 		WheelChunkNums.resize(4);
 		WheelChunkNums[0] = 1;
@@ -182,7 +182,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 6:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.0f, -3.0f));
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.0f, -3.0f));
 
 		WheelChunkNums.resize(4);
 		WheelChunkNums[0] = 1;
@@ -204,9 +204,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 7:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(204), sVECTOR3D(0.1f, 5.0f, -1.0f));
-		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(0.1f, 5.0f, -1.0f));
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
 		WeaponFireType = 2;
 
 		WheelChunkNums.resize(4);
@@ -229,9 +229,9 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 8:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(210), sVECTOR3D(1.5f, 5.2f, 7.0f));
-		Weapon[1](CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(210), sVECTOR3D(1.5f, 5.2f, 7.0f));
+		WeaponSlots[1](CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(8);
@@ -272,13 +272,13 @@ cWheeled::cWheeled(int WheeledNum)
 			MiddleBound = Chunks[TargetVertChunkNums[0]].Location;
 	}
 
-	for (auto &tmpWeapon : Weapon) {
+	for (auto &tmpWeaponSlot : WeaponSlots) {
 		if (!TargetVertChunkNums.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetVertChunkNums[0]].Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location - Chunks[TargetVertChunkNums[0]].Location;
 		else if (!TargetHorizChunkNums.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetHorizChunkNums[0]].Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location - Chunks[TargetHorizChunkNums[0]].Location;
 		else
-			tmpWeapon.Bound = tmpWeapon.Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
 }
 

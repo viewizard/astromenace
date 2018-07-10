@@ -53,14 +53,14 @@ enum class eGroundCycle {
 	DeleteObjectAndBreak
 };
 
-struct sGroundWeapon {
+struct sGroundWeaponSlot {
 	bool SetFire{false};
 	cWeapon *Weapon{nullptr};
 	sVECTOR3D Location{};
 	sVECTOR3D Bound{};
 
-	sGroundWeapon() = default;
-	sGroundWeapon(cWeapon *_Weapon, const sVECTOR3D &_Location) :
+	sGroundWeaponSlot() = default;
+	sGroundWeaponSlot(cWeapon *_Weapon, const sVECTOR3D &_Location) :
 		Weapon{_Weapon},
 		Location{_Location}
 	{}
@@ -124,7 +124,7 @@ public:
 	// нужное ускорение
 	float NeedAcceler{1.0f};
 
-	std::vector<sGroundWeapon> Weapon{};
+	std::vector<sGroundWeaponSlot> WeaponSlots{};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
 	int WeaponFireType{2};
 	int WeaponGroupCurrentFireNum{-1};

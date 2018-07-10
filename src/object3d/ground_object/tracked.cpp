@@ -91,7 +91,7 @@ cTracked::cTracked(int TrackedNum)
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (TrackedNum) {
 	case 1:
-		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.5f, 9.0f));
+		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.5f, 9.0f));
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 2;
@@ -123,9 +123,9 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 2:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(204), sVECTOR3D(0.1f, 6.1f, -0.4f));
-		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.1f, 6.1f, -0.4f));
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(0.1f, 6.1f, -0.4f));
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-0.1f, 6.1f, -0.4f));
 		WeaponFireType = 2;
 
 		WheelChunkNums.resize(10);
@@ -152,7 +152,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 3:
-		Weapon.emplace_back(CreateWeapon(213), sVECTOR3D(0.0f, 5.2f, 3.7f));
+		WeaponSlots.emplace_back(CreateWeapon(213), sVECTOR3D(0.0f, 5.2f, 3.7f));
 
 		WheelChunkNums.resize(14);
 		WheelChunkNums[0] = 0;
@@ -182,7 +182,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 4:
-		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.3f, 6.5f));
+		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.3f, 6.5f));
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 1;
@@ -217,7 +217,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 5:
-		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.8f, 4.5f));
+		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 5.8f, 4.5f));
 
 		WheelChunkNums.resize(14);
 		WheelChunkNums[0] = 1;
@@ -247,7 +247,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 6:
-		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 4.9f, 4.0f));
+		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 4.9f, 4.0f));
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 2;
@@ -279,7 +279,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 7:
-		Weapon.emplace_back(CreateWeapon(212), sVECTOR3D(0.0f, 7.6f, 5.5f));
+		WeaponSlots.emplace_back(CreateWeapon(212), sVECTOR3D(0.0f, 7.6f, 5.5f));
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 1;
@@ -311,7 +311,7 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 8:
-		Weapon.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 7.0f, 8.5f));
+		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 7.0f, 8.5f));
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 1;
@@ -343,8 +343,8 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 9:
-		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 6.7f, 6.8f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 6.7f, 6.8f));
+		WeaponSlots.back().Weapon->NextFireTime /= 2.0f;
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 1;
@@ -376,8 +376,8 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 10:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.1f, 0.5f));
-		Weapon.back().Weapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.1f, 0.5f));
+		WeaponSlots.back().Weapon->NextFireTime /= 2.0f;
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 1;
@@ -409,9 +409,9 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 11:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(209), sVECTOR3D(2.2f, 5.4f, 7.0f));
-		Weapon[1](CreateWeapon(209), sVECTOR3D(-2.2f, 5.4f, 7.0f));
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(209), sVECTOR3D(2.2f, 5.4f, 7.0f));
+		WeaponSlots[1](CreateWeapon(209), sVECTOR3D(-2.2f, 5.4f, 7.0f));
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(16);
@@ -440,15 +440,15 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 12:
-		Weapon.resize(4);
-		Weapon[0](CreateWeapon(206), sVECTOR3D(0.55f, 5.0f, 2.0f));
-		Weapon[0].Weapon->NextFireTime /= 2.0f;
-		Weapon[1](CreateWeapon(206), sVECTOR3D(-0.55f, 5.0f, 2.0f));
-		Weapon[1].Weapon->NextFireTime /= 2.0f;
-		Weapon[2](CreateWeapon(206), sVECTOR3D(1.65f, 5.0f, 2.0f));
-		Weapon[2].Weapon->NextFireTime /= 2.0f;
-		Weapon[3](CreateWeapon(206), sVECTOR3D(-1.65f, 5.0f, 2.0f));
-		Weapon[3].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots.resize(4);
+		WeaponSlots[0](CreateWeapon(206), sVECTOR3D(0.55f, 5.0f, 2.0f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(206), sVECTOR3D(-0.55f, 5.0f, 2.0f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[2](CreateWeapon(206), sVECTOR3D(1.65f, 5.0f, 2.0f));
+		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[3](CreateWeapon(206), sVECTOR3D(-1.65f, 5.0f, 2.0f));
+		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(16);
@@ -480,11 +480,11 @@ cTracked::cTracked(int TrackedNum)
 		break;
 
 	case 13:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(206), sVECTOR3D(1.4f, 5.0f, 0.4f));
-		Weapon[0].Weapon->NextFireTime /= 2.0f;
-		Weapon[1](CreateWeapon(206), sVECTOR3D(-1.4f, 5.0f, 0.4f));
-		Weapon[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(206), sVECTOR3D(1.4f, 5.0f, 0.4f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(206), sVECTOR3D(-1.4f, 5.0f, 0.4f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(14);
@@ -548,13 +548,13 @@ cTracked::cTracked(int TrackedNum)
 			MiddleBound = Chunks[TargetVertChunkNums[0]].Location;
 	}
 
-	for (auto &tmpWeapon : Weapon) {
+	for (auto &tmpWeaponSlot : WeaponSlots) {
 		if (!TargetVertChunkNums.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetVertChunkNums[0]].Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location - Chunks[TargetVertChunkNums[0]].Location;
 		else if (!TargetHorizChunkNums.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetHorizChunkNums[0]].Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location - Chunks[TargetHorizChunkNums[0]].Location;
 		else
-			tmpWeapon.Bound = tmpWeapon.Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
 }
 

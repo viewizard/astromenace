@@ -81,9 +81,9 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (MilitaryBuildingNum) {
 	case 1:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(204), sVECTOR3D(0.3f, 4.6f, 2.6f));
-		Weapon[1](CreateWeapon(204), sVECTOR3D(-0.3f, 4.6f, 2.6f));
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(0.3f, 4.6f, 2.6f));
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-0.3f, 4.6f, 2.6f));
 		WeaponFireType = 2;
 
 		TargetHorizChunkNums.resize(4);
@@ -100,8 +100,8 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 2:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 4.6f, 4.5f));
-		Weapon.back().Weapon->NextFireTime /= 3.0f;
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 4.6f, 4.5f));
+		WeaponSlots.back().Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
 		TargetHorizChunkNums.resize(4);
@@ -120,11 +120,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 3:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(205), sVECTOR3D(2.8f, 5.3f, 7.5f));
-		Weapon[0].Weapon->NextFireTime /= 2.0f;
-		Weapon[1](CreateWeapon(205), sVECTOR3D(-2.8f, 5.3f, 7.5f));
-		Weapon[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(205), sVECTOR3D(2.8f, 5.3f, 7.5f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(205), sVECTOR3D(-2.8f, 5.3f, 7.5f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		TargetHorizChunkNums.resize(2);
@@ -136,11 +136,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 4:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(204), sVECTOR3D(3.6f, 8.5f, 4.0f));
-		Weapon[0].Weapon->NextFireTime /= 2.0f;
-		Weapon[1](CreateWeapon(204), sVECTOR3D(-3.6f, 8.5f, 4.0f));
-		Weapon[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(3.6f, 8.5f, 4.0f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-3.6f, 8.5f, 4.0f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
 		WeaponFireType = 2;
 
 		TargetHorizChunkNums.resize(4);
@@ -161,11 +161,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 5:
-		Weapon.resize(2);
-		Weapon[0](CreateWeapon(204), sVECTOR3D(1.95f, 6.5f, 3.7f));
-		Weapon[0].Weapon->NextFireTime /= 3.0f;
-		Weapon[1](CreateWeapon(204), sVECTOR3D(-1.95f, 6.5f, 3.7f));
-		Weapon[1].Weapon->NextFireTime /= 3.0f;
+		WeaponSlots.resize(2);
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(1.95f, 6.5f, 3.7f));
+		WeaponSlots[0].Weapon->NextFireTime /= 3.0f;
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-1.95f, 6.5f, 3.7f));
+		WeaponSlots[1].Weapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
 		TargetHorizChunkNums.resize(2);
@@ -177,8 +177,8 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 6:
-		Weapon.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 3.0f, 7.0f));
-		Weapon.back().Weapon->NextFireTime /= 3.5f;
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 3.0f, 7.0f));
+		WeaponSlots.back().Weapon->NextFireTime /= 3.5f;
 
 		TargetHorizChunkNums.resize(2);
 		TargetHorizChunkNums[0] = 2;
@@ -189,7 +189,7 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		break;
 
 	case 7:
-		Weapon.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.2f, 10.3f));
+		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D(0.0f, 5.2f, 10.3f));
 
 		TargetHorizChunkNums.resize(4);
 		TargetHorizChunkNums[0] = 4;
@@ -219,13 +219,13 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 			MiddleBound = Chunks[TargetVertChunkNums[0]].Location;
 	}
 
-	for (auto &tmpWeapon : Weapon) {
+	for (auto &tmpWeaponSlot : WeaponSlots) {
 		if (!TargetVertChunkNums.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetVertChunkNums[0]].Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location - Chunks[TargetVertChunkNums[0]].Location;
 		else if (!TargetHorizChunkNums.empty())
-			tmpWeapon.Bound = tmpWeapon.Location - Chunks[TargetHorizChunkNums[0]].Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location - Chunks[TargetHorizChunkNums[0]].Location;
 		else
-			tmpWeapon.Bound = tmpWeapon.Location;
+			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
 }
 
