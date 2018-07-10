@@ -239,9 +239,9 @@ void InitGamePlayerShip()
 
 	PlayerFighter = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 
-	PlayerFighter->Deviation.resize(1);
-	PlayerFighter->Deviation[0].Direction(0.0f, 0.0f, 1.0f);
-	PlayerFighter->Deviation[0].Need = vw_fRand0() * 0.1f;
+	PlayerFighter->ShipDeviation.resize(1);
+	PlayerFighter->ShipDeviation[0].Direction(0.0f, 0.0f, 1.0f);
+	PlayerFighter->ShipDeviation[0].Need = vw_fRand0() * 0.1f;
 
 	PlayerFighter->ObjectStatus = eObjectStatus::Player;
 	PlayerFighter->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;

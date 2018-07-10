@@ -72,13 +72,6 @@ struct sGroundWeapon {
 	}
 };
 
-struct sWheelDeviation {
-	sVECTOR3D Direction{};
-	float Need{0.0f};
-	float Current{0.0f};
-	unsigned ChunkNum{0};
-};
-
 class cGroundObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
@@ -100,7 +93,7 @@ public:
 	// wheel chunks (for both, wheeled and tracked)
 	std::vector<unsigned> WheelChunkNums{};
 	// small wheel deviation (for both, wheeled and tracked)
-	std::vector<sWheelDeviation> WheelDeviation{};
+	std::vector<sDeviation> WheelDeviation{};
 	// steerable wheel chunks (for wheeled only)
 	std::vector<unsigned> SteerableWheelChunkNums{};
 	float MaxSteerableWheelAngle{20.0f};

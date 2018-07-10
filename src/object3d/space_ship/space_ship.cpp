@@ -1051,34 +1051,34 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание корпуса
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!Deviation.empty()) {
+	if (!ShipDeviation.empty()) {
 		float Sign = 1.0f;
 		// нужно двигать
-		if (Deviation[0].Need < 0.0f)
+		if (ShipDeviation[0].Need < 0.0f)
 			Sign = -1.0f;
 		if (Sign == 1.0f) {
-			if (Deviation[0].Need < Deviation[0].Current)
+			if (ShipDeviation[0].Need < ShipDeviation[0].Current)
 				Sign = -1.0f;
 		} else {
-			if (Deviation[0].Need > Deviation[0].Current)
+			if (ShipDeviation[0].Need > ShipDeviation[0].Current)
 				Sign = 1.0f;
 		}
 
 		float tmpIncrement = Sign * 0.035f * TimeDelta;
 
 		if (Sign == 1.0f) {
-			if (Deviation[0].Need <= Deviation[0].Current + tmpIncrement) {
-				tmpIncrement -= Deviation[0].Current + tmpIncrement - Deviation[0].Need;
-				Deviation[0].Need = vw_fRand0() * 0.1f;
+			if (ShipDeviation[0].Need <= ShipDeviation[0].Current + tmpIncrement) {
+				tmpIncrement -= ShipDeviation[0].Current + tmpIncrement - ShipDeviation[0].Need;
+				ShipDeviation[0].Need = vw_fRand0() * 0.1f;
 			}
 		} else {
-			if (Deviation[0].Need >= Deviation[0].Current + tmpIncrement) {
-				tmpIncrement += Deviation[0].Current + tmpIncrement - Deviation[0].Need;
-				Deviation[0].Need = vw_fRand0() * 0.1f;
+			if (ShipDeviation[0].Need >= ShipDeviation[0].Current + tmpIncrement) {
+				tmpIncrement += ShipDeviation[0].Current + tmpIncrement - ShipDeviation[0].Need;
+				ShipDeviation[0].Need = vw_fRand0() * 0.1f;
 			}
 		}
-		Deviation[0].Current += tmpIncrement;
-		SetRotation(Deviation[0].Direction ^ (tmpIncrement * 50.0f));
+		ShipDeviation[0].Current += tmpIncrement;
+		SetRotation(ShipDeviation[0].Direction ^ (tmpIncrement * 50.0f));
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

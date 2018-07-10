@@ -95,6 +95,13 @@ enum class eDeleteAfterLeaveScene {
 // delay before object delete, since object could back to the scene
 constexpr float DeleteAfterLeaveSceneDelay = 1.0f;
 
+struct sDeviation {
+	sVECTOR3D Direction{};
+	float Need{0.0f};
+	float Current{0.0f};
+	unsigned ChunkNum{0};
+};
+
 class cObject3D : public sModel3D {
 protected:
 	// don't allow object of this class creation
