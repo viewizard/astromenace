@@ -694,7 +694,7 @@ void sModel3D::MetadataInitialization()
 	if (Chunks.empty())
 		return;
 
-	int AllVertexCounted{0};
+	unsigned int AllChunksVertexQuantity{0};
 
 	// HitBB calculation
 	HitBB.resize(Chunks.size());
@@ -785,13 +785,13 @@ void sModel3D::MetadataInitialization()
 		// correct HitBB geometry center location accordingly to chunk location
 		HitBB[i].Location += Chunks[i].Location;
 
-		AllVertexCounted += Chunks[i].VertexQuantity;
+		AllChunksVertexQuantity += Chunks[i].VertexQuantity;
 	}
 
 	// calculate 3D model's geometry center
-	if (AllVertexCounted > 0) {
-		// we are safe with static_cast here, since AllVertexCounted will not exceed limits
-		GeometryCenter = GeometryCenter / static_cast<float>(AllVertexCounted);
+	if (AllChunksVertexQuantity > 0) {
+		// we are safe with static_cast here, since AllChunksVertexQuantity will not exceed limits
+		GeometryCenter = GeometryCenter / static_cast<float>(AllChunksVertexQuantity);
 	}
 
 	// first HitBB's data as initial data for calculation
