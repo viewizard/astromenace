@@ -528,7 +528,6 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 	Weight = PresetEarthSpaceFighterData[SpaceShipNum-1].Weight;
 	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum-1].Strength; // GameEnemyArmorPenalty for enemies only
 	WeaponQuantity = PresetEarthSpaceFighterData[SpaceShipNum-1].WeaponQuantity;
-	unsigned int EngineQuantity = PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
 	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum-1].Name, *this);
 
 
@@ -547,9 +546,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 
 
 	// начальные установки для двигателей
-
-	EnginesLocation.resize(EngineQuantity);
-	Engines.resize(EngineQuantity);
+	Engines.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity);
+	EnginesLocation.resize(Engines.size());
 
 	EnginesLeftLocation.resize(1);
 	EnginesLeft.resize(1);
@@ -929,7 +927,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		MaxAcceler = 4.5f;
 		MaxSpeedRotate = 4.5f;*/
 
-	for (unsigned int i = 0; i < EngineQuantity; i++) {
+	for (unsigned int i = 0; i < Engines.size(); i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			// находим кол-во внутренних источников света
 			if (!sharedEngine->Light.expired())

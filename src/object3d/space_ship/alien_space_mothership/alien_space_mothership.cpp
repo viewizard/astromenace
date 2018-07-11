@@ -524,7 +524,6 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 
 	WeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].WeaponQuantity;
 	BossWeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].BossWeaponQuantity;
-	unsigned int EngineQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity;
 
 
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, *this);
@@ -562,8 +561,8 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	}
 
 	// начальные установки для двигателей
-	EnginesLocation.resize(EngineQuantity);
-	Engines.resize(EngineQuantity);
+	Engines.resize(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity);
+	EnginesLocation.resize(Engines.size());
 
 
 
@@ -1289,7 +1288,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		return;
 	}
 
-	for (unsigned int i = 0; i < EngineQuantity; i++) {
+	for (unsigned int i = 0; i < Engines.size(); i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			sharedEngine->SetStartLocation(EnginesLocation[i]);
 			// находим кол-во внутренних источников света

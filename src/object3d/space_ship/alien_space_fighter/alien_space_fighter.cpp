@@ -264,7 +264,6 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	ShieldRecharge = ShieldStrengthStart/10.0f;
 
 	WeaponQuantity = PresetAlienSpaceFighterData[SpaceShipNum-1].WeaponQuantity;
-	unsigned int EngineQuantity = PresetAlienSpaceFighterData[SpaceShipNum - 1].EngineQuantity;
 
 
 	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum-1].Name, *this);
@@ -287,8 +286,8 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	}
 
 	// начальные установки для двигателей
-	EnginesLocation.resize(EngineQuantity);
-	Engines.resize(EngineQuantity);
+	Engines.resize(PresetAlienSpaceFighterData[SpaceShipNum - 1].EngineQuantity);
+	EnginesLocation.resize(Engines.size());
 
 
 
@@ -940,7 +939,7 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		return;
 	}
 
-	for (unsigned int i = 0; i < EngineQuantity; i++) {
+	for (unsigned int i = 0; i < Engines.size(); i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			sharedEngine->SetStartLocation(EnginesLocation[i]);
 			// находим кол-во внутренних источников света
