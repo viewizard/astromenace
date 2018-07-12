@@ -779,13 +779,13 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// считаем вектор движения
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	sVECTOR3D Velocity = (Orientation ^ (Speed * TimeDelta));
+	sVECTOR3D tmpShift = (Orientation ^ (Speed * TimeDelta));
 
 	// перемещение объекта, если нужно
-	if ((Velocity.x != 0.0f) || (Velocity.y != 0.0f) || (Velocity.z != 0.0f)) {
+	if ((tmpShift.x != 0.0f) || (tmpShift.y != 0.0f) || (tmpShift.z != 0.0f)) {
 		WheelRotarySpeed = Speed * SpeedToWheelRotarySpeedFactor;
 		// делаем сдвиг модели в указанную точку
-		SetLocation(Location + Velocity);
+		SetLocation(Location + tmpShift);
 	}
 
 	// объект в порядке - удалять не нужно
