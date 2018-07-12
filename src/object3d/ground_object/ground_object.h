@@ -39,6 +39,7 @@
 #define OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
 
 #include "../object3d.h"
+#include "../shake.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -92,8 +93,8 @@ public:
 
 	// wheel chunks (for both, wheeled and tracked)
 	std::vector<unsigned> WheelChunkNums{};
-	// small wheel deviation (for both, wheeled and tracked)
-	std::vector<sDeviation> WheelDeviation{};
+	// small wheel shake (for both, wheeled and tracked)
+	std::vector<cShake> WheelShake{};
 	// steerable wheel chunks (for wheeled only)
 	std::vector<unsigned> SteerableWheelChunkNums{};
 	float MaxSteerableWheelAngle{20.0f};

@@ -765,38 +765,14 @@ bool cGroundObject::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание колес, если нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!WheelDeviation.empty()) {
-		for (auto &tmpWheelDeviation : WheelDeviation) {
-			float Sign{1.0f};
-			// нужно двигать
-			if (tmpWheelDeviation.Need < 0.0f)
-				Sign = -1.0f;
-			if (Sign == 1.0f) {
-				if (tmpWheelDeviation.Need < tmpWheelDeviation.Current)
-					Sign = -1.0f;
-			} else {
-				if (tmpWheelDeviation.Need > tmpWheelDeviation.Current)
-					Sign = 1.0f;
-			}
-
-			float tmpIncrement = Sign * 0.35f * TimeDelta;
-
-			if (Sign == 1.0f) {
-				if (tmpWheelDeviation.Need <= tmpWheelDeviation.Current + tmpIncrement) {
-					tmpIncrement -= tmpWheelDeviation.Current + tmpIncrement - tmpWheelDeviation.Need;
-					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
-				}
-			} else {
-				if (tmpWheelDeviation.Need >= tmpWheelDeviation.Current + tmpIncrement) {
-					tmpIncrement += tmpWheelDeviation.Current + tmpIncrement - tmpWheelDeviation.Need;
-					tmpWheelDeviation.Need = vw_fRand0() * 0.1f;
-				}
-			}
-			tmpWheelDeviation.Current += tmpIncrement;
-
-			sVECTOR3D tmpLocation = tmpWheelDeviation.Direction ^ tmpIncrement;
-			SetChunkLocation(Chunks[tmpWheelDeviation.ChunkNum].Location + tmpLocation,
-					 tmpWheelDeviation.ChunkNum);
+	if (!WheelShake.empty()) {
+		for (auto &tmpWheelShake : WheelShake) {
+			tmpWheelShake.Update(TimeDelta, [&] (const float ShakeIncrement,
+							     const sVECTOR3D &ShakeDirection,
+							     const unsigned ShakeChunkNum) {
+				sVECTOR3D tmpLocation = ShakeDirection ^ ShakeIncrement;
+				SetChunkLocation(Chunks[ShakeChunkNum].Location + tmpLocation, ShakeChunkNum);
+			});
 		}
 	}
 

@@ -31,6 +31,7 @@
 #define OBJECT3D_SPACESHIP_SPACESHIP_H
 
 #include "../object3d.h"
+#include "../shake.h"
 #include "../weapon/weapon.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
@@ -138,7 +139,7 @@ public:
 	float MoveDown{0.0f};
 
 	// небольшая девиация-болтание корабля
-	std::vector<sDeviation> ShipDeviation{};
+	std::vector<cShake> ShipShake{};
 
 	// кол-во оружия доступного на данной моделе
 	int WeaponQuantity{0};

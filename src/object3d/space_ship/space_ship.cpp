@@ -1051,34 +1051,12 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание корпуса
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!ShipDeviation.empty()) {
-		float Sign = 1.0f;
-		// нужно двигать
-		if (ShipDeviation[0].Need < 0.0f)
-			Sign = -1.0f;
-		if (Sign == 1.0f) {
-			if (ShipDeviation[0].Need < ShipDeviation[0].Current)
-				Sign = -1.0f;
-		} else {
-			if (ShipDeviation[0].Need > ShipDeviation[0].Current)
-				Sign = 1.0f;
-		}
-
-		float tmpIncrement = Sign * 0.035f * TimeDelta;
-
-		if (Sign == 1.0f) {
-			if (ShipDeviation[0].Need <= ShipDeviation[0].Current + tmpIncrement) {
-				tmpIncrement -= ShipDeviation[0].Current + tmpIncrement - ShipDeviation[0].Need;
-				ShipDeviation[0].Need = vw_fRand0() * 0.1f;
-			}
-		} else {
-			if (ShipDeviation[0].Need >= ShipDeviation[0].Current + tmpIncrement) {
-				tmpIncrement += ShipDeviation[0].Current + tmpIncrement - ShipDeviation[0].Need;
-				ShipDeviation[0].Need = vw_fRand0() * 0.1f;
-			}
-		}
-		ShipDeviation[0].Current += tmpIncrement;
-		SetRotation(ShipDeviation[0].Direction ^ (tmpIncrement * 50.0f));
+	if (!ShipShake.empty()) {
+		ShipShake[0].Update(TimeDelta, [&] (const float ShakeIncrement,
+						    const sVECTOR3D &ShakeDirection,
+						    const unsigned UNUSED(ShakeChunkNum)) {
+			SetRotation(ShakeDirection ^ (ShakeIncrement * 50.0f));
+		});
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -528,12 +528,12 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoWheeledStart+1;
 		InfoGroundObject = CreateWheeled(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
-			sharedObject->WheelDeviation.resize(sharedObject->WheelChunkNums.size());
-			for (unsigned i = 0; i < sharedObject->WheelDeviation.size(); i++) {
-				sharedObject->WheelDeviation[i].Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
-				sharedObject->WheelDeviation[i].Need = vw_fRand0() * 0.1f;
-				sharedObject->WheelDeviation[i].Current = 0.0f;
-				sharedObject->WheelDeviation[i].ChunkNum = sharedObject->WheelChunkNums[i];
+			sharedObject->WheelShake.resize(sharedObject->WheelChunkNums.size());
+			for (unsigned i = 0; i < sharedObject->WheelShake.size(); i++) {
+				sharedObject->WheelShake[i](sVECTOR3D{0.0f, 1.0f, 0.0f},
+							    sharedObject->WheelChunkNums[i],
+							    0.35f,
+							    [] () {return vw_fRand0() * 0.1f;});
 			}
 
 			sharedObject->ObjectStatus = eObjectStatus::none;
@@ -561,12 +561,12 @@ void CreateInfoObject()
 		int tmpCreateNum = CreateNum-InfoTrackedStart+1;
 		InfoGroundObject = CreateTracked(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
-			sharedObject->WheelDeviation.resize(sharedObject->WheelChunkNums.size());
-			for (unsigned i = 0; i < sharedObject->WheelDeviation.size(); i++) {
-				sharedObject->WheelDeviation[i].Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
-				sharedObject->WheelDeviation[i].Need = vw_fRand0() * 0.1f;
-				sharedObject->WheelDeviation[i].Current = 0.0f;
-				sharedObject->WheelDeviation[i].ChunkNum = sharedObject->WheelChunkNums[i];
+			sharedObject->WheelShake.resize(sharedObject->WheelChunkNums.size());
+			for (unsigned i = 0; i < sharedObject->WheelShake.size(); i++) {
+				sharedObject->WheelShake[i](sVECTOR3D{0.0f, 1.0f, 0.0f},
+							    sharedObject->WheelChunkNums[i],
+							    0.35f,
+							    [] () {return vw_fRand0() * 0.1f;});
 			}
 
 			sharedObject->ObjectStatus = eObjectStatus::none;
