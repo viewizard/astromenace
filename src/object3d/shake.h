@@ -44,7 +44,7 @@ public:
 		if (Need < Current)
 			Sign = -1.0f;
 
-		float tmpIncrement = Sign * TimeFactor * TimeDelta;
+		float tmpIncrement = Sign * ShiftPerSecond * TimeDelta;
 
 		if (((Sign > 0.0f) && (Need <= Current + tmpIncrement)) ||
 		    ((Sign < 0.0f) && (Need >= Current + tmpIncrement))) {
@@ -56,11 +56,11 @@ public:
 	}
 
 	void operator () (const sVECTOR3D &_Direction, const unsigned _ChunkNum,
-			  const float _TimeFactor, const std::function<float ()> &_GenerateRand)
+			  const float _ShiftPerSecond, const std::function<float ()> &_GenerateRand)
 	{
 		Direction = _Direction;
 		ChunkNum = _ChunkNum;
-		TimeFactor = _TimeFactor;
+		ShiftPerSecond = _ShiftPerSecond;
 		GenerateRand = _GenerateRand;
 		Need = GenerateRand();
 	}
@@ -68,7 +68,7 @@ public:
 private:
 	sVECTOR3D Direction{};
 	unsigned ChunkNum{0};
-	float TimeFactor{0.0f};
+	float ShiftPerSecond{0.0f};
 	float Need{0.0f};
 	float Current{0.0f};
 	std::function<float ()> GenerateRand{[] () {return 0.0f;}};
