@@ -456,45 +456,24 @@ bool cSpaceShip::Update(float Time)
 	// если у корабля есть спец средства против ракет...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!FlareWeaponSlots.empty()) {
-		// проверка, есть ли вражеские ракеты?
-		bool NeedFlare = false;
+		bool NeedFlare{false};
 		cProjectile *tmpProjectile = StartProjectile;
-		while (!NeedFlare && (tmpProjectile != nullptr)) {
+		while (tmpProjectile != nullptr) {
 			cProjectile *tmpProjectile2 = tmpProjectile->Next;
 
-			if ((((ObjectStatus == eObjectStatus::Enemy) &&
-			      ((tmpProjectile->ObjectStatus == eObjectStatus::Ally) || (tmpProjectile->ObjectStatus == eObjectStatus::Player))) ||
-			     // снаряды врагов - с союзниками или игроком
-			     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) &&
-			      (tmpProjectile->ObjectStatus == eObjectStatus::Enemy)) ||
-			     // снаряды игрока со всеми, кроме игрока
-			     ((ObjectStatus != eObjectStatus::Player) && (tmpProjectile->ObjectStatus == eObjectStatus::Player))) &&
-			    (tmpProjectile->ProjectileType == 1))
-					NeedFlare = true;
+			// homing missile targeted on this ship
+			if (tmpProjectile->Target == this) {
+				NeedFlare = true;
+				tmpProjectile->Target = nullptr; // reset target, since we will fire flares
+			}
 
 			tmpProjectile = tmpProjectile2;
 		}
 
-		tmpProjectile = StartProjectile;
-		if (NeedFlare)
-			while (tmpProjectile != nullptr) {
-				cProjectile *tmpProjectile2 = tmpProjectile->Next;
-				// если навелись на этот объект ракетой
-				// т.к. только у ракеты тут не ноль
-				if (tmpProjectile->Target == this) {
-					// начинаем отстреливать фларес
-					for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
-						if (tmpFlareWeaponSlot.Weapon)
-							tmpFlareWeaponSlot.SetFire = true;
-					}
-				}
-
-				tmpProjectile = tmpProjectile2;
-			}
-		else {
+		if (NeedFlare) {
 			for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
 				if (tmpFlareWeaponSlot.Weapon)
-					tmpFlareWeaponSlot.SetFire = false;
+					tmpFlareWeaponSlot.Weapon->WeaponFire(Time);
 			}
 		}
 	}
@@ -1035,12 +1014,6 @@ bool cSpaceShip::Update(float Time)
 				}
 			}
 		}
-	}
-
-	for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
-		if (tmpFlareWeaponSlot.Weapon &&
-		    tmpFlareWeaponSlot.SetFire)
-			tmpFlareWeaponSlot.Weapon->WeaponFire(Time);
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
