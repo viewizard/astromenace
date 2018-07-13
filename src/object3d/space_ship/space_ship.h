@@ -45,6 +45,11 @@ struct sShipWeaponSlot {
 	int Type{1};
 	float YAngle{0.0f};
 
+	sShipWeaponSlot() = default;
+	sShipWeaponSlot(cWeapon *_Weapon, const sVECTOR3D &_Location) :
+		Weapon{_Weapon},
+		Location{_Location}
+	{}
 	~sShipWeaponSlot()
 	{
 		if (Weapon)
@@ -184,12 +189,7 @@ public:
 	int BossWeaponGroupCurrentFireNum{-1};
 	float BossWeaponGroupCurrentFireDelay{0.0f};
 
-	// выстрел из оружия-фларес, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool WeaponFlareSetFire{false};
-	// указатель на оружие-фларе
-	cWeapon *WeaponFlare{nullptr};
-	// расположение оружия на коробле (относительное)
-	sVECTOR3D WeaponFlareLocation{0.0f, 0.0f, 0.0f};
+	std::vector<sShipWeaponSlot> FlareWeaponSlots{};
 
 	// тип, как будем удалять двигатели -сразу, или глушить
 	bool EngineDestroyType{false};

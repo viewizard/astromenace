@@ -511,11 +511,9 @@ void DetectCollisionAllObject3D()
 						tmpShip->MaxSpeedRotate = tmpShip->MaxSpeedRotate / 2.0f;
 
 					// если есть фларес, есть шанс его вырубить
-					if (tmpShip->WeaponFlare &&
-					    (Rand > 0.5f-DR) && (Rand < 0.8f)) {
-						ReleaseWeapon(tmpShip->WeaponFlare);
-						tmpShip->WeaponFlare = nullptr;
-					}
+					if (!tmpShip->FlareWeaponSlots.empty() &&
+					    (Rand > 0.5f-DR) && (Rand < 0.8f))
+						tmpShip->FlareWeaponSlots.clear();
 				}
 
 

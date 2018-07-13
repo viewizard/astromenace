@@ -177,10 +177,6 @@ cSpaceShip::~cSpaceShip()
 		delete [] Weapon;
 		Weapon = nullptr;
 	}
-	if (WeaponFlare != nullptr) {
-		ReleaseWeapon(WeaponFlare);
-		WeaponFlare = nullptr;
-	}
 
 	for (auto &tmpEngine : Engines) {
 		if (auto sharedEngine = tmpEngine.lock()) {
@@ -239,8 +235,12 @@ void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 				tmpBossWeaponSlot.Weapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
 	}
-	if (WeaponFlare != nullptr)
-		WeaponFlare->SetLocation(NewLocation + WeaponFlareLocation);
+	if (!FlareWeaponSlots.empty()) {
+		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
+			if (tmpFlareWeaponSlot.Weapon)
+				tmpFlareWeaponSlot.Weapon->SetLocation(tmpFlareWeaponSlot.Location + NewLocation);
+		}
+	}
 
 	// положение двигателей
 	for (unsigned int i = 0; i < Engines.size(); i++) {
@@ -286,8 +286,11 @@ void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 				tmpBossWeaponSlot.Weapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
 	}
-	if (WeaponFlare != nullptr) {
-		WeaponFlare->SetLocation(NewLocation + WeaponFlareLocation);
+	if (!FlareWeaponSlots.empty()) {
+		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
+			if (tmpFlareWeaponSlot.Weapon)
+				tmpFlareWeaponSlot.Weapon->SetLocation(tmpFlareWeaponSlot.Location + NewLocation);
+		}
 	}
 
 	// положение двигателей
@@ -346,11 +349,16 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 			}
 		}
 	}
-	if (WeaponFlare != nullptr) {
-		vw_Matrix33CalcPoint(WeaponFlareLocation, OldInvRotationMat);
-		vw_Matrix33CalcPoint(WeaponFlareLocation, CurrentRotationMat);
-		WeaponFlare->SetRotation(NewRotation);
-		WeaponFlare->SetLocation(Location + WeaponFlareLocation);
+	if (!FlareWeaponSlots.empty()) {
+		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
+			if (tmpFlareWeaponSlot.Weapon) {
+				vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, OldInvRotationMat);
+				vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, CurrentRotationMat);
+
+				tmpFlareWeaponSlot.Weapon->SetRotation(NewRotation);
+				tmpFlareWeaponSlot.Weapon->SetLocation(Location + tmpFlareWeaponSlot.Location);
+			}
+		}
 	}
 
 	// двигатели
@@ -447,7 +455,7 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// если у корабля есть спец средства против ракет...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (WeaponFlare != nullptr) {
+	if (!FlareWeaponSlots.empty()) {
 		// проверка, есть ли вражеские ракеты?
 		bool NeedFlare = false;
 		cProjectile *tmpProjectile = StartProjectile;
@@ -475,13 +483,20 @@ bool cSpaceShip::Update(float Time)
 				// т.к. только у ракеты тут не ноль
 				if (tmpProjectile->Target == this) {
 					// начинаем отстреливать фларес
-					WeaponFlareSetFire = true;
+					for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
+						if (tmpFlareWeaponSlot.Weapon)
+							tmpFlareWeaponSlot.SetFire = true;
+					}
 				}
 
 				tmpProjectile = tmpProjectile2;
 			}
-		else
-			WeaponFlareSetFire = false;
+		else {
+			for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
+				if (tmpFlareWeaponSlot.Weapon)
+					tmpFlareWeaponSlot.SetFire = false;
+			}
+		}
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1022,9 +1037,11 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	if ((WeaponFlare != nullptr) &&
-	    (WeaponFlareSetFire))
-		WeaponFlare->WeaponFire(Time);
+	for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
+		if (tmpFlareWeaponSlot.Weapon &&
+		    tmpFlareWeaponSlot.SetFire)
+			tmpFlareWeaponSlot.Weapon->WeaponFire(Time);
+	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// небольшая девиация-болтание корпуса

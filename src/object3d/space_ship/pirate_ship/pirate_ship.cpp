@@ -402,9 +402,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D(5.4f, 1.0f, 2.0f));
 		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D(-5.4f, 1.0f, 2.0f));
 
-		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
+
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
@@ -424,9 +423,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(9.5f, 1.3f, 2.0f));
 		BossWeaponSlots[1](CreateWeapon(210), sVECTOR3D(-9.5f, 1.3f, 2.0f));
 
-		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
+
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
@@ -459,9 +457,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D(-9.4f, 1.0f, 2.0f));
 		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D(-9.1f, 0.7f, 2.0f));
 
-		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 6.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 6.0f, 0.0f));
+
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
@@ -494,9 +491,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 9.0f));
 		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 9.0f));
 
-		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
+
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
@@ -542,9 +538,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D(16.5f, 2.7f, 7.5f));
 		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D(-16.5f, 2.7f, 7.5f));
 
-		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
+
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);
@@ -589,8 +584,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D(5.4f, 1.0f, 2.0f));
 		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D(-5.4f, 1.0f, 2.0f));
 		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
@@ -607,8 +601,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(9.5f, 1.3f, 2.0f));
 		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(-9.5f, 1.3f, 2.0f));
 		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
@@ -637,8 +630,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D(-9.4f, 1.0f, 2.0f));
 		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D(-9.1f, 0.7f, 2.0f));
 		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 6.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 6.0f, 0.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
@@ -663,8 +655,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 9.0f));
 		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 9.0f));
 		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
@@ -699,8 +690,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D(16.5f, 2.7f, 7.5f));
 		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D(-16.5f, 2.7f, 7.5f));
 		// фларе
-		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
-		WeaponFlare = CreateWeapon(203);
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);
