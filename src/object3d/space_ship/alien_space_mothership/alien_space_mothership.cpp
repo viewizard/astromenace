@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO add flare weapons (probably, we need some alien-specific visual effects)
+
 #include "alien_space_mothership.h"
 #include "../../../config/config.h"
 #include "../../../assets/texture.h"

@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO add more flare weapons for big pirate ships
+
 #include "pirate_ship.h"
 #include "../../../config/config.h"
 #include "../../../assets/audio.h"
