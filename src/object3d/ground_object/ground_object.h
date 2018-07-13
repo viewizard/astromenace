@@ -40,6 +40,7 @@
 
 #include "../object3d.h"
 #include "../shake.h"
+#include "../weapon/weapon.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -65,6 +66,11 @@ struct sGroundWeaponSlot {
 		Weapon{_Weapon},
 		Location{_Location}
 	{}
+	~sGroundWeaponSlot()
+	{
+		if (Weapon)
+			ReleaseWeapon(Weapon);
+	}
 
 	void operator () (cWeapon *_Weapon, const sVECTOR3D &_Location)
 	{
@@ -77,7 +83,7 @@ class cGroundObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cGroundObject();
-	virtual ~cGroundObject();
+	virtual ~cGroundObject() = default;
 
 public:
 	// Обновление данных объектa

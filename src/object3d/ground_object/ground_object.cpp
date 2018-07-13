@@ -30,7 +30,6 @@
 #include "ground_object.h"
 #include "../../script/script.h"
 #include "../../config/config.h"
-#include "../weapon/weapon.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -165,19 +164,6 @@ void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle
 cGroundObject::cGroundObject()
 {
 	ObjectStatus = eObjectStatus::Enemy;
-}
-
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
-cGroundObject::~cGroundObject()
-{
-	if (!WeaponSlots.empty()) {
-		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon != nullptr)
-				ReleaseWeapon(tmpWeaponSlot.Weapon);
-		}
-	}
 }
 
 //-----------------------------------------------------------------------------
