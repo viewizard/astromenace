@@ -45,7 +45,7 @@ struct sAlienSpaceMotherShipData {
 };
 
 const sAlienSpaceMotherShipData PresetAlienSpaceMotherShipData[] = {
-	{14,	1,	10,	3000,	1500,	"models/alienmothership/alm-01.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
+	{14,	0,	10,	3000,	1500,	"models/alienmothership/alm-01.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
 	{8,	8,	10,	4000,	3000,	"models/alienmothership/alm-02.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
 	{8,	1,	8,	5000,	3300,	"models/alienmothership/alm-03.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
 	{8,	8,	12,	6000,	3500,	"models/alienmothership/alm-04.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
@@ -523,7 +523,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	ShieldRecharge = ShieldStrengthStart/15.0f;
 
 	WeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].WeaponQuantity;
-	BossWeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].BossWeaponQuantity;
+	BossWeaponSlots.resize(PresetAlienSpaceMotherShipData[SpaceShipNum-1].BossWeaponQuantity);
 
 
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, *this);
@@ -548,16 +548,6 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		WeaponSetFire[i] = false;
 		WeaponType[i] = 1;
 		Weapon[i] = nullptr;
-	}
-
-	BossWeaponSetFire = new bool[BossWeaponQuantity];
-	BossWeaponLocation = new sVECTOR3D[BossWeaponQuantity];
-	BossWeaponType = new int[BossWeaponQuantity];
-	BossWeapon = new cWeapon*[BossWeaponQuantity];
-	for (int i=0; i<BossWeaponQuantity; i++) {
-		BossWeaponSetFire[i] = false;
-		BossWeaponType[i] = 1;
-		BossWeapon[i] = nullptr;
 	}
 
 	// начальные установки для двигателей
@@ -608,8 +598,6 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		Weapon[12] = CreateWeapon(104);
 		WeaponLocation[13] = sVECTOR3D(0.0f, -8.0f, 0.0f);
 		Weapon[13] = CreateWeapon(104);
-
-		BossWeaponLocation[0] = sVECTOR3D(0.0f, 0.0f, 0.0f);
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -681,26 +669,14 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		Weapon[7] = CreateWeapon(106);
 		Weapon[7]->NextFireTime = Weapon[7]->NextFireTime/2.0f;
 
-
-		BossWeaponLocation[0] = sVECTOR3D(-1.5f, 1.5f, 25.0f);
-		BossWeapon[0] = CreateWeapon(102);
-		BossWeaponLocation[1] = sVECTOR3D(1.5f, 1.5f, 25.0f);
-		BossWeapon[1] = CreateWeapon(102);
-		BossWeaponLocation[2] = sVECTOR3D(-1.5f, -1.5f, 25.0f);
-		BossWeapon[2] = CreateWeapon(102);
-		BossWeaponLocation[3] = sVECTOR3D(1.5f, -1.5f, 25.0f);
-		BossWeapon[3] = CreateWeapon(102);
-
-
-		BossWeaponLocation[4] = sVECTOR3D(-4.0f, 2.0f, 24.0f);
-		BossWeapon[4] = CreateWeapon(102);
-		BossWeaponLocation[5] = sVECTOR3D(4.0f, 2.0f, 24.0f);
-		BossWeapon[5] = CreateWeapon(102);
-		BossWeaponLocation[6] = sVECTOR3D(-4.0f, -2.0f, 24.0f);
-		BossWeapon[6] = CreateWeapon(102);
-		BossWeaponLocation[7] = sVECTOR3D(4.0f, -2.0f, 24.0f);
-		BossWeapon[7] = CreateWeapon(102);
-
+		BossWeaponSlots[0](CreateWeapon(102), sVECTOR3D(-1.5f, 1.5f, 25.0f));
+		BossWeaponSlots[1](CreateWeapon(102), sVECTOR3D(1.5f, 1.5f, 25.0f));
+		BossWeaponSlots[2](CreateWeapon(102), sVECTOR3D(-1.5f, -1.5f, 25.0f));
+		BossWeaponSlots[3](CreateWeapon(102), sVECTOR3D(1.5f, -1.5f, 25.0f));
+		BossWeaponSlots[4](CreateWeapon(102), sVECTOR3D(-4.0f, 2.0f, 24.0f));
+		BossWeaponSlots[5](CreateWeapon(102), sVECTOR3D(4.0f, 2.0f, 24.0f));
+		BossWeaponSlots[6](CreateWeapon(102), sVECTOR3D(-4.0f, -2.0f, 24.0f));
+		BossWeaponSlots[7](CreateWeapon(102), sVECTOR3D(4.0f, -2.0f, 24.0f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -764,9 +740,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		WeaponLocation[7] = sVECTOR3D(-7.0f, -2.0f, 13.0f);
 		Weapon[7] = CreateWeapon(109);
 
-
-		BossWeaponLocation[0] = sVECTOR3D(0.0f, -2.0f, 27.0f);
-		BossWeapon[0] = CreateWeapon(110);
+		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(0.0f, -2.0f, 27.0f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -821,29 +795,20 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		WeaponLocation[7] = sVECTOR3D(0.0f, -1.0f, 23.0f);
 		Weapon[7] = CreateWeapon(109);
 
-		BossWeaponLocation[0] = sVECTOR3D(8.9f, -0.6f, 18.0f);
-		BossWeapon[0] = CreateWeapon(108);
-		BossWeapon[0]->SetRotation(sVECTOR3D(0.0f, -15.0f, 0.0f));
-		BossWeaponLocation[1] = sVECTOR3D(-8.9f, -0.6f, 18.0f);
-		BossWeapon[1] = CreateWeapon(108);
-		BossWeapon[1]->SetRotation(sVECTOR3D(0.0f, 15.0f, 0.0f));
-		BossWeaponLocation[2] = sVECTOR3D(10.0f, -5.6f, 18.0f);
-		BossWeapon[2] = CreateWeapon(108);
-		BossWeaponLocation[3] = sVECTOR3D(-10.0f, -5.6f, 18.0f);
-		BossWeapon[3] = CreateWeapon(108);
-		BossWeaponLocation[4] = sVECTOR3D(8.9f, -0.6f, 18.0f);
-		BossWeapon[4] = CreateWeapon(108);
-		BossWeapon[4]->SetRotation(sVECTOR3D(0.0f, -5.0f, 0.0f));
-		BossWeaponLocation[5] = sVECTOR3D(-8.9f, -0.6f, 18.0f);
-		BossWeapon[5] = CreateWeapon(108);
-		BossWeapon[5]->SetRotation(sVECTOR3D(0.0f, 5.0f, 0.0f));
-		BossWeaponLocation[6] = sVECTOR3D(10.0f, -5.6f, 18.0f);
-		BossWeapon[6] = CreateWeapon(108);
-		BossWeapon[6]->SetRotation(sVECTOR3D(0.0f, -10.0f, 0.0f));
-		BossWeaponLocation[7] = sVECTOR3D(-10.0f, -5.6f, 18.0f);
-		BossWeapon[7] = CreateWeapon(108);
-		BossWeapon[7]->SetRotation(sVECTOR3D(0.0f, 10.0f, 0.0f));
-
+		BossWeaponSlots[0](CreateWeapon(108), sVECTOR3D(8.9f, -0.6f, 18.0f));
+		BossWeaponSlots[0].Weapon->SetRotation(sVECTOR3D(0.0f, -15.0f, 0.0f));
+		BossWeaponSlots[1](CreateWeapon(108), sVECTOR3D(-8.9f, -0.6f, 18.0f));
+		BossWeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 15.0f, 0.0f));
+		BossWeaponSlots[2](CreateWeapon(108), sVECTOR3D(10.0f, -5.6f, 18.0f));
+		BossWeaponSlots[3](CreateWeapon(108), sVECTOR3D(-10.0f, -5.6f, 18.0f));
+		BossWeaponSlots[4](CreateWeapon(108), sVECTOR3D(8.9f, -0.6f, 18.0f));
+		BossWeaponSlots[4].Weapon->SetRotation(sVECTOR3D(0.0f, -5.0f, 0.0f));
+		BossWeaponSlots[5](CreateWeapon(108), sVECTOR3D(-8.9f, -0.6f, 18.0f));
+		BossWeaponSlots[5].Weapon->SetRotation(sVECTOR3D(0.0f, 5.0f, 0.0f));
+		BossWeaponSlots[6](CreateWeapon(108), sVECTOR3D(10.0f, -5.6f, 18.0f));
+		BossWeaponSlots[6].Weapon->SetRotation(sVECTOR3D(0.0f, -10.0f, 0.0f));
+		BossWeaponSlots[7](CreateWeapon(108), sVECTOR3D(-10.0f, -5.6f, 18.0f));
+		BossWeaponSlots[7].Weapon->SetRotation(sVECTOR3D(0.0f, 10.0f, 0.0f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -926,18 +891,12 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		Weapon[7] = CreateWeapon(109);
 		Weapon[7]->SetRotation(sVECTOR3D(0.0f, -9.0f, 0.0f));
 
-		BossWeaponLocation[0] = sVECTOR3D(35.7f, -3.0f, -13.0f);
-		BossWeapon[0] = CreateWeapon(106);
-		BossWeaponLocation[1] = sVECTOR3D(-35.7f, -3.0f, -13.0f);
-		BossWeapon[1] = CreateWeapon(106);
-		BossWeaponLocation[2] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		BossWeapon[2] = CreateWeapon(106);
-		BossWeaponLocation[3] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		BossWeapon[3] = CreateWeapon(106);
-		BossWeaponLocation[4] = sVECTOR3D(8.85f, 5.65f, -10.2f);
-		BossWeapon[4] = CreateWeapon(104);
-		BossWeaponLocation[5] = sVECTOR3D(-8.85f, 5.65f, -10.2f);
-		BossWeapon[5] = CreateWeapon(104);
+		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D(35.7f, -3.0f, -13.0f));
+		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D(-35.7f, -3.0f, -13.0f));
+		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		BossWeaponSlots[4](CreateWeapon(104), sVECTOR3D(8.85f, 5.65f, -10.2f));
+		BossWeaponSlots[5](CreateWeapon(104), sVECTOR3D(-8.85f, 5.65f, -10.2f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -1067,18 +1026,12 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		Weapon[11] = CreateWeapon(104);
 		Weapon[11]->NextFireTime = Weapon[11]->NextFireTime/2.0f;
 
-		BossWeaponLocation[0] = sVECTOR3D(10.0f, -6.4f, 10.0f);
-		BossWeapon[0] = CreateWeapon(106);
-		BossWeaponLocation[1] = sVECTOR3D(-10.0f, -6.4f, 10.0f);
-		BossWeapon[1] = CreateWeapon(106);
-		BossWeaponLocation[2] = sVECTOR3D(15.0f, -6.4f, 8.0f);
-		BossWeapon[2] = CreateWeapon(106);
-		BossWeaponLocation[3] = sVECTOR3D(-15.0f, -6.4f, 8.0f);
-		BossWeapon[3] = CreateWeapon(106);
-		BossWeaponLocation[4] = sVECTOR3D(20.0f, -6.4f, 5.0f);
-		BossWeapon[4] = CreateWeapon(106);
-		BossWeaponLocation[5] = sVECTOR3D(-20.0f, -6.4f, 5.0f);
-		BossWeapon[5] = CreateWeapon(106);
+		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D(10.0f, -6.4f, 10.0f));
+		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D(-10.0f, -6.4f, 10.0f));
+		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D(15.0f, -6.4f, 8.0f));
+		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D(-15.0f, -6.4f, 8.0f));
+		BossWeaponSlots[4](CreateWeapon(106), sVECTOR3D(20.0f, -6.4f, 5.0f));
+		BossWeaponSlots[5](CreateWeapon(106), sVECTOR3D(-20.0f, -6.4f, 5.0f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -1165,10 +1118,8 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		Weapon[4]->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
 		Weapon[4]->NextFireTime = Weapon[4]->NextFireTime/2.0f;
 
-		BossWeaponLocation[0] = sVECTOR3D(12.5f, 1.6f, -15.3f);
-		BossWeapon[0] = CreateWeapon(110);
-		BossWeaponLocation[1] = sVECTOR3D(-12.5f, 1.6f, -15.3f);
-		BossWeapon[1] = CreateWeapon(110);
+		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(12.5f, 1.6f, -15.3f));
+		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D(-12.5f, 1.6f, -15.3f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -1215,18 +1166,12 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		Weapon[3] = CreateWeapon(104);
 		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
 
-		BossWeaponLocation[0] = sVECTOR3D(8.0f, -1.0f, 15.0f);
-		BossWeapon[0] = CreateWeapon(110);
-		BossWeaponLocation[1] = sVECTOR3D(-8.0f, -1.0f, 15.0f);
-		BossWeapon[1] = CreateWeapon(110);
-		BossWeaponLocation[2] = sVECTOR3D(10.0f, -6.4f, 8.0f);
-		BossWeapon[2] = CreateWeapon(107);
-		BossWeaponLocation[3] = sVECTOR3D(-10.0f, -6.4f, 8.0f);
-		BossWeapon[3] = CreateWeapon(107);
-		BossWeaponLocation[4] = sVECTOR3D(15.0f, -6.4f, 5.0f);
-		BossWeapon[4] = CreateWeapon(107);
-		BossWeaponLocation[5] = sVECTOR3D(-15.0f, -6.4f, 5.0f);
-		BossWeapon[5] = CreateWeapon(107);
+		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(8.0f, -1.0f, 15.0f));
+		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D(-8.0f, -1.0f, 15.0f));
+		BossWeaponSlots[2](CreateWeapon(107), sVECTOR3D(10.0f, -6.4f, 8.0f));
+		BossWeaponSlots[3](CreateWeapon(107), sVECTOR3D(-10.0f, -6.4f, 8.0f));
+		BossWeaponSlots[4](CreateWeapon(107), sVECTOR3D(15.0f, -6.4f, 5.0f));
+		BossWeaponSlots[5](CreateWeapon(107), sVECTOR3D(-15.0f, -6.4f, 5.0f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();

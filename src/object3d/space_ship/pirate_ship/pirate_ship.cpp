@@ -228,7 +228,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 	MaxSpeedRotate = 40.0f;
 	Strength = StrengthStart = PresetPirateShipData[PirateShipNum - 1].Strength / GameEnemyArmorPenalty;
 	WeaponQuantity = PresetPirateShipData[PirateShipNum - 1].WeaponQuantity;
-	BossWeaponQuantity = PresetPirateShipData[PirateShipNum - 1].BossWeaponQuantity;
+	BossWeaponSlots.resize(PresetPirateShipData[PirateShipNum - 1].BossWeaponQuantity);
 	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
 
 
@@ -254,17 +254,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 			Weapon[i] = nullptr;
 		}
 	}
-	if (BossWeaponQuantity > 0) {
-		BossWeaponSetFire = new bool[BossWeaponQuantity];
-		BossWeaponLocation = new sVECTOR3D[BossWeaponQuantity];
-		BossWeaponType = new int[BossWeaponQuantity];
-		BossWeapon = new cWeapon*[BossWeaponQuantity];
-		for (int i = 0; i < BossWeaponQuantity; i++) {
-			BossWeaponSetFire[i] = false;
-			BossWeaponType[i] = 1;
-			BossWeapon[i] = nullptr;
-		}
-	}
+
 	// начальные установки для двигателей
 	EnginesLocation.resize(EngineQuantity);
 	Engines.resize(EngineQuantity);
@@ -409,10 +399,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		WeaponLocation[0] = sVECTOR3D(0.0f, 2.2f, -0.2f);
 		Weapon[0] = CreateWeapon(202);
 
-		BossWeaponLocation[0] = sVECTOR3D(5.4f, 1.0f, 2.0f);
-		BossWeapon[0] = CreateWeapon(209);
-		BossWeaponLocation[1] = sVECTOR3D(-5.4f, 1.0f, 2.0f);
-		BossWeapon[1] = CreateWeapon(209);
+		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D(5.4f, 1.0f, 2.0f));
+		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D(-5.4f, 1.0f, 2.0f));
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
@@ -433,10 +421,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		WeaponLocation[0] = sVECTOR3D(0.0f, 2.4f, -0.2f);
 		Weapon[0] = CreateWeapon(202);
 
-		BossWeaponLocation[0] = sVECTOR3D(9.5f, 1.3f, 2.0f);
-		BossWeapon[0] = CreateWeapon(210);
-		BossWeaponLocation[1] = sVECTOR3D(-9.5f, 1.3f, 2.0f);
-		BossWeapon[1] = CreateWeapon(210);
+		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(9.5f, 1.3f, 2.0f));
+		BossWeaponSlots[1](CreateWeapon(210), sVECTOR3D(-9.5f, 1.3f, 2.0f));
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
@@ -465,19 +451,13 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		WeaponLocation[0] = sVECTOR3D(0.0f, 2.4f, -0.2f);
 		Weapon[0] = CreateWeapon(202);
 
-		BossWeaponLocation[0] = sVECTOR3D(9.1f, 1.3f, 2.0f);
-		BossWeapon[0] = CreateWeapon(206);
-		BossWeaponLocation[1] = sVECTOR3D(9.4f, 1.0f, 2.0f);
-		BossWeapon[1] = CreateWeapon(206);
-		BossWeaponLocation[2] = sVECTOR3D(9.1f, 0.7f, 2.0f);
-		BossWeapon[2] = CreateWeapon(206);
+		BossWeaponSlots[0](CreateWeapon(206), sVECTOR3D(9.1f, 1.3f, 2.0f));
+		BossWeaponSlots[1](CreateWeapon(206), sVECTOR3D(9.4f, 1.0f, 2.0f));
+		BossWeaponSlots[2](CreateWeapon(206), sVECTOR3D(9.1f, 0.7f, 2.0f));
 
-		BossWeaponLocation[3] = sVECTOR3D(-9.1f, 1.3f, 2.0f);
-		BossWeapon[3] = CreateWeapon(206);
-		BossWeaponLocation[4] = sVECTOR3D(-9.4f, 1.0f, 2.0f);
-		BossWeapon[4] = CreateWeapon(206);
-		BossWeaponLocation[5] = sVECTOR3D(-9.1f, 0.7f, 2.0f);
-		BossWeapon[5] = CreateWeapon(206);
+		BossWeaponSlots[3](CreateWeapon(206), sVECTOR3D(-9.1f, 1.3f, 2.0f));
+		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D(-9.4f, 1.0f, 2.0f));
+		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D(-9.1f, 0.7f, 2.0f));
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 6.0f, 0.0f);
@@ -511,10 +491,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		WeaponLocation[2] = sVECTOR3D(0.0f, 3.4f, -5.0f);
 		Weapon[2] = CreateWeapon(202);
 
-		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 9.0f);
-		BossWeapon[0] = CreateWeapon(205);
-		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 9.0f);
-		BossWeapon[1] = CreateWeapon(205);
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 9.0f));
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 9.0f));
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
@@ -559,14 +537,10 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		Weapon[3] = CreateWeapon(201);
 		Weapon[3]->SetRotation(sVECTOR3D(0,180,0));
 
-		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 8.0f);
-		BossWeapon[0] = CreateWeapon(205);
-		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 8.0f);
-		BossWeapon[1] = CreateWeapon(205);
-		BossWeaponLocation[2] = sVECTOR3D(16.5f, 2.7f, 7.5f);
-		BossWeapon[2] = CreateWeapon(205);
-		BossWeaponLocation[3] = sVECTOR3D(-16.5f, 2.7f, 7.5f);
-		BossWeapon[3] = CreateWeapon(205);
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 8.0f));
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 8.0f));
+		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D(16.5f, 2.7f, 7.5f));
+		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D(-16.5f, 2.7f, 7.5f));
 
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
@@ -612,10 +586,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 11:
 		// оружие
-		BossWeaponLocation[0] = sVECTOR3D(5.4f, 1.0f, 2.0f);
-		BossWeapon[0] = CreateWeapon(209);
-		BossWeaponLocation[1] = sVECTOR3D(-5.4f, 1.0f, 2.0f);
-		BossWeapon[1] = CreateWeapon(209);
+		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D(5.4f, 1.0f, 2.0f));
+		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D(-5.4f, 1.0f, 2.0f));
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
 		WeaponFlare = CreateWeapon(203);
@@ -632,10 +604,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 12:
 		// оружие
-		BossWeaponLocation[0] = sVECTOR3D(9.5f, 1.3f, 2.0f);
-		BossWeapon[0] = CreateWeapon(210);
-		BossWeaponLocation[1] = sVECTOR3D(-9.5f, 1.3f, 2.0f);
-		BossWeapon[1] = CreateWeapon(210);
+		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(9.5f, 1.3f, 2.0f));
+		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(-9.5f, 1.3f, 2.0f));
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 5.0f, 0.0f);
 		WeaponFlare = CreateWeapon(203);
@@ -660,18 +630,12 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 13:
 		// оружие
-		BossWeaponLocation[0] = sVECTOR3D(9.1f, 1.3f, 2.0f);
-		BossWeapon[0] = CreateWeapon(206);
-		BossWeaponLocation[1] = sVECTOR3D(9.4f, 1.0f, 2.0f);
-		BossWeapon[1] = CreateWeapon(206);
-		BossWeaponLocation[2] = sVECTOR3D(9.1f, 0.7f, 2.0f);
-		BossWeapon[2] = CreateWeapon(206);
-		BossWeaponLocation[3] = sVECTOR3D(-9.1f, 1.3f, 2.0f);
-		BossWeapon[3] = CreateWeapon(206);
-		BossWeaponLocation[4] = sVECTOR3D(-9.4f, 1.0f, 2.0f);
-		BossWeapon[4] = CreateWeapon(206);
-		BossWeaponLocation[5] = sVECTOR3D(-9.1f, 0.7f, 2.0f);
-		BossWeapon[5] = CreateWeapon(206);
+		BossWeaponSlots[0](CreateWeapon(206), sVECTOR3D(9.1f, 1.3f, 2.0f));
+		BossWeaponSlots[1](CreateWeapon(206), sVECTOR3D(9.4f, 1.0f, 2.0f));
+		BossWeaponSlots[2](CreateWeapon(206), sVECTOR3D(9.1f, 0.7f, 2.0f));
+		BossWeaponSlots[3](CreateWeapon(206), sVECTOR3D(-9.1f, 1.3f, 2.0f));
+		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D(-9.4f, 1.0f, 2.0f));
+		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D(-9.1f, 0.7f, 2.0f));
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 6.0f, 0.0f);
 		WeaponFlare = CreateWeapon(203);
@@ -696,10 +660,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 14:
 		// оружие
-		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 9.0f);
-		BossWeapon[0] = CreateWeapon(205);
-		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 9.0f);
-		BossWeapon[1] = CreateWeapon(205);
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 9.0f));
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 9.0f));
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
 		WeaponFlare = CreateWeapon(203);
@@ -732,14 +694,10 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 15:
 		// оружие
-		BossWeaponLocation[0] = sVECTOR3D(11.1f, 2.7f, 8.0f);
-		BossWeapon[0] = CreateWeapon(205);
-		BossWeaponLocation[1] = sVECTOR3D(-11.1f, 2.7f, 8.0f);
-		BossWeapon[1] = CreateWeapon(205);
-		BossWeaponLocation[2] = sVECTOR3D(16.5f, 2.7f, 7.5f);
-		BossWeapon[2] = CreateWeapon(205);
-		BossWeaponLocation[3] = sVECTOR3D(-16.5f, 2.7f, 7.5f);
-		BossWeapon[3] = CreateWeapon(205);
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 8.0f));
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 8.0f));
+		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D(16.5f, 2.7f, 7.5f));
+		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D(-16.5f, 2.7f, 7.5f));
 		// фларе
 		WeaponFlareLocation = sVECTOR3D(0.0f, 7.0f, 0.0f);
 		WeaponFlare = CreateWeapon(203);

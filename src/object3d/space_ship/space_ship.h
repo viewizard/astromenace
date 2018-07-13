@@ -38,6 +38,26 @@
 namespace viewizard {
 namespace astromenace {
 
+struct sShipWeaponSlot {
+	bool SetFire{false};
+	cWeapon *Weapon{nullptr};
+	sVECTOR3D Location{};
+	int Type{1};
+	float YAngle{0.0f};
+
+	~sShipWeaponSlot()
+	{
+		if (Weapon)
+			ReleaseWeapon(Weapon);
+	}
+
+	void operator () (cWeapon *_Weapon, const sVECTOR3D &_Location)
+	{
+		Weapon = _Weapon;
+		Location = _Location;
+	}
+};
+
 class cSpaceShip : public cObject3D
 {
 public:
@@ -158,18 +178,7 @@ public:
 	int WeaponGroupCurrentFireNum{-1};
 	float WeaponGroupCurrentFireDelay{0.0f};
 
-	// кол-во оружия доступного на данной моделе
-	int BossWeaponQuantity{0};
-	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool *BossWeaponSetFire{nullptr};
-	// указатель на массив оружия
-	cWeapon **BossWeapon{nullptr};
-	// расположение оружия на коробле (относительное)
-	sVECTOR3D *BossWeaponLocation{nullptr};
-	// тип оружия по мощьности, для определенных слотов
-	int *BossWeaponType{nullptr};
-	// первоначальный доворот оружия для корабля (будем использовать только для игрка, для остальных он ноль)
-	float *BossWeaponYAngle{nullptr};
+	std::vector<sShipWeaponSlot> BossWeaponSlots{};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
 	int BossWeaponFireType{2};
 	int BossWeaponGroupCurrentFireNum{-1};

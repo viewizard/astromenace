@@ -177,32 +177,6 @@ cSpaceShip::~cSpaceShip()
 		delete [] Weapon;
 		Weapon = nullptr;
 	}
-	if (BossWeaponSetFire != nullptr) {
-		delete [] BossWeaponSetFire;
-		BossWeaponSetFire = nullptr;
-	}
-	if (BossWeaponLocation != nullptr) {
-		delete [] BossWeaponLocation;
-		BossWeaponLocation = nullptr;
-	}
-	if (BossWeaponType != nullptr) {
-		delete [] BossWeaponType;
-		BossWeaponType = nullptr;
-	}
-	if (BossWeaponYAngle != nullptr) {
-		delete [] BossWeaponYAngle;
-		BossWeaponYAngle = nullptr;
-	}
-	if (BossWeapon != nullptr) {
-		for (int i = 0; i < BossWeaponQuantity; i++)
-			if (BossWeapon[i] != nullptr) {
-				ReleaseWeapon(BossWeapon[i]);
-				BossWeapon[i] = nullptr;
-			}
-
-		delete [] BossWeapon;
-		BossWeapon = nullptr;
-	}
 	if (WeaponFlare != nullptr) {
 		ReleaseWeapon(WeaponFlare);
 		WeaponFlare = nullptr;
@@ -259,11 +233,12 @@ void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 			if (Weapon[i] != nullptr)
 				Weapon[i]->SetLocation(NewLocation + WeaponLocation[i]);
 		}
-	if (BossWeapon != nullptr)
-		for (int i = 0; i < BossWeaponQuantity; i++) {
-			if (BossWeapon[i] != nullptr)
-				BossWeapon[i]->SetLocation(NewLocation + BossWeaponLocation[i]);
+	if (!BossWeaponSlots.empty()) {
+		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+			if (tmpBossWeaponSlot.Weapon)
+				tmpBossWeaponSlot.Weapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
+	}
 	if (WeaponFlare != nullptr)
 		WeaponFlare->SetLocation(NewLocation + WeaponFlareLocation);
 
@@ -305,10 +280,12 @@ void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 		for (int i = 0; i < WeaponQuantity; i++) {
 			if (Weapon[i] != nullptr) Weapon[i]->SetLocation(NewLocation + WeaponLocation[i]);
 		}
-	if (BossWeapon != nullptr)
-		for (int i = 0; i < BossWeaponQuantity; i++) {
-			if (BossWeapon[i] != nullptr) BossWeapon[i]->SetLocation(NewLocation + BossWeaponLocation[i]);
+	if (!BossWeaponSlots.empty()) {
+		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+			if (tmpBossWeaponSlot.Weapon)
+				tmpBossWeaponSlot.Weapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
+	}
 	if (WeaponFlare != nullptr) {
 		WeaponFlare->SetLocation(NewLocation + WeaponFlareLocation);
 	}
@@ -358,14 +335,14 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 			}
 		}
 	}
-	if (BossWeapon != nullptr) {
-		for (int i = 0; i < BossWeaponQuantity; i++) {
-			vw_Matrix33CalcPoint(BossWeaponLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(BossWeaponLocation[i], CurrentRotationMat);
+	if (!BossWeaponSlots.empty()) {
+		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+			if (tmpBossWeaponSlot.Weapon) {
+				vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, OldInvRotationMat);
+				vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, CurrentRotationMat);
 
-			if (BossWeapon[i] != nullptr) {
-				BossWeapon[i]->SetRotation(NewRotation);
-				BossWeapon[i]->SetLocation(Location + BossWeaponLocation[i]);
+				tmpBossWeaponSlot.Weapon->SetRotation(NewRotation);
+				tmpBossWeaponSlot.Weapon->SetLocation(Location + tmpBossWeaponSlot.Location);
 			}
 		}
 	}
@@ -459,10 +436,10 @@ bool cSpaceShip::Update(float Time)
 					WeaponSetFire[i] = TimeSheetList.front().Fire;
 			}
 		}
-		if (BossWeapon) {
-			for (int i = 0; i < BossWeaponQuantity; i++) {
-				if (BossWeapon[i])
-					BossWeaponSetFire[i] = TimeSheetList.front().BossFire;
+		if (!BossWeaponSlots.empty()) {
+			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+				if (tmpBossWeaponSlot.Weapon)
+					tmpBossWeaponSlot.SetFire = TimeSheetList.front().BossFire;
 			}
 		}
 	}
@@ -984,58 +961,59 @@ bool cSpaceShip::Update(float Time)
 				}
 		}
 	}
-	if (BossWeapon != nullptr) {
+	if (!BossWeaponSlots.empty()) {
 		// если залп
 		if (BossWeaponFireType == 1) {
-			for (int i=0; i<BossWeaponQuantity; i++) {
-				if ((BossWeapon[i] != nullptr) &&
-				    (BossWeaponSetFire[i]))
-					BossWeapon[i]->WeaponFire(Time);
+			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+				if (tmpBossWeaponSlot.Weapon &&
+				    tmpBossWeaponSlot.SetFire)
+					tmpBossWeaponSlot.Weapon->WeaponFire(Time);
 			}
 		} else { // переменный огонь
 
 			int PrimCount = 0;
 			float PrimTime = 0.0f;
-			int FirstWeapon = 6;
-			int LastWeapon = 0;
+			unsigned FirstWeapon = BossWeaponSlots.size();
+			unsigned LastWeapon = 0;
 
 			BossWeaponGroupCurrentFireDelay -= TimeDelta;
 
 			// находим кол-во оружия
-			for (int i = 0; i < BossWeaponQuantity; i++)
-				if (BossWeapon[i] != nullptr) {
+			for (unsigned i = 0; i < BossWeaponSlots.size(); i++) {
+				if (BossWeaponSlots[i].Weapon) {
 					PrimCount++;
-					PrimTime += BossWeapon[i]->NextFireTime;
+					PrimTime += BossWeaponSlots[i].Weapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
 						LastWeapon = i;
 				}
+			}
 			// если еще не было начальной установки
 			if (BossWeaponGroupCurrentFireNum == -1)
 				BossWeaponGroupCurrentFireNum = FirstWeapon;
 
 			// стреляем
-			for (int i = 0; i < BossWeaponQuantity; i++) {
-				if ((BossWeapon[i] != nullptr) &&
-				    (BossWeaponSetFire[i]) &&
-				    (BossWeaponGroupCurrentFireNum == i) &&
+			for (unsigned i = 0; i < BossWeaponSlots.size(); i++) {
+				if (BossWeaponSlots[i].Weapon &&
+				    BossWeaponSlots[i].SetFire &&
+				    (BossWeaponGroupCurrentFireNum == static_cast<int>(i)) &&
 				    (BossWeaponGroupCurrentFireDelay <= 0.0f)) {
-					BossWeapon[i]->WeaponFire(Time);
+					BossWeaponSlots[i].Weapon->WeaponFire(Time);
 
 					BossWeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
 					BossWeaponGroupCurrentFireNum++;
-					if (BossWeaponGroupCurrentFireNum > LastWeapon)
+					if (BossWeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 						BossWeaponGroupCurrentFireNum = FirstWeapon;
 
 					// если такого оружия нет, берем что есть
-					if (BossWeapon[BossWeaponGroupCurrentFireNum] == nullptr) {
+					if (!BossWeaponSlots[BossWeaponGroupCurrentFireNum].Weapon) {
 						bool exit = false;
 						while (!exit) {
 							BossWeaponGroupCurrentFireNum++;
-							if (BossWeaponGroupCurrentFireNum > LastWeapon)
+							if (BossWeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 								BossWeaponGroupCurrentFireNum = FirstWeapon;
-							if (BossWeapon[BossWeaponGroupCurrentFireNum] != nullptr)
+							if (BossWeaponSlots[BossWeaponGroupCurrentFireNum].Weapon)
 								exit = true;
 						}
 					}
@@ -1124,11 +1102,13 @@ bool cSpaceShip::Update(float Time)
 				if (WeaponSetFire[i]) NeedFire = true;
 		}
 	bool NeedBossFire = false;
-	if (BossWeapon != nullptr)
-		for (int i = 0; i < BossWeaponQuantity; i++) {
-			if (BossWeapon[i] != nullptr)
-				if (BossWeaponSetFire[i]) NeedBossFire = true;
+	if (!BossWeaponSlots.empty()) {
+		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+			if (tmpBossWeaponSlot.Weapon &&
+			    tmpBossWeaponSlot.SetFire)
+				NeedBossFire = true;
 		}
+	}
 
 	// если не игрок игрок и есть режим действия - нужно "искать" противника
 	if ((ObjectStatus == eObjectStatus::Enemy) && NeedFire) {
@@ -1201,11 +1181,11 @@ bool cSpaceShip::Update(float Time)
 		// находим среднюю точку положение оружия
 		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
-		if (BossWeapon != nullptr) {
-			for (int i=0; i<BossWeaponQuantity; i++) {
-				if ((BossWeapon[i] != nullptr) &&
-				    (BossWeapon[i]->NeedRotateOnTargeting)) {
-					WeaponAvLocation = WeaponAvLocation + BossWeaponLocation[i] + BossWeapon[i]->FireLocation + Location;
+		if (!BossWeaponSlots.empty()) {
+			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+				if (tmpBossWeaponSlot.Weapon &&
+				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					WeaponAvLocation = WeaponAvLocation + tmpBossWeaponSlot.Location + tmpBossWeaponSlot.Weapon->FireLocation + Location;
 					UsedWeaponQunt++;
 				}
 			}
@@ -1214,15 +1194,15 @@ bool cSpaceShip::Update(float Time)
 		WeaponAvLocation.y = WeaponAvLocation.y / UsedWeaponQunt;
 		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
 
-		int WeapNum = -1;
+		int WeapNum{-1};
 		sVECTOR3D FirePos(0.0f,0.0f,0.0f);
-		if (BossWeapon != nullptr) {
+		if (!BossWeaponSlots.empty()) {
 			// находим номер
-			for (int i = 0; i < BossWeaponQuantity; i++) {
-				if ((BossWeapon[i] != nullptr) &&
-				    (BossWeapon[i]->NeedRotateOnTargeting) &&
-				    (WeapNum == -1)) {
-					WeapNum = BossWeapon[0]->InternalType;
+			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+				if (tmpBossWeaponSlot.Weapon &&
+				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					WeapNum = tmpBossWeaponSlot.Weapon->InternalType;
+					break;
 				}
 			}
 			if (WeapNum == -1)
@@ -1230,10 +1210,10 @@ bool cSpaceShip::Update(float Time)
 
 
 			int Count = 0;
-			for (int i = 0; i < BossWeaponQuantity; i++) {
-				if ((BossWeapon[i] != nullptr) &&
-				    (BossWeapon[i]->NeedRotateOnTargeting)) {
-					FirePos += BossWeaponLocation[i];
+			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+				if (tmpBossWeaponSlot.Weapon &&
+				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					FirePos += tmpBossWeaponSlot.Location;
 					Count++;
 				}
 			}
@@ -1244,15 +1224,15 @@ bool cSpaceShip::Update(float Time)
 						 CurrentRotationMat, NeedAngle, WeapNum);
 
 		// всему оружию ставим нужную ориентацию
-		if (BossWeapon != nullptr) {
-			for (int i = 0; i < BossWeaponQuantity; i++) {
-				if ((BossWeapon[i] != nullptr) &&
-				    (BossWeapon[i]->NeedRotateOnTargeting)) {
-					NeedAngle.y = BossWeapon[i]->Rotation.y;
-					NeedAngle.z = BossWeapon[i]->Rotation.z;
+		if (!BossWeaponSlots.empty()) {
+			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
+				if (tmpBossWeaponSlot.Weapon &&
+				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					NeedAngle.y = tmpBossWeaponSlot.Weapon->Rotation.y;
+					NeedAngle.z = tmpBossWeaponSlot.Weapon->Rotation.z;
 
-					BossWeapon[i]->SetRotation(BossWeapon[i]->Rotation^(-1));
-					BossWeapon[i]->SetRotation(NeedAngle);
+					tmpBossWeaponSlot.Weapon->SetRotation(tmpBossWeaponSlot.Weapon->Rotation ^ -1);
+					tmpBossWeaponSlot.Weapon->SetRotation(NeedAngle);
 				}
 			}
 		}
