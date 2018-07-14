@@ -563,7 +563,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 	case 12:
 		// оружие
 		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D{9.5f, 1.3f, 2.0f});
-		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D{-9.5f, 1.3f, 2.0f});
+		BossWeaponSlots[1](CreateWeapon(210), sVECTOR3D{-9.5f, 1.3f, 2.0f});
 		// фларе
 		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 5.0f, 0.0f});
 		// двигатели
