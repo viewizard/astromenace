@@ -928,15 +928,15 @@ void ExitGameWithSave()
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = PlayerFighter->Strength;
 
 	// учет состояния оружия
-	for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+	for (unsigned i = 0; i < PlayerFighter->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			// если оружие было уничтожено во время игры
-			if (PlayerFighter->Weapon[i]->Strength <= 0.0f) {
+			if (PlayerFighter->WeaponSlots[i].Weapon->Strength <= 0.0f) {
 				ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
 				ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
 			} else {
 				// если все ок, нужно запомнить сколько осталось в боекомплекте
-				ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = PlayerFighter->Weapon[i]->Ammo;
+				ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = PlayerFighter->WeaponSlots[i].Weapon->Ammo;
 			}
 		}
 	}

@@ -247,12 +247,14 @@ int GetWorkshopShipFullCost(int Num, cEarthSpaceFighter *Fighter)
 
 
 	// прибавить стоимость оружия
-	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++)
-		if (WorkshopFighterGame->Weapon[i] != nullptr) {
-			ShipCost += GetWeaponCost(WorkshopFighterGame->Weapon[i]->InternalType,
-						  WorkshopFighterGame->Weapon[i]->Ammo,
-						  WorkshopFighterGame->Weapon[i]->AmmoStart);
+	if (!WorkshopFighterGame->WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
+			if (tmpWeaponSlot.Weapon)
+				ShipCost += GetWeaponCost(tmpWeaponSlot.Weapon->InternalType,
+							  tmpWeaponSlot.Weapon->Ammo,
+							  tmpWeaponSlot.Weapon->AmmoStart);
 		}
+	}
 
 	// прибавить стоимость систем
 	if (GameConfig().Profile[CurrentProfile].EngineSystem)
@@ -310,16 +312,17 @@ void WorkshopCreateBuyShip()
 	ChangeGameConfig().Profile[CurrentProfile].AdvancedProtectionSystem = 0;
 
 	// 2 - Оружие
-	int OldWeaponQuantity = WorkshopFighterGame->WeaponQuantity;
-	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++)
-		if (WorkshopFighterGame->Weapon[i] != nullptr) {
+	unsigned OldWeaponQuantity = WorkshopFighterGame->WeaponSlots.size();
+	for (auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
+		if (tmpWeaponSlot.Weapon) {
 			ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(
-									    WorkshopFighterGame->Weapon[i]->InternalType,
-									    WorkshopFighterGame->Weapon[i]->Ammo,
-									    WorkshopFighterGame->Weapon[i]->AmmoStart);
-			ReleaseWeapon(WorkshopFighterGame->Weapon[i]);
-			WorkshopFighterGame->Weapon[i] = nullptr;
+									    tmpWeaponSlot.Weapon->InternalType,
+									    tmpWeaponSlot.Weapon->Ammo,
+									    tmpWeaponSlot.Weapon->AmmoStart);
+			ReleaseWeapon(tmpWeaponSlot.Weapon);
+			tmpWeaponSlot.Weapon = nullptr;
 		}
+	}
 
 	// 3 - корпус
 	ChangeGameConfig().Profile[CurrentProfile].Money +=
@@ -381,15 +384,15 @@ void WorkshopCreateBuyShip()
 
 	// покупаем оружие, если можем... нет - ставим что продали его (это сделали ранее)
 	// всегда покупаем новое, т.е. с полным боекомплектом!
-	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
+	for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			if (GameConfig().Profile[CurrentProfile].Money >= GetWeaponBaseCost(GameConfig().Profile[CurrentProfile].Weapon[i])) {
 				if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
-					if (auto sharedFire = WorkshopFighterGame->Weapon[i]->Fire.lock())
+					if (auto sharedFire = WorkshopFighterGame->WeaponSlots[i].Weapon->Fire.lock())
 						vw_ReleaseLight(sharedFire->Light);
 
 					ChangeGameConfig().Profile[CurrentProfile].Money -= GetWeaponBaseCost(GameConfig().Profile[CurrentProfile].Weapon[i]);
-					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->AmmoStart;
+					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->WeaponSlots[i].Weapon->AmmoStart;
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i] = 0.0f;
 				} else { // если поставить не смогли - не такой слот
 					ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
@@ -402,9 +405,9 @@ void WorkshopCreateBuyShip()
 		}
 	}
 	// если было больше слотов чем есть сейчас
-	if (OldWeaponQuantity > WorkshopFighterGame->WeaponQuantity) {
-		for (int j = 0; j < OldWeaponQuantity; j++) {
-			if (WorkshopFighterGame->WeaponQuantity <= j)
+	if (OldWeaponQuantity > WorkshopFighterGame->WeaponSlots.size()) {
+		for (unsigned j = 0; j < OldWeaponQuantity; j++) {
+			if (WorkshopFighterGame->WeaponSlots.size() <= j)
 				ChangeGameConfig().Profile[CurrentProfile].Weapon[j] = 0;
 		}
 	}
@@ -434,7 +437,7 @@ void WorkshopCreateBuyShip()
 void BuyShip()
 {
 	// сбрасываем особенные настройки слотов оружия
-	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
+	for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
 		ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i] = 0;
 	}
 
@@ -586,17 +589,17 @@ void Workshop_Shipyard()
 	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", (int)WorkshopNewFighter->StrengthStart);
 
 	vw_DrawText(GameConfig().InternalWidth/2-440, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
-	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponQuantity);
+	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponSlots.size());
 
 	vw_DrawText(GameConfig().InternalWidth/2-440, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
 	int SSS = 0;
-	if (WorkshopNewFighter->WeaponQuantity>0) {
-		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponType[0]);
-		SSS += vw_TextWidth("%i", WorkshopNewFighter->WeaponType[0]);
+	if (WorkshopNewFighter->WeaponSlots.size()>0) {
+		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponSlots[0].Type);
+		SSS += vw_TextWidth("%i", WorkshopNewFighter->WeaponSlots[0].Type);
 	}
-	for (int i=1; i<WorkshopNewFighter->WeaponQuantity; i++) {
-		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", WorkshopNewFighter->WeaponType[i]);
-		SSS += vw_TextWidth("/%i", WorkshopNewFighter->WeaponType[i]);
+	for (unsigned i=1; i<WorkshopNewFighter->WeaponSlots.size(); i++) {
+		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", WorkshopNewFighter->WeaponSlots[i].Type);
+		SSS += vw_TextWidth("/%i", WorkshopNewFighter->WeaponSlots[i].Type);
 	}
 
 	// вывод стоимости корабля
@@ -715,18 +718,18 @@ void Workshop_Shipyard()
 	}
 
 	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
-	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponQuantity);
+	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponSlots.size());
 
 
 	vw_DrawText(GameConfig().InternalWidth/2+74, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
 	SSS = 0;
-	if (WorkshopFighterGame->WeaponQuantity>0) {
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponType[0]);
-		SSS += vw_TextWidth("%i", WorkshopFighterGame->WeaponType[0]);
+	if (WorkshopFighterGame->WeaponSlots.size()>0) {
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponSlots[0].Type);
+		SSS += vw_TextWidth("%i", WorkshopFighterGame->WeaponSlots[0].Type);
 	}
-	for (int i=1; i<WorkshopFighterGame->WeaponQuantity; i++) {
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", WorkshopFighterGame->WeaponType[i]);
-		SSS += vw_TextWidth("/%i", WorkshopFighterGame->WeaponType[i]);
+	for (unsigned i=1; i<WorkshopFighterGame->WeaponSlots.size(); i++) {
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", WorkshopFighterGame->WeaponSlots[i].Type);
+		SSS += vw_TextWidth("/%i", WorkshopFighterGame->WeaponSlots[i].Type);
 	}
 
 

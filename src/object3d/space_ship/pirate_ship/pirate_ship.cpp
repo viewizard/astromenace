@@ -229,7 +229,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
 	Strength = StrengthStart = PresetPirateShipData[PirateShipNum - 1].Strength / GameEnemyArmorPenalty;
-	WeaponQuantity = PresetPirateShipData[PirateShipNum - 1].WeaponQuantity;
+	WeaponSlots.resize(PresetPirateShipData[PirateShipNum - 1].WeaponQuantity);
 	BossWeaponSlots.resize(PresetPirateShipData[PirateShipNum - 1].BossWeaponQuantity);
 	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
 
@@ -243,19 +243,6 @@ cPirateShip::cPirateShip(int PirateShipNum)
 			NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[PirateShipNum - 1].NormalMapName);
 	}
 
-
-	// начальные установки для оружия
-	if (WeaponQuantity > 0) {
-		WeaponSetFire = new bool[WeaponQuantity];
-		WeaponLocation = new sVECTOR3D[WeaponQuantity];
-		WeaponType = new int[WeaponQuantity];
-		Weapon = new cWeapon*[WeaponQuantity];
-		for (int i = 0; i < WeaponQuantity; i++) {
-			WeaponSetFire[i] = false;
-			WeaponType[i] = 1;
-			Weapon[i] = nullptr;
-		}
-	}
 
 	// начальные установки для двигателей
 	EnginesLocation.resize(EngineQuantity);
@@ -273,11 +260,9 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(1.8f, -1.2f, 6.0f);
-		Weapon[0] = CreateWeapon(204);
-		WeaponLocation[1] = sVECTOR3D(-1.8f, -1.2f, 6.0f);
-		Weapon[1] = CreateWeapon(204);
-		Weapon[1]->SFX = eGameSFX::none;
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(1.8f, -1.2f, 6.0f));
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-1.8f, -1.2f, 6.0f));
+		WeaponSlots[1].Weapon->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
 		// двигатели
@@ -295,8 +280,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 50.0f;
 		MaxAcceler = 50.0f;
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, -2.0f, 2.0f);
-		Weapon[0] = CreateWeapon(205);
+		WeaponSlots[0](CreateWeapon(205), sVECTOR3D(0.0f, -2.0f, 2.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.1f, 0.5f, -5.7f);
@@ -312,14 +296,10 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(3.0f, -0.2f, -0.5f);
-		Weapon[0] = CreateWeapon(204);
-		WeaponLocation[1] = sVECTOR3D(-3.0f, -0.2f, -0.5f);
-		Weapon[1] = CreateWeapon(204);
-		WeaponLocation[2] = sVECTOR3D(2.0f, -0.2f, 0.0f);
-		Weapon[2] = CreateWeapon(206);
-		WeaponLocation[3] = sVECTOR3D(-2.0f, -0.2f, 0.0f);
-		Weapon[3] = CreateWeapon(206);
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(3.0f, -0.2f, -0.5f));
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-3.0f, -0.2f, -0.5f));
+		WeaponSlots[2](CreateWeapon(206), sVECTOR3D(2.0f, -0.2f, 0.0f));
+		WeaponSlots[3](CreateWeapon(206), sVECTOR3D(-2.0f, -0.2f, 0.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.0f, 1.8f, -1.2f);
@@ -334,14 +314,10 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(4.3f, -0.4f, -0.5f);
-		Weapon[0] = CreateWeapon(211);
-		WeaponLocation[1] = sVECTOR3D(-4.3f, -0.4f, -0.5f);
-		Weapon[1] = CreateWeapon(211);
-		WeaponLocation[2] = sVECTOR3D(3.0f, -0.4f, 0.5f);
-		Weapon[2] = CreateWeapon(205);
-		WeaponLocation[3] = sVECTOR3D(-3.0f, -0.4f, 0.5f);
-		Weapon[3] = CreateWeapon(205);
+		WeaponSlots[0](CreateWeapon(211), sVECTOR3D(4.3f, -0.4f, -0.5f));
+		WeaponSlots[1](CreateWeapon(211), sVECTOR3D(-4.3f, -0.4f, -0.5f));
+		WeaponSlots[2](CreateWeapon(205), sVECTOR3D(3.0f, -0.4f, 0.5f));
+		WeaponSlots[3](CreateWeapon(205), sVECTOR3D(-3.0f, -0.4f, 0.5f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(1.3f, 1.9f, -1.7f);
@@ -357,14 +333,10 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(1.0f, 4.2f, -5.5f);
-		Weapon[0] = CreateWeapon(211);
-		WeaponLocation[1] = sVECTOR3D(-1.0f, 4.2f, -5.5f);
-		Weapon[1] = CreateWeapon(211);
-		WeaponLocation[2] = sVECTOR3D(0.5f, -1.8f, 5.0f);
-		Weapon[2] = CreateWeapon(211);
-		WeaponLocation[3] = sVECTOR3D(-0.5f, -1.8f, 5.0f);
-		Weapon[3] = CreateWeapon(211);
+		WeaponSlots[0](CreateWeapon(211), sVECTOR3D(1.0f, 4.2f, -5.5f));
+		WeaponSlots[1](CreateWeapon(211), sVECTOR3D(-1.0f, 4.2f, -5.5f));
+		WeaponSlots[2](CreateWeapon(211), sVECTOR3D(0.5f, -1.8f, 5.0f));
+		WeaponSlots[3](CreateWeapon(211), sVECTOR3D(-0.5f, -1.8f, 5.0f));
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D(5.8f, 6.5f-4.6f, 0.0f);
@@ -398,8 +370,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 6:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, 2.2f, -0.2f);
-		Weapon[0] = CreateWeapon(202);
+		WeaponSlots[0](CreateWeapon(202), sVECTOR3D(0.0f, 2.2f, -0.2f));
 
 		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D(5.4f, 1.0f, 2.0f));
 		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D(-5.4f, 1.0f, 2.0f));
@@ -419,8 +390,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 7:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, 2.4f, -0.2f);
-		Weapon[0] = CreateWeapon(202);
+		WeaponSlots[0](CreateWeapon(202), sVECTOR3D(0.0f, 2.4f, -0.2f));
 
 		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(9.5f, 1.3f, 2.0f));
 		BossWeaponSlots[1](CreateWeapon(210), sVECTOR3D(-9.5f, 1.3f, 2.0f));
@@ -448,8 +418,7 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 8:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, 2.4f, -0.2f);
-		Weapon[0] = CreateWeapon(202);
+		WeaponSlots[0](CreateWeapon(202), sVECTOR3D(0.0f, 2.4f, -0.2f));
 
 		BossWeaponSlots[0](CreateWeapon(206), sVECTOR3D(9.1f, 1.3f, 2.0f));
 		BossWeaponSlots[1](CreateWeapon(206), sVECTOR3D(9.4f, 1.0f, 2.0f));
@@ -482,13 +451,10 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 9:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, 4.2f, 7.0f);
-		Weapon[0] = CreateWeapon(201);
-		WeaponLocation[1] = sVECTOR3D(0.0f, 4.2f, 3.5f);
-		Weapon[1] = CreateWeapon(201);
-		Weapon[1]->SetRotation(sVECTOR3D(0,180,0));
-		WeaponLocation[2] = sVECTOR3D(0.0f, 3.4f, -5.0f);
-		Weapon[2] = CreateWeapon(202);
+		WeaponSlots[0](CreateWeapon(201), sVECTOR3D(0.0f, 4.2f, 7.0f));
+		WeaponSlots[1](CreateWeapon(201), sVECTOR3D(0.0f, 4.2f, 3.5f));
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0,180,0));
+		WeaponSlots[2](CreateWeapon(202), sVECTOR3D(0.0f, 3.4f, -5.0f));
 
 		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 9.0f));
 		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 9.0f));
@@ -524,16 +490,12 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 10:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, 4.4f, 6.8f);
-		Weapon[0] = CreateWeapon(201);
-		WeaponLocation[1] = sVECTOR3D(0.0f, 4.4f, 2.6f);
-		Weapon[1] = CreateWeapon(201);
-		Weapon[1]->SetRotation(sVECTOR3D(0,180,0));
-		WeaponLocation[2] = sVECTOR3D(0.0f, 2.6f, -7.0f);
-		Weapon[2] = CreateWeapon(202);
-		WeaponLocation[3] = sVECTOR3D(0.0f, 2.6f, -16.0f);
-		Weapon[3] = CreateWeapon(201);
-		Weapon[3]->SetRotation(sVECTOR3D(0,180,0));
+		WeaponSlots[0](CreateWeapon(201), sVECTOR3D(0.0f, 4.4f, 6.8f));
+		WeaponSlots[1](CreateWeapon(201), sVECTOR3D(0.0f, 4.4f, 2.6f));
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0,180,0));
+		WeaponSlots[2](CreateWeapon(202), sVECTOR3D(0.0f, 2.6f, -7.0f));
+		WeaponSlots[3](CreateWeapon(201), sVECTOR3D(0.0f, 2.6f, -16.0f));
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0,180,0));
 
 		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 8.0f));
 		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 8.0f));

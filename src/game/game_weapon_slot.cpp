@@ -48,7 +48,7 @@ int LeftDrawLevelPos = 1;
 //------------------------------------------------------------------------------------
 void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 {
-	if (PlayerFighter->Weapon[WeaponNum] == nullptr)
+	if (!PlayerFighter->WeaponSlots[WeaponNum].Weapon)
 		return;
 
 	sRECT SrcRect, DstRect;
@@ -80,18 +80,18 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		SrcRect(0, 0, 128, 64);
 		DstRect(Xpos+24, Ypos+12, Xpos+24+128, Ypos+64+12);
 		// пушка работает или нет?
-		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
+		if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Strength <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0, 0, 128, 64);
 			DstRect(Xpos + 24, Ypos + 12, Xpos + 24 + 128, Ypos + 64 + 12);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 		} else {
-			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->CurrentEnergyAccumulated < PlayerFighter->WeaponSlots[WeaponNum].Weapon->EnergyUse)
 				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
-				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
+				if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo == 0)
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
@@ -100,10 +100,10 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// иконка оружия
 			SrcRect(0, 0, 128, 64);
 			DstRect(Xpos+24, Ypos+12, Xpos+24+128, Ypos+64+12);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 
 			// боекомплект
-			int AmmoShow = (int)((56.0f*(PlayerFighter->Weapon[WeaponNum]->AmmoStart-PlayerFighter->Weapon[WeaponNum]->Ammo))/PlayerFighter->Weapon[WeaponNum]->AmmoStart);
+			int AmmoShow = (int)((56.0f*(PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart-PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart);
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
@@ -112,9 +112,9 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
+			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->WeaponSlots[WeaponNum].Weapon->LastFireTime))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 56;
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType == 17 && PlayerFighter->WeaponSlots[WeaponNum].Weapon->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,56);
 			DstRect(Xpos+12,Ypos+16+ReloadShow,Xpos+12+8,Ypos+56+16);
@@ -147,18 +147,18 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
 
 		// пушка работает или нет?
-		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
+		if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Strength <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0,0,128,64);
 			DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 		} else {
-			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->CurrentEnergyAccumulated < PlayerFighter->WeaponSlots[WeaponNum].Weapon->EnergyUse)
 				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
-				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
+				if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo == 0)
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
@@ -166,10 +166,10 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			// иконка оружия
 			SrcRect(0,0,128,64);
 			DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 
 			// боекомплект
-			int AmmoShow = (int)((64.0f*(PlayerFighter->Weapon[WeaponNum]->AmmoStart-PlayerFighter->Weapon[WeaponNum]->Ammo))/PlayerFighter->Weapon[WeaponNum]->AmmoStart);
+			int AmmoShow = (int)((64.0f*(PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart-PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart);
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
@@ -178,9 +178,9 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->WeaponSlots[WeaponNum].Weapon->LastFireTime))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType == 17 && PlayerFighter->WeaponSlots[WeaponNum].Weapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
@@ -203,11 +203,11 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
 
 		// пушка работает или нет?
-		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
+		if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Strength <= 0.0f) {
 
 		} else {
 			// боекомплект
-			int AmmoShow = (int)((64.0f*(PlayerFighter->Weapon[WeaponNum]->AmmoStart-PlayerFighter->Weapon[WeaponNum]->Ammo))/PlayerFighter->Weapon[WeaponNum]->AmmoStart);
+			int AmmoShow = (int)((64.0f*(PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart-PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart);
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
@@ -216,9 +216,9 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->WeaponSlots[WeaponNum].Weapon->LastFireTime))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType == 17 && PlayerFighter->WeaponSlots[WeaponNum].Weapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
@@ -243,7 +243,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 //------------------------------------------------------------------------------------
 void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 {
-	if (PlayerFighter->Weapon[WeaponNum] == nullptr)
+	if (!PlayerFighter->WeaponSlots[WeaponNum].Weapon)
 		return;
 
 	sRECT SrcRect, DstRect;
@@ -275,18 +275,18 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		SrcRect(0,0,128,64);
 		DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
 		// пушка работает или нет?
-		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
+		if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Strength <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0,0,128,64);
 			DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 		} else {
-			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->CurrentEnergyAccumulated < PlayerFighter->WeaponSlots[WeaponNum].Weapon->EnergyUse)
 				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
-				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
+				if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo == 0)
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
@@ -294,10 +294,10 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// иконка оружия
 			SrcRect(0,0,128,64);
 			DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 
 			// боекомплект
-			int AmmoShow = (int)((56.0f*(PlayerFighter->Weapon[WeaponNum]->AmmoStart-PlayerFighter->Weapon[WeaponNum]->Ammo))/PlayerFighter->Weapon[WeaponNum]->AmmoStart);
+			int AmmoShow = (int)((56.0f*(PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart-PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart);
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
@@ -306,9 +306,9 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
+			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->WeaponSlots[WeaponNum].Weapon->LastFireTime))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 56;
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType == 17 && PlayerFighter->WeaponSlots[WeaponNum].Weapon->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,56);
 			DstRect(Xpos+144,Ypos+16+ReloadShow,Xpos+144+8,Ypos+56+16);
@@ -340,18 +340,18 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		SrcRect(0,0,128,64);
 		DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
 		// пушка работает или нет?
-		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
+		if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Strength <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
 			SrcRect(0,0,128,64);
 			DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 		} else {
-			if (PlayerFighter->Weapon[WeaponNum]->CurrentEnergyAccumulated < PlayerFighter->Weapon[WeaponNum]->EnergyUse)
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->CurrentEnergyAccumulated < PlayerFighter->WeaponSlots[WeaponNum].Weapon->EnergyUse)
 				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 			else {
-				if (PlayerFighter->Weapon[WeaponNum]->Ammo == 0)
+				if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo == 0)
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 				else
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
@@ -359,10 +359,10 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			// иконка оружия
 			SrcRect(0,0,128,64);
 			DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->Weapon[WeaponNum]->InternalType)), true, 1.0f);
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType)), true, 1.0f);
 
 			// боекомплект
-			int AmmoShow = (int)((64.0f*(PlayerFighter->Weapon[WeaponNum]->AmmoStart-PlayerFighter->Weapon[WeaponNum]->Ammo))/PlayerFighter->Weapon[WeaponNum]->AmmoStart);
+			int AmmoShow = (int)((64.0f*(PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart-PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart);
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
@@ -371,9 +371,9 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->WeaponSlots[WeaponNum].Weapon->LastFireTime))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType == 17 && PlayerFighter->WeaponSlots[WeaponNum].Weapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
@@ -397,11 +397,11 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
 
 		// пушка работает или нет?
-		if (PlayerFighter->Weapon[WeaponNum]->Strength <= 0.0f) {
+		if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->Strength <= 0.0f) {
 
 		} else {
 			// боекомплект
-			int AmmoShow = (int)((64.0f*(PlayerFighter->Weapon[WeaponNum]->AmmoStart-PlayerFighter->Weapon[WeaponNum]->Ammo))/PlayerFighter->Weapon[WeaponNum]->AmmoStart);
+			int AmmoShow = (int)((64.0f*(PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart-PlayerFighter->WeaponSlots[WeaponNum].Weapon->Ammo))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->AmmoStart);
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 			if (AmmoShow < 0) AmmoShow = 0;
 
@@ -410,9 +410,9 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->Weapon[WeaponNum]->LastFireTime))/PlayerFighter->Weapon[WeaponNum]->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-PlayerFighter->WeaponSlots[WeaponNum].Weapon->LastFireTime))/PlayerFighter->WeaponSlots[WeaponNum].Weapon->NextFireTime);
 			// особый случай, рой ракет
-			if (PlayerFighter->Weapon[WeaponNum]->InternalType == 17 && PlayerFighter->Weapon[WeaponNum]->SwarmNum > 0) ReloadShow = 64;
+			if (PlayerFighter->WeaponSlots[WeaponNum].Weapon->InternalType == 17 && PlayerFighter->WeaponSlots[WeaponNum].Weapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);

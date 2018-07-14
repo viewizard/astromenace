@@ -861,17 +861,17 @@ Dialogs with default type:
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Weapon Slots:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", DialogSpaceShip->WeaponQuantity, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", DialogSpaceShip->WeaponSlots.size(), vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Slot Levels:"));
 		int SSS = 0;
-		if (DialogSpaceShip->WeaponQuantity>0) {
-			vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i", DialogSpaceShip->WeaponType[0]);
-			SSS += vw_TextWidth("%i", DialogSpaceShip->WeaponType[0]);
+		if (DialogSpaceShip->WeaponSlots.size()>0) {
+			vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i", DialogSpaceShip->WeaponSlots[0].Type);
+			SSS += vw_TextWidth("%i", DialogSpaceShip->WeaponSlots[0].Type);
 		}
-		for (int i=1; i<DialogSpaceShip->WeaponQuantity; i++) {
-			vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "/%i", DialogSpaceShip->WeaponType[i]);
-			SSS += vw_TextWidth("/%i", DialogSpaceShip->WeaponType[i]);
+		for (unsigned i=1; i<DialogSpaceShip->WeaponSlots.size(); i++) {
+			vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "/%i", DialogSpaceShip->WeaponSlots[i].Type);
+			SSS += vw_TextWidth("/%i", DialogSpaceShip->WeaponSlots[i].Type);
 		}
 
 		// закрываем...

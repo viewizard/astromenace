@@ -102,19 +102,19 @@ void WorkshopCreateShip(int Num)
 
 
 	// создаем оружие
-	for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
+	for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] &&
 		    SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
 			// убираем источник света
-			if (auto sharedFire = WorkshopFighterGame->Weapon[i]->Fire.lock())
+			if (auto sharedFire = WorkshopFighterGame->WeaponSlots[i].Weapon->Fire.lock())
 				vw_ReleaseLight(sharedFire->Light);
 
-			WorkshopFighterGame->Weapon[i]->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
-			WorkshopFighterGame->WeaponYAngle[i] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
+			WorkshopFighterGame->WeaponSlots[i].Weapon->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
+			WorkshopFighterGame->WeaponSlots[i].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
 
 			sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-			NeedAngle.y += WorkshopFighterGame->WeaponYAngle[i];
-			WorkshopFighterGame->Weapon[i]->SetRotation(NeedAngle);
+			NeedAngle.y += WorkshopFighterGame->WeaponSlots[i].YAngle;
+			WorkshopFighterGame->WeaponSlots[i].Weapon->SetRotation(NeedAngle);
 		}
 	}
 
@@ -492,11 +492,12 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			ShadowMap_StartRenderToFBO(sVECTOR3D(0,5,0), EffectiveDistance, EffectiveDistance*2);
 
 			SpaceFighter->Draw(true);
-			if (SpaceFighter->Weapon != nullptr)
-				for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
-					if (SpaceFighter->Weapon[i] != nullptr)
-						SpaceFighter->Weapon[i]->Draw(true);
+			if (!SpaceFighter->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+					if (tmpWeaponSlot.Weapon)
+						tmpWeaponSlot.Weapon->Draw(true);
 				}
+			}
 
 			ShadowMap_EndRenderToFBO();
 			ShadowMap = true;
@@ -504,11 +505,12 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		}
 
 		SpaceFighter->Draw(false, ShadowMap);
-		if (SpaceFighter->Weapon != nullptr)
-			for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
-				if (SpaceFighter->Weapon[i] != nullptr)
-					SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
+		if (!SpaceFighter->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+				if (tmpWeaponSlot.Weapon)
+					tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
 			}
+		}
 
 		if (GameConfig().ShadowMap > 0)
 			ShadowMap_EndFinalRender();
@@ -546,11 +548,12 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
 
 			SpaceFighter->Draw(true);
-			if (SpaceFighter->Weapon != nullptr)
-				for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
-					if (SpaceFighter->Weapon[i] != nullptr)
-						SpaceFighter->Weapon[i]->Draw(true);
+			if (!SpaceFighter->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+					if (tmpWeaponSlot.Weapon)
+						tmpWeaponSlot.Weapon->Draw(true);
 				}
+			}
 
 			ShadowMap_EndRenderToFBO();
 			ShadowMap = true;
@@ -558,11 +561,12 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		}
 
 		SpaceFighter->Draw(false, ShadowMap);
-		if (SpaceFighter->Weapon != nullptr)
-			for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
-				if (SpaceFighter->Weapon[i] != nullptr)
-					SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
+		if (!SpaceFighter->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+				if (tmpWeaponSlot.Weapon)
+					tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
 			}
+		}
 
 		if (GameConfig().ShadowMap > 0)
 			ShadowMap_EndFinalRender();
@@ -619,11 +623,12 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		ShadowMap_StartRenderToFBO(sVECTOR3D(0,-2,0), EffectiveDistance, EffectiveDistance*2);
 
 		SpaceFighter->Draw(true);
-		if (SpaceFighter->Weapon != nullptr)
-			for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
-				if (SpaceFighter->Weapon[i] != nullptr)
-					SpaceFighter->Weapon[i]->Draw(true);
+		if (!SpaceFighter->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+				if (tmpWeaponSlot.Weapon)
+					tmpWeaponSlot.Weapon->Draw(true);
 			}
+		}
 
 		ShadowMap_EndRenderToFBO();
 		ShadowMap = true;
@@ -632,11 +637,12 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	SpaceFighter->Draw(false, ShadowMap);
 
-	if (SpaceFighter->Weapon != nullptr)
-		for (int i=0; i<SpaceFighter->WeaponQuantity; i++) {
-			if (SpaceFighter->Weapon[i] != nullptr)
-				SpaceFighter->Weapon[i]->Draw(false, ShadowMap);
+	if (!SpaceFighter->WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+			if (tmpWeaponSlot.Weapon)
+				tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
 		}
+	}
 
 	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();

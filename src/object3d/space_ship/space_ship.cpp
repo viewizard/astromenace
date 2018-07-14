@@ -151,33 +151,6 @@ cSpaceShip::cSpaceShip()
 //-----------------------------------------------------------------------------
 cSpaceShip::~cSpaceShip()
 {
-	if (WeaponSetFire != nullptr) {
-		delete [] WeaponSetFire;
-		WeaponSetFire = nullptr;
-	}
-	if (WeaponLocation != nullptr) {
-		delete [] WeaponLocation;
-		WeaponLocation = nullptr;
-	}
-	if (WeaponType != nullptr) {
-		delete [] WeaponType;
-		WeaponType = nullptr;
-	}
-	if (WeaponYAngle != nullptr) {
-		delete [] WeaponYAngle;
-		WeaponYAngle = nullptr;
-	}
-	if (Weapon != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++)
-			if (Weapon[i] != nullptr) {
-				ReleaseWeapon(Weapon[i]);
-				Weapon[i] = nullptr;
-			}
-
-		delete [] Weapon;
-		Weapon = nullptr;
-	}
-
 	for (auto &tmpEngine : Engines) {
 		if (auto sharedEngine = tmpEngine.lock()) {
 			if (!EngineDestroyType) {
@@ -224,11 +197,12 @@ void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 	cObject3D::SetLocation(NewLocation);
 
 	// если оружие вообще есть
-	if (Weapon != nullptr)
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (Weapon[i] != nullptr)
-				Weapon[i]->SetLocation(NewLocation + WeaponLocation[i]);
+	if (!WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : WeaponSlots) {
+			if (tmpWeaponSlot.Weapon)
+				tmpWeaponSlot.Weapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
 		}
+	}
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 			if (tmpBossWeaponSlot.Weapon)
@@ -276,10 +250,12 @@ void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 	cObject3D::SetLocation(NewLocation);
 
 	// если оружие вообще есть
-	if (Weapon != nullptr)
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (Weapon[i] != nullptr) Weapon[i]->SetLocation(NewLocation + WeaponLocation[i]);
+	if (!WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : WeaponSlots) {
+			if (tmpWeaponSlot.Weapon)
+				tmpWeaponSlot.Weapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
 		}
+	}
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 			if (tmpBossWeaponSlot.Weapon)
@@ -327,14 +303,14 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 	cObject3D::SetRotation(NewRotation);
 
 	// оружие
-	if (Weapon != nullptr) {
-		for (int i = 0; i < WeaponQuantity; i++) {
-			vw_Matrix33CalcPoint(WeaponLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(WeaponLocation[i], CurrentRotationMat);
+	if (!WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : WeaponSlots) {
+			if (tmpWeaponSlot.Weapon) {
+				vw_Matrix33CalcPoint(tmpWeaponSlot.Location, OldInvRotationMat);
+				vw_Matrix33CalcPoint(tmpWeaponSlot.Location, CurrentRotationMat);
 
-			if (Weapon[i] != nullptr) {
-				Weapon[i]->SetRotation(NewRotation);
-				Weapon[i]->SetLocation(Location + WeaponLocation[i]);
+				tmpWeaponSlot.Weapon->SetRotation(NewRotation);
+				tmpWeaponSlot.Weapon->SetLocation(Location + tmpWeaponSlot.Location);
 			}
 		}
 	}
@@ -438,10 +414,10 @@ bool cSpaceShip::Update(float Time)
 		NeedRotate = TimeSheetList.front().Rotation;
 		RotationSpeed = TimeSheetList.front().RotationAcceler;
 
-		if (Weapon) {
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if (Weapon[i])
-					WeaponSetFire[i] = TimeSheetList.front().Fire;
+		if (!WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon)
+					tmpWeaponSlot.SetFire = TimeSheetList.front().Fire;
 			}
 		}
 		if (!BossWeaponSlots.empty()) {
@@ -896,28 +872,28 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// смотрим, есть ли команда открыть огонь
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (Weapon != nullptr) {
+	if (!WeaponSlots.empty()) {
 		// если залп или игрок (игроку регулируем сами)
 		if ((WeaponFireType == 1) || (ObjectStatus == eObjectStatus::Player)) {
-			for (int i=0; i<WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (WeaponSetFire[i]))
-					Weapon[i]->WeaponFire(Time);
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon &&
+				    tmpWeaponSlot.SetFire)
+					tmpWeaponSlot.Weapon->WeaponFire(Time);
 			}
 		} else { // переменный огонь
 
 			int PrimCount = 0;
 			float PrimTime = 0.0f;
-			int FirstWeapon = 6;
-			int LastWeapon = 0;
+			unsigned FirstWeapon = WeaponSlots.size();
+			unsigned LastWeapon = 0;
 
 			WeaponGroupCurrentFireDelay -= TimeDelta;
 
 			// находим кол-во оружия
-			for (int i = 0; i < WeaponQuantity; i++)
-				if (Weapon[i] != nullptr) {
+			for (unsigned i = 0; i < WeaponSlots.size(); i++)
+				if (WeaponSlots[i].Weapon) {
 					PrimCount++;
-					PrimTime += Weapon[i]->NextFireTime;
+					PrimTime += WeaponSlots[i].Weapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
@@ -929,26 +905,26 @@ bool cSpaceShip::Update(float Time)
 
 
 			// стреляем
-			for (int i = 0; i < WeaponQuantity; i++)
-				if ((Weapon[i] != nullptr) &&
-				    WeaponSetFire[i] &&
-				    (WeaponGroupCurrentFireNum == i) &&
+			for (unsigned i = 0; i < WeaponSlots.size(); i++)
+				if (WeaponSlots[i].Weapon &&
+				    WeaponSlots[i].SetFire &&
+				    (WeaponGroupCurrentFireNum == static_cast<int>(i)) &&
 				    (WeaponGroupCurrentFireDelay <= 0.0f)) {
-					Weapon[i]->WeaponFire(Time);
+					WeaponSlots[i].Weapon->WeaponFire(Time);
 
 					WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
 					WeaponGroupCurrentFireNum++;
-					if (WeaponGroupCurrentFireNum > LastWeapon)
+					if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 						WeaponGroupCurrentFireNum = FirstWeapon;
 
 					// если такого оружия нет, берем что есть
-					if (Weapon[WeaponGroupCurrentFireNum] == nullptr) {
+					if (!WeaponSlots[WeaponGroupCurrentFireNum].Weapon) {
 						bool exit = false;
 						while (!exit) {
 							WeaponGroupCurrentFireNum++;
-							if (WeaponGroupCurrentFireNum > LastWeapon)
+							if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 								WeaponGroupCurrentFireNum = FirstWeapon;
-							if (Weapon[WeaponGroupCurrentFireNum] != nullptr)
+							if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon)
 								exit = true;
 						}
 					}
@@ -1086,17 +1062,23 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// а нужно ли стерять
 	bool NeedFire = false;
-	if (Weapon != nullptr)
-		for (int i = 0; i < WeaponQuantity; i++) {
-			if (Weapon[i] != nullptr)
-				if (WeaponSetFire[i]) NeedFire = true;
+	if (!WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : WeaponSlots) {
+			if (tmpWeaponSlot.Weapon &&
+			    tmpWeaponSlot.SetFire) {
+				NeedFire = true;
+				break;
+			}
 		}
+	}
 	bool NeedBossFire = false;
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 			if (tmpBossWeaponSlot.Weapon &&
-			    tmpBossWeaponSlot.SetFire)
+			    tmpBossWeaponSlot.SetFire) {
 				NeedBossFire = true;
+				break;
+			}
 		}
 	}
 
@@ -1107,11 +1089,11 @@ bool cSpaceShip::Update(float Time)
 		// находим среднюю точку положение оружия
 		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
-		if (Weapon != nullptr) {
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (Weapon[i]->NeedRotateOnTargeting)) {
-					WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
+		if (!WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon &&
+				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + tmpWeaponSlot.Weapon->FireLocation + Location;
 					UsedWeaponQunt++;
 				}
 			}
@@ -1123,13 +1105,13 @@ bool cSpaceShip::Update(float Time)
 
 		int WeapNum = -1;
 		sVECTOR3D	FirePos(0.0f,0.0f,0.0f);
-		if (Weapon != nullptr) {
+		if (!WeaponSlots.empty()) {
 			// находим номер
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (Weapon[i]->NeedRotateOnTargeting) &&
-				    (WeapNum == -1)) {
-					WeapNum = Weapon[0]->InternalType;
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon &&
+				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					WeapNum = tmpWeaponSlot.Weapon->InternalType;
+					break;
 				}
 			}
 			if (WeapNum == -1)
@@ -1137,10 +1119,10 @@ bool cSpaceShip::Update(float Time)
 
 
 			int Count = 0;
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (Weapon[i]->NeedRotateOnTargeting)) {
-					FirePos += WeaponLocation[i];
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon &&
+				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					FirePos += tmpWeaponSlot.Location;
 					Count++;
 				}
 			}
@@ -1151,15 +1133,15 @@ bool cSpaceShip::Update(float Time)
 						 CurrentRotationMat, NeedAngle, WeapNum);
 
 		// всему оружию ставим нужную ориентацию
-		if (Weapon != nullptr) {
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (Weapon[i]->NeedRotateOnTargeting)) {
-					NeedAngle.y = Weapon[i]->Rotation.y;
-					NeedAngle.z = Weapon[i]->Rotation.z;
+		if (!WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon &&
+				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
+					NeedAngle.y = tmpWeaponSlot.Weapon->Rotation.y;
+					NeedAngle.z = tmpWeaponSlot.Weapon->Rotation.z;
 
-					Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1));
-					Weapon[i]->SetRotation(NeedAngle);
+					tmpWeaponSlot.Weapon->SetRotation(tmpWeaponSlot.Weapon->Rotation^(-1));
+					tmpWeaponSlot.Weapon->SetRotation(NeedAngle);
 				}
 			}
 		}
@@ -1234,10 +1216,10 @@ bool cSpaceShip::Update(float Time)
 		// находим среднюю точку положение оружия
 		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
-		if (Weapon != nullptr) {
-			for (int i=0; i<WeaponQuantity; i++) {
-				if (Weapon[i] != nullptr) {
-					WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
+		if (!WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon) {
+					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location +tmpWeaponSlot.Weapon->FireLocation + Location;
 					UsedWeaponQunt++;
 				}
 			}
@@ -1249,33 +1231,33 @@ bool cSpaceShip::Update(float Time)
 		sVECTOR3D NeedAngle = Rotation;
 
 		// всему оружию ставим нужную ориентацию
-		if (Weapon != nullptr) {
+		if (!WeaponSlots.empty()) {
 			// ставим скорость наведения оружия
 			float TargetingSpeed = 1.0f;
 
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] !=nullptr) &&
-				    (Weapon[i]->NeedRotateOnTargeting)) {
+			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
+				if (WeaponSlots[i].Weapon &&
+				    WeaponSlots[i].Weapon->NeedRotateOnTargeting) {
 					NeedAngle = Rotation;
 					// добавляем базовый угол, чтобы по умолчанию устанавливало его
-					NeedAngle.y += WeaponYAngle[i];
+					NeedAngle.y += WeaponSlots[i].YAngle;
 
-					GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Rotation,
+					GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, Rotation,
 								    Length, CurrentRotationMat, NeedAngle, Width, true, true,
-								    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
+								    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
 
 					sVECTOR3D NeedAngleTmp = NeedAngle;
 
 					// учитываем скорость поворота по вертикали
-					if (Weapon[i]->Rotation.x < NeedAngle.x) {
-						float NeedAngle_x = Weapon[i]->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.x < NeedAngle.x) {
+						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_x > NeedAngle.x)
 							NeedAngle_x = NeedAngle.x;
 						NeedAngle.x = NeedAngle_x;
 
 					}
-					if (Weapon[i]->Rotation.x > NeedAngle.x) {
-						float NeedAngle_x = Weapon[i]->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.x > NeedAngle.x) {
+						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_x < NeedAngle.x)
 							NeedAngle_x = NeedAngle.x;
 						NeedAngle.x = NeedAngle_x;
@@ -1285,8 +1267,8 @@ bool cSpaceShip::Update(float Time)
 					float Min = 0.0f;
 					float Max = 0.0f;
 					GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
-					if (Weapon[i]->Rotation.y < NeedAngle.y) {
-						float NeedAngle_y = Weapon[i]->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.y < NeedAngle.y) {
+						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_y > NeedAngle.y)
 							NeedAngle_y = NeedAngle.y;
 						NeedAngle.y = NeedAngle_y;
@@ -1294,8 +1276,8 @@ bool cSpaceShip::Update(float Time)
 						if (NeedAngle.y > Max+Rotation.y)
 							NeedAngle.y = Max+Rotation.y;
 					}
-					if (Weapon[i]->Rotation.y > NeedAngle.y) {
-						float NeedAngle_y = Weapon[i]->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.y > NeedAngle.y) {
+						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_y < NeedAngle.y)
 							NeedAngle_y = NeedAngle.y;
 						NeedAngle.y = NeedAngle_y;
@@ -1309,9 +1291,9 @@ bool cSpaceShip::Update(float Time)
 						NeedAngle = NeedAngleTmp;
 
 					// если это не ракетные системы, нужно повернуть
-					if (Weapon[i]->InternalType < 16) {
-						Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1));
-						Weapon[i]->SetRotation(NeedAngle);
+					if (WeaponSlots[i].Weapon->InternalType < 16) {
+						WeaponSlots[i].Weapon->SetRotation(WeaponSlots[i].Weapon->Rotation^(-1));
+						WeaponSlots[i].Weapon->SetRotation(NeedAngle);
 					}
 				}
 			}
@@ -1327,10 +1309,10 @@ bool cSpaceShip::Update(float Time)
 		// находим среднюю точку положение оружия
 		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
 		int UsedWeaponQunt = 0;
-		if (Weapon != nullptr) {
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if (Weapon[i] != nullptr) {
-					WeaponAvLocation = WeaponAvLocation + WeaponLocation[i] + Weapon[i]->FireLocation + Location;
+		if (!WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : WeaponSlots) {
+				if (tmpWeaponSlot.Weapon) {
+					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + tmpWeaponSlot.Weapon->FireLocation + Location;
 					UsedWeaponQunt++;
 				}
 			}
@@ -1354,50 +1336,50 @@ bool cSpaceShip::Update(float Time)
 		*/
 
 		// всему оружию ставим нужную ориентацию
-		if (Weapon != nullptr) {
-			for (int i = 0; i < WeaponQuantity; i++) {
-				if ((Weapon[i] != nullptr) &&
-				    (Weapon[i]->NeedRotateOnTargeting)) {
+		if (!WeaponSlots.empty()) {
+			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
+				if (WeaponSlots[i].Weapon &&
+				    WeaponSlots[i].Weapon->NeedRotateOnTargeting) {
 					NeedAngle = Rotation;
 					// добавляем базовый угол, чтобы по умолчанию устанавливало его
-					NeedAngle.y += WeaponYAngle[i];
+					NeedAngle.y += WeaponSlots[i].YAngle;
 
 					switch (GameTargetingSystem) {
 					case 1:
 						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
 									    Length, CurrentRotationMat, NeedAngle, Width, false, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
+									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
 						break;
 					case 2:
 						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
 									    Length, CurrentRotationMat, NeedAngle, Width, true, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
+									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
 						break;
 					case 3:
-						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->Rotation,
-									    Length, Weapon[i]->CurrentRotationMat, NeedAngle, Weapon[i]->Width, false, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
+						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->Rotation,
+									    Length, WeaponSlots[i].Weapon->CurrentRotationMat, NeedAngle, WeaponSlots[i].Weapon->Width, false, true,
+									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
 						break;
 					case 4:
-						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponLocation[i] + Weapon[i]->FireLocation,
-									    sVECTOR3D(Weapon[i]->Rotation.x, 0 , Weapon[i]->Rotation.z) + sVECTOR3D(0,WeaponYAngle[i],0),
-									    Length, Weapon[i]->CurrentRotationMat, NeedAngle, Width, false, true,
-									    Location + WeaponLocation[i] + Weapon[i]->FireLocation, Weapon[i]->InternalType);
+						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation,
+									    sVECTOR3D(WeaponSlots[i].Weapon->Rotation.x, 0 , WeaponSlots[i].Weapon->Rotation.z) + sVECTOR3D(0,WeaponSlots[i].YAngle,0),
+									    Length, WeaponSlots[i].Weapon->CurrentRotationMat, NeedAngle, Width, false, true,
+									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
 						break;
 					}
 
 					sVECTOR3D NeedAngleTmp = NeedAngle;
 
 					// учитываем скорость поворота по вертикали
-					if (Weapon[i]->Rotation.x < NeedAngle.x) {
-						float NeedAngle_x = Weapon[i]->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.x < NeedAngle.x) {
+						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_x > NeedAngle.x)
 							NeedAngle_x = NeedAngle.x;
 						NeedAngle.x = NeedAngle_x;
 
 					}
-					if (Weapon[i]->Rotation.x > NeedAngle.x) {
-						float NeedAngle_x = Weapon[i]->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.x > NeedAngle.x) {
+						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_x < NeedAngle.x)
 							NeedAngle_x = NeedAngle.x;
 						NeedAngle.x = NeedAngle_x;
@@ -1407,31 +1389,31 @@ bool cSpaceShip::Update(float Time)
 					float Min = 0.0f;
 					float Max = 0.0f;
 					GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
-					if (Weapon[i]->Rotation.y > NeedAngle.y) {
-						float NeedAngle_y = Weapon[i]->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.y > NeedAngle.y) {
+						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_y > NeedAngle.y)
 							NeedAngle_y = NeedAngle.y;
 						NeedAngle.y = NeedAngle_y;
 						// проверка на достижение предела поворота
-						if (NeedAngle.y > Max+Weapon[i]->Rotation.y)
-							NeedAngle.y = Max+Weapon[i]->Rotation.y;
+						if (NeedAngle.y > Max+WeaponSlots[i].Weapon->Rotation.y)
+							NeedAngle.y = Max+WeaponSlots[i].Weapon->Rotation.y;
 					}
-					if (Weapon[i]->Rotation.y < NeedAngle.y) {
-						float NeedAngle_y = Weapon[i]->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
+					if (WeaponSlots[i].Weapon->Rotation.y < NeedAngle.y) {
+						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
 						if (NeedAngle_y < NeedAngle.y)
 							NeedAngle_y = NeedAngle.y;
 						NeedAngle.y = NeedAngle_y;
 						// проверка на достижение предела поворота
-						if (NeedAngle.y < Min+Weapon[i]->Rotation.y)
-							NeedAngle.y = Min+Weapon[i]->Rotation.y;
+						if (NeedAngle.y < Min+WeaponSlots[i].Weapon->Rotation.y)
+							NeedAngle.y = Min+WeaponSlots[i].Weapon->Rotation.y;
 					}
 
 					// если выключен прикол с поворотом - моментально поворачиваем ствол
 					if (GameWeaponTargetingMode == 1)
 						NeedAngle = NeedAngleTmp;
 
-					Weapon[i]->SetRotation(Weapon[i]->Rotation^(-1));
-					Weapon[i]->SetRotation(NeedAngle);
+					WeaponSlots[i].Weapon->SetRotation(WeaponSlots[i].Weapon->Rotation^(-1));
+					WeaponSlots[i].Weapon->SetRotation(NeedAngle);
 				}
 			}
 		}

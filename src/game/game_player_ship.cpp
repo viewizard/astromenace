@@ -251,11 +251,11 @@ void InitGamePlayerShip()
 	PlayerFighter->ShowStrength = false;
 
 	// создаем оружие
-	for (int i=0; i<PlayerFighter->WeaponQuantity; i++) {
+	for (unsigned i=0; i<PlayerFighter->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
-				PlayerFighter->Weapon[i]->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
-				PlayerFighter->WeaponYAngle[i] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
+				PlayerFighter->WeaponSlots[i].Weapon->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
+				PlayerFighter->WeaponSlots[i].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
 			}
 		}
 	}
@@ -541,18 +541,18 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Вывод голосового предупреждения, если в оружие нет пуль
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (PlayerFighter->WeaponSetFire != nullptr) // если вообще есть оружие
-			for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+		if (!PlayerFighter->WeaponSlots.empty()) { // если вообще есть оружие
+			for (const auto &tmpWeaponSlot : PlayerFighter->WeaponSlots) {
 				// если нажали стрелять, а патронов нет в одном из орудий
-				if ((PlayerFighter->Weapon[i] != nullptr) &&
-				    (PlayerFighter->WeaponSetFire[i]) &&
-				    (PlayerFighter->Weapon[i]->Ammo <= 0)) {
+				if (tmpWeaponSlot.Weapon &&
+				    tmpWeaponSlot.SetFire &&
+				    (tmpWeaponSlot.Weapon->Ammo <= 0)) {
 					// проверяем, действительно еще играем
 					if (!vw_IsSoundAvailable(VoiceWeaponMalfunction))
 						VoiceWeaponMalfunction = PlayVoicePhrase(eVoicePhrase::WeaponMalfunction, 1.0f);
 				}
-
 			}
+		}
 
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -780,7 +780,7 @@ void GamePlayerShip()
 	// управление кораблем - стрельба
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (GameContentTransp < 0.5f) // если не в меню нажимают
-		if (PlayerFighter->WeaponSetFire != nullptr) { // если вообще есть оружие
+		if (!PlayerFighter->WeaponSlots.empty()) { // если вообще есть оружие
 
 			int PrimCount = 0;
 			float PrimTime = 0.0f;
@@ -791,19 +791,19 @@ void GamePlayerShip()
 			SecondaryGroupCurrentFireWeaponDelay -= PlayerFighter->TimeDelta;
 
 			// находим кол-во оружия в группах
-			for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+			for (unsigned i = 0; i < PlayerFighter->WeaponSlots.size(); i++) {
 				if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
 
 					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 1 ||
 					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3) {
 						PrimCount++;
-						PrimTime += PlayerFighter->Weapon[i]->NextFireTime;
+						PrimTime += PlayerFighter->WeaponSlots[i].Weapon->NextFireTime;
 					}
 
 					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 2 ||
 					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3) {
 						SecCount++;
-						SecTime += PlayerFighter->Weapon[i]->NextFireTime;
+						SecTime += PlayerFighter->WeaponSlots[i].Weapon->NextFireTime;
 					}
 				}
 			}
@@ -812,10 +812,10 @@ void GamePlayerShip()
 			int PrimNum = 0;
 			int SecNum = 0;
 
-			for (int i = 0; i < PlayerFighter->WeaponQuantity; i++) {
+			for (unsigned i = 0; i < PlayerFighter->WeaponSlots.size(); i++) {
 				if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
 
-					PlayerFighter->WeaponSetFire[i] = false;
+					PlayerFighter->WeaponSlots[i].SetFire = false;
 
 					// получаем данные, в какую группу относится
 					bool primary_fire = false;
@@ -833,13 +833,13 @@ void GamePlayerShip()
 						if (primary_fire)
 							if (vw_GetMouseButtonStatus(GameConfig().MousePrimary)) {
 								if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
-									PlayerFighter->WeaponSetFire[i] = true;
+									PlayerFighter->WeaponSlots[i].SetFire = true;
 								} else {
 									PrimNum++;
 									if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
 									    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
 										PrimaryGroupCurrentFireWeaponDelay = PrimTime / (PrimCount * PrimCount);
-										PlayerFighter->WeaponSetFire[i] = true;
+										PlayerFighter->WeaponSlots[i].SetFire = true;
 										PrimaryGroupCurrentFireWeaponNum++;
 										if (PrimaryGroupCurrentFireWeaponNum > PrimCount)
 											PrimaryGroupCurrentFireWeaponNum = 1;
@@ -851,13 +851,13 @@ void GamePlayerShip()
 						if (secondary_fire)
 							if (vw_GetMouseButtonStatus(GameConfig().MouseSecondary)) {
 								if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
-									PlayerFighter->WeaponSetFire[i] = true;
+									PlayerFighter->WeaponSlots[i].SetFire = true;
 								} else {
 									SecNum++;
 									if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
 									    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
 										SecondaryGroupCurrentFireWeaponDelay = SecTime / (SecCount * SecCount);
-										PlayerFighter->WeaponSetFire[i] = true;
+										PlayerFighter->WeaponSlots[i].SetFire = true;
 										SecondaryGroupCurrentFireWeaponNum++;
 										if (SecondaryGroupCurrentFireWeaponNum > SecCount)
 											SecondaryGroupCurrentFireWeaponNum = 1;
@@ -868,7 +868,7 @@ void GamePlayerShip()
 						// альтернативное управление
 						if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 2)
 							if (vw_GetMouseButtonStatus(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]))
-								PlayerFighter->WeaponSetFire[i] = true;
+								PlayerFighter->WeaponSlots[i].SetFire = true;
 					}
 
 
@@ -878,13 +878,13 @@ void GamePlayerShip()
 						if (primary_fire)
 							if (GetJoystickButton(GameConfig().JoystickPrimary)) {
 								if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
-									PlayerFighter->WeaponSetFire[i] = true;
+									PlayerFighter->WeaponSlots[i].SetFire = true;
 								} else {
 									PrimNum++;
 									if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
 									    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
 										PrimaryGroupCurrentFireWeaponDelay = PrimTime / (PrimCount * PrimCount);
-										PlayerFighter->WeaponSetFire[i] = true;
+										PlayerFighter->WeaponSlots[i].SetFire = true;
 										PrimaryGroupCurrentFireWeaponNum++;
 										if (PrimaryGroupCurrentFireWeaponNum > PrimCount)
 											PrimaryGroupCurrentFireWeaponNum = 1;
@@ -896,13 +896,13 @@ void GamePlayerShip()
 						if (secondary_fire)
 							if (GetJoystickButton(GameConfig().JoystickSecondary)) {
 								if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
-									PlayerFighter->WeaponSetFire[i] = true;
+									PlayerFighter->WeaponSlots[i].SetFire = true;
 								} else {
 									SecNum++;
 									if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
 									    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
 										SecondaryGroupCurrentFireWeaponDelay = SecTime / (SecCount * SecCount);
-										PlayerFighter->WeaponSetFire[i] = true;
+										PlayerFighter->WeaponSlots[i].SetFire = true;
 										SecondaryGroupCurrentFireWeaponNum++;
 										if (SecondaryGroupCurrentFireWeaponNum > SecCount)
 											SecondaryGroupCurrentFireWeaponNum = 1;
@@ -913,7 +913,7 @@ void GamePlayerShip()
 						// альтернативное управление
 						if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 3)
 							if (GetJoystickButton(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]))
-								PlayerFighter->WeaponSetFire[i] = true;
+								PlayerFighter->WeaponSlots[i].SetFire = true;
 					}
 
 					// клавиатура
@@ -922,13 +922,13 @@ void GamePlayerShip()
 					if (primary_fire)
 						if (vw_GetKeyStatus(GameConfig().KeyBoardPrimary)) {
 							if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode == 1) {
-								PlayerFighter->WeaponSetFire[i] = true;
+								PlayerFighter->WeaponSlots[i].SetFire = true;
 							} else {
 								PrimNum++;
 								if (PrimaryGroupCurrentFireWeaponNum == PrimNum &&
 								    PrimaryGroupCurrentFireWeaponDelay <= 0.0f) {
 									PrimaryGroupCurrentFireWeaponDelay = PrimTime / (PrimCount * PrimCount);
-									PlayerFighter->WeaponSetFire[i] = true;
+									PlayerFighter->WeaponSlots[i].SetFire = true;
 									PrimaryGroupCurrentFireWeaponNum++;
 									if (PrimaryGroupCurrentFireWeaponNum > PrimCount)
 										PrimaryGroupCurrentFireWeaponNum = 1;
@@ -940,13 +940,13 @@ void GamePlayerShip()
 					if (secondary_fire)
 						if (vw_GetKeyStatus(GameConfig().KeyBoardSecondary)) {
 							if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode == 1) {
-								PlayerFighter->WeaponSetFire[i] = true;
+								PlayerFighter->WeaponSlots[i].SetFire = true;
 							} else {
 								SecNum++;
 								if (SecondaryGroupCurrentFireWeaponNum == SecNum &&
 								    SecondaryGroupCurrentFireWeaponDelay <= 0.0f) {
 									SecondaryGroupCurrentFireWeaponDelay = SecTime / (SecCount * SecCount);
-									PlayerFighter->WeaponSetFire[i] = true;
+									PlayerFighter->WeaponSlots[i].SetFire = true;
 									SecondaryGroupCurrentFireWeaponNum++;
 									if (SecondaryGroupCurrentFireWeaponNum > SecCount)
 										SecondaryGroupCurrentFireWeaponNum = 1;
@@ -957,7 +957,7 @@ void GamePlayerShip()
 					// альтернативное управление
 					if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 1)
 						if (vw_GetKeyStatus(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i]))
-							PlayerFighter->WeaponSetFire[i] = true;
+							PlayerFighter->WeaponSlots[i].SetFire = true;
 
 				}
 			}
@@ -1027,23 +1027,23 @@ void GamePlayerShip()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// сейчас получаем всю энергию для перезарядки и выстрела
 	// потом лучше будет переделать на постепенный отбор энергии
-	for (int i = 0; i < PlayerFighter->WeaponQuantity; i++)
+	for (unsigned i = 0; i < PlayerFighter->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
-			if (PlayerFighter->Weapon[i]->CurrentEnergyAccumulated < PlayerFighter->Weapon[i]->EnergyUse) {
+			if (PlayerFighter->WeaponSlots[i].Weapon->CurrentEnergyAccumulated < PlayerFighter->WeaponSlots[i].Weapon->EnergyUse) {
 				// если энергии не достаточно для зарядки орудия
-				if (CurrentPlayerShipEnergy < PlayerFighter->Weapon[i]->EnergyUse) {
+				if (CurrentPlayerShipEnergy < PlayerFighter->WeaponSlots[i].Weapon->EnergyUse) {
 					// останавливаем перезарядку оружия
-					PlayerFighter->Weapon[i]->LastFireTime += PlayerFighter->TimeDelta;
-					if (auto sharedFire = PlayerFighter->Weapon[i]->Fire.lock())
+					PlayerFighter->WeaponSlots[i].Weapon->LastFireTime += PlayerFighter->TimeDelta;
+					if (auto sharedFire = PlayerFighter->WeaponSlots[i].Weapon->Fire.lock())
 						sharedFire->IsSuppressed = true;
 				} else {
 					// если энергии достаточно, все нормально берем ее и перезаряжаем оружие
-					PlayerFighter->Weapon[i]->CurrentEnergyAccumulated = PlayerFighter->Weapon[i]->EnergyUse;
-					CurrentPlayerShipEnergy -= PlayerFighter->Weapon[i]->EnergyUse;
+					PlayerFighter->WeaponSlots[i].Weapon->CurrentEnergyAccumulated = PlayerFighter->WeaponSlots[i].Weapon->EnergyUse;
+					CurrentPlayerShipEnergy -= PlayerFighter->WeaponSlots[i].Weapon->EnergyUse;
 				}
 			}
 		}
-
+	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

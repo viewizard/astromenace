@@ -524,7 +524,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum-1].ShieldStrength/GameEnemyArmorPenalty;
 	ShieldRecharge = ShieldStrengthStart/15.0f;
 
-	WeaponQuantity = PresetAlienSpaceMotherShipData[SpaceShipNum-1].WeaponQuantity;
+	WeaponSlots.resize(PresetAlienSpaceMotherShipData[SpaceShipNum-1].WeaponQuantity);
 	BossWeaponSlots.resize(PresetAlienSpaceMotherShipData[SpaceShipNum-1].BossWeaponQuantity);
 
 
@@ -539,18 +539,6 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/alien_mothership_nm.tga");
 	}
 
-
-
-	// начальные установки для оружия
-	WeaponSetFire = new bool[WeaponQuantity];
-	WeaponLocation = new sVECTOR3D[WeaponQuantity];
-	WeaponType = new int[WeaponQuantity];
-	Weapon = new cWeapon*[WeaponQuantity];
-	for (int i=0; i<WeaponQuantity; i++) {
-		WeaponSetFire[i] = false;
-		WeaponType[i] = 1;
-		Weapon[i] = nullptr;
-	}
 
 	// начальные установки для двигателей
 	Engines.resize(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity);
@@ -569,37 +557,23 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	switch (SpaceShipNum) {
 	case 1:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(-1.6f, 1.0f, 19.0f);
-		Weapon[0] = CreateWeapon(102);
-		WeaponLocation[1] = sVECTOR3D(1.6f, 1.0f, 19.0f);
-		Weapon[1] = CreateWeapon(102);
-		WeaponLocation[2] = sVECTOR3D(-1.6f, -1.0f, 19.0f);
-		Weapon[2] = CreateWeapon(102);
-		WeaponLocation[3] = sVECTOR3D(1.6f, -1.0f, 19.0f);
-		Weapon[3] = CreateWeapon(102);
+		WeaponSlots[0](CreateWeapon(102), sVECTOR3D(-1.6f, 1.0f, 19.0f));
+		WeaponSlots[1](CreateWeapon(102), sVECTOR3D(1.6f, 1.0f, 19.0f));
+		WeaponSlots[2](CreateWeapon(102), sVECTOR3D(-1.6f, -1.0f, 19.0f));
+		WeaponSlots[3](CreateWeapon(102), sVECTOR3D(1.6f, -1.0f, 19.0f));
 
-		WeaponLocation[4] = sVECTOR3D(-1.6f, 1.5f, 18.0f);
-		Weapon[4] = CreateWeapon(103);
-		WeaponLocation[5] = sVECTOR3D(1.6f, 1.5f, 18.0f);
-		Weapon[5] = CreateWeapon(103);
-		WeaponLocation[6] = sVECTOR3D(-1.6f, -1.5f, 18.0f);
-		Weapon[6] = CreateWeapon(103);
-		WeaponLocation[7] = sVECTOR3D(1.6f, -1.5f, 18.0f);
-		Weapon[7] = CreateWeapon(103);
+		WeaponSlots[4](CreateWeapon(103), sVECTOR3D(-1.6f, 1.5f, 18.0f));
+		WeaponSlots[5](CreateWeapon(103), sVECTOR3D(1.6f, 1.5f, 18.0f));
+		WeaponSlots[6](CreateWeapon(103), sVECTOR3D(-1.6f, -1.5f, 18.0f));
+		WeaponSlots[7](CreateWeapon(103), sVECTOR3D(1.6f, -1.5f, 18.0f));
 
-		WeaponLocation[8] = sVECTOR3D(-1.6f, 1.0f, 19.0f);
-		Weapon[8] = CreateWeapon(104);
-		WeaponLocation[9] = sVECTOR3D(1.6f, 1.0f, 19.0f);
-		Weapon[9] = CreateWeapon(104);
-		WeaponLocation[10] = sVECTOR3D(-1.6f, -1.0f, 19.0f);
-		Weapon[10] = CreateWeapon(104);
-		WeaponLocation[11] = sVECTOR3D(1.6f, -1.0f, 19.0f);
-		Weapon[11] = CreateWeapon(104);
+		WeaponSlots[8](CreateWeapon(104), sVECTOR3D(-1.6f, 1.0f, 19.0f));
+		WeaponSlots[9](CreateWeapon(104), sVECTOR3D(1.6f, 1.0f, 19.0f));
+		WeaponSlots[10](CreateWeapon(104), sVECTOR3D(-1.6f, -1.0f, 19.0f));
+		WeaponSlots[11](CreateWeapon(104), sVECTOR3D(1.6f, -1.0f, 19.0f));
 
-		WeaponLocation[12] = sVECTOR3D(0.0f, -8.0f, 0.0f);
-		Weapon[12] = CreateWeapon(104);
-		WeaponLocation[13] = sVECTOR3D(0.0f, -8.0f, 0.0f);
-		Weapon[13] = CreateWeapon(104);
+		WeaponSlots[12](CreateWeapon(104), sVECTOR3D(0.0f, -8.0f, 0.0f));
+		WeaponSlots[13](CreateWeapon(104), sVECTOR3D(0.0f, -8.0f, 0.0f));
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -645,31 +619,23 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		break;
 	case 2:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(-10.7f, 0.0f, -18.5f);
-		Weapon[0] = CreateWeapon(103);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
-		WeaponLocation[1] = sVECTOR3D(10.7f, 0.0f, -18.5f);
-		Weapon[1] = CreateWeapon(103);
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
-		WeaponLocation[2] = sVECTOR3D(-10.7f, 0.0f, -18.5f);
-		Weapon[2] = CreateWeapon(103);
-		Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
-		WeaponLocation[3] = sVECTOR3D(10.7f, 0.0f, -18.5f);
-		Weapon[3] = CreateWeapon(103);
-		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
+		WeaponSlots[0](CreateWeapon(103), sVECTOR3D(-10.7f, 0.0f, -18.5f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(103), sVECTOR3D(10.7f, 0.0f, -18.5f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[2](CreateWeapon(103), sVECTOR3D(-10.7f, 0.0f, -18.5f));
+		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[3](CreateWeapon(103), sVECTOR3D(10.7f, 0.0f, -18.5f));
+		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
 
-		WeaponLocation[4] = sVECTOR3D(-10.7f, 0.0f, -18.5f);
-		Weapon[4] = CreateWeapon(106);
-		Weapon[4]->NextFireTime = Weapon[4]->NextFireTime/2.0f;
-		WeaponLocation[5] = sVECTOR3D(10.7f, 0.0f, -18.5f);
-		Weapon[5] = CreateWeapon(106);
-		Weapon[5]->NextFireTime = Weapon[5]->NextFireTime/2.0f;
-		WeaponLocation[6] = sVECTOR3D(-4.0f, 0.0f, 24.0f);
-		Weapon[6] = CreateWeapon(106);
-		Weapon[6]->NextFireTime = Weapon[6]->NextFireTime/2.0f;
-		WeaponLocation[7] = sVECTOR3D(4.0f, 0.0f, 24.0f);
-		Weapon[7] = CreateWeapon(106);
-		Weapon[7]->NextFireTime = Weapon[7]->NextFireTime/2.0f;
+		WeaponSlots[4](CreateWeapon(106), sVECTOR3D(-10.7f, 0.0f, -18.5f));
+		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[5](CreateWeapon(106), sVECTOR3D(10.7f, 0.0f, -18.5f));
+		WeaponSlots[5].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[6](CreateWeapon(106), sVECTOR3D(-4.0f, 0.0f, 24.0f));
+		WeaponSlots[6].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[7](CreateWeapon(106), sVECTOR3D(4.0f, 0.0f, 24.0f));
+		WeaponSlots[7].Weapon->NextFireTime /= 2.0f;
 
 		BossWeaponSlots[0](CreateWeapon(102), sVECTOR3D(-1.5f, 1.5f, 25.0f));
 		BossWeaponSlots[1](CreateWeapon(102), sVECTOR3D(1.5f, 1.5f, 25.0f));
@@ -724,23 +690,15 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		break;
 	case 3:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(3.0f, -2.0f, 13.0f);
-		Weapon[0] = CreateWeapon(104);
-		WeaponLocation[1] = sVECTOR3D(-3.0f, -2.0f, 13.0f);
-		Weapon[1] = CreateWeapon(104);
-		WeaponLocation[2] = sVECTOR3D(2.0f, -1.0f, 13.0f);
-		Weapon[2] = CreateWeapon(104);
-		WeaponLocation[3] = sVECTOR3D(-2.0f, -1.0f, 13.0f);
-		Weapon[3] = CreateWeapon(104);
-		WeaponLocation[4] = sVECTOR3D(2.0f, -3.0f, 13.0f);
-		Weapon[4] = CreateWeapon(104);
-		WeaponLocation[5] = sVECTOR3D(-2.0f, -3.0f, 13.0f);
-		Weapon[5] = CreateWeapon(104);
+		WeaponSlots[0](CreateWeapon(104), sVECTOR3D(3.0f, -2.0f, 13.0f));
+		WeaponSlots[1](CreateWeapon(104), sVECTOR3D(-3.0f, -2.0f, 13.0f));
+		WeaponSlots[2](CreateWeapon(104), sVECTOR3D(2.0f, -1.0f, 13.0f));
+		WeaponSlots[3](CreateWeapon(104), sVECTOR3D(-2.0f, -1.0f, 13.0f));
+		WeaponSlots[4](CreateWeapon(104), sVECTOR3D(2.0f, -3.0f, 13.0f));
+		WeaponSlots[5](CreateWeapon(104), sVECTOR3D(-2.0f, -3.0f, 13.0f));
 
-		WeaponLocation[6] = sVECTOR3D(7.0f, -2.0f, 13.0f);
-		Weapon[6] = CreateWeapon(109);
-		WeaponLocation[7] = sVECTOR3D(-7.0f, -2.0f, 13.0f);
-		Weapon[7] = CreateWeapon(109);
+		WeaponSlots[6](CreateWeapon(109), sVECTOR3D(7.0f, -2.0f, 13.0f));
+		WeaponSlots[7](CreateWeapon(109), sVECTOR3D(-7.0f, -2.0f, 13.0f));
 
 		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(0.0f, -2.0f, 27.0f));
 
@@ -780,22 +738,15 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		break;
 	case 4:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(1.0f, -1.0f, 23.0f);
-		Weapon[0] = CreateWeapon(104);
-		WeaponLocation[1] = sVECTOR3D(-1.0f, -1.0f, 23.0f);
-		Weapon[1] = CreateWeapon(104);
-		WeaponLocation[2] = sVECTOR3D(1.0f, 0.0f, 23.0f);
-		Weapon[2] = CreateWeapon(104);
-		WeaponLocation[3] = sVECTOR3D(-1.0f, 0.0f, 23.0f);
-		Weapon[3] = CreateWeapon(104);
-		WeaponLocation[4] = sVECTOR3D(1.0f, -2.0f, 23.0f);
-		Weapon[4] = CreateWeapon(104);
-		WeaponLocation[5] = sVECTOR3D(-1.0f, -2.0f, 23.0f);
-		Weapon[5] = CreateWeapon(104);
-		WeaponLocation[6] = sVECTOR3D(0.0f, -1.0f, 23.0f);
-		Weapon[6] = CreateWeapon(109);
-		WeaponLocation[7] = sVECTOR3D(0.0f, -1.0f, 23.0f);
-		Weapon[7] = CreateWeapon(109);
+		WeaponSlots[0](CreateWeapon(104), sVECTOR3D(1.0f, -1.0f, 23.0f));
+		WeaponSlots[1](CreateWeapon(104), sVECTOR3D(-1.0f, -1.0f, 23.0f));
+		WeaponSlots[2](CreateWeapon(104), sVECTOR3D(1.0f, 0.0f, 23.0f));
+		WeaponSlots[3](CreateWeapon(104), sVECTOR3D(-1.0f, 0.0f, 23.0f));
+		WeaponSlots[4](CreateWeapon(104), sVECTOR3D(1.0f, -2.0f, 23.0f));
+		WeaponSlots[5](CreateWeapon(104), sVECTOR3D(-1.0f, -2.0f, 23.0f));
+
+		WeaponSlots[6](CreateWeapon(109), sVECTOR3D(0.0f, -1.0f, 23.0f));
+		WeaponSlots[7](CreateWeapon(109), sVECTOR3D(0.0f, -1.0f, 23.0f));
 
 		BossWeaponSlots[0](CreateWeapon(108), sVECTOR3D(8.9f, -0.6f, 18.0f));
 		BossWeaponSlots[0].Weapon->SetRotation(sVECTOR3D(0.0f, -15.0f, 0.0f));
@@ -870,28 +821,20 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		break;
 	case 5:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[0] = CreateWeapon(109);
-		WeaponLocation[1] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[1] = CreateWeapon(109);
-		Weapon[1]->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
-		WeaponLocation[2] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[2] = CreateWeapon(109);
-		Weapon[2]->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
-		WeaponLocation[3] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[3] = CreateWeapon(109);
-		Weapon[3]->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
-		WeaponLocation[4] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[4] = CreateWeapon(109);
-		WeaponLocation[5] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[5] = CreateWeapon(109);
-		Weapon[5]->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
-		WeaponLocation[6] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[6] = CreateWeapon(109);
-		Weapon[6]->SetRotation(sVECTOR3D(0.0f, 9.0f, 0.0f));
-		WeaponLocation[7] = sVECTOR3D(0.0f, -2.4f, 20.0f);
-		Weapon[7] = CreateWeapon(109);
-		Weapon[7]->SetRotation(sVECTOR3D(0.0f, -9.0f, 0.0f));
+		WeaponSlots[0](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[1](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
+		WeaponSlots[2](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
+		WeaponSlots[3](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
+		WeaponSlots[4](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[5](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
+		WeaponSlots[6](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[6].Weapon->SetRotation(sVECTOR3D(0.0f, 9.0f, 0.0f));
+		WeaponSlots[7](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
+		WeaponSlots[7].Weapon->SetRotation(sVECTOR3D(0.0f, -9.0f, 0.0f));
 
 		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D(35.7f, -3.0f, -13.0f));
 		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D(-35.7f, -3.0f, -13.0f));
@@ -986,47 +929,35 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 
 	case 6:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, -4.4f, 18.0f);
-		Weapon[0] = CreateWeapon(103);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
-		WeaponLocation[1] = sVECTOR3D(0.0f, -4.4f, 18.0f);
-		Weapon[1] = CreateWeapon(103);
-		Weapon[1]->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
-		WeaponLocation[2] = sVECTOR3D(0.0f, -4.4f, 18.0f);
-		Weapon[2] = CreateWeapon(103);
-		Weapon[2]->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
-		Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
-		WeaponLocation[3] = sVECTOR3D(0.0f, -4.4f, 18.0f);
-		Weapon[3] = CreateWeapon(103);
-		Weapon[3]->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
-		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
-		WeaponLocation[4] = sVECTOR3D(0.0f, -4.4f, 18.0f);
-		Weapon[4] = CreateWeapon(103);
-		Weapon[4]->NextFireTime = Weapon[4]->NextFireTime/2.0f;
-		WeaponLocation[5] = sVECTOR3D(0.0f, -4.4f, 18.0f);
-		Weapon[5] = CreateWeapon(103);
-		Weapon[5]->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
-		Weapon[5]->NextFireTime = Weapon[5]->NextFireTime/2.0f;
+		WeaponSlots[0](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[2](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
+		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[3](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
+		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[4](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[5](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
+		WeaponSlots[5].Weapon->NextFireTime /= 2.0f;
 
-		WeaponLocation[6] = sVECTOR3D(7.0f, -4.4f, 13.0f);
-		Weapon[6] = CreateWeapon(104);
-		Weapon[6]->NextFireTime = Weapon[6]->NextFireTime/2.0f;
-		WeaponLocation[7] = sVECTOR3D(-7.0f, -4.4f, 13.0f);
-		Weapon[7] = CreateWeapon(104);
-		Weapon[7]->NextFireTime = Weapon[7]->NextFireTime/2.0f;
-		WeaponLocation[8] = sVECTOR3D(12.0f, -4.4f, 10.0f);
-		Weapon[8] = CreateWeapon(104);
-		Weapon[8]->NextFireTime = Weapon[8]->NextFireTime/2.0f;
-		WeaponLocation[9] = sVECTOR3D(-12.0f, -4.4f, 10.0f);
-		Weapon[9] = CreateWeapon(104);
-		Weapon[9]->NextFireTime = Weapon[9]->NextFireTime/2.0f;
-		WeaponLocation[10] = sVECTOR3D(17.0f, -4.4f, 8.0f);
-		Weapon[10] = CreateWeapon(104);
-		Weapon[10]->NextFireTime = Weapon[10]->NextFireTime/2.0f;
-		WeaponLocation[11] = sVECTOR3D(-17.0f, -4.4f, 8.0f);
-		Weapon[11] = CreateWeapon(104);
-		Weapon[11]->NextFireTime = Weapon[11]->NextFireTime/2.0f;
+		WeaponSlots[6](CreateWeapon(104), sVECTOR3D(7.0f, -4.4f, 13.0f));
+		WeaponSlots[6].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[7](CreateWeapon(104), sVECTOR3D(-7.0f, -4.4f, 13.0f));
+		WeaponSlots[7].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[8](CreateWeapon(104), sVECTOR3D(12.0f, -4.4f, 10.0f));
+		WeaponSlots[8].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[9](CreateWeapon(104), sVECTOR3D(-12.0f, -4.4f, 10.0f));
+		WeaponSlots[9].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[10](CreateWeapon(104), sVECTOR3D(17.0f, -4.4f, 8.0f));
+		WeaponSlots[10].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[11](CreateWeapon(104), sVECTOR3D(-17.0f, -4.4f, 8.0f));
+		WeaponSlots[11].Weapon->NextFireTime /= 2.0f;
 
 		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D(10.0f, -6.4f, 10.0f));
 		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D(-10.0f, -6.4f, 10.0f));
@@ -1100,25 +1031,20 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 
 	case 7:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(0.0f, -1.4f, 15.0f);
-		Weapon[0] = CreateWeapon(108);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
-		WeaponLocation[1] = sVECTOR3D(2.0f, -1.4f, 15.0f);
-		Weapon[1] = CreateWeapon(108);
-		Weapon[1]->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
-		WeaponLocation[2] = sVECTOR3D(-2.0f, -1.4f, 15.0f);
-		Weapon[2] = CreateWeapon(108);
-		Weapon[2]->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
-		Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
-		WeaponLocation[3] = sVECTOR3D(4.0f, -1.4f, 15.0f);
-		Weapon[3] = CreateWeapon(108);
-		Weapon[3]->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
-		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
-		WeaponLocation[4] = sVECTOR3D(-4.0f, -1.4f, 15.0f);
-		Weapon[4] = CreateWeapon(108);
-		Weapon[4]->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
-		Weapon[4]->NextFireTime = Weapon[4]->NextFireTime/2.0f;
+		WeaponSlots[0](CreateWeapon(108), sVECTOR3D(0.0f, -1.4f, 15.0f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(108), sVECTOR3D(2.0f, -1.4f, 15.0f));
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[2](CreateWeapon(108), sVECTOR3D(-2.0f, -1.4f, 15.0f));
+		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
+		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[3](CreateWeapon(108), sVECTOR3D(4.0f, -1.4f, 15.0f));
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
+		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[4](CreateWeapon(108), sVECTOR3D(-4.0f, -1.4f, 15.0f));
+		WeaponSlots[4].Weapon->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
+		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
 
 		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(12.5f, 1.6f, -15.3f));
 		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D(-12.5f, 1.6f, -15.3f));
@@ -1155,18 +1081,14 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 
 	case 8:
 		// оружие
-		WeaponLocation[0] = sVECTOR3D(2.0f, -2.4f, 15.0f);
-		Weapon[0] = CreateWeapon(104);
-		Weapon[0]->NextFireTime = Weapon[0]->NextFireTime/2.0f;
-		WeaponLocation[1] = sVECTOR3D(-2.0f, -2.4f, 15.0f);
-		Weapon[1] = CreateWeapon(104);
-		Weapon[1]->NextFireTime = Weapon[1]->NextFireTime/2.0f;
-		WeaponLocation[2] = sVECTOR3D(2.0f, -4.4f, 15.0f);
-		Weapon[2] = CreateWeapon(104);
-		Weapon[2]->NextFireTime = Weapon[2]->NextFireTime/2.0f;
-		WeaponLocation[3] = sVECTOR3D(-2.0f, -4.4f, 15.0f);
-		Weapon[3] = CreateWeapon(104);
-		Weapon[3]->NextFireTime = Weapon[3]->NextFireTime/2.0f;
+		WeaponSlots[0](CreateWeapon(104), sVECTOR3D(2.0f, -2.4f, 15.0f));
+		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[1](CreateWeapon(104), sVECTOR3D(-2.0f, -2.4f, 15.0f));
+		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[2](CreateWeapon(104), sVECTOR3D(2.0f, -4.4f, 15.0f));
+		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		WeaponSlots[3](CreateWeapon(104), sVECTOR3D(-2.0f, -4.4f, 15.0f));
+		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
 
 		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(8.0f, -1.0f, 15.0f));
 		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D(-8.0f, -1.0f, 15.0f));

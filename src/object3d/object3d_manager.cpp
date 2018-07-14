@@ -165,8 +165,8 @@ void DrawAllObject3D(eDrawType DrawType)
 void UpdateAllObject3D(float Time)
 {
 	UpdateAllSpaceShip(Time);
-	UpdateAllWeapon(Time);
 	UpdateAllGroundObjects(Time);
+	UpdateAllWeapon(Time);
 	UpdateAllProjectile(Time);
 	UpdateAllSpaceObject(Time);
 	UpdateAllExplosion(Time);

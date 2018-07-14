@@ -326,7 +326,7 @@ void CreateInfoObject()
 		InfoObjectLength = InfoFighter->Length;
 		InfoObjectHeight = InfoFighter->Height;
 		InfoObjectStrength = InfoFighter->StrengthStart;
-		InfoObjectWeaponQuantity = InfoFighter->WeaponQuantity;
+		InfoObjectWeaponQuantity = InfoFighter->WeaponSlots.size();
 		InfoObjectEngineQuantity = InfoFighter->Engines.size();
 
 		for (auto &tmpEngine : InfoFighter->Engines) {
@@ -1539,10 +1539,10 @@ void InformationDrawObject()
 		if (InfoPirateShip) {
 			InfoPirateShip->Draw(true);
 			// рисуем оружие
-			if (InfoPirateShip->Weapon) {
-				for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
-					if (InfoPirateShip->Weapon[i])
-						InfoPirateShip->Weapon[i]->Draw(true);
+			if (!InfoPirateShip->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : InfoPirateShip->WeaponSlots) {
+					if (tmpWeaponSlot.Weapon)
+						tmpWeaponSlot.Weapon->Draw(true);
 				}
 			}
 		}
@@ -1585,10 +1585,10 @@ void InformationDrawObject()
 	if (InfoPirateShip) {
 		InfoPirateShip->Draw(false, ShadowMap);
 		// рисуем оружие
-		if (InfoPirateShip->Weapon) {
-			for (int i = 0; i < InfoPirateShip->WeaponQuantity; i++) {
-				if (InfoPirateShip->Weapon[i])
-					InfoPirateShip->Weapon[i]->Draw(false, ShadowMap);
+		if (!InfoPirateShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : InfoPirateShip->WeaponSlots) {
+				if (tmpWeaponSlot.Weapon)
+					tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
 			}
 		}
 		// рисуем эффекты двигателей только для этой модели

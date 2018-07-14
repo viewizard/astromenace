@@ -370,8 +370,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	bool WeaponAmmoOut = false;
 
 	// отображаем боекомплект
-	if (WorkshopFighterGame->Weapon[SlotNum] != nullptr) {
-		int AmmoShow = (int)((56.0f*(WorkshopFighterGame->Weapon[SlotNum]->AmmoStart-WorkshopFighterGame->Weapon[SlotNum]->Ammo))/WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+	if (WorkshopFighterGame->WeaponSlots[SlotNum].Weapon) {
+		int AmmoShow = (int)((56.0f*(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart-WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo))/WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart);
 		// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
 		if (AmmoShow < 0)
 			AmmoShow = 0;
@@ -383,7 +383,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		else
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/ammo.tga"), true, MenuContentTransp);
 
-		if (WorkshopFighterGame->Weapon[SlotNum]->Ammo == 0)
+		if (WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo == 0)
 			WeaponAmmoOut = true;
 	}
 
@@ -432,28 +432,28 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = GameConfig().Profile[CurrentProfile].Money;
-		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
-			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
-					       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+		if (WorkshopFighterGame->WeaponSlots[SlotNum].Weapon)
+			Money += GetWeaponCost(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->InternalType,
+					       WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo,
+					       WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart);
 
 		// если отпустили тут
 		if (!vw_GetMouseLeftClick(false) && DragWeapon) {
 			// есть уровень слота соотв. уровню оружия
-			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
+			if ((WorkshopFighterGame->WeaponSlots[SlotNum].Type >= DragWeaponLevel) &&
 			    // если стоимость меньше чем есть денег + стоимость оружия
 			    (Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart))) {
 				// звук устанавливаемого оружия
 				PlayMenuSFX(eMenuSFX::DragInstallToSlot, 1.0f);
 
 				// если тут было оружие - сначало продаем его
-				if (WorkshopFighterGame->Weapon[SlotNum]) {
+				if (WorkshopFighterGame->WeaponSlots[SlotNum].Weapon) {
 					ChangeGameConfig().Profile[CurrentProfile].Money +=
-						GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
-							      WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-							      WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-					ReleaseWeapon(WorkshopFighterGame->Weapon[SlotNum]);
-					WorkshopFighterGame->Weapon[SlotNum] = nullptr;
+						GetWeaponCost(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->InternalType,
+							      WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo,
+							      WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart);
+					ReleaseWeapon(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon);
+					WorkshopFighterGame->WeaponSlots[SlotNum].Weapon = nullptr;
 					ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = 0;
 					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
 				}
@@ -464,7 +464,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
 				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
 				// убираем источник света
-				if (auto sharedFire = WorkshopFighterGame->Weapon[SlotNum]->Fire.lock())
+				if (auto sharedFire = WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Fire.lock())
 					vw_ReleaseLight(sharedFire->Light);
 
 				ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
@@ -472,15 +472,15 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 				ChangeGameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] = DragWeaponControl;
 				ChangeGameConfig().Profile[CurrentProfile].WeaponAltControl[SlotNum] = DragWeaponAltControl;
 				ChangeGameConfig().Profile[CurrentProfile].WeaponAltControlData[SlotNum] = DragWeaponAltControlData;
-				WorkshopFighterGame->Weapon[SlotNum]->Ammo = DragWeaponAmmo;
-				WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
+				WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo = DragWeaponAmmo;
+				WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart = DragWeaponAmmoStart;
 
 				// если не ракетная установка
 				if (DragWeaponNum < 16) {
-					WorkshopFighterGame->WeaponYAngle[SlotNum] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->WeaponSlots[SlotNum].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
-					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
+					NeedAngle.y += WorkshopFighterGame->WeaponSlots[SlotNum].YAngle;
+					WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->SetRotation(NeedAngle);
 				} else
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
 
@@ -514,27 +514,27 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 		// взяли оружие из слота, чтобы тащить - фактически продали его
-		if ((WorkshopFighterGame->Weapon[SlotNum] != nullptr) &&
+		if (WorkshopFighterGame->WeaponSlots[SlotNum].Weapon &&
 		    vw_GetMouseLeftClick(false) &&
 		    !DragWeapon) {
 			// звук снятия оружия из слота
 			PlayMenuSFX(eMenuSFX::DragUninstallFromSlot, 1.0f);
 
 			DragWeapon = true;
-			DragWeaponNum = WorkshopFighterGame->Weapon[SlotNum]->InternalType;
-			DragWeaponLevel = WorkshopFighterGame->Weapon[SlotNum]->WeaponLevel;
-			DragWeaponAmmo = WorkshopFighterGame->Weapon[SlotNum]->Ammo;
-			DragWeaponAmmoStart = WorkshopFighterGame->Weapon[SlotNum]->AmmoStart;
+			DragWeaponNum = WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->InternalType;
+			DragWeaponLevel = WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->WeaponLevel;
+			DragWeaponAmmo = WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo;
+			DragWeaponAmmoStart = WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart;
 			DragWeaponControl = GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum];
 			DragWeaponAltControl = GameConfig().Profile[CurrentProfile].WeaponAltControl[SlotNum];
 			DragWeaponAltControlData = GameConfig().Profile[CurrentProfile].WeaponAltControlData[SlotNum];
 
 			ChangeGameConfig().Profile[CurrentProfile].Money +=
-				GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
-					      WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-					      WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-			ReleaseWeapon(WorkshopFighterGame->Weapon[SlotNum]);
-			WorkshopFighterGame->Weapon[SlotNum] = nullptr;
+				GetWeaponCost(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->InternalType,
+					      WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo,
+					      WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart);
+			ReleaseWeapon(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon);
+			WorkshopFighterGame->WeaponSlots[SlotNum].Weapon = nullptr;
 			ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = 0;
 			ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
 		}
@@ -542,7 +542,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 		// если не тянем и в слоте что-то есть, показываем, что можем тянуть
-		if (!DragWeapon && WorkshopFighterGame->Weapon[SlotNum])
+		if (!DragWeapon && WorkshopFighterGame->WeaponSlots[SlotNum].Weapon)
 			CurrentCursorStatus = 1;
 
 	}
@@ -553,9 +553,9 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	// рисуем можем ставить в слот или нет
 	bool CanOn = false;
 	// проверка по уровню слота
-	if (DragWeapon && (WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel))
+	if (DragWeapon && (WorkshopFighterGame->WeaponSlots[SlotNum].Type >= DragWeaponLevel))
 		CanOn = true;
-	if (!DragWeapon && (WorkshopFighterGame->WeaponType[SlotNum] >= WorkshopNewWeapon->WeaponLevel))
+	if (!DragWeapon && (WorkshopFighterGame->WeaponSlots[SlotNum].Type >= WorkshopNewWeapon->WeaponLevel))
 		CanOn = true;
 
 	SrcRect(0,0,128,64);
@@ -565,12 +565,12 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		if (!WeaponAmmoOut) {
 			bool NeedAlert = false;
 			// если есть хоть 1 слот меньшего уровня
-			for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++) {
+			for (unsigned i=0; i<WorkshopFighterGame->WeaponSlots.size(); i++) {
 				// если что-то тянем, смотрим по нему...
 				if (DragWeapon) {
-					if (WorkshopFighterGame->WeaponType[i] < DragWeaponLevel) NeedAlert = true;
+					if (WorkshopFighterGame->WeaponSlots[i].Type < DragWeaponLevel) NeedAlert = true;
 				} else {
-					if (WorkshopFighterGame->WeaponType[i] < WorkshopNewWeapon->WeaponLevel) NeedAlert = true;
+					if (WorkshopFighterGame->WeaponSlots[i].Type < WorkshopNewWeapon->WeaponLevel) NeedAlert = true;
 				}
 			}
 
@@ -589,7 +589,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 	// прорисовка
 
-	if (WorkshopFighterGame->Weapon[SlotNum] == nullptr) {
+	if (!WorkshopFighterGame->WeaponSlots[SlotNum].Weapon) {
 		// пустой слот, рисуем его
 
 		DstRect(X,Y,X+128,Y+64);
@@ -602,13 +602,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		}
 		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-53, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7*MenuContentTransp, vw_GetText("EMPTY"));
 
-		Size = vw_TextWidth("%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponType[SlotNum]);
+		Size = vw_TextWidth("%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponSlots[SlotNum].Type);
 		WScale = 0;
 		if (Size > 88) {
 			Size = 88;
 			WScale = -88;
 		}
-		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-32, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7*MenuContentTransp, "%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponType[SlotNum]);
+		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-32, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7*MenuContentTransp, "%s %i",vw_GetText("level"),WorkshopFighterGame->WeaponSlots[SlotNum].Type);
 
 
 		return;
@@ -616,7 +616,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 	SrcRect(0,0,128,64);
 	DstRect(X,Y,X+128,Y+64);
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(WorkshopFighterGame->Weapon[SlotNum]->InternalType)), true, MenuContentTransp);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->InternalType)), true, MenuContentTransp);
 
 
 
@@ -643,7 +643,7 @@ void ShipSlotSetupWeapon(int Slot)
 
 
 
-	if (WorkshopFighterGame->Weapon[Slot] == nullptr) {
+	if (!WorkshopFighterGame->WeaponSlots[Slot].Weapon) {
 		Xpos += 74;
 		Ypos += 128;
 		// пустой слот, рисуем его
@@ -663,14 +663,14 @@ void ShipSlotSetupWeapon(int Slot)
 		// выводим боекомплект   текущий/полный
 		Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
 		vw_DrawText(Xpos, Ypos, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon Ammo:"));
-		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth("%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth("%i/%i", WorkshopFighterGame->WeaponSlots[Slot].Weapon->Ammo, WorkshopFighterGame->WeaponSlots[Slot].Weapon->AmmoStart);
 
 
 		// если все нормально - белым... иначе подмаргиваем
-		if (WorkshopFighterGame->Weapon[Slot]->Ammo == WorkshopFighterGame->Weapon[Slot]->AmmoStart)
-			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+		if (WorkshopFighterGame->WeaponSlots[Slot].Weapon->Ammo == WorkshopFighterGame->WeaponSlots[Slot].Weapon->AmmoStart)
+			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i/%i", WorkshopFighterGame->WeaponSlots[Slot].Weapon->Ammo, WorkshopFighterGame->WeaponSlots[Slot].Weapon->AmmoStart);
 		else
-			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3*MenuContentTransp, "%i/%i", WorkshopFighterGame->Weapon[Slot]->Ammo, WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3*MenuContentTransp, "%i/%i", WorkshopFighterGame->WeaponSlots[Slot].Weapon->Ammo, WorkshopFighterGame->WeaponSlots[Slot].Weapon->AmmoStart);
 
 
 		// стоимость перезарядки
@@ -678,9 +678,9 @@ void ShipSlotSetupWeapon(int Slot)
 		Ypos += 30;
 		vw_DrawText(Xpos, Ypos, -230, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon Reload Cost:"));
 		// находим стоимость перезарядки
-		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->Weapon[Slot]->InternalType,
-						     WorkshopFighterGame->Weapon[Slot]->Ammo,
-						     WorkshopFighterGame->Weapon[Slot]->AmmoStart);
+		int ReloadCost = GetWeaponReloadCost(WorkshopFighterGame->WeaponSlots[Slot].Weapon->InternalType,
+						     WorkshopFighterGame->WeaponSlots[Slot].Weapon->Ammo,
+						     WorkshopFighterGame->WeaponSlots[Slot].Weapon->AmmoStart);
 		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth("%i", ReloadCost);
 		if (ReloadCost == 0)
 			vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i", ReloadCost);
@@ -691,8 +691,8 @@ void ShipSlotSetupWeapon(int Slot)
 		// кнопка перезарядить оружие
 		Ypos += 40;
 		if (DrawButton200_2(GameConfig().InternalWidth / 2 + 155, Ypos, vw_GetText("Reload"), MenuContentTransp, (ReloadCost == 0) || GameConfig().Profile[CurrentProfile].Money<ReloadCost)) {
-			WorkshopFighterGame->Weapon[Slot]->Ammo = WorkshopFighterGame->Weapon[Slot]->AmmoStart;
-			ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[Slot] = WorkshopFighterGame->Weapon[Slot]->Ammo;
+			WorkshopFighterGame->WeaponSlots[Slot].Weapon->Ammo = WorkshopFighterGame->WeaponSlots[Slot].Weapon->AmmoStart;
+			ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[Slot] = WorkshopFighterGame->WeaponSlots[Slot].Weapon->Ammo;
 			ChangeGameConfig().Profile[CurrentProfile].Money -= ReloadCost;
 		}
 
@@ -790,21 +790,21 @@ void ShipSlotSetupWeapon(int Slot)
 			} else {
 				if (DrawButton128_2(GameConfig().InternalWidth/2+118, Ypos, vw_GetText("Left"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot] <= Min)) {
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot] -= 5.0f;
-					WorkshopFighterGame->WeaponYAngle[Slot] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot];
+					WorkshopFighterGame->WeaponSlots[Slot].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
-					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
+					WorkshopFighterGame->WeaponSlots[Slot].Weapon->SetRotation(WorkshopFighterGame->WeaponSlots[Slot].Weapon->Rotation^(-1));
 					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[Slot];
-					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
+					NeedAngle.y += WorkshopFighterGame->WeaponSlots[Slot].YAngle;
+					WorkshopFighterGame->WeaponSlots[Slot].Weapon->SetRotation(NeedAngle);
 				}
 				if (DrawButton128_2(GameConfig().InternalWidth/2+266, Ypos, vw_GetText("Right"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot] >= Max)) {
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot] += 5.0f;
-					WorkshopFighterGame->WeaponYAngle[Slot] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot];
+					WorkshopFighterGame->WeaponSlots[Slot].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[Slot];
 
-					WorkshopFighterGame->Weapon[Slot]->SetRotation(WorkshopFighterGame->Weapon[Slot]->Rotation^(-1));
+					WorkshopFighterGame->WeaponSlots[Slot].Weapon->SetRotation(WorkshopFighterGame->WeaponSlots[Slot].Weapon->Rotation^(-1));
 					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[Slot];
-					WorkshopFighterGame->Weapon[Slot]->SetRotation(NeedAngle);
+					NeedAngle.y += WorkshopFighterGame->WeaponSlots[Slot].YAngle;
+					WorkshopFighterGame->WeaponSlots[Slot].Weapon->SetRotation(NeedAngle);
 				}
 			}
 		}
@@ -822,27 +822,27 @@ void ShipSlotSetupWeapon(int Slot)
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 
 		int Money = GameConfig().Profile[CurrentProfile].Money;
-		if (WorkshopFighterGame->Weapon[SlotNum] != nullptr)
-			Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
-					       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-					       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
+		if (WorkshopFighterGame->WeaponSlots[SlotNum].Weapon)
+			Money += GetWeaponCost(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->InternalType,
+					       WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo,
+					       WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart);
 
 		// если отпустили тут
 		if (!vw_GetMouseLeftClick(false) && DragWeapon) {
 			// есть уровень слота соотв. уровню оружия
-			if ((WorkshopFighterGame->WeaponType[SlotNum] >= DragWeaponLevel) &&
+			if ((WorkshopFighterGame->WeaponSlots[SlotNum].Type >= DragWeaponLevel) &&
 			    // если стоимость меньше чем есть денег + стоимость оружия
 			    (Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart))) {
 				// звук устанавливаемого оружия
 				PlayMenuSFX(eMenuSFX::DragInstallToSlot, 1.0f);
 
 				// если тут было оружие - сначало продаем его
-				if (WorkshopFighterGame->Weapon[SlotNum] != nullptr) {
-					ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->Weapon[SlotNum]->InternalType,
-									       WorkshopFighterGame->Weapon[SlotNum]->Ammo,
-									       WorkshopFighterGame->Weapon[SlotNum]->AmmoStart);
-					ReleaseWeapon(WorkshopFighterGame->Weapon[SlotNum]);
-					WorkshopFighterGame->Weapon[SlotNum] = nullptr;
+				if (WorkshopFighterGame->WeaponSlots[SlotNum].Weapon) {
+					ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->InternalType,
+									       WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo,
+									       WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart);
+					ReleaseWeapon(WorkshopFighterGame->WeaponSlots[SlotNum].Weapon);
+					WorkshopFighterGame->WeaponSlots[SlotNum].Weapon = nullptr;
 					ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = 0;
 					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
 				}
@@ -853,7 +853,7 @@ void ShipSlotSetupWeapon(int Slot)
 				// все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
 				SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
 				// убираем источник света
-				if (auto sharedFire = WorkshopFighterGame->Weapon[SlotNum]->Fire.lock())
+				if (auto sharedFire = WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Fire.lock())
 					vw_ReleaseLight(sharedFire->Light);
 
 				ChangeGameConfig().Profile[CurrentProfile].Weapon[SlotNum] = DragWeaponNum;
@@ -861,15 +861,15 @@ void ShipSlotSetupWeapon(int Slot)
 				ChangeGameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] = DragWeaponControl;
 				ChangeGameConfig().Profile[CurrentProfile].WeaponAltControl[SlotNum] = DragWeaponAltControl;
 				ChangeGameConfig().Profile[CurrentProfile].WeaponAltControlData[SlotNum] = DragWeaponAltControlData;
-				WorkshopFighterGame->Weapon[SlotNum]->Ammo = DragWeaponAmmo;
-				WorkshopFighterGame->Weapon[SlotNum]->AmmoStart = DragWeaponAmmoStart;
+				WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->Ammo = DragWeaponAmmo;
+				WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->AmmoStart = DragWeaponAmmoStart;
 
 				// если не ракетная установка
 				if (DragWeaponNum < 16) {
-					WorkshopFighterGame->WeaponYAngle[SlotNum] = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
+					WorkshopFighterGame->WeaponSlots[SlotNum].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 					sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-					NeedAngle.y += WorkshopFighterGame->WeaponYAngle[SlotNum];
-					WorkshopFighterGame->Weapon[SlotNum]->SetRotation(NeedAngle);
+					NeedAngle.y += WorkshopFighterGame->WeaponSlots[SlotNum].YAngle;
+					WorkshopFighterGame->WeaponSlots[SlotNum].Weapon->SetRotation(NeedAngle);
 				} else
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] = 0.0f;
 
@@ -1071,9 +1071,10 @@ int GetShipWeaponsMaxSlotLevel()
 {
 	int max = 1;
 
-	for (int i=0; i<WorkshopFighterGame->WeaponQuantity; i++)
-		if (WorkshopFighterGame->WeaponType[i] > max)
-			max = WorkshopFighterGame->WeaponType[i];
+	for (const auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
+		if (tmpWeaponSlot.Type > max)
+			max = tmpWeaponSlot.Type;
+	}
 
 	return max;
 }
@@ -1259,19 +1260,19 @@ void Workshop_Weaponry()
 	if (WeaponSetupSlot == -1) {
 		int ReloadCost = 0;
 		// находим стоимость перезарядки
-		for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
-			if (WorkshopFighterGame->Weapon[i])
-				ReloadCost += GetWeaponReloadCost(WorkshopFighterGame->Weapon[i]->InternalType,
-								  WorkshopFighterGame->Weapon[i]->Ammo,
-								  WorkshopFighterGame->Weapon[i]->AmmoStart);
+		for (const auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
+			if (tmpWeaponSlot.Weapon)
+				ReloadCost += GetWeaponReloadCost(tmpWeaponSlot.Weapon->InternalType,
+								  tmpWeaponSlot.Weapon->Ammo,
+								  tmpWeaponSlot.Weapon->AmmoStart);
 		}
 		std::string ButtonName{std::string(vw_GetText("Reload All")) + ": " + std::to_string(ReloadCost)};
 
 		if (DrawButton200_2(GameConfig().InternalWidth/2+153, 50, ButtonName.c_str(), MenuContentTransp, (ReloadCost == 0) || (GameConfig().Profile[CurrentProfile].Money < ReloadCost))) {
-			for (int i = 0; i < WorkshopFighterGame->WeaponQuantity; i++) {
-				if (WorkshopFighterGame->Weapon[i]) {
-					WorkshopFighterGame->Weapon[i]->Ammo = WorkshopFighterGame->Weapon[i]->AmmoStart;
-					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->Weapon[i]->Ammo;
+			for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
+				if (WorkshopFighterGame->WeaponSlots[i].Weapon) {
+					WorkshopFighterGame->WeaponSlots[i].Weapon->Ammo = WorkshopFighterGame->WeaponSlots[i].Weapon->AmmoStart;
+					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->WeaponSlots[i].Weapon->Ammo;
 				}
 			}
 			ChangeGameConfig().Profile[CurrentProfile].Money -= ReloadCost;

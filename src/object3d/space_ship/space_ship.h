@@ -166,18 +166,7 @@ public:
 	// небольшая девиация-болтание корабля
 	std::vector<cShake> ShipShake{};
 
-	// кол-во оружия доступного на данной моделе
-	int WeaponQuantity{0};
-	// выстрел из оружия, т.е. передача команды "стрелять" оружию при сделующем Update'е
-	bool *WeaponSetFire{nullptr};
-	// указатель на массив оружия
-	cWeapon **Weapon{nullptr};
-	// расположение оружия на коробле (относительное)
-	sVECTOR3D *WeaponLocation{nullptr};
-	// тип оружия по мощьности, для определенных слотов
-	int *WeaponType{nullptr};
-	// первоначальный доворот оружия для корабля (будем использовать только для игрка, для остальных он ноль)
-	float *WeaponYAngle{nullptr};
+	std::vector<sShipWeaponSlot> WeaponSlots{};
 	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
 	int WeaponFireType{2};
 	int WeaponGroupCurrentFireNum{-1};

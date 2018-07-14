@@ -39,30 +39,30 @@ bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, i
 {
 
 	// проверяем, можно ли вообще ставить в этот слот оружие
-	if (SpaceShip->WeaponQuantity < WeaponSlot) {
+	if (static_cast<int>(SpaceShip->WeaponSlots.size()) < WeaponSlot) {
 		return false;
 	}
 
 	// удаляем оружие, если оно уже тут есть
-	if (SpaceShip->Weapon[WeaponSlot-1] != nullptr) {
-		ReleaseWeapon(SpaceShip->Weapon[WeaponSlot-1]);
-		SpaceShip->Weapon[WeaponSlot-1] = nullptr;
+	if (SpaceShip->WeaponSlots[WeaponSlot-1].Weapon) {
+		ReleaseWeapon(SpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
+		SpaceShip->WeaponSlots[WeaponSlot-1].Weapon = nullptr;
 	}
 
 	// создаем нужное оружие
-	SpaceShip->Weapon[WeaponSlot-1] = CreateWeapon(WeaponNum);
+	SpaceShip->WeaponSlots[WeaponSlot-1].Weapon = CreateWeapon(WeaponNum);
 
 	// проверяем уровень оружия и уровень слота
-	if (SpaceShip->WeaponType[WeaponSlot-1] < SpaceShip->Weapon[WeaponSlot-1]->WeaponLevel) {
-		ReleaseWeapon(SpaceShip->Weapon[WeaponSlot-1]);
-		SpaceShip->Weapon[WeaponSlot-1] = nullptr;
+	if (SpaceShip->WeaponSlots[WeaponSlot-1].Type < SpaceShip->WeaponSlots[WeaponSlot-1].Weapon->WeaponLevel) {
+		ReleaseWeapon(SpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
+		SpaceShip->WeaponSlots[WeaponSlot-1].Weapon = nullptr;
 		return false;
 	}
 
 	// если тут, значит все нормально - можно подключать
-	SpaceShip->Weapon[WeaponSlot-1]->SetLocation(SpaceShip->WeaponLocation[WeaponSlot-1]);
+	SpaceShip->WeaponSlots[WeaponSlot-1].Weapon->SetLocation(SpaceShip->WeaponSlots[WeaponSlot-1].Location);
 	// передаем статус корабля, чтобы учесть что это игрока оружие
-	SpaceShip->Weapon[WeaponSlot-1]->ObjectStatus = SpaceShip->ObjectStatus;
+	SpaceShip->WeaponSlots[WeaponSlot-1].Weapon->ObjectStatus = SpaceShip->ObjectStatus;
 
 	return true;
 }
