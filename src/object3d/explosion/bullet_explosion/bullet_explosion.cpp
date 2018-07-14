@@ -269,7 +269,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				sharedGFX->Theta = 360.00f;
 			sharedGFX->ParticlesPerSec = (int)(30 * Projectile->Radius);
 			sharedGFX->CreationType = eParticleCreationType::Sphere;
-			sharedGFX->CreationSize = sVECTOR3D(AABB[0].x, AABB[0].y, AABB[0].z);
+			sharedGFX->CreationSize = sVECTOR3D{AABB[0].x, AABB[0].y, AABB[0].z};
 			// разварачиваем взрыв по объекту
 			sharedGFX->RotateSystemAndParticlesByAngle(Projectile->Rotation);
 		}
@@ -282,7 +282,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
+			ProjectileTMP->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     360.0f * vw_fRand0()});
 			sVECTOR3D TM1 = Projectile->Orientation^Projectile->Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -363,7 +365,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				float Rexpl = (sharedProjectileGFX->ColorStart.r + sharedProjectileGFX->ColorEnd.r) / 2.0f;
 				float Gexpl = (sharedProjectileGFX->ColorStart.g + sharedProjectileGFX->ColorEnd.g) / 2.0f;
 				float Bexpl = (sharedProjectileGFX->ColorStart.b + sharedProjectileGFX->ColorEnd.b) / 2.0f;
-				sharedGFX->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+				sharedGFX->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
 				sharedGFX->ColorStart.r = sharedProjectileGFX->ColorStart.r;
 				sharedGFX->ColorStart.g = sharedProjectileGFX->ColorStart.g;
@@ -424,7 +426,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				float Rexpl = (sharedProjectileGFX->ColorStart.r + sharedProjectileGFX->ColorEnd.r) / 2.0f;
 				float Gexpl = (sharedProjectileGFX->ColorStart.g + sharedProjectileGFX->ColorEnd.g) / 2.0f;
 				float Bexpl = (sharedProjectileGFX->ColorStart.b + sharedProjectileGFX->ColorEnd.b) / 2.0f;
-				sharedGFX->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
+				sharedGFX->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, Rexpl, Gexpl, Bexpl, 0.0f, 0.005f);
 
 				sharedGFX->ColorStart.r = sharedProjectileGFX->ColorStart.r;
 				sharedGFX->ColorStart.g = sharedProjectileGFX->ColorStart.g;
@@ -488,7 +490,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			sVECTOR3D TM1 = Projectile->Orientation;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -527,7 +531,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 10);
 			sharedGFX->ParticlesPerSec = 30;
-			sharedGFX->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
+			sharedGFX->CreationSize = sVECTOR3D{2.0f, 0.3f, 2.0f};
 			sharedGFX->SetStartLocation(Projectile->Location);
 		}
 
@@ -539,7 +543,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -592,7 +598,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -651,7 +659,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			sVECTOR3D TM1 = Projectile->Orientation;
 			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
 			ProjectileTMP->Orientation.Normalize();
@@ -676,7 +686,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -697,7 +709,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -717,7 +731,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Create(1);
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(5.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -739,7 +755,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D(20.0f*vw_fRand0(), 360.0f*vw_fRand0(), 0.0f));
+			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+							     360.0f * vw_fRand0(),
+							     0.0f});
 			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock()) {
 					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
@@ -867,7 +885,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			}
 
 
-			Chunks[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
+			Chunks[i].Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
 			// сбрасываем индексный буфер блока (если он был), мы "распаковали" все в VertexArray
 			Chunks[i].IndexArray.reset();
 		}

@@ -633,7 +633,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 
 				FutureLocation = tmp->Orientation ^ (tmp->Speed * PoprTime);
 				// учитываем камеру...
-				CamPosTTT = sVECTOR3D(0.0f, 0.0f, 0.0f);
+				CamPosTTT = sVECTOR3D{0.0f, 0.0f, 0.0f};
 				if (tmp->ObjectStatus == eObjectStatus::Player)
 					CamPosTTT = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
 

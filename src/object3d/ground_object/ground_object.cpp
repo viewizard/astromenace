@@ -217,7 +217,10 @@ void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 				if (TargetHorizChunkNums.empty() &&
 				    TargetVertChunkNums.empty() &&
 				    !DoNotCalculateRotation) // и если нужно считать...
-					RotationWeapon = sVECTOR3D(TargetVertChunksNeedAngle, TargetHorizChunksNeedAngle, 0.0f) + Rotation;
+					RotationWeapon = sVECTOR3D{TargetVertChunksNeedAngle,
+								   TargetHorizChunksNeedAngle,
+								   0.0f} +
+							 Rotation;
 				tmpWeaponSlot.Weapon->SetRotation(tmpWeaponSlot.Weapon->Rotation ^ (-1.0f));
 				tmpWeaponSlot.Weapon->SetRotation(RotationWeapon);
 				tmpWeaponSlot.Weapon->SetLocation(Location + tmpWeaponSlot.Location);
@@ -338,9 +341,9 @@ bool cGroundObject::Update(float Time)
 
 				vw_RotatePointInv(tmpLocation, Chunks[tmpChunkNum].Rotation ^ (-1.0f));
 
-				SetChunkRotation(sVECTOR3D(Chunks[tmpChunkNum].Rotation.x,
+				SetChunkRotation(sVECTOR3D{Chunks[tmpChunkNum].Rotation.x,
 							   -NeedRotateCalculation,
-							   Chunks[tmpChunkNum].Rotation.z),
+							   Chunks[tmpChunkNum].Rotation.z},
 						  tmpChunkNum);
 
 				vw_RotatePoint(tmpLocation, Chunks[tmpChunkNum].Rotation);
@@ -382,9 +385,9 @@ bool cGroundObject::Update(float Time)
 
 				vw_RotatePointInv(tmpLocation, Chunks[tmpChunkNum].Rotation ^ (-1.0f));
 
-				SetChunkRotation(sVECTOR3D(-NeedRotateCalculation,
+				SetChunkRotation(sVECTOR3D{-NeedRotateCalculation,
 							   Chunks[tmpChunkNum].Rotation.y,
-							   Chunks[tmpChunkNum].Rotation.z),
+							   Chunks[tmpChunkNum].Rotation.z},
 						  tmpChunkNum);
 
 				vw_RotatePoint(tmpLocation, Chunks[tmpChunkNum].Rotation);
@@ -423,7 +426,9 @@ bool cGroundObject::Update(float Time)
 				if (TargetHorizChunkNums.empty() &&
 				    TargetVertChunkNums.empty() &&
 				    !DoNotCalculateRotation) // и если нужно считать...
-					RotationWeapon = Rotation - sVECTOR3D(TargetVertChunksNeedAngle, TargetHorizChunksNeedAngle, 0.0f);
+					RotationWeapon = Rotation - sVECTOR3D{TargetVertChunksNeedAngle,
+									      TargetHorizChunksNeedAngle,
+									      0.0f};
 
 				tmpWeaponSlot.Weapon->SetRotation(tmpWeaponSlot.Weapon->Rotation ^ (-1.0f));
 				tmpWeaponSlot.Weapon->SetRotation(RotationWeapon);
@@ -692,9 +697,9 @@ bool cGroundObject::Update(float Time)
 				if (tmpRotateY < -MaxSteerableWheelAngle)
 					tmpRotateY = -MaxSteerableWheelAngle;
 
-				SetChunkRotation(sVECTOR3D(Chunks[tmpChunkNum].Rotation.x,
+				SetChunkRotation(sVECTOR3D{Chunks[tmpChunkNum].Rotation.x,
 							   tmpRotateY,
-							   Chunks[tmpChunkNum].Rotation.z),
+							   Chunks[tmpChunkNum].Rotation.z},
 						  tmpChunkNum);
 			}
 		}

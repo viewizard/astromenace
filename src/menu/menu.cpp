@@ -152,8 +152,8 @@ void InitMenu(eMenuStatus NewMenuStatus)
 	// иним камеру, всегда до работы со скриптом (!!!)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
-	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
-	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
+	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 
 	// since we use scripts with background animation in the same way as
 	// games levels do, we should reset game camera first
@@ -427,7 +427,7 @@ void DrawMenu()
 	}
 
 
-	vw_SetCameraMoveAroundPoint(sVECTOR3D(0,0,0), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 	vw_CameraLookAt();
 
 

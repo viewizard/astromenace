@@ -347,7 +347,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetProjectileGFX(sharedGFX, 5);
-			sharedGFX->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
+			sharedGFX->CreationSize = sVECTOR3D{2.5f, 2.5f, 0.5f};
 			sharedGFX->DeadZone = 1.9f;
 		}
 		break;
@@ -389,12 +389,12 @@ void cProjectile::Create(int ProjectileNum)
 		break;
 	// Maser
 	case 11:
-		ProjectileCenter = sVECTOR3D(0.0f,0.0f,50.0f);
+		ProjectileCenter = sVECTOR3D{0.0f, 0.0f, 50.0f};
 		NeedStopPartic = true;
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetProjectileGFX(sharedGFX, 17);
-			sharedGFX->CreationSize = sVECTOR3D(0.8f,0.8f,100.0f);
+			sharedGFX->CreationSize = sVECTOR3D{0.8f, 0.8f, 100.0f};
 
 			float MinX = -sharedGFX->CreationSize.x/2;
 			float MaxX = sharedGFX->CreationSize.x/2;
@@ -403,32 +403,32 @@ void cProjectile::Create(int ProjectileNum)
 			float MinZ = -sharedGFX->CreationSize.z/2;
 			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-			OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-			OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-			OBB.Box[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-			OBB.Box[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-			OBB.Box[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-			OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-			OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
-			OBB.Location = sVECTOR3D(0,0,0);
-			Width = fabsf(MaxX-MinX);
-			Height = fabsf(MaxY-MinY);
-			Length = fabsf(MaxZ-MinZ);
+			OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+			OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+			OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+			OBB.Box[3] = AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+			OBB.Box[4] = AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+			OBB.Box[5] = AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+			OBB.Box[6] = AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+			OBB.Box[7] = AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
+			OBB.Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
+			Width = fabsf(MaxX - MinX);
+			Height = fabsf(MaxY - MinY);
+			Length = fabsf(MaxZ - MinZ);
 		}
 		break;
 	case 12:
-		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
+		ProjectileCenter = sVECTOR3D{0.0f, 0.0f, 55.0f};
 		NeedStopPartic = true;
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetProjectileGFX(sharedGFX, 18);
-			sharedGFX->CreationSize = sVECTOR3D(1.6f,1.6f,110.0f);
+			sharedGFX->CreationSize = sVECTOR3D{1.6f, 1.6f, 110.0f};
 		}
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetProjectileGFX(sharedGFX, 17);
-			sharedGFX->CreationSize = sVECTOR3D(0.8f,0.8f,110.0f);
+			sharedGFX->CreationSize = sVECTOR3D{0.8f, 0.8f, 110.0f};
 
 			float MinX = -sharedGFX->CreationSize.x/2;
 			float MaxX = sharedGFX->CreationSize.x/2;
@@ -437,15 +437,15 @@ void cProjectile::Create(int ProjectileNum)
 			float MinZ = -sharedGFX->CreationSize.z/2;
 			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-			OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-			OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-			OBB.Box[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-			OBB.Box[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-			OBB.Box[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-			OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-			OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
-			OBB.Location = sVECTOR3D(0,0,0);
+			OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+			OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+			OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+			OBB.Box[3] = AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+			OBB.Box[4] = AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+			OBB.Box[5] = AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+			OBB.Box[6] = AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+			OBB.Box[7] = AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
+			OBB.Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
 			Width = fabsf(MaxX-MinX);
 			Height = fabsf(MaxY-MinY);
 			Length = fabsf(MaxZ-MinZ);
@@ -459,12 +459,12 @@ void cProjectile::Create(int ProjectileNum)
 		break;
 	// Laser
 	case 14:
-		ProjectileCenter = sVECTOR3D(0.0f,0.0f,60.0f);
+		ProjectileCenter = sVECTOR3D{0.0f, 0.0f, 60.0f};
 		NeedStopPartic = true;
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetProjectileGFX(sharedGFX, 20);
-			sharedGFX->CreationSize = sVECTOR3D(0.4f,0.4f,120.0f);
+			sharedGFX->CreationSize = sVECTOR3D{0.4f, 0.4f, 120.0f};
 
 			float MinX = -sharedGFX->CreationSize.x/2;
 			float MaxX = sharedGFX->CreationSize.x/2;
@@ -473,15 +473,15 @@ void cProjectile::Create(int ProjectileNum)
 			float MinZ = -sharedGFX->CreationSize.z/2;
 			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-			OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-			OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-			OBB.Box[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-			OBB.Box[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-			OBB.Box[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-			OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-			OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
-			OBB.Location = sVECTOR3D(0,0,0);
+			OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+			OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+			OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+			OBB.Box[3] = AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+			OBB.Box[4] = AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+			OBB.Box[5] = AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+			OBB.Box[6] = AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+			OBB.Box[7] = AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
+			OBB.Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
 			Width = fabsf(MaxX-MinX);
 			Height = fabsf(MaxY-MinY);
 			Length = fabsf(MaxZ-MinZ);
@@ -500,7 +500,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 13);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -515,7 +515,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 16);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -532,7 +532,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 14);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -547,7 +547,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 15);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -643,12 +643,12 @@ void cProjectile::Create(int ProjectileNum)
 		break;
 	// как Laser
 	case 110:
-		ProjectileCenter = sVECTOR3D(0.0f,0.0f,55.0f);
+		ProjectileCenter = sVECTOR3D{0.0f, 0.0f, 55.0f};
 		NeedStopPartic = true;
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetProjectileGFX(sharedGFX, 38);
-			sharedGFX->CreationSize = sVECTOR3D(2.0f,2.0f,110.0f);
+			sharedGFX->CreationSize = sVECTOR3D{2.0f, 2.0f, 110.0f};
 
 			float MinX = -sharedGFX->CreationSize.x/2;
 			float MaxX = sharedGFX->CreationSize.x/2;
@@ -657,15 +657,15 @@ void cProjectile::Create(int ProjectileNum)
 			float MinZ = -sharedGFX->CreationSize.z/2;
 			float MaxZ = sharedGFX->CreationSize.z/2;
 			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-			OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-			OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-			OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-			OBB.Box[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-			OBB.Box[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-			OBB.Box[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-			OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-			OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
-			OBB.Location = sVECTOR3D(0,0,0);
+			OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+			OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+			OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+			OBB.Box[3] = AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+			OBB.Box[4] = AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+			OBB.Box[5] = AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+			OBB.Box[6] = AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+			OBB.Box[7] = AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
+			OBB.Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
 			Width = fabsf(MaxX-MinX);
 			Height = fabsf(MaxY-MinY);
 			Length = fabsf(MaxZ-MinZ);
@@ -693,7 +693,7 @@ void cProjectile::Create(int ProjectileNum)
 	// фларес
 	case 203:
 		// смотрит вверх
-		Orientation = sVECTOR3D(0.0f, 0.5f, 0.5f);
+		Orientation = sVECTOR3D{0.0f, 0.5f, 0.5f};
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 25);
@@ -711,7 +711,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 27);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -726,7 +726,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 31);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -742,7 +742,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetProjectileGFX(sharedGFX, 5);
-			sharedGFX->CreationSize = sVECTOR3D(2.5f,2.5f,0.5f);
+			sharedGFX->CreationSize = sVECTOR3D{2.5f, 2.5f, 0.5f};
 			sharedGFX->DeadZone = 1.9f;
 		}
 		break;
@@ -759,7 +759,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 32);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -774,7 +774,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 33);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, 0.0f, -Length/2.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
 		// шлейф
 		GraphicFX[1] = vw_CreateParticleSystem();
@@ -828,7 +828,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 28);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.8f, 0.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, -0.8f, 0.0f};
 		NeedStopPartic = true;
 		break;
 	// мина3 (наведение по высоте + стрельба снарядами)
@@ -843,7 +843,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 29);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, -2.5f, 0.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, -2.5f, 0.0f};
 		NeedStopPartic = true;
 		break;
 	// мина4 (наведение по высоте + стрельба ракетами)
@@ -858,7 +858,7 @@ void cProjectile::Create(int ProjectileNum)
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 30);
-		GraphicFXLocation[0] = sVECTOR3D(0.0f, -0.7f, 0.0f);
+		GraphicFXLocation[0] = sVECTOR3D{0.0f, -0.7f, 0.0f};
 		NeedStopPartic = true;
 		break;
 
@@ -957,9 +957,9 @@ cProjectile::~cProjectile()
 					fDist2 = 3.0f;
 
 				if (fDist2 < effective_dist2) {
-					pVelocity = sVECTOR3D(Dist2.x + 10.0f * vw_fRand0(),
+					pVelocity = sVECTOR3D{Dist2.x + 10.0f * vw_fRand0(),
 							      Dist2.y + 10.0f * vw_fRand0(),
-							      Dist2.z + 10.0f * vw_fRand0());
+							      Dist2.z + 10.0f * vw_fRand0()};
 					pVelocity.Normalize();
 					pVelocity = pVelocity ^ (effective_dist2 / fDist2);
 					pNeedStop = true;
@@ -1327,39 +1327,43 @@ bool cProjectile::Update(float Time)
 	case 9:
 	case 109:
 		if (auto sharedGFX = GraphicFX[1].lock())
-			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
-									     sharedGFX->Angle.y, sharedGFX->Angle.z));
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D{sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y,
+									     sharedGFX->Angle.z});
 		if (auto sharedGFX = GraphicFX[2].lock())
-			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
-									     sharedGFX->Angle.y, sharedGFX->Angle.z));
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D{sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y,
+									     sharedGFX->Angle.z});
 		break;
 	case 10:
 	case 108:
 	case 213:
 		if (auto sharedGFX = GraphicFX[0].lock())
-			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
-									     sharedGFX->Angle.y, sharedGFX->Angle.z));
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D{sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y,
+									     sharedGFX->Angle.z});
 		if (auto sharedGFX = GraphicFX[1].lock())
-			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x - 360.0f * TimeDelta,
-									     sharedGFX->Angle.y, sharedGFX->Angle.z));
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D{sharedGFX->Angle.x - 360.0f * TimeDelta,
+									     sharedGFX->Angle.y,
+									     sharedGFX->Angle.z});
 		break;
 
 	// Maser
 	case 11:
 		if (auto sharedGFX = GraphicFX[0].lock()) {
-			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, 360.0f * TimeDelta * 3.0f));
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D{0.0f, 0.0f, 360.0f * TimeDelta * 3.0f});
 			if (Lifetime <= sharedGFX->Life / 1.5f)
 				sharedGFX->IsSuppressed = true;
 		}
 		break;
 	case 12:
 		if (auto sharedGFX = GraphicFX[0].lock()) {
-			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, 360.0f * TimeDelta * 4.0f));
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D{0.0f, 0.0f, 360.0f * TimeDelta * 4.0f});
 			if (Lifetime <= sharedGFX->Life / 1.5f)
 				sharedGFX->IsSuppressed = true;
 		}
 		if (auto sharedGFX = GraphicFX[1].lock()) {
-			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, -360.0f * TimeDelta * 2.0f));
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D{0.0f, 0.0f, -360.0f * TimeDelta * 2.0f});
 			if (Lifetime <= sharedGFX->Life / 1.5f)
 				sharedGFX->IsSuppressed = true;
 		}
@@ -1369,9 +1373,9 @@ bool cProjectile::Update(float Time)
 	case 13:
 	case 208:
 		if (auto sharedGFX = GraphicFX[0].lock())
-			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D(sharedGFX->Angle.x,
+			sharedGFX->RotateSystemAndParticlesByAngle(sVECTOR3D{sharedGFX->Angle.x,
 									     sharedGFX->Angle.y - 360.0f * TimeDelta * 2.0f,
-									     sharedGFX->Angle.z));
+									     sharedGFX->Angle.z});
 		break;
 
 	// Laser
@@ -1385,7 +1389,7 @@ bool cProjectile::Update(float Time)
 	// Gauss
 	case 15:
 		if (auto sharedGFX = GraphicFX[0].lock())
-			sharedGFX->RotateParticlesByAngle(sVECTOR3D(0.0f, 0.0f, 360.0f * TimeDelta * 6.0f));
+			sharedGFX->RotateParticlesByAngle(sVECTOR3D{0.0f, 0.0f, 360.0f * TimeDelta * 6.0f});
 		break;
 
 
@@ -1526,7 +1530,7 @@ missile:
 				// находим направление (если нужно вниз, меняем знак)
 				if (Location.y > tmpTarget->Location.y) SpeedTmp *= -1.0f;
 
-				sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
+				sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
 				SetLocation(Location+VelocityUp);
 			}
 		}
@@ -1602,7 +1606,7 @@ missile:
 					// находим направление (если нужно вниз, меняем знак)
 					if (Location.y > NeedPoint.y) SpeedTmp *= -1.0f;
 
-					sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
+					sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
 					SetLocation(Location+VelocityUp);
 				}
 			}
@@ -1675,7 +1679,7 @@ missile:
 					// находим направление (если нужно вниз, меняем знак)
 					if (Location.y-2.0f > NeedPoint.y) SpeedTmp *= -1.0f;
 
-					sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
+					sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
 					SetLocation(Location+VelocityUp);
 				}
 
@@ -1685,7 +1689,7 @@ missile:
 					// создаем снаряд
 					cProjectile *Projectile = new cProjectile;
 					Projectile->Create(204);
-					Projectile->SetLocation(Location + sVECTOR3D(0.0f, -2.0f, 0.0f));
+					Projectile->SetLocation(Location + sVECTOR3D{0.0f, -2.0f, 0.0f});
 
 					Projectile->SetRotation(Rotation);
 					for (auto &tmpGFX : Projectile->GraphicFX) {
@@ -1776,7 +1780,7 @@ missile:
 					// находим направление (если нужно вниз, меняем знак)
 					if (Location.y+2.0f > NeedPoint.y) SpeedTmp *= -1.0f;
 
-					sVECTOR3D VelocityUp = sVECTOR3D(0.0f,SpeedTmp,0.0f);
+					sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
 					SetLocation(Location+VelocityUp);
 				}
 
@@ -1786,7 +1790,7 @@ missile:
 					// создаем снаряд
 					cProjectile *Projectile = new cProjectile;
 					Projectile->Create(206);
-					Projectile->SetLocation(Location + sVECTOR3D(0.0f, 0.0f, 0.0f));
+					Projectile->SetLocation(Location + sVECTOR3D{0.0f, 0.0f, 0.0f});
 
 					Projectile->SetRotation(Rotation);
 					for (auto &tmpGFX : Projectile->GraphicFX) {

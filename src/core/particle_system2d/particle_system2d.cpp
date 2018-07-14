@@ -225,9 +225,9 @@ void cParticleSystem2D::GenerateLocationPointType(cParticle2D &NewParticle)
  */
 void cParticleSystem2D::GenerateLocationQuadType(cParticle2D &NewParticle)
 {
-	NewParticle.Location = Location + sVECTOR3D((1.0f - vw_fRand() * 2) * CreationSize.x,
+	NewParticle.Location = Location + sVECTOR3D{(1.0f - vw_fRand() * 2) * CreationSize.x,
 						    (1.0f - vw_fRand() * 2) * CreationSize.y,
-						    (1.0f - vw_fRand() * 2) * CreationSize.z);
+						    (1.0f - vw_fRand() * 2) * CreationSize.z};
 }
 
 /*

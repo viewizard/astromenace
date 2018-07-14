@@ -81,7 +81,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
 	case 2:	// средний взрыв, пришельцы
 		ParticleSystem->ColorStart.r = 0.10f;
@@ -122,7 +122,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(2.8f,2.8f,2.8f);
+		ParticleSystem->CreationSize = sVECTOR3D{2.8f, 2.8f, 2.8f};
 		ParticleSystem->NeedStop = true;
 		break;
 	case 4:	// средний взрыв
@@ -144,7 +144,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.002f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.05f, 0.85f, 1.0f, 0.0f, 0.002f);
 		break;
 	case 5:	// средний взрыв, земляне
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -165,7 +165,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.003f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.003f);
 		break;
 	case 6:	// средний взрыв, земляне
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -205,12 +205,12 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 300;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(2.0f,0.3f,2.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{2.0f, 0.3f, 2.0f};
 		ParticleSystem->DeadZone = 1.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.15f, 0.35f, 1.0f, 0.0f, 0.0001f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.15f, 0.35f, 1.0f, 0.0f, 0.0001f);
 		break;
 	case 8: // torpedo
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -230,12 +230,12 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{3.0f, 0.3f, 3.0f};
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 1.0f, 0.15f, 0.0f, 0.0005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 1.0f, 0.15f, 0.0f, 0.0005f);
 		break;
 	case 9: // nuke
 		ParticleSystem->ColorStart.r = 0.30f;
@@ -255,7 +255,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{3.0f, 0.3f, 3.0f};
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -279,12 +279,12 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(3.0f,0.3f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{3.0f, 0.3f, 3.0f};
 		ParticleSystem->DeadZone = 0.9f;
 		ParticleSystem->AlphaShowHide = false;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
 
 
@@ -307,7 +307,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->Theta      = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.05f, 0.85f, 1.0f, 0.0f, 0.001f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.05f, 0.85f, 1.0f, 0.0f, 0.001f);
 		break;
 	case 12:	// взрыв осколка босса, как средний взрыв, земляне
 		ParticleSystem->ColorStart.r = 0.10f;

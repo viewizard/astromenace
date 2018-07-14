@@ -64,7 +64,7 @@ float   GameCameraDeviationAge = 0.0f;
 
 void ResetGameCamera()
 {
-	GamePoint = sVECTOR3D(0.0f, 0.0f, 0.0f);
+	GamePoint = sVECTOR3D{0.0f, 0.0f, 0.0f};
 	GameCameraLastUpdate = 0.0f;
 
 	GameCameraDeviation = 0.0f;
@@ -73,7 +73,7 @@ void ResetGameCamera()
 	GameCameraDeviationPower = 0.0f;
 	GameCameraNeedStartDeviation = 0.0f;
 	GameCameraDeviationAge = 0.0f;
-	vw_SetCameraDeviation(sVECTOR3D(0,0,0));
+	vw_SetCameraDeviation(sVECTOR3D{0.0f, 0.0f, 0.0f});
 }
 
 
@@ -208,7 +208,7 @@ void GameCameraUpdate(float Time)
 		}
 
 
-	vw_SetCameraDeviation(sVECTOR3D(GameCameraDeviation,GameCameraDeviation/(-2.0f),0.0f));
+	vw_SetCameraDeviation(sVECTOR3D{GameCameraDeviation, GameCameraDeviation / (-2.0f), 0.0f});
 
 
 	// если поворачиваем

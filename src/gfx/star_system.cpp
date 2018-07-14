@@ -153,12 +153,12 @@ void StarSystemInitByType(eDrawType DrawType)
 			sharedSpace->Life = 10.00f;
 			sharedSpace->LifeVar = 0.00f;
 			sharedSpace->CreationType = eParticleCreationType::Cube;
-			sharedSpace->CreationSize = sVECTOR3D(2.0f, 50.0f, 30.0f);
+			sharedSpace->CreationSize = sVECTOR3D{2.0f, 50.0f, 30.0f};
 			sharedSpace->ParticlesPerSec = 140;
 			sharedSpace->Texture = GetPreloadedTextureAsset("gfx/flare3.tga");
-			sharedSpace->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
+			sharedSpace->Direction = sVECTOR3D{1.0f, 0.0f, 0.0f};
 			sharedSpace->CameraDistResize = 0.1f;
-			sharedSpace->SetStartLocation(sVECTOR3D(-50, 10, -20));
+			sharedSpace->SetStartLocation(sVECTOR3D{-50.0f, 10.0f, -20.0f});
 
 			// emulate time flow, particles should fill the screen
 			float Time = sharedSpace->TimeLastUpdate;
@@ -189,10 +189,10 @@ void StarSystemInitByType(eDrawType DrawType)
 			sharedSpace->Life = 14.00f;
 			sharedSpace->LifeVar = 0.00f;
 			sharedSpace->CreationType = eParticleCreationType::Cube;
-			sharedSpace->CreationSize = sVECTOR3D(200.0f, 30.0f, 10.0f);
+			sharedSpace->CreationSize = sVECTOR3D{200.0f, 30.0f, 10.0f};
 			sharedSpace->ParticlesPerSec = 100;
 			sharedSpace->Texture = GetPreloadedTextureAsset("gfx/flare3.tga");
-			sharedSpace->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedSpace->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 			sharedSpace->SetStartLocation(InGameInitialLocation);
 
 			// emulate time flow, particles should fill the screen
@@ -295,8 +295,9 @@ void StarSystemDraw(eDrawType DrawType)
 		if (tmpSpace.ObjectType == eObjectType::Planet) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
-				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.90f - GameCameraGetDeviation() * 4.0f,
-						       GameCameraGetDeviation() * 2.0f, 0.0f));
+				vw_Translate(sVECTOR3D{CurrentCameraLocation.x * 0.90f - GameCameraGetDeviation() * 4.0f,
+						       GameCameraGetDeviation() * 2.0f,
+						       0.0f});
 			}
 			tmpSpace.Draw(false);
 			if (DrawType == eDrawType::GAME)
@@ -305,8 +306,9 @@ void StarSystemDraw(eDrawType DrawType)
 			   ((tmpSpace.InternalType > 10) && (tmpSpace.InternalType < 20))) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
-				vw_Translate(sVECTOR3D(CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
-						       GameCameraGetDeviation() * 2.0f, 0.0f));
+				vw_Translate(sVECTOR3D{CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
+						       GameCameraGetDeviation() * 2.0f,
+						       0.0f});
 			}
 			tmpSpace.Draw(false);
 			if (DrawType == eDrawType::GAME)

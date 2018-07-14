@@ -61,97 +61,97 @@ struct sWeaponData {
 // оружие землян 1-99
 const std::vector<sWeaponData> PresetEarthWeaponData{
 	// Kinetic
-	{eGameSFX::WeaponFire_Kinetic1,		true, 25,	1,	1.5f,	3000,	0.4f, sVECTOR3D(0.0f, -0.613f, 2.0f), sVECTOR3D(0.0f, -0.65f, 1.0f), "models/earthfighter/weapon5.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-	{eGameSFX::WeaponFire_Kinetic2,		true, 25,	1,	3,	1500,	0.6f, sVECTOR3D(0.0f, -0.613f, 2.93f), sVECTOR3D(0.0f, -0.6f, 1.8f), "models/earthfighter/weapon11.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-	{eGameSFX::WeaponFire_Kinetic3,		true, 30,	2,	3.5,	1000,	0.7f, sVECTOR3D(0.0f, -0.613f, 3.33f), sVECTOR3D(0.0f, -0.6f, 2.2f), "models/earthfighter/weapon13.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-	{eGameSFX::WeaponFire_Kinetic4,		true, 30,	2,	5,	7000,	0.3f, sVECTOR3D(0.0f, -0.613f, 2.33f), sVECTOR3D(0.0f, -0.6f, 1.2f), "models/earthfighter/weapon8.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic1,		true, 25,	1,	1.5f,	3000,	0.4f, sVECTOR3D{0.0f, -0.613f, 2.0f}, sVECTOR3D{0.0f, -0.65f, 1.0f}, "models/earthfighter/weapon5.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic2,		true, 25,	1,	3,	1500,	0.6f, sVECTOR3D{0.0f, -0.613f, 2.93f}, sVECTOR3D{0.0f, -0.6f, 1.8f}, "models/earthfighter/weapon11.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic3,		true, 30,	2,	3.5,	1000,	0.7f, sVECTOR3D{0.0f, -0.613f, 3.33f}, sVECTOR3D{0.0f, -0.6f, 2.2f}, "models/earthfighter/weapon13.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+	{eGameSFX::WeaponFire_Kinetic4,		true, 30,	2,	5,	7000,	0.3f, sVECTOR3D{0.0f, -0.613f, 2.33f}, sVECTOR3D{0.0f, -0.6f, 1.2f}, "models/earthfighter/weapon8.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
 	// Ion
-	{eGameSFX::WeaponFire_Ion1,		true, 10,	1,	7,	1000,	0.7f, sVECTOR3D(0.0f, -0.43f, 2.13f), sVECTOR3D(0.0f, -0.45f, 1.5f), "models/earthfighter/weapon1.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
-	{eGameSFX::WeaponFire_Ion2,		true, 10,	1,	10,	2000,	0.9f, sVECTOR3D(0.0f, -0.53f, 1.86f), sVECTOR3D(0.0f, -0.5f, 1.8f), "models/earthfighter/weapon4.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
-	{eGameSFX::WeaponFire_Ion3,		true, 15,	2,	11.5,	3000,	1.0f, sVECTOR3D(0.0f, -0.63f, 2.26f), sVECTOR3D(0.0f, -0.65f, 2.3f), "models/earthfighter/weapon6.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Ion1,		true, 10,	1,	7,	1000,	0.7f, sVECTOR3D{0.0f, -0.43f, 2.13f}, sVECTOR3D{0.0f, -0.45f, 1.5f}, "models/earthfighter/weapon1.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Ion2,		true, 10,	1,	10,	2000,	0.9f, sVECTOR3D{0.0f, -0.53f, 1.86f}, sVECTOR3D{0.0f, -0.5f, 1.8f}, "models/earthfighter/weapon4.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Ion3,		true, 15,	2,	11.5,	3000,	1.0f, sVECTOR3D{0.0f, -0.63f, 2.26f}, sVECTOR3D{0.0f, -0.65f, 2.3f}, "models/earthfighter/weapon6.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
 	// Plasma
-	{eGameSFX::WeaponFire_Plasma1,		true, 10,	2,	20,	2000,	0.6f, sVECTOR3D(0.0f, -0.613f, 2.0f), sVECTOR3D(0.0f, -0.65f, 1.8f), "models/earthfighter/weapon3.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-	{eGameSFX::WeaponFire_Plasma2,		true, 15,	2,	30,	1000,	0.7f, sVECTOR3D(0.0f, -0.8f, 1.86f), sVECTOR3D(0.0f, -0.8f, 1.8f), "models/earthfighter/weapon2.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-	{eGameSFX::WeaponFire_Plasma3,		true, 10,	3,	50,	800,	0.9f, sVECTOR3D(0.0f, -0.613f, 1.2f), sVECTOR3D(0.0f, -0.7f, 1.6f), "models/earthfighter/weapon7.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Plasma1,		true, 10,	2,	20,	2000,	0.6f, sVECTOR3D{0.0f, -0.613f, 2.0f}, sVECTOR3D{0.0f, -0.65f, 1.8f}, "models/earthfighter/weapon3.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Plasma2,		true, 15,	2,	30,	1000,	0.7f, sVECTOR3D{0.0f, -0.8f, 1.86f}, sVECTOR3D{0.0f, -0.8f, 1.8f}, "models/earthfighter/weapon2.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Plasma3,		true, 10,	3,	50,	800,	0.9f, sVECTOR3D{0.0f, -0.613f, 1.2f}, sVECTOR3D{0.0f, -0.7f, 1.6f}, "models/earthfighter/weapon7.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Maser
-	{eGameSFX::WeaponFire_Maser1,		true, 10,	3,	50,	800,	3.0f, sVECTOR3D(0.0f, -0.55f, 2.1f), sVECTOR3D(0.0f, -0.55f, 1.4f), "models/earthfighter/weapon10.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-	{eGameSFX::WeaponFire_Maser2,		true, 15,	4,	80,	1000,	2.4f, sVECTOR3D(0.0f, -0.55f, 2.5f), sVECTOR3D(0.0f, -0.55f, 1.8f), "models/earthfighter/weapon9.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Maser1,		true, 10,	3,	50,	800,	3.0f, sVECTOR3D{0.0f, -0.55f, 2.1f}, sVECTOR3D{0.0f, -0.55f, 1.4f}, "models/earthfighter/weapon10.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Maser2,		true, 15,	4,	80,	1000,	2.4f, sVECTOR3D{0.0f, -0.55f, 2.5f}, sVECTOR3D{0.0f, -0.55f, 1.8f}, "models/earthfighter/weapon9.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Antimatter
-	{eGameSFX::WeaponFire_Antimatter,	true, 20,	4,	50,	5000,	0.8f, sVECTOR3D(0.0f, -0.65f, 2.1f), sVECTOR3D(0.0f, -0.65f, 1.9f), "models/earthfighter/weapon12.vw3d", "models/earthfighter/sf-text09.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+	{eGameSFX::WeaponFire_Antimatter,	true, 20,	4,	50,	5000,	0.8f, sVECTOR3D{0.0f, -0.65f, 2.1f}, sVECTOR3D{0.0f, -0.65f, 1.9f}, "models/earthfighter/weapon12.vw3d", "models/earthfighter/sf-text09.vw2d", "models/earthfighter/sf-illum02.vw2d"},
 	// Laser
-	{eGameSFX::WeaponFire_Laser,		true, 15,	5,	150,	800,	1.2f, sVECTOR3D(0.0f, -0.6f, 2.5f), sVECTOR3D(0.0f, -0.6f, 2.1f), "models/earthfighter/weapon14.vw3d", "models/earthfighter/sf-text05.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Laser,		true, 15,	5,	150,	800,	1.2f, sVECTOR3D{0.0f, -0.6f, 2.5f}, sVECTOR3D{0.0f, -0.6f, 2.1f}, "models/earthfighter/weapon14.vw3d", "models/earthfighter/sf-text05.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Gauss
-	{eGameSFX::WeaponFire_Gauss,		true, 20,	5,	150,	2000,	0.7f, sVECTOR3D(0.0f, -0.65f, 3.6f), sVECTOR3D(0.0f, -0.55f, 2.2f), "models/earthfighter/weapon15.vw3d", "models/earthfighter/sf-text08.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+	{eGameSFX::WeaponFire_Gauss,		true, 20,	5,	150,	2000,	0.7f, sVECTOR3D{0.0f, -0.65f, 3.6f}, sVECTOR3D{0.0f, -0.55f, 2.2f}, "models/earthfighter/weapon15.vw3d", "models/earthfighter/sf-text08.vw2d", "models/earthfighter/sf-illum03.vw2d"},
 	// Missiles
-	{eGameSFX::WeaponFire_SmallMissile,	false, 30,	4,	5,	200,	3.0f, sVECTOR3D(0.0f, -0.8f, 4.7f), sVECTOR3D(0.0f, -0.9f, 1.5f), "models/earthfighter/lnch1.vw3d", "models/earthfighter/lnch12.tga", ""},
-	{eGameSFX::WeaponFire_NormalMissile,	false, 30,	4,	15,	400,	8.0f, sVECTOR3D(0.2f, -0.95f, 2.6f), sVECTOR3D(0.0f, -0.6f, 1.0f), "models/earthfighter/lnch2.vw3d", "models/earthfighter/lnch12.tga", ""},
-	{eGameSFX::WeaponFire_Torpedo,		false, 25,	5,	10,	50,	8.0f, sVECTOR3D(0.0f, -0.95f, 4.0f), sVECTOR3D(0.0f, -0.9f, 1.5f), "models/earthfighter/lnch3.vw3d", "models/earthfighter/lnch34.tga", ""},
-	{eGameSFX::WeaponFire_Bomb,		false, 30,	5,	15,	25,	10.0f, sVECTOR3D(0.0f, -0.95f, 5.0f), sVECTOR3D(0.0f, -0.9f, 1.8f), "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""},
+	{eGameSFX::WeaponFire_SmallMissile,	false, 30,	4,	5,	200,	3.0f, sVECTOR3D{0.0f, -0.8f, 4.7f}, sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch1.vw3d", "models/earthfighter/lnch12.tga", ""},
+	{eGameSFX::WeaponFire_NormalMissile,	false, 30,	4,	15,	400,	8.0f, sVECTOR3D{0.2f, -0.95f, 2.6f}, sVECTOR3D{0.0f, -0.6f, 1.0f}, "models/earthfighter/lnch2.vw3d", "models/earthfighter/lnch12.tga", ""},
+	{eGameSFX::WeaponFire_Torpedo,		false, 25,	5,	10,	50,	8.0f, sVECTOR3D{0.0f, -0.95f, 4.0f}, sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch3.vw3d", "models/earthfighter/lnch34.tga", ""},
+	{eGameSFX::WeaponFire_Bomb,		false, 30,	5,	15,	25,	10.0f, sVECTOR3D{0.0f, -0.95f, 5.0f}, sVECTOR3D{0.0f, -0.9f, 1.8f}, "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""},
 };
 
 // оружие пришельцев 101-199
 static std::vector<sWeaponData> PresetAlienWeaponData{
 	// оружие пришельцев (как Kinetic1)
-	{eGameSFX::WeaponFire_Ion2, true, 1.0f,		1,	1,	5000,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Ion2, true, 1.0f,		1,	1,	5000,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев (с наведением, как Kinetic2)
-	{eGameSFX::WeaponFire_Plasma1, false, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma1, false, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев (как Kinetic3)
-	{eGameSFX::WeaponFire_Plasma2, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев (с наведением, как Kinetic3)
-	{eGameSFX::WeaponFire_Plasma2, false, 1.0f,	1,	1,	2500,	2.5f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, false, 1.0f,	1,	1,	2500,	2.5f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев (как Kinetic2)
-	{eGameSFX::WeaponFire_Plasma1, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma1, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев для выброса мин (1 типа)
-	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев для выброса мин (2 типа)
-	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев (как Plasma3)
-	{eGameSFX::WeaponFire_Plasma3, true, 10,	3,	50,	800,	0.9f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma3, true, 10,	3,	50,	800,	0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев (как Plasma2)
-	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// оружие пришельцев (как Laser) для больших кораблей
-	{eGameSFX::WeaponFire_Laser, true, 15,		5,	150,	800,	1.2f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Laser, true, 15,		5,	150,	800,	1.2f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 };
 
 // оружие пиратов 201-299
 static std::vector<sWeaponData> PresetPirateWeaponData{
 	// турель для кораблей пиратов
-	{eGameSFX::WeaponFire_Kinetic1, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D(0.0f, 1.5f, 1.0f), sVECTOR3D(0.0f, 1.5f, 1.0f), "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
+	{eGameSFX::WeaponFire_Kinetic1, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D{0.0f, 1.5f, 1.0f}, sVECTOR3D{0.0f, 1.5f, 1.0f}, "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
 	// турель для кораблей пиратов
-	{eGameSFX::WeaponFire_Kinetic2, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D(0.0f, 1.0f, 0.0f), sVECTOR3D(0.0f, 1.0f, 0.0f), "models/turret/turret-02.vw3d", "models/turret/turrets.tga", ""},
+	{eGameSFX::WeaponFire_Kinetic2, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D{0.0f, 1.0f, 0.0f}, sVECTOR3D{0.0f, 1.0f, 0.0f}, "models/turret/turret-02.vw3d", "models/turret/turrets.tga", ""},
 
 	// оружие пиратов - отстрел фларес для больших кораблей
-	{eGameSFX::WeaponFire_Kinetic1, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic1, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 
 	// как Kinetic1
-	{eGameSFX::WeaponFire_Kinetic1, true, 10,	1,	1.7f,	3000,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic1, true, 10,	1,	1.7f,	3000,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Missile1
-	{eGameSFX::WeaponFire_SmallMissile, false, 80,	4,	5,	200,	5.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_SmallMissile, false, 80,	4,	5,	200,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Missile2
-	{eGameSFX::WeaponFire_NormalMissile, false, 30,	4,	5,	800,	8.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_NormalMissile, false, 30,	4,	5,	800,	8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Ion2
-	{eGameSFX::WeaponFire_Ion2, true, 10,	1,	10,		2000,	0.9f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Ion2, true, 10,	1,	10,		2000,	0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Antimatter
-	{eGameSFX::WeaponFire_Antimatter, true, 20,	4,	50,	5000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Antimatter, true, 20,	4,	50,	5000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Missile3 (торпеда)
-	{eGameSFX::WeaponFire_Torpedo, false, 25,	5,	10,	200,	8.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Torpedo, false, 25,	5,	10,	200,	8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Missile4 (бомба)
-	{eGameSFX::WeaponFire_Bomb, false, 30,	5,	15,		100,	10.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Bomb, false, 30,	5,	15,		100,	10.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Kinetic2
-	{eGameSFX::WeaponFire_Kinetic2, true, 25,	1,	3,	1500,	0.6f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic2, true, 25,	1,	3,	1500,	0.6f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Kinetic3
-	{eGameSFX::WeaponFire_Kinetic3, true, 30,	2,	3.5,	500,	0.7f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Kinetic3, true, 30,	2,	3.5,	500,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// как Plasma2
-	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 
 	// мина1 (простое наведение по высоте)
-	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// мина2 (наведение по высоте + приближение)
-	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// мина3 (наведение по высоте + стрельба снарядами)
-	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 	// мина4 (наведение по высоте + стрельба ракетами)
-	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D(0.0f, 0.0f, 0.0f), sVECTOR3D(0.0f, 0.0f, 0.0f), "none", "none", "none"},
+	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
 };
 
 
@@ -279,7 +279,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
 		break;
 	case 2:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -297,7 +297,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 40.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
 		break;
 	case 3:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -315,7 +315,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 50.00f;
 		ParticleSystem->Life       = 0.50f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
 		break;
 	case 4:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -333,7 +333,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.50f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
 		break;
 	case 5:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -350,7 +350,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 1.00f;
 		ParticleSystem->Theta      = 10.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 6:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -367,7 +367,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 1.00f;
 		ParticleSystem->Theta      = 20.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 7:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -384,7 +384,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 1.00f;
 		ParticleSystem->Theta      = 10.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 8:
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -403,8 +403,8 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D(0.4f,0.4f,0.4f);
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		ParticleSystem->CreationSize       = sVECTOR3D{0.4f, 0.4f, 0.4f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 	case 9:
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -423,8 +423,8 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.3f, 0.3f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 	case 10:
 		ParticleSystem->ColorStart.r = 0.00f;
@@ -443,8 +443,8 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->Theta      = 0.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.3f,0.3f);
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
+		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.3f, 0.3f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 
 
@@ -468,7 +468,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);
+		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.2f, 0.3f};
 		break;
 	case 12:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -489,7 +489,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D(0.3f,0.2f,0.3f);
+		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.2f, 0.3f};
 		break;
 	case 13:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -507,7 +507,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.7f, 1.0f, 0.0f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.7f, 1.0f, 0.0f, 0.0f, 0.02f);
 		break;
 	case 14:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -527,7 +527,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->Life       = 0.20f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D(0.2f,0.2f,0.8f);
+		ParticleSystem->CreationSize       = sVECTOR3D{0.2f, 0.2f, 0.8f};
 		break;
 	case 15:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -545,7 +545,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->SpeedVar   = 3.00f;
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.5f, 0.0f, 0.0f, 0.02f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.5f, 0.0f, 0.0f, 0.02f);
 		break;
 	case 16:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -678,7 +678,7 @@ cWeapon::cWeapon(int WeaponNum)
 		Fire = vw_CreateParticleSystem();
 		if (auto sharedFire = Fire.lock()) {
 			sharedFire->SetStartLocation(FireLocation);
-			sharedFire->Direction = sVECTOR3D(0.0f, 0.0f, 1.0f);
+			sharedFire->Direction = sVECTOR3D{0.0f, 0.0f, 1.0f};
 			SetWeaponFire(sharedFire, WeaponNum);
 		}
 
@@ -864,8 +864,10 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedFire->ParticlesPerSec = 70;
 			sharedDestroyedFire->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedDestroyedFire->CreationType = eParticleCreationType::Cube;
-			sharedDestroyedFire->CreationSize = sVECTOR3D(Width/2.0f,Width/2.0f,0.1f);
-			sharedDestroyedFire->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedDestroyedFire->CreationSize = sVECTOR3D{Width / 2.0f,
+								      Width / 2.0f,
+								      0.1f};
+			sharedDestroyedFire->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 			sharedDestroyedFire->SetStartLocation(DestroyedFireLocation);
 		}
 	}
@@ -897,8 +899,10 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedSmoke->ParticlesPerSec = 300;
 			sharedDestroyedSmoke->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedDestroyedSmoke->CreationType = eParticleCreationType::Point;
-			sharedDestroyedSmoke->CreationSize = sVECTOR3D(Width/2.5f,Width/2.5f,0.1f);
-			sharedDestroyedSmoke->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedDestroyedSmoke->CreationSize = sVECTOR3D{Width / 2.5f,
+								       Width / 2.5f,
+								       0.1f};
+			sharedDestroyedSmoke->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 			sharedDestroyedSmoke->SetStartLocation(DestroyedFireLocation);
 		}
 	}
@@ -919,31 +923,31 @@ bool cWeapon::Update(float Time)
 
 				switch (SwarmNum) {
 				case 9:
-					FireLocation = sVECTOR3D(-0.5f, -0.5f, 2.6f);
+					FireLocation = sVECTOR3D{-0.5f, -0.5f, 2.6f};
 					break;
 				case 8:
-					FireLocation = sVECTOR3D(0.5f, -0.8f, 2.6f);
+					FireLocation = sVECTOR3D{0.5f, -0.8f, 2.6f};
 					break;
 				case 7:
-					FireLocation = sVECTOR3D(-0.5f, -0.8f, 2.6f);
+					FireLocation = sVECTOR3D{-0.5f, -0.8f, 2.6f};
 					break;
 				case 6:
-					FireLocation = sVECTOR3D(0.5f, -0.5f, 2.6f);
+					FireLocation = sVECTOR3D{0.5f, -0.5f, 2.6f};
 					break;
 				case 5:
-					FireLocation = sVECTOR3D(-0.2f, -0.95f, 2.6f);
+					FireLocation = sVECTOR3D{-0.2f, -0.95f, 2.6f};
 					break;
 				case 4:
-					FireLocation = sVECTOR3D(0.2f, -0.65f, 2.6f);
+					FireLocation = sVECTOR3D{0.2f, -0.65f, 2.6f};
 					break;
 				case 3:
-					FireLocation = sVECTOR3D(-0.2f, -0.3f, 2.6f);
+					FireLocation = sVECTOR3D{-0.2f, -0.3f, 2.6f};
 					break;
 				case 2:
-					FireLocation = sVECTOR3D(0.2f, -0.65f, 2.6f);
+					FireLocation = sVECTOR3D{0.2f, -0.65f, 2.6f};
 					break;
 				case 1:
-					FireLocation = sVECTOR3D(0.2f, -0.3f, 2.6f);
+					FireLocation = sVECTOR3D{0.2f, -0.3f, 2.6f};
 					break;
 				}
 				vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
@@ -1002,7 +1006,9 @@ bool cWeapon::Update(float Time)
 				cProjectile *Projectile = new cProjectile;
 				Projectile->Create(InternalType);
 				Projectile->SetLocation(Location + FireLocation);
-				Projectile->SetRotation(Rotation + sVECTOR3D(vw_fRand0() * 30.0f, 0.0f, vw_fRand0() * 30.0f));
+				Projectile->SetRotation(Rotation + sVECTOR3D{vw_fRand0() * 30.0f,
+									     0.0f,
+									     vw_fRand0() * 30.0f});
 
 				for (auto &tmpGFX : Projectile->GraphicFX) {
 					if (auto sharedGFX = tmpGFX.lock()) {
@@ -1165,9 +1171,12 @@ bool cWeapon::Update(float Time)
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 		if ((TargetHorizChunkNum == -1) && (TargetVertChunkNum == -1))
-			RotationWeapon = sVECTOR3D(TargetVertChunkNeedAngle, TargetHorizChunkNeedAngle, 0.0f)+Rotation;
+			RotationWeapon = sVECTOR3D{TargetVertChunkNeedAngle,
+						   TargetHorizChunkNeedAngle,
+						   0.0f} +
+					 Rotation;
 
-		Orientation = sVECTOR3D(0.0f, 0.0f, 1.0f);
+		Orientation = sVECTOR3D{0.0f, 0.0f, 1.0f};
 		vw_RotatePoint(Orientation, RotationWeapon);
 	}
 
@@ -1216,9 +1225,12 @@ void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 		if ((TargetHorizChunkNum == -1) && (TargetVertChunkNum == -1))
-			RotationWeapon = sVECTOR3D(TargetVertChunkNeedAngle, TargetHorizChunkNeedAngle, 0.0f)+Rotation;
+			RotationWeapon = sVECTOR3D{TargetVertChunkNeedAngle,
+						   TargetHorizChunkNeedAngle,
+						   0.0f} +
+					 Rotation;
 
-		Orientation = sVECTOR3D(0.0f, 0.0f, 1.0f);
+		Orientation = sVECTOR3D{0.0f, 0.0f, 1.0f};
 		vw_RotatePoint(Orientation, RotationWeapon);
 	}
 
@@ -1412,7 +1424,10 @@ bool cWeapon::WeaponFire(float Time)
 
 		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 		if (TargetHorizChunkNum == -1 && TargetVertChunkNum == -1) {
-			RotationWeapon = sVECTOR3D(TargetVertChunkNeedAngle, TargetHorizChunkNeedAngle, 0.0f)+Rotation;
+			RotationWeapon = sVECTOR3D{TargetVertChunkNeedAngle,
+						   TargetHorizChunkNeedAngle,
+						   0.0f} +
+					 Rotation;
 		}
 
 	}
@@ -1436,7 +1451,8 @@ bool cWeapon::WeaponFire(float Time)
 	} else { // если это снаряд, его нужно немного вынести, так лучше смотрится
 		if (Projectile->ProjectileType == 0) {
 			sVECTOR3D ADDPOS(0,0,4.0f);
-			if (WeaponTurret) ADDPOS = sVECTOR3D(0,0,2.0f);
+			if (WeaponTurret)
+				ADDPOS = sVECTOR3D{0.0f, 0.0f, 2.0f};
 
 			vw_RotatePoint(ADDPOS, RotationWeapon);
 

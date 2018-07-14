@@ -423,11 +423,13 @@ void WorkshopCreateBuyShip()
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
-	WorkshopFighterGame->SetLocation(sVECTOR3D(1000,-1000-(WorkshopFighterGame->Height/2.0f + WorkshopFighterGame->AABB[6].y), -(WorkshopFighterGame->Length/2.0f + WorkshopFighterGame->AABB[6].z)));
+	WorkshopFighterGame->SetLocation(sVECTOR3D{1000.0f,
+						   -1000.0f - (WorkshopFighterGame->Height / 2.0f + WorkshopFighterGame->AABB[6].y),
+						   -(WorkshopFighterGame->Length / 2.0f + WorkshopFighterGame->AABB[6].z)});
 	// чтобы оружие заняло свое место...
 	WorkshopFighterGame->Update(vw_GetTimeThread(0));
 
-	WorkshopFighterGame->SetRotation(sVECTOR3D(0.0f,150.0f,0.0f));
+	WorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 150.0f, 0.0f});
 }
 
 

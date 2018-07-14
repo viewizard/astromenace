@@ -86,10 +86,10 @@ cWheeled::cWheeled(int WheeledNum)
 	switch (WheeledNum) {
 	case 1:
 		WeaponSlots.resize(4);
-		WeaponSlots[0](CreateWeapon(206), sVECTOR3D(0.3f, 4.5f, -1.5f));
-		WeaponSlots[1](CreateWeapon(206), sVECTOR3D(-0.3f, 4.5f, -1.5f));
-		WeaponSlots[2](CreateWeapon(206), sVECTOR3D(0.9f, 4.5f, -1.5f));
-		WeaponSlots[3](CreateWeapon(206), sVECTOR3D(-0.9f, 4.5f, -1.5f));
+		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{0.3f, 4.5f, -1.5f});
+		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-0.3f, 4.5f, -1.5f});
+		WeaponSlots[2](CreateWeapon(206), sVECTOR3D{0.9f, 4.5f, -1.5f});
+		WeaponSlots[3](CreateWeapon(206), sVECTOR3D{-0.9f, 4.5f, -1.5f});
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(4);
@@ -109,8 +109,8 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 2:
 		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(206), sVECTOR3D(1.3f, 3.5f, -1.5f));
-		WeaponSlots[1](CreateWeapon(206), sVECTOR3D(-1.3f, 3.5f, -1.5f));
+		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{1.3f, 3.5f, -1.5f});
+		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-1.3f, 3.5f, -1.5f});
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
@@ -128,8 +128,8 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 3:
 		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(0.8f, 4.2f, -1.0f));
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-0.8f, 4.2f, -1.0f));
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{0.8f, 4.2f, -1.0f});
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-0.8f, 4.2f, -1.0f});
 		WeaponFireType = 2;
 
 		WheelChunkNums.resize(4);
@@ -152,7 +152,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 4:
-		WeaponSlots.emplace_back(CreateWeapon(207), sVECTOR3D(0.0f, 4.5f, -4.0f));
+		WeaponSlots.emplace_back(CreateWeapon(207), sVECTOR3D{0.0f, 4.5f, -4.0f});
 
 		WheelChunkNums.resize(4);
 		WheelChunkNums[0] = 0;
@@ -167,7 +167,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 5:
-		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D(0.0f, 4.5f, -4.0f));
+		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D{0.0f, 4.5f, -4.0f});
 
 		WheelChunkNums.resize(4);
 		WheelChunkNums[0] = 1;
@@ -182,7 +182,7 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 6:
-		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D(0.0f, 6.0f, -3.0f));
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.0f, 6.0f, -3.0f});
 
 		WheelChunkNums.resize(4);
 		WheelChunkNums[0] = 1;
@@ -205,8 +205,8 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 7:
 		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(0.1f, 5.0f, -1.0f));
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-0.1f, 5.0f, -1.0f));
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{0.1f, 5.0f, -1.0f});
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-0.1f, 5.0f, -1.0f});
 		WeaponFireType = 2;
 
 		WheelChunkNums.resize(4);
@@ -230,8 +230,8 @@ cWheeled::cWheeled(int WheeledNum)
 
 	case 8:
 		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(210), sVECTOR3D(1.5f, 5.2f, 7.0f));
-		WeaponSlots[1](CreateWeapon(210), sVECTOR3D(-1.5f, 5.2f, 7.0f));
+		WeaponSlots[0](CreateWeapon(210), sVECTOR3D{1.5f, 5.2f, 7.0f});
+		WeaponSlots[1](CreateWeapon(210), sVECTOR3D{-1.5f, 5.2f, 7.0f});
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(8);

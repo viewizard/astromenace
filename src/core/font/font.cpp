@@ -760,7 +760,7 @@ int vw_DrawText3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vw_PushMatrix();
-	vw_Translate(sVECTOR3D(X, Y, Z));
+	vw_Translate(sVECTOR3D{X, Y, Z});
 
 	// this is billboard, not a 3D model, rotate it to the camera view
 	sVECTOR3D CurrentCameraRotation;

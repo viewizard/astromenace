@@ -753,14 +753,14 @@ void sModel3D::MetadataInitialization()
 		}
 
 		// store data to the HitBB
-		HitBB[i].Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		HitBB[i].Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		HitBB[i].Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		HitBB[i].Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		HitBB[i].Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		HitBB[i].Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		HitBB[i].Box[6] = sVECTOR3D(MinX, MinY, MinZ);
-		HitBB[i].Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		HitBB[i].Box[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+		HitBB[i].Box[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+		HitBB[i].Box[2] = sVECTOR3D{MinX, MaxY, MinZ};
+		HitBB[i].Box[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+		HitBB[i].Box[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+		HitBB[i].Box[5] = sVECTOR3D{MinX, MinY, MaxZ};
+		HitBB[i].Box[6] = sVECTOR3D{MinX, MinY, MinZ};
+		HitBB[i].Box[7] = sVECTOR3D{MaxX, MinY, MinZ};
 
 		// calculate HitBB geometry center
 		HitBB[i].Location.x = (MaxX + MinX) / 2.0f;
@@ -819,14 +819,14 @@ void sModel3D::MetadataInitialization()
 	}
 
 	// store data to OBB and AABB, since on this stage they are identical
-	OBB.Box[0] = AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-	OBB.Box[1] = AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-	OBB.Box[2] = AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-	OBB.Box[3] = AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-	OBB.Box[4] = AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-	OBB.Box[5] = AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-	OBB.Box[6] = AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-	OBB.Box[7] = AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+	OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+	OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+	OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+	OBB.Box[3] = AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+	OBB.Box[4] = AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+	OBB.Box[5] = AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+	OBB.Box[6] = AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+	OBB.Box[7] = AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 
 	// calculate OBB geometry center
 	OBB.Location.x = (MaxX + MinX) / 2.0f;

@@ -213,7 +213,7 @@ void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-	ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
+	ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
 
 	switch(GFXType) {
 	// двигатели на базе пиратов
@@ -236,10 +236,10 @@ void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(0.8f, 0.1f, 0.8f);
+		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.1f, 0.8f};
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
+		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
 		break;
 	case 2:
 		ParticleSystem->ColorStart.r = 0.60f;
@@ -260,8 +260,8 @@ void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f, 0.0f, 0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
+		ParticleSystem->Direction = sVECTOR3D{0.0f, 1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
 		break;
 
 	default:
@@ -367,7 +367,9 @@ bool cSpaceObject::Update(float Time)
 		// если большие астероиды летящие сверху
 		if ((ObjectType == eObjectType::BigAsteroid) &&
 		    ((InternalType > 20) && (InternalType < 30))) {
-			SetRotation(sVECTOR3D(RotationSpeed.x*TimeDelta, RotationSpeed.y*TimeDelta, 0.0f));
+			SetRotation(sVECTOR3D{RotationSpeed.x * TimeDelta,
+					      RotationSpeed.y * TimeDelta,
+					      0.0f});
 		} else {
 			if (RotationSpeed.x != 0.0f) {
 				Rotation.x -= RotationSpeed.x*TimeDelta;
@@ -394,15 +396,15 @@ bool cSpaceObject::Update(float Time)
 		}
 
 		if (RotationSpeed.x != 0.0f) {
-			SetRotation(sVECTOR3D(-RotationSpeed.x * TimeDelta, 0.0f, 0.0f));
+			SetRotation(sVECTOR3D{-RotationSpeed.x * TimeDelta, 0.0f, 0.0f});
 			RotationSpeed.x -= (RotationSpeed.x / 4.0f) * TimeDelta;
 		}
 		if (RotationSpeed.y != 0.0f) {
-			SetRotation(sVECTOR3D(0.0f, -RotationSpeed.y * TimeDelta, 0.0f));
+			SetRotation(sVECTOR3D{0.0f, -RotationSpeed.y * TimeDelta, 0.0f});
 			RotationSpeed.y -= (RotationSpeed.y / 4.0f) * TimeDelta;
 		}
 		if (RotationSpeed.z != 0.0f) {
-			SetRotation(sVECTOR3D(0.0f, 0.0f, -RotationSpeed.z * TimeDelta));
+			SetRotation(sVECTOR3D{0.0f, 0.0f, -RotationSpeed.z * TimeDelta});
 			RotationSpeed.z -= (RotationSpeed.z / 4.0f) * TimeDelta;
 		}
 	}

@@ -688,8 +688,8 @@ void InitGame()
 	// немного "прокручиваем", чтобы сразу по появлению было заполнено
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
-	vw_SetCameraLocation(sVECTOR3D(0, 65, -100+10));
-	vw_SetCameraMoveAroundPoint(sVECTOR3D(0, 0, 10), 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraLocation(sVECTOR3D{0.0f, 65.0f, -100.0f + 10.0f});
+	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 10.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -718,7 +718,7 @@ void InitGame()
 		sharedEnergyParticleSystem2D->MagnetFactor = 150.0f;
 		sharedEnergyParticleSystem2D->CreationType = eParticle2DCreationType::Point;
 		sharedEnergyParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		sharedEnergyParticleSystem2D->MoveSystem(sVECTOR3D(33.0f, 29.0f, 0.0f));
+		sharedEnergyParticleSystem2D->MoveSystem(sVECTOR3D{33.0f, 29.0f, 0.0f});
 	}
 
 	Life3ParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
@@ -742,9 +742,9 @@ void InitGame()
 		sharedLife3ParticleSystem2D->LifeVar = 0.05f;
 		sharedLife3ParticleSystem2D->ParticlesPerSec = 50;
 		sharedLife3ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
-		sharedLife3ParticleSystem2D->CreationSize = sVECTOR3D(1.0f, 18.0f, 0.0f);
+		sharedLife3ParticleSystem2D->CreationSize = sVECTOR3D{1.0f, 18.0f, 0.0f};
 		sharedLife3ParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
+		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
 	}
 
 	Life2ParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
@@ -768,9 +768,9 @@ void InitGame()
 		sharedLife2ParticleSystem2D->LifeVar = 0.05f;
 		sharedLife2ParticleSystem2D->ParticlesPerSec = 50;
 		sharedLife2ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
-		sharedLife2ParticleSystem2D->CreationSize = sVECTOR3D(18.0f, 1.0f, 0.0f);
+		sharedLife2ParticleSystem2D->CreationSize = sVECTOR3D{18.0f, 1.0f, 0.0f};
 		sharedLife2ParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
+		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
 	}
 
 	LifeParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
@@ -793,15 +793,15 @@ void InitGame()
 		sharedLifeParticleSystem2D->Life = 1.50f;
 		sharedLifeParticleSystem2D->LifeVar = 0.05f;
 		sharedLifeParticleSystem2D->ParticlesPerSec = 70;
-		sharedLifeParticleSystem2D->Direction = sVECTOR3D(1.0f, 0.0f, 0.0f);
+		sharedLifeParticleSystem2D->Direction = sVECTOR3D{1.0f, 0.0f, 0.0f};
 		sharedLifeParticleSystem2D->CreationType = eParticle2DCreationType::Circle;
-		sharedLifeParticleSystem2D->CreationSize = sVECTOR3D(25.0f, 25.0f, 0.0f);
+		sharedLifeParticleSystem2D->CreationSize = sVECTOR3D{25.0f, 25.0f, 0.0f};
 		sharedLifeParticleSystem2D->DeadZone = 24.0f;
 		sharedLifeParticleSystem2D->IsMagnet = true;
 		sharedLifeParticleSystem2D->MagnetFactor = 25.0f;
 		sharedLifeParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
-		sharedLifeParticleSystem2D->MoveSystem(sVECTOR3D(GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f));
-		sharedLifeParticleSystem2D->SetRotation(sVECTOR3D(0.0f, 0.0f, 90.0f));
+		sharedLifeParticleSystem2D->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
+		sharedLifeParticleSystem2D->SetRotation(sVECTOR3D{0.0f, 0.0f, 90.0f});
 	}
 
 

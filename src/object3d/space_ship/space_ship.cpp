@@ -1024,12 +1024,12 @@ bool cSpaceShip::Update(float Time)
 	}
 	if (fabs(SpeedByCamLR) > 0.01f) {
 		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamLR*TimeDelta);
-		vw_RotatePoint(tmp, sVECTOR3D(0.0,-90.0f,0.0f));
+		vw_RotatePoint(tmp, sVECTOR3D{0.0, -90.0f ,0.0f});
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamUD) > 0.01f) {
 		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamUD*TimeDelta);
-		vw_RotatePoint(tmp, sVECTOR3D(90.0f,0.0f,0.0f));
+		vw_RotatePoint(tmp, sVECTOR3D{90.0f, 0.0f, 0.0f});
 		Velocity += tmp;
 	}
 
@@ -1362,7 +1362,7 @@ bool cSpaceShip::Update(float Time)
 						break;
 					case 4:
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation,
-									    sVECTOR3D(WeaponSlots[i].Weapon->Rotation.x, 0 , WeaponSlots[i].Weapon->Rotation.z) + sVECTOR3D(0,WeaponSlots[i].YAngle,0),
+									    sVECTOR3D{WeaponSlots[i].Weapon->Rotation.x, 0.0f, WeaponSlots[i].Weapon->Rotation.z} + sVECTOR3D{0.0f, WeaponSlots[i].YAngle, 0.0f},
 									    Length, WeaponSlots[i].Weapon->CurrentRotationMat, NeedAngle, Width, false, true,
 									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
 						break;

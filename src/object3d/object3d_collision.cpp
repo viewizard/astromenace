@@ -1074,9 +1074,9 @@ void DetectCollisionAllObject3D()
 			if (((FirstObject.ObjectType == eObjectType::BasePart) && (SecondObject.ObjectType == eObjectType::SpaceDebris)) ||
 			    ((FirstObject.ObjectType == eObjectType::SpaceDebris) && (SecondObject.ObjectType == eObjectType::BasePart))) {
 				if (FirstObject.ObjectType == eObjectType::SpaceDebris)
-					vw_RotatePoint(FirstObject.Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
+					vw_RotatePoint(FirstObject.Orientation, sVECTOR3D{0.0f, 180.0f, 0.0f});
 				if (SecondObject.ObjectType == eObjectType::SpaceDebris)
-					vw_RotatePoint(SecondObject.Orientation, sVECTOR3D(0.0f,180.0f,0.0f));
+					vw_RotatePoint(SecondObject.Orientation, sVECTOR3D{0.0f, 180.0f, 0.0f});
 
 				return; // eSpacePairCycle::Continue
 			}

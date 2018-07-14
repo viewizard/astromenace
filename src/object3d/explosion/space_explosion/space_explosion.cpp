@@ -92,7 +92,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			sharedGFX->ParticlesPerSec = (int)(20 * Object.Radius);
 			sharedGFX->Direction = Object.Orientation;
 			sharedGFX->CreationType = eParticleCreationType::Sphere;
-			sharedGFX->CreationSize = sVECTOR3D(tRadius, tRadius, tRadius);
+			sharedGFX->CreationSize = sVECTOR3D{tRadius, tRadius, tRadius};
 			sharedGFX->Life = 1.5f;
 			sharedGFX->SizeStart = tRadius / 1.5f;
 		}
@@ -104,7 +104,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
+			Projectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
+							  360.0f * vw_fRand0(),
+							  360.0f * vw_fRand0()});
 			sVECTOR3D TM1 = Object.Orientation ^ Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius * 6.0f));
 			Projectile->Orientation.Normalize();
@@ -154,7 +156,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			sharedGFX->MoveSystem(Object.Location);
 			sharedGFX->ParticlesPerSec = (int)(5 * Object.Radius);
 			sharedGFX->Direction = Object.Orientation;
-			sharedGFX->CreationSize = sVECTOR3D(Object.Radius / 4, Object.Radius / 4, Object.Radius / 4);
+			sharedGFX->CreationSize = sVECTOR3D{Object.Radius / 4,
+							    Object.Radius / 4,
+							    Object.Radius / 4};
 		}
 
 		GraphicFX[2] = vw_CreateParticleSystem();
@@ -189,7 +193,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
+			Projectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
+							  360.0f * vw_fRand0(),
+							  360.0f * vw_fRand0()});
 			sVECTOR3D TM1 = Object.Orientation ^ Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius / 4.0f));
 			Projectile->Orientation.Normalize();
@@ -371,7 +377,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			Projectile->Create(1);
 			Projectile->SetLocation(Location);
 
-			Projectile->SetRotation(sVECTOR3D(360.0f*vw_fRand0(), 360.0f*vw_fRand0(), 360.0f*vw_fRand0()));
+			Projectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
+							  360.0f * vw_fRand0(),
+							  360.0f * vw_fRand0()});
 			sVECTOR3D TM1 = Object.Orientation^Speed;
 			Projectile->Orientation = TM1 + (Projectile->Orientation ^ (Object.Radius / 2.0f));
 			Projectile->Orientation.Normalize();
@@ -653,9 +661,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 					tricount = 0;
 			}
 
-			Chunks[i].Location = sVECTOR3D(0.0f,0.0f,0.0f);
-			Chunks[i].Rotation = sVECTOR3D(0.0f,0.0f,0.0f);
-			Chunks[i].GeometryAnimation = sVECTOR3D(0.0f,0.0f,0.0f);
+			Chunks[i].Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
+			Chunks[i].Rotation = sVECTOR3D{0.0f, 0.0f, 0.0f};
+			Chunks[i].GeometryAnimation = sVECTOR3D{0.0f, 0.0f, 0.0f};
 
 			TotalCount += Chunks[i].VertexQuantity;
 		}

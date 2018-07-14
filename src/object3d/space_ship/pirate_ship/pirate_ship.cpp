@@ -75,7 +75,7 @@ const sPirateShipData PresetPirateShipData[] = {
 static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-	ParticleSystem->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+	ParticleSystem->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 
 	switch(EngineType) {
 	case 1:
@@ -97,9 +97,9 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(0.4f,0.4f,0.4f);
+		ParticleSystem->CreationSize = sVECTOR3D{0.4f, 0.4f, 0.4f};
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -121,9 +121,9 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{0.6f, 0.6f, 0.1f};
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -145,10 +145,10 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(1.0f,0.1f,1.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{1.0f, 0.1f, 1.0f};
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D(0.0f, -1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
+		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -170,8 +170,8 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D(0.0f, 1.0f, 0.0f);
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		ParticleSystem->Direction = sVECTOR3D{0.0f, 1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 5:
@@ -193,9 +193,9 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->Life       = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(1.0f,1.0f,1.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{1.0f, 1.0f, 1.0f};
 		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -260,18 +260,18 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(1.8f, -1.2f, 6.0f));
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-1.8f, -1.2f, 6.0f));
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{1.8f, -1.2f, 6.0f});
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-1.8f, -1.2f, 6.0f});
 		WeaponSlots[1].Weapon->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(0.9f, 1.6f, -5.4f);
+		EnginesLocation[0] = sVECTOR3D{0.9f, 1.6f, -5.4f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 1);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-0.9f, 1.6f, -5.4f);
+		EnginesLocation[1] = sVECTOR3D{-0.9f, 1.6f, -5.4f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 1);
 		break;
@@ -280,14 +280,14 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 50.0f;
 		MaxAcceler = 50.0f;
 		// оружие
-		WeaponSlots[0](CreateWeapon(205), sVECTOR3D(0.0f, -2.0f, 2.0f));
+		WeaponSlots[0](CreateWeapon(205), sVECTOR3D{0.0f, -2.0f, 2.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.1f, 0.5f, -5.7f);
+		EnginesLocation[0] = sVECTOR3D{1.1f, 0.5f, -5.7f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.1f, 0.5f, -5.7f);
+		EnginesLocation[1] = sVECTOR3D{-1.1f, 0.5f, -5.7f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;
@@ -296,17 +296,17 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D(3.0f, -0.2f, -0.5f));
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D(-3.0f, -0.2f, -0.5f));
-		WeaponSlots[2](CreateWeapon(206), sVECTOR3D(2.0f, -0.2f, 0.0f));
-		WeaponSlots[3](CreateWeapon(206), sVECTOR3D(-2.0f, -0.2f, 0.0f));
+		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{3.0f, -0.2f, -0.5f});
+		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-3.0f, -0.2f, -0.5f});
+		WeaponSlots[2](CreateWeapon(206), sVECTOR3D{2.0f, -0.2f, 0.0f});
+		WeaponSlots[3](CreateWeapon(206), sVECTOR3D{-2.0f, -0.2f, 0.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.0f, 1.8f, -1.2f);
+		EnginesLocation[0] = sVECTOR3D{1.0f, 1.8f, -1.2f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 1);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.0f, 1.8f, -1.2f);
+		EnginesLocation[1] = sVECTOR3D{-1.0f, 1.8f, -1.2f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 1);
 		break;
@@ -314,17 +314,17 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponSlots[0](CreateWeapon(211), sVECTOR3D(4.3f, -0.4f, -0.5f));
-		WeaponSlots[1](CreateWeapon(211), sVECTOR3D(-4.3f, -0.4f, -0.5f));
-		WeaponSlots[2](CreateWeapon(205), sVECTOR3D(3.0f, -0.4f, 0.5f));
-		WeaponSlots[3](CreateWeapon(205), sVECTOR3D(-3.0f, -0.4f, 0.5f));
+		WeaponSlots[0](CreateWeapon(211), sVECTOR3D{4.3f, -0.4f, -0.5f});
+		WeaponSlots[1](CreateWeapon(211), sVECTOR3D{-4.3f, -0.4f, -0.5f});
+		WeaponSlots[2](CreateWeapon(205), sVECTOR3D{3.0f, -0.4f, 0.5f});
+		WeaponSlots[3](CreateWeapon(205), sVECTOR3D{-3.0f, -0.4f, 0.5f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.3f, 1.9f, -1.7f);
+		EnginesLocation[0] = sVECTOR3D{1.3f, 1.9f, -1.7f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.3f, 1.9f, -1.7f);
+		EnginesLocation[1] = sVECTOR3D{-1.3f, 1.9f, -1.7f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;
@@ -333,208 +333,208 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
 		// оружие
-		WeaponSlots[0](CreateWeapon(211), sVECTOR3D(1.0f, 4.2f, -5.5f));
-		WeaponSlots[1](CreateWeapon(211), sVECTOR3D(-1.0f, 4.2f, -5.5f));
-		WeaponSlots[2](CreateWeapon(211), sVECTOR3D(0.5f, -1.8f, 5.0f));
-		WeaponSlots[3](CreateWeapon(211), sVECTOR3D(-0.5f, -1.8f, 5.0f));
+		WeaponSlots[0](CreateWeapon(211), sVECTOR3D{1.0f, 4.2f, -5.5f});
+		WeaponSlots[1](CreateWeapon(211), sVECTOR3D{-1.0f, 4.2f, -5.5f});
+		WeaponSlots[2](CreateWeapon(211), sVECTOR3D{0.5f, -1.8f, 5.0f});
+		WeaponSlots[3](CreateWeapon(211), sVECTOR3D{-0.5f, -1.8f, 5.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(5.8f, 6.5f-4.6f, 0.0f);
+		EnginesLocation[0] = sVECTOR3D{5.8f, 6.5f - 4.6f, 0.0f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 3);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-5.8f, 6.5f-4.6f, 0.0f);
+		EnginesLocation[1] = sVECTOR3D{-5.8f, 6.5f - 4.6f, 0.0f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 3);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(5.8f, 7.3f-4.6f, 0.0f);
+		EnginesLocation[2] = sVECTOR3D{5.8f, 7.3f - 4.6f, 0.0f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 4);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-5.8f, 7.3f-4.6f, 0.0f);
+		EnginesLocation[3] = sVECTOR3D{-5.8f, 7.3f - 4.6f, 0.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 4);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(5.8f, 6.1f-4.6f, -2.3f);
+		EnginesLocation[4] = sVECTOR3D{5.8f, 6.1f - 4.6f, -2.3f};
 		if (auto sharedEngine = Engines[4].lock()) {
 			SetPirateShipEngine(sharedEngine, 1);
-			sharedEngine->Direction = sVECTOR3D(0.0f, -0.2f, -0.8f);
+			sharedEngine->Direction = sVECTOR3D{0.0f, -0.2f, -0.8f};
 		}
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-5.8f, 6.1f-4.6f, -2.3f);
+		EnginesLocation[5] = sVECTOR3D{-5.8f, 6.1f - 4.6f, -2.3f};
 		if (auto sharedEngine = Engines[5].lock()) {
 			SetPirateShipEngine(sharedEngine, 1);
-			sharedEngine->Direction = sVECTOR3D(0.0f, -0.2f, -0.8f);
+			sharedEngine->Direction = sVECTOR3D{0.0f, -0.2f, -0.8f};
 		}
 		break;
 
 	case 6:
 		// оружие
-		WeaponSlots[0](CreateWeapon(202), sVECTOR3D(0.0f, 2.2f, -0.2f));
+		WeaponSlots[0](CreateWeapon(202), sVECTOR3D{0.0f, 2.2f, -0.2f});
 
-		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D(5.4f, 1.0f, 2.0f));
-		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D(-5.4f, 1.0f, 2.0f));
+		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D{5.4f, 1.0f, 2.0f});
+		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D{-5.4f, 1.0f, 2.0f});
 
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 5.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
+		EnginesLocation[0] = sVECTOR3D{1.7f, 6.6f - 3.83f, -14.2f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.7f, 6.6f-3.83f, -14.2f);
+		EnginesLocation[1] = sVECTOR3D{-1.7f, 6.6f - 3.83f, -14.2f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 7:
 		// оружие
-		WeaponSlots[0](CreateWeapon(202), sVECTOR3D(0.0f, 2.4f, -0.2f));
+		WeaponSlots[0](CreateWeapon(202), sVECTOR3D{0.0f, 2.4f, -0.2f});
 
-		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(9.5f, 1.3f, 2.0f));
-		BossWeaponSlots[1](CreateWeapon(210), sVECTOR3D(-9.5f, 1.3f, 2.0f));
+		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D{9.5f, 1.3f, 2.0f});
+		BossWeaponSlots[1](CreateWeapon(210), sVECTOR3D{-9.5f, 1.3f, 2.0f});
 
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 5.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
+		EnginesLocation[0] = sVECTOR3D{2.2f, 7.6f - 5.25f, -14.8f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-2.2f, 7.6f-5.25f, -14.8f);
+		EnginesLocation[1] = sVECTOR3D{-2.2f, 7.6f - 5.25f, -14.8f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(17.2f, 6.8f-5.25f, -9.0f);
+		EnginesLocation[2] = sVECTOR3D{17.2f, 6.8f - 5.25f, -9.0f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-17.2f, 6.8f-5.25f, -9.0f);
+		EnginesLocation[3] = sVECTOR3D{-17.2f, 6.8f - 5.25f, -9.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 8:
 		// оружие
-		WeaponSlots[0](CreateWeapon(202), sVECTOR3D(0.0f, 2.4f, -0.2f));
+		WeaponSlots[0](CreateWeapon(202), sVECTOR3D{0.0f, 2.4f, -0.2f});
 
-		BossWeaponSlots[0](CreateWeapon(206), sVECTOR3D(9.1f, 1.3f, 2.0f));
-		BossWeaponSlots[1](CreateWeapon(206), sVECTOR3D(9.4f, 1.0f, 2.0f));
-		BossWeaponSlots[2](CreateWeapon(206), sVECTOR3D(9.1f, 0.7f, 2.0f));
+		BossWeaponSlots[0](CreateWeapon(206), sVECTOR3D{9.1f, 1.3f, 2.0f});
+		BossWeaponSlots[1](CreateWeapon(206), sVECTOR3D{9.4f, 1.0f, 2.0f});
+		BossWeaponSlots[2](CreateWeapon(206), sVECTOR3D{9.1f, 0.7f, 2.0f});
 
-		BossWeaponSlots[3](CreateWeapon(206), sVECTOR3D(-9.1f, 1.3f, 2.0f));
-		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D(-9.4f, 1.0f, 2.0f));
-		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D(-9.1f, 0.7f, 2.0f));
+		BossWeaponSlots[3](CreateWeapon(206), sVECTOR3D{-9.1f, 1.3f, 2.0f});
+		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D{-9.4f, 1.0f, 2.0f});
+		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D{-9.1f, 0.7f, 2.0f});
 
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 6.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 6.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
+		EnginesLocation[0] = sVECTOR3D{4.5f, 6.3f - 3.62f, -12.5f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-4.5f, 6.3f-3.62f, -12.5f);
+		EnginesLocation[1] = sVECTOR3D{-4.5f, 6.3f - 3.62f, -12.5f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(9.2f, 4.4f-3.62f, -5.6f);
+		EnginesLocation[2] = sVECTOR3D{9.2f, 4.4f - 3.62f, -5.6f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-9.2f, 4.4f-3.62f, -5.6f);
+		EnginesLocation[3] = sVECTOR3D{-9.2f, 4.4f - 3.62f, -5.6f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 9:
 		// оружие
-		WeaponSlots[0](CreateWeapon(201), sVECTOR3D(0.0f, 4.2f, 7.0f));
-		WeaponSlots[1](CreateWeapon(201), sVECTOR3D(0.0f, 4.2f, 3.5f));
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0,180,0));
-		WeaponSlots[2](CreateWeapon(202), sVECTOR3D(0.0f, 3.4f, -5.0f));
+		WeaponSlots[0](CreateWeapon(201), sVECTOR3D{0.0f, 4.2f, 7.0f});
+		WeaponSlots[1](CreateWeapon(201), sVECTOR3D{0.0f, 4.2f, 3.5f});
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0, 180.0, 0.0});
+		WeaponSlots[2](CreateWeapon(202), sVECTOR3D{0.0f, 3.4f, -5.0f});
 
-		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 9.0f));
-		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 9.0f));
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D{11.1f, 2.7f, 9.0f});
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D{-11.1f, 2.7f, 9.0f});
 
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 7.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
+		EnginesLocation[0] = sVECTOR3D{1.4f, 8.7f - 4.9f, -20.4f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.4f, 8.7f-4.9f, -20.4f);
+		EnginesLocation[1] = sVECTOR3D{-1.4f, 8.7f - 4.9f, -20.4f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(4.7f, 7.0f-4.9f, 0.0f);
+		EnginesLocation[2] = sVECTOR3D{4.7f, 7.0f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-4.7f, 7.0f-4.9f, 0.0f);
+		EnginesLocation[3] = sVECTOR3D{-4.7f, 7.0f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(7.5f, 6.8f-4.9f, 0.0f);
+		EnginesLocation[4] = sVECTOR3D{7.5f, 6.8f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-7.5f, 6.8f-4.9f, 0.0f);
+		EnginesLocation[5] = sVECTOR3D{-7.5f, 6.8f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 10:
 		// оружие
-		WeaponSlots[0](CreateWeapon(201), sVECTOR3D(0.0f, 4.4f, 6.8f));
-		WeaponSlots[1](CreateWeapon(201), sVECTOR3D(0.0f, 4.4f, 2.6f));
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0,180,0));
-		WeaponSlots[2](CreateWeapon(202), sVECTOR3D(0.0f, 2.6f, -7.0f));
-		WeaponSlots[3](CreateWeapon(201), sVECTOR3D(0.0f, 2.6f, -16.0f));
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0,180,0));
+		WeaponSlots[0](CreateWeapon(201), sVECTOR3D{0.0f, 4.4f, 6.8f});
+		WeaponSlots[1](CreateWeapon(201), sVECTOR3D{0.0f, 4.4f, 2.6f});
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
+		WeaponSlots[2](CreateWeapon(202), sVECTOR3D{0.0f, 2.6f, -7.0f});
+		WeaponSlots[3](CreateWeapon(201), sVECTOR3D{0.0f, 2.6f, -16.0f});
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
 
-		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 8.0f));
-		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 8.0f));
-		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D(16.5f, 2.7f, 7.5f));
-		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D(-16.5f, 2.7f, 7.5f));
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D{11.1f, 2.7f, 8.0f});
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D{-11.1f, 2.7f, 8.0f});
+		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D{16.5f, 2.7f, 7.5f});
+		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D{-16.5f, 2.7f, 7.5f});
 
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 7.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);
+		EnginesLocation[0] = sVECTOR3D{3.8f, 5.4f - 4.29f, -19.5f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-3.8f, 5.4f-4.29f, -19.5f);
+		EnginesLocation[1] = sVECTOR3D{-3.8f, 5.4f - 4.29f, -19.5f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(5.8f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[2] = sVECTOR3D{5.8f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-5.8f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[3] = sVECTOR3D{-5.8f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(8.0f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[4] = sVECTOR3D{8.0f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-8.0f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[5] = sVECTOR3D{-8.0f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(20.0f, 5.0f-4.29f, -3.6f);
+		EnginesLocation[6] = sVECTOR3D{20.0f, 5.0f - 4.29f, -3.6f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(-20.0f, 5.0f-4.29f, -3.6f);
+		EnginesLocation[7] = sVECTOR3D{-20.0f, 5.0f - 4.29f, -3.6f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;
@@ -545,147 +545,147 @@ cPirateShip::cPirateShip(int PirateShipNum)
 
 	case 11:
 		// оружие
-		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D(5.4f, 1.0f, 2.0f));
-		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D(-5.4f, 1.0f, 2.0f));
+		BossWeaponSlots[0](CreateWeapon(209), sVECTOR3D{5.4f, 1.0f, 2.0f});
+		BossWeaponSlots[1](CreateWeapon(209), sVECTOR3D{-5.4f, 1.0f, 2.0f});
 		// фларе
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 5.0f, 0.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.7f, 6.6f-3.83f, -14.2f);
+		EnginesLocation[0] = sVECTOR3D{1.7f, 6.6f - 3.83f, -14.2f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.7f, 6.6f-3.83f, -14.2f);
+		EnginesLocation[1] = sVECTOR3D{-1.7f, 6.6f - 3.83f, -14.2f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 12:
 		// оружие
-		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(9.5f, 1.3f, 2.0f));
-		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D(-9.5f, 1.3f, 2.0f));
+		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D{9.5f, 1.3f, 2.0f});
+		BossWeaponSlots[0](CreateWeapon(210), sVECTOR3D{-9.5f, 1.3f, 2.0f});
 		// фларе
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 5.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 5.0f, 0.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(2.2f, 7.6f-5.25f, -14.8f);
+		EnginesLocation[0] = sVECTOR3D{2.2f, 7.6f - 5.25f, -14.8f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-2.2f, 7.6f-5.25f, -14.8f);
+		EnginesLocation[1] = sVECTOR3D{-2.2f, 7.6f - 5.25f, -14.8f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(17.2f, 6.8f-5.25f, -9.0f);
+		EnginesLocation[2] = sVECTOR3D{17.2f, 6.8f - 5.25f, -9.0f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-17.2f, 6.8f-5.25f, -9.0f);
+		EnginesLocation[3] = sVECTOR3D{-17.2f, 6.8f - 5.25f, -9.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 13:
 		// оружие
-		BossWeaponSlots[0](CreateWeapon(206), sVECTOR3D(9.1f, 1.3f, 2.0f));
-		BossWeaponSlots[1](CreateWeapon(206), sVECTOR3D(9.4f, 1.0f, 2.0f));
-		BossWeaponSlots[2](CreateWeapon(206), sVECTOR3D(9.1f, 0.7f, 2.0f));
-		BossWeaponSlots[3](CreateWeapon(206), sVECTOR3D(-9.1f, 1.3f, 2.0f));
-		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D(-9.4f, 1.0f, 2.0f));
-		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D(-9.1f, 0.7f, 2.0f));
+		BossWeaponSlots[0](CreateWeapon(206), sVECTOR3D{9.1f, 1.3f, 2.0f});
+		BossWeaponSlots[1](CreateWeapon(206), sVECTOR3D{9.4f, 1.0f, 2.0f});
+		BossWeaponSlots[2](CreateWeapon(206), sVECTOR3D{9.1f, 0.7f, 2.0f});
+		BossWeaponSlots[3](CreateWeapon(206), sVECTOR3D{-9.1f, 1.3f, 2.0f});
+		BossWeaponSlots[4](CreateWeapon(206), sVECTOR3D{-9.4f, 1.0f, 2.0f});
+		BossWeaponSlots[5](CreateWeapon(206), sVECTOR3D{-9.1f, 0.7f, 2.0f});
 		// фларе
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 6.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 6.0f, 0.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(4.5f, 6.3f-3.62f, -12.5f);
+		EnginesLocation[0] = sVECTOR3D{4.5f, 6.3f - 3.62f, -12.5f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-4.5f, 6.3f-3.62f, -12.5f);
+		EnginesLocation[1] = sVECTOR3D{-4.5f, 6.3f - 3.62f, -12.5f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(9.2f, 4.4f-3.62f, -5.6f);
+		EnginesLocation[2] = sVECTOR3D{9.2f, 4.4f - 3.62f, -5.6f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-9.2f, 4.4f-3.62f, -5.6f);
+		EnginesLocation[3] = sVECTOR3D{-9.2f, 4.4f - 3.62f, -5.6f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 5);
 		break;
 
 	case 14:
 		// оружие
-		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 9.0f));
-		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 9.0f));
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D{11.1f, 2.7f, 9.0f});
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D{-11.1f, 2.7f, 9.0f});
 		// фларе
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 7.0f, 0.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.4f, 8.7f-4.9f, -20.4f);
+		EnginesLocation[0] = sVECTOR3D{1.4f, 8.7f - 4.9f, -20.4f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.4f, 8.7f-4.9f, -20.4f);
+		EnginesLocation[1] = sVECTOR3D{-1.4f, 8.7f - 4.9f, -20.4f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(4.7f, 7.0f-4.9f, 0.0f);
+		EnginesLocation[2] = sVECTOR3D{4.7f, 7.0f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-4.7f, 7.0f-4.9f, 0.0f);
+		EnginesLocation[3] = sVECTOR3D{-4.7f, 7.0f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(7.5f, 6.8f-4.9f, 0.0f);
+		EnginesLocation[4] = sVECTOR3D{7.5f, 6.8f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-7.5f, 6.8f-4.9f, 0.0f);
+		EnginesLocation[5] = sVECTOR3D{-7.5f, 6.8f - 4.9f, 0.0f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;
 
 	case 15:
 		// оружие
-		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D(11.1f, 2.7f, 8.0f));
-		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D(-11.1f, 2.7f, 8.0f));
-		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D(16.5f, 2.7f, 7.5f));
-		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D(-16.5f, 2.7f, 7.5f));
+		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D{11.1f, 2.7f, 8.0f});
+		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D{-11.1f, 2.7f, 8.0f});
+		BossWeaponSlots[2](CreateWeapon(205), sVECTOR3D{16.5f, 2.7f, 7.5f});
+		BossWeaponSlots[3](CreateWeapon(205), sVECTOR3D{-16.5f, 2.7f, 7.5f});
 		// фларе
-		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D(0.0f, 7.0f, 0.0f));
+		FlareWeaponSlots.emplace_back(CreateWeapon(203), sVECTOR3D{0.0f, 7.0f, 0.0f});
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(3.8f, 5.4f-4.29f, -19.5f);
+		EnginesLocation[0] = sVECTOR3D{3.8f, 5.4f - 4.29f, -19.5f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-3.8f, 5.4f-4.29f, -19.5f);
+		EnginesLocation[1] = sVECTOR3D{-3.8f, 5.4f - 4.29f, -19.5f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(5.8f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[2] = sVECTOR3D{5.8f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-5.8f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[3] = sVECTOR3D{-5.8f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(8.0f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[4] = sVECTOR3D{8.0f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-8.0f, 6.0f-4.29f, -0.9f);
+		EnginesLocation[5] = sVECTOR3D{-8.0f, 6.0f - 4.29f, -0.9f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(20.0f, 5.0f-4.29f, -3.6f);
+		EnginesLocation[6] = sVECTOR3D{20.0f, 5.0f - 4.29f, -3.6f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(-20.0f, 5.0f-4.29f, -3.6f);
+		EnginesLocation[7] = sVECTOR3D{-20.0f, 5.0f - 4.29f, -3.6f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetPirateShipEngine(sharedEngine, 2);
 		break;

@@ -96,14 +96,14 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		OBB.Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		OBB.Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		OBB.Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		OBB.Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		OBB.Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		OBB.Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		OBB.Box[6] = sVECTOR3D(MinX, MinY, MinZ);
-		OBB.Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		OBB.Box[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+		OBB.Box[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+		OBB.Box[2] = sVECTOR3D{MinX, MaxY, MinZ};
+		OBB.Box[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+		OBB.Box[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+		OBB.Box[5] = sVECTOR3D{MinX, MinY, MaxZ};
+		OBB.Box[6] = sVECTOR3D{MinX, MinY, MinZ};
+		OBB.Box[7] = sVECTOR3D{MaxX, MinY, MinZ};
 
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
 		Width = fabsf(MaxX - MinX);
@@ -147,14 +147,14 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 			if (MaxZ < OBB.Box[j].z + OBB.Location.z)
 				MaxZ = OBB.Box[j].z + OBB.Location.z;
 		}
-		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-		AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+		AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+		AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+		AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+		AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+		AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+		AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+		AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 	}
 
 	// собственно меняем данные в геометрии
@@ -229,14 +229,14 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 		}
 
 		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
-		OBB.Box[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		OBB.Box[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		OBB.Box[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		OBB.Box[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		OBB.Box[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		OBB.Box[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		OBB.Box[6] = sVECTOR3D(MinX, MinY, MinZ);
-		OBB.Box[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		OBB.Box[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+		OBB.Box[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+		OBB.Box[2] = sVECTOR3D{MinX, MaxY, MinZ};
+		OBB.Box[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+		OBB.Box[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+		OBB.Box[5] = sVECTOR3D{MinX, MinY, MaxZ};
+		OBB.Box[6] = sVECTOR3D{MinX, MinY, MinZ};
+		OBB.Box[7] = sVECTOR3D{MaxX, MinY, MinZ};
 
 		// габариты, пересчет именно тут, т.к. нужны данные OBB
 		Width = fabsf(MaxX - MinX);
@@ -280,14 +280,14 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 			if (MaxZ < OBB.Box[j].z + OBB.Location.z)
 				MaxZ = OBB.Box[j].z + OBB.Location.z;
 		}
-		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-		AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+		AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+		AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+		AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+		AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+		AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+		AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+		AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 	}
 
 	// собственно меняем данные в геометрии
@@ -310,7 +310,7 @@ void cObject3D::SetLocation(const sVECTOR3D &NewLocation)
 void cObject3D::SetRotation(const sVECTOR3D &NewRotation)
 {
 	// Записываем данные в Rotation
-	OldRotationInv = sVECTOR3D(-Rotation.x, -Rotation.y, -Rotation.z);
+	OldRotationInv = sVECTOR3D{-Rotation.x, -Rotation.y, -Rotation.z};
 	Rotation += NewRotation;
 
 	// сохраняем старые значения + пересчет новых
@@ -366,14 +366,14 @@ void cObject3D::SetRotation(const sVECTOR3D &NewRotation)
 		if (MaxZ < OBB.Box[j].z + OBB.Location.z)
 			MaxZ = OBB.Box[j].z + OBB.Location.z;
 	}
-	AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-	AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-	AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-	AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-	AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-	AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-	AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-	AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+	AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+	AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+	AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+	AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+	AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+	AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+	AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+	AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 
 }
 
@@ -1022,7 +1022,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	sVECTOR3D CurrentCameraRotation;
 	vw_GetCameraRotation(&CurrentCameraRotation);
 	// поднимаем
-	vw_Translate(sVECTOR3D(Location.x, Location.y + AABB[0].y + SizeY * 2.0f, Location.z));
+	vw_Translate(sVECTOR3D{Location.x,
+			       Location.y + AABB[0].y + SizeY * 2.0f,
+			       Location.z});
 	// поворачиваем к камере
 	vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
@@ -1122,7 +1124,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 		vw_PushMatrix();
 		// поднимаем
-		vw_Translate(sVECTOR3D(Location.x, Location.y + AABB[0].y + SizeY * 5.0f, Location.z));
+		vw_Translate(sVECTOR3D{Location.x,
+				       Location.y + AABB[0].y + SizeY * 5.0f,
+				       Location.z});
 		// поворачиваем к камере
 		vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
 		vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);

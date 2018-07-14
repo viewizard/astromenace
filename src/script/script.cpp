@@ -253,17 +253,17 @@ bool cMissionScript::Update(float Time)
 				else
 					sharedCreateAsteroid->Speed = AsterMinFastSpeed + AsterMaxSpeed * vw_fRand();
 				sharedCreateAsteroid->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
-				sharedCreateAsteroid->SetRotation(sVECTOR3D(0.0f, 180.0f, 0.0f));
+				sharedCreateAsteroid->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
 
 				if (AsterFastCount != 20)
-					sharedCreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
+					sharedCreateAsteroid->SetLocation(sVECTOR3D{AsterXPos + AsterW * vw_fRand0(),
 										    AsterYPos * 2 + AsterH * vw_fRand(),
-										    AsterZPos + 20.0f) +
+										    AsterZPos + 20.0f} +
 									  GamePoint);
 				else
-					sharedCreateAsteroid->SetLocation(sVECTOR3D(AsterW * vw_fRand0() + AsterXPos,
+					sharedCreateAsteroid->SetLocation(sVECTOR3D{AsterXPos + AsterW * vw_fRand0(),
 										    AsterYPos * 2 + AsterH * vw_fRand(),
-										    AsterZPos) +
+										    AsterZPos} +
 									  GamePoint);
 			}
 			NeedGenerInt--;

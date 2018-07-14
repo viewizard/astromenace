@@ -127,7 +127,7 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -149,7 +149,7 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -171,7 +171,7 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -192,11 +192,11 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(0.6f,0.6f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{0.6f, 0.6f, 0.1f};
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 50.0f;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -233,7 +233,7 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -255,7 +255,7 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
@@ -277,7 +277,7 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
@@ -299,7 +299,7 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -352,7 +352,7 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 		if (auto sharedEngine =SpaceShip->Engines[i].lock()) {
 			CreateSpaceShipEngine(sharedEngine, EngineType);
 			sharedEngine->SetStartLocation(SpaceShip->EnginesLocation[i]);
-			sharedEngine->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedEngine->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 		}
 	}
 
@@ -364,7 +364,7 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 			if (auto sharedEngineLeft =SpaceShip->EnginesLeft[i].lock()) {
 				CreateRotateSpaceShipEngine(sharedEngineLeft, EngineType);
 				sharedEngineLeft->SetStartLocation(SpaceShip->EnginesLeftLocation[i]);
-				sharedEngineLeft->Direction = sVECTOR3D(1.0f, 0.0f, 0.6f);
+				sharedEngineLeft->Direction = sVECTOR3D{1.0f, 0.0f, 0.6f};
 				sharedEngineLeft->IsSuppressed = true;
 			}
 		}
@@ -378,7 +378,7 @@ void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
 			if (auto sharedEngineRight =SpaceShip->EnginesRight[i].lock()) {
 				CreateRotateSpaceShipEngine(sharedEngineRight, EngineType);
 				sharedEngineRight->SetStartLocation(SpaceShip->EnginesRightLocation[i]);
-				sharedEngineRight->Direction = sVECTOR3D(-1.0f, 0.0f, 0.6f);
+				sharedEngineRight->Direction = sVECTOR3D{-1.0f, 0.0f, 0.6f};
 				sharedEngineRight->IsSuppressed = true;
 			}
 		}

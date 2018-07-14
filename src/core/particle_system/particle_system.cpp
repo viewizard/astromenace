@@ -278,7 +278,9 @@ void cParticleSystem::EmitParticles(unsigned int Quantity, float TimeDelta)
 			// emit with deviation
 			NewParticle.Velocity = Direction;
 			vw_RotatePoint(NewParticle.Velocity,
-				       sVECTOR3D(Theta * vw_fRand0() / 2.0f, Theta * vw_fRand0() / 2.0f, 0.0f));
+				       sVECTOR3D{Theta * vw_fRand0() / 2.0f,
+						 Theta * vw_fRand0() / 2.0f,
+						 0.0f});
 		}
 
 		NewParticle.NeedStop = NeedStop;
@@ -348,9 +350,9 @@ void cParticleSystem::GenerateLocationPointType(cParticle &NewParticle)
 	// FIXME this should be fixed, Point Type should return same location as system,
 	//       if particle system need CreationSize, Sphere or Cube Type should be used
 	//       since we have point type by default, not so easy now find related code
-	NewParticle.Location = Location + sVECTOR3D(vw_fRand0() * CreationSize.x,
+	NewParticle.Location = Location + sVECTOR3D{vw_fRand0() * CreationSize.x,
 						    vw_fRand0() * CreationSize.y,
-						    vw_fRand0() * CreationSize.z);
+						    vw_fRand0() * CreationSize.z};
 }
 
 /*
@@ -510,14 +512,14 @@ void cParticleSystem::CalculateAABB()
 		}
 	}
 
-	AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-	AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-	AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-	AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-	AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-	AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-	AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-	AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+	AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+	AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+	AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+	AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+	AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+	AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+	AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+	AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 }
 
 /*
@@ -779,7 +781,7 @@ void cParticleSystem::StopAllParticles()
 	IsMagnet = false;
 
 	for (auto &tmpParticle : ParticlesList) {
-		tmpParticle.Velocity = sVECTOR3D(0.0f,0.0f,0.0f);
+		tmpParticle.Velocity = sVECTOR3D{0.0f, 0.0f, 0.0f};
 	}
 }
 

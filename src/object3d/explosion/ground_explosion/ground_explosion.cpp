@@ -146,7 +146,9 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 					if (Wheel) {
 						sVECTOR3D VelocityTMP = sharedSpaceDebris->Location - Object.Location;
 						// делаем небольшой случайный доворот
-						vw_RotatePoint(VelocityTMP, sVECTOR3D(-5.0f - 15.0f * vw_fRand(), 10.0f * vw_fRand0(), 0.0f));
+						vw_RotatePoint(VelocityTMP, sVECTOR3D{-5.0f - 15.0f * vw_fRand(),
+										      10.0f * vw_fRand0(),
+										      0.0f});
 						if (sharedSpaceDebris->Radius != 0.0f)
 							sharedSpaceDebris->Velocity = VelocityTMP ^ ((1.0f + 5.0f * vw_fRand()) / sharedSpaceDebris->Radius);
 						else

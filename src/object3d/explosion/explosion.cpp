@@ -297,14 +297,14 @@ bool cExplosion::Update(float Time)
 		float MinZ = AABB[6].z - AABBSpeedTmp;
 		float MaxZ = AABB[0].z + AABBSpeedTmp;
 
-		AABB[0] = sVECTOR3D(MaxX, MaxY, MaxZ);
-		AABB[1] = sVECTOR3D(MinX, MaxY, MaxZ);
-		AABB[2] = sVECTOR3D(MinX, MaxY, MinZ);
-		AABB[3] = sVECTOR3D(MaxX, MaxY, MinZ);
-		AABB[4] = sVECTOR3D(MaxX, MinY, MaxZ);
-		AABB[5] = sVECTOR3D(MinX, MinY, MaxZ);
-		AABB[6] = sVECTOR3D(MinX, MinY, MinZ);
-		AABB[7] = sVECTOR3D(MaxX, MinY, MinZ);
+		AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
+		AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
+		AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
+		AABB[3] = sVECTOR3D{MaxX, MaxY, MinZ};
+		AABB[4] = sVECTOR3D{MaxX, MinY, MaxZ};
+		AABB[5] = sVECTOR3D{MinX, MinY, MaxZ};
+		AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
+		AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 	}
 
 

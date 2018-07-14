@@ -225,7 +225,7 @@ void ShadowMap_StartFinalRender()
 
 	vw_MatrixMode(eMatrixMode::TEXTURE);
 	vw_LoadIdentity();
-	vw_Translate(sVECTOR3D(0.5f, 0.5f, 0.5f)); // remap from [-1,1]^2 to [0,1]^2
+	vw_Translate(sVECTOR3D{0.5f, 0.5f, 0.5f}); // remap from [-1,1]^2 to [0,1]^2
 	vw_Scale(0.5f, 0.5f, 0.5f);
 
 	vw_MultMatrix(ShadowMap_LightProjectionMatrix);

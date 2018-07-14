@@ -70,11 +70,11 @@ void DrawAllObject3D(eDrawType DrawType)
 		switch (DrawType) {
 		// меню
 		case eDrawType::MENU:
-			ShadowMap_StartRenderToFBO(sVECTOR3D(50,-5,-120), 120.0f, 500.0f);
+			ShadowMap_StartRenderToFBO(sVECTOR3D{50.0f, -5.0f, -120.0f}, 120.0f, 500.0f);
 			break;
 		// игра
 		case eDrawType::GAME:
-			ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,160), 600.0f, 800.0f);
+			ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, 0.0f, 160.0f}, 600.0f, 800.0f);
 			break;
 		}
 

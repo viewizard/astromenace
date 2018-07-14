@@ -301,13 +301,13 @@ void InitGamePlayerShip()
 			sharedShild1->Life = 1.00f;
 			sharedShild1->ParticlesPerSec = (int)(40 * ShildRadius);
 			sharedShild1->CreationType = eParticleCreationType::Sphere;
-			sharedShild1->CreationSize = sVECTOR3D(ShildRadius, 0.05f * ShildRadius, ShildRadius);
+			sharedShild1->CreationSize = sVECTOR3D{ShildRadius, 0.05f * ShildRadius, ShildRadius};
 			sharedShild1->DeadZone = ShildRadius - 0.05f;
 			sharedShild1->AlphaShowHide = true;
 			sharedShild1->IsMagnet = true;
 			sharedShild1->MagnetFactor = -3.0f;
 			sharedShild1->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedShild1->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		}
 
@@ -334,13 +334,13 @@ void InitGamePlayerShip()
 			sharedShild1->Life = 1.00f;
 			sharedShild1->ParticlesPerSec = (int)(40 * ShildRadius);
 			sharedShild1->CreationType = eParticleCreationType::Sphere;
-			sharedShild1->CreationSize = sVECTOR3D(ShildRadius, 0.05f * ShildRadius, ShildRadius);
+			sharedShild1->CreationSize = sVECTOR3D{ShildRadius, 0.05f * ShildRadius, ShildRadius};
 			sharedShild1->DeadZone = ShildRadius - 0.05f;
 			sharedShild1->IsMagnet = true;
 			sharedShild1->AlphaShowHide = true;
 			sharedShild1->MagnetFactor = 2.5f;
 			sharedShild1->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-			sharedShild1->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedShild1->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 			sharedShild1->SetStartLocation(PlayerFighter->Location + PlayerFighter->OBB.Location);
 		}
 
@@ -363,12 +363,12 @@ void InitGamePlayerShip()
 			sharedShild2->Life = 1.00f;
 			sharedShild2->ParticlesPerSec = (int)(5 * ShildRadius);
 			sharedShild2->CreationType = eParticleCreationType::Sphere;
-			sharedShild2->CreationSize = sVECTOR3D(ShildRadius, 0.05f * ShildRadius, ShildRadius);
+			sharedShild2->CreationSize = sVECTOR3D{ShildRadius, 0.05f * ShildRadius, ShildRadius};
 			sharedShild2->DeadZone = ShildRadius - 0.05f;
 			sharedShild2->IsMagnet = true;
 			sharedShild2->MagnetFactor = 20.0f;
 			sharedShild2->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-			sharedShild2->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+			sharedShild2->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 		}
 
 		ShildStartHitStatus = 150.0f;
@@ -385,7 +385,7 @@ void InitGamePlayerShip()
 	LastMouseY = -1;
 	MoveFB = 0.0f;
 	MoveLR = 0.0f;
-	CurrentMovementVel = sVECTOR3D(0.0f, 0.0f, 0.0f);
+	CurrentMovementVel = sVECTOR3D{0.0f, 0.0f, 0.0f};
 
 	// сброс стрельбы...
 	PrimaryGroupCurrentFireWeaponNum = 1;
@@ -636,9 +636,13 @@ void GamePlayerShip()
 		// находим конечную точку перемещения
 		sVECTOR3D PlayerFighterEndLocation;
 		if (GameConfig().InternalWidth == 1024)
-			PlayerFighterEndLocation = sVECTOR3D(-(73.15f-PlayerFighter->Width/2.0f+MoveFB*(20.05f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
+			PlayerFighterEndLocation = sVECTOR3D{-(73.15f-PlayerFighter->Width/2.0f+MoveFB*(20.05f-PlayerFighter->Length/6.0f))*MoveLR,
+							     0.0f,
+							     (46.0f-PlayerFighter->Length/2.0f)*MoveFB};
 		else
-			PlayerFighterEndLocation = sVECTOR3D(-(70.0f-PlayerFighter->Width/2.0f+MoveFB*(23.2f-PlayerFighter->Length/6.0f))*MoveLR, 0.0f, (46.0f-PlayerFighter->Length/2.0f)*MoveFB);
+			PlayerFighterEndLocation = sVECTOR3D{-(70.0f-PlayerFighter->Width/2.0f+MoveFB*(23.2f-PlayerFighter->Length/6.0f))*MoveLR,
+							     0.0f,
+							     (46.0f-PlayerFighter->Length/2.0f)*MoveFB};
 
 		// учет положение камеры
 		PlayerFighterEndLocation += GamePoint;

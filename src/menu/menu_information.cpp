@@ -304,24 +304,25 @@ void CreateInfoObject()
 
 	RotationSumY = 140;
 
-	Point = sVECTOR3D(1000,-1000,0);
+	Point = sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
 	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		int tmpCreateNum = CreateNum-InfoFighterStart+1;
 		InfoFighter = new cEarthSpaceFighter(tmpCreateNum);
 		InfoFighter->ObjectStatus = eObjectStatus::none;
 		InfoFighter->EngineDestroyType = true;
-		InfoFighter->SetLocation(sVECTOR3D(1000,-1000-InfoFighter->AABB[6].y, 0));
-		ObjectBaseLocation = InfoFighter->Location - sVECTOR3D(1000,-1000,0);
+		InfoFighter->SetLocation(sVECTOR3D{1000.0f,
+						   -1000.0f - InfoFighter->AABB[6].y,
+						   0.0f});
+		ObjectBaseLocation = InfoFighter->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D(1000,-1000+InfoFighter->Height/3.0f,0);
+		Point = sVECTOR3D{1000.0f,
+				  -1000.0f + InfoFighter->Height / 3.0f,
+				  0.0f};
 
-		PointCamera = sVECTOR3D(0.0f,(InfoFighter->Length
-					     +InfoFighter->Width+
-					     InfoFighter->Height)*0.24f +InfoFighter->Height*0.3f,
-				       -(InfoFighter->Length
-					 +InfoFighter->Width+
-					 InfoFighter->Height)*0.56f-InfoFighter->Height*0.7f);
+		PointCamera = sVECTOR3D{0.0f,
+					(InfoFighter->Length + InfoFighter->Width + InfoFighter->Height) * 0.24f + InfoFighter->Height * 0.3f,
+					-(InfoFighter->Length + InfoFighter->Width + InfoFighter->Height) * 0.56f - InfoFighter->Height * 0.7f};
 		InfoObjectWidth = InfoFighter->Width;
 		InfoObjectLength = InfoFighter->Length;
 		InfoObjectHeight = InfoFighter->Height;
@@ -334,28 +335,29 @@ void CreateInfoObject()
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoFighter->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+		InfoFighter->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
 		InfoWeapon = CreateWeapon(tmpCreateNum);
 		InfoWeapon->ObjectStatus = eObjectStatus::none;
-		ObjectBaseLocation = sVECTOR3D(0.0f,-InfoWeapon->AABB[6].y, -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z));
+		ObjectBaseLocation = sVECTOR3D{0.0f,
+					       -InfoWeapon->AABB[6].y,
+					       -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z)};
 
-		Point = sVECTOR3D(1000,-1000+InfoWeapon->Height/3.0f,0);
+		Point = sVECTOR3D{1000.0f,
+				  -1000.0f + InfoWeapon->Height / 3.0f,
+				  0.0f};
 
-		PointCamera = sVECTOR3D(0.0f,(InfoWeapon->Length
-					     +InfoWeapon->Width+
-					     InfoWeapon->Height)*0.3f +InfoWeapon->Height*0.3f,
-				       -(InfoWeapon->Length
-					 +InfoWeapon->Width+
-					 InfoWeapon->Height)*0.7f-InfoWeapon->Height*0.7f);
+		PointCamera = sVECTOR3D{0.0f,
+					(InfoWeapon->Length + InfoWeapon->Width + InfoWeapon->Height) * 0.3f + InfoWeapon->Height * 0.3f,
+					-(InfoWeapon->Length + InfoWeapon->Width + InfoWeapon->Height) * 0.7f - InfoWeapon->Height * 0.7f};
 		InfoObjectWidth = InfoWeapon->Width;
 		InfoObjectLength = InfoWeapon->Length;
 		InfoObjectHeight = InfoWeapon->Height;
 		InfoObjectStrength = InfoWeapon->StrengthStart;
 
-		InfoWeapon->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+		InfoWeapon->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 
 		InfoObjectEnergyUse = InfoWeapon->EnergyUse;
 		InfoObjectAmmo = InfoWeapon->AmmoStart;
@@ -372,41 +374,35 @@ void CreateInfoObject()
 		InfoMine->ObjectStatus = eObjectStatus::none;
 		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
 		InfoMine->GraphicFXDestroyType = true;
-		InfoMine->SetLocation(sVECTOR3D(1000,-1000-InfoMine->AABB[6].y, 0));
-		ObjectBaseLocation = InfoMine->Location - sVECTOR3D(1000,-1000,0);
+		InfoMine->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoMine->AABB[6].y, 0.0f});
+		ObjectBaseLocation = InfoMine->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D(1000,-1000+InfoMine->Height/2.0f,0);
+		Point = sVECTOR3D{1000.0f, -1000.0f + InfoMine->Height / 2.0f, 0.0f};
 
-		PointCamera = sVECTOR3D(0.0f,(InfoMine->Length
-					     +InfoMine->Width+
-					     InfoMine->Height)*0.3f +InfoMine->Height*0.3f,
-				       -(InfoMine->Length
-					 +InfoMine->Width+
-					 InfoMine->Height)*0.7f-InfoMine->Height*0.7f);
+		PointCamera = sVECTOR3D{0.0f,
+					(InfoMine->Length + InfoMine->Width + InfoMine->Height) * 0.3f + InfoMine->Height * 0.3f,
+					-(InfoMine->Length + InfoMine->Width + InfoMine->Height) * 0.7f - InfoMine->Height * 0.7f};
 
 		InfoObjectWidth = InfoMine->Width;
 		InfoObjectLength = InfoMine->Length;
 		InfoObjectHeight = InfoMine->Height;
 		InfoObjectStrength = InfoMine->StrengthStart;
 
-		InfoMine->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+		InfoMine->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
 		InfoAlien = new cAlienSpaceFighter(tmpCreateNum);
 		InfoAlien->ObjectStatus = eObjectStatus::none;
 		InfoAlien->EngineDestroyType = true;
-		InfoAlien->SetLocation(sVECTOR3D(1000,-1000-InfoAlien->AABB[6].y, 0));
-		ObjectBaseLocation = InfoAlien->Location - sVECTOR3D(1000,-1000,0);
+		InfoAlien->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoAlien->AABB[6].y, 0.0f});
+		ObjectBaseLocation = InfoAlien->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D(1000,-1000+InfoAlien->Height/3.0f,0);
+		Point = sVECTOR3D{1000.0f, -1000.0f + InfoAlien->Height / 3.0f, 0.0f};
 
-		PointCamera = sVECTOR3D(0.0f,(InfoAlien->Length
-					     +InfoAlien->Width+
-					     InfoAlien->Height)*0.24f +InfoAlien->Height*0.3f,
-				       -(InfoAlien->Length
-					 +InfoAlien->Width+
-					 InfoAlien->Height)*0.56f-InfoAlien->Height*0.7f);
+		PointCamera = sVECTOR3D{0.0f,
+					(InfoAlien->Length + InfoAlien->Width + InfoAlien->Height) * 0.24f + InfoAlien->Height * 0.3f,
+					-(InfoAlien->Length + InfoAlien->Width + InfoAlien->Height) * 0.56f - InfoAlien->Height * 0.7f};
 
 		InfoObjectWidth = InfoAlien->Width;
 		InfoObjectLength = InfoAlien->Length;
@@ -418,24 +414,21 @@ void CreateInfoObject()
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoAlien->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+		InfoAlien->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
 		InfoAlienMotherShip = new cAlienSpaceMotherShip(tmpCreateNum);
 		InfoAlienMotherShip->ObjectStatus = eObjectStatus::none;
 		InfoAlienMotherShip->EngineDestroyType = true;
-		InfoAlienMotherShip->SetLocation(sVECTOR3D(1000,-1000-InfoAlienMotherShip->AABB[6].y, 0));
-		ObjectBaseLocation = InfoAlienMotherShip->Location - sVECTOR3D(1000,-1000,0);
+		InfoAlienMotherShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoAlienMotherShip->AABB[6].y, 0.0f});
+		ObjectBaseLocation = InfoAlienMotherShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D(1000,-1000+InfoAlienMotherShip->Height/3.0f,0);
+		Point = sVECTOR3D{1000.0f, -1000.0f + InfoAlienMotherShip->Height / 3.0f, 0.0f};
 
-		PointCamera = sVECTOR3D(0.0f,(InfoAlienMotherShip->Length
-					     +InfoAlienMotherShip->Width+
-					     InfoAlienMotherShip->Height)*0.24f +InfoAlienMotherShip->Height*0.3f,
-				       -(InfoAlienMotherShip->Length
-					 +InfoAlienMotherShip->Width+
-					 InfoAlienMotherShip->Height)*0.56f-InfoAlienMotherShip->Height*0.7f);
+		PointCamera = sVECTOR3D{0.0f,
+					(InfoAlienMotherShip->Length + InfoAlienMotherShip->Width + InfoAlienMotherShip->Height) * 0.24f + InfoAlienMotherShip->Height * 0.3f,
+					-(InfoAlienMotherShip->Length + InfoAlienMotherShip->Width + InfoAlienMotherShip->Height) * 0.56f - InfoAlienMotherShip->Height * 0.7f};
 		InfoObjectWidth = InfoAlienMotherShip->Width;
 		InfoObjectLength = InfoAlienMotherShip->Length;
 		InfoObjectHeight = InfoAlienMotherShip->Height;
@@ -446,24 +439,21 @@ void CreateInfoObject()
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoAlienMotherShip->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+		InfoAlienMotherShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
 		InfoPirateShip = new cPirateShip(tmpCreateNum);
 		InfoPirateShip->ObjectStatus = eObjectStatus::none;
 		InfoPirateShip->EngineDestroyType = true;
-		InfoPirateShip->SetLocation(sVECTOR3D(1000,-1000-InfoPirateShip->AABB[6].y, 0));
-		ObjectBaseLocation = InfoPirateShip->Location - sVECTOR3D(1000,-1000,0);
+		InfoPirateShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoPirateShip->AABB[6].y, 0.0f});
+		ObjectBaseLocation = InfoPirateShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D(1000,-1000+InfoPirateShip->Height/3.0f,0);
+		Point = sVECTOR3D{1000.0f, -1000.0f + InfoPirateShip->Height / 3.0f, 0.0f};
 
-		PointCamera = sVECTOR3D(0.0f,(InfoPirateShip->Length
-					     +InfoPirateShip->Width+
-					     InfoPirateShip->Height)*0.24f +InfoPirateShip->Height*0.3f,
-				       -(InfoPirateShip->Length
-					 +InfoPirateShip->Width+
-					 InfoPirateShip->Height)*0.56f-InfoPirateShip->Height*0.7f);
+		PointCamera = sVECTOR3D{0.0f,
+					(InfoPirateShip->Length + InfoPirateShip->Width + InfoPirateShip->Height) * 0.24f + InfoPirateShip->Height * 0.3f,
+					-(InfoPirateShip->Length + InfoPirateShip->Width + InfoPirateShip->Height) * 0.56f - InfoPirateShip->Height * 0.7f};
 		InfoObjectWidth = InfoPirateShip->Width;
 		InfoObjectLength = InfoPirateShip->Length;
 		InfoObjectHeight = InfoPirateShip->Height;
@@ -474,30 +464,27 @@ void CreateInfoObject()
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoPirateShip->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+		InfoPirateShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
 		InfoGroundObject = CreateCivilianBuilding(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
 			sharedObject->ObjectStatus = eObjectStatus::none;
-			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
-			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
+			sharedObject->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedObject->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedObject->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-			Point = sVECTOR3D(1000,-1000+sharedObject->Height/3.0f,0);
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedObject->Height / 3.0f, 0.0f};
 
-			PointCamera = sVECTOR3D(0.0f,(sharedObject->Length +
-						      sharedObject->Width +
-						      sharedObject->Height)*0.16f + sharedObject->Height*0.3f,
-					       -(sharedObject->Length +
-						 sharedObject->Width +
-						 sharedObject->Height)*0.38f-sharedObject->Height*0.7f);
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.16f + sharedObject->Height * 0.3f,
+						-(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.38f - sharedObject->Height * 0.7f};
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
 			InfoObjectStrength = sharedObject->StrengthStart;
 
-			sharedObject->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
 	}
 	if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
@@ -505,23 +492,20 @@ void CreateInfoObject()
 		InfoGroundObject = CreateMilitaryBuilding(tmpCreateNum);
 		if (auto sharedObject = InfoGroundObject.lock()) {
 			sharedObject->ObjectStatus = eObjectStatus::none;
-			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
-			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
+			sharedObject->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedObject->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedObject->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-			Point = sVECTOR3D(1000,-1000+sharedObject->Height/3.0f,0);
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedObject->Height / 3.0f, 0.0f};
 
-			PointCamera = sVECTOR3D(0.0f,(sharedObject->Length
-						     +sharedObject->Width+
-						     sharedObject->Height)*0.24f +sharedObject->Height*0.3f,
-					       -(sharedObject->Length
-						 +sharedObject->Width+
-						 sharedObject->Height)*0.56f-sharedObject->Height*0.7f);
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.24f + sharedObject->Height * 0.3f,
+						-(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.56f - sharedObject->Height * 0.7f};
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
 			InfoObjectStrength = sharedObject->StrengthStart;
 
-			sharedObject->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
 	}
 	if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
@@ -537,24 +521,21 @@ void CreateInfoObject()
 			}
 
 			sharedObject->ObjectStatus = eObjectStatus::none;
-			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
-			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
+			sharedObject->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedObject->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedObject->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 			sharedObject->WheelRotarySpeed = 350.0f;
 
-			Point = sVECTOR3D(1000,-1000+sharedObject->Height/3.0f,0);
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedObject->Height / 3.0f, 0.0f};
 
-			PointCamera = sVECTOR3D(0.0f,(sharedObject->Length
-						     +sharedObject->Width+
-						     sharedObject->Height)*0.24f +sharedObject->Height*0.3f,
-					       -(sharedObject->Length
-						 +sharedObject->Width+
-						 sharedObject->Height)*0.56f-sharedObject->Height*0.7f);
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.24f + sharedObject->Height * 0.3f,
+						-(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.56f - sharedObject->Height * 0.7f};
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
 			InfoObjectStrength = sharedObject->StrengthStart;
 
-			sharedObject->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
 	}
 	if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
@@ -570,24 +551,21 @@ void CreateInfoObject()
 			}
 
 			sharedObject->ObjectStatus = eObjectStatus::none;
-			sharedObject->SetLocation(sVECTOR3D(1000,-1000-sharedObject->AABB[6].y, 0));
-			ObjectBaseLocation = sharedObject->Location - sVECTOR3D(1000,-1000,0);
+			sharedObject->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedObject->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedObject->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 			sharedObject->WheelRotarySpeed = 350.0f;
 
-			Point = sVECTOR3D(1000,-1000+sharedObject->Height/3.0f,0);
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedObject->Height / 3.0f, 0.0f};
 
-			PointCamera = sVECTOR3D(0.0f,(sharedObject->Length
-						     +sharedObject->Width+
-						     sharedObject->Height)*0.24f +sharedObject->Height*0.3f,
-					       -(sharedObject->Length
-						 +sharedObject->Width+
-						 sharedObject->Height)*0.56f-sharedObject->Height*0.7f);
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.24f + sharedObject->Height * 0.3f,
+						-(sharedObject->Length + sharedObject->Width + sharedObject->Height) * 0.56f - sharedObject->Height * 0.7f};
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
 			InfoObjectStrength = sharedObject->StrengthStart;
 
-			sharedObject->SetRotation(sVECTOR3D(0.0f, RotationSumY, 0.0f));
+			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
 	}
 
@@ -1362,8 +1340,10 @@ void InformationDrawObject()
 
 
 	vw_LoadIdentity();
-	vw_SetCameraLocation(sVECTOR3D(1000 + PointCamera.x, -1000 + PointCamera.y, PointCamera.z));
-	vw_SetCameraMoveAroundPoint(Point, 0.0f, sVECTOR3D(0.0f, 0.0f, 0.0f));
+	vw_SetCameraLocation(sVECTOR3D{PointCamera.x + 1000.0f,
+				       PointCamera.y - 1000.0f,
+				       PointCamera.z});
+	vw_SetCameraMoveAroundPoint(Point, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 	vw_CameraLookAt();
 
 
@@ -1379,9 +1359,9 @@ void InformationDrawObject()
 	// корректируем положение (у нас объекты стоят не в нулевой точке, а со смещением, например - оружие землян)
 	sVECTOR3D TMPLocation = ObjectBaseLocation;
 	float tmp_matrix[9];
-	vw_Matrix33CreateRotate(tmp_matrix, sVECTOR3D(0, RotationSumY, 0));
+	vw_Matrix33CreateRotate(tmp_matrix, sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	vw_Matrix33CalcPoint(TMPLocation, tmp_matrix);
-	TMPLocation += sVECTOR3D(1000,-1000,0);
+	TMPLocation += sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
 
 	// рисуем линии
@@ -1404,7 +1384,7 @@ void InformationDrawObject()
 	vw_PushMatrix();
 	vw_CullFace(eCullFace::NONE);
 
-	vw_Translate(sVECTOR3D(1000.0f, -1000.0f, 0.0f));
+	vw_Translate(sVECTOR3D{1000.0f, -1000.0f, 0.0f});
 	vw_Rotate(RotationSumY, 0.0f, 1.0f, 0.0f);
 
 	vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f * MenuContentTransp);
@@ -1482,31 +1462,31 @@ void InformationDrawObject()
 
 	if (InfoFighter) {
 		InfoFighter->SetLocation(TMPLocation);
-		InfoFighter->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+		InfoFighter->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (InfoWeapon) {
 		InfoWeapon->SetLocation(TMPLocation);
-		InfoWeapon->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+		InfoWeapon->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (InfoMine) {
 		InfoMine->SetLocation(TMPLocation);
-		InfoMine->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+		InfoMine->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (InfoAlien) {
 		InfoAlien->SetLocation(TMPLocation);
-		InfoAlien->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+		InfoAlien->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (InfoAlienMotherShip) {
 		InfoAlienMotherShip->SetLocation(TMPLocation);
-		InfoAlienMotherShip->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+		InfoAlienMotherShip->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (InfoPirateShip) {
 		InfoPirateShip->SetLocation(TMPLocation);
-		InfoPirateShip->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+		InfoPirateShip->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (auto sharedObject = InfoGroundObject.lock()) {
 		sharedObject->SetLocation(TMPLocation);
-		sharedObject->SetRotation(sVECTOR3D(0.0f, RotateInfoObjectY, 0.0f));
+		sharedObject->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 
 
@@ -1515,7 +1495,7 @@ void InformationDrawObject()
 
 	if (GameConfig().ShadowMap > 0) {
 		float EffectiveDistance = PointCamera.Length();
-		ShadowMap_StartRenderToFBO(sVECTOR3D(0,0,0), EffectiveDistance, EffectiveDistance*2);
+		ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, 0.0f, 0.0f}, EffectiveDistance, EffectiveDistance*2);
 
 		// since some 3D models don't have 'back' sides - tank's tracks, covers elements for tires
 		// and tracks, etc., we are forced to disable face's culling during shadows map generation
@@ -1603,7 +1583,7 @@ void InformationDrawObject()
 
 
 
-	vw_SetCameraLocation(sVECTOR3D(-50,30,-50));
+	vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
 	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 

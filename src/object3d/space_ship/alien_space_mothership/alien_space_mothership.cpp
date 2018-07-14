@@ -66,7 +66,7 @@ const sAlienSpaceMotherShipData PresetAlienSpaceMotherShipData[] = {
 static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-	ParticleSystem->Direction = sVECTOR3D(0.0f, 0.0f, -1.0f);
+	ParticleSystem->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 
 	switch(EngineType) {
 	// красно-желтые
@@ -89,9 +89,9 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{2.4f, 2.4f, 0.1f};
 		ParticleSystem->IsMagnet = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
@@ -113,7 +113,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{1.2f, 1.2f, 0.1f};
 		ParticleSystem->IsMagnet = true;
 		break;
 	case 3:
@@ -135,7 +135,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{15.0f, 15.0f, 3.0f};
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -160,7 +160,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(15.0f,15.0f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{15.0f, 15.0f, 3.0f};
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -185,7 +185,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{9.0f, 9.0f, 2.0f};
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -210,7 +210,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(9.0f,9.0f,2.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{9.0f, 9.0f, 2.0f};
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -242,7 +242,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(0.5f,0.5f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{0.5f, 0.5f, 0.1f};
 		ParticleSystem->IsMagnet = true;
 		break;
 	case 10:
@@ -264,7 +264,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(0.8f,0.8f,0.8f);
+		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.8f, 0.8f};
 		ParticleSystem->IsMagnet = true;
 		break;
 	case 11:
@@ -286,7 +286,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(1.4f,1.4f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{1.4f, 1.4f, 0.1f};
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 13.0f;
 		break;
@@ -309,9 +309,9 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(2.4f,2.4f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{2.4f, 2.4f, 0.1f};
 		ParticleSystem->IsMagnet = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.03f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.03f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 13:
@@ -333,12 +333,12 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 0.70f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(14.0f,5.0f,10.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{14.0f, 5.0f, 10.0f};
 		ParticleSystem->DeadZone = 4.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 15.0f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.35f, 0.75f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
@@ -367,10 +367,10 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.50f;
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(5.0f,3.0f,3.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{5.0f, 3.0f, 3.0f};
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 30.0f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 16:
@@ -392,9 +392,9 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(1.2f,1.2f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{1.2f, 1.2f, 0.1f};
 		ParticleSystem->IsMagnet = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.05f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 17:
@@ -416,7 +416,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{14.0f, 1.0f, 14.0f};
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -441,7 +441,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(14.0f,1.0f,14.0f);
+		ParticleSystem->CreationSize = sVECTOR3D{14.0f, 1.0f, 14.0f};
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -466,7 +466,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->IsMagnet = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 20:
@@ -488,9 +488,9 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->Life       = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D(2.0f,2.0f,0.1f);
+		ParticleSystem->CreationSize = sVECTOR3D{2.0f, 2.0f, 0.1f};
 		ParticleSystem->IsMagnet = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D(0.0f,0.0f,0.0f), 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	default:
@@ -557,371 +557,371 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	switch (SpaceShipNum) {
 	case 1:
 		// оружие
-		WeaponSlots[0](CreateWeapon(102), sVECTOR3D(-1.6f, 1.0f, 19.0f));
-		WeaponSlots[1](CreateWeapon(102), sVECTOR3D(1.6f, 1.0f, 19.0f));
-		WeaponSlots[2](CreateWeapon(102), sVECTOR3D(-1.6f, -1.0f, 19.0f));
-		WeaponSlots[3](CreateWeapon(102), sVECTOR3D(1.6f, -1.0f, 19.0f));
+		WeaponSlots[0](CreateWeapon(102), sVECTOR3D{-1.6f, 1.0f, 19.0f});
+		WeaponSlots[1](CreateWeapon(102), sVECTOR3D{1.6f, 1.0f, 19.0f});
+		WeaponSlots[2](CreateWeapon(102), sVECTOR3D{-1.6f, -1.0f, 19.0f});
+		WeaponSlots[3](CreateWeapon(102), sVECTOR3D{1.6f, -1.0f, 19.0f});
 
-		WeaponSlots[4](CreateWeapon(103), sVECTOR3D(-1.6f, 1.5f, 18.0f));
-		WeaponSlots[5](CreateWeapon(103), sVECTOR3D(1.6f, 1.5f, 18.0f));
-		WeaponSlots[6](CreateWeapon(103), sVECTOR3D(-1.6f, -1.5f, 18.0f));
-		WeaponSlots[7](CreateWeapon(103), sVECTOR3D(1.6f, -1.5f, 18.0f));
+		WeaponSlots[4](CreateWeapon(103), sVECTOR3D{-1.6f, 1.5f, 18.0f});
+		WeaponSlots[5](CreateWeapon(103), sVECTOR3D{1.6f, 1.5f, 18.0f});
+		WeaponSlots[6](CreateWeapon(103), sVECTOR3D{-1.6f, -1.5f, 18.0f});
+		WeaponSlots[7](CreateWeapon(103), sVECTOR3D{1.6f, -1.5f, 18.0f});
 
-		WeaponSlots[8](CreateWeapon(104), sVECTOR3D(-1.6f, 1.0f, 19.0f));
-		WeaponSlots[9](CreateWeapon(104), sVECTOR3D(1.6f, 1.0f, 19.0f));
-		WeaponSlots[10](CreateWeapon(104), sVECTOR3D(-1.6f, -1.0f, 19.0f));
-		WeaponSlots[11](CreateWeapon(104), sVECTOR3D(1.6f, -1.0f, 19.0f));
+		WeaponSlots[8](CreateWeapon(104), sVECTOR3D{-1.6f, 1.0f, 19.0f});
+		WeaponSlots[9](CreateWeapon(104), sVECTOR3D{1.6f, 1.0f, 19.0f});
+		WeaponSlots[10](CreateWeapon(104), sVECTOR3D{-1.6f, -1.0f, 19.0f});
+		WeaponSlots[11](CreateWeapon(104), sVECTOR3D{1.6f, -1.0f, 19.0f});
 
-		WeaponSlots[12](CreateWeapon(104), sVECTOR3D(0.0f, -8.0f, 0.0f));
-		WeaponSlots[13](CreateWeapon(104), sVECTOR3D(0.0f, -8.0f, 0.0f));
+		WeaponSlots[12](CreateWeapon(104), sVECTOR3D{0.0f, -8.0f, 0.0f});
+		WeaponSlots[13](CreateWeapon(104), sVECTOR3D{0.0f, -8.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(8.4f, 5.2f, -24.0f);
+		EnginesLocation[0] = sVECTOR3D{8.4f, 5.2f, -24.0f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-8.4f, 5.2f, -24.0f);
+		EnginesLocation[1] = sVECTOR3D{-8.4f, 5.2f, -24.0f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(8.4f, -5.6f, -24.0f);
+		EnginesLocation[2] = sVECTOR3D{8.4f, -5.6f, -24.0f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-8.4f, -5.6f, -24.0f);
+		EnginesLocation[3] = sVECTOR3D{-8.4f, -5.6f, -24.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(0.0f, 8.2f, -15.0f);
+		EnginesLocation[4] = sVECTOR3D{0.0f, 8.2f, -15.0f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(0.0f, -8.2f, -15.0f);
+		EnginesLocation[5] = sVECTOR3D{0.0f, -8.2f, -15.0f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(0.0f, 0.0f, -8.0f);
+		EnginesLocation[6] = sVECTOR3D{0.0f, 0.0f, -8.0f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 3);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(0.0f, 0.0f, -8.0f);
+		EnginesLocation[7] = sVECTOR3D{0.0f, 0.0f, -8.0f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 4);
 		Engines[8] = vw_CreateParticleSystem();
-		EnginesLocation[8] = sVECTOR3D(0.0f, 0.0f, 15.0f);
+		EnginesLocation[8] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[8].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 5);
 		Engines[9] = vw_CreateParticleSystem();
-		EnginesLocation[9] = sVECTOR3D(0.0f, 0.0f, 15.0f);
+		EnginesLocation[9] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[9].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
 		break;
 	case 2:
 		// оружие
-		WeaponSlots[0](CreateWeapon(103), sVECTOR3D(-10.7f, 0.0f, -18.5f));
+		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
 		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(103), sVECTOR3D(10.7f, 0.0f, -18.5f));
+		WeaponSlots[1](CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
 		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[2](CreateWeapon(103), sVECTOR3D(-10.7f, 0.0f, -18.5f));
+		WeaponSlots[2](CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
 		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[3](CreateWeapon(103), sVECTOR3D(10.7f, 0.0f, -18.5f));
+		WeaponSlots[3](CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
 		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
 
-		WeaponSlots[4](CreateWeapon(106), sVECTOR3D(-10.7f, 0.0f, -18.5f));
+		WeaponSlots[4](CreateWeapon(106), sVECTOR3D{-10.7f, 0.0f, -18.5f});
 		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[5](CreateWeapon(106), sVECTOR3D(10.7f, 0.0f, -18.5f));
+		WeaponSlots[5](CreateWeapon(106), sVECTOR3D{10.7f, 0.0f, -18.5f});
 		WeaponSlots[5].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[6](CreateWeapon(106), sVECTOR3D(-4.0f, 0.0f, 24.0f));
+		WeaponSlots[6](CreateWeapon(106), sVECTOR3D{-4.0f, 0.0f, 24.0f});
 		WeaponSlots[6].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[7](CreateWeapon(106), sVECTOR3D(4.0f, 0.0f, 24.0f));
+		WeaponSlots[7](CreateWeapon(106), sVECTOR3D{4.0f, 0.0f, 24.0f});
 		WeaponSlots[7].Weapon->NextFireTime /= 2.0f;
 
-		BossWeaponSlots[0](CreateWeapon(102), sVECTOR3D(-1.5f, 1.5f, 25.0f));
-		BossWeaponSlots[1](CreateWeapon(102), sVECTOR3D(1.5f, 1.5f, 25.0f));
-		BossWeaponSlots[2](CreateWeapon(102), sVECTOR3D(-1.5f, -1.5f, 25.0f));
-		BossWeaponSlots[3](CreateWeapon(102), sVECTOR3D(1.5f, -1.5f, 25.0f));
-		BossWeaponSlots[4](CreateWeapon(102), sVECTOR3D(-4.0f, 2.0f, 24.0f));
-		BossWeaponSlots[5](CreateWeapon(102), sVECTOR3D(4.0f, 2.0f, 24.0f));
-		BossWeaponSlots[6](CreateWeapon(102), sVECTOR3D(-4.0f, -2.0f, 24.0f));
-		BossWeaponSlots[7](CreateWeapon(102), sVECTOR3D(4.0f, -2.0f, 24.0f));
+		BossWeaponSlots[0](CreateWeapon(102), sVECTOR3D{-1.5f, 1.5f, 25.0f});
+		BossWeaponSlots[1](CreateWeapon(102), sVECTOR3D{1.5f, 1.5f, 25.0f});
+		BossWeaponSlots[2](CreateWeapon(102), sVECTOR3D{-1.5f, -1.5f, 25.0f});
+		BossWeaponSlots[3](CreateWeapon(102), sVECTOR3D{1.5f, -1.5f, 25.0f});
+		BossWeaponSlots[4](CreateWeapon(102), sVECTOR3D{-4.0f, 2.0f, 24.0f});
+		BossWeaponSlots[5](CreateWeapon(102), sVECTOR3D{4.0f, 2.0f, 24.0f});
+		BossWeaponSlots[6](CreateWeapon(102), sVECTOR3D{-4.0f, -2.0f, 24.0f});
+		BossWeaponSlots[7](CreateWeapon(102), sVECTOR3D{4.0f, -2.0f, 24.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(5.6f, 7.0f, -27.6f);
+		EnginesLocation[0] = sVECTOR3D{5.6f, 7.0f, -27.6f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-5.6f, 7.0f, -27.6f);
+		EnginesLocation[1] = sVECTOR3D{-5.6f, 7.0f, -27.6f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(5.6f, -7.0f, -27.6f);
+		EnginesLocation[2] = sVECTOR3D{5.6f, -7.0f, -27.6f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-5.6f, -7.0f, -27.6f);
+		EnginesLocation[3] = sVECTOR3D{-5.6f, -7.0f, -27.6f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(10.7f, 0.0f, -21.5f);
+		EnginesLocation[4] = sVECTOR3D{10.7f, 0.0f, -21.5f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-10.7f, 0.0f, -21.5f);
+		EnginesLocation[5] = sVECTOR3D{-10.7f, 0.0f, -21.5f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(0.0f, 0.0f, -14.0f);
+		EnginesLocation[6] = sVECTOR3D{0.0f, 0.0f, -14.0f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 3);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(0.0f, 0.0f, -14.0f);
+		EnginesLocation[7] = sVECTOR3D{0.0f, 0.0f, -14.0f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 4);
 		Engines[8] = vw_CreateParticleSystem();
-		EnginesLocation[8] = sVECTOR3D(0.0f, 0.0f, 15.0f);
+		EnginesLocation[8] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[8].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 5);
 		Engines[9] = vw_CreateParticleSystem();
-		EnginesLocation[9] = sVECTOR3D(0.0f, 0.0f, 15.0f);
+		EnginesLocation[9] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[9].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
 		break;
 	case 3:
 		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D(3.0f, -2.0f, 13.0f));
-		WeaponSlots[1](CreateWeapon(104), sVECTOR3D(-3.0f, -2.0f, 13.0f));
-		WeaponSlots[2](CreateWeapon(104), sVECTOR3D(2.0f, -1.0f, 13.0f));
-		WeaponSlots[3](CreateWeapon(104), sVECTOR3D(-2.0f, -1.0f, 13.0f));
-		WeaponSlots[4](CreateWeapon(104), sVECTOR3D(2.0f, -3.0f, 13.0f));
-		WeaponSlots[5](CreateWeapon(104), sVECTOR3D(-2.0f, -3.0f, 13.0f));
+		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{3.0f, -2.0f, 13.0f});
+		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-3.0f, -2.0f, 13.0f});
+		WeaponSlots[2](CreateWeapon(104), sVECTOR3D{2.0f, -1.0f, 13.0f});
+		WeaponSlots[3](CreateWeapon(104), sVECTOR3D{-2.0f, -1.0f, 13.0f});
+		WeaponSlots[4](CreateWeapon(104), sVECTOR3D{2.0f, -3.0f, 13.0f});
+		WeaponSlots[5](CreateWeapon(104), sVECTOR3D{-2.0f, -3.0f, 13.0f});
 
-		WeaponSlots[6](CreateWeapon(109), sVECTOR3D(7.0f, -2.0f, 13.0f));
-		WeaponSlots[7](CreateWeapon(109), sVECTOR3D(-7.0f, -2.0f, 13.0f));
+		WeaponSlots[6](CreateWeapon(109), sVECTOR3D{7.0f, -2.0f, 13.0f});
+		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{-7.0f, -2.0f, 13.0f});
 
-		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(0.0f, -2.0f, 27.0f));
+		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{0.0f, -2.0f, 27.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(5.5f, 8.1f, -26.1f);
+		EnginesLocation[0] = sVECTOR3D{5.5f, 8.1f, -26.1f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-5.5f, 8.1f, -26.1f);
+		EnginesLocation[1] = sVECTOR3D{-5.5f, 8.1f, -26.1f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(5.6f, -7.2f, -28.6f);
+		EnginesLocation[2] = sVECTOR3D{5.6f, -7.2f, -28.6f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-5.6f, -7.2f, -28.6f);
+		EnginesLocation[3] = sVECTOR3D{-5.6f, -7.2f, -28.6f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(11.9f, -1.0f, -14.8f);
+		EnginesLocation[4] = sVECTOR3D{11.9f, -1.0f, -14.8f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-11.9f, -1.0f, -14.8f);
+		EnginesLocation[5] = sVECTOR3D{-11.9f, -1.0f, -14.8f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(0.0f, -1.0f, -10.0f);
+		EnginesLocation[6] = sVECTOR3D{0.0f, -1.0f, -10.0f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 3);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(0.0f, -1.0f, -10.0f);
+		EnginesLocation[7] = sVECTOR3D{0.0f, -1.0f, -10.0f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 4);
 		break;
 	case 4:
 		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D(1.0f, -1.0f, 23.0f));
-		WeaponSlots[1](CreateWeapon(104), sVECTOR3D(-1.0f, -1.0f, 23.0f));
-		WeaponSlots[2](CreateWeapon(104), sVECTOR3D(1.0f, 0.0f, 23.0f));
-		WeaponSlots[3](CreateWeapon(104), sVECTOR3D(-1.0f, 0.0f, 23.0f));
-		WeaponSlots[4](CreateWeapon(104), sVECTOR3D(1.0f, -2.0f, 23.0f));
-		WeaponSlots[5](CreateWeapon(104), sVECTOR3D(-1.0f, -2.0f, 23.0f));
+		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{1.0f, -1.0f, 23.0f});
+		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-1.0f, -1.0f, 23.0f});
+		WeaponSlots[2](CreateWeapon(104), sVECTOR3D{1.0f, 0.0f, 23.0f});
+		WeaponSlots[3](CreateWeapon(104), sVECTOR3D{-1.0f, 0.0f, 23.0f});
+		WeaponSlots[4](CreateWeapon(104), sVECTOR3D{1.0f, -2.0f, 23.0f});
+		WeaponSlots[5](CreateWeapon(104), sVECTOR3D{-1.0f, -2.0f, 23.0f});
 
-		WeaponSlots[6](CreateWeapon(109), sVECTOR3D(0.0f, -1.0f, 23.0f));
-		WeaponSlots[7](CreateWeapon(109), sVECTOR3D(0.0f, -1.0f, 23.0f));
+		WeaponSlots[6](CreateWeapon(109), sVECTOR3D{0.0f, -1.0f, 23.0f});
+		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{0.0f, -1.0f, 23.0f});
 
-		BossWeaponSlots[0](CreateWeapon(108), sVECTOR3D(8.9f, -0.6f, 18.0f));
-		BossWeaponSlots[0].Weapon->SetRotation(sVECTOR3D(0.0f, -15.0f, 0.0f));
-		BossWeaponSlots[1](CreateWeapon(108), sVECTOR3D(-8.9f, -0.6f, 18.0f));
-		BossWeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 15.0f, 0.0f));
-		BossWeaponSlots[2](CreateWeapon(108), sVECTOR3D(10.0f, -5.6f, 18.0f));
-		BossWeaponSlots[3](CreateWeapon(108), sVECTOR3D(-10.0f, -5.6f, 18.0f));
-		BossWeaponSlots[4](CreateWeapon(108), sVECTOR3D(8.9f, -0.6f, 18.0f));
-		BossWeaponSlots[4].Weapon->SetRotation(sVECTOR3D(0.0f, -5.0f, 0.0f));
-		BossWeaponSlots[5](CreateWeapon(108), sVECTOR3D(-8.9f, -0.6f, 18.0f));
-		BossWeaponSlots[5].Weapon->SetRotation(sVECTOR3D(0.0f, 5.0f, 0.0f));
-		BossWeaponSlots[6](CreateWeapon(108), sVECTOR3D(10.0f, -5.6f, 18.0f));
-		BossWeaponSlots[6].Weapon->SetRotation(sVECTOR3D(0.0f, -10.0f, 0.0f));
-		BossWeaponSlots[7](CreateWeapon(108), sVECTOR3D(-10.0f, -5.6f, 18.0f));
-		BossWeaponSlots[7].Weapon->SetRotation(sVECTOR3D(0.0f, 10.0f, 0.0f));
+		BossWeaponSlots[0](CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
+		BossWeaponSlots[0].Weapon->SetRotation(sVECTOR3D{0.0f, -15.0f, 0.0f});
+		BossWeaponSlots[1](CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
+		BossWeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 15.0f, 0.0f});
+		BossWeaponSlots[2](CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
+		BossWeaponSlots[3](CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
+		BossWeaponSlots[4](CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
+		BossWeaponSlots[4].Weapon->SetRotation(sVECTOR3D{0.0f, -5.0f, 0.0f});
+		BossWeaponSlots[5](CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
+		BossWeaponSlots[5].Weapon->SetRotation(sVECTOR3D{0.0f, 5.0f, 0.0f});
+		BossWeaponSlots[6](CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
+		BossWeaponSlots[6].Weapon->SetRotation(sVECTOR3D{0.0f, -10.0f, 0.0f});
+		BossWeaponSlots[7](CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
+		BossWeaponSlots[7].Weapon->SetRotation(sVECTOR3D{0.0f, 10.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(1.9f, 5.9f, -24.6f);
+		EnginesLocation[0] = sVECTOR3D{1.9f, 5.9f, -24.6f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-1.9f, 5.9f, -24.6f);
+		EnginesLocation[1] = sVECTOR3D{-1.9f, 5.9f, -24.6f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(1.9f, -2.9f, -24.6f);
+		EnginesLocation[2] = sVECTOR3D{1.9f, -2.9f, -24.6f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-1.9f, -2.9f, -24.6f);
+		EnginesLocation[3] = sVECTOR3D{-1.9f, -2.9f, -24.6f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(2.9f, 1.6f, -24.6f);
+		EnginesLocation[4] = sVECTOR3D{2.9f, 1.6f, -24.6f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-2.9f, 1.6f, -24.6f);
+		EnginesLocation[5] = sVECTOR3D{-2.9f, 1.6f, -24.6f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(8.9f, -0.6f, -12.6f);
+		EnginesLocation[6] = sVECTOR3D{8.9f, -0.6f, -12.6f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(-8.9f, -0.6f, -12.6f);
+		EnginesLocation[7] = sVECTOR3D{-8.9f, -0.6f, -12.6f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[8] = vw_CreateParticleSystem();
-		EnginesLocation[8] = sVECTOR3D(10.0f, -5.6f, -5.2f);
+		EnginesLocation[8] = sVECTOR3D{10.0f, -5.6f, -5.2f};
 		if (auto sharedEngine = Engines[8].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[9] = vw_CreateParticleSystem();
-		EnginesLocation[9] = sVECTOR3D(-10.0f, -5.6f, -5.2f);
+		EnginesLocation[9] = sVECTOR3D{-10.0f, -5.6f, -5.2f};
 		if (auto sharedEngine = Engines[9].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
 		Engines[10] = vw_CreateParticleSystem();
-		EnginesLocation[10] = sVECTOR3D(0.0f, -6.0f, 10.0f);
+		EnginesLocation[10] = sVECTOR3D{0.0f, -6.0f, 10.0f};
 		if (auto sharedEngine = Engines[10].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 5);
-			sharedEngine->CreationSize = sVECTOR3D(6.0f,6.0f,2.0f);
+			sharedEngine->CreationSize = sVECTOR3D{6.0f, 6.0f, 2.0f};
 			sharedEngine->DeadZone = 5.9f;
 		}
 		Engines[11] = vw_CreateParticleSystem();
-		EnginesLocation[11] = sVECTOR3D(0.0f, -6.0f, 10.0f);
+		EnginesLocation[11] = sVECTOR3D{0.0f, -6.0f, 10.0f};
 		if (auto sharedEngine = Engines[11].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
-			sharedEngine->CreationSize = sVECTOR3D(6.0f,6.0f,2.0f);
+			sharedEngine->CreationSize = sVECTOR3D{6.0f, 6.0f, 2.0f};
 			sharedEngine->DeadZone = 5.9f;
 		}
 		break;
 	case 5:
 		// оружие
-		WeaponSlots[0](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[1](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
-		WeaponSlots[2](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
-		WeaponSlots[3](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
-		WeaponSlots[4](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[5](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
-		WeaponSlots[6](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[6].Weapon->SetRotation(sVECTOR3D(0.0f, 9.0f, 0.0f));
-		WeaponSlots[7](CreateWeapon(109), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		WeaponSlots[7].Weapon->SetRotation(sVECTOR3D(0.0f, -9.0f, 0.0f));
+		WeaponSlots[0](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[1](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
+		WeaponSlots[2](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
+		WeaponSlots[3](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
+		WeaponSlots[4](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[5](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
+		WeaponSlots[6](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[6].Weapon->SetRotation(sVECTOR3D{0.0f, 9.0f, 0.0f});
+		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots[7].Weapon->SetRotation(sVECTOR3D{0.0f, -9.0f, 0.0f});
 
-		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D(35.7f, -3.0f, -13.0f));
-		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D(-35.7f, -3.0f, -13.0f));
-		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D(0.0f, -2.4f, 20.0f));
-		BossWeaponSlots[4](CreateWeapon(104), sVECTOR3D(8.85f, 5.65f, -10.2f));
-		BossWeaponSlots[5](CreateWeapon(104), sVECTOR3D(-8.85f, 5.65f, -10.2f));
+		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D{35.7f, -3.0f, -13.0f});
+		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D{-35.7f, -3.0f, -13.0f});
+		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		BossWeaponSlots[4](CreateWeapon(104), sVECTOR3D{8.85f, 5.65f, -10.2f});
+		BossWeaponSlots[5](CreateWeapon(104), sVECTOR3D{-8.85f, 5.65f, -10.2f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(25.1f, 0.65f, -18.8f);
+		EnginesLocation[0] = sVECTOR3D{25.1f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-25.1f, 0.65f, -18.8f);
+		EnginesLocation[1] = sVECTOR3D{-25.1f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(20.6f, 0.65f, -18.8f);
+		EnginesLocation[2] = sVECTOR3D{20.6f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-20.6f, 0.65f, -18.8f);
+		EnginesLocation[3] = sVECTOR3D{-20.6f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(22.9f, 0.65f, -20.0f);
+		EnginesLocation[4] = sVECTOR3D{22.9f, 0.65f, -20.0f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-22.9f, 0.65f, -20.0f);
+		EnginesLocation[5] = sVECTOR3D{-22.9f, 0.65f, -20.0f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(22.9f, -5.1f, -20.0f);
+		EnginesLocation[6] = sVECTOR3D{22.9f, -5.1f, -20.0f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(-22.9f, -5.1f, -20.0f);
+		EnginesLocation[7] = sVECTOR3D{-22.9f, -5.1f, -20.0f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[8] = vw_CreateParticleSystem();
-		EnginesLocation[8] = sVECTOR3D(8.85f, 5.65f, -15.2f);
+		EnginesLocation[8] = sVECTOR3D{8.85f, 5.65f, -15.2f};
 		if (auto sharedEngine = Engines[8].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[9] = vw_CreateParticleSystem();
-		EnginesLocation[9] = sVECTOR3D(-8.85f, 5.65f, -15.2f);
+		EnginesLocation[9] = sVECTOR3D{-8.85f, 5.65f, -15.2f};
 		if (auto sharedEngine = Engines[9].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[10] = vw_CreateParticleSystem();
-		EnginesLocation[10] = sVECTOR3D(4.0f, 7.0f, -21.2f);
+		EnginesLocation[10] = sVECTOR3D{4.0f, 7.0f, -21.2f};
 		if (auto sharedEngine = Engines[10].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[11] = vw_CreateParticleSystem();
-		EnginesLocation[11] = sVECTOR3D(-4.0f, 7.0f, -21.2f);
+		EnginesLocation[11] = sVECTOR3D{-4.0f, 7.0f, -21.2f};
 		if (auto sharedEngine = Engines[11].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[12] = vw_CreateParticleSystem();
-		EnginesLocation[12] = sVECTOR3D(20.4f, -2.4f, -20.0f);
+		EnginesLocation[12] = sVECTOR3D{20.4f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[12].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[13] = vw_CreateParticleSystem();
-		EnginesLocation[13] = sVECTOR3D(-20.4f, -2.4f, -20.0f);
+		EnginesLocation[13] = sVECTOR3D{-20.4f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[13].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[14] = vw_CreateParticleSystem();
-		EnginesLocation[14] = sVECTOR3D(25.2f, -2.4f, -20.0f);
+		EnginesLocation[14] = sVECTOR3D{25.2f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[14].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[15] = vw_CreateParticleSystem();
-		EnginesLocation[15] = sVECTOR3D(-25.2f, -2.4f, -20.0f);
+		EnginesLocation[15] = sVECTOR3D{-25.2f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[15].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[16] = vw_CreateParticleSystem();
-		EnginesLocation[16] = sVECTOR3D(35.7f, -3.0f, -13.0f);
+		EnginesLocation[16] = sVECTOR3D{35.7f, -3.0f, -13.0f};
 		if (auto sharedEngine = Engines[16].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 12);
-			sharedEngine->Direction = sVECTOR3D(0.4f, 0.0f, -0.8f);
+			sharedEngine->Direction = sVECTOR3D{0.4f, 0.0f, -0.8f};
 		}
 		Engines[17] = vw_CreateParticleSystem();
-		EnginesLocation[17] = sVECTOR3D(-35.7f, -3.0f, -13.0f);
+		EnginesLocation[17] = sVECTOR3D{-35.7f, -3.0f, -13.0f};
 		if (auto sharedEngine = Engines[17].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 12);
-			sharedEngine->Direction = sVECTOR3D(-0.4f, 0.0f, -0.8f);
+			sharedEngine->Direction = sVECTOR3D{-0.4f, 0.0f, -0.8f};
 		}
 		Engines[18] = vw_CreateParticleSystem();
-		EnginesLocation[18] = sVECTOR3D(0.0f, -2.4f, -23.0f);
+		EnginesLocation[18] = sVECTOR3D{0.0f, -2.4f, -23.0f};
 		if (auto sharedEngine = Engines[18].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 13);
 		break;
@@ -929,149 +929,149 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 
 	case 6:
 		// оружие
-		WeaponSlots[0](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
 		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
+		WeaponSlots[1](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
 		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[2](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
-		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
+		WeaponSlots[2](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
 		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[3](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
+		WeaponSlots[3](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
 		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[4](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
+		WeaponSlots[4](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
 		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[5](CreateWeapon(103), sVECTOR3D(0.0f, -4.4f, 18.0f));
-		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
+		WeaponSlots[5](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
 		WeaponSlots[5].Weapon->NextFireTime /= 2.0f;
 
-		WeaponSlots[6](CreateWeapon(104), sVECTOR3D(7.0f, -4.4f, 13.0f));
+		WeaponSlots[6](CreateWeapon(104), sVECTOR3D{7.0f, -4.4f, 13.0f});
 		WeaponSlots[6].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[7](CreateWeapon(104), sVECTOR3D(-7.0f, -4.4f, 13.0f));
+		WeaponSlots[7](CreateWeapon(104), sVECTOR3D{-7.0f, -4.4f, 13.0f});
 		WeaponSlots[7].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[8](CreateWeapon(104), sVECTOR3D(12.0f, -4.4f, 10.0f));
+		WeaponSlots[8](CreateWeapon(104), sVECTOR3D{12.0f, -4.4f, 10.0f});
 		WeaponSlots[8].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[9](CreateWeapon(104), sVECTOR3D(-12.0f, -4.4f, 10.0f));
+		WeaponSlots[9](CreateWeapon(104), sVECTOR3D{-12.0f, -4.4f, 10.0f});
 		WeaponSlots[9].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[10](CreateWeapon(104), sVECTOR3D(17.0f, -4.4f, 8.0f));
+		WeaponSlots[10](CreateWeapon(104), sVECTOR3D{17.0f, -4.4f, 8.0f});
 		WeaponSlots[10].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[11](CreateWeapon(104), sVECTOR3D(-17.0f, -4.4f, 8.0f));
+		WeaponSlots[11](CreateWeapon(104), sVECTOR3D{-17.0f, -4.4f, 8.0f});
 		WeaponSlots[11].Weapon->NextFireTime /= 2.0f;
 
-		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D(10.0f, -6.4f, 10.0f));
-		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D(-10.0f, -6.4f, 10.0f));
-		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D(15.0f, -6.4f, 8.0f));
-		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D(-15.0f, -6.4f, 8.0f));
-		BossWeaponSlots[4](CreateWeapon(106), sVECTOR3D(20.0f, -6.4f, 5.0f));
-		BossWeaponSlots[5](CreateWeapon(106), sVECTOR3D(-20.0f, -6.4f, 5.0f));
+		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D{10.0f, -6.4f, 10.0f});
+		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D{-10.0f, -6.4f, 10.0f});
+		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D{15.0f, -6.4f, 8.0f});
+		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D{-15.0f, -6.4f, 8.0f});
+		BossWeaponSlots[4](CreateWeapon(106), sVECTOR3D{20.0f, -6.4f, 5.0f});
+		BossWeaponSlots[5](CreateWeapon(106), sVECTOR3D{-20.0f, -6.4f, 5.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(0.0f, -7.0f, -23.0f);
+		EnginesLocation[0] = sVECTOR3D{0.0f, -7.0f, -23.0f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 13);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-25.4f, -4.0f, -20.0f);
+		EnginesLocation[1] = sVECTOR3D{-25.4f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(20.6f, -4.0f, -20.0f);
+		EnginesLocation[2] = sVECTOR3D{20.6f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-20.6f, -4.0f, -20.0f);
+		EnginesLocation[3] = sVECTOR3D{-20.6f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(23.4f, -1.0f, -20.0f);
+		EnginesLocation[4] = sVECTOR3D{23.4f, -1.0f, -20.0f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-23.4f, -1.0f, -20.0f);
+		EnginesLocation[5] = sVECTOR3D{-23.4f, -1.0f, -20.0f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(23.4f, -7.0f, -20.0f);
+		EnginesLocation[6] = sVECTOR3D{23.4f, -7.0f, -20.0f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(-23.4f, -7.0f, -20.0f);
+		EnginesLocation[7] = sVECTOR3D{-23.4f, -7.0f, -20.0f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[8] = vw_CreateParticleSystem();
-		EnginesLocation[8] = sVECTOR3D(5.3f, 4.7f, -22.9f);
+		EnginesLocation[8] = sVECTOR3D{5.3f, 4.7f, -22.9f};
 		if (auto sharedEngine = Engines[8].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[9] = vw_CreateParticleSystem();
-		EnginesLocation[9] = sVECTOR3D(-5.3f, 4.7f, -22.9f);
+		EnginesLocation[9] = sVECTOR3D{-5.3f, 4.7f, -22.9f};
 		if (auto sharedEngine = Engines[9].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
 		Engines[10] = vw_CreateParticleSystem();
-		EnginesLocation[10] = sVECTOR3D(2.6f, 6.6f, -21.5f);
+		EnginesLocation[10] = sVECTOR3D{2.6f, 6.6f, -21.5f};
 		if (auto sharedEngine = Engines[10].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[11] = vw_CreateParticleSystem();
-		EnginesLocation[11] = sVECTOR3D(-2.6f, 6.6f, -21.5f);
+		EnginesLocation[11] = sVECTOR3D{-2.6f, 6.6f, -21.5f};
 		if (auto sharedEngine = Engines[11].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[12] = vw_CreateParticleSystem();
-		EnginesLocation[12] = sVECTOR3D(2.6f, 2.0f, -21.5f);
+		EnginesLocation[12] = sVECTOR3D{2.6f, 2.0f, -21.5f};
 		if (auto sharedEngine = Engines[12].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[13] = vw_CreateParticleSystem();
-		EnginesLocation[13] = sVECTOR3D(-2.6f, 2.0f, -21.5f);
+		EnginesLocation[13] = sVECTOR3D{-2.6f, 2.0f, -21.5f};
 		if (auto sharedEngine = Engines[13].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		Engines[14] = vw_CreateParticleSystem();
-		EnginesLocation[14] = sVECTOR3D(25.4f, -4.0f, -20.0f);
+		EnginesLocation[14] = sVECTOR3D{25.4f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[14].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
 		break;
 
 	case 7:
 		// оружие
-		WeaponSlots[0](CreateWeapon(108), sVECTOR3D(0.0f, -1.4f, 15.0f));
+		WeaponSlots[0](CreateWeapon(108), sVECTOR3D{0.0f, -1.4f, 15.0f});
 		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(108), sVECTOR3D(2.0f, -1.4f, 15.0f));
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D(0.0f, 3.0f, 0.0f));
+		WeaponSlots[1](CreateWeapon(108), sVECTOR3D{2.0f, -1.4f, 15.0f});
+		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
 		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[2](CreateWeapon(108), sVECTOR3D(-2.0f, -1.4f, 15.0f));
-		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D(0.0f, -3.0f, 0.0f));
+		WeaponSlots[2](CreateWeapon(108), sVECTOR3D{-2.0f, -1.4f, 15.0f});
+		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
 		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[3](CreateWeapon(108), sVECTOR3D(4.0f, -1.4f, 15.0f));
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D(0.0f, 6.0f, 0.0f));
+		WeaponSlots[3](CreateWeapon(108), sVECTOR3D{4.0f, -1.4f, 15.0f});
+		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
 		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[4](CreateWeapon(108), sVECTOR3D(-4.0f, -1.4f, 15.0f));
-		WeaponSlots[4].Weapon->SetRotation(sVECTOR3D(0.0f, -6.0f, 0.0f));
+		WeaponSlots[4](CreateWeapon(108), sVECTOR3D{-4.0f, -1.4f, 15.0f});
+		WeaponSlots[4].Weapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
 		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
 
-		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(12.5f, 1.6f, -15.3f));
-		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D(-12.5f, 1.6f, -15.3f));
+		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{12.5f, 1.6f, -15.3f});
+		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D{-12.5f, 1.6f, -15.3f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(0.0f, 2.3f, -25.0f);
+		EnginesLocation[0] = sVECTOR3D{0.0f, 2.3f, -25.0f};
 		if (auto sharedEngine = Engines[0].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 15);
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(12.5f, 1.6f, -20.3f);
+		EnginesLocation[1] = sVECTOR3D{12.5f, 1.6f, -20.3f};
 		if (auto sharedEngine = Engines[1].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 16);
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(-12.5f, 1.6f, -20.3f);
+		EnginesLocation[2] = sVECTOR3D{-12.5f, 1.6f, -20.3f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 16);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(0.0f, -8.0f, 0.0f);
+		EnginesLocation[3] = sVECTOR3D{0.0f, -8.0f, 0.0f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 17);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(0.0f, -8.0f, 0.0f);
+		EnginesLocation[4] = sVECTOR3D{0.0f, -8.0f, 0.0f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 18);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(0.0f, -8.0f, 0.0f);
+		EnginesLocation[5] = sVECTOR3D{0.0f, -8.0f, 0.0f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 19);
 		break;
@@ -1081,71 +1081,71 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 
 	case 8:
 		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D(2.0f, -2.4f, 15.0f));
+		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{2.0f, -2.4f, 15.0f});
 		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(104), sVECTOR3D(-2.0f, -2.4f, 15.0f));
+		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-2.0f, -2.4f, 15.0f});
 		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[2](CreateWeapon(104), sVECTOR3D(2.0f, -4.4f, 15.0f));
+		WeaponSlots[2](CreateWeapon(104), sVECTOR3D{2.0f, -4.4f, 15.0f});
 		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
-		WeaponSlots[3](CreateWeapon(104), sVECTOR3D(-2.0f, -4.4f, 15.0f));
+		WeaponSlots[3](CreateWeapon(104), sVECTOR3D{-2.0f, -4.4f, 15.0f});
 		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
 
-		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D(8.0f, -1.0f, 15.0f));
-		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D(-8.0f, -1.0f, 15.0f));
-		BossWeaponSlots[2](CreateWeapon(107), sVECTOR3D(10.0f, -6.4f, 8.0f));
-		BossWeaponSlots[3](CreateWeapon(107), sVECTOR3D(-10.0f, -6.4f, 8.0f));
-		BossWeaponSlots[4](CreateWeapon(107), sVECTOR3D(15.0f, -6.4f, 5.0f));
-		BossWeaponSlots[5](CreateWeapon(107), sVECTOR3D(-15.0f, -6.4f, 5.0f));
+		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{8.0f, -1.0f, 15.0f});
+		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D{-8.0f, -1.0f, 15.0f});
+		BossWeaponSlots[2](CreateWeapon(107), sVECTOR3D{10.0f, -6.4f, 8.0f});
+		BossWeaponSlots[3](CreateWeapon(107), sVECTOR3D{-10.0f, -6.4f, 8.0f});
+		BossWeaponSlots[4](CreateWeapon(107), sVECTOR3D{15.0f, -6.4f, 5.0f});
+		BossWeaponSlots[5](CreateWeapon(107), sVECTOR3D{-15.0f, -6.4f, 5.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
-		EnginesLocation[0] = sVECTOR3D(15.0f, 4.4f, -29.0f);
+		EnginesLocation[0] = sVECTOR3D{15.0f, 4.4f, -29.0f};
 		if (auto sharedEngine = Engines[0].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 15);
-			sharedEngine->CreationSize = sVECTOR3D(4.0f,6.0f,3.0f);
+			sharedEngine->CreationSize = sVECTOR3D{4.0f, 6.0f, 3.0f};
 		}
 		Engines[1] = vw_CreateParticleSystem();
-		EnginesLocation[1] = sVECTOR3D(-15.0f, 4.4f, -29.0f);
+		EnginesLocation[1] = sVECTOR3D{-15.0f, 4.4f, -29.0f};
 		if (auto sharedEngine = Engines[1].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 15);
-			sharedEngine->CreationSize = sVECTOR3D(4.0f,6.0f,3.0f);
+			sharedEngine->CreationSize = sVECTOR3D{4.0f, 6.0f, 3.0f};
 		}
 		Engines[2] = vw_CreateParticleSystem();
-		EnginesLocation[2] = sVECTOR3D(5.2f, 5.4f, -20.6f);
+		EnginesLocation[2] = sVECTOR3D{5.2f, 5.4f, -20.6f};
 		if (auto sharedEngine = Engines[2].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
 		Engines[3] = vw_CreateParticleSystem();
-		EnginesLocation[3] = sVECTOR3D(-5.2f, 5.4f, -20.6f);
+		EnginesLocation[3] = sVECTOR3D{-5.2f, 5.4f, -20.6f};
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
 		Engines[4] = vw_CreateParticleSystem();
-		EnginesLocation[4] = sVECTOR3D(5.2f, -8.8f, -22.6f);
+		EnginesLocation[4] = sVECTOR3D{5.2f, -8.8f, -22.6f};
 		if (auto sharedEngine = Engines[4].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
 		Engines[5] = vw_CreateParticleSystem();
-		EnginesLocation[5] = sVECTOR3D(-5.2f, -8.8f, -22.6f);
+		EnginesLocation[5] = sVECTOR3D{-5.2f, -8.8f, -22.6f};
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
 		Engines[6] = vw_CreateParticleSystem();
-		EnginesLocation[6] = sVECTOR3D(11.2f, -2.8f, -10.0f);
+		EnginesLocation[6] = sVECTOR3D{11.2f, -2.8f, -10.0f};
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
 		Engines[7] = vw_CreateParticleSystem();
-		EnginesLocation[7] = sVECTOR3D(-11.2f, -2.8f, -10.0f);
+		EnginesLocation[7] = sVECTOR3D{-11.2f, -2.8f, -10.0f};
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
 		Engines[8] = vw_CreateParticleSystem();
-		EnginesLocation[8] = sVECTOR3D(0.0f, -10.0f, -3.0f);
+		EnginesLocation[8] = sVECTOR3D{0.0f, -10.0f, -3.0f};
 		if (auto sharedEngine = Engines[8].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 17);
-			sharedEngine->CreationSize = sVECTOR3D(17.0f,1.0f,17.0f);
+			sharedEngine->CreationSize = sVECTOR3D{17.0f, 1.0f, 17.0f};
 			sharedEngine->DeadZone = 16.9f;
 		}
 		Engines[9] = vw_CreateParticleSystem();
-		EnginesLocation[9] = sVECTOR3D(0.0f, -10.0f, -3.0f);
+		EnginesLocation[9] = sVECTOR3D{0.0f, -10.0f, -3.0f};
 		if (auto sharedEngine = Engines[9].lock()) {
 			SetAlienSpaceMotherShipEngine(sharedEngine, 18);
-			sharedEngine->CreationSize = sVECTOR3D(17.0f,1.0f,17.0f);
+			sharedEngine->CreationSize = sVECTOR3D{17.0f, 1.0f, 17.0f};
 			sharedEngine->DeadZone = 16.9f;
 		}
 		break;
