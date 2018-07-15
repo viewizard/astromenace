@@ -37,9 +37,7 @@ namespace astromenace {
 
 namespace {
 
-// Указатели на начальный и конечный объект в списке
-cWeapon *StartWeapon = nullptr;
-cWeapon *EndWeapon = nullptr;
+std::list<cWeapon*> WeaponList{};
 
 } // unnamed namespace
 
@@ -155,57 +153,13 @@ static std::vector<sWeaponData> PresetPirateWeaponData{
 };
 
 
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-static void AttachWeapon(cWeapon *Weapon)
-{
-	if (Weapon == nullptr)
-		return;
-
-	// первый в списке...
-	if (EndWeapon == nullptr) {
-		Weapon->Prev = nullptr;
-		Weapon->Next = nullptr;
-		StartWeapon = Weapon;
-		EndWeapon = Weapon;
-	} else { // продолжаем заполнение...
-		Weapon->Prev = EndWeapon;
-		Weapon->Next = nullptr;
-		EndWeapon->Next = Weapon;
-		EndWeapon = Weapon;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-static void DetachWeapon(cWeapon *Weapon)
-{
-	if (Weapon == nullptr)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartWeapon == Weapon) StartWeapon = Weapon->Next;
-	if (EndWeapon == Weapon) EndWeapon = Weapon->Prev;
-
-
-	if (Weapon->Next != nullptr)
-		Weapon->Next->Prev = Weapon->Prev;
-	else if (Weapon->Prev != nullptr)
-		Weapon->Prev->Next = nullptr;
-	if (Weapon->Prev != nullptr)
-		Weapon->Prev->Next = Weapon->Next;
-	else if (Weapon->Next != nullptr)
-		Weapon->Next->Prev = nullptr;
-}
-
 /*
  * Create cWeapon object.
  */
 cWeapon *CreateWeapon(int WeaponNum)
 {
-	return new cWeapon{WeaponNum};
+	WeaponList.emplace_front(new cWeapon{WeaponNum});
+	return WeaponList.front();
 }
 
 //-----------------------------------------------------------------------------
@@ -213,13 +167,11 @@ cWeapon *CreateWeapon(int WeaponNum)
 //-----------------------------------------------------------------------------
 void UpdateAllWeapon(float Time)
 {
-	cWeapon *tmp = StartWeapon;
-	while (tmp != nullptr) {
-		cWeapon *tmp2 = tmp->Next;
-		// делаем обновление данных по объекту
-		if (!tmp->Update(Time))
-			delete tmp;
-		tmp = tmp2;
+	for (auto iter = WeaponList.begin(); iter != WeaponList.end();) {
+		if (!(*iter)->Update(Time))
+			iter = WeaponList.erase(iter);
+		else
+			++iter;
 	}
 }
 
@@ -228,11 +180,8 @@ void UpdateAllWeapon(float Time)
 //-----------------------------------------------------------------------------
 void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap)
 {
-	cWeapon *tmp = StartWeapon;
-	while (tmp != nullptr) {
-		cWeapon *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass, ShadowMap);
-		tmp = tmp2;
+	for (auto &tmpWeapon : WeaponList) {
+		tmpWeapon->Draw(VertexOnlyPass, ShadowMap);
 	}
 }
 
@@ -241,7 +190,13 @@ void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap)
  */
 void ReleaseWeapon(cWeapon *Object)
 {
-	delete Object;
+	for (auto iter = WeaponList.begin(); iter != WeaponList.end();) {
+		if (*iter == Object) {
+			WeaponList.erase(iter);
+			return;
+		}
+		++iter;
+	}
 }
 
 /*
@@ -260,12 +215,7 @@ void ReleaseWeaponLazy(cWeapon *Object)
 //-----------------------------------------------------------------------------
 void ReleaseAllWeapons()
 {
-	cWeapon *tmp = StartWeapon;
-	while (tmp != nullptr) {
-		cWeapon *tmp2 = tmp->Next;
-		delete tmp;
-		tmp = tmp2;
-	}
+	WeaponList.clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -652,8 +602,6 @@ cWeapon::cWeapon(int WeaponNum)
 	// вес
 	Weight = 500;
 
-	AttachWeapon(this);
-
 	if (WeaponNum <= 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon object with Number " << WeaponNum << "\n";
 		return;
@@ -820,8 +768,6 @@ cWeapon::~cWeapon()
 		if (vw_IsSoundAvailable(LaserMaserSoundNum))
 			vw_StopSound(LaserMaserSoundNum, 150);
 	}
-
-	DetachWeapon(this);
 }
 
 //-----------------------------------------------------------------------------
