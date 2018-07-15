@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "ground_object.h"
 #include "../../assets/texture.h"
 #include "../weapon/weapon.h"
@@ -58,9 +60,11 @@ const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData{
 //-----------------------------------------------------------------------------
 cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 {
-	if ((MilitaryBuildingNum <= 0) || (static_cast<unsigned>(MilitaryBuildingNum) > PresetMilitaryBuildingData.size())) {
+	if ((MilitaryBuildingNum <= 0) ||
+	    (static_cast<unsigned>(MilitaryBuildingNum) > PresetMilitaryBuildingData.size())) {
 		std::cerr << __func__ << "(): "
-			  << "Could not init cMilitaryBuilding object with Number " << MilitaryBuildingNum << "\n";
+			  << "Could not init cMilitaryBuilding object with Number "
+			  << MilitaryBuildingNum << "\n";
 		return;
 	}
 
@@ -76,26 +80,26 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
 
-	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Strength/GameEnemyArmorPenalty;
+	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Strength / GameEnemyArmorPenalty;
 
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (MilitaryBuildingNum) {
 	case 1:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{0.3f, 4.6f, 2.6f});
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-0.3f, 4.6f, 2.6f});
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.3f, 4.6f, 2.6f});
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{-0.3f, 4.6f, 2.6f});
 		WeaponFireType = 2;
 
-		TargetHorizChunkNums.resize(4);
-		TargetHorizChunkNums[0] = 1;
-		TargetHorizChunkNums[1] = 2;
-		TargetHorizChunkNums[2] = 3;
-		TargetHorizChunkNums[3] = 4;
+		TargetHorizChunkNums.reserve(4);
+		TargetHorizChunkNums.emplace_back(1);
+		TargetHorizChunkNums.emplace_back(2);
+		TargetHorizChunkNums.emplace_back(3);
+		TargetHorizChunkNums.emplace_back(4);
 
-		TargetVertChunkNums.resize(3);
-		TargetVertChunkNums[0] = 2;
-		TargetVertChunkNums[1] = 3;
-		TargetVertChunkNums[2] = 4;
+		TargetVertChunkNums.reserve(3);
+		TargetVertChunkNums.emplace_back(2);
+		TargetVertChunkNums.emplace_back(3);
+		TargetVertChunkNums.emplace_back(4);
 		TargetVertChunksMaxAngle = 60.0f;
 		break;
 
@@ -105,79 +109,79 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 			sharedWeapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
-		TargetHorizChunkNums.resize(4);
-		TargetHorizChunkNums[0] = 1;
-		TargetHorizChunkNums[1] = 2;
-		TargetHorizChunkNums[2] = 3;
-		TargetHorizChunkNums[3] = 4;
+		TargetHorizChunkNums.reserve(4);
+		TargetHorizChunkNums.emplace_back(1);
+		TargetHorizChunkNums.emplace_back(2);
+		TargetHorizChunkNums.emplace_back(3);
+		TargetHorizChunkNums.emplace_back(4);
 
-		TargetVertChunkNums.resize(3);
-		TargetVertChunkNums[0] = 2;
-		TargetVertChunkNums[1] = 3;
-		TargetVertChunkNums[2] = 4;
+		TargetVertChunkNums.reserve(3);
+		TargetVertChunkNums.emplace_back(2);
+		TargetVertChunkNums.emplace_back(3);
+		TargetVertChunkNums.emplace_back(4);
 		TargetVertChunksMaxAngle = 60.0f;
 
 		BarrelChunkNums.emplace_back(4);
 		break;
 
 	case 3:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(205), sVECTOR3D{2.8f, 5.3f, 7.5f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(205), sVECTOR3D{2.8f, 5.3f, 7.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(205), sVECTOR3D{-2.8f, 5.3f, 7.5f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(205), sVECTOR3D{-2.8f, 5.3f, 7.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 1;
-		TargetHorizChunkNums[1] = 2;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(1);
+		TargetHorizChunkNums.emplace_back(2);
 
 		TargetVertChunkNums.emplace_back(2);
 		TargetVertChunksMaxAngle = 60.0f;
 		break;
 
 	case 4:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{3.6f, 8.5f, 4.0f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{3.6f, 8.5f, 4.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-3.6f, 8.5f, 4.0f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{-3.6f, 8.5f, 4.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 2;
 
-		TargetHorizChunkNums.resize(4);
-		TargetHorizChunkNums[0] = 1;
-		TargetHorizChunkNums[1] = 2;
-		TargetHorizChunkNums[2] = 3;
-		TargetHorizChunkNums[3] = 4;
+		TargetHorizChunkNums.reserve(4);
+		TargetHorizChunkNums.emplace_back(1);
+		TargetHorizChunkNums.emplace_back(2);
+		TargetHorizChunkNums.emplace_back(3);
+		TargetHorizChunkNums.emplace_back(4);
 
-		TargetVertChunkNums.resize(3);
-		TargetVertChunkNums[0] = 2;
-		TargetVertChunkNums[1] = 3;
-		TargetVertChunkNums[2] = 4;
+		TargetVertChunkNums.reserve(3);
+		TargetVertChunkNums.emplace_back(2);
+		TargetVertChunkNums.emplace_back(3);
+		TargetVertChunkNums.emplace_back(4);
 		TargetVertChunksMaxAngle = 60.0f;
 
-		BarrelChunkNums.resize(2);
-		BarrelChunkNums[0] = 3;
-		BarrelChunkNums[1] = 4;
+		BarrelChunkNums.reserve(2);
+		BarrelChunkNums.emplace_back(3);
+		BarrelChunkNums.emplace_back(4);
 		break;
 
 	case 5:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{1.95f, 6.5f, 3.7f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{1.95f, 6.5f, 3.7f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 3.0f;
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-1.95f, 6.5f, 3.7f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{-1.95f, 6.5f, 3.7f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 1;
-		TargetHorizChunkNums[1] = 2;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(1);
+		TargetHorizChunkNums.emplace_back(2);
 
 		TargetVertChunkNums.emplace_back(2);
 		TargetVertChunksMaxAngle = 60.0f;
@@ -188,9 +192,9 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 3.5f;
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 2;
-		TargetHorizChunkNums[1] = 1;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(2);
+		TargetHorizChunkNums.emplace_back(1);
 
 		TargetVertChunkNums.emplace_back(1);
 		TargetVertChunksMaxAngle = 80.0f;
@@ -199,16 +203,16 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	case 7:
 		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D{0.0f, 5.2f, 10.3f});
 
-		TargetHorizChunkNums.resize(4);
-		TargetHorizChunkNums[0] = 4;
-		TargetHorizChunkNums[1] = 2;
-		TargetHorizChunkNums[2] = 3;
-		TargetHorizChunkNums[3] = 1;
+		TargetHorizChunkNums.reserve(4);
+		TargetHorizChunkNums.emplace_back(4);
+		TargetHorizChunkNums.emplace_back(2);
+		TargetHorizChunkNums.emplace_back(3);
+		TargetHorizChunkNums.emplace_back(1);
 
-		TargetVertChunkNums.resize(3);
-		TargetVertChunkNums[0] = 3;
-		TargetVertChunkNums[1] = 2;
-		TargetVertChunkNums[2] = 1;
+		TargetVertChunkNums.reserve(3);
+		TargetVertChunkNums.emplace_back(3);
+		TargetVertChunkNums.emplace_back(2);
+		TargetVertChunkNums.emplace_back(1);
 		TargetVertChunksMaxAngle = 60.0f;
 
 		BarrelChunkNums.emplace_back(1);
@@ -216,9 +220,8 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (!TargetHorizChunkNums.empty()) {
+	if (!TargetHorizChunkNums.empty())
 		BaseBound = Chunks[TargetHorizChunkNums[0]].Location;
-	}
 
 	if (!TargetVertChunkNums.empty()) {
 		if (!TargetHorizChunkNums.empty())
@@ -235,6 +238,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 		else
 			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
+
+	assert(WeaponSlots.capacity() == WeaponSlots.size());
+	assert(TargetHorizChunkNums.capacity() == TargetHorizChunkNums.size());
+	assert(TargetVertChunkNums.capacity() == TargetVertChunkNums.size());
+	assert(BarrelChunkNums.capacity() == BarrelChunkNums.size());
 }
 
 } // astromenace namespace

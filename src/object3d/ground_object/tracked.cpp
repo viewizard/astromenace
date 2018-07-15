@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "ground_object.h"
 #include "../../assets/texture.h"
 #include "../weapon/weapon.h"
@@ -63,8 +65,11 @@ const std::vector<sTrackedData> PresetTrackedData{
 //-----------------------------------------------------------------------------
 cTracked::cTracked(int TrackedNum)
 {
-	if ((TrackedNum <= 0) || (static_cast<unsigned>(TrackedNum) > PresetTrackedData.size())) {
-		std::cerr << __func__ << "(): " << "Could not init cTracked object with Number " << TrackedNum << "\n";
+	if ((TrackedNum <= 0) ||
+	    (static_cast<unsigned>(TrackedNum) > PresetTrackedData.size())) {
+		std::cerr << __func__ << "(): "
+			  << "Could not init cTracked object with Number "
+			  << TrackedNum << "\n";
 		return;
 	}
 
@@ -86,260 +91,250 @@ cTracked::cTracked(int TrackedNum)
 	ResistanceSystems = 1.0f;
 	SpeedToWheelRotarySpeedFactor = PresetTrackedData[TrackedNum - 1].SpeedToWheelRotarySpeedFactor;
 
-	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength/GameEnemyArmorPenalty;
+	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength / GameEnemyArmorPenalty;
 
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (TrackedNum) {
 	case 1:
 		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D{0.0f, 5.5f, 9.0f});
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 2;
-		WheelChunkNums[1] = 3;
-		WheelChunkNums[2] = 4;
-		WheelChunkNums[3] = 6;
-		WheelChunkNums[4] = 7;
-		WheelChunkNums[5] = 8;
-		WheelChunkNums[6] = 9;
-		WheelChunkNums[7] = 10;
-		WheelChunkNums[8] = 11;
-		WheelChunkNums[9] = 12;
-		WheelChunkNums[10] = 13;
-		WheelChunkNums[11] = 14;
-		WheelChunkNums[12] = 15;
-		WheelChunkNums[13] = 16;
-		WheelChunkNums[14] = 17;
-		WheelChunkNums[15] = 18;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
+		WheelChunkNums.emplace_back(17);
+		WheelChunkNums.emplace_back(18);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 1;
-		TargetHorizChunkNums[1] = 5;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(1);
+		TargetHorizChunkNums.emplace_back(5);
 
 		TargetVertChunkNums.emplace_back(5);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 19;
-		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 2:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{0.1f, 6.1f, -0.4f});
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-0.1f, 6.1f, -0.4f});
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.1f, 6.1f, -0.4f});
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{-0.1f, 6.1f, -0.4f});
 		WeaponFireType = 2;
 
-		WheelChunkNums.resize(10);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
+		WheelChunkNums.reserve(10);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 11;
-		TargetHorizChunkNums[1] = 12;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(11);
+		TargetHorizChunkNums.emplace_back(12);
 
 		TargetVertChunkNums.emplace_back(12);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 13;
-		Texture[13] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 3:
 		WeaponSlots.emplace_back(CreateWeapon(213), sVECTOR3D{0.0f, 5.2f, 3.7f});
 
-		WheelChunkNums.resize(14);
-		WheelChunkNums[0] = 0;
-		WheelChunkNums[1] = 1;
-		WheelChunkNums[2] = 2;
-		WheelChunkNums[3] = 3;
-		WheelChunkNums[4] = 4;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 10;
-		WheelChunkNums[8] = 11;
-		WheelChunkNums[9] = 12;
-		WheelChunkNums[10] = 13;
-		WheelChunkNums[11] = 14;
-		WheelChunkNums[12] = 15;
-		WheelChunkNums[13] = 16;
+		WheelChunkNums.reserve(14);
+		WheelChunkNums.emplace_back(0);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 8;
-		TargetHorizChunkNums[1] = 9;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(8);
+		TargetHorizChunkNums.emplace_back(9);
 
 		TargetVertChunkNums.emplace_back(9);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 17;
-		Texture[17] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 4:
 		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D{0.0f, 5.3f, 6.5f});
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
-		WheelChunkNums[10] = 11;
-		WheelChunkNums[11] = 12;
-		WheelChunkNums[12] = 13;
-		WheelChunkNums[13] = 14;
-		WheelChunkNums[14] = 15;
-		WheelChunkNums[15] = 16;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
-		TargetHorizChunkNums.resize(3);
-		TargetHorizChunkNums[0] = 17;
-		TargetHorizChunkNums[1] = 18;
-		TargetHorizChunkNums[2] = 19;
+		TargetHorizChunkNums.reserve(3);
+		TargetHorizChunkNums.emplace_back(17);
+		TargetHorizChunkNums.emplace_back(18);
+		TargetHorizChunkNums.emplace_back(19);
 
 		TargetVertChunkNums.emplace_back(18);
 		TargetVertChunksMaxAngle = 50.0f;
 
-		Chunks[19].Location.z -= 1.0f;
-
 		TrackChunkNum = 20;
-		Texture[20] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 5:
 		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D{0.0f, 5.8f, 4.5f});
 
-		WheelChunkNums.resize(14);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 10;
-		WheelChunkNums[8] = 11;
-		WheelChunkNums[9] = 12;
-		WheelChunkNums[10] = 13;
-		WheelChunkNums[11] = 14;
-		WheelChunkNums[12] = 15;
-		WheelChunkNums[13] = 16;
+		WheelChunkNums.reserve(14);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 9;
-		TargetHorizChunkNums[1] = 8;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(9);
+		TargetHorizChunkNums.emplace_back(8);
 
 		TargetVertChunkNums.emplace_back(8);
 		TargetVertChunksMaxAngle = 30.0f;
 
 		TrackChunkNum = 17;
-		Texture[17] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 6:
 		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D{0.0f, 4.9f, 4.0f});
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 2;
-		WheelChunkNums[1] = 3;
-		WheelChunkNums[2] = 4;
-		WheelChunkNums[3] = 5;
-		WheelChunkNums[4] = 6;
-		WheelChunkNums[5] = 7;
-		WheelChunkNums[6] = 8;
-		WheelChunkNums[7] = 9;
-		WheelChunkNums[8] = 10;
-		WheelChunkNums[9] = 11;
-		WheelChunkNums[10] = 12;
-		WheelChunkNums[11] = 13;
-		WheelChunkNums[12] = 14;
-		WheelChunkNums[13] = 15;
-		WheelChunkNums[14] = 16;
-		WheelChunkNums[15] = 17;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
+		WheelChunkNums.emplace_back(17);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 1;
-		TargetHorizChunkNums[1] = 18;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(1);
+		TargetHorizChunkNums.emplace_back(18);
 
 		TargetVertChunkNums.emplace_back(18);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 19;
-		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 7:
 		WeaponSlots.emplace_back(CreateWeapon(212), sVECTOR3D{0.0f, 7.6f, 5.5f});
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
-		WheelChunkNums[10] = 13;
-		WheelChunkNums[11] = 14;
-		WheelChunkNums[12] = 15;
-		WheelChunkNums[13] = 16;
-		WheelChunkNums[14] = 17;
-		WheelChunkNums[15] = 18;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
+		WheelChunkNums.emplace_back(17);
+		WheelChunkNums.emplace_back(18);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 12;
-		TargetHorizChunkNums[1] = 11;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(12);
+		TargetHorizChunkNums.emplace_back(11);
 
 		TargetVertChunkNums.emplace_back(11);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 19;
-		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 8:
 		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D{0.0f, 7.0f, 8.5f});
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
-		WheelChunkNums[10] = 11;
-		WheelChunkNums[11] = 12;
-		WheelChunkNums[12] = 13;
-		WheelChunkNums[13] = 14;
-		WheelChunkNums[14] = 15;
-		WheelChunkNums[15] = 16;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 17;
-		TargetHorizChunkNums[1] = 18;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(17);
+		TargetHorizChunkNums.emplace_back(18);
 
 		TargetVertChunkNums.emplace_back(18);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 19;
-		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 9:
@@ -347,33 +342,32 @@ cTracked::cTracked(int TrackedNum)
 		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
-		WheelChunkNums[10] = 11;
-		WheelChunkNums[11] = 12;
-		WheelChunkNums[12] = 13;
-		WheelChunkNums[13] = 14;
-		WheelChunkNums[14] = 15;
-		WheelChunkNums[15] = 16;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 18;
-		TargetHorizChunkNums[1] = 0;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(18);
+		TargetHorizChunkNums.emplace_back(0);
 
 		TargetVertChunkNums.emplace_back(0);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 19;
-		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 10:
@@ -381,173 +375,170 @@ cTracked::cTracked(int TrackedNum)
 		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
-		WheelChunkNums[10] = 11;
-		WheelChunkNums[11] = 12;
-		WheelChunkNums[12] = 13;
-		WheelChunkNums[13] = 14;
-		WheelChunkNums[14] = 15;
-		WheelChunkNums[15] = 16;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 18;
-		TargetHorizChunkNums[1] = 0;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(18);
+		TargetHorizChunkNums.emplace_back(0);
 
 		TargetVertChunkNums.emplace_back(0);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 19;
-		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 11:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(209), sVECTOR3D{2.2f, 5.4f, 7.0f});
-		WeaponSlots[1](CreateWeapon(209), sVECTOR3D{-2.2f, 5.4f, 7.0f});
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(209), sVECTOR3D{2.2f, 5.4f, 7.0f});
+		WeaponSlots.emplace_back(CreateWeapon(209), sVECTOR3D{-2.2f, 5.4f, 7.0f});
 		WeaponFireType = 3;
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
-		WheelChunkNums[10] = 11;
-		WheelChunkNums[11] = 12;
-		WheelChunkNums[12] = 13;
-		WheelChunkNums[13] = 14;
-		WheelChunkNums[14] = 15;
-		WheelChunkNums[15] = 16;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
 		TargetVertChunkNums.emplace_back(0);
 		TargetVertChunksMaxAngle = 55.0f;
 
 		TrackChunkNum = 18;
-		Texture[18] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 12:
-		WeaponSlots.resize(4);
-		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{0.55f, 5.0f, 2.0f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(4);
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{0.55f, 5.0f, 2.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-0.55f, 5.0f, 2.0f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{-0.55f, 5.0f, 2.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[2](CreateWeapon(206), sVECTOR3D{1.65f, 5.0f, 2.0f});
-		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{1.65f, 5.0f, 2.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[3](CreateWeapon(206), sVECTOR3D{-1.65f, 5.0f, 2.0f});
-		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{-1.65f, 5.0f, 2.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
-		WheelChunkNums.resize(16);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
-		WheelChunkNums[8] = 9;
-		WheelChunkNums[9] = 10;
-		WheelChunkNums[10] = 11;
-		WheelChunkNums[11] = 12;
-		WheelChunkNums[12] = 13;
-		WheelChunkNums[13] = 14;
-		WheelChunkNums[14] = 15;
-		WheelChunkNums[15] = 16;
+		WheelChunkNums.reserve(16);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
+		WheelChunkNums.emplace_back(16);
 
-
-		TargetVertChunkNums.resize(2);
-		TargetVertChunkNums[0] = 18;
-		TargetVertChunkNums[1] = 0;
+		TargetVertChunkNums.reserve(2);
+		TargetVertChunkNums.emplace_back(18);
+		TargetVertChunkNums.emplace_back(0);
 		TargetVertChunksMaxAngle = 40.0f;
 
 		TrackChunkNum = 19;
-		Texture[19] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 13:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{1.4f, 5.0f, 0.4f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{1.4f, 5.0f, 0.4f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-1.4f, 5.0f, 0.4f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{-1.4f, 5.0f, 0.4f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
-		WheelChunkNums.resize(14);
-		WheelChunkNums[0] = 2;
-		WheelChunkNums[1] = 3;
-		WheelChunkNums[2] = 4;
-		WheelChunkNums[3] = 5;
-		WheelChunkNums[4] = 6;
-		WheelChunkNums[5] = 7;
-		WheelChunkNums[6] = 8;
-		WheelChunkNums[7] = 9;
-		WheelChunkNums[8] = 10;
-		WheelChunkNums[9] = 11;
-		WheelChunkNums[10] = 12;
-		WheelChunkNums[11] = 13;
-		WheelChunkNums[12] = 14;
-		WheelChunkNums[13] = 15;
+		WheelChunkNums.reserve(14);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
+		WheelChunkNums.emplace_back(10);
+		WheelChunkNums.emplace_back(11);
+		WheelChunkNums.emplace_back(12);
+		WheelChunkNums.emplace_back(13);
+		WheelChunkNums.emplace_back(14);
+		WheelChunkNums.emplace_back(15);
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 0;
-		TargetHorizChunkNums[1] = 16;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(0);
+		TargetHorizChunkNums.emplace_back(16);
 
 		TargetVertChunkNums.emplace_back(16);
 		TargetVertChunksMaxAngle = 50.0f;
 
 		TrackChunkNum = 17;
-		Texture[17] = GetPreloadedTextureAsset("models/track.vw2d");
 		break;
 
 	case 14:
-		WheelChunkNums.resize(8);
-		WheelChunkNums[0] = 0;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
-		WheelChunkNums[4] = 5;
-		WheelChunkNums[5] = 6;
-		WheelChunkNums[6] = 7;
-		WheelChunkNums[7] = 8;
+		WheelChunkNums.reserve(8);
+		WheelChunkNums.emplace_back(0);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
 
 		TrackChunkNum = 10;
-		Texture[10] = GetPreloadedTextureAsset("models/track.vw2d");
 		TrackRotationDirection = -1;
 		break;
 	}
 
+	assert(TrackChunkNum >= 0);
+	assert(TrackChunkNum < static_cast<int>(Texture.size()));
+	Texture[TrackChunkNum] = GetPreloadedTextureAsset("models/track.vw2d");
+
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
-	for (unsigned i = 0; i < WheelChunkNums.size(); i++) {
-		Chunks[WheelChunkNums[i]].Rotation.x = vw_fRandNum(360.0f);
+	for (const auto &WheelChunkNum : WheelChunkNums) {
+		Chunks[WheelChunkNum].Rotation.x = vw_fRandNum(360.0f);
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
-	if (!TargetHorizChunkNums.empty()) {
+	if (!TargetHorizChunkNums.empty())
 		BaseBound = Chunks[TargetHorizChunkNums[0]].Location;
-	}
 
 	if (!TargetVertChunkNums.empty()) {
 		if (!TargetHorizChunkNums.empty())
@@ -564,6 +555,12 @@ cTracked::cTracked(int TrackedNum)
 		else
 			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
+
+	assert(WheelChunkNums.capacity() == WheelChunkNums.size());
+	assert(WeaponSlots.capacity() == WeaponSlots.size());
+	assert(TargetHorizChunkNums.capacity() == TargetHorizChunkNums.size());
+	assert(TargetVertChunkNums.capacity() == TargetVertChunkNums.size());
+	assert(BarrelChunkNums.capacity() == BarrelChunkNums.size());
 }
 
 } // astromenace namespace

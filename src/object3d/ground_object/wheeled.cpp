@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "ground_object.h"
 #include "../../assets/texture.h"
 #include "../weapon/weapon.h"
@@ -60,8 +62,11 @@ const std::vector<sWheeledData> PresetWheeledData{
 //-----------------------------------------------------------------------------
 cWheeled::cWheeled(int WheeledNum)
 {
-	if ((WheeledNum <= 0) || (static_cast<unsigned>(WheeledNum) > PresetWheeledData.size())) {
-		std::cerr << __func__ << "(): " << "Could not init cWheeled object with Number " << WheeledNum << "\n";
+	if ((WheeledNum <= 0) ||
+	    (static_cast<unsigned>(WheeledNum) > PresetWheeledData.size())) {
+		std::cerr << __func__ << "(): "
+			  << "Could not init cWheeled object with Number "
+			  << WheeledNum << "\n";
 		return;
 	}
 
@@ -80,27 +85,27 @@ cWheeled::cWheeled(int WheeledNum)
 	ResistanceSystems = 1.0f;
 	SpeedToWheelRotarySpeedFactor = PresetWheeledData[WheeledNum - 1].SpeedToWheelRotarySpeedFactor;
 
-	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength/GameEnemyArmorPenalty;
+	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength / GameEnemyArmorPenalty;
 
 	// установка доп. текстуры и других настроек для каждой модели
 	switch (WheeledNum) {
 	case 1:
-		WeaponSlots.resize(4);
-		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{0.3f, 4.5f, -1.5f});
-		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-0.3f, 4.5f, -1.5f});
-		WeaponSlots[2](CreateWeapon(206), sVECTOR3D{0.9f, 4.5f, -1.5f});
-		WeaponSlots[3](CreateWeapon(206), sVECTOR3D{-0.9f, 4.5f, -1.5f});
+		WeaponSlots.reserve(4);
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{0.3f, 4.5f, -1.5f});
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{-0.3f, 4.5f, -1.5f});
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{0.9f, 4.5f, -1.5f});
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{-0.9f, 4.5f, -1.5f});
 		WeaponFireType = 3;
 
-		WheelChunkNums.resize(4);
-		WheelChunkNums[0] = 0;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
+		WheelChunkNums.reserve(4);
+		WheelChunkNums.emplace_back(0);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
 
-		SteerableWheelChunkNums.resize(2);
-		SteerableWheelChunkNums[0] = 3;
-		SteerableWheelChunkNums[1] = 4;
+		SteerableWheelChunkNums.reserve(2);
+		SteerableWheelChunkNums.emplace_back(3);
+		SteerableWheelChunkNums.emplace_back(4);
 		MaxSteerableWheelAngle = 30.0f;
 
 		TargetVertChunkNums.emplace_back(5);
@@ -108,44 +113,44 @@ cWheeled::cWheeled(int WheeledNum)
 		break;
 
 	case 2:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{1.3f, 3.5f, -1.5f});
-		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-1.3f, 3.5f, -1.5f});
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{1.3f, 3.5f, -1.5f});
+		WeaponSlots.emplace_back(CreateWeapon(206), sVECTOR3D{-1.3f, 3.5f, -1.5f});
 		WeaponFireType = 3;
 		DoNotCalculateRotation = true;
 
-		WheelChunkNums.resize(4);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
+		WheelChunkNums.reserve(4);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
 
-		SteerableWheelChunkNums.resize(2);
-		SteerableWheelChunkNums[0] = 1;
-		SteerableWheelChunkNums[1] = 4;
+		SteerableWheelChunkNums.reserve(2);
+		SteerableWheelChunkNums.emplace_back(1);
+		SteerableWheelChunkNums.emplace_back(4);
 		MaxSteerableWheelAngle = 20.0f;
 		break;
 
 	case 3:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{0.8f, 4.2f, -1.0f});
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-0.8f, 4.2f, -1.0f});
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.8f, 4.2f, -1.0f});
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{-0.8f, 4.2f, -1.0f});
 		WeaponFireType = 2;
 
-		WheelChunkNums.resize(4);
-		WheelChunkNums[0] = 0;
-		WheelChunkNums[1] = 1;
-		WheelChunkNums[2] = 2;
-		WheelChunkNums[3] = 5;
+		WheelChunkNums.reserve(4);
+		WheelChunkNums.emplace_back(0);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(5);
 
-		SteerableWheelChunkNums.resize(2);
-		SteerableWheelChunkNums[0] = 0;
-		SteerableWheelChunkNums[1] = 1;
+		SteerableWheelChunkNums.reserve(2);
+		SteerableWheelChunkNums.emplace_back(0);
+		SteerableWheelChunkNums.emplace_back(1);
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 3;
-		TargetHorizChunkNums[1] = 6;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(3);
+		TargetHorizChunkNums.emplace_back(6);
 
 		TargetVertChunkNums.emplace_back(6);
 		TargetVertChunksMaxAngle = 60.0f;
@@ -154,101 +159,101 @@ cWheeled::cWheeled(int WheeledNum)
 	case 4:
 		WeaponSlots.emplace_back(CreateWeapon(207), sVECTOR3D{0.0f, 4.5f, -4.0f});
 
-		WheelChunkNums.resize(4);
-		WheelChunkNums[0] = 0;
-		WheelChunkNums[1] = 1;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
+		WheelChunkNums.reserve(4);
+		WheelChunkNums.emplace_back(0);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
 
-		SteerableWheelChunkNums.resize(2);
-		SteerableWheelChunkNums[0] = 0;
-		SteerableWheelChunkNums[1] = 3;
+		SteerableWheelChunkNums.reserve(2);
+		SteerableWheelChunkNums.emplace_back(0);
+		SteerableWheelChunkNums.emplace_back(3);
 		MaxSteerableWheelAngle = 20.0f;
 		break;
 
 	case 5:
 		WeaponSlots.emplace_back(CreateWeapon(208), sVECTOR3D{0.0f, 4.5f, -4.0f});
 
-		WheelChunkNums.resize(4);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
+		WheelChunkNums.reserve(4);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
 
-		SteerableWheelChunkNums.resize(2);
-		SteerableWheelChunkNums[0] = 1;
-		SteerableWheelChunkNums[1] = 2;
+		SteerableWheelChunkNums.reserve(2);
+		SteerableWheelChunkNums.emplace_back(1);
+		SteerableWheelChunkNums.emplace_back(2);
 		MaxSteerableWheelAngle = 30.0f;
 		break;
 
 	case 6:
 		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.0f, 6.0f, -3.0f});
 
-		WheelChunkNums.resize(4);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
+		WheelChunkNums.reserve(4);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
 
-		SteerableWheelChunkNums.resize(2);
-		SteerableWheelChunkNums[0] = 1;
-		SteerableWheelChunkNums[1] = 4;
+		SteerableWheelChunkNums.reserve(2);
+		SteerableWheelChunkNums.emplace_back(1);
+		SteerableWheelChunkNums.emplace_back(4);
 		MaxSteerableWheelAngle = 30.0f;
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 5;
-		TargetHorizChunkNums[1] = 6;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(5);
+		TargetHorizChunkNums.emplace_back(6);
 
 		TargetVertChunkNums.emplace_back(6);
 		TargetVertChunksMaxAngle = 40.0f;
 		break;
 
 	case 7:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{0.1f, 5.0f, -1.0f});
-		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-0.1f, 5.0f, -1.0f});
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.1f, 5.0f, -1.0f});
+		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{-0.1f, 5.0f, -1.0f});
 		WeaponFireType = 2;
 
-		WheelChunkNums.resize(4);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 2;
-		WheelChunkNums[2] = 3;
-		WheelChunkNums[3] = 4;
+		WheelChunkNums.reserve(4);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(2);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
 
-		SteerableWheelChunkNums.resize(2);
-		SteerableWheelChunkNums[0] = 1;
-		SteerableWheelChunkNums[1] = 4;
+		SteerableWheelChunkNums.reserve(2);
+		SteerableWheelChunkNums.emplace_back(1);
+		SteerableWheelChunkNums.emplace_back(4);
 		MaxSteerableWheelAngle = 20.0f;
 
-		TargetHorizChunkNums.resize(2);
-		TargetHorizChunkNums[0] = 5;
-		TargetHorizChunkNums[1] = 6;
+		TargetHorizChunkNums.reserve(2);
+		TargetHorizChunkNums.emplace_back(5);
+		TargetHorizChunkNums.emplace_back(6);
 
 		TargetVertChunkNums.emplace_back(6);
 		TargetVertChunksMaxAngle = 40.0f;
 		break;
 
 	case 8:
-		WeaponSlots.resize(2);
-		WeaponSlots[0](CreateWeapon(210), sVECTOR3D{1.5f, 5.2f, 7.0f});
-		WeaponSlots[1](CreateWeapon(210), sVECTOR3D{-1.5f, 5.2f, 7.0f});
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(210), sVECTOR3D{1.5f, 5.2f, 7.0f});
+		WeaponSlots.emplace_back(CreateWeapon(210), sVECTOR3D{-1.5f, 5.2f, 7.0f});
 		WeaponFireType = 3;
 
-		WheelChunkNums.resize(8);
-		WheelChunkNums[0] = 1;
-		WheelChunkNums[1] = 3;
-		WheelChunkNums[2] = 4;
-		WheelChunkNums[3] = 5;
-		WheelChunkNums[4] = 6;
-		WheelChunkNums[5] = 7;
-		WheelChunkNums[6] = 8;
-		WheelChunkNums[7] = 9;
+		WheelChunkNums.reserve(8);
+		WheelChunkNums.emplace_back(1);
+		WheelChunkNums.emplace_back(3);
+		WheelChunkNums.emplace_back(4);
+		WheelChunkNums.emplace_back(5);
+		WheelChunkNums.emplace_back(6);
+		WheelChunkNums.emplace_back(7);
+		WheelChunkNums.emplace_back(8);
+		WheelChunkNums.emplace_back(9);
 
-		SteerableWheelChunkNums.resize(4);
-		SteerableWheelChunkNums[0] = 1;
-		SteerableWheelChunkNums[1] = 3;
-		SteerableWheelChunkNums[2] = 6;
-		SteerableWheelChunkNums[3] = 7;
+		SteerableWheelChunkNums.reserve(4);
+		SteerableWheelChunkNums.emplace_back(1);
+		SteerableWheelChunkNums.emplace_back(3);
+		SteerableWheelChunkNums.emplace_back(6);
+		SteerableWheelChunkNums.emplace_back(7);
 		MaxSteerableWheelAngle = 20.0f;
 
 		TargetVertChunkNums.emplace_back(2);
@@ -257,8 +262,8 @@ cWheeled::cWheeled(int WheeledNum)
 	}
 
 	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
-	for (unsigned i = 0; i < WheelChunkNums.size(); i++) {
-		Chunks[WheelChunkNums[i]].Rotation.x = vw_fRandNum(360.0f);
+	for (const auto &WheelChunkNum : WheelChunkNums) {
+		Chunks[WheelChunkNum].Rotation.x = vw_fRandNum(360.0f);
 	}
 
 	// вычисляем данные для нахождения точки стрельбы
@@ -280,6 +285,13 @@ cWheeled::cWheeled(int WheeledNum)
 		else
 			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
+
+	assert(WheelChunkNums.capacity() == WheelChunkNums.size());
+	assert(SteerableWheelChunkNums.capacity() == SteerableWheelChunkNums.size());
+	assert(WeaponSlots.capacity() == WeaponSlots.size());
+	assert(TargetHorizChunkNums.capacity() == TargetHorizChunkNums.size());
+	assert(TargetVertChunkNums.capacity() == TargetVertChunkNums.size());
+	assert(BarrelChunkNums.capacity() == BarrelChunkNums.size());
 }
 
 } // astromenace namespace
