@@ -244,6 +244,17 @@ void ReleaseWeapon(cWeapon *Object)
 	delete Object;
 }
 
+/*
+ * Release particular weapon object during update cycle.
+ */
+void ReleaseWeaponLazy(cWeapon *Object)
+{
+	// make sure, that the DeleteAfterLeaveScene is disabled,
+	// in order to prevent possible Lifetime counter reset
+	Object->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::disabled;
+	Object->Lifetime = 0.0f;
+}
+
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке
 //-----------------------------------------------------------------------------

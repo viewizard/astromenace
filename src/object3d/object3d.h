@@ -127,7 +127,7 @@ public:
 
 	// in case we need show object and delete after it leave scene (after DeleteAfterLeaveSceneDelay time)
 	eDeleteAfterLeaveScene DeleteAfterLeaveScene{eDeleteAfterLeaveScene::disabled};
-	// время жизни объекта в секундах, оставшееся
+	// note, Lifetime could be changed by DeleteAfterLeaveScene settings
 	float Lifetime{-1.0f};
 
 	// направление, куда ориентирован объект

@@ -53,7 +53,7 @@ struct sShipWeaponSlot {
 	~sShipWeaponSlot()
 	{
 		if (Weapon)
-			ReleaseWeapon(Weapon);
+			ReleaseWeaponLazy(Weapon);
 	}
 
 	void operator () (cWeapon *_Weapon, const sVECTOR3D &_Location)

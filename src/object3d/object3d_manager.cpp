@@ -166,6 +166,8 @@ void UpdateAllObject3D(float Time)
 {
 	UpdateAllSpaceShip(Time);
 	UpdateAllGroundObjects(Time);
+	// make sure this called after SpaceShip and GroundObject, since we need
+	// release all weapon with lazy release before collision detection
 	UpdateAllWeapon(Time);
 	UpdateAllProjectile(Time);
 	UpdateAllSpaceObject(Time);

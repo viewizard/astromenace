@@ -139,6 +139,8 @@ void UpdateAllWeapon(float Time);
 void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular weapon object.
 void ReleaseWeapon(cWeapon *Object);
+// Release particular weapon object during update cycle.
+void ReleaseWeaponLazy(cWeapon *Object);
 // Удаляем все объекты в списке
 void ReleaseAllWeapons();
 
