@@ -254,7 +254,8 @@ void InitGamePlayerShip()
 	for (unsigned i=0; i<PlayerFighter->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
-				PlayerFighter->WeaponSlots[i].Weapon->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
+				if (auto sharedWeapon = PlayerFighter->WeaponSlots[i].Weapon.lock())
+					sharedWeapon->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
 				PlayerFighter->WeaponSlots[i].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
 			}
 		}
@@ -544,11 +545,10 @@ void GamePlayerShip()
 		if (!PlayerFighter->WeaponSlots.empty()) { // если вообще есть оружие
 			for (const auto &tmpWeaponSlot : PlayerFighter->WeaponSlots) {
 				// если нажали стрелять, а патронов нет в одном из орудий
-				if (tmpWeaponSlot.Weapon &&
-				    tmpWeaponSlot.SetFire &&
-				    (tmpWeaponSlot.Weapon->Ammo <= 0)) {
-					// проверяем, действительно еще играем
-					if (!vw_IsSoundAvailable(VoiceWeaponMalfunction))
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+					if (tmpWeaponSlot.SetFire &&
+					    (sharedWeapon->Ammo <= 0) &&
+					    !vw_IsSoundAvailable(VoiceWeaponMalfunction)) // проверяем, действительно еще играем
 						VoiceWeaponMalfunction = PlayVoicePhrase(eVoicePhrase::WeaponMalfunction, 1.0f);
 				}
 			}
@@ -799,15 +799,19 @@ void GamePlayerShip()
 				if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
 
 					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 1 ||
-					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3) {
-						PrimCount++;
-						PrimTime += PlayerFighter->WeaponSlots[i].Weapon->NextFireTime;
+					    GameConfig().Profile[CurrentProfile].WeaponControl[i] == 3) {
+						if (auto sharedWeapon = PlayerFighter->WeaponSlots[i].Weapon.lock()) {
+							PrimCount++;
+							PrimTime += sharedWeapon->NextFireTime;
+						}
 					}
 
 					if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 2 ||
-					    GameConfig().Profile[CurrentProfile].WeaponControl[i] ==3) {
-						SecCount++;
-						SecTime += PlayerFighter->WeaponSlots[i].Weapon->NextFireTime;
+					    GameConfig().Profile[CurrentProfile].WeaponControl[i] == 3) {
+						if (auto sharedWeapon = PlayerFighter->WeaponSlots[i].Weapon.lock()) {
+							SecCount++;
+							SecTime += sharedWeapon->NextFireTime;
+						}
 					}
 				}
 			}
@@ -1033,17 +1037,19 @@ void GamePlayerShip()
 	// потом лучше будет переделать на постепенный отбор энергии
 	for (unsigned i = 0; i < PlayerFighter->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
-			if (PlayerFighter->WeaponSlots[i].Weapon->CurrentEnergyAccumulated < PlayerFighter->WeaponSlots[i].Weapon->EnergyUse) {
-				// если энергии не достаточно для зарядки орудия
-				if (CurrentPlayerShipEnergy < PlayerFighter->WeaponSlots[i].Weapon->EnergyUse) {
-					// останавливаем перезарядку оружия
-					PlayerFighter->WeaponSlots[i].Weapon->LastFireTime += PlayerFighter->TimeDelta;
-					if (auto sharedFire = PlayerFighter->WeaponSlots[i].Weapon->Fire.lock())
-						sharedFire->IsSuppressed = true;
-				} else {
-					// если энергии достаточно, все нормально берем ее и перезаряжаем оружие
-					PlayerFighter->WeaponSlots[i].Weapon->CurrentEnergyAccumulated = PlayerFighter->WeaponSlots[i].Weapon->EnergyUse;
-					CurrentPlayerShipEnergy -= PlayerFighter->WeaponSlots[i].Weapon->EnergyUse;
+			if (auto sharedWeapon = PlayerFighter->WeaponSlots[i].Weapon.lock()) {
+				if (sharedWeapon->CurrentEnergyAccumulated < sharedWeapon->EnergyUse) {
+					// если энергии не достаточно для зарядки орудия
+					if (CurrentPlayerShipEnergy < sharedWeapon->EnergyUse) {
+						// останавливаем перезарядку оружия
+						sharedWeapon->LastFireTime += PlayerFighter->TimeDelta;
+						if (auto sharedFire = sharedWeapon->Fire.lock())
+							sharedFire->IsSuppressed = true;
+					} else {
+						// если энергии достаточно, все нормально берем ее и перезаряжаем оружие
+						sharedWeapon->CurrentEnergyAccumulated = sharedWeapon->EnergyUse;
+						CurrentPlayerShipEnergy -= sharedWeapon->EnergyUse;
+					}
 				}
 			}
 		}

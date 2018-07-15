@@ -249,10 +249,10 @@ int GetWorkshopShipFullCost(int Num, cEarthSpaceFighter *Fighter)
 	// прибавить стоимость оружия
 	if (!WorkshopFighterGame->WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
-			if (tmpWeaponSlot.Weapon)
-				ShipCost += GetWeaponCost(tmpWeaponSlot.Weapon->InternalType,
-							  tmpWeaponSlot.Weapon->Ammo,
-							  tmpWeaponSlot.Weapon->AmmoStart);
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+				ShipCost += GetWeaponCost(sharedWeapon->InternalType,
+							  sharedWeapon->Ammo,
+							  sharedWeapon->AmmoStart);
 		}
 	}
 
@@ -314,13 +314,11 @@ void WorkshopCreateBuyShip()
 	// 2 - Оружие
 	unsigned OldWeaponQuantity = WorkshopFighterGame->WeaponSlots.size();
 	for (auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
-		if (tmpWeaponSlot.Weapon) {
-			ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(
-									    tmpWeaponSlot.Weapon->InternalType,
-									    tmpWeaponSlot.Weapon->Ammo,
-									    tmpWeaponSlot.Weapon->AmmoStart);
+		if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+			ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(sharedWeapon->InternalType,
+											  sharedWeapon->Ammo,
+											  sharedWeapon->AmmoStart);
 			ReleaseWeapon(tmpWeaponSlot.Weapon);
-			tmpWeaponSlot.Weapon = nullptr;
 		}
 	}
 
@@ -388,12 +386,14 @@ void WorkshopCreateBuyShip()
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			if (GameConfig().Profile[CurrentProfile].Money >= GetWeaponBaseCost(GameConfig().Profile[CurrentProfile].Weapon[i])) {
 				if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
-					if (auto sharedFire = WorkshopFighterGame->WeaponSlots[i].Weapon->Fire.lock())
-						vw_ReleaseLight(sharedFire->Light);
+					if (auto sharedWeapon = WorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
+						if (auto sharedFire = sharedWeapon->Fire.lock())
+							vw_ReleaseLight(sharedFire->Light);
 
-					ChangeGameConfig().Profile[CurrentProfile].Money -= GetWeaponBaseCost(GameConfig().Profile[CurrentProfile].Weapon[i]);
-					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = WorkshopFighterGame->WeaponSlots[i].Weapon->AmmoStart;
-					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i] = 0.0f;
+						ChangeGameConfig().Profile[CurrentProfile].Money -= GetWeaponBaseCost(GameConfig().Profile[CurrentProfile].Weapon[i]);
+						ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = sharedWeapon->AmmoStart;
+						ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i] = 0.0f;
+					}
 				} else { // если поставить не смогли - не такой слот
 					ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
 					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;

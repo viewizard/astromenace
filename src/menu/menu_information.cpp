@@ -45,7 +45,7 @@ namespace astromenace {
 // переменные
 //------------------------------------------------------------------------------------
 cEarthSpaceFighter *InfoFighter = nullptr;
-cWeapon *InfoWeapon = nullptr;
+std::weak_ptr<cWeapon> InfoWeapon{};
 cProjectile *InfoMine = nullptr;
 cAlienSpaceFighter *InfoAlien = nullptr;
 cAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
@@ -265,10 +265,7 @@ void DestroyInfoObject()
 		delete InfoFighter;
 		InfoFighter = nullptr;
 	}
-	if (InfoWeapon != nullptr) {
-		ReleaseWeapon(InfoWeapon);
-		InfoWeapon = nullptr;
-	}
+	ReleaseWeapon(InfoWeapon);
 	if (InfoMine != nullptr) {
 		delete InfoMine;
 		InfoMine = nullptr;
@@ -340,32 +337,34 @@ void CreateInfoObject()
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
 		InfoWeapon = CreateWeapon(tmpCreateNum);
-		InfoWeapon->ObjectStatus = eObjectStatus::none;
-		ObjectBaseLocation = sVECTOR3D{0.0f,
-					       -InfoWeapon->AABB[6].y,
-					       -(InfoWeapon->Length/2.0f + InfoWeapon->AABB[6].z)};
+		if (auto sharedWeapon = InfoWeapon.lock()) {
+			sharedWeapon->ObjectStatus = eObjectStatus::none;
+			ObjectBaseLocation = sVECTOR3D{0.0f,
+						       -sharedWeapon->AABB[6].y,
+						       -(sharedWeapon->Length/2.0f + sharedWeapon->AABB[6].z)};
 
-		Point = sVECTOR3D{1000.0f,
-				  -1000.0f + InfoWeapon->Height / 3.0f,
-				  0.0f};
+			Point = sVECTOR3D{1000.0f,
+					  -1000.0f + sharedWeapon->Height / 3.0f,
+					  0.0f};
 
-		PointCamera = sVECTOR3D{0.0f,
-					(InfoWeapon->Length + InfoWeapon->Width + InfoWeapon->Height) * 0.3f + InfoWeapon->Height * 0.3f,
-					-(InfoWeapon->Length + InfoWeapon->Width + InfoWeapon->Height) * 0.7f - InfoWeapon->Height * 0.7f};
-		InfoObjectWidth = InfoWeapon->Width;
-		InfoObjectLength = InfoWeapon->Length;
-		InfoObjectHeight = InfoWeapon->Height;
-		InfoObjectStrength = InfoWeapon->StrengthStart;
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedWeapon->Length + sharedWeapon->Width + sharedWeapon->Height) * 0.3f + sharedWeapon->Height * 0.3f,
+						-(sharedWeapon->Length + sharedWeapon->Width + sharedWeapon->Height) * 0.7f - sharedWeapon->Height * 0.7f};
+			InfoObjectWidth = sharedWeapon->Width;
+			InfoObjectLength = sharedWeapon->Length;
+			InfoObjectHeight = sharedWeapon->Height;
+			InfoObjectStrength = sharedWeapon->StrengthStart;
 
-		InfoWeapon->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 
-		InfoObjectEnergyUse = InfoWeapon->EnergyUse;
-		InfoObjectAmmo = InfoWeapon->AmmoStart;
-		InfoObjectReload = InfoWeapon->NextFireTime;
-		InfoObjectRange = GetProjectileRange(tmpCreateNum);
-		// убираем источник света
-		if (auto sharedFire = InfoWeapon->Fire.lock())
-			vw_ReleaseLight(sharedFire->Light);
+			InfoObjectEnergyUse = sharedWeapon->EnergyUse;
+			InfoObjectAmmo = sharedWeapon->AmmoStart;
+			InfoObjectReload = sharedWeapon->NextFireTime;
+			InfoObjectRange = GetProjectileRange(tmpCreateNum);
+			// убираем источник света
+			if (auto sharedFire = sharedWeapon->Fire.lock())
+				vw_ReleaseLight(sharedFire->Light);
+		}
 	}
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
@@ -1464,9 +1463,9 @@ void InformationDrawObject()
 		InfoFighter->SetLocation(TMPLocation);
 		InfoFighter->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
-	if (InfoWeapon) {
-		InfoWeapon->SetLocation(TMPLocation);
-		InfoWeapon->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
+	if (auto sharedWeapon = InfoWeapon.lock()) {
+		sharedWeapon->SetLocation(TMPLocation);
+		sharedWeapon->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (InfoMine) {
 		InfoMine->SetLocation(TMPLocation);
@@ -1504,9 +1503,8 @@ void InformationDrawObject()
 		if (InfoFighter) {
 			InfoFighter->Draw(true);
 		}
-		if (InfoWeapon) {
-			InfoWeapon->Draw(true);
-		}
+		if (auto sharedWeapon = InfoWeapon.lock())
+			sharedWeapon->Draw(true);
 		if (InfoMine) {
 			InfoMine->Draw(true);
 		}
@@ -1521,14 +1519,13 @@ void InformationDrawObject()
 			// рисуем оружие
 			if (!InfoPirateShip->WeaponSlots.empty()) {
 				for (auto &tmpWeaponSlot : InfoPirateShip->WeaponSlots) {
-					if (tmpWeaponSlot.Weapon)
-						tmpWeaponSlot.Weapon->Draw(true);
+					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+						sharedWeapon->Draw(true);
 				}
 			}
 		}
-		if (auto sharedObject = InfoGroundObject.lock()) {
+		if (auto sharedObject = InfoGroundObject.lock())
 			sharedObject->Draw(true);
-		}
 
 		vw_CullFace(eCullFace::BACK);
 		ShadowMap_EndRenderToFBO();
@@ -1544,9 +1541,8 @@ void InformationDrawObject()
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoFighter->Engines);
 	}
-	if (InfoWeapon) {
-		InfoWeapon->Draw(false, ShadowMap);
-	}
+	if (auto sharedWeapon = InfoWeapon.lock())
+		sharedWeapon->Draw(false, ShadowMap);
 	if (InfoMine) {
 		InfoMine->Draw(false, ShadowMap);
 		// рисуем эффекты двигателей только для этой модели
@@ -1567,16 +1563,15 @@ void InformationDrawObject()
 		// рисуем оружие
 		if (!InfoPirateShip->WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : InfoPirateShip->WeaponSlots) {
-				if (tmpWeaponSlot.Weapon)
-					tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+					sharedWeapon->Draw(false, ShadowMap);
 			}
 		}
 		// рисуем эффекты двигателей только для этой модели
 		vw_DrawParticleSystems(InfoPirateShip->Engines);
 	}
-	if (auto sharedObject = InfoGroundObject.lock()) {
+	if (auto sharedObject = InfoGroundObject.lock())
 		sharedObject->Draw(false, ShadowMap);
-	}
 
 	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();

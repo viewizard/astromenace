@@ -176,8 +176,8 @@ void cGroundObject::SetLocation(const sVECTOR3D &NewLocation)
 
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon != nullptr)
-				tmpWeaponSlot.Weapon->SetLocation(NewLocation + tmpWeaponSlot.Location);
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+				sharedWeapon->SetLocation(NewLocation + tmpWeaponSlot.Location);
 		}
 	}
 }
@@ -207,7 +207,7 @@ void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon != nullptr) {
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 				sVECTOR3D WeaponBoundTMP{tmpWeaponSlot.Bound};
 				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
@@ -221,9 +221,9 @@ void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 								   TargetHorizChunksNeedAngle,
 								   0.0f} +
 							 Rotation;
-				tmpWeaponSlot.Weapon->SetRotation(tmpWeaponSlot.Weapon->Rotation ^ (-1.0f));
-				tmpWeaponSlot.Weapon->SetRotation(RotationWeapon);
-				tmpWeaponSlot.Weapon->SetLocation(Location + tmpWeaponSlot.Location);
+				sharedWeapon->SetRotation(sharedWeapon->Rotation ^ (-1.0f));
+				sharedWeapon->SetRotation(RotationWeapon);
+				sharedWeapon->SetLocation(Location + tmpWeaponSlot.Location);
 			}
 		}
 	}
@@ -257,7 +257,7 @@ bool cGroundObject::Update(float Time)
 
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon != nullptr)
+				if (!tmpWeaponSlot.Weapon.expired())
 					tmpWeaponSlot.SetFire = TimeSheetList.front().Fire;
 			}
 		}
@@ -274,12 +274,12 @@ bool cGroundObject::Update(float Time)
 		int WeapNum{204}; // номер самого простого из пиратского оружия
 		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
 		if (!WeaponSlots.empty()) {
-			if (WeaponSlots[0].Weapon != nullptr)
-				WeapNum = WeaponSlots[0].Weapon->InternalType;
+			if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+				WeapNum = sharedWeapon->InternalType;
 
 			int Count{0};
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon != nullptr) {
+				if (!tmpWeaponSlot.Weapon.expired()) {
 					FirePos += tmpWeaponSlot.Location;
 					Count++;
 				}
@@ -416,7 +416,7 @@ bool cGroundObject::Update(float Time)
 
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon != nullptr) {
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 				sVECTOR3D WeaponBoundTMP = tmpWeaponSlot.Bound;
 				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
 
@@ -430,9 +430,9 @@ bool cGroundObject::Update(float Time)
 									      TargetHorizChunksNeedAngle,
 									      0.0f};
 
-				tmpWeaponSlot.Weapon->SetRotation(tmpWeaponSlot.Weapon->Rotation ^ (-1.0f));
-				tmpWeaponSlot.Weapon->SetRotation(RotationWeapon);
-				tmpWeaponSlot.Weapon->SetLocation(Location + tmpWeaponSlot.Location);
+				sharedWeapon->SetRotation(sharedWeapon->Rotation ^ (-1.0f));
+				sharedWeapon->SetRotation(RotationWeapon);
+				sharedWeapon->SetLocation(Location + tmpWeaponSlot.Location);
 			}
 		}
 	}
@@ -445,9 +445,9 @@ bool cGroundObject::Update(float Time)
 		// FIXME switch from if-else-if to case (?)
 		if (WeaponFireType == 1) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if ((tmpWeaponSlot.Weapon != nullptr) &&
-				    tmpWeaponSlot.SetFire)
-					tmpWeaponSlot.Weapon->WeaponFire(Time);
+				if (tmpWeaponSlot.SetFire)
+					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+						sharedWeapon->WeaponFire(Time);
 			}
 		} else if (WeaponFireType == 2) { // переменный огонь
 			int PrimCount{0};
@@ -459,9 +459,9 @@ bool cGroundObject::Update(float Time)
 
 			// находим кол-во оружия
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
-				if (WeaponSlots[i].Weapon != nullptr) {
+				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
-					PrimTime += WeaponSlots[i].Weapon->NextFireTime;
+					PrimTime += sharedWeapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
@@ -474,11 +474,12 @@ bool cGroundObject::Update(float Time)
 
 			// стреляем
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
-				if ((WeaponSlots[i].Weapon != nullptr) &&
+				if (!WeaponSlots[i].Weapon.expired() &&
 				    WeaponSlots[i].SetFire) {
 					if ((WeaponGroupCurrentFireNum == static_cast<int>(i)) &&
 					    (WeaponGroupCurrentFireDelay <= 0.0f)) {
-						WeaponSlots[i].Weapon->WeaponFire(Time);
+						if (auto sharedWeapon = WeaponSlots[i].Weapon.lock())
+							sharedWeapon->WeaponFire(Time);
 
 						WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameEnemyWeaponPenalty)/2.0f);
 						WeaponGroupCurrentFireNum++;
@@ -486,13 +487,13 @@ bool cGroundObject::Update(float Time)
 							WeaponGroupCurrentFireNum = FirstWeapon;
 
 						// если такого оружия нет, берем что есть
-						if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon == nullptr) {
+						if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired()) {
 							bool exit = false;
 							while (!exit) {
 								WeaponGroupCurrentFireNum++;
 								if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 									WeaponGroupCurrentFireNum = FirstWeapon;
-								if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon != nullptr)
+								if (!WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired())
 									exit = true;
 							}
 						}
@@ -509,9 +510,9 @@ bool cGroundObject::Update(float Time)
 
 			// находим кол-во оружия
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
-				if (WeaponSlots[i].Weapon != nullptr) {
+				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
-					PrimTime += WeaponSlots[i].Weapon->NextFireTime;
+					PrimTime += sharedWeapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
@@ -524,11 +525,12 @@ bool cGroundObject::Update(float Time)
 
 			// стреляем
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
-				if ((WeaponSlots[i].Weapon != nullptr) &&
+				if (!WeaponSlots[i].Weapon.expired() &&
 				    WeaponSlots[i].SetFire) {
 					if ((WeaponGroupCurrentFireNum == static_cast<int>(i)) &&
 					    (WeaponGroupCurrentFireDelay <= 0.0f)) {
-						WeaponSlots[i].Weapon->WeaponFire(Time);
+						if (auto sharedWeapon = WeaponSlots[i].Weapon.lock())
+							sharedWeapon->WeaponFire(Time);
 
 						WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
 						WeaponGroupCurrentFireNum++;
@@ -536,13 +538,13 @@ bool cGroundObject::Update(float Time)
 							WeaponGroupCurrentFireNum = FirstWeapon;
 
 						// если такого оружия нет, берем что есть
-						if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon == nullptr) {
+						if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired()) {
 							bool exit = false;
 							while (!exit) {
 								WeaponGroupCurrentFireNum++;
 								if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 									WeaponGroupCurrentFireNum = FirstWeapon;
-								if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon != nullptr)
+								if (!WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired())
 									exit = true;
 							}
 						}

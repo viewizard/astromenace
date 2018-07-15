@@ -533,20 +533,20 @@ void DetectCollisionAllObject3D()
 			    (tmpProjectile->ObjectStatus == eObjectStatus::Enemy) &&
 			    !GameUndestroyableWeapon && !tmpShip->WeaponSlots.empty()) {
 				for (auto &tmpWeaponSlot : tmpShip->WeaponSlots) {
-					if (tmpProjectile &&
-					    tmpWeaponSlot.Weapon &&
-					// если еще целое
-					    (tmpWeaponSlot.Weapon->Strength > 0.0f)) {
-						// делаем проверку
+					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 						sDamagesData DamagesDataWeapon;
 						int ObjectPieceNumWeapon;
-						if(DetectProjectileCollision(*tmpWeaponSlot.Weapon, ObjectPieceNumWeapon, *tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip->Speed)) {
+
+						if (tmpProjectile &&
+						// если еще целое
+						    (sharedWeapon->Strength > 0.0f) &&
+						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, *tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip->Speed)) {
 							tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
 							// просто делаем изменения в прочности... и больше ничего
-							tmpWeaponSlot.Weapon->Strength -= DamagesDataWeapon.DamageHull / tmpWeaponSlot.Weapon->ResistanceHull;
-							if (tmpWeaponSlot.Weapon->Strength <= 0.0f) {
-								tmpWeaponSlot.Weapon->Strength = 0.0f;
+							sharedWeapon->Strength -= DamagesDataWeapon.DamageHull / sharedWeapon->ResistanceHull;
+							if (sharedWeapon->Strength <= 0.0f) {
+								sharedWeapon->Strength = 0.0f;
 								PlayVoicePhrase(eVoicePhrase::WeaponDestroyed, 1.0f);
 								// убираем звук попадания-разбивания снаряда
 								tmpProjectile->NeedDeadSound = false;

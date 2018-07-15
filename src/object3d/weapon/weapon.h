@@ -48,12 +48,11 @@ namespace astromenace {
 enum class eGameSFX;
 
 class cWeapon final : public cObject3D {
-	friend cWeapon *CreateWeapon(int WeaponNum);
-	friend void UpdateAllWeapon(float Time);
-	friend void ReleaseWeapon(cWeapon *Object);
-	friend void ReleaseAllWeapons();
+	friend std::weak_ptr<cWeapon> CreateWeapon(int WeaponNum);
 
 private:
+	// Don't allow direct new/delete usage in code, only CreateWeapon()
+	// allowed for cWeapon creation and release setup (deleter must be provided).
 	explicit cWeapon(int WeaponNum);
 	virtual ~cWeapon();
 
@@ -132,15 +131,15 @@ public:
 
 
 // Create cWeapon object.
-cWeapon *CreateWeapon(int WeaponNum);
+std::weak_ptr<cWeapon> CreateWeapon(int WeaponNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllWeapon(float Time);
 // Прорисовываем все объекты
 void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular weapon object.
-void ReleaseWeapon(cWeapon *Object);
+void ReleaseWeapon(std::weak_ptr<cWeapon> &Object);
 // Release particular weapon object during update cycle.
-void ReleaseWeaponLazy(cWeapon *Object);
+void ReleaseWeaponLazy(std::weak_ptr<cWeapon> &Object);
 // Удаляем все объекты в списке
 void ReleaseAllWeapons();
 

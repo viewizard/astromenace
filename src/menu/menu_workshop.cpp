@@ -40,7 +40,7 @@ namespace astromenace {
 //------------------------------------------------------------------------------------
 cEarthSpaceFighter *WorkshopFighterGame = nullptr;
 cEarthSpaceFighter *WorkshopNewFighter = nullptr;
-cWeapon *WorkshopNewWeapon = nullptr;
+std::weak_ptr<cWeapon> WorkshopNewWeapon{};
 int	CurrentWorkshopNewFighter = 1;
 int	CurrentWorkshopNewWeapon = 1;
 
@@ -105,16 +105,18 @@ void WorkshopCreateShip(int Num)
 	for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] &&
 		    SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
-			// убираем источник света
-			if (auto sharedFire = WorkshopFighterGame->WeaponSlots[i].Weapon->Fire.lock())
-				vw_ReleaseLight(sharedFire->Light);
+			if (auto sharedWeapon = WorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
+				// убираем источник света
+				if (auto sharedFire = sharedWeapon->Fire.lock())
+					vw_ReleaseLight(sharedFire->Light);
 
-			WorkshopFighterGame->WeaponSlots[i].Weapon->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
-			WorkshopFighterGame->WeaponSlots[i].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
+				sharedWeapon->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
+				WorkshopFighterGame->WeaponSlots[i].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
 
-			sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-			NeedAngle.y += WorkshopFighterGame->WeaponSlots[i].YAngle;
-			WorkshopFighterGame->WeaponSlots[i].Weapon->SetRotation(NeedAngle);
+				sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
+				NeedAngle.y += WorkshopFighterGame->WeaponSlots[i].YAngle;
+				sharedWeapon->SetRotation(NeedAngle);
+			}
 		}
 	}
 
@@ -179,33 +181,33 @@ void WorkshopCreateNewShip()
 //------------------------------------------------------------------------------------
 void WorkshopCreateNewWeapon()
 {
-	// создаем объект
-	if (WorkshopNewWeapon != nullptr) {
-		ReleaseWeapon(WorkshopNewWeapon);
-		WorkshopNewWeapon = nullptr;
-	}
+	ReleaseWeapon(WorkshopNewWeapon);
 
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
 	WorkshopNewWeapon = CreateWeapon(CurrentWorkshopNewWeapon);
 
-	WorkshopNewWeapon->ObjectStatus = eObjectStatus::none;
+	auto sharedWeapon = WorkshopNewWeapon.lock();
+	if (!sharedWeapon)
+		return;
+
+	sharedWeapon->ObjectStatus = eObjectStatus::none;
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 
 	sVECTOR3D Ptmp = sVECTOR3D{0.0f,
-				   -(WorkshopNewWeapon->Height / 2.0f + WorkshopNewWeapon->AABB[6].y),
-				   -(WorkshopNewWeapon->Length / 2.0f + WorkshopNewWeapon->AABB[6].z) - 0.5f};
+				   -(sharedWeapon->Height / 2.0f + sharedWeapon->AABB[6].y),
+				   -(sharedWeapon->Length / 2.0f + sharedWeapon->AABB[6].z) - 0.5f};
 	vw_RotatePoint(Ptmp, sVECTOR3D{0.0f, -45.0f, 0.0f});
 
-	WorkshopNewWeapon->SetLocation(sVECTOR3D{Ptmp.x + 3000.0f,
-						 Ptmp.y - 3000.0f,
-						 Ptmp.z});
+	sharedWeapon->SetLocation(sVECTOR3D{Ptmp.x + 3000.0f,
+					    Ptmp.y - 3000.0f,
+					    Ptmp.z});
 
-	WorkshopNewWeapon->SetRotation(sVECTOR3D{0.0f, -45.0f, 0.0f});
+	sharedWeapon->SetRotation(sVECTOR3D{0.0f, -45.0f, 0.0f});
 
 	// убираем источник света
-	if (auto sharedFire = WorkshopNewWeapon->Fire.lock())
+	if (auto sharedFire = sharedWeapon->Fire.lock())
 		vw_ReleaseLight(sharedFire->Light);
 }
 
@@ -267,10 +269,7 @@ void WorkshopDestroyData()
 		delete WorkshopNewFighter;
 		WorkshopNewFighter = nullptr;
 	}
-	if (WorkshopNewWeapon != nullptr) {
-		ReleaseWeapon(WorkshopNewWeapon);
-		WorkshopNewWeapon = nullptr;
-	}
+	ReleaseWeapon(WorkshopNewWeapon);
 }
 
 
@@ -504,8 +503,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			SpaceFighter->Draw(true);
 			if (!SpaceFighter->WeaponSlots.empty()) {
 				for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
-					if (tmpWeaponSlot.Weapon)
-						tmpWeaponSlot.Weapon->Draw(true);
+					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+						sharedWeapon->Draw(true);
 				}
 			}
 
@@ -517,8 +516,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		SpaceFighter->Draw(false, ShadowMap);
 		if (!SpaceFighter->WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
-				if (tmpWeaponSlot.Weapon)
-					tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+					sharedWeapon->Draw(false, ShadowMap);
 			}
 		}
 
@@ -562,8 +561,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			SpaceFighter->Draw(true);
 			if (!SpaceFighter->WeaponSlots.empty()) {
 				for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
-					if (tmpWeaponSlot.Weapon)
-						tmpWeaponSlot.Weapon->Draw(true);
+					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+						sharedWeapon->Draw(true);
 				}
 			}
 
@@ -575,8 +574,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		SpaceFighter->Draw(false, ShadowMap);
 		if (!SpaceFighter->WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
-				if (tmpWeaponSlot.Weapon)
-					tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+					sharedWeapon->Draw(false, ShadowMap);
 			}
 		}
 
@@ -641,8 +640,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		SpaceFighter->Draw(true);
 		if (!SpaceFighter->WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
-				if (tmpWeaponSlot.Weapon)
-					tmpWeaponSlot.Weapon->Draw(true);
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+					sharedWeapon->Draw(true);
 			}
 		}
 
@@ -655,8 +654,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (!SpaceFighter->WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
-			if (tmpWeaponSlot.Weapon)
-				tmpWeaponSlot.Weapon->Draw(false, ShadowMap);
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+				sharedWeapon->Draw(false, ShadowMap);
 		}
 	}
 

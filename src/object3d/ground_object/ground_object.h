@@ -57,22 +57,21 @@ enum class eGroundCycle {
 
 struct sGroundWeaponSlot {
 	bool SetFire{false};
-	cWeapon *Weapon{nullptr};
+	std::weak_ptr<cWeapon> Weapon{};
 	sVECTOR3D Location{};
 	sVECTOR3D Bound{};
 
 	sGroundWeaponSlot() = default;
-	sGroundWeaponSlot(cWeapon *_Weapon, const sVECTOR3D &_Location) :
+	sGroundWeaponSlot(const std::weak_ptr<cWeapon> &_Weapon, const sVECTOR3D &_Location) :
 		Weapon{_Weapon},
 		Location{_Location}
 	{}
 	~sGroundWeaponSlot()
 	{
-		if (Weapon)
-			ReleaseWeaponLazy(Weapon);
+		ReleaseWeaponLazy(Weapon);
 	}
 
-	void operator () (cWeapon *_Weapon, const sVECTOR3D &_Location)
+	void operator () (const std::weak_ptr<cWeapon> &_Weapon, const sVECTOR3D &_Location)
 	{
 		Weapon = _Weapon;
 		Location = _Location;

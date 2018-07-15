@@ -101,7 +101,8 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 
 	case 2:
 		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.0f, 4.6f, 4.5f});
-		WeaponSlots.back().Weapon->NextFireTime /= 3.0f;
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
 		TargetHorizChunkNums.resize(4);
@@ -122,9 +123,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	case 3:
 		WeaponSlots.resize(2);
 		WeaponSlots[0](CreateWeapon(205), sVECTOR3D{2.8f, 5.3f, 7.5f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(205), sVECTOR3D{-2.8f, 5.3f, 7.5f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		TargetHorizChunkNums.resize(2);
@@ -138,9 +141,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	case 4:
 		WeaponSlots.resize(2);
 		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{3.6f, 8.5f, 4.0f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-3.6f, 8.5f, 4.0f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 2;
 
 		TargetHorizChunkNums.resize(4);
@@ -163,9 +168,11 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 	case 5:
 		WeaponSlots.resize(2);
 		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{1.95f, 6.5f, 3.7f});
-		WeaponSlots[0].Weapon->NextFireTime /= 3.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 3.0f;
 		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-1.95f, 6.5f, 3.7f});
-		WeaponSlots[1].Weapon->NextFireTime /= 3.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->NextFireTime /= 3.0f;
 		WeaponFireType = 2;
 
 		TargetHorizChunkNums.resize(2);
@@ -178,7 +185,8 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 
 	case 6:
 		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.0f, 3.0f, 7.0f});
-		WeaponSlots.back().Weapon->NextFireTime /= 3.5f;
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 3.5f;
 
 		TargetHorizChunkNums.resize(2);
 		TargetHorizChunkNums[0] = 2;

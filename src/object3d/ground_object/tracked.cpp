@@ -344,7 +344,8 @@ cTracked::cTracked(int TrackedNum)
 
 	case 9:
 		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D{0.0f, 6.7f, 6.8f});
-		WeaponSlots.back().Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 1;
@@ -377,7 +378,8 @@ cTracked::cTracked(int TrackedNum)
 
 	case 10:
 		WeaponSlots.emplace_back(CreateWeapon(204), sVECTOR3D{0.0f, 6.1f, 0.5f});
-		WeaponSlots.back().Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 
 		WheelChunkNums.resize(16);
 		WheelChunkNums[0] = 1;
@@ -442,13 +444,17 @@ cTracked::cTracked(int TrackedNum)
 	case 12:
 		WeaponSlots.resize(4);
 		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{0.55f, 5.0f, 2.0f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-0.55f, 5.0f, 2.0f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[2](CreateWeapon(206), sVECTOR3D{1.65f, 5.0f, 2.0f});
-		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[3](CreateWeapon(206), sVECTOR3D{-1.65f, 5.0f, 2.0f});
-		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(16);
@@ -482,9 +488,11 @@ cTracked::cTracked(int TrackedNum)
 	case 13:
 		WeaponSlots.resize(2);
 		WeaponSlots[0](CreateWeapon(206), sVECTOR3D{1.4f, 5.0f, 0.4f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(206), sVECTOR3D{-1.4f, 5.0f, 0.4f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponFireType = 3;
 
 		WheelChunkNums.resize(14);

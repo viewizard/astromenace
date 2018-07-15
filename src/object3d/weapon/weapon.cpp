@@ -37,7 +37,7 @@ namespace astromenace {
 
 namespace {
 
-std::list<cWeapon*> WeaponList{};
+std::list<std::shared_ptr<cWeapon>> WeaponList{};
 
 } // unnamed namespace
 
@@ -156,9 +156,10 @@ static std::vector<sWeaponData> PresetPirateWeaponData{
 /*
  * Create cWeapon object.
  */
-cWeapon *CreateWeapon(int WeaponNum)
+std::weak_ptr<cWeapon> CreateWeapon(int WeaponNum)
 {
-	WeaponList.emplace_front(new cWeapon{WeaponNum});
+	WeaponList.emplace_front(std::shared_ptr<cWeapon>{new cWeapon{WeaponNum},
+							  [](cWeapon *p) {delete p;}});
 	return WeaponList.front();
 }
 
@@ -168,7 +169,7 @@ cWeapon *CreateWeapon(int WeaponNum)
 void UpdateAllWeapon(float Time)
 {
 	for (auto iter = WeaponList.begin(); iter != WeaponList.end();) {
-		if (!(*iter)->Update(Time))
+		if (!iter->get()->Update(Time))
 			iter = WeaponList.erase(iter);
 		else
 			++iter;
@@ -181,17 +182,21 @@ void UpdateAllWeapon(float Time)
 void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	for (auto &tmpWeapon : WeaponList) {
-		tmpWeapon->Draw(VertexOnlyPass, ShadowMap);
+		tmpWeapon.get()->Draw(VertexOnlyPass, ShadowMap);
 	}
 }
 
 /*
  * Release particular weapon object.
  */
-void ReleaseWeapon(cWeapon *Object)
+void ReleaseWeapon(std::weak_ptr<cWeapon> &Object)
 {
+	auto sharedObject = Object.lock();
+	if (!sharedObject)
+		return;
+
 	for (auto iter = WeaponList.begin(); iter != WeaponList.end();) {
-		if (*iter == Object) {
+		if (iter->get() == sharedObject.get()) {
 			WeaponList.erase(iter);
 			return;
 		}
@@ -202,12 +207,16 @@ void ReleaseWeapon(cWeapon *Object)
 /*
  * Release particular weapon object during update cycle.
  */
-void ReleaseWeaponLazy(cWeapon *Object)
+void ReleaseWeaponLazy(std::weak_ptr<cWeapon> &Object)
 {
+	auto sharedObject = Object.lock();
+	if (!sharedObject)
+		return;
+
 	// make sure, that the DeleteAfterLeaveScene is disabled,
 	// in order to prevent possible Lifetime counter reset
-	Object->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::disabled;
-	Object->Lifetime = 0.0f;
+	sharedObject->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::disabled;
+	sharedObject->Lifetime = 0.0f;
 }
 
 //-----------------------------------------------------------------------------

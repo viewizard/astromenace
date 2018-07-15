@@ -40,23 +40,22 @@ namespace astromenace {
 
 struct sShipWeaponSlot {
 	bool SetFire{false};
-	cWeapon *Weapon{nullptr};
+	std::weak_ptr<cWeapon> Weapon{};
 	sVECTOR3D Location{};
 	int Type{1};
 	float YAngle{0.0f};
 
 	sShipWeaponSlot() = default;
-	sShipWeaponSlot(cWeapon *_Weapon, const sVECTOR3D &_Location) :
+	sShipWeaponSlot(const std::weak_ptr<cWeapon> &_Weapon, const sVECTOR3D &_Location) :
 		Weapon{_Weapon},
 		Location{_Location}
 	{}
 	~sShipWeaponSlot()
 	{
-		if (Weapon)
-			ReleaseWeaponLazy(Weapon);
+		ReleaseWeaponLazy(Weapon);
 	}
 
-	void operator () (cWeapon *_Weapon, const sVECTOR3D &_Location)
+	void operator () (const std::weak_ptr<cWeapon> &_Weapon, const sVECTOR3D &_Location)
 	{
 		Weapon = _Weapon;
 		Location = _Location;

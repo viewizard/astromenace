@@ -620,22 +620,30 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	case 2:
 		// оружие
 		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[2](CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
-		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[3](CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
-		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 
 		WeaponSlots[4](CreateWeapon(106), sVECTOR3D{-10.7f, 0.0f, -18.5f});
-		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[4].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[5](CreateWeapon(106), sVECTOR3D{10.7f, 0.0f, -18.5f});
-		WeaponSlots[5].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[5].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[6](CreateWeapon(106), sVECTOR3D{-4.0f, 0.0f, 24.0f});
-		WeaponSlots[6].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[6].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[7](CreateWeapon(106), sVECTOR3D{4.0f, 0.0f, 24.0f});
-		WeaponSlots[7].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[7].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 
 		BossWeaponSlots[0](CreateWeapon(102), sVECTOR3D{-1.5f, 1.5f, 25.0f});
 		BossWeaponSlots[1](CreateWeapon(102), sVECTOR3D{1.5f, 1.5f, 25.0f});
@@ -749,19 +757,25 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{0.0f, -1.0f, 23.0f});
 
 		BossWeaponSlots[0](CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
-		BossWeaponSlots[0].Weapon->SetRotation(sVECTOR3D{0.0f, -15.0f, 0.0f});
+		if (auto sharedWeapon = BossWeaponSlots[0].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -15.0f, 0.0f});
 		BossWeaponSlots[1](CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
-		BossWeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 15.0f, 0.0f});
+		if (auto sharedWeapon = BossWeaponSlots[1].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 15.0f, 0.0f});
 		BossWeaponSlots[2](CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
 		BossWeaponSlots[3](CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
 		BossWeaponSlots[4](CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
-		BossWeaponSlots[4].Weapon->SetRotation(sVECTOR3D{0.0f, -5.0f, 0.0f});
+		if (auto sharedWeapon = BossWeaponSlots[4].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -5.0f, 0.0f});
 		BossWeaponSlots[5](CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
-		BossWeaponSlots[5].Weapon->SetRotation(sVECTOR3D{0.0f, 5.0f, 0.0f});
+		if (auto sharedWeapon = BossWeaponSlots[5].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 5.0f, 0.0f});
 		BossWeaponSlots[6](CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
-		BossWeaponSlots[6].Weapon->SetRotation(sVECTOR3D{0.0f, -10.0f, 0.0f});
+		if (auto sharedWeapon = BossWeaponSlots[6].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -10.0f, 0.0f});
 		BossWeaponSlots[7](CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
-		BossWeaponSlots[7].Weapon->SetRotation(sVECTOR3D{0.0f, 10.0f, 0.0f});
+		if (auto sharedWeapon = BossWeaponSlots[7].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 10.0f, 0.0f});
 
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
@@ -823,18 +837,24 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		// оружие
 		WeaponSlots[0](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
 		WeaponSlots[1](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
 		WeaponSlots[2](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
 		WeaponSlots[3](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
 		WeaponSlots[4](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
 		WeaponSlots[5](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[5].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
 		WeaponSlots[6](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[6].Weapon->SetRotation(sVECTOR3D{0.0f, 9.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[6].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 9.0f, 0.0f});
 		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[7].Weapon->SetRotation(sVECTOR3D{0.0f, -9.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[7].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -9.0f, 0.0f});
 
 		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D{35.7f, -3.0f, -13.0f});
 		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D{-35.7f, -3.0f, -13.0f});
@@ -930,34 +950,50 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	case 6:
 		// оружие
 		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 		WeaponSlots[2](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
-		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 		WeaponSlots[3](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
-		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 		WeaponSlots[4](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[4].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[5](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		WeaponSlots[5].Weapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
-		WeaponSlots[5].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[5].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 
 		WeaponSlots[6](CreateWeapon(104), sVECTOR3D{7.0f, -4.4f, 13.0f});
-		WeaponSlots[6].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[6].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[7](CreateWeapon(104), sVECTOR3D{-7.0f, -4.4f, 13.0f});
-		WeaponSlots[7].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[7].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[8](CreateWeapon(104), sVECTOR3D{12.0f, -4.4f, 10.0f});
-		WeaponSlots[8].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[8].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[9](CreateWeapon(104), sVECTOR3D{-12.0f, -4.4f, 10.0f});
-		WeaponSlots[9].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[9].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[10](CreateWeapon(104), sVECTOR3D{17.0f, -4.4f, 8.0f});
-		WeaponSlots[10].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[10].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[11](CreateWeapon(104), sVECTOR3D{-17.0f, -4.4f, 8.0f});
-		WeaponSlots[11].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[11].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 
 		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D{10.0f, -6.4f, 10.0f});
 		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D{-10.0f, -6.4f, 10.0f});
@@ -1032,19 +1068,28 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	case 7:
 		// оружие
 		WeaponSlots[0](CreateWeapon(108), sVECTOR3D{0.0f, -1.4f, 15.0f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(108), sVECTOR3D{2.0f, -1.4f, 15.0f});
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 		WeaponSlots[2](CreateWeapon(108), sVECTOR3D{-2.0f, -1.4f, 15.0f});
-		WeaponSlots[2].Weapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
-		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 		WeaponSlots[3](CreateWeapon(108), sVECTOR3D{4.0f, -1.4f, 15.0f});
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
-		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 		WeaponSlots[4](CreateWeapon(108), sVECTOR3D{-4.0f, -1.4f, 15.0f});
-		WeaponSlots[4].Weapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
-		WeaponSlots[4].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[4].Weapon.lock()) {
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
+			sharedWeapon->NextFireTime /= 2.0f;
+		}
 
 		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{12.5f, 1.6f, -15.3f});
 		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D{-12.5f, 1.6f, -15.3f});
@@ -1082,13 +1127,17 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	case 8:
 		// оружие
 		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{2.0f, -2.4f, 15.0f});
-		WeaponSlots[0].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-2.0f, -2.4f, 15.0f});
-		WeaponSlots[1].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[2](CreateWeapon(104), sVECTOR3D{2.0f, -4.4f, 15.0f});
-		WeaponSlots[2].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 		WeaponSlots[3](CreateWeapon(104), sVECTOR3D{-2.0f, -4.4f, 15.0f});
-		WeaponSlots[3].Weapon->NextFireTime /= 2.0f;
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 
 		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{8.0f, -1.0f, 15.0f});
 		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D{-8.0f, -1.0f, 15.0f});

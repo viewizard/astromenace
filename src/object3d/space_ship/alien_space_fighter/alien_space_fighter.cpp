@@ -371,11 +371,14 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		// оружие
 		WeaponSlots[0](CreateWeapon(101), sVECTOR3D{0.75f, -0.15f, 5.1f});
 		WeaponSlots[1](CreateWeapon(101), sVECTOR3D{-0.75f, -0.15f, 5.1f});
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->SFX = eGameSFX::none;
 		WeaponSlots[2](CreateWeapon(101), sVECTOR3D{0.85f, -1.4f, 6.5f});
+		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+			sharedWeapon->SFX = eGameSFX::none;
 		WeaponSlots[3](CreateWeapon(101), sVECTOR3D{-0.85f, -1.4f, 6.5f});
-		WeaponSlots[1].Weapon->SFX = eGameSFX::none;
-		WeaponSlots[2].Weapon->SFX = eGameSFX::none;
-		WeaponSlots[3].Weapon->SFX = eGameSFX::none;
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+			sharedWeapon->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
 		// двигатели
@@ -525,7 +528,8 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	case 8:
 		// оружие
 		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, 1.10f, -0.5f});
-		WeaponSlots[0].Weapon->NextFireTime /= 4.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 4.0f;
 		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 1.4f, -8.6f};
@@ -567,7 +571,8 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	case 9:
 		// оружие
 		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, 0.10f, 4.9f});
-		WeaponSlots[0].Weapon->NextFireTime /= 3.0f;
+		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+			sharedWeapon->NextFireTime /= 3.0f;
 		WeaponSlots[1](CreateWeapon(107), sVECTOR3D{0.0f, 0.0f, 0.0f});
 		WeaponFireType = 1;
 		// двигатели

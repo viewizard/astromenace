@@ -199,20 +199,20 @@ void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 	// если оружие вообще есть
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon)
-				tmpWeaponSlot.Weapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+				sharedWeapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
 		}
 	}
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-			if (tmpBossWeaponSlot.Weapon)
-				tmpBossWeaponSlot.Weapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
+			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock())
+				sharedWeapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
 	}
 	if (!FlareWeaponSlots.empty()) {
 		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
-			if (tmpFlareWeaponSlot.Weapon)
-				tmpFlareWeaponSlot.Weapon->SetLocation(tmpFlareWeaponSlot.Location + NewLocation);
+			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock())
+				sharedWeapon->SetLocation(tmpFlareWeaponSlot.Location + NewLocation);
 		}
 	}
 
@@ -252,20 +252,20 @@ void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 	// если оружие вообще есть
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon)
-				tmpWeaponSlot.Weapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+				sharedWeapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
 		}
 	}
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-			if (tmpBossWeaponSlot.Weapon)
-				tmpBossWeaponSlot.Weapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
+			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock())
+				sharedWeapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
 	}
 	if (!FlareWeaponSlots.empty()) {
 		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
-			if (tmpFlareWeaponSlot.Weapon)
-				tmpFlareWeaponSlot.Weapon->SetLocation(tmpFlareWeaponSlot.Location + NewLocation);
+			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock())
+				sharedWeapon->SetLocation(tmpFlareWeaponSlot.Location + NewLocation);
 		}
 	}
 
@@ -305,34 +305,34 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 	// оружие
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon) {
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 				vw_Matrix33CalcPoint(tmpWeaponSlot.Location, OldInvRotationMat);
 				vw_Matrix33CalcPoint(tmpWeaponSlot.Location, CurrentRotationMat);
 
-				tmpWeaponSlot.Weapon->SetRotation(NewRotation);
-				tmpWeaponSlot.Weapon->SetLocation(Location + tmpWeaponSlot.Location);
+				sharedWeapon->SetRotation(NewRotation);
+				sharedWeapon->SetLocation(Location + tmpWeaponSlot.Location);
 			}
 		}
 	}
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-			if (tmpBossWeaponSlot.Weapon) {
+			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
 				vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, OldInvRotationMat);
 				vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, CurrentRotationMat);
 
-				tmpBossWeaponSlot.Weapon->SetRotation(NewRotation);
-				tmpBossWeaponSlot.Weapon->SetLocation(Location + tmpBossWeaponSlot.Location);
+				sharedWeapon->SetRotation(NewRotation);
+				sharedWeapon->SetLocation(Location + tmpBossWeaponSlot.Location);
 			}
 		}
 	}
 	if (!FlareWeaponSlots.empty()) {
 		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
-			if (tmpFlareWeaponSlot.Weapon) {
+			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock()) {
 				vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, OldInvRotationMat);
 				vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, CurrentRotationMat);
 
-				tmpFlareWeaponSlot.Weapon->SetRotation(NewRotation);
-				tmpFlareWeaponSlot.Weapon->SetLocation(Location + tmpFlareWeaponSlot.Location);
+				sharedWeapon->SetRotation(NewRotation);
+				sharedWeapon->SetLocation(Location + tmpFlareWeaponSlot.Location);
 			}
 		}
 	}
@@ -416,13 +416,13 @@ bool cSpaceShip::Update(float Time)
 
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon)
+				if (!tmpWeaponSlot.Weapon.expired())
 					tmpWeaponSlot.SetFire = TimeSheetList.front().Fire;
 			}
 		}
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (tmpBossWeaponSlot.Weapon)
+				if (!tmpBossWeaponSlot.Weapon.expired())
 					tmpBossWeaponSlot.SetFire = TimeSheetList.front().BossFire;
 			}
 		}
@@ -448,8 +448,8 @@ bool cSpaceShip::Update(float Time)
 
 		if (NeedFlare) {
 			for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
-				if (tmpFlareWeaponSlot.Weapon)
-					tmpFlareWeaponSlot.Weapon->WeaponFire(Time);
+				if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock())
+					sharedWeapon->WeaponFire(Time);
 			}
 		}
 	}
@@ -876,9 +876,9 @@ bool cSpaceShip::Update(float Time)
 		// если залп или игрок (игроку регулируем сами)
 		if ((WeaponFireType == 1) || (ObjectStatus == eObjectStatus::Player)) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon &&
-				    tmpWeaponSlot.SetFire)
-					tmpWeaponSlot.Weapon->WeaponFire(Time);
+				if (tmpWeaponSlot.SetFire)
+					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+						sharedWeapon->WeaponFire(Time);
 			}
 		} else { // переменный огонь
 
@@ -891,9 +891,9 @@ bool cSpaceShip::Update(float Time)
 
 			// находим кол-во оружия
 			for (unsigned i = 0; i < WeaponSlots.size(); i++)
-				if (WeaponSlots[i].Weapon) {
+				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
-					PrimTime += WeaponSlots[i].Weapon->NextFireTime;
+					PrimTime += sharedWeapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
@@ -906,11 +906,12 @@ bool cSpaceShip::Update(float Time)
 
 			// стреляем
 			for (unsigned i = 0; i < WeaponSlots.size(); i++)
-				if (WeaponSlots[i].Weapon &&
+				if (!WeaponSlots[i].Weapon.expired() &&
 				    WeaponSlots[i].SetFire &&
 				    (WeaponGroupCurrentFireNum == static_cast<int>(i)) &&
 				    (WeaponGroupCurrentFireDelay <= 0.0f)) {
-					WeaponSlots[i].Weapon->WeaponFire(Time);
+					if (auto sharedWeapon = WeaponSlots[i].Weapon.lock())
+						sharedWeapon->WeaponFire(Time);
 
 					WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
 					WeaponGroupCurrentFireNum++;
@@ -918,13 +919,13 @@ bool cSpaceShip::Update(float Time)
 						WeaponGroupCurrentFireNum = FirstWeapon;
 
 					// если такого оружия нет, берем что есть
-					if (!WeaponSlots[WeaponGroupCurrentFireNum].Weapon) {
+					if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired()) {
 						bool exit = false;
 						while (!exit) {
 							WeaponGroupCurrentFireNum++;
 							if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 								WeaponGroupCurrentFireNum = FirstWeapon;
-							if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon)
+							if (!WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired())
 								exit = true;
 						}
 					}
@@ -935,9 +936,9 @@ bool cSpaceShip::Update(float Time)
 		// если залп
 		if (BossWeaponFireType == 1) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (tmpBossWeaponSlot.Weapon &&
-				    tmpBossWeaponSlot.SetFire)
-					tmpBossWeaponSlot.Weapon->WeaponFire(Time);
+				if (tmpBossWeaponSlot.SetFire)
+					if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock())
+						sharedWeapon->WeaponFire(Time);
 			}
 		} else { // переменный огонь
 
@@ -950,9 +951,9 @@ bool cSpaceShip::Update(float Time)
 
 			// находим кол-во оружия
 			for (unsigned i = 0; i < BossWeaponSlots.size(); i++) {
-				if (BossWeaponSlots[i].Weapon) {
+				if (auto sharedWeapon = BossWeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
-					PrimTime += BossWeaponSlots[i].Weapon->NextFireTime;
+					PrimTime += sharedWeapon->NextFireTime;
 					if (FirstWeapon > i)
 						FirstWeapon = i;
 					if (LastWeapon < i)
@@ -965,11 +966,12 @@ bool cSpaceShip::Update(float Time)
 
 			// стреляем
 			for (unsigned i = 0; i < BossWeaponSlots.size(); i++) {
-				if (BossWeaponSlots[i].Weapon &&
+				if (!BossWeaponSlots[i].Weapon.expired() &&
 				    BossWeaponSlots[i].SetFire &&
 				    (BossWeaponGroupCurrentFireNum == static_cast<int>(i)) &&
 				    (BossWeaponGroupCurrentFireDelay <= 0.0f)) {
-					BossWeaponSlots[i].Weapon->WeaponFire(Time);
+					if (auto sharedWeapon = BossWeaponSlots[i].Weapon.lock())
+						sharedWeapon->WeaponFire(Time);
 
 					BossWeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
 					BossWeaponGroupCurrentFireNum++;
@@ -977,13 +979,13 @@ bool cSpaceShip::Update(float Time)
 						BossWeaponGroupCurrentFireNum = FirstWeapon;
 
 					// если такого оружия нет, берем что есть
-					if (!BossWeaponSlots[BossWeaponGroupCurrentFireNum].Weapon) {
+					if (BossWeaponSlots[BossWeaponGroupCurrentFireNum].Weapon.expired()) {
 						bool exit = false;
 						while (!exit) {
 							BossWeaponGroupCurrentFireNum++;
 							if (BossWeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 								BossWeaponGroupCurrentFireNum = FirstWeapon;
-							if (BossWeaponSlots[BossWeaponGroupCurrentFireNum].Weapon)
+							if (!BossWeaponSlots[BossWeaponGroupCurrentFireNum].Weapon.expired())
 								exit = true;
 						}
 					}
@@ -1064,7 +1066,7 @@ bool cSpaceShip::Update(float Time)
 	bool NeedFire = false;
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (tmpWeaponSlot.Weapon &&
+			if (!tmpWeaponSlot.Weapon.expired() &&
 			    tmpWeaponSlot.SetFire) {
 				NeedFire = true;
 				break;
@@ -1074,7 +1076,7 @@ bool cSpaceShip::Update(float Time)
 	bool NeedBossFire = false;
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-			if (tmpBossWeaponSlot.Weapon &&
+			if (!tmpBossWeaponSlot.Weapon.expired() &&
 			    tmpBossWeaponSlot.SetFire) {
 				NeedBossFire = true;
 				break;
@@ -1091,10 +1093,11 @@ bool cSpaceShip::Update(float Time)
 		int UsedWeaponQunt = 0;
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon &&
-				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + tmpWeaponSlot.Weapon->FireLocation + Location;
-					UsedWeaponQunt++;
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + sharedWeapon->FireLocation + Location;
+						UsedWeaponQunt++;
+					}
 				}
 			}
 		}
@@ -1108,10 +1111,11 @@ bool cSpaceShip::Update(float Time)
 		if (!WeaponSlots.empty()) {
 			// находим номер
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon &&
-				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					WeapNum = tmpWeaponSlot.Weapon->InternalType;
-					break;
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						WeapNum = sharedWeapon->InternalType;
+						break;
+					}
 				}
 			}
 			if (WeapNum == -1)
@@ -1120,10 +1124,11 @@ bool cSpaceShip::Update(float Time)
 
 			int Count = 0;
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon &&
-				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					FirePos += tmpWeaponSlot.Location;
-					Count++;
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						FirePos += tmpWeaponSlot.Location;
+						Count++;
+					}
 				}
 			}
 			FirePos = FirePos^(1.0f/Count);
@@ -1135,13 +1140,14 @@ bool cSpaceShip::Update(float Time)
 		// всему оружию ставим нужную ориентацию
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon &&
-				    tmpWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					NeedAngle.y = tmpWeaponSlot.Weapon->Rotation.y;
-					NeedAngle.z = tmpWeaponSlot.Weapon->Rotation.z;
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						NeedAngle.y = sharedWeapon->Rotation.y;
+						NeedAngle.z = sharedWeapon->Rotation.z;
 
-					tmpWeaponSlot.Weapon->SetRotation(tmpWeaponSlot.Weapon->Rotation^(-1));
-					tmpWeaponSlot.Weapon->SetRotation(NeedAngle);
+						sharedWeapon->SetRotation(sharedWeapon->Rotation^(-1));
+						sharedWeapon->SetRotation(NeedAngle);
+					}
 				}
 			}
 		}
@@ -1155,10 +1161,11 @@ bool cSpaceShip::Update(float Time)
 		int UsedWeaponQunt = 0;
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (tmpBossWeaponSlot.Weapon &&
-				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					WeaponAvLocation = WeaponAvLocation + tmpBossWeaponSlot.Location + tmpBossWeaponSlot.Weapon->FireLocation + Location;
-					UsedWeaponQunt++;
+				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						WeaponAvLocation = WeaponAvLocation + tmpBossWeaponSlot.Location + sharedWeapon->FireLocation + Location;
+						UsedWeaponQunt++;
+					}
 				}
 			}
 		}
@@ -1171,10 +1178,11 @@ bool cSpaceShip::Update(float Time)
 		if (!BossWeaponSlots.empty()) {
 			// находим номер
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (tmpBossWeaponSlot.Weapon &&
-				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					WeapNum = tmpBossWeaponSlot.Weapon->InternalType;
-					break;
+				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						WeapNum = sharedWeapon->InternalType;
+						break;
+					}
 				}
 			}
 			if (WeapNum == -1)
@@ -1183,10 +1191,11 @@ bool cSpaceShip::Update(float Time)
 
 			int Count = 0;
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (tmpBossWeaponSlot.Weapon &&
-				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					FirePos += tmpBossWeaponSlot.Location;
-					Count++;
+				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						FirePos += tmpBossWeaponSlot.Location;
+						Count++;
+					}
 				}
 			}
 			FirePos = FirePos^(1.0f/Count);
@@ -1198,13 +1207,14 @@ bool cSpaceShip::Update(float Time)
 		// всему оружию ставим нужную ориентацию
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (tmpBossWeaponSlot.Weapon &&
-				    tmpBossWeaponSlot.Weapon->NeedRotateOnTargeting) {
-					NeedAngle.y = tmpBossWeaponSlot.Weapon->Rotation.y;
-					NeedAngle.z = tmpBossWeaponSlot.Weapon->Rotation.z;
+				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						NeedAngle.y = sharedWeapon->Rotation.y;
+						NeedAngle.z = sharedWeapon->Rotation.z;
 
-					tmpBossWeaponSlot.Weapon->SetRotation(tmpBossWeaponSlot.Weapon->Rotation ^ -1);
-					tmpBossWeaponSlot.Weapon->SetRotation(NeedAngle);
+						sharedWeapon->SetRotation(sharedWeapon->Rotation ^ -1);
+						sharedWeapon->SetRotation(NeedAngle);
+					}
 				}
 			}
 		}
@@ -1218,8 +1228,8 @@ bool cSpaceShip::Update(float Time)
 		int UsedWeaponQunt = 0;
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon) {
-					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location +tmpWeaponSlot.Weapon->FireLocation + Location;
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + sharedWeapon->FireLocation + Location;
 					UsedWeaponQunt++;
 				}
 			}
@@ -1236,64 +1246,65 @@ bool cSpaceShip::Update(float Time)
 			float TargetingSpeed = 1.0f;
 
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
-				if (WeaponSlots[i].Weapon &&
-				    WeaponSlots[i].Weapon->NeedRotateOnTargeting) {
-					NeedAngle = Rotation;
-					// добавляем базовый угол, чтобы по умолчанию устанавливало его
-					NeedAngle.y += WeaponSlots[i].YAngle;
+				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
+					if(sharedWeapon->NeedRotateOnTargeting) {
+						NeedAngle = Rotation;
+						// добавляем базовый угол, чтобы по умолчанию устанавливало его
+						NeedAngle.y += WeaponSlots[i].YAngle;
 
-					GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, Rotation,
-								    Length, CurrentRotationMat, NeedAngle, Width, true, true,
-								    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
+						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, Rotation,
+									    Length, CurrentRotationMat, NeedAngle, Width, true, true,
+									    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 
-					sVECTOR3D NeedAngleTmp = NeedAngle;
+						sVECTOR3D NeedAngleTmp = NeedAngle;
 
-					// учитываем скорость поворота по вертикали
-					if (WeaponSlots[i].Weapon->Rotation.x < NeedAngle.x) {
-						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_x > NeedAngle.x)
-							NeedAngle_x = NeedAngle.x;
-						NeedAngle.x = NeedAngle_x;
+						// учитываем скорость поворота по вертикали
+						if (sharedWeapon->Rotation.x < NeedAngle.x) {
+							float NeedAngle_x = sharedWeapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_x > NeedAngle.x)
+								NeedAngle_x = NeedAngle.x;
+							NeedAngle.x = NeedAngle_x;
 
-					}
-					if (WeaponSlots[i].Weapon->Rotation.x > NeedAngle.x) {
-						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_x < NeedAngle.x)
-							NeedAngle_x = NeedAngle.x;
-						NeedAngle.x = NeedAngle_x;
-					}
+						}
+						if (sharedWeapon->Rotation.x > NeedAngle.x) {
+							float NeedAngle_x = sharedWeapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_x < NeedAngle.x)
+								NeedAngle_x = NeedAngle.x;
+							NeedAngle.x = NeedAngle_x;
+						}
 
-					// учитываем скорость поворота по горизонтали
-					float Min = 0.0f;
-					float Max = 0.0f;
-					GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
-					if (WeaponSlots[i].Weapon->Rotation.y < NeedAngle.y) {
-						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_y > NeedAngle.y)
-							NeedAngle_y = NeedAngle.y;
-						NeedAngle.y = NeedAngle_y;
-						// проверка на достижение предела поворота
-						if (NeedAngle.y > Max+Rotation.y)
-							NeedAngle.y = Max+Rotation.y;
-					}
-					if (WeaponSlots[i].Weapon->Rotation.y > NeedAngle.y) {
-						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_y < NeedAngle.y)
-							NeedAngle_y = NeedAngle.y;
-						NeedAngle.y = NeedAngle_y;
-						// проверка на достижение предела поворота
-						if (NeedAngle.y < Min+Rotation.y)
-							NeedAngle.y = Min+Rotation.y;
-					}
+						// учитываем скорость поворота по горизонтали
+						float Min = 0.0f;
+						float Max = 0.0f;
+						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
+						if (sharedWeapon->Rotation.y < NeedAngle.y) {
+							float NeedAngle_y = sharedWeapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_y > NeedAngle.y)
+								NeedAngle_y = NeedAngle.y;
+							NeedAngle.y = NeedAngle_y;
+							// проверка на достижение предела поворота
+							if (NeedAngle.y > Max+Rotation.y)
+								NeedAngle.y = Max+Rotation.y;
+						}
+						if (sharedWeapon->Rotation.y > NeedAngle.y) {
+							float NeedAngle_y = sharedWeapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_y < NeedAngle.y)
+								NeedAngle_y = NeedAngle.y;
+							NeedAngle.y = NeedAngle_y;
+							// проверка на достижение предела поворота
+							if (NeedAngle.y < Min+Rotation.y)
+								NeedAngle.y = Min+Rotation.y;
+						}
 
-					// если выключен прикол с поворотом - моментально поворачиваем ствол
-					if (GameWeaponTargetingMode == 1)
-						NeedAngle = NeedAngleTmp;
+						// если выключен прикол с поворотом - моментально поворачиваем ствол
+						if (GameWeaponTargetingMode == 1)
+							NeedAngle = NeedAngleTmp;
 
-					// если это не ракетные системы, нужно повернуть
-					if (WeaponSlots[i].Weapon->InternalType < 16) {
-						WeaponSlots[i].Weapon->SetRotation(WeaponSlots[i].Weapon->Rotation^(-1));
-						WeaponSlots[i].Weapon->SetRotation(NeedAngle);
+						// если это не ракетные системы, нужно повернуть
+						if (sharedWeapon->InternalType < 16) {
+							sharedWeapon->SetRotation(sharedWeapon->Rotation^(-1));
+							sharedWeapon->SetRotation(NeedAngle);
+						}
 					}
 				}
 			}
@@ -1311,8 +1322,8 @@ bool cSpaceShip::Update(float Time)
 		int UsedWeaponQunt = 0;
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (tmpWeaponSlot.Weapon) {
-					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + tmpWeaponSlot.Weapon->FireLocation + Location;
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+					WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + sharedWeapon->FireLocation + Location;
 					UsedWeaponQunt++;
 				}
 			}
@@ -1338,82 +1349,83 @@ bool cSpaceShip::Update(float Time)
 		// всему оружию ставим нужную ориентацию
 		if (!WeaponSlots.empty()) {
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
-				if (WeaponSlots[i].Weapon &&
-				    WeaponSlots[i].Weapon->NeedRotateOnTargeting) {
-					NeedAngle = Rotation;
-					// добавляем базовый угол, чтобы по умолчанию устанавливало его
-					NeedAngle.y += WeaponSlots[i].YAngle;
+				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
+						NeedAngle = Rotation;
+						// добавляем базовый угол, чтобы по умолчанию устанавливало его
+						NeedAngle.y += WeaponSlots[i].YAngle;
 
-					switch (GameTargetingSystem) {
-					case 1:
-						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-									    Length, CurrentRotationMat, NeedAngle, Width, false, true,
-									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
-						break;
-					case 2:
-						GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-									    Length, CurrentRotationMat, NeedAngle, Width, true, true,
-									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
-						break;
-					case 3:
-						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->Rotation,
-									    Length, WeaponSlots[i].Weapon->CurrentRotationMat, NeedAngle, WeaponSlots[i].Weapon->Width, false, true,
-									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
-						break;
-					case 4:
-						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation,
-									    sVECTOR3D{WeaponSlots[i].Weapon->Rotation.x, 0.0f, WeaponSlots[i].Weapon->Rotation.z} + sVECTOR3D{0.0f, WeaponSlots[i].YAngle, 0.0f},
-									    Length, WeaponSlots[i].Weapon->CurrentRotationMat, NeedAngle, Width, false, true,
-									    Location + WeaponSlots[i].Location + WeaponSlots[i].Weapon->FireLocation, WeaponSlots[i].Weapon->InternalType);
-						break;
+						switch (GameTargetingSystem) {
+						case 1:
+							GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
+										    Length, CurrentRotationMat, NeedAngle, Width, false, true,
+										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							break;
+						case 2:
+							GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
+										    Length, CurrentRotationMat, NeedAngle, Width, true, true,
+										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							break;
+						case 3:
+							GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->Rotation,
+										    Length, sharedWeapon->CurrentRotationMat, NeedAngle, sharedWeapon->Width, false, true,
+										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							break;
+						case 4:
+							GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation,
+										    sVECTOR3D{sharedWeapon->Rotation.x, 0.0f, sharedWeapon->Rotation.z} + sVECTOR3D{0.0f, WeaponSlots[i].YAngle, 0.0f},
+										    Length, sharedWeapon->CurrentRotationMat, NeedAngle, Width, false, true,
+										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							break;
+						}
+
+						sVECTOR3D NeedAngleTmp = NeedAngle;
+
+						// учитываем скорость поворота по вертикали
+						if (sharedWeapon->Rotation.x < NeedAngle.x) {
+							float NeedAngle_x = sharedWeapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_x > NeedAngle.x)
+								NeedAngle_x = NeedAngle.x;
+							NeedAngle.x = NeedAngle_x;
+
+						}
+						if (sharedWeapon->Rotation.x > NeedAngle.x) {
+							float NeedAngle_x = sharedWeapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_x < NeedAngle.x)
+								NeedAngle_x = NeedAngle.x;
+							NeedAngle.x = NeedAngle_x;
+						}
+
+						// учитываем скорость поворота по горизонтали
+						float Min = 0.0f;
+						float Max = 0.0f;
+						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
+						if (sharedWeapon->Rotation.y > NeedAngle.y) {
+							float NeedAngle_y = sharedWeapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_y > NeedAngle.y)
+								NeedAngle_y = NeedAngle.y;
+							NeedAngle.y = NeedAngle_y;
+							// проверка на достижение предела поворота
+							if (NeedAngle.y > Max+sharedWeapon->Rotation.y)
+								NeedAngle.y = Max+sharedWeapon->Rotation.y;
+						}
+						if (sharedWeapon->Rotation.y < NeedAngle.y) {
+							float NeedAngle_y = sharedWeapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
+							if (NeedAngle_y < NeedAngle.y)
+								NeedAngle_y = NeedAngle.y;
+							NeedAngle.y = NeedAngle_y;
+							// проверка на достижение предела поворота
+							if (NeedAngle.y < Min+sharedWeapon->Rotation.y)
+								NeedAngle.y = Min+sharedWeapon->Rotation.y;
+						}
+
+						// если выключен прикол с поворотом - моментально поворачиваем ствол
+						if (GameWeaponTargetingMode == 1)
+							NeedAngle = NeedAngleTmp;
+
+						sharedWeapon->SetRotation(sharedWeapon->Rotation^(-1));
+						sharedWeapon->SetRotation(NeedAngle);
 					}
-
-					sVECTOR3D NeedAngleTmp = NeedAngle;
-
-					// учитываем скорость поворота по вертикали
-					if (WeaponSlots[i].Weapon->Rotation.x < NeedAngle.x) {
-						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_x > NeedAngle.x)
-							NeedAngle_x = NeedAngle.x;
-						NeedAngle.x = NeedAngle_x;
-
-					}
-					if (WeaponSlots[i].Weapon->Rotation.x > NeedAngle.x) {
-						float NeedAngle_x = WeaponSlots[i].Weapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_x < NeedAngle.x)
-							NeedAngle_x = NeedAngle.x;
-						NeedAngle.x = NeedAngle_x;
-					}
-
-					// учитываем скорость поворота по горизонтали
-					float Min = 0.0f;
-					float Max = 0.0f;
-					GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
-					if (WeaponSlots[i].Weapon->Rotation.y > NeedAngle.y) {
-						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_y > NeedAngle.y)
-							NeedAngle_y = NeedAngle.y;
-						NeedAngle.y = NeedAngle_y;
-						// проверка на достижение предела поворота
-						if (NeedAngle.y > Max+WeaponSlots[i].Weapon->Rotation.y)
-							NeedAngle.y = Max+WeaponSlots[i].Weapon->Rotation.y;
-					}
-					if (WeaponSlots[i].Weapon->Rotation.y < NeedAngle.y) {
-						float NeedAngle_y = WeaponSlots[i].Weapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
-						if (NeedAngle_y < NeedAngle.y)
-							NeedAngle_y = NeedAngle.y;
-						NeedAngle.y = NeedAngle_y;
-						// проверка на достижение предела поворота
-						if (NeedAngle.y < Min+WeaponSlots[i].Weapon->Rotation.y)
-							NeedAngle.y = Min+WeaponSlots[i].Weapon->Rotation.y;
-					}
-
-					// если выключен прикол с поворотом - моментально поворачиваем ствол
-					if (GameWeaponTargetingMode == 1)
-						NeedAngle = NeedAngleTmp;
-
-					WeaponSlots[i].Weapon->SetRotation(WeaponSlots[i].Weapon->Rotation^(-1));
-					WeaponSlots[i].Weapon->SetRotation(NeedAngle);
 				}
 			}
 		}

@@ -262,7 +262,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		// оружие
 		WeaponSlots[0](CreateWeapon(204), sVECTOR3D{1.8f, -1.2f, 6.0f});
 		WeaponSlots[1](CreateWeapon(204), sVECTOR3D{-1.8f, -1.2f, 6.0f});
-		WeaponSlots[1].Weapon->SFX = eGameSFX::none;
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
 		// двигатели
@@ -453,7 +454,8 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		// оружие
 		WeaponSlots[0](CreateWeapon(201), sVECTOR3D{0.0f, 4.2f, 7.0f});
 		WeaponSlots[1](CreateWeapon(201), sVECTOR3D{0.0f, 4.2f, 3.5f});
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0, 180.0, 0.0});
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0, 180.0, 0.0});
 		WeaponSlots[2](CreateWeapon(202), sVECTOR3D{0.0f, 3.4f, -5.0f});
 
 		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D{11.1f, 2.7f, 9.0f});
@@ -492,10 +494,12 @@ cPirateShip::cPirateShip(int PirateShipNum)
 		// оружие
 		WeaponSlots[0](CreateWeapon(201), sVECTOR3D{0.0f, 4.4f, 6.8f});
 		WeaponSlots[1](CreateWeapon(201), sVECTOR3D{0.0f, 4.4f, 2.6f});
-		WeaponSlots[1].Weapon->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
 		WeaponSlots[2](CreateWeapon(202), sVECTOR3D{0.0f, 2.6f, -7.0f});
 		WeaponSlots[3](CreateWeapon(201), sVECTOR3D{0.0f, 2.6f, -16.0f});
-		WeaponSlots[3].Weapon->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
+		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
 
 		BossWeaponSlots[0](CreateWeapon(205), sVECTOR3D{11.1f, 2.7f, 8.0f});
 		BossWeaponSlots[1](CreateWeapon(205), sVECTOR3D{-11.1f, 2.7f, 8.0f});
