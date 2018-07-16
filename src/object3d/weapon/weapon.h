@@ -57,7 +57,6 @@ private:
 	virtual ~cWeapon();
 
 public:
-
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 	// Выстрел
@@ -124,9 +123,6 @@ public:
 	std::weak_ptr<cParticleSystem> DestroyedFire{};
 	std::weak_ptr<cParticleSystem> DestroyedSmoke{};
 	sVECTOR3D DestroyedFireLocation{0.0f, 0.0f, 0.0f};
-
-	cWeapon *Next{nullptr};
-	cWeapon *Prev{nullptr};
 };
 
 
