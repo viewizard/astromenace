@@ -87,7 +87,6 @@ cWheeled::cWheeled(int WheeledNum)
 
 	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength / GameEnemyArmorPenalty;
 
-	// установка доп. текстуры и других настроек для каждой модели
 	switch (WheeledNum) {
 	case 1:
 		WeaponSlots.reserve(4);

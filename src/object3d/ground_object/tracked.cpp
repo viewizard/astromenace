@@ -93,7 +93,6 @@ cTracked::cTracked(int TrackedNum)
 
 	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength / GameEnemyArmorPenalty;
 
-	// установка доп. текстуры и других настроек для каждой модели
 	switch (TrackedNum) {
 	case 1:
 		WeaponSlots.emplace_back(CreateWeapon(211), sVECTOR3D{0.0f, 5.5f, 9.0f});

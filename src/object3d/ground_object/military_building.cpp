@@ -82,7 +82,6 @@ cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
 
 	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Strength / GameEnemyArmorPenalty;
 
-	// установка доп. текстуры и других настроек для каждой модели
 	switch (MilitaryBuildingNum) {
 	case 1:
 		WeaponSlots.reserve(2);
