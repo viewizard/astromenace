@@ -36,8 +36,6 @@ namespace viewizard {
 namespace astromenace {
 
 struct sAlienSpaceMotherShipData {
-	unsigned int WeaponQuantity;
-	unsigned int BossWeaponQuantity;
 	unsigned int EngineQuantity;
 	float Strength;
 	float ShieldStrength;
@@ -47,17 +45,16 @@ struct sAlienSpaceMotherShipData {
 };
 
 const sAlienSpaceMotherShipData PresetAlienSpaceMotherShipData[] = {
-	{14,	0,	10,	3000,	1500,	"models/alienmothership/alm-01.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
-	{8,	8,	10,	4000,	3000,	"models/alienmothership/alm-02.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
-	{8,	1,	8,	5000,	3300,	"models/alienmothership/alm-03.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
-	{8,	8,	12,	6000,	3500,	"models/alienmothership/alm-04.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
-	{8,	6,	19,	7000,	3800,	"models/alienmothership/alm-05.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
-	{12,	6,	15,	8000,	4000,	"models/alienmothership/alm-06.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
-	{5,	2,	6,	9000,	4300,	"models/alienmothership/alm-07.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"},
-	{4,	6,	10,	10000,	4500,	"models/alienmothership/alm-08.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"}
+	{10,	3000,	1500,	"models/alienmothership/alm-01.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
+	{10,	4000,	3000,	"models/alienmothership/alm-02.vw3d", "models/alienmothership/alm-text04.vw2d", "models/alienmothership/alm-illum04.vw2d"},
+	{8,	5000,	3300,	"models/alienmothership/alm-03.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
+	{12,	6000,	3500,	"models/alienmothership/alm-04.vw3d", "models/alienmothership/alm-text02.vw2d", "models/alienmothership/alm-illum02.vw2d"},
+	{19,	7000,	3800,	"models/alienmothership/alm-05.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
+	{15,	8000,	4000,	"models/alienmothership/alm-06.vw3d", "models/alienmothership/alm-text08.vw2d", "models/alienmothership/alm-illum08.vw2d"},
+	{6,	9000,	4300,	"models/alienmothership/alm-07.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"},
+	{10,	10000,	4500,	"models/alienmothership/alm-08.vw3d", "models/alienmothership/alm-text03.vw2d", "models/alienmothership/alm-illum03.vw2d"}
 };
 #define PresetAlienSpaceMotherShipDataCount sizeof(PresetAlienSpaceMotherShipData)/sizeof(PresetAlienSpaceMotherShipData[0])
-
 
 
 //-----------------------------------------------------------------------------
@@ -504,9 +501,11 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 //-----------------------------------------------------------------------------
 cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 {
-	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetAlienSpaceMotherShipDataCount)) {
+	if ((SpaceShipNum <= 0) ||
+	    (static_cast<unsigned>(SpaceShipNum) > PresetAlienSpaceMotherShipDataCount)) {
 		std::cerr << __func__ << "(): "
-			  << "Could not init cAlienSpaceMotherShip object with Number " << SpaceShipNum << "\n";
+			  << "Could not init cAlienSpaceMotherShip object with Number "
+			  << SpaceShipNum << "\n";
 		return;
 	}
 
@@ -520,15 +519,11 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 80.0f;
-	Strength = StrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum-1].Strength/GameEnemyArmorPenalty;
-	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum-1].ShieldStrength/GameEnemyArmorPenalty;
-	ShieldRecharge = ShieldStrengthStart/15.0f;
+	Strength = StrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
+	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].ShieldStrength / GameEnemyArmorPenalty;
+	ShieldRecharge = ShieldStrengthStart / 15.0f;
 
-	WeaponSlots.resize(PresetAlienSpaceMotherShipData[SpaceShipNum-1].WeaponQuantity);
-	BossWeaponSlots.resize(PresetAlienSpaceMotherShipData[SpaceShipNum-1].BossWeaponQuantity);
-
-
-	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum-1].Name, *this);
+	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Name, *this);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Chunks.size(); i++) {
@@ -539,43 +534,28 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/alien_mothership_nm.tga");
 	}
 
-
 	// начальные установки для двигателей
 	Engines.resize(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity);
 	EnginesLocation.resize(Engines.size());
 
-
-
-
-
-
-
-
-
-
-	// перебираем и ставим нужные данные
 	switch (SpaceShipNum) {
 	case 1:
-		// оружие
-		WeaponSlots[0](CreateWeapon(102), sVECTOR3D{-1.6f, 1.0f, 19.0f});
-		WeaponSlots[1](CreateWeapon(102), sVECTOR3D{1.6f, 1.0f, 19.0f});
-		WeaponSlots[2](CreateWeapon(102), sVECTOR3D{-1.6f, -1.0f, 19.0f});
-		WeaponSlots[3](CreateWeapon(102), sVECTOR3D{1.6f, -1.0f, 19.0f});
+		WeaponSlots.reserve(14);
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-1.6f, 1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{1.6f, 1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-1.6f, -1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{1.6f, -1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{-1.6f, 1.5f, 18.0f});
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{1.6f, 1.5f, 18.0f});
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{-1.6f, -1.5f, 18.0f});
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{1.6f, -1.5f, 18.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-1.6f, 1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{1.6f, 1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-1.6f, -1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{1.6f, -1.0f, 19.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{0.0f, -8.0f, 0.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{0.0f, -8.0f, 0.0f});
 
-		WeaponSlots[4](CreateWeapon(103), sVECTOR3D{-1.6f, 1.5f, 18.0f});
-		WeaponSlots[5](CreateWeapon(103), sVECTOR3D{1.6f, 1.5f, 18.0f});
-		WeaponSlots[6](CreateWeapon(103), sVECTOR3D{-1.6f, -1.5f, 18.0f});
-		WeaponSlots[7](CreateWeapon(103), sVECTOR3D{1.6f, -1.5f, 18.0f});
-
-		WeaponSlots[8](CreateWeapon(104), sVECTOR3D{-1.6f, 1.0f, 19.0f});
-		WeaponSlots[9](CreateWeapon(104), sVECTOR3D{1.6f, 1.0f, 19.0f});
-		WeaponSlots[10](CreateWeapon(104), sVECTOR3D{-1.6f, -1.0f, 19.0f});
-		WeaponSlots[11](CreateWeapon(104), sVECTOR3D{1.6f, -1.0f, 19.0f});
-
-		WeaponSlots[12](CreateWeapon(104), sVECTOR3D{0.0f, -8.0f, 0.0f});
-		WeaponSlots[13](CreateWeapon(104), sVECTOR3D{0.0f, -8.0f, 0.0f});
-
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{8.4f, 5.2f, -24.0f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -617,44 +597,44 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		if (auto sharedEngine = Engines[9].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
 		break;
+
 	case 2:
-		// оружие
-		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(8);
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[2](CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
-		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{-10.7f, 0.0f, -18.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[3](CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
-		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{10.7f, 0.0f, -18.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{-10.7f, 0.0f, -18.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{10.7f, 0.0f, -18.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{-4.0f, 0.0f, 24.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{4.0f, 0.0f, 24.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 
-		WeaponSlots[4](CreateWeapon(106), sVECTOR3D{-10.7f, 0.0f, -18.5f});
-		if (auto sharedWeapon = WeaponSlots[4].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[5](CreateWeapon(106), sVECTOR3D{10.7f, 0.0f, -18.5f});
-		if (auto sharedWeapon = WeaponSlots[5].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[6](CreateWeapon(106), sVECTOR3D{-4.0f, 0.0f, 24.0f});
-		if (auto sharedWeapon = WeaponSlots[6].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[7](CreateWeapon(106), sVECTOR3D{4.0f, 0.0f, 24.0f});
-		if (auto sharedWeapon = WeaponSlots[7].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
+		BossWeaponSlots.reserve(8);
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-1.5f, 1.5f, 25.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{1.5f, 1.5f, 25.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-1.5f, -1.5f, 25.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{1.5f, -1.5f, 25.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-4.0f, 2.0f, 24.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{4.0f, 2.0f, 24.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-4.0f, -2.0f, 24.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{4.0f, -2.0f, 24.0f});
 
-		BossWeaponSlots[0](CreateWeapon(102), sVECTOR3D{-1.5f, 1.5f, 25.0f});
-		BossWeaponSlots[1](CreateWeapon(102), sVECTOR3D{1.5f, 1.5f, 25.0f});
-		BossWeaponSlots[2](CreateWeapon(102), sVECTOR3D{-1.5f, -1.5f, 25.0f});
-		BossWeaponSlots[3](CreateWeapon(102), sVECTOR3D{1.5f, -1.5f, 25.0f});
-		BossWeaponSlots[4](CreateWeapon(102), sVECTOR3D{-4.0f, 2.0f, 24.0f});
-		BossWeaponSlots[5](CreateWeapon(102), sVECTOR3D{4.0f, 2.0f, 24.0f});
-		BossWeaponSlots[6](CreateWeapon(102), sVECTOR3D{-4.0f, -2.0f, 24.0f});
-		BossWeaponSlots[7](CreateWeapon(102), sVECTOR3D{4.0f, -2.0f, 24.0f});
-
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{5.6f, 7.0f, -27.6f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -696,21 +676,20 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		if (auto sharedEngine = Engines[9].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
 		break;
+
 	case 3:
-		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{3.0f, -2.0f, 13.0f});
-		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-3.0f, -2.0f, 13.0f});
-		WeaponSlots[2](CreateWeapon(104), sVECTOR3D{2.0f, -1.0f, 13.0f});
-		WeaponSlots[3](CreateWeapon(104), sVECTOR3D{-2.0f, -1.0f, 13.0f});
-		WeaponSlots[4](CreateWeapon(104), sVECTOR3D{2.0f, -3.0f, 13.0f});
-		WeaponSlots[5](CreateWeapon(104), sVECTOR3D{-2.0f, -3.0f, 13.0f});
+		WeaponSlots.reserve(8);
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{3.0f, -2.0f, 13.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-3.0f, -2.0f, 13.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{2.0f, -1.0f, 13.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-2.0f, -1.0f, 13.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{2.0f, -3.0f, 13.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-2.0f, -3.0f, 13.0f});
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{7.0f, -2.0f, 13.0f});
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{-7.0f, -2.0f, 13.0f});
 
-		WeaponSlots[6](CreateWeapon(109), sVECTOR3D{7.0f, -2.0f, 13.0f});
-		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{-7.0f, -2.0f, 13.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(110), sVECTOR3D{0.0f, -2.0f, 27.0f});
 
-		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{0.0f, -2.0f, 27.0f});
-
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{5.5f, 8.1f, -26.1f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -744,40 +723,40 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceMotherShipEngine(sharedEngine, 4);
 		break;
+
 	case 4:
-		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{1.0f, -1.0f, 23.0f});
-		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-1.0f, -1.0f, 23.0f});
-		WeaponSlots[2](CreateWeapon(104), sVECTOR3D{1.0f, 0.0f, 23.0f});
-		WeaponSlots[3](CreateWeapon(104), sVECTOR3D{-1.0f, 0.0f, 23.0f});
-		WeaponSlots[4](CreateWeapon(104), sVECTOR3D{1.0f, -2.0f, 23.0f});
-		WeaponSlots[5](CreateWeapon(104), sVECTOR3D{-1.0f, -2.0f, 23.0f});
+		WeaponSlots.reserve(8);
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{1.0f, -1.0f, 23.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-1.0f, -1.0f, 23.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{1.0f, 0.0f, 23.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-1.0f, 0.0f, 23.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{1.0f, -2.0f, 23.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-1.0f, -2.0f, 23.0f});
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -1.0f, 23.0f});
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -1.0f, 23.0f});
 
-		WeaponSlots[6](CreateWeapon(109), sVECTOR3D{0.0f, -1.0f, 23.0f});
-		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{0.0f, -1.0f, 23.0f});
-
-		BossWeaponSlots[0](CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
-		if (auto sharedWeapon = BossWeaponSlots[0].Weapon.lock())
+		BossWeaponSlots.reserve(8);
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
+		if (auto sharedWeapon = BossWeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -15.0f, 0.0f});
-		BossWeaponSlots[1](CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
-		if (auto sharedWeapon = BossWeaponSlots[1].Weapon.lock())
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
+		if (auto sharedWeapon = BossWeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 15.0f, 0.0f});
-		BossWeaponSlots[2](CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
-		BossWeaponSlots[3](CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
-		BossWeaponSlots[4](CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
-		if (auto sharedWeapon = BossWeaponSlots[4].Weapon.lock())
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{8.9f, -0.6f, 18.0f});
+		if (auto sharedWeapon = BossWeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -5.0f, 0.0f});
-		BossWeaponSlots[5](CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
-		if (auto sharedWeapon = BossWeaponSlots[5].Weapon.lock())
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{-8.9f, -0.6f, 18.0f});
+		if (auto sharedWeapon = BossWeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 5.0f, 0.0f});
-		BossWeaponSlots[6](CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
-		if (auto sharedWeapon = BossWeaponSlots[6].Weapon.lock())
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{10.0f, -5.6f, 18.0f});
+		if (auto sharedWeapon = BossWeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -10.0f, 0.0f});
-		BossWeaponSlots[7](CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
-		if (auto sharedWeapon = BossWeaponSlots[7].Weapon.lock())
+		BossWeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{-10.0f, -5.6f, 18.0f});
+		if (auto sharedWeapon = BossWeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 10.0f, 0.0f});
 
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{1.9f, 5.9f, -24.6f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -833,37 +812,38 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 			sharedEngine->DeadZone = 5.9f;
 		}
 		break;
+
 	case 5:
-		// оружие
-		WeaponSlots[0](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[1](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.reserve(8);
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
-		WeaponSlots[2](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
-		WeaponSlots[3](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
-		WeaponSlots[4](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		WeaponSlots[5](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		if (auto sharedWeapon = WeaponSlots[5].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
-		WeaponSlots[6](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		if (auto sharedWeapon = WeaponSlots[6].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 9.0f, 0.0f});
-		WeaponSlots[7](CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		if (auto sharedWeapon = WeaponSlots[7].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -9.0f, 0.0f});
 
-		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D{35.7f, -3.0f, -13.0f});
-		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D{-35.7f, -3.0f, -13.0f});
-		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D{0.0f, -2.4f, 20.0f});
-		BossWeaponSlots[4](CreateWeapon(104), sVECTOR3D{8.85f, 5.65f, -10.2f});
-		BossWeaponSlots[5](CreateWeapon(104), sVECTOR3D{-8.85f, 5.65f, -10.2f});
+		BossWeaponSlots.reserve(6);
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{35.7f, -3.0f, -13.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{-35.7f, -3.0f, -13.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{0.0f, -2.4f, 20.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{8.85f, 5.65f, -10.2f});
+		BossWeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-8.85f, 5.65f, -10.2f});
 
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{25.1f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -946,63 +926,61 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 			SetAlienSpaceMotherShipEngine(sharedEngine, 13);
 		break;
 
-
 	case 6:
-		// оружие
-		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(12);
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
-		WeaponSlots[2](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
-		WeaponSlots[3](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
-		WeaponSlots[4](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		if (auto sharedWeapon = WeaponSlots[4].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[5](CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
-		if (auto sharedWeapon = WeaponSlots[5].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, -4.4f, 18.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{7.0f, -4.4f, 13.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-7.0f, -4.4f, 13.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{12.0f, -4.4f, 10.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-12.0f, -4.4f, 10.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{17.0f, -4.4f, 8.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-17.0f, -4.4f, 8.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
+			sharedWeapon->NextFireTime /= 2.0f;
 
-		WeaponSlots[6](CreateWeapon(104), sVECTOR3D{7.0f, -4.4f, 13.0f});
-		if (auto sharedWeapon = WeaponSlots[6].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[7](CreateWeapon(104), sVECTOR3D{-7.0f, -4.4f, 13.0f});
-		if (auto sharedWeapon = WeaponSlots[7].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[8](CreateWeapon(104), sVECTOR3D{12.0f, -4.4f, 10.0f});
-		if (auto sharedWeapon = WeaponSlots[8].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[9](CreateWeapon(104), sVECTOR3D{-12.0f, -4.4f, 10.0f});
-		if (auto sharedWeapon = WeaponSlots[9].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[10](CreateWeapon(104), sVECTOR3D{17.0f, -4.4f, 8.0f});
-		if (auto sharedWeapon = WeaponSlots[10].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[11](CreateWeapon(104), sVECTOR3D{-17.0f, -4.4f, 8.0f});
-		if (auto sharedWeapon = WeaponSlots[11].Weapon.lock())
-			sharedWeapon->NextFireTime /= 2.0f;
+		BossWeaponSlots.reserve(6);
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{10.0f, -6.4f, 10.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{-10.0f, -6.4f, 10.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{15.0f, -6.4f, 8.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{-15.0f, -6.4f, 8.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{20.0f, -6.4f, 5.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{-20.0f, -6.4f, 5.0f});
 
-		BossWeaponSlots[0](CreateWeapon(106), sVECTOR3D{10.0f, -6.4f, 10.0f});
-		BossWeaponSlots[1](CreateWeapon(106), sVECTOR3D{-10.0f, -6.4f, 10.0f});
-		BossWeaponSlots[2](CreateWeapon(106), sVECTOR3D{15.0f, -6.4f, 8.0f});
-		BossWeaponSlots[3](CreateWeapon(106), sVECTOR3D{-15.0f, -6.4f, 8.0f});
-		BossWeaponSlots[4](CreateWeapon(106), sVECTOR3D{20.0f, -6.4f, 5.0f});
-		BossWeaponSlots[5](CreateWeapon(106), sVECTOR3D{-20.0f, -6.4f, 5.0f});
-
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, -7.0f, -23.0f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -1066,35 +1044,35 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 		break;
 
 	case 7:
-		// оружие
-		WeaponSlots[0](CreateWeapon(108), sVECTOR3D{0.0f, -1.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(5);
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{0.0f, -1.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(108), sVECTOR3D{2.0f, -1.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{2.0f, -1.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 3.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
-		WeaponSlots[2](CreateWeapon(108), sVECTOR3D{-2.0f, -1.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{-2.0f, -1.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -3.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
-		WeaponSlots[3](CreateWeapon(108), sVECTOR3D{4.0f, -1.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{4.0f, -1.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, 6.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
-		WeaponSlots[4](CreateWeapon(108), sVECTOR3D{-4.0f, -1.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[4].Weapon.lock()) {
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{-4.0f, -1.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock()) {
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, -6.0f, 0.0f});
 			sharedWeapon->NextFireTime /= 2.0f;
 		}
 
-		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{12.5f, 1.6f, -15.3f});
-		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D{-12.5f, 1.6f, -15.3f});
+		BossWeaponSlots.reserve(2);
+		BossWeaponSlots.emplace_back(CreateWeapon(110), sVECTOR3D{12.5f, 1.6f, -15.3f});
+		BossWeaponSlots.emplace_back(CreateWeapon(110), sVECTOR3D{-12.5f, 1.6f, -15.3f});
 
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 2.3f, -25.0f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -1121,32 +1099,29 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 			SetAlienSpaceMotherShipEngine(sharedEngine, 19);
 		break;
 
-
-
-
 	case 8:
-		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{2.0f, -2.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(4);
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{2.0f, -2.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-2.0f, -2.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-2.0f, -2.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[2](CreateWeapon(104), sVECTOR3D{2.0f, -4.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{2.0f, -4.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
-		WeaponSlots[3](CreateWeapon(104), sVECTOR3D{-2.0f, -4.4f, 15.0f});
-		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-2.0f, -4.4f, 15.0f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 2.0f;
 
-		BossWeaponSlots[0](CreateWeapon(110), sVECTOR3D{8.0f, -1.0f, 15.0f});
-		BossWeaponSlots[1](CreateWeapon(110), sVECTOR3D{-8.0f, -1.0f, 15.0f});
-		BossWeaponSlots[2](CreateWeapon(107), sVECTOR3D{10.0f, -6.4f, 8.0f});
-		BossWeaponSlots[3](CreateWeapon(107), sVECTOR3D{-10.0f, -6.4f, 8.0f});
-		BossWeaponSlots[4](CreateWeapon(107), sVECTOR3D{15.0f, -6.4f, 5.0f});
-		BossWeaponSlots[5](CreateWeapon(107), sVECTOR3D{-15.0f, -6.4f, 5.0f});
+		BossWeaponSlots.reserve(6);
+		BossWeaponSlots.emplace_back(CreateWeapon(110), sVECTOR3D{8.0f, -1.0f, 15.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(110), sVECTOR3D{-8.0f, -1.0f, 15.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(107), sVECTOR3D{10.0f, -6.4f, 8.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(107), sVECTOR3D{-10.0f, -6.4f, 8.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(107), sVECTOR3D{15.0f, -6.4f, 5.0f});
+		BossWeaponSlots.emplace_back(CreateWeapon(107), sVECTOR3D{-15.0f, -6.4f, 5.0f});
 
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{15.0f, 4.4f, -29.0f};
 		if (auto sharedEngine = Engines[0].lock()) {
@@ -1198,12 +1173,6 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 			sharedEngine->DeadZone = 16.9f;
 		}
 		break;
-
-
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong SpaceShipNum.\n";
-		return;
 	}
 
 	for (unsigned int i = 0; i < Engines.size(); i++) {
@@ -1214,6 +1183,10 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
 				InternalLights++;
 		}
 	}
+
+	assert(WeaponSlots.capacity() == WeaponSlots.size());
+	assert(BossWeaponSlots.capacity() == BossWeaponSlots.size());
+	assert(FlareWeaponSlots.capacity() == FlareWeaponSlots.size());
 }
 
 } // astromenace namespace
