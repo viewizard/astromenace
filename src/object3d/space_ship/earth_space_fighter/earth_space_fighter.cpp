@@ -455,16 +455,6 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
 struct sEarthSpaceFighterData {
 	float Weight;
 	float Strength;
@@ -504,18 +494,16 @@ float GetShipArmor(int SpaceShipNum)
 	return PresetEarthSpaceFighterData[SpaceShipNum-1].Strength;
 }
 
-
-
-
-
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
 cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 {
-	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetEarthSpaceFighterDataCount)) {
+	if ((SpaceShipNum <= 0) ||
+	    (static_cast<unsigned>(SpaceShipNum) > PresetEarthSpaceFighterDataCount)) {
 		std::cerr << __func__ << "(): "
-			  << "Could not init cEarthSpaceFighter object with Number " << SpaceShipNum << "\n";
+			  << "Could not init cEarthSpaceFighter object with Number "
+			  << SpaceShipNum << "\n";
 		return;
 	}
 
@@ -525,11 +513,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 	PromptDrawDist2 = 100.0f;
 
 	// ставим нужные данные
-	Weight = PresetEarthSpaceFighterData[SpaceShipNum-1].Weight;
-	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum-1].Strength; // GameEnemyArmorPenalty for enemies only
-	WeaponSlots.resize(PresetEarthSpaceFighterData[SpaceShipNum-1].WeaponQuantity);
-	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum-1].Name, *this);
-
+	Weight = PresetEarthSpaceFighterData[SpaceShipNum - 1].Weight;
+	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength; // GameEnemyArmorPenalty for enemies only
+	WeaponSlots.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].WeaponQuantity);
+	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum - 1].Name, *this);
 
 	// начальные установки для двигателей
 	Engines.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity);
@@ -541,10 +528,6 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 	EnginesRightLocation.resize(1);
 	EnginesRight.resize(1);
 
-
-
-
-	// перебираем и ставим нужные данные
 	switch (SpaceShipNum) {
 	case 1:
 		WeaponSlots[0].Type = 1;
@@ -564,6 +547,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.7f, 3.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.7f, 3.7f};
 		break;
+
 	case 2:
 		WeaponSlots[0].Type = 1;
 		WeaponSlots[0].Location = sVECTOR3D{3.45f, 1.03f, -8.5f};
@@ -582,6 +566,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.7f, 5.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.7f, 5.7f};
 		break;
+
 	case 3:
 		WeaponSlots[0].Type = 5;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, -1.75f, 3.5f};
@@ -598,6 +583,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{0.8f, -1.6f, 8.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-0.8f, -1.6f, 8.7f};
 		break;
+
 	case 4:
 		WeaponSlots[0].Type = 1;
 		WeaponSlots[0].Location = sVECTOR3D{4.10f, 1.4f, -2.5f};
@@ -616,6 +602,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.9f, 5.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.9f, 5.7f};
 		break;
+
 	case 5:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{4.0f, -0.5f, 1.0f};
@@ -630,6 +617,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, 0.0f, 3.92f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, 0.0f, 3.92f};
 		break;
+
 	case 6:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{2.80f, 0.25f, -7.0f};
@@ -648,6 +636,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.9f, 4.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.9f, 4.7f};
 		break;
+
 	case 7:
 		WeaponSlots[0].Type = 5;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, -0.2f, 0.0f};
@@ -667,6 +656,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, 0.1f, 1.1f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, 0.1f, 1.1f};
 		break;
+
 	case 8:
 		WeaponSlots[0].Type = 1;
 		WeaponSlots[0].Location = sVECTOR3D{1.0f, -0.3f, 0.4f};
@@ -681,6 +671,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, 0.0f, 2.4f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, 0.0f, 2.4f};
 		break;
+
 	case 9:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{1.2f, 0.2f, 1.6f};
@@ -693,6 +684,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, 0.2f, 2.2f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, 0.2f, 2.2f};
 		break;
+
 	case 10:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{5.05f, -1.8f, -1.7f};
@@ -711,6 +703,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.4f, 5.3f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.4f, 5.3f};
 		break;
+
 	case 11:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{2.0f, -0.55f, -2.2f};
@@ -725,6 +718,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.5f, -0.6f, 2.0f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.5f, -0.6f, 2.0f};
 		break;
+
 	case 12:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{2.25f, -0.85f, 3.3f};
@@ -739,6 +733,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.2f, -0.2f, 6.3f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.2f, -0.2f, 6.3f};
 		break;
+
 	case 13:
 		WeaponSlots[0].Type = 5;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, -2.15f, -4.4f};
@@ -759,6 +754,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, -0.1f, 0.5f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, -0.1f, 0.5f};
 		break;
+
 	case 14:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{1.70f, -1.1f, 5.5f};
@@ -777,6 +773,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.3f, -0.7f, 6.3f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.3f, -0.7f, 6.3f};
 		break;
+
 	case 15:
 		WeaponSlots[0].Type = 4;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, -0.7f, 1.3f};
@@ -791,6 +788,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.6f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.6f, 6.25f};
 		break;
+
 	case 16:
 		WeaponSlots[0].Type = 3;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, -1.2f, 7.7f};
@@ -807,6 +805,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.6f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.6f, 6.25f};
 		break;
+
 	case 17:
 		WeaponSlots[0].Type = 3;
 		WeaponSlots[0].Location = sVECTOR3D{3.10f, 0.2f, -4.6f};
@@ -825,6 +824,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, -0.5f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, -0.5f, 6.25f};
 		break;
+
 	case 18:
 		WeaponSlots[0].Type = 5;
 		WeaponSlots[0].Location = sVECTOR3D{1.7f, -2.5f, -4.4f};
@@ -843,6 +843,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.9f, -1.6f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.9f, -1.6f, 6.25f};
 		break;
+
 	case 19:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, -0.75f, 0.0f};
@@ -859,6 +860,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.45f, 0.05f, 5.0f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.45f, 0.05f, 5.0f};
 		break;
+
 	case 20:
 		WeaponSlots[0].Type = 3;
 		WeaponSlots[0].Location = sVECTOR3D{0.80f, -0.8f, -2.3f};
@@ -877,6 +879,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.4f, 1.45f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.4f, 1.45f};
 		break;
+
 	case 21:
 		WeaponSlots[0].Type = 2;
 		WeaponSlots[0].Location = sVECTOR3D{2.05f, -0.22f, -1.2f};
@@ -891,6 +894,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.4f, 3.0f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.4f, 3.0f};
 		break;
+
 	case 22:
 		WeaponSlots[0].Type = 3;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, 0.05f, 3.6f};
@@ -900,10 +904,6 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesLeftLocation[0] = sVECTOR3D{1.9f, -0.3f, 2.6f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.9f, -0.3f, 2.6f};
 		break;
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong SpaceShipNum.\n";
-		return;
 	}
 
 
