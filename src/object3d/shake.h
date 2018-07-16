@@ -36,6 +36,16 @@ namespace astromenace {
 
 class cShake {
 public:
+	cShake (const sVECTOR3D &_Direction, const unsigned _ChunkNum,
+		const float _ShiftPerSecond, const std::function<float ()> &_GenerateRand) :
+		Direction{_Direction},
+		ChunkNum{_ChunkNum},
+		ShiftPerSecond{_ShiftPerSecond},
+		GenerateRand{_GenerateRand}
+	{
+		Need = GenerateRand();
+	}
+
 	void Update(float TimeDelta, std::function<void (const float ShakeIncrement,
 							 const sVECTOR3D &ShakeDirection,
 							 const unsigned ShakeChunkNum)> function)
@@ -53,16 +63,6 @@ public:
 		}
 		Current += tmpIncrement;
 		function(tmpIncrement, Direction, ChunkNum);
-	}
-
-	void operator () (const sVECTOR3D &_Direction, const unsigned _ChunkNum,
-			  const float _ShiftPerSecond, const std::function<float ()> &_GenerateRand)
-	{
-		Direction = _Direction;
-		ChunkNum = _ChunkNum;
-		ShiftPerSecond = _ShiftPerSecond;
-		GenerateRand = _GenerateRand;
-		Need = GenerateRand();
 	}
 
 private:

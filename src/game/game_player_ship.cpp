@@ -239,11 +239,10 @@ void InitGamePlayerShip()
 
 	PlayerFighter = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 
-	PlayerFighter->ShipShake.resize(1);
-	PlayerFighter->ShipShake[0](sVECTOR3D{0.0f, 0.0f, 1.0f},
-				    0,
-				    0.035f,
-				    [] () {return vw_fRand0() * 0.1f;});
+	PlayerFighter->ShipShake.emplace_back(sVECTOR3D{0.0f, 0.0f, 1.0f},
+					      0,
+					      0.035f,
+					      [] () {return vw_fRand0() * 0.1f;});
 
 	PlayerFighter->ObjectStatus = eObjectStatus::Player;
 	PlayerFighter->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
