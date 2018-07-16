@@ -34,7 +34,6 @@ namespace viewizard {
 namespace astromenace {
 
 struct sAlienSpaceFighterData {
-	unsigned int WeaponQuantity;
 	unsigned int EngineQuantity;
 	float Strength;
 	float ShieldStrength;
@@ -42,26 +41,25 @@ struct sAlienSpaceFighterData {
 };
 
 const sAlienSpaceFighterData PresetAlienSpaceFighterData[] = {
-	{1,	4,	5,	0,	"models/alienfighter/al-01.vw3d"},
-	{1,	5,	15,	0,	"models/alienfighter/al-02.vw3d"},
-	{1,	5,	60,	0,	"models/alienfighter/al-03.vw3d"},
-	{4,	8,	40,	0, 	"models/alienfighter/al-04.vw3d"},
-	{1,	7,	30,	0,	"models/alienfighter/al-05.vw3d"},
-	{1,	6,	120,	0,	"models/alienfighter/al-06.vw3d"},
-	{1,	8,	250,	100,	"models/alienfighter/al-07.vw3d"},
-	{1,	7,	200,	50,	"models/alienfighter/al-08.vw3d"},
-	{2,	11,	500,	200,	"models/alienfighter/al-09.vw3d"},
-	{1,	7,	250,	50,	"models/alienfighter/al-10.vw3d"},
-	{2,	6,	150,	100,	"models/alienfighter/al-11.vw3d"},
-	{1,	5,	200,	100,	"models/alienfighter/al-12.vw3d"},
-	{2,	5,	300,	200,	"models/alienfighter/al-13.vw3d"},
-	{2,	8,	400,	300,	"models/alienfighter/al-14.vw3d"},
-	{6,	4,	50,	100,	"models/alienfighter/al-15.vw3d"},
-	{3,	4,	100,	150,	"models/alienfighter/al-16.vw3d"},
-	{5,	6,	150,	200,	"models/alienfighter/al-17.vw3d"}
+	{4,	5,	0,	"models/alienfighter/al-01.vw3d"},
+	{5,	15,	0,	"models/alienfighter/al-02.vw3d"},
+	{5,	60,	0,	"models/alienfighter/al-03.vw3d"},
+	{8,	40,	0, 	"models/alienfighter/al-04.vw3d"},
+	{7,	30,	0,	"models/alienfighter/al-05.vw3d"},
+	{6,	120,	0,	"models/alienfighter/al-06.vw3d"},
+	{8,	250,	100,	"models/alienfighter/al-07.vw3d"},
+	{7,	200,	50,	"models/alienfighter/al-08.vw3d"},
+	{11,	500,	200,	"models/alienfighter/al-09.vw3d"},
+	{7,	250,	50,	"models/alienfighter/al-10.vw3d"},
+	{6,	150,	100,	"models/alienfighter/al-11.vw3d"},
+	{5,	200,	100,	"models/alienfighter/al-12.vw3d"},
+	{5,	300,	200,	"models/alienfighter/al-13.vw3d"},
+	{8,	400,	300,	"models/alienfighter/al-14.vw3d"},
+	{4,	50,	100,	"models/alienfighter/al-15.vw3d"},
+	{4,	100,	150,	"models/alienfighter/al-16.vw3d"},
+	{6,	150,	200,	"models/alienfighter/al-17.vw3d"}
 };
 #define PresetAlienSpaceFighterDataCount sizeof(PresetAlienSpaceFighterData)/sizeof(PresetAlienSpaceFighterData[0])
-
 
 
 //-----------------------------------------------------------------------------
@@ -243,9 +241,11 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 //-----------------------------------------------------------------------------
 cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 {
-	if ((SpaceShipNum <= 0) || ((unsigned int)SpaceShipNum > PresetAlienSpaceFighterDataCount)) {
+	if ((SpaceShipNum <= 0) ||
+	    (static_cast<unsigned>(SpaceShipNum) > PresetAlienSpaceFighterDataCount)) {
 		std::cerr << __func__ << "(): "
-			  << "Could not init cAlienSpaceFighter object with Number " << SpaceShipNum << "\n";
+			  << "Could not init cAlienSpaceFighter object with Number "
+			  << SpaceShipNum << "\n";
 		return;
 	}
 
@@ -259,14 +259,11 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	MaxSpeed = 40.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	Strength = StrengthStart = PresetAlienSpaceFighterData[SpaceShipNum-1].Strength/GameEnemyArmorPenalty;
-	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceFighterData[SpaceShipNum-1].ShieldStrength/GameEnemyArmorPenalty;
-	ShieldRecharge = ShieldStrengthStart/10.0f;
+	Strength = StrengthStart = PresetAlienSpaceFighterData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
+	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceFighterData[SpaceShipNum - 1].ShieldStrength / GameEnemyArmorPenalty;
+	ShieldRecharge = ShieldStrengthStart / 10.0f;
 
-	WeaponSlots.resize(PresetAlienSpaceFighterData[SpaceShipNum-1].WeaponQuantity);
-
-
-	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum-1].Name, *this);
+	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum - 1].Name, *this);
 
 	// всегда только эти текстуры и 1 объект
 	for (unsigned int i = 0; i < Chunks.size(); i++) {
@@ -278,21 +275,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 	Engines.resize(PresetAlienSpaceFighterData[SpaceShipNum - 1].EngineQuantity);
 	EnginesLocation.resize(Engines.size());
 
-
-
-
-
-
-
-
-
-
-	// перебираем и ставим нужные данные
 	switch (SpaceShipNum) {
 	case 1:
-		// оружие
-		WeaponSlots[0](CreateWeapon(101), sVECTOR3D{0.0f, 0.25f, 1.85f});
-		// двигатели
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{0.0f, 0.25f, 1.85f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 0.65f, -2.3f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -310,10 +296,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		if (auto sharedEngine = Engines[3].lock())
 			SetAlienSpaceFighterEngine(sharedEngine, 3);
 		break;
+
 	case 2:
-		// оружие
-		WeaponSlots[0](CreateWeapon(101), sVECTOR3D{0.0f, -0.30f, 3.95f});
-		// двигатели
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{0.0f, -0.30f, 3.95f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 0.8f, -3.1f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -337,10 +323,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->Direction = sVECTOR3D{0.0f, 0.3f, -1.0f};
 		}
 		break;
+
 	case 3:
-		// оружие
-		WeaponSlots[0](CreateWeapon(102), sVECTOR3D{0.0f, -0.35f, 3.9f});
-		// двигатели
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{0.0f, -0.35f, 3.9f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 0.8f, -5.5f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -367,21 +353,21 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->Direction = sVECTOR3D{0.0f, -0.3f, 1.0f};
 		}
 		break;
+
 	case 4:
-		// оружие
-		WeaponSlots[0](CreateWeapon(101), sVECTOR3D{0.75f, -0.15f, 5.1f});
-		WeaponSlots[1](CreateWeapon(101), sVECTOR3D{-0.75f, -0.15f, 5.1f});
-		if (auto sharedWeapon = WeaponSlots[1].Weapon.lock())
+		WeaponSlots.reserve(4);
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{0.75f, -0.15f, 5.1f});
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{-0.75f, -0.15f, 5.1f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SFX = eGameSFX::none;
-		WeaponSlots[2](CreateWeapon(101), sVECTOR3D{0.85f, -1.4f, 6.5f});
-		if (auto sharedWeapon = WeaponSlots[2].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{0.85f, -1.4f, 6.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SFX = eGameSFX::none;
-		WeaponSlots[3](CreateWeapon(101), sVECTOR3D{-0.85f, -1.4f, 6.5f});
-		if (auto sharedWeapon = WeaponSlots[3].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{-0.85f, -1.4f, 6.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->SFX = eGameSFX::none;
 		WeaponFireType = 1;
 
-		// двигатели
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 1.4f, -3.7f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -415,11 +401,12 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceFighterEngine(sharedEngine, 3);
 		break;
+
 	case 5:
 		MaxSpeedRotate = 720.0f;
-		// оружие
-		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, 0.0f, 0.0f});
-		// двигатели
+
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, 0.0f, 0.0f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{1.0f, 0.0f, -4.0f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -449,10 +436,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		if (auto sharedEngine = Engines[6].lock())
 			SetAlienSpaceFighterEngine(sharedEngine, 4);
 		break;
+
 	case 6:
-		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{0.0f, 0.35f, 2.65f});
-		// двигатели
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{0.0f, 0.35f, 2.65f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 2.4f, -7.4f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -480,10 +467,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->SizeStart = 0.50f;
 		}
 		break;
+
 	case 7:
-		// оружие
-		WeaponSlots[0](CreateWeapon(105), sVECTOR3D{0.0f, -0.70f, 7.0f});
-		// двигатели
+		WeaponSlots.emplace_back(CreateWeapon(105), sVECTOR3D{0.0f, -0.70f, 7.0f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 1.8f, -10.2f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -525,12 +512,12 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceFighterEngine(sharedEngine, 5);
 		break;
+
 	case 8:
-		// оружие
-		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, 1.10f, -0.5f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, 1.10f, -0.5f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 4.0f;
-		// двигатели
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 1.4f, -8.6f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -568,14 +555,15 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->Direction = sVECTOR3D{0.22f, 0.25f, 1.0f};
 		}
 		break;
+
 	case 9:
-		// оружие
-		WeaponSlots[0](CreateWeapon(103), sVECTOR3D{0.0f, 0.10f, 4.9f});
-		if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(103), sVECTOR3D{0.0f, 0.10f, 4.9f});
+		if (auto sharedWeapon = WeaponSlots.back().Weapon.lock())
 			sharedWeapon->NextFireTime /= 3.0f;
-		WeaponSlots[1](CreateWeapon(107), sVECTOR3D{0.0f, 0.0f, 0.0f});
+		WeaponSlots.emplace_back(CreateWeapon(107), sVECTOR3D{0.0f, 0.0f, 0.0f});
 		WeaponFireType = 1;
-		// двигатели
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 0.2f, -5.8f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -630,10 +618,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->SizeVar = sharedEngine->SizeEnd = 0.20f;
 		}
 		break;
+
 	case 10:
-		// оружие
-		WeaponSlots[0](CreateWeapon(106), sVECTOR3D{0.0f, 0.0f, 0.0f});
-		// двигатели
+		WeaponSlots.emplace_back(CreateWeapon(106), sVECTOR3D{0.0f, 0.0f, 0.0f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 0.8f, -4.0f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -666,11 +654,12 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->ParticlesPerSec = 50;
 		}
 		break;
+
 	case 11:
-		// оружие
-		WeaponSlots[0](CreateWeapon(104), sVECTOR3D{3.9f, 1.3f, 1.0f});
-		WeaponSlots[1](CreateWeapon(104), sVECTOR3D{-3.9f, 1.3f, 1.0f});
-		// двигатели
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{3.9f, 1.3f, 1.0f});
+		WeaponSlots.emplace_back(CreateWeapon(104), sVECTOR3D{-3.9f, 1.3f, 1.0f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 1.0f, -5.4f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -703,10 +692,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->Speed = 5.0f;
 		}
 		break;
+
 	case 12:
-		// оружие
-		WeaponSlots[0](CreateWeapon(108), sVECTOR3D{0.0f, 0.50f, 0.8f});
-		// двигатели
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{0.0f, 0.50f, 0.8f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{1.1f, 1.0f, -4.4f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -730,11 +719,12 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->CreationSize = sVECTOR3D{1.0f, 0.1f, 0.1f};
 		}
 		break;
+
 	case 13:
-		// оружие
-		WeaponSlots[0](CreateWeapon(109), sVECTOR3D{3.0f, 0.0f, 0.5f});
-		WeaponSlots[1](CreateWeapon(109), sVECTOR3D{-3.0f, 0.0f, 0.5f});
-		// двигатели
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{3.0f, 0.0f, 0.5f});
+		WeaponSlots.emplace_back(CreateWeapon(109), sVECTOR3D{-3.0f, 0.0f, 0.5f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{1.1f, 1.0f, -4.4f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -758,11 +748,12 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->CreationSize = sVECTOR3D{0.1f, 1.2f, 0.1f};
 		}
 		break;
+
 	case 14:
-		// оружие
-		WeaponSlots[0](CreateWeapon(108), sVECTOR3D{3.0f, 0.0f, 0.5f});
-		WeaponSlots[1](CreateWeapon(108), sVECTOR3D{-3.0f, 0.0f, 0.5f});
-		// двигатели
+		WeaponSlots.reserve(2);
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{3.0f, 0.0f, 0.5f});
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{-3.0f, 0.0f, 0.5f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{1.1f, 1.1f, -4.9f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -796,15 +787,16 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		if (auto sharedEngine = Engines[7].lock())
 			SetAlienSpaceFighterEngine(sharedEngine, 3);
 		break;
+
 	case 15:
-		// оружие
-		WeaponSlots[0](CreateWeapon(102), sVECTOR3D{3.8f, -1.8f, 0.5f});
-		WeaponSlots[1](CreateWeapon(102), sVECTOR3D{-3.8f, -1.8f, 0.5f});
-		WeaponSlots[2](CreateWeapon(101), sVECTOR3D{0.2f, 1.9f, -3.0f});
-		WeaponSlots[3](CreateWeapon(101), sVECTOR3D{-0.2f, 1.6f, -3.0f});
-		WeaponSlots[4](CreateWeapon(101), sVECTOR3D{0.2f, 1.4f, -3.0f});
-		WeaponSlots[5](CreateWeapon(101), sVECTOR3D{-0.2f, 1.1f, -3.0f});
-		// двигатели
+		WeaponSlots.reserve(6);
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{3.8f, -1.8f, 0.5f});
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-3.8f, -1.8f, 0.5f});
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{0.2f, 1.9f, -3.0f});
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{-0.2f, 1.6f, -3.0f});
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{0.2f, 1.4f, -3.0f});
+		WeaponSlots.emplace_back(CreateWeapon(101), sVECTOR3D{-0.2f, 1.1f, -3.0f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 2.4f, -4.0f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -825,12 +817,13 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->ParticlesPerSec = 40;
 		}
 		break;
+
 	case 16:
-		// оружие
-		WeaponSlots[0](CreateWeapon(102), sVECTOR3D{3.7f, -1.9f, 1.5f});
-		WeaponSlots[1](CreateWeapon(102), sVECTOR3D{-3.7f, -1.9f, 1.5f});
-		WeaponSlots[2](CreateWeapon(108), sVECTOR3D{0.0f, 0.2f, -0.8f});
-		// двигатели
+		WeaponSlots.reserve(3);
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{3.7f, -1.9f, 1.5f});
+		WeaponSlots.emplace_back(CreateWeapon(102), sVECTOR3D{-3.7f, -1.9f, 1.5f});
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{0.0f, 0.2f, -0.8f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{2.8f, 0.2f, -7.2f};
 		if (auto sharedEngine = Engines[0].lock())
@@ -854,14 +847,15 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 			sharedEngine->ParticlesPerSec = 40;
 		}
 		break;
+
 	case 17:
-		// оружие
-		WeaponSlots[0](CreateWeapon(108), sVECTOR3D{0.0f, -0.85f, 1.0f});
-		WeaponSlots[1](CreateWeapon(105), sVECTOR3D{1.7f, -0.85f, 1.9f});
-		WeaponSlots[2](CreateWeapon(105), sVECTOR3D{-1.7f, -0.85f, 1.9f});
-		WeaponSlots[3](CreateWeapon(105), sVECTOR3D{1.0f, -0.85f, 1.1f});
-		WeaponSlots[4](CreateWeapon(105), sVECTOR3D{-1.0f, -0.85f, 1.1f});
-		// двигатели
+		WeaponSlots.reserve(5);
+		WeaponSlots.emplace_back(CreateWeapon(108), sVECTOR3D{0.0f, -0.85f, 1.0f});
+		WeaponSlots.emplace_back(CreateWeapon(105), sVECTOR3D{1.7f, -0.85f, 1.9f});
+		WeaponSlots.emplace_back(CreateWeapon(105), sVECTOR3D{-1.7f, -0.85f, 1.9f});
+		WeaponSlots.emplace_back(CreateWeapon(105), sVECTOR3D{1.0f, -0.85f, 1.1f});
+		WeaponSlots.emplace_back(CreateWeapon(105), sVECTOR3D{-1.0f, -0.85f, 1.1f});
+
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{1.8f, 1.0f, -7.2f};
 		if (auto sharedEngine = Engines[0].lock()) {
@@ -891,11 +885,6 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 		if (auto sharedEngine = Engines[5].lock())
 			SetAlienSpaceFighterEngine(sharedEngine, 4);
 		break;
-
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong SpaceShipNum.\n";
-		return;
 	}
 
 	for (unsigned int i = 0; i < Engines.size(); i++) {
@@ -906,6 +895,10 @@ cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
 				InternalLights++;
 		}
 	}
+
+	assert(WeaponSlots.capacity() == WeaponSlots.size());
+	assert(BossWeaponSlots.capacity() == BossWeaponSlots.size());
+	assert(FlareWeaponSlots.capacity() == FlareWeaponSlots.size());
 }
 
 } // astromenace namespace
