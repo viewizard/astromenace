@@ -29,7 +29,8 @@
 
 // TODO split to earth/pirate/alien
 
-// TODO switch to enumeration for projectile type
+// TODO switch to enumeration for projectile type (ProjectileType)
+//      split flare and alien's mine
 
 // TODO translate comments
 
@@ -80,7 +81,8 @@ public:
 	// 0 - обычный
 	// 1 - можем наводится и сбивать снаряд
 	// 2 - лучевое оружие
-	// 3 - фларе против ракет
+	// 3 - фларе против ракет / мина пришельцев
+	// 4 - мина (уничтожаемая)
 	int ProjectileType{0};
 
 	// для ракет, тянем на кого навелись... чтобы цель могла принять действия

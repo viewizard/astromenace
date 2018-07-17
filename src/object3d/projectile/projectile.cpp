@@ -47,7 +47,7 @@ struct sProjectileData {
 	float Radius;
 	float DamageHull;
 	float DamageSystems;
-	// 0-обычный снаряд, 1-уничтожаемый, 2-лучевой, 3-мина (не уничтожаемая), 4-мина (уничтожаемая)
+	// 0-обычный снаряд, 1-уничтожаемый, 2-лучевой, 3- фларес/мина пришельцев, 4-мина (уничтожаемая)
 	int ProjectileType;
 	float Speed;
 	float Age;

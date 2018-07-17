@@ -1139,134 +1139,83 @@ void DetectCollisionAllObject3D()
 		}
 	});
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// для cProjectile игрока проверяем со всеми
-	// cProjectile врага, которые можно уничтожить
-	// на попадание
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	cProjectile *tmpProjectile = StartProjectile;
-	while (tmpProjectile != nullptr) {
-		cProjectile *tmpProjectile2 = tmpProjectile->Next;
+	ForEachProjectilePair([] (cProjectile &FirstObject, cProjectile &SecondObject, eProjectilePairCycle &Command) {
+		if (((FirstObject.ObjectStatus == eObjectStatus::Enemy) && ((SecondObject.ObjectStatus == eObjectStatus::Ally) || (SecondObject.ObjectStatus == eObjectStatus::Player))) ||
+		    (((FirstObject.ObjectStatus == eObjectStatus::Ally) || (FirstObject.ObjectStatus == eObjectStatus::Player)) && (SecondObject.ObjectStatus == eObjectStatus::Enemy)) ||
+		    ((FirstObject.ObjectStatus != eObjectStatus::Player) && (SecondObject.ObjectStatus == eObjectStatus::Player))) {
 
-		cProjectile *tmpProject1 = tmpProjectile2;
+			// missile/mine with missile/mine
+			if (((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) &&
+			    ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4))) {
+				if (vw_SphereSphereCollision(FirstObject.Radius, FirstObject.Location,
+							     SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
+				    vw_SphereAABBCollision(FirstObject.AABB, FirstObject.Location,
+							   SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
+				    vw_SphereOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
+							  SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
+				    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
+						       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
 
-		while (tmpProject1 && tmpProjectile) {
-			cProjectile *tmpProject2 = tmpProject1->Next;
+					if ((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) {
+						FirstObject.Speed = 0.0f;
+						new cBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+						Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
+					}
+					if ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) {
+						SecondObject.Speed = 0.0f;
+						new cBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 
-			// делаем все тут , а не в общей процедуре, тк не обрабатываем там фларес
-
-			if (((tmpProjectile->ObjectStatus == eObjectStatus::Enemy) && ((tmpProject1->ObjectStatus == eObjectStatus::Ally) || (tmpProject1->ObjectStatus == eObjectStatus::Player))) ||
-			    // снаряды врагов - с союзниками или игроком
-			    (((tmpProjectile->ObjectStatus == eObjectStatus::Ally) || (tmpProjectile->ObjectStatus == eObjectStatus::Player)) && (tmpProject1->ObjectStatus == eObjectStatus::Enemy)) ||
-			    // снаряды игрока со всеми, кроме игрока
-			    ((tmpProjectile->ObjectStatus != eObjectStatus::Player) && (tmpProject1->ObjectStatus == eObjectStatus::Player))) {
-
-				// если это уничтожаемая цель...
-				if ((tmpProjectile->ProjectileType == 1) &&
-					// проверка на попадание
-				    vw_SphereSphereCollision(tmpProjectile->Radius, tmpProjectile->Location,
-							     tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation) &&
-				    vw_SphereAABBCollision(tmpProjectile->AABB, tmpProjectile->Location,
-							   tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation) &&
-				    vw_SphereOBBCollision(tmpProjectile->OBB.Box, tmpProjectile->OBB.Location, tmpProjectile->Location, tmpProjectile->CurrentRotationMat,
-							  tmpProject1->Radius, tmpProject1->Location, tmpProject1->PrevLocation)) {
-
-					// если оба - ракеты, их можно уничтожить, надо проверить по OBB-OBB
-					bool NeedCheck = true;
-					if ((tmpProjectile->ProjectileType == 1) &&
-					    (tmpProject1->ProjectileType == 1) &&
-					    !vw_OBBOBBCollision(tmpProjectile->OBB.Box, tmpProjectile->OBB.Location, tmpProjectile->Location, tmpProjectile->CurrentRotationMat,
-								tmpProject1->OBB.Box, tmpProject1->OBB.Location, tmpProject1->Location, tmpProject1->CurrentRotationMat))
-						NeedCheck = false;
-
-					if (NeedCheck) {
-						// удаляем только те, которые разбились
-						if ((tmpProject1->ProjectileType != 2) && (tmpProject1->ProjectileType != 3)) {
-							// корректировка указателя
-							if (tmpProjectile2 == tmpProject1) tmpProjectile2 = tmpProjectile2->Next;
-
-							// тоже ракета
-							if (tmpProject1->ProjectileType == 1) {
-								tmpProject1->Speed = 0.0f;
-								new cBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
-							}
-							delete tmpProject1;
-							tmpProject1 = nullptr;
-
-							// взрываем...
-							tmpProjectile->Speed = 0.0f;
-							new cBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
-							// в самый последний момент - удаляем снаряд... он разбился
-							delete tmpProjectile;
-							tmpProjectile = nullptr;
-						} else {
-							// разрушаем
-							new cSpaceExplosion(*tmpProjectile, 4, tmpProjectile->Location, tmpProjectile->Speed, -1);
-							// в самый последний момент - удаляем снаряд... он разбился
-							delete tmpProjectile;
-							tmpProjectile = nullptr;
-						}
+						if (Command == eProjectilePairCycle::DeleteFirstObjectAndContinue)
+							Command = eProjectilePairCycle::DeleteBothObjectsAndContinue;
+						else
+							Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
 					}
 				}
-
-				// если не уничтожили, проверяем другие
-				if (tmpProjectile && tmpProject1 &&
-				    (tmpProject1->ProjectileType == 1) &&
-					// проверка на попадание
-				    vw_SphereSphereCollision(tmpProject1->Radius, tmpProject1->Location,
-							      tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation) &&
-				    vw_SphereAABBCollision(tmpProject1->AABB, tmpProject1->Location,
-							    tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation) &&
-				    vw_SphereOBBCollision(tmpProject1->OBB.Box, tmpProject1->OBB.Location, tmpProject1->Location, tmpProject1->CurrentRotationMat,
-							   tmpProjectile->Radius, tmpProjectile->Location, tmpProjectile->PrevLocation)) {
-
-					// если оба - ракеты, их можно уничтожить, надо проверить по OBB-OBB
-					bool NeedCheck{true};
-					if ((tmpProjectile->ProjectileType == 1) && (tmpProject1->ProjectileType == 1) &&
-					    !vw_OBBOBBCollision(tmpProject1->OBB.Box, tmpProject1->OBB.Location, tmpProject1->Location, tmpProject1->CurrentRotationMat,
-								tmpProjectile->OBB.Box, tmpProjectile->OBB.Location, tmpProjectile->Location, tmpProjectile->CurrentRotationMat))
-						NeedCheck = false;
-
-					if (NeedCheck) {
-						// удаляем только те, которые разбились
-						if ((tmpProjectile->ProjectileType != 2) &&
-						    (tmpProjectile->ProjectileType != 3)) {
-							// тоже ракета
-							if (tmpProjectile->ProjectileType == 1) {
-								tmpProjectile->Speed = 0.0f;
-								new cBulletExplosion(nullptr, tmpProjectile, -tmpProjectile->Num, tmpProjectile->Location, tmpProjectile->Speed);
-							}
-							delete tmpProjectile;
-							tmpProjectile = nullptr;
-
-							// взрываем...
-							tmpProject1->Speed = 0.0f;
-							new cBulletExplosion(nullptr, tmpProject1, -tmpProject1->Num, tmpProject1->Location, tmpProject1->Speed);
-							// корректировка указателя
-							if (tmpProjectile2 == tmpProject1)
-								tmpProjectile2 = tmpProjectile2->Next;
-							// в самый последний момент - удаляем снаряд... он разбился
-							delete tmpProject1;
-							tmpProject1 = nullptr;
-						} else {
-							// разрушаем
-							new cSpaceExplosion(*tmpProject1, 4, tmpProject1->Location, tmpProject1->Speed, -1);
-							// корректировка указателя
-							if (tmpProjectile2 == tmpProject1)
-								tmpProjectile2 = tmpProjectile2->Next;
-							// в самый последний момент - удаляем снаряд... он разбился
-							delete tmpProject1;
-							tmpProject1 = nullptr;
-						}
-					}
+			// missile/mine with beam
+			} else if (((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) && (SecondObject.ProjectileType == 2)) {
+				if (vw_SphereOBBCollision(SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat,
+							  FirstObject.Radius, FirstObject.Location, FirstObject.PrevLocation) &&
+				    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
+						       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
+					FirstObject.Speed = 0.0f;
+					new cBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+					Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
+				}
+			} else if (((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) && (FirstObject.ProjectileType == 2)) {
+				if (vw_SphereOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
+							  SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
+				    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
+						       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
+					SecondObject.Speed = 0.0f;
+					new cBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+					Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
+				}
+			// missile/mine with projectile/flare
+			} else if ((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) {
+				if (vw_SphereSphereCollision(FirstObject.Radius, FirstObject.Location,
+							     SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
+				    vw_SphereAABBCollision(FirstObject.AABB, FirstObject.Location,
+							   SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
+				    vw_SphereOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
+							  SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation)) {
+					FirstObject.Speed = 0.0f;
+					new cBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+					Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
+				}
+			} else if ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) {
+				if (vw_SphereSphereCollision(SecondObject.Radius, SecondObject.Location,
+							     FirstObject.Radius, FirstObject.Location, FirstObject.PrevLocation) &&
+				    vw_SphereAABBCollision(SecondObject.AABB, SecondObject.Location,
+							   FirstObject.Radius, FirstObject.Location, FirstObject.PrevLocation) &&
+				    vw_SphereOBBCollision(SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat,
+							  FirstObject.Radius, FirstObject.Location, FirstObject.PrevLocation)) {
+					SecondObject.Speed = 0.0f;
+					new cBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+					Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
 				}
 			}
-
-			tmpProject1 = tmpProject2;
 		}
-
-		tmpProjectile = tmpProjectile2;
-	}
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -1293,6 +1242,8 @@ bool CheckSphereSphereDestroyDetection(const cObject3D &Object1, const sVECTOR3D
 void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const sVECTOR3D &Point,
 				       float Radius, float Damage, eObjectStatus ObjectStatus)
 {
+	// важно!!! в этой функции не удаляем снаряды (в т.ч. разрушаемые), иначе будут проблемы с ForEachProjectilePair()
+
 	// важно!!!
 	// у нас мощность ударной волны отличается от мощности детонации, и состовляет только 75%
 	Damage = Damage * 0.75f;
