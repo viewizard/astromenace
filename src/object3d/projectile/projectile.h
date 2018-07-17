@@ -25,6 +25,14 @@
 
 *************************************************************************************/
 
+// TODO split to projectile/swarm/beam
+
+// TODO split to earth/pirate/alien
+
+// TODO switch to enumeration for projectile type
+
+// TODO translate comments
+
 #ifndef OBJECT3D_PROJECTILE_PROJECTILE_H
 #define OBJECT3D_PROJECTILE_PROJECTILE_H
 
@@ -34,9 +42,6 @@
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Класс cProjectile
-//-----------------------------------------------------------------------------
 class cProjectile : public cObject3D
 {
 public:
@@ -44,90 +49,75 @@ public:
 	virtual ~cProjectile();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time) override;
+	virtual bool Update(float Time) override;
 	// Установка углов поворота
-	virtual void	SetRotation(const sVECTOR3D &NewRotation) override;
+	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 	// Установка положения
-	virtual void	SetLocation(const sVECTOR3D &NewLocation) override;
+	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
 	// Создание нужного объекта
-	virtual void	Create(int ProjectileNum);
+	virtual void Create(int ProjectileNum);
 
 	// Номер типа снаряда при создании
-	int		Num{0};
+	int Num{0};
 
 	// повреждение снаряда
-	float		DamageHull{0.0f};
-	float		DamageSystems{0.0f};
+	float DamageHull{0.0f};
+	float DamageSystems{0.0f};
 
 	// Класс снаряда
 	// 0 - обычный
 	// 1 - можем наводится и сбивать снаряд
 	// 2 - лучевое оружие
 	// 3 - фларе против ракет
-	int		ProjectileType{0};
+	int ProjectileType{0};
 
 	// для ракет, тянем на кого навелись... чтобы цель могла принять действия
-	cObject3D	*Target{nullptr};
+	cObject3D *Target{nullptr};
 
 	// данные для 2-го класса (лучевого снаряда)
 	// эти данные меняем только в объекте-орудии!!!
 	// точка центра снаряда
-	sVECTOR3D	ProjectileCenter{0.0f, 0.0f, 0.0f};
+	sVECTOR3D ProjectileCenter{0.0f, 0.0f, 0.0f};
 
 	// скорость снаряда
-	float		Speed{0.0f};
-	float		SpeedStart{0.0f};
-	float		SpeedEnd{0.0f};
+	float Speed{0.0f};
+	float SpeedStart{0.0f};
+	float SpeedEnd{0.0f};
 
 	// общее время жизни снаряда
-	float		Age{0.0f};
+	float Age{0.0f};
 
 	// нужно ли играть звук при уничтожении
-	bool		NeedDeadSound{true};
+	bool NeedDeadSound{true};
 
 	// временные данные, для подсветки мин
-	float		MineIData{0.0f};
+	float MineIData{0.0f};
 
 	// временные данные, для мин которые стреляют - время перезарядки
-	float		MineReloadTime{1.0f};
-	float		MineNextFireTime{1.0f};
+	float MineReloadTime{1.0f};
+	float MineNextFireTime{1.0f};
 
 	// для прорисовки графических эффектов
 	// тип, как будем удалять -сразу, или глушить
-	bool		GraphicFXDestroyType{false};
+	bool GraphicFXDestroyType{false};
 	std::vector<sVECTOR3D> GraphicFXLocation{};
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
-	bool		NeedStopPartic{false};
+	bool NeedStopPartic{false};
 
 	cProjectile *Next{nullptr};
 	cProjectile *Prev{nullptr};
 };
 
 
-//-----------------------------------------------------------------------------
-// Дополнительные функции для cProjectile
-//-----------------------------------------------------------------------------
-
-// Установка нужных данных для вспышки возле ствола
-void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum);
+// Проверяем все объекты, обновляем данные
+void UpdateAllProjectile(float Time);
+// Прорисовываем все объекты
+void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
+// Удаляем все объекты в списке
+void ReleaseAllProjectiles();
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
-
-//-----------------------------------------------------------------------------
-// Менеджер cSpaceShipWeapon, дополнительный
-//-----------------------------------------------------------------------------
-
-// Включаем в список
-void	AttachProjectile(cProjectile* Projectile);
-// Исключаем из списка
-void	DetachProjectile(cProjectile* Projectile);
-// Проверяем все объекты, обновляем данные
-void	UpdateAllProjectile(float Time);
-// Прорисовываем все объекты
-void	DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
-// Удаляем все объекты в списке
-void	ReleaseAllProjectiles();
 
 } // astromenace namespace
 } // viewizard namespace

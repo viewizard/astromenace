@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 /*
 
 Note, all enemy's projectiles and missiles without penalty should be about 30% faster
@@ -51,6 +53,16 @@ struct sProjectileData {
 	float Age;
 	int GraphicFXQuantity;
 };
+
+const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
+					 {"gfx/trail2.tga"},
+					 {"gfx/trail3.tga"},
+					 {"gfx/trail4.tga"},
+					 {"gfx/trail5.tga"}};
+
+// Указатели на начальный и конечный объект в списке
+cProjectile *StartProjectile = nullptr;
+cProjectile *EndProjectile = nullptr;
 
 // снаряды для оружия землян 1-99
 const std::vector<sProjectileData> PresetEarthProjectileData{
@@ -152,6 +164,114 @@ const std::vector<sProjectileData> PresetPirateProjectileData{
 
 
 
+//-----------------------------------------------------------------------------
+// Включаем в список
+//-----------------------------------------------------------------------------
+static void AttachProjectile(cProjectile* Projectile)
+{
+	if (Projectile == nullptr)
+		return;
+
+	// первый в списке...
+	if (EndProjectile == nullptr) {
+		Projectile->Prev = nullptr;
+		Projectile->Next = nullptr;
+		StartProjectile = Projectile;
+		EndProjectile = Projectile;
+	} else { // продолжаем заполнение...
+		Projectile->Prev = EndProjectile;
+		Projectile->Next = nullptr;
+		EndProjectile->Next = Projectile;
+		EndProjectile = Projectile;
+	}
+}
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// Исключаем из списка
+//-----------------------------------------------------------------------------
+static void DetachProjectile(cProjectile* Projectile)
+{
+	if (Projectile == nullptr)
+		return;
+
+	// переустанавливаем указатели...
+	if (StartProjectile == Projectile)
+		StartProjectile = Projectile->Next;
+	if (EndProjectile == Projectile)
+		EndProjectile = Projectile->Prev;
+
+	if (Projectile->Next != nullptr)
+		Projectile->Next->Prev = Projectile->Prev;
+	else if (Projectile->Prev != nullptr)
+		Projectile->Prev->Next = nullptr;
+
+	if (Projectile->Prev != nullptr)
+		Projectile->Prev->Next = Projectile->Next;
+	else if (Projectile->Next != nullptr)
+		Projectile->Next->Prev = nullptr;
+}
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// Проверяем все объекты, обновляем данные
+//-----------------------------------------------------------------------------
+void UpdateAllProjectile(float Time)
+{
+	cProjectile *tmp = StartProjectile;
+	while (tmp != nullptr) {
+		cProjectile *tmp2 = tmp->Next;
+		// делаем обновление данных по объекту
+		if (!tmp->Update(Time))
+			delete tmp;
+		tmp = tmp2;
+	}
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+// Прорисовываем все объекты
+//-----------------------------------------------------------------------------
+void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap)
+{
+
+	cProjectile *tmp = StartProjectile;
+	while (tmp != nullptr) {
+		cProjectile *tmp2 = tmp->Next;
+		tmp->Draw(VertexOnlyPass, ShadowMap);
+		tmp = tmp2;
+	}
+
+}
+
+
+
+
+
+//-----------------------------------------------------------------------------
+// Удаляем все объекты в списке
+//-----------------------------------------------------------------------------
+void ReleaseAllProjectiles()
+{
+	cProjectile *tmp = StartProjectile;
+	while (tmp != nullptr) {
+		cProjectile *tmp2 = tmp->Next;
+		delete tmp;
+		tmp = tmp2;
+	}
+}
+
+
 
 
 
@@ -221,6 +341,848 @@ float GetProjectileSpeed(int Num)
 
 
 
+//-----------------------------------------------------------------------------
+// Создание графического эффекта
+//-----------------------------------------------------------------------------
+static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
+{
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+
+	switch(GFXNum) {
+	case 1:	// Kinetic
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 0.00f;
+		ParticleSystem->Theta      = 0.00f;
+		ParticleSystem->Life       = 0.15f;
+		ParticleSystem->ParticlesPerSec = 300;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		break;
+	case 2:	// Kinetic
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
+		break;
+	case 3:	// Kinetic
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.60f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
+		break;
+	case 4:	// Kinetic
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.40f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->SpeedVar   = 0.00f;
+		ParticleSystem->Theta      = 0.00f;
+		ParticleSystem->Life       = 0.20f;
+		ParticleSystem->ParticlesPerSec = 300;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.17f);
+		break;
+	case 5:	// Ion
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.70f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.20f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.20f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->ParticlesPerSec = 60;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{2.0f, 2.0f, 0.5f};
+		ParticleSystem->DeadZone = 1.5f;
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 25.0f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.1f);
+		break;
+	case 6:	// Ion
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.70f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeVar    = 0.30f;
+		ParticleSystem->SizeEnd    = 0.20f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 30;
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -20.0f;
+		break;
+	case 7:	// Plasma
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.30f;
+		ParticleSystem->Speed      = 6.40f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 50;
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->NeedStop = true;
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.15f);
+		break;
+	case 8:	// Plasma
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.10f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.80f;
+		ParticleSystem->ParticlesPerSec = 50;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{1.3f, 1.3f, 0.2f};
+		ParticleSystem->DeadZone = 1.2f;
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 2.0f;
+		break;
+	case 9:	// Plasma
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.10f;
+		ParticleSystem->SizeEnd    = 0.20f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.80f;
+		ParticleSystem->ParticlesPerSec = 50;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{1.3f, 0.2f, 1.3f};
+		ParticleSystem->DeadZone = 1.2f;
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 2.0f;
+		break;
+	case 10:	// Plasma
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.80f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 4.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 30;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.10f);
+		break;
+	case 11:	// Plasma
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.60f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.20f;
+		ParticleSystem->ParticlesPerSec = 150;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.08f);
+		break;
+	case 12:	// Ion
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.70f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.40f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.20f;
+		ParticleSystem->ParticlesPerSec = 200;
+		break;
+
+
+	case 13:	// Missile
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.35f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
+		break;
+	case 14:	// Torpedo
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.35f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
+		break;
+	case 15:	// Nuke
+		ParticleSystem->ColorStart.r = 0.30f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.40f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
+		break;
+	case 16:	// Swarm
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.25f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		break;
+
+
+
+	case 17:	// maser
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.40f;
+		ParticleSystem->SizeVar    = 0.10f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->ParticlesPerSec = 600;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
+		ParticleSystem->CreationSize = sVECTOR3D{0.4f, 0.4f, 0.2f};
+		ParticleSystem->AlphaShowHide = true;
+		break;
+	case 18:	// maser2
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.40f;
+		ParticleSystem->SizeVar    = 0.10f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->ParticlesPerSec = 400;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
+		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.8f, 0.2f};
+		ParticleSystem->AlphaShowHide = true;
+		break;
+	case 19:	// Antimatter
+		ParticleSystem->ColorStart.r = 0.50f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 0.50f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.10f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.1f, 0.8f};
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -20.0f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 1.0f, 0.0f, 0.0f, 0.05f);
+		break;
+	case 20:	// Laser
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.20f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.20f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.20f;
+		ParticleSystem->ParticlesPerSec = 3000;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
+		ParticleSystem->CreationSize = sVECTOR3D{0.2f, 0.2f, 0.1f};
+		break;
+	case 21:	// Antimatter
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 0.00f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.50f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.20f;
+		ParticleSystem->SizeVar    = 0.10f;
+		ParticleSystem->SizeEnd    = 0.30f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 150;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{1.0f, 1.0f, 0.1f};
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = -40.0f;
+		break;
+
+
+
+	case 22: // Оружие пришельцев 1
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 0.00f;
+		ParticleSystem->Theta      = 0.00f;
+		ParticleSystem->Life       = 0.15f;
+		ParticleSystem->ParticlesPerSec = 300;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
+		break;
+	case 23:	// Оружие пришельцев 2
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
+		break;
+	case 24:	// Оружие пришельцев 2
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.60f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
+		break;
+
+	case 25:	// фларес
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.50f;
+		ParticleSystem->ColorStart.b = 0.10f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 1.00f;
+		ParticleSystem->SizeVar    = 0.50f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{4.0f, 4.0f, 4.0f};
+		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
+		break;
+	case 26:	// стрельба 1-го пирата Kinetic
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 0.00f;
+		ParticleSystem->Theta      = 0.00f;
+		ParticleSystem->Life       = 0.15f;
+		ParticleSystem->ParticlesPerSec = 300;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
+		break;
+	case 27:	// стрельба 2-го пирата Missile
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.35f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		break;
+
+
+	case 28:	// 2-я мина
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 180.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
+		break;
+	case 29:	// 3-я мина
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 60.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
+		break;
+	case 30:	// 4-я мина
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 180.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 150;
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{1.5f, 0.1f, 1.5f};
+		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
+		break;
+	case 31:	// Swarm для пиратов
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.25f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
+		break;
+	case 32:	// Torpedo пиратов
+		ParticleSystem->ColorStart.r = 0.70f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.35f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
+		break;
+	case 33:	// Nuke пиратов
+		ParticleSystem->ColorStart.r = 0.30f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.40f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 1.00f;
+		ParticleSystem->SpeedVar   = 1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 250;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
+		break;
+	case 34:	// Kinetic2 пиратов
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.50f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.00f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.15f);
+		break;
+	case 35:	// Kinetic3 пиратов
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.60f;
+		ParticleSystem->SizeVar    = 0.00f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 2.00f;
+		ParticleSystem->SpeedVar   = 3.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
+		break;
+
+	case 36:	// Оружие пришельцев, мина 1 тип
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.70f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.01f;
+		ParticleSystem->SizeVar    = 0.02f;
+		ParticleSystem->SizeEnd    = 0.40f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{2.0, 2.0f, 2.0f};
+		ParticleSystem->DeadZone = 1.9f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 25.0f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.1f);
+		break;
+
+	case 37:	// Оружие пришельцев, мина 2 тип
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 0.20f;
+		ParticleSystem->ColorStart.b = 0.20f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.20f;
+		ParticleSystem->ColorEnd.b = 0.20f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 1.00f;
+		ParticleSystem->SizeStart  = 0.3f;
+		ParticleSystem->SizeVar    = 0.02f;
+		ParticleSystem->SizeEnd    = 0.1f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->SpeedOnCreation	   = -1.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->ParticlesPerSec = 200;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{2.0, 0.2f, 2.0f};
+		ParticleSystem->DeadZone = 1.9f;
+		ParticleSystem->IsMagnet = true;
+		ParticleSystem->MagnetFactor = 2.0f;
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.2f, 0.2f, 0.0f, 0.1f);
+		break;
+	case 38:	// Оружие пришельцев, Laser
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 0.30f;
+		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.40f;
+		ParticleSystem->SizeVar    = 0.05f;
+		ParticleSystem->SizeEnd    = 0.20f;
+		ParticleSystem->Speed      = 0.00f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 0.20f;
+		ParticleSystem->ParticlesPerSec = 9000;
+		ParticleSystem->CreationType = eParticleCreationType::Tube;
+		ParticleSystem->CreationSize = sVECTOR3D{0.2f, 0.2f, 0.1f};
+		ParticleSystem->AlphaShowHide = true;
+		break;
+
+	case 101:	// шлейф ракеты землян и пиратов
+		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
+		ParticleSystem->ColorStart.r = 1.00f;
+		ParticleSystem->ColorStart.g = 1.00f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 1.00f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 0.06f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.20f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 2.50f;
+		ParticleSystem->Speed      = 0.20f;
+		ParticleSystem->SpeedVar   = 0.30f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 5.00f;
+		ParticleSystem->LifeVar    = 5.00f;
+		ParticleSystem->ParticlesPerSec = 150;
+		ParticleSystem->TextureBlend = true;
+		break;
+
+	case 102:	// шлейф ракет пришельцев
+		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
+		ParticleSystem->ColorStart.r = 0.00f;
+		ParticleSystem->ColorStart.g = 0.70f;
+		ParticleSystem->ColorStart.b = 1.00f;
+		ParticleSystem->ColorEnd.r = 0.00f;
+		ParticleSystem->ColorEnd.g = 0.70f;
+		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->AlphaStart = 0.08f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.20f;
+		ParticleSystem->SizeVar    = 0.10f;
+		ParticleSystem->SizeEnd    = 2.00f;
+		ParticleSystem->Speed      = 0.20f;
+		ParticleSystem->SpeedVar   = 0.30f;
+		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->Life       = 5.00f;
+		ParticleSystem->LifeVar    = 5.00f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->TextureBlend = true;
+		break;
+
+	default:
+		std::cerr << __func__ << "(): " << "wrong GFXNum.\n";
+		break;
+	}
+}
 
 
 
