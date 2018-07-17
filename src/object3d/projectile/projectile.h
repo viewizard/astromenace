@@ -45,7 +45,7 @@ namespace astromenace {
 class cProjectile : public cObject3D
 {
 public:
-	cProjectile();
+	explicit cProjectile(int ProjectileNum);
 	virtual ~cProjectile();
 
 	// Обновление данных объектa
@@ -54,8 +54,6 @@ public:
 	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 	// Установка положения
 	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
-	// Создание нужного объекта
-	virtual void Create(int ProjectileNum);
 
 	// Номер типа снаряда при создании
 	int Num{0};

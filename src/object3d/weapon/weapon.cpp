@@ -919,8 +919,7 @@ bool cWeapon::Update(float Time)
 				vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
 				// создаем снаряд
-				cProjectile *Projectile = new cProjectile;
-				Projectile->Create(InternalType);
+				cProjectile *Projectile = new cProjectile{InternalType};
 				Projectile->SetLocation(Location+FireLocation);
 				Projectile->SetRotation(Rotation);
 				for (auto &tmpGFX : Projectile->GraphicFX) {
@@ -969,8 +968,7 @@ bool cWeapon::Update(float Time)
 
 
 				// создаем снаряд
-				cProjectile *Projectile = new cProjectile;
-				Projectile->Create(InternalType);
+				cProjectile *Projectile = new cProjectile{InternalType};
 				Projectile->SetLocation(Location + FireLocation);
 				Projectile->SetRotation(Rotation + sVECTOR3D{vw_fRand0() * 30.0f,
 									     0.0f,
@@ -1400,8 +1398,7 @@ bool cWeapon::WeaponFire(float Time)
 
 
 	// создаем снаряд
-	cProjectile *Projectile = new cProjectile;
-	Projectile->Create(InternalType);
+	cProjectile *Projectile = new cProjectile{InternalType};
 
 
 	// если лучевое оружие, немного все делаем по другому

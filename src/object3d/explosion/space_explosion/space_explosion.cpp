@@ -100,8 +100,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3 * Object.Radius) + (int)(vw_fRand0() * 3 * Object.Radius);
 		for (int i=0; i<ttt; i++) {
-			cProjectile *Projectile  = new cProjectile;
-			Projectile->Create(1);
+			cProjectile *Projectile  = new cProjectile{1};
 			Projectile->SetLocation(Location);
 
 			Projectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
@@ -189,8 +188,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(Object.Radius) + (int)(vw_fRand0() * Object.Radius);
 		for (int i=0; i<ttt; i++) {
-			cProjectile *Projectile  = new cProjectile;
-			Projectile->Create(1);
+			cProjectile *Projectile  = new cProjectile{1};
 			Projectile->SetLocation(Location);
 
 			Projectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
@@ -373,8 +371,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(0.5f * Object.Radius) + (int)(vw_fRand0() * Object.Radius);
 		for (int i=0; i<ttt; i++) {
-			cProjectile *Projectile = new cProjectile;
-			Projectile->Create(1);
+			cProjectile *Projectile = new cProjectile{1};
 			Projectile->SetLocation(Location);
 
 			Projectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),

@@ -368,8 +368,7 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
-		InfoMine = new cProjectile;
-		InfoMine->Create(213+tmpCreateNum);
+		InfoMine = new cProjectile{213+tmpCreateNum};
 		InfoMine->ObjectStatus = eObjectStatus::none;
 		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
 		InfoMine->GraphicFXDestroyType = true;

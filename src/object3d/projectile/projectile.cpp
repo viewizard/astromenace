@@ -1191,7 +1191,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cProjectile::cProjectile()
+cProjectile::cProjectile(int ProjectileNum)
 {
 	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::Projectile;
@@ -1202,15 +1202,8 @@ cProjectile::cProjectile()
 	Ambient[0] = Ambient[1] = Ambient[2] = Ambient[3] = 0.35f;
 
 	AttachProjectile(this);
-}
 
 
-
-//-----------------------------------------------------------------------------
-// выполнение действий
-//-----------------------------------------------------------------------------
-void cProjectile::Create(int ProjectileNum)
-{
 	if (ProjectileNum <= 0) {
 		std::cerr << __func__ << "(): " << "Could not init cProjectile object with Number " << ProjectileNum << "\n";
 		return;
@@ -2649,8 +2642,7 @@ missile:
 				MineNextFireTime -= TimeDelta;
 				if (MineNextFireTime <= 0.0f) {
 					// создаем снаряд
-					cProjectile *Projectile = new cProjectile;
-					Projectile->Create(204);
+					cProjectile *Projectile = new cProjectile{204};
 					Projectile->SetLocation(Location + sVECTOR3D{0.0f, -2.0f, 0.0f});
 
 					Projectile->SetRotation(Rotation);
@@ -2750,8 +2742,7 @@ missile:
 				MineNextFireTime -= TimeDelta;
 				if (MineNextFireTime <= 0.0f) {
 					// создаем снаряд
-					cProjectile *Projectile = new cProjectile;
-					Projectile->Create(206);
+					cProjectile *Projectile = new cProjectile{206};
 					Projectile->SetLocation(Location + sVECTOR3D{0.0f, 0.0f, 0.0f});
 
 					Projectile->SetRotation(Rotation);
