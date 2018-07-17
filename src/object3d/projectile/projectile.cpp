@@ -298,6 +298,43 @@ void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle
 	}
 }
 
+/*
+ * Managed cycle for each projectile pair.
+ */
+void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
+					       cProjectile &SecondObject,
+					       eProjectilePairCycle &Command)> function)
+{
+	cProjectile *tmpFirstProjectile = StartProjectile;
+	while (tmpFirstProjectile) {
+		eProjectilePairCycle Command{eProjectilePairCycle::Continue};
+		cProjectile *tmpSecondProjectile = tmpFirstProjectile->Next;
+		while (tmpSecondProjectile) {
+			Command = eProjectilePairCycle::Continue;
+			function(*tmpFirstProjectile, *tmpSecondProjectile, Command);
+			cProjectile *tmpSecondProjectileNext = tmpSecondProjectile->Next;
+
+			if ((Command == eProjectilePairCycle::DeleteSecondObjectAndContinue) ||
+			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
+				delete tmpSecondProjectile;
+
+			// break second cycle
+			if ((Command == eProjectilePairCycle::DeleteFirstObjectAndContinue) ||
+			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
+				break;
+
+			tmpSecondProjectile = tmpSecondProjectileNext;
+		}
+
+		cProjectile *tmpFirstProjectileNext = tmpFirstProjectile->Next;
+
+		if ((Command == eProjectilePairCycle::DeleteFirstObjectAndContinue) ||
+		    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
+			delete tmpFirstProjectile;
+
+		tmpFirstProjectile = tmpFirstProjectileNext;
+	}
+}
 
 
 

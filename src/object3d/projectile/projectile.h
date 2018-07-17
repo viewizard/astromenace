@@ -49,6 +49,13 @@ enum class eProjectileCycle {
 	DeleteObjectAndBreak
 };
 
+enum class eProjectilePairCycle {
+	Continue,
+	DeleteFirstObjectAndContinue,
+	DeleteSecondObjectAndContinue,
+	DeleteBothObjectsAndContinue
+};
+
 class cProjectile : public cObject3D
 {
 public:
@@ -123,6 +130,11 @@ void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
 void ReleaseAllProjectiles();
 // Managed cycle for each projectile.
 void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function);
+// Managed cycle for each projectile pair.
+// Note, caller must guarantee, that 'FirstObject' and 'SecondObject' will not released in callback function call.
+void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
+					       cProjectile &SecondObject,
+					       eProjectilePairCycle &Command)> function);
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
 
