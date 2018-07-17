@@ -40,9 +40,6 @@
 namespace viewizard {
 namespace astromenace {
 
-extern cProjectile *StartProjectile;
-extern cProjectile *EndProjectile;
-
 float GetEnginePower(int EngineType);
 float GetEngineAcceleration(int EngineType);
 float GetEngineRotatePower(int EngineType);
@@ -446,21 +443,13 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Вывод голосового предупреждения, если навелась ракета
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		cProjectile *tmpProjectile = StartProjectile;
-		bool CheckStatus = false;
-		while (tmpProjectile != nullptr) {
-			cProjectile *tmpProjectile2 = tmpProjectile->Next;
-			// если навелись на этот объект ракетой
-			// т.к. только у ракеты тут не ноль
-			if (tmpProjectile->Target == PlayerFighter)
-				// если это не мина
-				if (tmpProjectile->Num < 26 || tmpProjectile->Num > 29) {
-					// проверяем, есть ли ракеты или нет
+		bool CheckStatus{false};
+		ForEachProjectile([&] (const cProjectile &Projectile, eProjectileCycle &UNUSED(Command)) {
+			if (Projectile.Target == PlayerFighter)
+				// homing missile targeted on this ship, but not homing mine
+				if ((Projectile.Num < 26) || (Projectile.Num > 29))
 					CheckStatus = true;
-				}
-
-			tmpProjectile = tmpProjectile2;
-		}
+		});
 
 		if (CheckStatus) {
 			// проверяем, действительно еще играем (играем только 1 раз!)
