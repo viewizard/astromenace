@@ -1317,15 +1317,16 @@ bool GetMissileTargetStatus(cObject3D *TargetObject,
 	if (!TargetObject)
 		return false;
 
-	cProjectile *tmpProjectile = StartProjectile;
-	while (tmpProjectile) {
-		cProjectile *tmpProjectile2 = tmpProjectile->Next;
-		if (tmpProjectile == TargetObject)
-			return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
-		tmpProjectile = tmpProjectile2;
-	}
-
 	bool ObjectFound{false};
+	ForEachProjectile([&TargetObject, &ObjectFound] (const cProjectile &tmpProjectile, eProjectileCycle &Command) {
+		if (&tmpProjectile == TargetObject) {
+			ObjectFound = true;
+			Command = eProjectileCycle::Break;
+		}
+	});
+	if (ObjectFound)
+		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
+
 	ForEachGroundObject([&TargetObject, &ObjectFound] (const cGroundObject &tmpGround, eGroundCycle &Command) {
 		if (&tmpGround == TargetObject) {
 			ObjectFound = true;
