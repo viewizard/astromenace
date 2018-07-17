@@ -272,7 +272,31 @@ void ReleaseAllProjectiles()
 }
 
 
-
+/*
+ * Managed cycle for each projectile.
+ */
+void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function)
+{
+	cProjectile *tmpProjectile = StartProjectile;
+	while (tmpProjectile) {
+		eProjectileCycle Command{eProjectileCycle::Continue};
+		function(*tmpProjectile, Command);
+		cProjectile *tmpProjectileNext = tmpProjectile->Next;
+		switch (Command) {
+		case eProjectileCycle::Continue:
+			break;
+		case eProjectileCycle::Break:
+			return;
+		case eProjectileCycle::DeleteObjectAndContinue:
+			delete tmpProjectile;
+			break;
+		case eProjectileCycle::DeleteObjectAndBreak:
+			delete tmpProjectile;
+			return;
+		}
+		tmpProjectile = tmpProjectileNext;
+	}
+}
 
 
 

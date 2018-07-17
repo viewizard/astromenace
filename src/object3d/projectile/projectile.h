@@ -42,6 +42,13 @@
 namespace viewizard {
 namespace astromenace {
 
+enum class eProjectileCycle {
+	Continue,
+	Break,
+	DeleteObjectAndContinue,
+	DeleteObjectAndBreak
+};
+
 class cProjectile : public cObject3D
 {
 public:
@@ -114,6 +121,8 @@ void UpdateAllProjectile(float Time);
 void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void ReleaseAllProjectiles();
+// Managed cycle for each projectile.
+void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function);
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
 
