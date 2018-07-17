@@ -41,8 +41,6 @@ cSpaceShip *EndSpaceShip = nullptr;
 
 extern bool PlayerFighterLeftEng;
 extern bool PlayerFighterRightEng;
-extern cProjectile *StartProjectile;
-extern cProjectile *EndProjectile;
 
 
 //-----------------------------------------------------------------------------
@@ -433,18 +431,13 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!FlareWeaponSlots.empty()) {
 		bool NeedFlare{false};
-		cProjectile *tmpProjectile = StartProjectile;
-		while (tmpProjectile != nullptr) {
-			cProjectile *tmpProjectile2 = tmpProjectile->Next;
-
-			// homing missile targeted on this ship
-			if (tmpProjectile->Target == this) {
+		ForEachProjectile([&] (cProjectile &Projectile, eProjectileCycle &UNUSED(Command)) {
+			// homing missile or homing mine targeted on this ship
+			if (Projectile.Target == this) {
 				NeedFlare = true;
-				tmpProjectile->Target = nullptr; // reset target, since we will fire flares
+				Projectile.Target = nullptr; // reset target, since we will fire flares
 			}
-
-			tmpProjectile = tmpProjectile2;
-		}
+		});
 
 		if (NeedFlare) {
 			for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
