@@ -41,8 +41,6 @@ namespace astromenace {
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
-extern cProjectile *StartProjectile;
-extern cProjectile *EndProjectile;
 float GetProjectileSpeed(int Num);
 
 std::weak_ptr<cGLSL> GLSLShaderType1{};
@@ -924,18 +922,16 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 	cObject3D *Target{nullptr};
 
 	// проверка по снарядам, фларес
-	cProjectile *tmpProjectile = StartProjectile;
-	while (tmpProjectile) {
-		cProjectile *tmpProjectile2 = tmpProjectile->Next;
+	ForEachProjectile([&] (const cProjectile &tmpProjectile, eProjectileCycle &UNUSED(Command)) {
 		// только фларес
-		if ((tmpProjectile->ProjectileType == 3) && NeedCheckCollision(*tmpProjectile) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpProjectile->ObjectStatus == eObjectStatus::Ally) || (tmpProjectile->ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpProjectile->ObjectStatus == eObjectStatus::Enemy)))) {
+		if ((tmpProjectile.ProjectileType == 3) && NeedCheckCollision(tmpProjectile) &&
+		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpProjectile.ObjectStatus == eObjectStatus::Ally) || (tmpProjectile.ObjectStatus == eObjectStatus::Player))) ||
+		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpProjectile.ObjectStatus == eObjectStatus::Enemy)))) {
 
 			// проверяем, спереди или сзади стоит противник
-			float tmp1 = A2 * tmpProjectile->Location.x + B2 * tmpProjectile->Location.y + C2 * tmpProjectile->Location.z + D2;
+			float tmp1 = A2 * tmpProjectile.Location.x + B2 * tmpProjectile.Location.y + C2 * tmpProjectile.Location.z + D2;
 			if (tmp1 > 0.0f) {
-				float TargetDist2TMP = A2 * tmpProjectile->Location.x + B2 * tmpProjectile->Location.y + C2 * tmpProjectile->Location.z + D2;
+				float TargetDist2TMP = A2 * tmpProjectile.Location.x + B2 * tmpProjectile.Location.y + C2 * tmpProjectile.Location.z + D2;
 
 				// проверяем, чтобы объект находился не ближе чем MinDistance
 				if ((MinDistance < TargetDist2TMP) && (MaxDistance > TargetDist2TMP)) {
@@ -943,7 +939,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 					// идущим по нашему курсу...
 
 					sVECTOR3D TargetAngleTMP;
-					TargetLocation = tmpProjectile->Location;
+					TargetLocation = tmpProjectile.Location;
 
 					// находим угол между плоскостью и прямой
 					float A3, B3, C3, D3;
@@ -978,14 +974,12 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 						Tdist = m * m + n * n + p * p;
 						TargetLocked = true;
 						TType = 1;
-						Target = tmpProjectile;
+						Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpProjectile));
 					}
 				}
 			}
 		}
-
-		tmpProjectile = tmpProjectile2;
-	}
+	});
 
 	// проверка по наземным объектам
 	// не стрелять по "мирным" постойкам
