@@ -49,8 +49,6 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern cSpaceShip *StartSpaceShip;
 extern cSpaceShip *EndSpaceShip;
-extern cProjectile *StartProjectile;
-extern cProjectile *EndProjectile;
 
 extern float GameMoney;
 extern float GameExperience;
@@ -415,18 +413,12 @@ void DetectCollisionAllObject3D()
 	while (tmpShip) {
 		cSpaceShip *tmpShip2 = tmpShip->Next;
 
-		// точка попадания, если оно есть
-		sVECTOR3D IntercPoint;
-
-		// проверяем со снарядами
-		cProjectile *tmpProjectile = StartProjectile;
-		while (tmpProjectile && tmpShip) {
-			cProjectile *tmpProjectile2 = tmpProjectile->Next;
-
-			// проверка на попадание в корпус корабля
+		ForEachProjectile([&tmpShip, &tmpShip2] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
+			sVECTOR3D IntercPoint;
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
-			if (DetectProjectileCollision(*tmpShip, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpShip->Speed)) {
+
+			if (DetectProjectileCollision(*tmpShip, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpShip->Speed)) {
 				tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
 
 				// если на корабле есть щит, сначала его уничтожаем
@@ -460,10 +452,8 @@ void DetectCollisionAllObject3D()
 				    (vw_fRand() > 0.7f))
 					tmpShip->Strength = 0;
 
-				// если уже все... удаляем
 				if (tmpShip->Strength <= 0.0f) {
-					// проверка, нужно начислять или нет
-					AddPlayerBonus(*tmpShip, tmpProjectile->ObjectStatus);
+					AddPlayerBonus(*tmpShip, tmpProjectile.ObjectStatus);
 
 					// если не корабль игрока! его удалим сами
 					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
@@ -488,8 +478,6 @@ void DetectCollisionAllObject3D()
 						}
 						delete tmpShip;
 						tmpShip = nullptr;
-						// убираем звук попадания-разбивания снаряда
-						tmpProjectile->NeedDeadSound = false;
 					} else {
 						// запоминаем, что взорвалось
 						PlayerDeadObjectPieceNum = ObjectPieceNum;
@@ -516,57 +504,65 @@ void DetectCollisionAllObject3D()
 						tmpShip->FlareWeaponSlots.clear();
 				}
 
-
-				// удаляем только те, которые разбились
-				if (tmpProjectile->ProjectileType != 2) {
-					DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
-					delete tmpProjectile;
-					tmpProjectile = nullptr;
+				if (tmpProjectile.ProjectileType != 2) {
+					if (!tmpShip)
+						tmpProjectile.NeedDeadSound = false;
+					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+					ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
 				}
 
+				if (!tmpShip) {
+					// break projectile cycle
+					switch (ProjectileCycleCommand) {
+					case eProjectileCycle::Continue:
+						ProjectileCycleCommand = eProjectileCycle::Break;
+						break;
+					case eProjectileCycle::DeleteObjectAndContinue:
+						ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndBreak;
+						break;
+					default:
+						break;
+					}
+				}
 			}
+			if (ProjectileCycleCommand != eProjectileCycle::Continue)
+				return;
 
 			// проверка на попадание в оружие (только для игрока и если включено в настройках)
 			// проверять только до OBB
-			if (tmpShip && tmpProjectile &&
+			if (tmpShip &&
 			    (tmpShip->ObjectStatus == eObjectStatus::Player) &&
-			    (tmpProjectile->ObjectStatus == eObjectStatus::Enemy) &&
+			    (tmpProjectile.ObjectStatus == eObjectStatus::Enemy) &&
 			    !GameUndestroyableWeapon && !tmpShip->WeaponSlots.empty()) {
 				for (auto &tmpWeaponSlot : tmpShip->WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 						sDamagesData DamagesDataWeapon;
 						int ObjectPieceNumWeapon;
 
-						if (tmpProjectile &&
-						// если еще целое
-						    (sharedWeapon->Strength > 0.0f) &&
-						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, *tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip->Speed)) {
+						if ((sharedWeapon->Strength > 0.0f) &&
+						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip->Speed)) {
 							tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
+							// FIXME вот тут все очень плохо, т.к. можем убить и сам tmpShip
 
 							// просто делаем изменения в прочности... и больше ничего
 							sharedWeapon->Strength -= DamagesDataWeapon.DamageHull / sharedWeapon->ResistanceHull;
 							if (sharedWeapon->Strength <= 0.0f) {
 								sharedWeapon->Strength = 0.0f;
 								PlayVoicePhrase(eVoicePhrase::WeaponDestroyed, 1.0f);
-								// убираем звук попадания-разбивания снаряда
-								tmpProjectile->NeedDeadSound = false;
 							} else
 								PlayVoicePhrase(eVoicePhrase::WeaponDamaged, 1.0f);
 
 							// удаляем только те, которые разбились
-							if (tmpProjectile->ProjectileType != 2) {
-								DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
-								delete tmpProjectile;
-								tmpProjectile = nullptr;
+							if (tmpProjectile.ProjectileType != 2) {
+								DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+								ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
+								return;
 							}
 						}
 					}
 				}
 			}
-
-			// берем следующий снаряд
-			tmpProjectile = tmpProjectile2;
-		}
+		});
 
 		// проверяем столкновение
 		// cSpaceObject

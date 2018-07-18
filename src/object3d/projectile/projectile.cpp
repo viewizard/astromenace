@@ -43,6 +43,8 @@ will not kill their speed and maneuverability and we will have nice difficulty m
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
 struct sProjectileData {
 	float Radius;
 	float DamageHull;
@@ -59,10 +61,6 @@ const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
 					 {"gfx/trail3.tga"},
 					 {"gfx/trail4.tga"},
 					 {"gfx/trail5.tga"}};
-
-// Указатели на начальный и конечный объект в списке
-cProjectile *StartProjectile = nullptr;
-cProjectile *EndProjectile = nullptr;
 
 // снаряды для оружия землян 1-99
 const std::vector<sProjectileData> PresetEarthProjectileData{
@@ -160,7 +158,11 @@ const std::vector<sProjectileData> PresetPirateProjectileData{
 	{1.2f, 200, 0,	4, 0, -1, 1},
 };
 
+// Указатели на начальный и конечный объект в списке
+cProjectile *StartProjectile = nullptr;
+cProjectile *EndProjectile = nullptr;
 
+} // unnamed namespace
 
 
 
