@@ -893,7 +893,7 @@ void DetectCollisionAllObject3D()
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			if(DetectProjectileCollision(tmpGround, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpGround.Speed)) {
+			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpGround.Speed)) {
 				if (NeedCheckCollision(tmpGround)) {
 					tmpGround.Strength -= DamagesData.DamageHull / tmpGround.ResistanceHull;
 
@@ -1015,22 +1015,16 @@ void DetectCollisionAllObject3D()
 	// проверяем все cSpaceObject
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceObject([] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
-		// точка попадания, если оно есть
-		sVECTOR3D IntercPoint;
-		// проверяем со снарядами
-		cProjectile *tmpProjectile = StartProjectile;
-		while (tmpProjectile) {
-			cProjectile *tmpProjectile2 = tmpProjectile->Next;
-			sDamagesData DamagesData;
+		ForEachProjectile([&tmpSpace, &SpaceCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
 			int ObjectPieceNum;
+			sVECTOR3D IntercPoint;
+			sDamagesData DamagesData;
 
-			if(DetectProjectileCollision(tmpSpace, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpSpace.Speed)) {
+			if (DetectProjectileCollision(tmpSpace, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpSpace.Speed)) {
 				if (NeedCheckCollision(tmpSpace)) {
 					tmpSpace.Strength -= DamagesData.DamageHull / tmpSpace.ResistanceHull;
-					// если уже все... удаляем
 					if (tmpSpace.Strength <= 0.0f) {
-						// проверка, нужно начислять или нет
-						AddPlayerBonus(tmpSpace, tmpProjectile->ObjectStatus);
+						AddPlayerBonus(tmpSpace, tmpProjectile.ObjectStatus);
 
 						switch (tmpSpace.ObjectType) {
 						case eObjectType::SmallAsteroid:
@@ -1043,24 +1037,32 @@ void DetectCollisionAllObject3D()
 							break;
 						}
 						SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
-
-						// убираем звук попадания-разбивания снаряда
-						tmpProjectile->NeedDeadSound = false;
 					}
 				}
 
-				// удаляем только те, которые разбились
-				if (tmpProjectile->ProjectileType != 2) {
-					DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
-					delete tmpProjectile;
-					tmpProjectile = nullptr;
+				if (tmpProjectile.ProjectileType != 2) {
+					// if space object destroyed, we should play only "explosion" sfx, without "hit" sfx
+					if (SpaceCycleCommand == eSpaceCycle::DeleteObjectAndContinue)
+						tmpProjectile.NeedDeadSound = false;
+					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+					ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
+				}
+
+				if (SpaceCycleCommand == eSpaceCycle::DeleteObjectAndContinue) {
+					// break projectile cycle
+					switch (ProjectileCycleCommand) {
+					case eProjectileCycle::Continue:
+						ProjectileCycleCommand = eProjectileCycle::Break;
+						break;
+					case eProjectileCycle::DeleteObjectAndContinue:
+						ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndBreak;
+						break;
+					default:
+						break;
+					}
 				}
 			}
-
-			tmpProjectile = tmpProjectile2;
-			if (SpaceCycleCommand == eSpaceCycle::DeleteObjectAndContinue) // FIXME temporary
-				break;
-		}
+		});
 	});
 
 	ForEachSpaceObjectPair([] (cSpaceObject &FirstObject, cSpaceObject &SecondObject, eSpacePairCycle &Command) {
