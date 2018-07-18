@@ -204,7 +204,7 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "MenuScript"), "value", Config.MenuScript);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Tips and Hints settings ");
-	for(int i = 0; i < 10; i++) {
+	for (unsigned i = 0; i < config::MAX_HINTS; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
 		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, tmpString.c_str()), "value",
 					  Config.NeedShowHint[i]);
@@ -487,7 +487,7 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "MenuScript"), "value",
 					   Config.MenuScript);
 
-	for(int i = 0; i < 10; i++) {
+	for (unsigned i = 0; i < config::MAX_HINTS; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
 		if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()))
 			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()), "value",
