@@ -59,10 +59,20 @@ enum class eProjectilePairCycle {
 
 class cProjectile : public cObject3D
 {
-public:
+	friend cProjectile *CreateProjectile(int ProjectileNum);
+	friend void UpdateAllProjectile(float Time);
+	friend void ReleaseProjectile(cProjectile *Object);
+	friend void ReleaseAllProjectiles();
+	friend void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function);
+	friend void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
+							      cProjectile &SecondObject,
+							      eProjectilePairCycle &Command)> function);
+
+private:
 	explicit cProjectile(int ProjectileNum);
 	virtual ~cProjectile();
 
+public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 	// Установка углов поворота
@@ -124,10 +134,14 @@ public:
 };
 
 
+// Create cProjectile object.
+cProjectile *CreateProjectile(int ProjectileNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllProjectile(float Time);
 // Прорисовываем все объекты
 void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
+// Release particular projectile object.
+void ReleaseProjectile(cProjectile *Object);
 // Удаляем все объекты в списке
 void ReleaseAllProjectiles();
 // Managed cycle for each projectile.

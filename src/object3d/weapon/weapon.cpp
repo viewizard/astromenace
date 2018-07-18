@@ -771,8 +771,7 @@ cWeapon::~cWeapon()
 	}
 	// если лучевое оружие
 	if (LaserMaser != nullptr) {
-		delete LaserMaser;
-		LaserMaser = nullptr;
+		ReleaseProjectile(LaserMaser);
 		// убираем звук выстрела
 		if (vw_IsSoundAvailable(LaserMaserSoundNum))
 			vw_StopSound(LaserMaserSoundNum, 150);
@@ -787,7 +786,7 @@ bool cWeapon::Update(float Time)
 	// если лучевое оружие
 	if (LaserMaser != nullptr) {
 		if (LaserMaser->Lifetime <= 0.0f) {
-			delete LaserMaser;
+			ReleaseProjectile(LaserMaser);
 			LaserMaser = nullptr;
 		}
 	}
@@ -919,7 +918,7 @@ bool cWeapon::Update(float Time)
 				vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
 				// создаем снаряд
-				cProjectile *Projectile = new cProjectile{InternalType};
+				cProjectile *Projectile = CreateProjectile(InternalType);
 				Projectile->SetLocation(Location+FireLocation);
 				Projectile->SetRotation(Rotation);
 				for (auto &tmpGFX : Projectile->GraphicFX) {
@@ -968,7 +967,7 @@ bool cWeapon::Update(float Time)
 
 
 				// создаем снаряд
-				cProjectile *Projectile = new cProjectile{InternalType};
+				cProjectile *Projectile = CreateProjectile(InternalType);
 				Projectile->SetLocation(Location + FireLocation);
 				Projectile->SetRotation(Rotation + sVECTOR3D{vw_fRand0() * 30.0f,
 									     0.0f,
@@ -1398,14 +1397,14 @@ bool cWeapon::WeaponFire(float Time)
 
 
 	// создаем снаряд
-	cProjectile *Projectile = new cProjectile{InternalType};
+	cProjectile *Projectile = CreateProjectile(InternalType);
 
 
 	// если лучевое оружие, немного все делаем по другому
 	// или это испускатель мин
 	if (Projectile->ProjectileType == 2) {
 		if (LaserMaser != nullptr) {
-			delete LaserMaser;
+			ReleaseProjectile(LaserMaser);
 			LaserMaser = nullptr;
 		}
 		LaserMaser = Projectile;

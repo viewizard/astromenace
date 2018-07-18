@@ -220,8 +220,13 @@ static void DetachProjectile(cProjectile* Projectile)
 
 
 
-
-
+/*
+ * Create cProjectile object.
+ */
+cProjectile *CreateProjectile(int ProjectileNum)
+{
+	return new cProjectile{ProjectileNum};
+}
 
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
@@ -258,7 +263,13 @@ void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap)
 
 
 
-
+/*
+ * Release particular projectile object.
+ */
+void ReleaseProjectile(cProjectile *Object)
+{
+	delete Object;
+}
 
 //-----------------------------------------------------------------------------
 // Удаляем все объекты в списке

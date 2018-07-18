@@ -267,7 +267,7 @@ void DestroyInfoObject()
 	}
 	ReleaseWeapon(InfoWeapon);
 	if (InfoMine != nullptr) {
-		delete InfoMine;
+		ReleaseProjectile(InfoMine);
 		InfoMine = nullptr;
 	}
 	if (InfoAlien != nullptr) {
@@ -368,7 +368,7 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
-		InfoMine = new cProjectile{213+tmpCreateNum};
+		InfoMine = CreateProjectile(213 + tmpCreateNum);
 		InfoMine->ObjectStatus = eObjectStatus::none;
 		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
 		InfoMine->GraphicFXDestroyType = true;

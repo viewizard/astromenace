@@ -277,8 +277,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Projectile->Radius) + (int)(vw_fRand0()*3*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP  = nullptr;
-			ProjectileTMP  = new cProjectile{1};
+			cProjectile *ProjectileTMP = CreateProjectile(1);
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
@@ -485,7 +484,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (3 + vw_fRand()) * Projectile->Radius;
 		for (int i = 0; i < ttt; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{1};
+			cProjectile *ProjectileTMP = CreateProjectile(1);
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
@@ -537,7 +536,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		int ttt = (1 + vw_fRand()) * Projectile->Radius;
 		//vw_LogMessage(LOG_MESS_INF, "%i", ttt);
 		for (int i = 0; i < ttt; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{1};
+			cProjectile *ProjectileTMP = CreateProjectile(1);
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
@@ -590,7 +589,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (2 + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{2};
+			cProjectile *ProjectileTMP = CreateProjectile(2);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
@@ -650,7 +649,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 
 		// создаем немного разлетающихся кусков-снарядов
 		for (int i=0; i<4; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{3};
+			cProjectile *ProjectileTMP = CreateProjectile(3);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
@@ -676,7 +675,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (3  + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{2};
+			cProjectile *ProjectileTMP = CreateProjectile(2);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
@@ -698,7 +697,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		ttt = (3 + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{3};
+			cProjectile *ProjectileTMP = CreateProjectile(3);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
@@ -720,7 +719,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 
 		ttt = (3 + vw_fRand() * 5) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{1};
+			cProjectile *ProjectileTMP = CreateProjectile(1);
 			ProjectileTMP->SetLocation(Location);
 
 			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
@@ -742,7 +741,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		ttt = (5 + vw_fRand() * 3) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = new cProjectile{5};
+			cProjectile *ProjectileTMP = CreateProjectile(5);
 			ProjectileTMP->Num = 1;
 			ProjectileTMP->SetLocation(Location);
 
