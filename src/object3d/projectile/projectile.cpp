@@ -158,66 +158,9 @@ const std::vector<sProjectileData> PresetPirateProjectileData{
 	{1.2f, 200, 0,	4, 0, -1, 1},
 };
 
-// Указатели на начальный и конечный объект в списке
-cProjectile *StartProjectile = nullptr;
-cProjectile *EndProjectile = nullptr;
+std::list<cProjectile*> ProjectileList{};
 
 } // unnamed namespace
-
-
-
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-static void AttachProjectile(cProjectile* Projectile)
-{
-	if (Projectile == nullptr)
-		return;
-
-	// первый в списке...
-	if (EndProjectile == nullptr) {
-		Projectile->Prev = nullptr;
-		Projectile->Next = nullptr;
-		StartProjectile = Projectile;
-		EndProjectile = Projectile;
-	} else { // продолжаем заполнение...
-		Projectile->Prev = EndProjectile;
-		Projectile->Next = nullptr;
-		EndProjectile->Next = Projectile;
-		EndProjectile = Projectile;
-	}
-}
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-static void DetachProjectile(cProjectile* Projectile)
-{
-	if (Projectile == nullptr)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartProjectile == Projectile)
-		StartProjectile = Projectile->Next;
-	if (EndProjectile == Projectile)
-		EndProjectile = Projectile->Prev;
-
-	if (Projectile->Next != nullptr)
-		Projectile->Next->Prev = Projectile->Prev;
-	else if (Projectile->Prev != nullptr)
-		Projectile->Prev->Next = nullptr;
-
-	if (Projectile->Prev != nullptr)
-		Projectile->Prev->Next = Projectile->Next;
-	else if (Projectile->Next != nullptr)
-		Projectile->Next->Prev = nullptr;
-}
-
-
 
 
 /*
@@ -225,7 +168,8 @@ static void DetachProjectile(cProjectile* Projectile)
  */
 cProjectile *CreateProjectile(int ProjectileNum)
 {
-	return new cProjectile{ProjectileNum};
+	ProjectileList.emplace_front(new cProjectile{ProjectileNum});
+	return ProjectileList.front();
 }
 
 //-----------------------------------------------------------------------------
@@ -233,42 +177,38 @@ cProjectile *CreateProjectile(int ProjectileNum)
 //-----------------------------------------------------------------------------
 void UpdateAllProjectile(float Time)
 {
-	cProjectile *tmp = StartProjectile;
-	while (tmp != nullptr) {
-		cProjectile *tmp2 = tmp->Next;
-		// делаем обновление данных по объекту
-		if (!tmp->Update(Time))
-			delete tmp;
-		tmp = tmp2;
+	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
+		if (!(*iter)->Update(Time)) {
+			delete *iter;
+			iter = ProjectileList.erase(iter);
+		} else
+			++iter;
 	}
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 // Прорисовываем все объекты
 //-----------------------------------------------------------------------------
 void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap)
 {
-
-	cProjectile *tmp = StartProjectile;
-	while (tmp != nullptr) {
-		cProjectile *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass, ShadowMap);
-		tmp = tmp2;
+	for (auto &tmpProjectile : ProjectileList) {
+		tmpProjectile->Draw(VertexOnlyPass, ShadowMap);
 	}
-
 }
-
-
 
 /*
  * Release particular projectile object.
  */
 void ReleaseProjectile(cProjectile *Object)
 {
-	delete Object;
+	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
+		if (*iter == Object) {
+			delete *iter;
+			ProjectileList.erase(iter);
+			return;
+		}
+		++iter;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -276,38 +216,33 @@ void ReleaseProjectile(cProjectile *Object)
 //-----------------------------------------------------------------------------
 void ReleaseAllProjectiles()
 {
-	cProjectile *tmp = StartProjectile;
-	while (tmp != nullptr) {
-		cProjectile *tmp2 = tmp->Next;
-		delete tmp;
-		tmp = tmp2;
-	}
+	ProjectileList.clear();
 }
-
 
 /*
  * Managed cycle for each projectile.
  */
 void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function)
 {
-	cProjectile *tmpProjectile = StartProjectile;
-	while (tmpProjectile) {
+	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
 		eProjectileCycle Command{eProjectileCycle::Continue};
-		function(*tmpProjectile, Command);
-		cProjectile *tmpProjectileNext = tmpProjectile->Next;
+		function(*(*iter), Command);
+
 		switch (Command) {
 		case eProjectileCycle::Continue:
+			++iter;
 			break;
 		case eProjectileCycle::Break:
 			return;
 		case eProjectileCycle::DeleteObjectAndContinue:
-			delete tmpProjectile;
+			delete *iter;
+			iter = ProjectileList.erase(iter);
 			break;
 		case eProjectileCycle::DeleteObjectAndBreak:
-			delete tmpProjectile;
+			delete *iter;
+			ProjectileList.erase(iter);
 			return;
 		}
-		tmpProjectile = tmpProjectileNext;
 	}
 }
 
@@ -318,34 +253,32 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 					       cProjectile &SecondObject,
 					       eProjectilePairCycle &Command)> function)
 {
-	cProjectile *tmpFirstProjectile = StartProjectile;
-	while (tmpFirstProjectile) {
+	for (auto iterFirst = ProjectileList.begin(); iterFirst != ProjectileList.end();) {
 		eProjectilePairCycle Command{eProjectilePairCycle::Continue};
-		cProjectile *tmpSecondProjectile = tmpFirstProjectile->Next;
-		while (tmpSecondProjectile) {
+
+		for (auto iterSecond = std::next(iterFirst, 1); iterSecond != ProjectileList.end();) {
 			Command = eProjectilePairCycle::Continue;
-			function(*tmpFirstProjectile, *tmpSecondProjectile, Command);
-			cProjectile *tmpSecondProjectileNext = tmpSecondProjectile->Next;
+			function(*(*iterFirst), *(*iterSecond), Command);
 
 			if ((Command == eProjectilePairCycle::DeleteSecondObjectAndContinue) ||
-			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
-				delete tmpSecondProjectile;
+			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue)) {
+				delete *iterSecond;
+				iterSecond = ProjectileList.erase(iterSecond);
+			} else
+				++iterSecond;
 
 			// break second cycle
 			if ((Command == eProjectilePairCycle::DeleteFirstObjectAndContinue) ||
 			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
 				break;
-
-			tmpSecondProjectile = tmpSecondProjectileNext;
 		}
 
-		cProjectile *tmpFirstProjectileNext = tmpFirstProjectile->Next;
-
 		if ((Command == eProjectilePairCycle::DeleteFirstObjectAndContinue) ||
-		    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
-			delete tmpFirstProjectile;
-
-		tmpFirstProjectile = tmpFirstProjectileNext;
+		    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue)) {
+			delete *iterFirst;
+			iterFirst = ProjectileList.erase(iterFirst);
+		} else
+			++iterFirst;
 	}
 }
 
@@ -1275,9 +1208,6 @@ cProjectile::cProjectile(int ProjectileNum)
 
 	Ambient[0] = Ambient[1] = Ambient[2] = Ambient[3] = 0.35f;
 
-	AttachProjectile(this);
-
-
 	if (ProjectileNum <= 0) {
 		std::cerr << __func__ << "(): " << "Could not init cProjectile object with Number " << ProjectileNum << "\n";
 		return;
@@ -1904,22 +1834,11 @@ cProjectile::cProjectile(int ProjectileNum)
 
 }
 
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------
 cProjectile::~cProjectile()
 {
-	DetachProjectile(this);
-
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
 		/* this GFX is not in use */
 		auto sharedGFX = GraphicFX[i].lock();

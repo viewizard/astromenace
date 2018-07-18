@@ -128,9 +128,6 @@ public:
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
 	bool NeedStopPartic{false};
-
-	cProjectile *Next{nullptr};
-	cProjectile *Prev{nullptr};
 };
 
 
