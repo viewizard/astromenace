@@ -103,63 +103,63 @@ bool vw_OBBOBBCollision(const bounding_box &Object1OBB, const sVECTOR3D &Object1
 		      {TMPInvObject1RotationMatrix[2], TMPInvObject1RotationMatrix[5], TMPInvObject1RotationMatrix[8]}};
 
 	// 1 (Ra)x
-	if(fabsf(T.x) > a.x + b.x * fabsf(R[0][0]) + b.y * fabsf(R[0][1]) + b.z * fabsf(R[0][2]))
+	if (fabsf(T.x) > a.x + b.x * fabsf(R[0][0]) + b.y * fabsf(R[0][1]) + b.z * fabsf(R[0][2]))
 		return false;
 	// 2 (Ra)y
-	if(fabsf(T.y) > a.y + b.x * fabsf(R[1][0]) + b.y * fabsf(R[1][1]) + b.z * fabsf(R[1][2]))
+	if (fabsf(T.y) > a.y + b.x * fabsf(R[1][0]) + b.y * fabsf(R[1][1]) + b.z * fabsf(R[1][2]))
 		return false;
 	// 3 (Ra)z
-	if(fabsf(T.z) > a.z + b.x * fabsf(R[2][0]) + b.y * fabsf(R[2][1]) + b.z * fabsf(R[2][2]))
+	if (fabsf(T.z) > a.z + b.x * fabsf(R[2][0]) + b.y * fabsf(R[2][1]) + b.z * fabsf(R[2][2]))
 		return false;
 
 	// 4 (Rb)x
-	if(fabsf(T.x * R[0][0] + T.y * R[1][0] + T.z * R[2][0]) >
-	   (b.x + a.x * fabsf(R[0][0]) + a.y * fabsf(R[1][0]) + a. z * fabsf(R[2][0])))
+	if (fabsf(T.x * R[0][0] + T.y * R[1][0] + T.z * R[2][0]) >
+	    (b.x + a.x * fabsf(R[0][0]) + a.y * fabsf(R[1][0]) + a. z * fabsf(R[2][0])))
 		return false;
 	// 5 (Rb)y
-	if(fabsf(T.x * R[0][1] + T.y * R[1][1] + T.z * R[2][1]) >
-	   (b.y + a.x * fabsf(R[0][1]) + a.y * fabsf(R[1][1]) + a.z * fabsf(R[2][1])))
+	if (fabsf(T.x * R[0][1] + T.y * R[1][1] + T.z * R[2][1]) >
+	    (b.y + a.x * fabsf(R[0][1]) + a.y * fabsf(R[1][1]) + a.z * fabsf(R[2][1])))
 		return false;
 	// 6 (Rb)z
-	if(fabsf(T.x * R[0][2] + T.y * R[1][2] + T.z * R[2][2]) >
-	   (b.z + a.x * fabsf(R[0][2]) + a.y * fabsf(R[1][2]) + a.z * fabsf(R[2][2])))
+	if (fabsf(T.x * R[0][2] + T.y * R[1][2] + T.z * R[2][2]) >
+	    (b.z + a.x * fabsf(R[0][2]) + a.y * fabsf(R[1][2]) + a.z * fabsf(R[2][2])))
 		return false;
 
 	// 7 (Ra)x X (Rb)x
-	if(fabsf(T.z * R[1][0] - T.y * R[2][0]) >
-	   a.y * fabsf(R[2][0]) + a.z * fabsf(R[1][0]) + b.y * fabsf(R[0][2]) + b.z * fabsf(R[0][1]))
+	if (fabsf(T.z * R[1][0] - T.y * R[2][0]) >
+	    a.y * fabsf(R[2][0]) + a.z * fabsf(R[1][0]) + b.y * fabsf(R[0][2]) + b.z * fabsf(R[0][1]))
 		return false;
 	// 8 (Ra)x X (Rb)y
-	if(fabsf(T.z * R[1][1] - T.y * R[2][1]) >
-	   a.y * fabsf(R[2][1]) + a.z * fabsf(R[1][1]) + b.x * fabsf(R[0][2]) + b.z * fabsf(R[0][0]))
+	if (fabsf(T.z * R[1][1] - T.y * R[2][1]) >
+	    a.y * fabsf(R[2][1]) + a.z * fabsf(R[1][1]) + b.x * fabsf(R[0][2]) + b.z * fabsf(R[0][0]))
 		return false;
 	// 9 (Ra)x X (Rb)z
-	if(fabsf(T.z * R[1][2]-T.y * R[2][2]) >
-	   a.y * fabsf(R[2][2]) + a.z * fabsf(R[1][2]) + b.x * fabsf(R[0][1]) + b.y * fabsf(R[0][0]))
+	if (fabsf(T.z * R[1][2]-T.y * R[2][2]) >
+	    a.y * fabsf(R[2][2]) + a.z * fabsf(R[1][2]) + b.x * fabsf(R[0][1]) + b.y * fabsf(R[0][0]))
 		return false;
 	// 10 (Ra)y X (Rb)x
-	if(fabsf(T.x * R[2][0]-T.z * R[0][0]) >
-	   a.x * fabsf(R[2][0]) + a.z * fabsf(R[0][0]) + b.y * fabsf(R[1][2]) + b.z * fabsf(R[1][1]))
+	if (fabsf(T.x * R[2][0]-T.z * R[0][0]) >
+	    a.x * fabsf(R[2][0]) + a.z * fabsf(R[0][0]) + b.y * fabsf(R[1][2]) + b.z * fabsf(R[1][1]))
 		return false;
 	// 11 (Ra)y X (Rb)y
-	if(fabsf(T.x * R[2][1]-T.z * R[0][1]) >
-	   a.x * fabsf(R[2][1]) + a.z * fabsf(R[0][1]) + b.x * fabsf(R[1][2]) + b.z * fabsf(R[1][0]))
+	if (fabsf(T.x * R[2][1]-T.z * R[0][1]) >
+	    a.x * fabsf(R[2][1]) + a.z * fabsf(R[0][1]) + b.x * fabsf(R[1][2]) + b.z * fabsf(R[1][0]))
 		return false;
 	// 12 (Ra)y X (Rb)z
-	if(fabsf(T.x*R[2][2]-T.z*R[0][2]) >
-	   a.x * fabsf(R[2][2]) + a.z * fabsf(R[0][2]) + b.x * fabsf(R[1][1]) + b.y * fabsf(R[1][0]))
+	if (fabsf(T.x*R[2][2]-T.z*R[0][2]) >
+	    a.x * fabsf(R[2][2]) + a.z * fabsf(R[0][2]) + b.x * fabsf(R[1][1]) + b.y * fabsf(R[1][0]))
 		return false;
 	// 13 (Ra)z X (Rb)x
-	if(fabsf(T.y * R[0][0]-T.x * R[1][0]) >
-	   a.x * fabsf(R[1][0]) + a.y * fabsf(R[0][0]) + b.y * fabsf(R[2][2]) + b.z * fabsf(R[2][1]))
+	if (fabsf(T.y * R[0][0]-T.x * R[1][0]) >
+	    a.x * fabsf(R[1][0]) + a.y * fabsf(R[0][0]) + b.y * fabsf(R[2][2]) + b.z * fabsf(R[2][1]))
 		return false;
 	// 14 (Ra)z X (Rb)y
-	if(fabsf(T.y * R[0][1]-T.x * R[1][1]) >
-	   a.x * fabsf(R[1][1]) + a.y * fabsf(R[0][1]) + b.x * fabsf(R[2][2]) + b.z * fabsf(R[2][0]))
+	if (fabsf(T.y * R[0][1]-T.x * R[1][1]) >
+	    a.x * fabsf(R[1][1]) + a.y * fabsf(R[0][1]) + b.x * fabsf(R[2][2]) + b.z * fabsf(R[2][0]))
 		return false;
 	// 15 (Ra)z X (Rb)z
-	if(fabsf(T.y * R[0][2]-T.x * R[1][2]) >
-	   a.x * fabsf(R[1][2]) + a.y * fabsf(R[0][2]) + b.x * fabsf(R[2][1]) + b.y * fabsf(R[2][0]))
+	if (fabsf(T.y * R[0][2]-T.x * R[1][2]) >
+	    a.x * fabsf(R[1][2]) + a.y * fabsf(R[0][2]) + b.x * fabsf(R[2][1]) + b.y * fabsf(R[2][0]))
 		return false;
 
 	return true;
@@ -505,7 +505,7 @@ bool vw_SphereMeshCollision(const sVECTOR3D &Object1Location, const sChunk3D &Ob
 					   NormalVector.z * Object2PrevLocation.z - originDistance)};
 
 			float Denominator{NormalVector * vLineDir};
-			if(Denominator != 0.0f) {
+			if (Denominator != 0.0f) {
 				float dist{Numerator / Denominator};
 
 				// calculate collision point on plane for ray

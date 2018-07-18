@@ -100,7 +100,7 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 		return true;
 
 	alGenSources(1, &MusicMap[Name].Source); // create entry on first access
-	if(!CheckALError(__func__))
+	if (!CheckALError(__func__))
 		return false;
 
 	MusicMap[Name].LocalVolume = _LocalVolume;
@@ -131,7 +131,7 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 		return false;
 
 	alSourcePlay(MusicMap[Name].Source);
-	if(!CheckALError(__func__))
+	if (!CheckALError(__func__))
 		return false;
 
 	return true;
@@ -237,8 +237,8 @@ void vw_FadeOutAllMusicWithException(const std::string &Name, uint32_t Ticks,
 {
 	for (auto &tmpMusic : MusicMap) {
 		if ((tmpMusic.first != Name)) {
-			if(alIsSource(tmpMusic.second.Source) &&
-			   CheckALSourceState(tmpMusic.second.Source, AL_PLAYING))
+			if (alIsSource(tmpMusic.second.Source) &&
+			    CheckALSourceState(tmpMusic.second.Source, AL_PLAYING))
 				tmpMusic.second.FadeOut(Ticks);
 		} else {
 			// fade-in exception music theme in case we fade-out it

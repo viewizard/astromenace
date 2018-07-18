@@ -103,7 +103,7 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 				_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
 									    GL_RGBA, FBO->Width.i(), FBO->Height.i());
 			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
-			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}
@@ -117,7 +117,7 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO->Width.i(), FBO->Height.i(),
 				     0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
-			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}
@@ -138,7 +138,7 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
 			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
-			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}
@@ -154,7 +154,7 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
 			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
-			if(_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}

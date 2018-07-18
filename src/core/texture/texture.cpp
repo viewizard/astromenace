@@ -249,11 +249,11 @@ static void CreateAlpha(std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Textu
 	std::unique_ptr<uint8_t[]> tmpPixelsArray{std::move(PixelsArray)};
 	PixelsArray.reset(new uint8_t[Texture.Width * Texture.Height * 4]);
 
-	for(int i = 0; i < Texture.Height; i++) {
+	for (int i = 0; i < Texture.Height; i++) {
 		int tmpOffsetDst = Texture.Width * 4 * i;
 		int tmpOffsetSrc = Texture.Width * 3 * i;
 
-		for(int j2 = 0; j2 < Texture.Width; j2++) {
+		for (int j2 = 0; j2 < Texture.Width; j2++) {
 			// copy color
 			memcpy(PixelsArray.get() + tmpOffsetDst,
 			       tmpPixelsArray.get() + tmpOffsetSrc,
@@ -303,11 +303,11 @@ static void RemoveAlpha(std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Textu
 	std::unique_ptr<uint8_t[]> tmpPixelsArray{std::move(PixelsArray)};
 	PixelsArray.reset(new uint8_t[Texture.Width * Texture.Height * 3]);
 
-	for(int i = 0; i < Texture.Height; i++) {
+	for (int i = 0; i < Texture.Height; i++) {
 		int tmpOffsetDst = Texture.Width * 3 * i;
 		int tmpOffsetSrc = Texture.Width * 4 * i;
 
-		for(int j = 0; j < Texture.Width; j++) {
+		for (int j = 0; j < Texture.Width; j++) {
 			memcpy(PixelsArray.get() + tmpOffsetDst,
 			       tmpPixelsArray.get() + tmpOffsetSrc,
 			       sizeof(PixelsArray.get()[0]) * 3);

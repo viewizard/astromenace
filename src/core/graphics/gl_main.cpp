@@ -34,7 +34,7 @@
 //
 //      int NumberOfExtensions;
 //      glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
-//      for(int i = 0; i < NumberOfExtensions; i++) {
+//      for (int i = 0; i < NumberOfExtensions; i++) {
 //      	const GLubyte *one_string = glGetStringi(GL_EXTENSIONS, i);
 //      }
 

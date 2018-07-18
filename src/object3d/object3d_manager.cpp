@@ -111,7 +111,7 @@ void DrawAllObject3D(eDrawType DrawType)
 	StarSystemDrawThirdLayer(DrawType);
 
 	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
-	if(GameConfig().Brightness != 5) {
+	if (GameConfig().Brightness != 5) {
 		float *buff = new float[4*4]; // RI_2f_XY | RI_1_TEX
 		int k=0;
 
@@ -140,7 +140,7 @@ void DrawAllObject3D(eDrawType DrawType)
 
 		float BrightnessF = 1.0f + (GameConfig().Brightness - 5) / 5.0f;
 
-		if( BrightnessF > 1.0f) {
+		if (BrightnessF > 1.0f) {
 			vw_SetTextureBlend(true, eTextureBlendFactor::DST_COLOR, eTextureBlendFactor::ONE);
 			vw_SetColor(BrightnessF-1.0f, BrightnessF-1.0f, BrightnessF-1.0f, 1.0f);
 		} else {

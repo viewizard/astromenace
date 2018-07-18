@@ -1240,7 +1240,7 @@ bool cSpaceShip::Update(float Time)
 
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
-					if(sharedWeapon->NeedRotateOnTargeting) {
+					if (sharedWeapon->NeedRotateOnTargeting) {
 						NeedAngle = Rotation;
 						// добавляем базовый угол, чтобы по умолчанию устанавливало его
 						NeedAngle.y += WeaponSlots[i].YAngle;

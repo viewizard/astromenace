@@ -92,9 +92,9 @@ bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D
 		}
 
 		// дальше работаем с геометрией
-		if(vw_SphereMeshCollision(Object1.Location, Object1.Chunks[j],
-					  Object1.CurrentRotationMat, Object2.Radius, Object2.Location,
-					  Object2.PrevLocation, NewLoc)) {
+		if (vw_SphereMeshCollision(Object1.Location, Object1.Chunks[j],
+					   Object1.CurrentRotationMat, Object2.Radius, Object2.Location,
+					   Object2.PrevLocation, NewLoc)) {
 			Object1PieceNum = j;
 			return true;
 		}
@@ -153,108 +153,108 @@ bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D
 			//делаем 15 проверок, т.к. у нас 15 разделяющих осей
 
 			//1 (Ra)x
-			if(fabsf(vPosB.x) > (Obj1_data.x + Obj2_data.x * fabsf(XAxis.x) +
-					     Obj2_data.y * fabsf(XAxis.y) +
-					     Obj2_data.z * fabsf(XAxis.z)))
+			if (fabsf(vPosB.x) > (Obj1_data.x + Obj2_data.x * fabsf(XAxis.x) +
+					      Obj2_data.y * fabsf(XAxis.y) +
+					      Obj2_data.z * fabsf(XAxis.z)))
 				continue;
 
 			//2 (Ra)y
-			if(fabsf(vPosB.y) > (Obj1_data.y + Obj2_data.x * fabsf(YAxis.x) +
-					     Obj2_data.y * fabsf(YAxis.y) +
-					     Obj2_data.z * fabsf(YAxis.z)))
+			if (fabsf(vPosB.y) > (Obj1_data.y + Obj2_data.x * fabsf(YAxis.x) +
+					      Obj2_data.y * fabsf(YAxis.y) +
+					      Obj2_data.z * fabsf(YAxis.z)))
 				continue;
 
 			//3 (Ra)z
-			if(fabsf(vPosB.z) > (Obj1_data.z + Obj2_data.x * fabsf(ZAxis.x) +
-					     Obj2_data.y * fabsf(ZAxis.y) +
-					     Obj2_data.z * fabsf(ZAxis.z)))
+			if (fabsf(vPosB.z) > (Obj1_data.z + Obj2_data.x * fabsf(ZAxis.x) +
+					      Obj2_data.y * fabsf(ZAxis.y) +
+					      Obj2_data.z * fabsf(ZAxis.z)))
 				continue;
 
 			//4 (Rb)x
-			if(fabsf(vPosB.x * XAxis.x +
-				 vPosB.y * YAxis.x +
-				 vPosB.z * ZAxis.x) > (Obj2_data.x + Obj1_data.x * fabsf(XAxis.x) +
-						       Obj1_data.y * fabsf(YAxis.x) +
-						       Obj1_data.z * fabsf(ZAxis.x)))
+			if (fabsf(vPosB.x * XAxis.x +
+				  vPosB.y * YAxis.x +
+				  vPosB.z * ZAxis.x) > (Obj2_data.x + Obj1_data.x * fabsf(XAxis.x) +
+							Obj1_data.y * fabsf(YAxis.x) +
+							Obj1_data.z * fabsf(ZAxis.x)))
 				continue;
 
 			//5 (Rb)y
-			if(fabsf(vPosB.x * XAxis.y +
-				 vPosB.y * YAxis.y +
-				 vPosB.z * ZAxis.y) > (Obj2_data.y + Obj1_data.x * fabsf(XAxis.y) +
-						       Obj1_data.y * fabsf(YAxis.y) +
-						       Obj1_data.z * fabsf(ZAxis.y)))
+			if (fabsf(vPosB.x * XAxis.y +
+				  vPosB.y * YAxis.y +
+				  vPosB.z * ZAxis.y) > (Obj2_data.y + Obj1_data.x * fabsf(XAxis.y) +
+							Obj1_data.y * fabsf(YAxis.y) +
+							Obj1_data.z * fabsf(ZAxis.y)))
 				continue;
 
 			//6 (Rb)z
-			if(fabsf(vPosB.x * XAxis.z +
-				 vPosB.y * YAxis.z +
-				 vPosB.z * ZAxis.z) > (Obj2_data.z + Obj1_data.x * fabsf(XAxis.z) +
-						       Obj1_data.y * fabsf(YAxis.z) +
-						       Obj1_data.z * fabsf(ZAxis.z)))
+			if (fabsf(vPosB.x * XAxis.z +
+				  vPosB.y * YAxis.z +
+				  vPosB.z * ZAxis.z) > (Obj2_data.z + Obj1_data.x * fabsf(XAxis.z) +
+							Obj1_data.y * fabsf(YAxis.z) +
+							Obj1_data.z * fabsf(ZAxis.z)))
 				continue;
 
 			//7 (Ra)x X (Rb)x
-			if(fabsf(vPosB.z * YAxis.x - vPosB.y * ZAxis.x) > (Obj1_data.y * fabsf(ZAxis.x) +
-									   Obj1_data.z * fabsf(YAxis.x) +
-									   Obj2_data.y * fabsf(XAxis.z) +
-									   Obj2_data.z * fabsf(XAxis.y)))
+			if (fabsf(vPosB.z * YAxis.x - vPosB.y * ZAxis.x) > (Obj1_data.y * fabsf(ZAxis.x) +
+									    Obj1_data.z * fabsf(YAxis.x) +
+									    Obj2_data.y * fabsf(XAxis.z) +
+									    Obj2_data.z * fabsf(XAxis.y)))
 				continue;
 
 			//8 (Ra)x X (Rb)y
-			if(fabsf(vPosB.z * YAxis.y - vPosB.y * ZAxis.y) > (Obj1_data.y * fabsf(ZAxis.y) +
-									   Obj1_data.z * fabsf(YAxis.y) +
-									   Obj2_data.x * fabsf(XAxis.z) +
-									   Obj2_data.z * fabsf(XAxis.x)))
+			if (fabsf(vPosB.z * YAxis.y - vPosB.y * ZAxis.y) > (Obj1_data.y * fabsf(ZAxis.y) +
+									    Obj1_data.z * fabsf(YAxis.y) +
+									    Obj2_data.x * fabsf(XAxis.z) +
+									    Obj2_data.z * fabsf(XAxis.x)))
 				continue;
 
 			//9 (Ra)x X (Rb)z
-			if(fabsf(vPosB.z * YAxis.z - vPosB.y * ZAxis.z) > (Obj1_data.y * fabsf(ZAxis.z) +
-									   Obj1_data.z * fabsf(YAxis.z) +
-									   Obj2_data.x * fabsf(XAxis.y) +
-									   Obj2_data.y * fabsf(XAxis.x)))
+			if (fabsf(vPosB.z * YAxis.z - vPosB.y * ZAxis.z) > (Obj1_data.y * fabsf(ZAxis.z) +
+									    Obj1_data.z * fabsf(YAxis.z) +
+									    Obj2_data.x * fabsf(XAxis.y) +
+									    Obj2_data.y * fabsf(XAxis.x)))
 				continue;
 
 			//10 (Ra)y X (Rb)x
-			if(fabsf(vPosB.x * ZAxis.x - vPosB.z * XAxis.x) > (Obj1_data.x * fabsf(ZAxis.x) +
-									   Obj1_data.z * fabsf(XAxis.x) +
-									   Obj2_data.y * fabsf(YAxis.z) +
-									   Obj2_data.z * fabsf(YAxis.y)))
+			if (fabsf(vPosB.x * ZAxis.x - vPosB.z * XAxis.x) > (Obj1_data.x * fabsf(ZAxis.x) +
+									    Obj1_data.z * fabsf(XAxis.x) +
+									    Obj2_data.y * fabsf(YAxis.z) +
+									    Obj2_data.z * fabsf(YAxis.y)))
 				continue;
 
 			//11 (Ra)y X (Rb)y
-			if(fabsf(vPosB.x * ZAxis.y - vPosB.z * XAxis.y) > (Obj1_data.x * fabsf(ZAxis.y) +
-									   Obj1_data.z * fabsf(XAxis.y) +
-									   Obj2_data.x * fabsf(YAxis.z) +
-									   Obj2_data.z * fabsf(YAxis.x)))
+			if (fabsf(vPosB.x * ZAxis.y - vPosB.z * XAxis.y) > (Obj1_data.x * fabsf(ZAxis.y) +
+									    Obj1_data.z * fabsf(XAxis.y) +
+									    Obj2_data.x * fabsf(YAxis.z) +
+									    Obj2_data.z * fabsf(YAxis.x)))
 				continue;
 
 			//12 (Ra)y X (Rb)z
-			if(fabsf(vPosB.x * ZAxis.z - vPosB.z * XAxis.z) > (Obj1_data.x * fabsf(ZAxis.z) +
-									   Obj1_data.z * fabsf(XAxis.z) +
-									   Obj2_data.x * fabsf(YAxis.y) +
-									   Obj2_data.y * fabsf(YAxis.x)))
+			if (fabsf(vPosB.x * ZAxis.z - vPosB.z * XAxis.z) > (Obj1_data.x * fabsf(ZAxis.z) +
+									    Obj1_data.z * fabsf(XAxis.z) +
+									    Obj2_data.x * fabsf(YAxis.y) +
+									    Obj2_data.y * fabsf(YAxis.x)))
 				continue;
 
 			//13 (Ra)z X (Rb)x
-			if(fabsf(vPosB.y * XAxis.x - vPosB.x * YAxis.x) > (Obj1_data.x * fabsf(YAxis.x) +
-									   Obj1_data.y * fabsf(XAxis.x) +
-									   Obj2_data.y * fabsf(ZAxis.z) +
-									   Obj2_data.z * fabsf(ZAxis.y)))
+			if (fabsf(vPosB.y * XAxis.x - vPosB.x * YAxis.x) > (Obj1_data.x * fabsf(YAxis.x) +
+									    Obj1_data.y * fabsf(XAxis.x) +
+									    Obj2_data.y * fabsf(ZAxis.z) +
+									    Obj2_data.z * fabsf(ZAxis.y)))
 				continue;
 
 			//14 (Ra)z X (Rb)y
-			if(fabsf(vPosB.y * XAxis.y - vPosB.x * YAxis.y) > (Obj1_data.x * fabsf(YAxis.y) +
-									   Obj1_data.y * fabsf(XAxis.y) +
-									   Obj2_data.x * fabsf(ZAxis.z) +
-									   Obj2_data.z * fabsf(ZAxis.x)))
+			if (fabsf(vPosB.y * XAxis.y - vPosB.x * YAxis.y) > (Obj1_data.x * fabsf(YAxis.y) +
+									    Obj1_data.y * fabsf(XAxis.y) +
+									    Obj2_data.x * fabsf(ZAxis.z) +
+									    Obj2_data.z * fabsf(ZAxis.x)))
 				continue;
 
 			//15 (Ra)z X (Rb)z
-			if(fabsf(vPosB.y * XAxis.z - vPosB.x * YAxis.z) > (Obj1_data.x * fabsf(YAxis.z) +
-									   Obj1_data.y * fabsf(XAxis.z) +
-									   Obj2_data.x * fabsf(ZAxis.y) +
-									   Obj2_data.y * fabsf(ZAxis.x)))
+			if (fabsf(vPosB.y * XAxis.z - vPosB.x * YAxis.z) > (Obj1_data.x * fabsf(YAxis.z) +
+									    Obj1_data.y * fabsf(XAxis.z) +
+									    Obj2_data.x * fabsf(ZAxis.y) +
+									    Obj2_data.y * fabsf(ZAxis.x)))
 				continue;
 
 			// если тут, нашли пересекающиеся!
@@ -301,108 +301,108 @@ bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &
 		//делаем 15 проверок, т.к. у нас 15 разделяющих осей
 
 		//1 (Ra)x
-		if(fabsf(vPosB.x) > (Obj1_data.x + Obj2_data.x * fabsf(XAxis.x) +
-				     Obj2_data.y * fabsf(XAxis.y) +
-				     Obj2_data.z * fabsf(XAxis.z)))
+		if (fabsf(vPosB.x) > (Obj1_data.x + Obj2_data.x * fabsf(XAxis.x) +
+				      Obj2_data.y * fabsf(XAxis.y) +
+				      Obj2_data.z * fabsf(XAxis.z)))
 			continue;
 
 		//2 (Ra)y
-		if(fabsf(vPosB.y) > (Obj1_data.y + Obj2_data.x * fabsf(YAxis.x) +
-				     Obj2_data.y * fabsf(YAxis.y) +
-				     Obj2_data.z * fabsf(YAxis.z)))
+		if (fabsf(vPosB.y) > (Obj1_data.y + Obj2_data.x * fabsf(YAxis.x) +
+				      Obj2_data.y * fabsf(YAxis.y) +
+				      Obj2_data.z * fabsf(YAxis.z)))
 			continue;
 
 		//3 (Ra)z
-		if(fabsf(vPosB.z) > (Obj1_data.z + Obj2_data.x * fabsf(ZAxis.x) +
-				     Obj2_data.y * fabsf(ZAxis.y) +
-				     Obj2_data.z * fabsf(ZAxis.z)))
+		if (fabsf(vPosB.z) > (Obj1_data.z + Obj2_data.x * fabsf(ZAxis.x) +
+				      Obj2_data.y * fabsf(ZAxis.y) +
+				      Obj2_data.z * fabsf(ZAxis.z)))
 			continue;
 
 		//4 (Rb)x
-		if(fabsf(vPosB.x * XAxis.x +
-			 vPosB.y * YAxis.x +
-			 vPosB.z * ZAxis.x) > (Obj2_data.x + Obj1_data.x * fabsf(XAxis.x) +
-					       Obj1_data.y * fabsf(YAxis.x) +
-					       Obj1_data.z * fabsf(ZAxis.x)))
+		if (fabsf(vPosB.x * XAxis.x +
+			  vPosB.y * YAxis.x +
+			  vPosB.z * ZAxis.x) > (Obj2_data.x + Obj1_data.x * fabsf(XAxis.x) +
+						Obj1_data.y * fabsf(YAxis.x) +
+						Obj1_data.z * fabsf(ZAxis.x)))
 			continue;
 
 		//5 (Rb)y
-		if(fabsf(vPosB.x * XAxis.y +
-			 vPosB.y * YAxis.y +
-			 vPosB.z * ZAxis.y) > (Obj2_data.y + Obj1_data.x * fabsf(XAxis.y) +
-					       Obj1_data.y * fabsf(YAxis.y) +
-					       Obj1_data.z * fabsf(ZAxis.y)))
+		if (fabsf(vPosB.x * XAxis.y +
+			  vPosB.y * YAxis.y +
+			  vPosB.z * ZAxis.y) > (Obj2_data.y + Obj1_data.x * fabsf(XAxis.y) +
+						Obj1_data.y * fabsf(YAxis.y) +
+						Obj1_data.z * fabsf(ZAxis.y)))
 			continue;
 
 		//6 (Rb)z
-		if(fabsf(vPosB.x * XAxis.z +
-			 vPosB.y * YAxis.z +
-			 vPosB.z * ZAxis.z) > (Obj2_data.z + Obj1_data.x * fabsf(XAxis.z) +
-					       Obj1_data.y * fabsf(YAxis.z) +
-					       Obj1_data.z * fabsf(ZAxis.z)))
+		if (fabsf(vPosB.x * XAxis.z +
+			  vPosB.y * YAxis.z +
+			  vPosB.z * ZAxis.z) > (Obj2_data.z + Obj1_data.x * fabsf(XAxis.z) +
+						Obj1_data.y * fabsf(YAxis.z) +
+						Obj1_data.z * fabsf(ZAxis.z)))
 			continue;
 
 		//7 (Ra)x X (Rb)x
-		if(fabsf(vPosB.z * YAxis.x - vPosB.y * ZAxis.x) > (Obj1_data.y*fabsf(ZAxis.x) +
-								   Obj1_data.z*fabsf(YAxis.x) +
-								   Obj2_data.y*fabsf(XAxis.z) +
-								   Obj2_data.z*fabsf(XAxis.y)))
+		if (fabsf(vPosB.z * YAxis.x - vPosB.y * ZAxis.x) > (Obj1_data.y*fabsf(ZAxis.x) +
+								    Obj1_data.z*fabsf(YAxis.x) +
+								    Obj2_data.y*fabsf(XAxis.z) +
+								    Obj2_data.z*fabsf(XAxis.y)))
 			continue;
 
 		//8 (Ra)x X (Rb)y
-		if(fabsf(vPosB.z * YAxis.y - vPosB.y * ZAxis.y) > (Obj1_data.y*fabsf(ZAxis.y) +
-								   Obj1_data.z*fabsf(YAxis.y) +
-								   Obj2_data.x*fabsf(XAxis.z) +
-								   Obj2_data.z*fabsf(XAxis.x)))
+		if (fabsf(vPosB.z * YAxis.y - vPosB.y * ZAxis.y) > (Obj1_data.y*fabsf(ZAxis.y) +
+								    Obj1_data.z*fabsf(YAxis.y) +
+								    Obj2_data.x*fabsf(XAxis.z) +
+								    Obj2_data.z*fabsf(XAxis.x)))
 			continue;
 
 		//9 (Ra)x X (Rb)z
-		if(fabsf(vPosB.z * YAxis.z - vPosB.y * ZAxis.z) > (Obj1_data.y*fabsf(ZAxis.z) +
-								   Obj1_data.z*fabsf(YAxis.z) +
-								   Obj2_data.x*fabsf(XAxis.y) +
-								   Obj2_data.y*fabsf(XAxis.x)))
+		if (fabsf(vPosB.z * YAxis.z - vPosB.y * ZAxis.z) > (Obj1_data.y*fabsf(ZAxis.z) +
+								    Obj1_data.z*fabsf(YAxis.z) +
+								    Obj2_data.x*fabsf(XAxis.y) +
+								    Obj2_data.y*fabsf(XAxis.x)))
 			continue;
 
 		//10 (Ra)y X (Rb)x
-		if(fabsf(vPosB.x * ZAxis.x - vPosB.z * XAxis.x) > (Obj1_data.x * fabsf(ZAxis.x) +
-								   Obj1_data.z * fabsf(XAxis.x) +
-								   Obj2_data.y * fabsf(YAxis.z) +
-								   Obj2_data.z * fabsf(YAxis.y)))
+		if (fabsf(vPosB.x * ZAxis.x - vPosB.z * XAxis.x) > (Obj1_data.x * fabsf(ZAxis.x) +
+								    Obj1_data.z * fabsf(XAxis.x) +
+								    Obj2_data.y * fabsf(YAxis.z) +
+								    Obj2_data.z * fabsf(YAxis.y)))
 			continue;
 
 		//11 (Ra)y X (Rb)y
-		if(fabsf(vPosB.x * ZAxis.y - vPosB.z * XAxis.y) > (Obj1_data.x * fabsf(ZAxis.y) +
-								   Obj1_data.z * fabsf(XAxis.y) +
-								   Obj2_data.x * fabsf(YAxis.z) +
-								   Obj2_data.z * fabsf(YAxis.x)))
+		if (fabsf(vPosB.x * ZAxis.y - vPosB.z * XAxis.y) > (Obj1_data.x * fabsf(ZAxis.y) +
+								    Obj1_data.z * fabsf(XAxis.y) +
+								    Obj2_data.x * fabsf(YAxis.z) +
+								    Obj2_data.z * fabsf(YAxis.x)))
 			continue;
 
 		//12 (Ra)y X (Rb)z
-		if(fabsf(vPosB.x * ZAxis.z - vPosB.z * XAxis.z) > (Obj1_data.x * fabsf(ZAxis.z) +
-								   Obj1_data.z * fabsf(XAxis.z) +
-								   Obj2_data.x * fabsf(YAxis.y) +
-								   Obj2_data.y * fabsf(YAxis.x)))
+		if (fabsf(vPosB.x * ZAxis.z - vPosB.z * XAxis.z) > (Obj1_data.x * fabsf(ZAxis.z) +
+								    Obj1_data.z * fabsf(XAxis.z) +
+								    Obj2_data.x * fabsf(YAxis.y) +
+								    Obj2_data.y * fabsf(YAxis.x)))
 			continue;
 
 		//13 (Ra)z X (Rb)x
-		if(fabsf(vPosB.y * XAxis.x - vPosB.x * YAxis.x) > (Obj1_data.x * fabsf(YAxis.x) +
-								   Obj1_data.y * fabsf(XAxis.x) +
-								   Obj2_data.y * fabsf(ZAxis.z) +
-								   Obj2_data.z * fabsf(ZAxis.y)))
+		if (fabsf(vPosB.y * XAxis.x - vPosB.x * YAxis.x) > (Obj1_data.x * fabsf(YAxis.x) +
+								    Obj1_data.y * fabsf(XAxis.x) +
+								    Obj2_data.y * fabsf(ZAxis.z) +
+								    Obj2_data.z * fabsf(ZAxis.y)))
 			continue;
 
 		//14 (Ra)z X (Rb)y
-		if(fabsf(vPosB.y * XAxis.y - vPosB.x * YAxis.y) > (Obj1_data.x * fabsf(YAxis.y) +
-								   Obj1_data.y * fabsf(XAxis.y) +
-								   Obj2_data.x * fabsf(ZAxis.z) +
-								   Obj2_data.z * fabsf(ZAxis.x)))
+		if (fabsf(vPosB.y * XAxis.y - vPosB.x * YAxis.y) > (Obj1_data.x * fabsf(YAxis.y) +
+								    Obj1_data.y * fabsf(XAxis.y) +
+								    Obj2_data.x * fabsf(ZAxis.z) +
+								    Obj2_data.z * fabsf(ZAxis.x)))
 			continue;
 
 		//15 (Ra)z X (Rb)z
-		if(fabsf(vPosB.y * XAxis.z - vPosB.x * YAxis.z) > (Obj1_data.x * fabsf(YAxis.z) +
-								   Obj1_data.y * fabsf(XAxis.z) +
-								   Obj2_data.x * fabsf(ZAxis.y) +
-								   Obj2_data.y * fabsf(ZAxis.x)))
+		if (fabsf(vPosB.y * XAxis.z - vPosB.x * YAxis.z) > (Obj1_data.x * fabsf(YAxis.z) +
+								    Obj1_data.y * fabsf(XAxis.z) +
+								    Obj2_data.x * fabsf(ZAxis.y) +
+								    Obj2_data.y * fabsf(ZAxis.x)))
 			continue;
 
 		// если тут, нашли пересекающиеся!

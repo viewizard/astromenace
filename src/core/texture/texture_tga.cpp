@@ -91,7 +91,7 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, 
 					pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1);
 
 					memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
-					if(tmpBits == 32)
+					if (tmpBits == 32)
 						PixelsArray[colorsRead + 3] = pColors[3];
 
 					i++;
@@ -107,7 +107,7 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, 
 
 				while (rleID && (i < DWidth * DHeight)) {
 					memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
-					if(tmpBits == 32)
+					if (tmpBits == 32)
 						PixelsArray[colorsRead + 3] = pColors[3];
 
 					i++;

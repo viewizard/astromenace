@@ -155,7 +155,7 @@ static void CreateTangentAndBinormal(cModel3DWrapper *Model)
 		// check, is normalmap mirrored or not
 		sVECTOR3D TBCross = Tangent;
 		TBCross.Multiply(BiNormal);
-		if( (TBCross * PlaneNormal) < 0 ) {
+		if ((TBCross * PlaneNormal) < 0) {
 			// care about mirrored normalmap
 			Tangent = ((PlaneVector1 ^ (-delta_V_1)) - (PlaneVector2 ^ (-delta_V_0)));
 			Tangent.NormalizeHi();
