@@ -884,23 +884,17 @@ void DetectCollisionAllObject3D()
 	// cProjectile
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachGroundObject([] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
-		// точка попадания, если оно есть
-		sVECTOR3D IntercPoint;
-		// проверяем со снарядами
-		cProjectile *tmpProjectile = StartProjectile;
-		while (tmpProjectile) {
-			cProjectile *tmpProjectile2 = tmpProjectile->Next;
+		ForEachProjectile([&tmpGround, &GroundCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
+			sVECTOR3D IntercPoint;
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, *tmpProjectile, IntercPoint, DamagesData, tmpGround.Speed)) {
+			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpGround.Speed)) {
 				if (NeedCheckCollision(tmpGround)) {
 					tmpGround.Strength -= DamagesData.DamageHull / tmpGround.ResistanceHull;
 
-					// если уже все... удаляем
 					if (tmpGround.Strength <= 0.0f) {
-						// проверка, нужно начислять или нет
-						AddPlayerBonus(tmpGround, tmpProjectile->ObjectStatus);
+						AddPlayerBonus(tmpGround, tmpProjectile.ObjectStatus);
 
 						switch (tmpGround.ObjectType) {
 						case eObjectType::PirateBuilding:
@@ -913,24 +907,32 @@ void DetectCollisionAllObject3D()
 							break;
 						}
 						GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
-
-						// убираем звук попадания-разбивания снаряда
-						tmpProjectile->NeedDeadSound = false;
 					}
 				}
 
-				// удаляем только те, которые разбились
-				if (tmpProjectile->ProjectileType != 2) {
-					DestroyProjectileWithExplosion(*tmpProjectile, IntercPoint);
-					delete tmpProjectile;
-					tmpProjectile = nullptr;
+				if (tmpProjectile.ProjectileType != 2) {
+					// if ground object destroyed, we should play only "explosion" sfx, without "hit" sfx
+					if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue)
+						tmpProjectile.NeedDeadSound = false;
+					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+					ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
+				}
+
+				if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue) {
+					// break projectile cycle
+					switch (ProjectileCycleCommand) {
+					case eProjectileCycle::Continue:
+						ProjectileCycleCommand = eProjectileCycle::Break;
+						break;
+					case eProjectileCycle::DeleteObjectAndContinue:
+						ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndBreak;
+						break;
+					default:
+						break;
+					}
 				}
 			}
-
-			tmpProjectile = tmpProjectile2;
-			if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue) // FIXME temporary
-				break;
-		}
+		});
 		if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue)
 			return;
 
