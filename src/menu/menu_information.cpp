@@ -46,7 +46,7 @@ namespace astromenace {
 //------------------------------------------------------------------------------------
 cEarthSpaceFighter *InfoFighter = nullptr;
 std::weak_ptr<cWeapon> InfoWeapon{};
-cProjectile *InfoMine = nullptr;
+std::weak_ptr<cProjectile> InfoMine{};
 cAlienSpaceFighter *InfoAlien = nullptr;
 cAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
 cPirateShip *InfoPirateShip = nullptr;
@@ -266,10 +266,7 @@ void DestroyInfoObject()
 		InfoFighter = nullptr;
 	}
 	ReleaseWeapon(InfoWeapon);
-	if (InfoMine != nullptr) {
-		ReleaseProjectile(InfoMine);
-		InfoMine = nullptr;
-	}
+	ReleaseProjectile(InfoMine);
 	if (InfoAlien != nullptr) {
 		delete InfoAlien;
 		InfoAlien = nullptr;
@@ -369,24 +366,26 @@ void CreateInfoObject()
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
 		int tmpCreateNum = CreateNum-InfoMineStart+1;
 		InfoMine = CreateProjectile(213 + tmpCreateNum);
-		InfoMine->ObjectStatus = eObjectStatus::none;
-		InfoMine->SpeedStart = InfoMine->SpeedEnd = InfoMine->Speed = 0.0f;
-		InfoMine->GraphicFXDestroyType = true;
-		InfoMine->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoMine->AABB[6].y, 0.0f});
-		ObjectBaseLocation = InfoMine->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		if (auto sharedMine = InfoMine.lock()) {
+			sharedMine->ObjectStatus = eObjectStatus::none;
+			sharedMine->SpeedStart = sharedMine->SpeedEnd = sharedMine->Speed = 0.0f;
+			sharedMine->GraphicFXDestroyType = true;
+			sharedMine->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedMine->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedMine->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f, -1000.0f + InfoMine->Height / 2.0f, 0.0f};
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedMine->Height / 2.0f, 0.0f};
 
-		PointCamera = sVECTOR3D{0.0f,
-					(InfoMine->Length + InfoMine->Width + InfoMine->Height) * 0.3f + InfoMine->Height * 0.3f,
-					-(InfoMine->Length + InfoMine->Width + InfoMine->Height) * 0.7f - InfoMine->Height * 0.7f};
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedMine->Length + sharedMine->Width + sharedMine->Height) * 0.3f + sharedMine->Height * 0.3f,
+						-(sharedMine->Length + sharedMine->Width + sharedMine->Height) * 0.7f - sharedMine->Height * 0.7f};
 
-		InfoObjectWidth = InfoMine->Width;
-		InfoObjectLength = InfoMine->Length;
-		InfoObjectHeight = InfoMine->Height;
-		InfoObjectStrength = InfoMine->StrengthStart;
+			InfoObjectWidth = sharedMine->Width;
+			InfoObjectLength = sharedMine->Length;
+			InfoObjectHeight = sharedMine->Height;
+			InfoObjectStrength = sharedMine->StrengthStart;
 
-		InfoMine->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
+			sharedMine->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
+		}
 	}
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
@@ -1466,9 +1465,9 @@ void InformationDrawObject()
 		sharedWeapon->SetLocation(TMPLocation);
 		sharedWeapon->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
-	if (InfoMine) {
-		InfoMine->SetLocation(TMPLocation);
-		InfoMine->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
+	if (auto sharedMine = InfoMine.lock()) {
+		sharedMine->SetLocation(TMPLocation);
+		sharedMine->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (InfoAlien) {
 		InfoAlien->SetLocation(TMPLocation);
@@ -1504,9 +1503,8 @@ void InformationDrawObject()
 		}
 		if (auto sharedWeapon = InfoWeapon.lock())
 			sharedWeapon->Draw(true);
-		if (InfoMine) {
-			InfoMine->Draw(true);
-		}
+		if (auto sharedMine = InfoMine.lock())
+			sharedMine->Draw(true);
 		if (InfoAlien) {
 			InfoAlien->Draw(true);
 		}
@@ -1542,10 +1540,9 @@ void InformationDrawObject()
 	}
 	if (auto sharedWeapon = InfoWeapon.lock())
 		sharedWeapon->Draw(false, ShadowMap);
-	if (InfoMine) {
-		InfoMine->Draw(false, ShadowMap);
-		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoMine->GraphicFX);
+	if (auto sharedMine = InfoMine.lock()) {
+		sharedMine->Draw(false, ShadowMap);
+		vw_DrawParticleSystems(sharedMine->GraphicFX); // рисуем эффекты двигателей только для этой модели
 	}
 	if (InfoAlien) {
 		InfoAlien->Draw(false, ShadowMap);

@@ -277,29 +277,31 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (int)(3*Projectile->Radius) + (int)(vw_fRand0()*3*Projectile->Radius);
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(1);
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     360.0f * vw_fRand0()});
-			sVECTOR3D TM1 = Projectile->Orientation^Projectile->Speed;
-			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*6.0f));
-			ProjectileTMP->Orientation.Normalize();
+				sharedProjectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									360.0f * vw_fRand0()});
+				sVECTOR3D TM1 = Projectile->Orientation ^ Projectile->Speed;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 6.0f));
+				sharedProjectile->Orientation.Normalize();
 
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = 1.5f;
-					sharedGFX->SetStartLocation(Location);
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = 1.5f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				// учитываем пенальти
+				sharedProjectile->Speed = Projectile->Speed + Projectile->Radius * 1.5f + 2.0f * vw_fRand0();
+				sharedProjectile->SpeedEnd = 0.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed;
+				sharedProjectile->Lifetime = Projectile->Age = 2.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			// учитываем пенальти
-			ProjectileTMP->Speed = Projectile->Speed + Projectile->Radius*1.5f + 2.0f*vw_fRand0();
-			ProjectileTMP->SpeedEnd = 0.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed;
-			ProjectileTMP->Lifetime = Projectile->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -484,27 +486,29 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (3 + vw_fRand()) * Projectile->Radius;
 		for (int i = 0; i < ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(1);
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			sVECTOR3D TM1 = Projectile->Orientation;
-			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
-			ProjectileTMP->Orientation.Normalize();
+				sharedProjectile->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				sVECTOR3D TM1 = Projectile->Orientation;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 2.0f));
+				sharedProjectile->Orientation.Normalize();
 
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 7.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 4.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 2.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/4.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -536,27 +540,29 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		int ttt = (1 + vw_fRand()) * Projectile->Radius;
 		//vw_LogMessage(LOG_MESS_INF, "%i", ttt);
 		for (int i = 0; i < ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(1);
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
-			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
-			ProjectileTMP->Orientation.Normalize();
+				sharedProjectile->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 2.0f));
+				sharedProjectile->Orientation.Normalize();
 
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 7.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 4.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 2.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/4.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -589,28 +595,30 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (2 + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(2);
-			ProjectileTMP->Num = 1;
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(2);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->Num = 1;
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
-			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*2.0f));
-			ProjectileTMP->Orientation.Normalize();
+				sharedProjectile->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 2.0f));
+				sharedProjectile->Orientation.Normalize();
 
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 7.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 4.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 2.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/7.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/4.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 2.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -649,116 +657,126 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 
 		// создаем немного разлетающихся кусков-снарядов
 		for (int i=0; i<4; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(3);
-			ProjectileTMP->Num = 1;
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(3);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->Num = 1;
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			sVECTOR3D TM1 = Projectile->Orientation;
-			ProjectileTMP->Orientation = TM1 + (ProjectileTMP->Orientation^(Projectile->Radius*4.0f));
-			ProjectileTMP->Orientation.Normalize();
+				sharedProjectile->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				sVECTOR3D TM1 = Projectile->Orientation;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 4.0f));
+				sharedProjectile->Orientation.Normalize();
 
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 6.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 2.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 3.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 		// создаем немного разлетающихся кусков-снарядов
 		int ttt = (3  + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(2);
-			ProjectileTMP->Num = 1;
-			ProjectileTMP->SetLocation(Location);
-
-			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(2);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->Num = 1;
+				sharedProjectile->SetLocation(Location);
+	
+				sharedProjectile->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 6.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 2.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 3.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 		// создаем немного разлетающихся кусков-снарядов
 		ttt = (3 + vw_fRand()) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(3);
-			ProjectileTMP->Num = 1;
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(3);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->Num = 1;
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+				sharedProjectile->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 6.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 2.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 3.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 
 		ttt = (3 + vw_fRand() * 5) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(1);
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+				sharedProjectile->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 6.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 2.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 3.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
 		ttt = (5 + vw_fRand() * 3) * Projectile->Radius;
 		for (int i=0; i<ttt; i++) {
-			cProjectile *ProjectileTMP = CreateProjectile(5);
-			ProjectileTMP->Num = 1;
-			ProjectileTMP->SetLocation(Location);
+			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(5);
+			if (auto sharedProjectile = tmpProjectile.lock()) {
+				sharedProjectile->Num = 1;
+				sharedProjectile->SetLocation(Location);
 
-			ProjectileTMP->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
-							     360.0f * vw_fRand0(),
-							     0.0f});
-			for (auto &tmpGFX : ProjectileTMP->GraphicFX) {
-				if (auto sharedGFX = tmpGFX.lock()) {
-					sharedGFX->Direction = ProjectileTMP->Orientation ^ -1;
-					sharedGFX->Speed = sharedGFX->Speed / 2.0f;
-					sharedGFX->SetStartLocation(Location);
+				sharedProjectile->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
+									360.0f * vw_fRand0(),
+									0.0f});
+				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+					if (auto sharedGFX = tmpGFX.lock()) {
+						sharedGFX->Direction = sharedProjectile->Orientation ^ -1;
+						sharedGFX->Speed = sharedGFX->Speed / 2.0f;
+						sharedGFX->SetStartLocation(Location);
+					}
 				}
+				sharedProjectile->ObjectStatus = ObjectStatus;
+				sharedProjectile->SpeedEnd = sharedProjectile->Speed / 6.0f;
+				sharedProjectile->SpeedStart = sharedProjectile->Speed / 2.0f;
+				sharedProjectile->Lifetime = sharedProjectile->Age = 3.0f + vw_fRand0();
 			}
-			ProjectileTMP->ObjectStatus = ObjectStatus;
-			ProjectileTMP->SpeedEnd = ProjectileTMP->Speed/6.0f;
-			ProjectileTMP->SpeedStart = ProjectileTMP->Speed/2.0f;
-			ProjectileTMP->Lifetime = ProjectileTMP->Age = 3.0f+vw_fRand0();
 		}
 
 		// собираем геометрию и рисуем ее разлет

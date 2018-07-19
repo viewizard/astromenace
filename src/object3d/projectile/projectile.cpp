@@ -27,6 +27,10 @@
 
 // TODO translate comments
 
+// NOTE we use ReleaseProjectile() in weapon code for beam, since we use beam weapon for
+//      player and motherships only (rare enough). If enemy will have beam weapon, revise
+//      weapon code and/or projectile STL container (std::list is using now).
+
 /*
 
 Note, all enemy's projectiles and missiles without penalty should be about 30% faster
@@ -158,7 +162,7 @@ const std::vector<sProjectileData> PresetPirateProjectileData{
 	{1.2f, 200, 0,	4, 0, -1, 1},
 };
 
-std::list<cProjectile*> ProjectileList{};
+std::list<std::shared_ptr<cProjectile>> ProjectileList{};
 
 } // unnamed namespace
 
@@ -166,9 +170,10 @@ std::list<cProjectile*> ProjectileList{};
 /*
  * Create cProjectile object.
  */
-cProjectile *CreateProjectile(int ProjectileNum)
+std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum)
 {
-	ProjectileList.emplace_front(new cProjectile{ProjectileNum});
+	ProjectileList.emplace_front(std::shared_ptr<cProjectile>{new cProjectile{ProjectileNum},
+								  [](cProjectile *p) {delete p;}});
 	return ProjectileList.front();
 }
 
@@ -178,10 +183,9 @@ cProjectile *CreateProjectile(int ProjectileNum)
 void UpdateAllProjectile(float Time)
 {
 	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
-		if (!(*iter)->Update(Time)) {
-			delete *iter;
+		if (!iter->get()->Update(Time))
 			iter = ProjectileList.erase(iter);
-		} else
+		else
 			++iter;
 	}
 }
@@ -199,11 +203,14 @@ void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap)
 /*
  * Release particular projectile object.
  */
-void ReleaseProjectile(cProjectile *Object)
+void ReleaseProjectile(std::weak_ptr<cProjectile> &Object)
 {
+	auto sharedObject = Object.lock();
+	if (!sharedObject)
+		return;
+
 	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
-		if (*iter == Object) {
-			delete *iter;
+		if (iter->get() == sharedObject.get()) {
 			ProjectileList.erase(iter);
 			return;
 		}
@@ -226,7 +233,7 @@ void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle
 {
 	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
 		eProjectileCycle Command{eProjectileCycle::Continue};
-		function(*(*iter), Command);
+		function(*iter->get(), Command);
 
 		switch (Command) {
 		case eProjectileCycle::Continue:
@@ -235,11 +242,9 @@ void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle
 		case eProjectileCycle::Break:
 			return;
 		case eProjectileCycle::DeleteObjectAndContinue:
-			delete *iter;
 			iter = ProjectileList.erase(iter);
 			break;
 		case eProjectileCycle::DeleteObjectAndBreak:
-			delete *iter;
 			ProjectileList.erase(iter);
 			return;
 		}
@@ -258,13 +263,12 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 
 		for (auto iterSecond = std::next(iterFirst, 1); iterSecond != ProjectileList.end();) {
 			Command = eProjectilePairCycle::Continue;
-			function(*(*iterFirst), *(*iterSecond), Command);
+			function(*iterFirst->get(), *iterSecond->get(), Command);
 
 			if ((Command == eProjectilePairCycle::DeleteSecondObjectAndContinue) ||
-			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue)) {
-				delete *iterSecond;
+			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
 				iterSecond = ProjectileList.erase(iterSecond);
-			} else
+			else
 				++iterSecond;
 
 			// break second cycle
@@ -274,10 +278,9 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 		}
 
 		if ((Command == eProjectilePairCycle::DeleteFirstObjectAndContinue) ||
-		    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue)) {
-			delete *iterFirst;
+		    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
 			iterFirst = ProjectileList.erase(iterFirst);
-		} else
+		else
 			++iterFirst;
 	}
 }

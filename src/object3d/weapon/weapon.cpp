@@ -770,7 +770,7 @@ cWeapon::~cWeapon()
 		sharedDestroyedSmoke->DestroyIfNoParticles = true;
 	}
 	// если лучевое оружие
-	if (LaserMaser != nullptr) {
+	if (!LaserMaser.expired()) {
 		ReleaseProjectile(LaserMaser);
 		// убираем звук выстрела
 		if (vw_IsSoundAvailable(LaserMaserSoundNum))
@@ -784,11 +784,9 @@ cWeapon::~cWeapon()
 bool cWeapon::Update(float Time)
 {
 	// если лучевое оружие
-	if (LaserMaser != nullptr) {
-		if (LaserMaser->Lifetime <= 0.0f) {
+	if (auto sharedLaserMaser = LaserMaser.lock()) {
+		if (sharedLaserMaser->Lifetime <= 0.0f)
 			ReleaseProjectile(LaserMaser);
-			LaserMaser = nullptr;
-		}
 	}
 
 	// вызываем родительскую функцию
@@ -918,34 +916,35 @@ bool cWeapon::Update(float Time)
 				vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
 				// создаем снаряд
-				cProjectile *Projectile = CreateProjectile(InternalType);
-				Projectile->SetLocation(Location+FireLocation);
-				Projectile->SetRotation(Rotation);
-				for (auto &tmpGFX : Projectile->GraphicFX) {
-					if (auto sharedGFX = tmpGFX.lock()) {
-						if (auto sharedFire = Fire.lock())
-							sharedGFX->Direction = sharedFire->Direction ^ -1;
-						// учитываем пенальти для визуальных эффектов
-						if (CurrentPenalty == 2)
-							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
-						if (CurrentPenalty == 3)
-							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
-						sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
-						sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
-						sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+				std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(InternalType);
+				if (auto sharedProjectile = tmpProjectile.lock()) {
+					sharedProjectile->SetLocation(Location + FireLocation);
+					sharedProjectile->SetRotation(Rotation);
+					for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+						if (auto sharedGFX = tmpGFX.lock()) {
+							if (auto sharedFire = Fire.lock())
+								sharedGFX->Direction = sharedFire->Direction ^ -1;
+							// учитываем пенальти для визуальных эффектов
+							if (CurrentPenalty == 2)
+								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
+							if (CurrentPenalty == 3)
+								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
+							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+							sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+						}
 					}
-				}
-				Projectile->ObjectStatus = ObjectStatus;
-				// учитываем пенальти для снаряда
-				Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-				Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
-				Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-				Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
+					sharedProjectile->ObjectStatus = ObjectStatus;
+					// учитываем пенальти для снаряда
+					sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
+					sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
+					sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
+					sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
 
-				// звук...
-				if (SFX != eGameSFX::none) {
-					float fVol = 1.0f;
-					PlayGameSFX(SFX, fVol, Projectile->Location);
+					if (SFX != eGameSFX::none) {
+						float fVol = 1.0f;
+						PlayGameSFX(SFX, fVol, sharedProjectile->Location);
+					}
 				}
 
 				SwarmNum--;
@@ -967,37 +966,37 @@ bool cWeapon::Update(float Time)
 
 
 				// создаем снаряд
-				cProjectile *Projectile = CreateProjectile(InternalType);
-				Projectile->SetLocation(Location + FireLocation);
-				Projectile->SetRotation(Rotation + sVECTOR3D{vw_fRand0() * 30.0f,
-									     0.0f,
-									     vw_fRand0() * 30.0f});
+				std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(InternalType);
+				if (auto sharedProjectile = tmpProjectile.lock()) {
+					sharedProjectile->SetLocation(Location + FireLocation);
+					sharedProjectile->SetRotation(Rotation + sVECTOR3D{vw_fRand0() * 30.0f,
+											   0.0f,
+											   vw_fRand0() * 30.0f});
 
-				for (auto &tmpGFX : Projectile->GraphicFX) {
-					if (auto sharedGFX = tmpGFX.lock()) {
-						sharedGFX->Direction = Orientation ^ -1;
-						// учитываем пенальти для визуальных эффектов
-						if (CurrentPenalty == 2)
-							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
-						if (CurrentPenalty == 3)
-							sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
-						sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
-						sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
-						sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+					for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+						if (auto sharedGFX = tmpGFX.lock()) {
+							sharedGFX->Direction = Orientation ^ -1;
+							// учитываем пенальти для визуальных эффектов
+							if (CurrentPenalty == 2)
+								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
+							if (CurrentPenalty == 3)
+								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
+							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+							sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+						}
 					}
-				}
-				Projectile->ObjectStatus = ObjectStatus;
-				// учитываем пенальти для снаряда
-				Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-				Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
-				Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-				Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
+					sharedProjectile->ObjectStatus = ObjectStatus;
+					// учитываем пенальти для снаряда
+					sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
+					sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
+					sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
+					sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
 
-
-				// звук...
-				if (SFX != eGameSFX::none) {
-					float fVol = 1.0f;
-					PlayGameSFX(SFX, fVol, Projectile->Location);
+					if (SFX != eGameSFX::none) {
+						float fVol = 1.0f;
+						PlayGameSFX(SFX, fVol, sharedProjectile->Location);
+					}
 				}
 
 				SwarmNum--;
@@ -1211,11 +1210,11 @@ void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 		sharedDestroyedSmoke->RotateSystemByAngle(Rotation);
 	}
 	// если лучевое оружие
-	if (LaserMaser != nullptr) {
-		vw_Matrix33CalcPoint(LaserMaser->ProjectileCenter, OldInvRotationMat);
-		vw_Matrix33CalcPoint(LaserMaser->ProjectileCenter, CurrentRotationMat);
-		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
-		LaserMaser->SetRotation(NewRotation);
+	if (auto sharedLaserMaser = LaserMaser.lock()) {
+		vw_Matrix33CalcPoint(sharedLaserMaser->ProjectileCenter, OldInvRotationMat);
+		vw_Matrix33CalcPoint(sharedLaserMaser->ProjectileCenter, CurrentRotationMat);
+		sharedLaserMaser->SetLocation(Location + FireLocation + sharedLaserMaser->ProjectileCenter);
+		sharedLaserMaser->SetRotation(NewRotation);
 	}
 }
 
@@ -1240,8 +1239,8 @@ void cWeapon::SetLocation(const sVECTOR3D &NewLocation)
 		sharedDestroyedSmoke->MoveSystemLocation(NewLocation + DestroyedFireLocation);
 
 	// если лучевое оружие
-	if (LaserMaser != nullptr)
-		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
+	if (auto sharedLaserMaser = LaserMaser.lock())
+		sharedLaserMaser->SetLocation(Location + FireLocation + sharedLaserMaser->ProjectileCenter);
 
 	// звук... для мазеров-лазеров нужно учитывать перемещение
 	if (vw_IsSoundAvailable(LaserMaserSoundNum))  // уже играем, нужно изменить данные
@@ -1397,77 +1396,75 @@ bool cWeapon::WeaponFire(float Time)
 
 
 	// создаем снаряд
-	cProjectile *Projectile = CreateProjectile(InternalType);
+	std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(InternalType);
+	if (auto sharedProjectile = tmpProjectile.lock()) {
+		// если лучевое оружие, немного все делаем по другому
+		// или это испускатель мин
+		if (sharedProjectile->ProjectileType == 2) {
+			if (!LaserMaser.expired())
+				ReleaseProjectile(LaserMaser);
 
+			LaserMaser = tmpProjectile;
+			vw_Matrix33CalcPoint(sharedProjectile->ProjectileCenter, CurrentRotationMat);
+			sharedProjectile->SetLocation(Location + FireLocation + sharedProjectile->ProjectileCenter);
+		} else { // если это снаряд, его нужно немного вынести, так лучше смотрится
+			if (sharedProjectile->ProjectileType == 0) {
+				sVECTOR3D ADDPOS(0,0,4.0f);
+				if (WeaponTurret)
+					ADDPOS = sVECTOR3D{0.0f, 0.0f, 2.0f};
 
-	// если лучевое оружие, немного все делаем по другому
-	// или это испускатель мин
-	if (Projectile->ProjectileType == 2) {
-		if (LaserMaser != nullptr) {
-			ReleaseProjectile(LaserMaser);
-			LaserMaser = nullptr;
+				vw_RotatePoint(ADDPOS, RotationWeapon);
+
+				sharedProjectile->SetLocation(Location+FireLocation+ADDPOS);
+			} else // для ракет и мин все без изменения
+				sharedProjectile->SetLocation(Location+FireLocation);
 		}
-		LaserMaser = Projectile;
-		vw_Matrix33CalcPoint(LaserMaser->ProjectileCenter, CurrentRotationMat);
-		LaserMaser->SetLocation(Location+FireLocation+LaserMaser->ProjectileCenter);
-	} else { // если это снаряд, его нужно немного вынести, так лучше смотрится
-		if (Projectile->ProjectileType == 0) {
-			sVECTOR3D ADDPOS(0,0,4.0f);
-			if (WeaponTurret)
-				ADDPOS = sVECTOR3D{0.0f, 0.0f, 2.0f};
-
-			vw_RotatePoint(ADDPOS, RotationWeapon);
-
-			Projectile->SetLocation(Location+FireLocation+ADDPOS);
-		} else // для ракет и мин все без изменения
-			Projectile->SetLocation(Location+FireLocation);
-	}
 
 
-	// если это мина, то нужно делать немного по другому
-	if (Projectile->ProjectileType == 3 || Projectile->ProjectileType == 4) {
-		Projectile->SetRotation(RotationWeapon);
-		for (auto &tmpGFX : Projectile->GraphicFX) {
-			if (auto sharedGFX = tmpGFX.lock())
-				sharedGFX->Direction = Orientation;
-		}
-		Projectile->ObjectStatus = ObjectStatus;
-		// учитываем пенальти для снаряда
-		Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-		Projectile->Age = Projectile->Lifetime = Projectile->Age;
-		Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-		Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
-
-		// приводим к типу снаряда (0-обычный или 1-уничтожаемый)
-		Projectile->ProjectileType = Projectile->ProjectileType - 3;
-	} else {
-		Projectile->SetRotation(RotationWeapon);
-		for (auto &tmpGFX : Projectile->GraphicFX) {
-			if (auto sharedGFX = tmpGFX.lock()) {
-				sharedGFX->Direction = Orientation;
-				// учитываем пенальти для визуальных эффектов
-				sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
-
-				sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
-				sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
-				sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+		// если это мина, то нужно делать немного по другому
+		if (sharedProjectile->ProjectileType == 3 || sharedProjectile->ProjectileType == 4) {
+			sharedProjectile->SetRotation(RotationWeapon);
+			for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+				if (auto sharedGFX = tmpGFX.lock())
+					sharedGFX->Direction = Orientation;
 			}
-		}
-		Projectile->ObjectStatus = ObjectStatus;
-		// учитываем пенальти для снаряда
-		Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-		Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
-		Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-		Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
-	}
+			sharedProjectile->ObjectStatus = ObjectStatus;
+			// учитываем пенальти для снаряда
+			sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
+			sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age;
+			sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
+			sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
 
+			// приводим к типу снаряда (0-обычный или 1-уничтожаемый)
+			sharedProjectile->ProjectileType = sharedProjectile->ProjectileType - 3;
+		} else {
+			sharedProjectile->SetRotation(RotationWeapon);
+			for (auto &tmpGFX : sharedProjectile->GraphicFX) {
+				if (auto sharedGFX = tmpGFX.lock()) {
+					sharedGFX->Direction = Orientation;
+					// учитываем пенальти для визуальных эффектов
+					sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
+
+					sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
+					sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
+					sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
+				}
+			}
+			sharedProjectile->ObjectStatus = ObjectStatus;
+			// учитываем пенальти для снаряда
+			sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
+			sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
+			sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
+			sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+		}
+	}
 
 	// звук...
 	if (SFX != eGameSFX::none) {
 		float fVol = 1.0f;
-		LaserMaserSoundNum = PlayGameSFX(SFX, fVol, Location+FireLocation);
+		LaserMaserSoundNum = PlayGameSFX(SFX, fVol, Location + FireLocation);
 		// если не надо сохранять
-		if (LaserMaser == nullptr)
+		if (LaserMaser.expired())
 			LaserMaserSoundNum = 0;
 	}
 

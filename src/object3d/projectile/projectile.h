@@ -59,16 +59,11 @@ enum class eProjectilePairCycle {
 
 class cProjectile : public cObject3D
 {
-	friend cProjectile *CreateProjectile(int ProjectileNum);
-	friend void UpdateAllProjectile(float Time);
-	friend void ReleaseProjectile(cProjectile *Object);
-	friend void ReleaseAllProjectiles();
-	friend void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function);
-	friend void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
-							      cProjectile &SecondObject,
-							      eProjectilePairCycle &Command)> function);
+	friend std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum);
 
 private:
+	// Don't allow direct new/delete usage in code, only CreateProjectile()
+	// allowed for cProjectile creation and release setup (deleter must be provided).
 	explicit cProjectile(int ProjectileNum);
 	virtual ~cProjectile();
 
@@ -132,13 +127,13 @@ public:
 
 
 // Create cProjectile object.
-cProjectile *CreateProjectile(int ProjectileNum);
+std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllProjectile(float Time);
 // Прорисовываем все объекты
 void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular projectile object.
-void ReleaseProjectile(cProjectile *Object);
+void ReleaseProjectile(std::weak_ptr<cProjectile> &Object);
 // Удаляем все объекты в списке
 void ReleaseAllProjectiles();
 // Managed cycle for each projectile.

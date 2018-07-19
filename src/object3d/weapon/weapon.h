@@ -92,7 +92,7 @@ public:
 
 	// лучевое оружие
 	// собственно объект=снаряд
-	cProjectile *LaserMaser{nullptr};
+	std::weak_ptr<cProjectile> LaserMaser{};
 	// номер проигрываемого звука, чтобы была возможность выключить при уничтожении
 	unsigned int LaserMaserSoundNum{0};
 	// флаг, это турель
