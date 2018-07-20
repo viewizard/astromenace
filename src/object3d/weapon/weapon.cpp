@@ -158,8 +158,9 @@ static std::vector<sWeaponData> PresetPirateWeaponData{
  */
 std::weak_ptr<cWeapon> CreateWeapon(int WeaponNum)
 {
-	WeaponList.emplace_front(std::shared_ptr<cWeapon>{new cWeapon{WeaponNum},
-							  [](cWeapon *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	WeaponList.emplace_front(new cWeapon{WeaponNum}, [](cWeapon *p) {delete p;});
 	return WeaponList.front();
 }
 

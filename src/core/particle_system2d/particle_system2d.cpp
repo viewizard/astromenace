@@ -406,8 +406,6 @@ void cParticleSystem2D::SetRotation(const sVECTOR3D &NewAngle)
  */
 std::weak_ptr<cParticleSystem2D> vw_CreateParticleSystem2D(float Time)
 {
-	// NOTE emplace_front() return reference to the inserted element (since C++17)
-	//      this two lines could be combined
 	ParticleSystemsList.emplace_front(new cParticleSystem2D, [](cParticleSystem2D *p) {delete p;});
 	ParticleSystemsList.front()->TimeLastUpdate = Time;
 	return ParticleSystemsList.front();

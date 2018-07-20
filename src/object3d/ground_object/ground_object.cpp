@@ -48,8 +48,9 @@ std::list<std::shared_ptr<cGroundObject>> GroundObjectList{};
  */
 std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cCivilianBuilding{BuildingNum},
-								      [](cCivilianBuilding *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	GroundObjectList.emplace_front(new cCivilianBuilding{BuildingNum}, [](cCivilianBuilding *p) {delete p;});
 	return GroundObjectList.front();
 }
 
@@ -58,8 +59,9 @@ std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum)
  */
 std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cMilitaryBuilding{MilitaryBuildingNum},
-								      [](cMilitaryBuilding *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	GroundObjectList.emplace_front(new cMilitaryBuilding{MilitaryBuildingNum}, [](cMilitaryBuilding *p) {delete p;});
 	return GroundObjectList.front();
 }
 
@@ -68,8 +70,9 @@ std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum)
  */
 std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cTracked{TrackedNum},
-								      [](cTracked *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	GroundObjectList.emplace_front(new cTracked{TrackedNum}, [](cTracked *p) {delete p;});
 	return GroundObjectList.front();
 }
 
@@ -78,8 +81,9 @@ std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum)
  */
 std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum)
 {
-	GroundObjectList.emplace_front(std::shared_ptr<cGroundObject>{new cWheeled{WheeledNum},
-								      [](cWheeled *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	GroundObjectList.emplace_front(new cWheeled{WheeledNum}, [](cWheeled *p) {delete p;});
 	return GroundObjectList.front();
 }
 

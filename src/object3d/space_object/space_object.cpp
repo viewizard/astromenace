@@ -48,8 +48,9 @@ std::list<std::shared_ptr<cSpaceObject>> SpaceObjectList{};
  */
 std::weak_ptr<cSpaceObject> CreateSmallAsteroid()
 {
-	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cSmallAsteroid,
-								    [](cSmallAsteroid *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	SpaceObjectList.emplace_front(new cSmallAsteroid, [](cSmallAsteroid *p) {delete p;});
 	return SpaceObjectList.front();
 }
 
@@ -58,8 +59,9 @@ std::weak_ptr<cSpaceObject> CreateSmallAsteroid()
  */
 std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum)
 {
-	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cBigAsteroid{AsteroidNum},
-								    [](cBigAsteroid *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	SpaceObjectList.emplace_front(new cBigAsteroid{AsteroidNum}, [](cBigAsteroid *p) {delete p;});
 	return SpaceObjectList.front();
 }
 
@@ -68,8 +70,9 @@ std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum)
  */
 std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum)
 {
-	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cPlanet{PlanetNum},
-								    [](cPlanet *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	SpaceObjectList.emplace_front(new cPlanet{PlanetNum}, [](cPlanet *p) {delete p;});
 	return SpaceObjectList.front();
 }
 
@@ -78,8 +81,9 @@ std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum)
  */
 std::weak_ptr<cSpaceObject> CreateSpaceDebris()
 {
-	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cSpaceDebris,
-								    [](cSpaceDebris *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	SpaceObjectList.emplace_front(new cSpaceDebris, [](cSpaceDebris *p) {delete p;});
 	return SpaceObjectList.front();
 }
 
@@ -88,8 +92,9 @@ std::weak_ptr<cSpaceObject> CreateSpaceDebris()
  */
 std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum)
 {
-	SpaceObjectList.emplace_front(std::shared_ptr<cSpaceObject>{new cBasePart{BasePartNum},
-								    [](cBasePart *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	SpaceObjectList.emplace_front(new cBasePart{BasePartNum}, [](cBasePart *p) {delete p;});
 	return SpaceObjectList.front();
 }
 

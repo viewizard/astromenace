@@ -50,9 +50,9 @@ void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 			   int ExplType, const sVECTOR3D &ExplLocation,
 			   float Speed, bool NeedExplosionSFX)
 {
-	ExplosionList.emplace_front(std::shared_ptr<cBulletExplosion>{
+	ExplosionList.emplace_front(
 		new cBulletExplosion{Object, Projectile, ExplType, ExplLocation, Speed, NeedExplosionSFX},
-		[](cBulletExplosion *p) {delete p;}});
+		[](cBulletExplosion *p) {delete p;});
 }
 
 /*
@@ -62,9 +62,9 @@ void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 			   const sVECTOR3D &ExplLocation,
 			   int ObjectChunkNum, bool NeedExplosionSFX)
 {
-	ExplosionList.emplace_front(std::shared_ptr<cGroundExplosion>{
+	ExplosionList.emplace_front(
 		new cGroundExplosion{Object, ExplType, ExplLocation, ObjectChunkNum, NeedExplosionSFX},
-		[](cGroundExplosion *p) {delete p;}});
+		[](cGroundExplosion *p) {delete p;});
 }
 
 /*
@@ -74,9 +74,9 @@ void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 			  const sVECTOR3D &ExplLocation, float Speed,
 			  int ObjectChunkNum, bool NeedExplosionSFX)
 {
-	ExplosionList.emplace_front(std::shared_ptr<cSpaceExplosion>{
+	ExplosionList.emplace_front(
 		new cSpaceExplosion{Object, ExplType, ExplLocation, Speed, ObjectChunkNum, NeedExplosionSFX},
-		[](cSpaceExplosion *p) {delete p;}});
+		[](cSpaceExplosion *p) {delete p;});
 }
 
 //-----------------------------------------------------------------------------

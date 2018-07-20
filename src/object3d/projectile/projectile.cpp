@@ -172,8 +172,9 @@ std::list<std::shared_ptr<cProjectile>> ProjectileList{};
  */
 std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum)
 {
-	ProjectileList.emplace_front(std::shared_ptr<cProjectile>{new cProjectile{ProjectileNum},
-								  [](cProjectile *p) {delete p;}});
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	ProjectileList.emplace_front(new cProjectile{ProjectileNum}, [](cProjectile *p) {delete p;});
 	return ProjectileList.front();
 }
 
