@@ -35,9 +35,6 @@
 #include "projectile/projectile.h"
 #include "space_object/space_object.h"
 #include "explosion/explosion.h"
-#include "explosion/bullet_explosion/bullet_explosion.h"
-#include "explosion/ground_explosion/ground_explosion.h"
-#include "explosion/space_explosion/space_explosion.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

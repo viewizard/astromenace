@@ -40,7 +40,7 @@ will not kill their speed and maneuverability and we will have nice difficulty m
 */
 
 #include "projectile.h"
-#include "../explosion/bullet_explosion/bullet_explosion.h"
+#include "../explosion/explosion.h"
 #include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)

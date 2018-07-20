@@ -34,7 +34,7 @@
 #define OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
 
 #include "../object3d.h"
-#include "../explosion/space_explosion/space_explosion.h"
+#include "../explosion/explosion.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

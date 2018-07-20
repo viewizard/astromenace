@@ -25,9 +25,10 @@
 
 *************************************************************************************/
 
-#include "ground_explosion.h"
-#include "../../../assets/audio.h"
-#include "../../../object3d/space_object/space_object.h"
+#include "explosion.h"
+#include "../../assets/audio.h"
+#include "../../object3d/space_object/space_object.h"
+#include "../../object3d/ground_object/ground_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

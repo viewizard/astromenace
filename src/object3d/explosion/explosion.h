@@ -35,10 +35,8 @@
 namespace viewizard {
 namespace astromenace {
 
+class cGroundObject;
 
-//-----------------------------------------------------------------------------
-// Структура sExplosionPiece
-//-----------------------------------------------------------------------------
 struct sExplosionPiece {
 	// вектор направления движения частицы (скорости включены)
 	sVECTOR3D Velocity;
@@ -46,16 +44,6 @@ struct sExplosionPiece {
 	float Life;
 };
 
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Класс cExplosion
-//-----------------------------------------------------------------------------
 class cExplosion : public cObject3D
 {
 public:
@@ -64,63 +52,63 @@ public:
 	virtual ~cExplosion();
 
 	// Обновление данных объектa
-	virtual bool	Update(float Time) override;
+	virtual bool Update(float Time) override;
 
-	int		ExplosionType{0};
-	int		ExplosionTypeByClass{0};
+	int ExplosionType{0};
+	int ExplosionTypeByClass{0};
 
 	// набор управления частицами
-	sExplosionPiece	*ExplosionPieceData{nullptr};
+	sExplosionPiece *ExplosionPieceData{nullptr};
 
-	float	ExplosionGeometryMoveLastTime{-1}; // последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
+	float ExplosionGeometryMoveLastTime{-1}; // последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
 
-	sVECTOR3D	VelocityOrientation{0.0f, 0.0f, 0.0f};
-	float		OldSpeed{0.0f};
-	bool		NeedStop{true};
+	sVECTOR3D VelocityOrientation{0.0f, 0.0f, 0.0f};
+	float OldSpeed{0.0f};
+	bool NeedStop{true};
 
 	// скорость изменения AABB
-	float		AABBSpeed{0.0f};
+	float AABBSpeed{0.0f};
 
 	// для прорисовки графических эффектов
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
 	// для собственного списка
-	cExplosion	*Next{nullptr};
-	cExplosion	*Prev{nullptr};
+	cExplosion *Next{nullptr};
+	cExplosion *Prev{nullptr};
+};
+
+class cBulletExplosion : public cExplosion
+{
+public:
+	explicit cBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+				  int ExplType, const sVECTOR3D &ExplLocation,
+				  float Speed, bool NeedExplosionSFX = true);
+};
+
+class cGroundExplosion : public cExplosion
+{
+public:
+	explicit cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
+				  int ObjectChunkNum, bool NeedExplosionSFX = true);
+};
+
+class cSpaceExplosion : public cExplosion
+{
+public:
+	explicit cSpaceExplosion(cObject3D &Object, int ExplType,
+				 const sVECTOR3D &ExplLocation, float Speed,
+				 int ObjectChunkNum, bool NeedExplosionSFX = true);
 };
 
 
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Менеджер Explosion, дополнительный
-//-----------------------------------------------------------------------------
-
-// Включаем в список
-void	AttachExplosion(cExplosion* Explosion);
-// Исключаем из списка
-void	DetachExplosion(cExplosion* Explosion);
 // Проверяем все объекты, обновляем данные
-void	UpdateAllExplosion(float Time);
+void UpdateAllExplosion(float Time);
 // Прорисовываем все объекты
-void	DrawAllExplosions(bool VertexOnlyPass);
+void DrawAllExplosions(bool VertexOnlyPass);
 // Удаляем все объекты в списке
-void	ReleaseAllExplosions();
-
-
-
-
-//-----------------------------------------------------------------------------
-// Дополнительные функции
-//-----------------------------------------------------------------------------
+void ReleaseAllExplosions();
+//
 void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum);
-
-
 
 } // astromenace namespace
 } // viewizard namespace

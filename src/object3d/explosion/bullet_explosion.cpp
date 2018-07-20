@@ -25,9 +25,9 @@
 
 *************************************************************************************/
 
-#include "bullet_explosion.h"
-#include "../../../config/config.h"
-#include "../../../assets/audio.h"
+#include "explosion.h"
+#include "../../config/config.h"
+#include "../../assets/audio.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
