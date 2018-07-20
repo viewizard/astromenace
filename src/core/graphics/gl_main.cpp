@@ -207,7 +207,7 @@ bool vw_CreateOpenGLContext(int VSync)
 
 		// MSAA
 		for (int i = 2; i <= MaxSamples; i *= 2) {
-			DevCaps.MultisampleCoverageModes.push_back(sCoverageModes{i, i});
+			DevCaps.MultisampleCoverageModes.emplace_back(i, i);
 		}
 
 		// CSAA
@@ -220,7 +220,7 @@ bool vw_CreateOpenGLContext(int VSync)
 			// fill MultisampleCoverageModes with MSAA/CSAA modes
 			DevCaps.MultisampleCoverageModes.clear();
 			for (int i = 0; i < (NumModes * 2); i += 2) {
-				DevCaps.MultisampleCoverageModes.push_back(sCoverageModes{modes[i + 1], modes[i]});
+				DevCaps.MultisampleCoverageModes.emplace_back(modes[i + 1], modes[i]);
 			}
 		}
 	}

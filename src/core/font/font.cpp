@@ -255,11 +255,11 @@ static sFontChar *LoadFontChar(char32_t UTF32)
 	}
 
 	// create new character
-	FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(UTF32, InternalFontSize,
-				 sTexturePos{0, 0, InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows},
-				 sFontMetrics{InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-				 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-				 InternalFace->glyph->advance.x /* in 1/64th of points */})));
+	FontCharsList.emplace_front(new sFontChar(UTF32, InternalFontSize,
+				    sTexturePos{0, 0, InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows},
+				    sFontMetrics{InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
+				    InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
+				    InternalFace->glyph->advance.x /* in 1/64th of points */}));
 
 	if ((FontCharsList.front()->FontMetrics.Width.i() > 0) && (FontCharsList.front()->FontMetrics.Height.i() > 0)) {
 		// buffer for RGBA, data for font characters texture, initialize it with white color (255)
@@ -341,11 +341,11 @@ int vw_GenerateFontChars(unsigned FontTextureWidth, unsigned FontTextureHeight,
 			return ERR_EXT_RES;
 		}
 
-		FontCharsList.push_front(std::unique_ptr<sFontChar>(new sFontChar(CurrentChar, InternalFontSize,
-					 sTexturePos{0, 0, 0, 0},
-					 sFontMetrics{InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
-					 InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
-					 InternalFace->glyph->advance.x /* in 1/64th of points */})));
+		FontCharsList.emplace_front(new sFontChar(CurrentChar, InternalFontSize,
+					    sTexturePos{0, 0, 0, 0},
+					    sFontMetrics{InternalFace->glyph->bitmap_left, InternalFace->glyph->bitmap_top,
+					    InternalFace->glyph->bitmap.width, InternalFace->glyph->bitmap.rows,
+					    InternalFace->glyph->advance.x /* in 1/64th of points */}));
 
 		// move to next line in bitmap if not enough space
 		if (CurrentPixelsX + FontCharsList.front()->FontMetrics.Width.i() > FontTextureWidth) {

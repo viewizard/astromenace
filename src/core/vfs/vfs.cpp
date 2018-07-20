@@ -274,7 +274,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 		return err;
 	};
 
-	VFSList.push_front(std::shared_ptr<sVFS>{new sVFS{Name}});
+	VFSList.emplace_front(new sVFS{Name});
 
 	VFSList.front()->File.open(Name, std::ios::binary | std::ios::in);
 	if (VFSList.front()->File.fail())
