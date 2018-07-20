@@ -356,7 +356,7 @@ bool cSpaceObject::Update(float Time)
 		BossPartCountDown -= TimeDelta;
 
 		if (BossPartCountDown <= 0.0f) {
-			new cSpaceExplosion(*this, 34, Location, Speed, -1);
+			CreateSpaceExplosion(*this, 34, Location, Speed, -1);
 			return false;
 		}
 	}

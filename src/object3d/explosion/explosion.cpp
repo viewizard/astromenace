@@ -85,6 +85,36 @@ static void DetachExplosion(cExplosion *Explosion)
 		Explosion->Next->Prev = nullptr;
 }
 
+/*
+ * Create cBulletExplosion object.
+ */
+void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+			   int ExplType, const sVECTOR3D &ExplLocation,
+			   float Speed, bool NeedExplosionSFX)
+{
+	new cBulletExplosion{Object, Projectile, ExplType, ExplLocation, Speed, NeedExplosionSFX};
+}
+
+/*
+ * Create cGroundExplosion object.
+ */
+void CreateGroundExplosion(cGroundObject &Object, int ExplType,
+			   const sVECTOR3D &ExplLocation,
+			   int ObjectChunkNum, bool NeedExplosionSFX)
+{
+	new cGroundExplosion{Object, ExplType, ExplLocation, ObjectChunkNum, NeedExplosionSFX};
+}
+
+/*
+ * Create cSpaceExplosion object.
+ */
+void CreateSpaceExplosion(cObject3D &Object, int ExplType,
+			  const sVECTOR3D &ExplLocation, float Speed,
+			  int ObjectChunkNum, bool NeedExplosionSFX)
+{
+	new cSpaceExplosion{Object, ExplType, ExplLocation, Speed, ObjectChunkNum, NeedExplosionSFX};
+}
+
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------

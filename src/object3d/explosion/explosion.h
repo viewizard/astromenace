@@ -89,28 +89,49 @@ public:
 
 class cBulletExplosion : public cExplosion
 {
-public:
+	friend void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+					  int ExplType, const sVECTOR3D &ExplLocation,
+					  float Speed, bool NeedExplosionSFX);
+private:
 	explicit cBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 				  int ExplType, const sVECTOR3D &ExplLocation,
-				  float Speed, bool NeedExplosionSFX = true);
+				  float Speed, bool NeedExplosionSFX);
 };
 
 class cGroundExplosion : public cExplosion
 {
-public:
+	friend void CreateGroundExplosion(cGroundObject &Object, int ExplType,
+					  const sVECTOR3D &ExplLocation,
+					  int ObjectChunkNum, bool NeedExplosionSFX);
+private:
 	explicit cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
-				  int ObjectChunkNum, bool NeedExplosionSFX = true);
+				  int ObjectChunkNum, bool NeedExplosionSFX);
 };
 
 class cSpaceExplosion : public cExplosion
 {
-public:
+	friend void CreateSpaceExplosion(cObject3D &Object, int ExplType,
+					 const sVECTOR3D &ExplLocation, float Speed,
+					 int ObjectChunkNum, bool NeedExplosionSFX);
+private:
 	explicit cSpaceExplosion(cObject3D &Object, int ExplType,
 				 const sVECTOR3D &ExplLocation, float Speed,
-				 int ObjectChunkNum, bool NeedExplosionSFX = true);
+				 int ObjectChunkNum, bool NeedExplosionSFX);
 };
 
 
+// Create cBulletExplosion object.
+void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+			   int ExplType, const sVECTOR3D &ExplLocation,
+			   float Speed, bool NeedExplosionSFX = true);
+// Create cGroundExplosion object.
+void CreateGroundExplosion(cGroundObject &Object, int ExplType,
+			   const sVECTOR3D &ExplLocation,
+			   int ObjectChunkNum, bool NeedExplosionSFX = true);
+// Create cSpaceExplosion object.
+void CreateSpaceExplosion(cObject3D &Object, int ExplType,
+			  const sVECTOR3D &ExplLocation, float Speed,
+			  int ObjectChunkNum, bool NeedExplosionSFX = true);
 // Проверяем все объекты, обновляем данные
 void UpdateAllExplosion(float Time);
 // Прорисовываем все объекты

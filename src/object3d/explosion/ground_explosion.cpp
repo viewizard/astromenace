@@ -183,7 +183,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 				if (ObjectChunkNum != -1)
 					if (ObjectChunkNum == (int)i) {
 						// а теперь взрываем ту, в которую попали...
-						new cSpaceExplosion(*sharedSpaceDebris, 32, sharedSpaceDebris->Location, sharedSpaceDebris->Speed, -1);
+						CreateSpaceExplosion(*sharedSpaceDebris, 32, sharedSpaceDebris->Location, sharedSpaceDebris->Speed, -1);
 						ReleaseSpaceObject(SpaceDebris);
 					}
 			}

@@ -2240,7 +2240,7 @@ bool cProjectile::Update(float Time)
 		if (ProjectileType == 2)
 			return true;
 		// передаем на самоуничтожение... там все сделаем правильно
-		new cBulletExplosion(nullptr, this, -Num, Location, Speed);
+		CreateBulletExplosion(nullptr, this, -Num, Location, Speed);
 		return false;
 	}
 

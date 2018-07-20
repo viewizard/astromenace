@@ -512,7 +512,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			}
 			if (ObjectChunkNum != -1)
 				if (ObjectChunkNum == (int)i) {
-					new cSpaceExplosion(*sharedSpaceDebris, NeedExplosionType, sharedSpaceDebris->Location, sharedSpaceDebris->Speed, -1);
+					CreateSpaceExplosion(*sharedSpaceDebris, NeedExplosionType, sharedSpaceDebris->Location, sharedSpaceDebris->Speed, -1);
 					ReleaseSpaceObject(SpaceDebris);
 				}
 		}

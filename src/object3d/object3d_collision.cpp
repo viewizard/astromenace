@@ -152,7 +152,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					return false;
 				} else {
 					// "разбиваем" снаряд о корпус, звук тянем отдельно!
-					new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, ObjectSpeed, false);
+					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, ObjectSpeed, false);
 
 					// где сейчас, там и погибли
 					IntercPoint = Projectile.Location;
@@ -188,9 +188,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				// "разбиваем" снаряд о корпус
 				// звук тянем отдельно!
 				if (NeedCheckCollision(Object))
-					new cBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, ObjectSpeed, false);
+					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, ObjectSpeed, false);
 				else
-					new cBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, 0.0f, false);
+					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, 0.0f, false);
 
 				// столкновение было
 				return true;
@@ -209,7 +209,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					IntercPoint = Projectile.Location;
 
 					// "разбиваем" снаряд о корпус
-					new cBulletExplosion(&Object, &Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
+					CreateBulletExplosion(&Object, &Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
@@ -244,9 +244,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 						// взрываем...
 						if (NeedCheckCollision(Object))
-							new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
+							CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
 						else
-							new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
+							CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
 
 						return true;
 					} else
@@ -261,9 +261,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				}
 				// взрываем...
 				if (NeedCheckCollision(Object))
-					new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
+					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
 				else
-					new cBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
+					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
 				// столкновение было
 				return true;
 			}
@@ -302,11 +302,6 @@ void DestroyProjectileWithExplosion(const cProjectile &Projectile, const sVECTOR
 	switch (Projectile.ProjectileType) {
 	// обычные снаряды
 	case 0:
-		// "разбиваем" снаряд о корпус
-		/*	cBulletExplosion *TMPBulletExplosion;
-			TMPBulletExplosion = new cBulletExplosion;
-			TMPBulletExplosion->Create(0, Projectile, Projectile->Num, IntercPoint, ObjectSpeed, Projectile->NeedDeadSound);
-		*/
 		PlayBulletExplosion(IntercPoint, Projectile.NeedDeadSound, Projectile.Num);
 		break;
 
@@ -456,19 +451,19 @@ void DetectCollisionAllObject3D()
 					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 						switch (tmpShip->ObjectType) {
 						case eObjectType::AlienFighter:
-							new cSpaceExplosion(*tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(*tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case eObjectType::EarthFighter:
-							new cSpaceExplosion(*tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(*tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case eObjectType::AlienMotherShip:
-							new cSpaceExplosion(*tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(*tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case eObjectType::PirateShip:
 							if (tmpShip->InternalType <= 5)
-								new cSpaceExplosion(*tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+								CreateSpaceExplosion(*tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							else
-								new cSpaceExplosion(*tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+								CreateSpaceExplosion(*tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
 							break;
 						default:
 							break;
@@ -602,10 +597,10 @@ void DetectCollisionAllObject3D()
 
 					switch (tmpSpace.ObjectType) {
 					case eObjectType::SmallAsteroid:
-						new cSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
+						CreateSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					case eObjectType::SpaceDebris:
-						new cSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
+						CreateSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					default:
 						break;
@@ -620,19 +615,19 @@ void DetectCollisionAllObject3D()
 					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 						switch (tmpShip->ObjectType) {
 						case eObjectType::AlienFighter:
-							new cSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case eObjectType::EarthFighter:
-							new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case eObjectType::AlienMotherShip:
-							new cSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 							break;
 						case eObjectType::PirateShip:
 							if (tmpShip->InternalType <= 5)
-								new cSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+								CreateSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 							else
-								new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+								CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
 							break;
 						default:
 							break;
@@ -703,10 +698,10 @@ void DetectCollisionAllObject3D()
 
 					switch (tmpGround.ObjectType) {
 					case eObjectType::PirateBuilding:
-						new cGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum2);
+						CreateGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum2);
 						break;
 					case eObjectType::PirateVehicle:
-						new cGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum2);
+						CreateGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum2);
 						break;
 					default:
 						break;
@@ -721,19 +716,19 @@ void DetectCollisionAllObject3D()
 					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 						switch (tmpShip->ObjectType) {
 						case eObjectType::AlienFighter:
-							new cSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::EarthFighter:
-							new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::AlienMotherShip:
-							new cSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::PirateShip:
 							if (tmpShip->InternalType <= 5)
-								new cSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+								CreateSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							else
-								new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+								CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						default:
 							break;
@@ -805,19 +800,19 @@ void DetectCollisionAllObject3D()
 					if (tmpCollisionShip1->ObjectStatus != eObjectStatus::Player) {
 						switch (tmpCollisionShip1->ObjectType) {
 						case eObjectType::AlienFighter:
-							new cSpaceExplosion(*tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+							CreateSpaceExplosion(*tmpCollisionShip1, 2, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 							break;
 						case eObjectType::EarthFighter:
-							new cSpaceExplosion(*tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+							CreateSpaceExplosion(*tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 							break;
 						case eObjectType::AlienMotherShip:
-							new cSpaceExplosion(*tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+							CreateSpaceExplosion(*tmpCollisionShip1, 33, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 							break;
 						case eObjectType::PirateShip:
 							if (tmpCollisionShip1->InternalType <= 5)
-								new cSpaceExplosion(*tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+								CreateSpaceExplosion(*tmpCollisionShip1, 3, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 							else
-								new cSpaceExplosion(*tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
+								CreateSpaceExplosion(*tmpCollisionShip1, 31, tmpCollisionShip1->Location, tmpCollisionShip1->Speed, ObjectPieceNum2);
 							break;
 						default:
 							break;
@@ -840,19 +835,19 @@ void DetectCollisionAllObject3D()
 					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 						switch (tmpShip->ObjectType) {
 						case eObjectType::AlienFighter:
-							new cSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::EarthFighter:
-							new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::AlienMotherShip:
-							new cSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::PirateShip:
 							if (tmpShip->InternalType <= 5)
-								new cSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+								CreateSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							else
-								new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+								CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
 							break;
 						default:
 							break;
@@ -891,10 +886,10 @@ void DetectCollisionAllObject3D()
 
 						switch (tmpGround.ObjectType) {
 						case eObjectType::PirateBuilding:
-							new cGroundExplosion(tmpGround, 1, IntercPoint, ObjectPieceNum);
+							CreateGroundExplosion(tmpGround, 1, IntercPoint, ObjectPieceNum);
 							break;
 						case eObjectType::PirateVehicle:
-							new cGroundExplosion(tmpGround, 2, IntercPoint, ObjectPieceNum);
+							CreateGroundExplosion(tmpGround, 2, IntercPoint, ObjectPieceNum);
 							break;
 						default:
 							break;
@@ -965,10 +960,10 @@ void DetectCollisionAllObject3D()
 
 					switch (tmpSpace.ObjectType) {
 					case eObjectType::SmallAsteroid:
-						new cSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
+						CreateSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					case eObjectType::SpaceDebris:
-						new cSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
+						CreateSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
 						break;
 					default:
 						break;
@@ -980,10 +975,10 @@ void DetectCollisionAllObject3D()
 				    (tmpGround.Strength <= 0.0f)) {
 					switch (tmpGround.ObjectType) {
 					case eObjectType::PirateBuilding:
-						new cGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum);
+						CreateGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum);
 						break;
 					case eObjectType::PirateVehicle:
-						new cGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum);
+						CreateGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum);
 						break;
 					default:
 						break;
@@ -1023,10 +1018,10 @@ void DetectCollisionAllObject3D()
 
 						switch (tmpSpace.ObjectType) {
 						case eObjectType::SmallAsteroid:
-							new cSpaceExplosion(tmpSpace, 1, IntercPoint, tmpSpace.Speed, -1);
+							CreateSpaceExplosion(tmpSpace, 1, IntercPoint, tmpSpace.Speed, -1);
 							break;
 						case eObjectType::SpaceDebris:
-							new cSpaceExplosion(tmpSpace, 32, IntercPoint, tmpSpace.Speed, -1);
+							CreateSpaceExplosion(tmpSpace, 32, IntercPoint, tmpSpace.Speed, -1);
 							break;
 						default:
 							break;
@@ -1100,10 +1095,10 @@ void DetectCollisionAllObject3D()
 				     (SecondObject.ObjectType == eObjectType::SpaceDebris))) {
 					switch (SecondObject.ObjectType) {
 					case eObjectType::SmallAsteroid:
-						new cSpaceExplosion(SecondObject, 1, SecondObject.Location, SecondObject.Speed, -1);
+						CreateSpaceExplosion(SecondObject, 1, SecondObject.Location, SecondObject.Speed, -1);
 						break;
 					case eObjectType::SpaceDebris:
-						new cSpaceExplosion(SecondObject, 32, SecondObject.Location, SecondObject.Speed, -1);
+						CreateSpaceExplosion(SecondObject, 32, SecondObject.Location, SecondObject.Speed, -1);
 						break;
 					default:
 						break;
@@ -1118,10 +1113,10 @@ void DetectCollisionAllObject3D()
 				     (FirstObject.ObjectType == eObjectType::SpaceDebris))) {
 					switch (FirstObject.ObjectType) {
 					case eObjectType::SmallAsteroid:
-						new cSpaceExplosion(FirstObject, 1, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
+						CreateSpaceExplosion(FirstObject, 1, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
 						break;
 					case eObjectType::SpaceDebris:
-						new cSpaceExplosion(FirstObject, 32, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
+						CreateSpaceExplosion(FirstObject, 32, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
 						break;
 					default:
 						break;
@@ -1155,12 +1150,12 @@ void DetectCollisionAllObject3D()
 
 					if ((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) {
 						FirstObject.Speed = 0.0f;
-						new cBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+						CreateBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
 						Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
 					}
 					if ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) {
 						SecondObject.Speed = 0.0f;
-						new cBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+						CreateBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 
 						if (Command == eProjectilePairCycle::DeleteFirstObjectAndContinue)
 							Command = eProjectilePairCycle::DeleteBothObjectsAndContinue;
@@ -1175,7 +1170,7 @@ void DetectCollisionAllObject3D()
 				    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
 						       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
 					FirstObject.Speed = 0.0f;
-					new cBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+					CreateBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
 					Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
 				}
 			} else if (((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) && (FirstObject.ProjectileType == 2)) {
@@ -1184,7 +1179,7 @@ void DetectCollisionAllObject3D()
 				    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
 						       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
 					SecondObject.Speed = 0.0f;
-					new cBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+					CreateBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 					Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
 				}
 			// missile/mine with projectile/flare
@@ -1196,7 +1191,7 @@ void DetectCollisionAllObject3D()
 				    vw_SphereOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
 							  SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation)) {
 					FirstObject.Speed = 0.0f;
-					new cBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+					CreateBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
 					Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
 				}
 			} else if ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) {
@@ -1207,7 +1202,7 @@ void DetectCollisionAllObject3D()
 				    vw_SphereOBBCollision(SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat,
 							  FirstObject.Radius, FirstObject.Location, FirstObject.PrevLocation)) {
 					SecondObject.Speed = 0.0f;
-					new cBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+					CreateBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 					Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
 				}
 			}
@@ -1273,7 +1268,7 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 				// проверка, нужно начислять или нет
 				AddPlayerBonus(tmpSpace, ObjectStatus);
 
-				new cSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
+				CreateSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
 
 				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 			}
@@ -1309,19 +1304,19 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 				if (tmpShip->ObjectStatus != eObjectStatus::Player) {
 					switch (tmpShip->ObjectType) {
 					case eObjectType::AlienFighter:
-						new cSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
+						CreateSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
 						break;
 					case eObjectType::EarthFighter:
-						new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
+						CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
 						break;
 					case eObjectType::AlienMotherShip:
-						new cSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
+						CreateSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
 						break;
 					case eObjectType::PirateShip:
 						if (tmpShip->InternalType <= 5)
-							new cSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
+							CreateSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
 						else
-							new cSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
+							CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
 						break;
 					default:
 						break;
@@ -1355,10 +1350,10 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 
 				switch (tmpGround.ObjectType) {
 				case eObjectType::PirateBuilding:
-					new cGroundExplosion(tmpGround, 1, tmpGround.Location, -1);
+					CreateGroundExplosion(tmpGround, 1, tmpGround.Location, -1);
 					break;
 				case eObjectType::PirateVehicle:
-					new cGroundExplosion(tmpGround, 2, tmpGround.Location, -1);
+					CreateGroundExplosion(tmpGround, 2, tmpGround.Location, -1);
 					break;
 				default:
 					break;
