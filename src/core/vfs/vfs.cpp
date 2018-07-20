@@ -59,6 +59,16 @@
   4b - file size
 */
 
+/*
+
+Important!
+Don't use std::make_shared here, since std::make_shared performs one heap-allocation,
+whereas calling the std::shared_ptr constructor performs two.
+https://en.cppreference.com/w/cpp/memory/shared_ptr (see "Implementation notes")
+https://stackoverflow.com/questions/20895648/difference-in-make-shared-and-normal-shared-ptr-in-c
+
+*/
+
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
 
@@ -178,7 +188,7 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 	if (Name.empty())
 		return ERR_PARAMETERS;
 
-	std::shared_ptr<sVFS> TempVFS(std::make_shared<sVFS>(Name));
+	std::shared_ptr<sVFS> TempVFS{new sVFS{Name}};
 
 	TempVFS->File.open(Name, std::ios::binary | std::ios::out);
 	if (TempVFS->File.fail()) {
@@ -264,7 +274,7 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber)
 		return err;
 	};
 
-	VFSList.push_front(std::make_shared<sVFS>(Name));
+	VFSList.push_front(std::shared_ptr<sVFS>{new sVFS{Name}});
 
 	VFSList.front()->File.open(Name, std::ios::binary | std::ios::in);
 	if (VFSList.front()->File.fail())
