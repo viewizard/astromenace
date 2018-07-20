@@ -25,6 +25,12 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
+// TODO switch to enumerations
+
+// TODO correct hierarchy, explosion to "dust" and explosion to "debris" should be separated
+
 #ifndef OBJECT3D_EXPLOSION_EXPLOSION_H
 #define OBJECT3D_EXPLOSION_EXPLOSION_H
 
@@ -46,11 +52,15 @@ struct sExplosionPiece {
 
 class cExplosion : public cObject3D
 {
-public:
-	// базовые конструктор и деструктор объекта
+	friend void UpdateAllExplosion(float Time);
+	friend void ReleaseAllExplosions();
+
+protected:
+	// don't allow object of this class creation
 	cExplosion();
 	virtual ~cExplosion();
 
+public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 

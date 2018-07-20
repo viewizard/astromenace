@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "explosion.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"

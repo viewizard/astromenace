@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "explosion.h"
 #include "../../assets/audio.h"
 #include "../../object3d/space_object/space_object.h"
@@ -34,6 +36,7 @@
 namespace viewizard {
 namespace astromenace {
 
+// FIXME should be fixed, use 'include' instead
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 
 
