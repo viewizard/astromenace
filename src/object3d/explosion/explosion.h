@@ -52,9 +52,6 @@ struct sExplosionPiece {
 
 class cExplosion : public cObject3D
 {
-	friend void UpdateAllExplosion(float Time);
-	friend void ReleaseAllExplosions();
-
 protected:
 	// don't allow object of this class creation
 	cExplosion();
@@ -87,7 +84,7 @@ public:
 	cExplosion *Prev{nullptr};
 };
 
-class cBulletExplosion : public cExplosion
+class cBulletExplosion final : public cExplosion
 {
 	friend void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 					  int ExplType, const sVECTOR3D &ExplLocation,
@@ -98,7 +95,7 @@ private:
 				  float Speed, bool NeedExplosionSFX);
 };
 
-class cGroundExplosion : public cExplosion
+class cGroundExplosion final : public cExplosion
 {
 	friend void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 					  const sVECTOR3D &ExplLocation,
@@ -108,7 +105,7 @@ private:
 				  int ObjectChunkNum, bool NeedExplosionSFX);
 };
 
-class cSpaceExplosion : public cExplosion
+class cSpaceExplosion final : public cExplosion
 {
 	friend void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 					 const sVECTOR3D &ExplLocation, float Speed,

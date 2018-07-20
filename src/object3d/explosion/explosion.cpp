@@ -35,55 +35,13 @@
 namespace viewizard {
 namespace astromenace {
 
-// Указатели на начальный и конечный объект в списке
-cExplosion *StartExplosion = nullptr;
-cExplosion *EndExplosion = nullptr;
+namespace {
 
+// all explosion list
+std::list<std::shared_ptr<cExplosion>> ExplosionList{};
 
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-static void AttachExplosion(cExplosion *Explosion)
-{
-	if (Explosion == nullptr)
-		return;
+} // unnamed namespace
 
-	if (EndExplosion == nullptr) {
-		Explosion->Prev = nullptr;
-		Explosion->Next = nullptr;
-		StartExplosion = Explosion;
-		EndExplosion = Explosion;
-	} else {
-		Explosion->Prev = EndExplosion;
-		Explosion->Next = nullptr;
-		EndExplosion->Next = Explosion;
-		EndExplosion = Explosion;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-static void DetachExplosion(cExplosion *Explosion)
-{
-	if (Explosion == nullptr)
-		return;
-
-	if (StartExplosion == Explosion)
-		StartExplosion = Explosion->Next;
-	if (EndExplosion == Explosion)
-		EndExplosion = Explosion->Prev;
-
-	if (Explosion->Next != nullptr)
-		Explosion->Next->Prev = Explosion->Prev;
-	else if (Explosion->Prev != nullptr)
-		Explosion->Prev->Next = nullptr;
-
-	if (Explosion->Prev != nullptr)
-		Explosion->Prev->Next = Explosion->Next;
-	else if (Explosion->Next != nullptr)
-		Explosion->Next->Prev = nullptr;
-}
 
 /*
  * Create cBulletExplosion object.
@@ -92,7 +50,9 @@ void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 			   int ExplType, const sVECTOR3D &ExplLocation,
 			   float Speed, bool NeedExplosionSFX)
 {
-	new cBulletExplosion{Object, Projectile, ExplType, ExplLocation, Speed, NeedExplosionSFX};
+	ExplosionList.emplace_front(std::shared_ptr<cBulletExplosion>{
+		new cBulletExplosion{Object, Projectile, ExplType, ExplLocation, Speed, NeedExplosionSFX},
+		[](cBulletExplosion *p) {delete p;}});
 }
 
 /*
@@ -102,7 +62,9 @@ void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 			   const sVECTOR3D &ExplLocation,
 			   int ObjectChunkNum, bool NeedExplosionSFX)
 {
-	new cGroundExplosion{Object, ExplType, ExplLocation, ObjectChunkNum, NeedExplosionSFX};
+	ExplosionList.emplace_front(std::shared_ptr<cGroundExplosion>{
+		new cGroundExplosion{Object, ExplType, ExplLocation, ObjectChunkNum, NeedExplosionSFX},
+		[](cGroundExplosion *p) {delete p;}});
 }
 
 /*
@@ -112,7 +74,9 @@ void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 			  const sVECTOR3D &ExplLocation, float Speed,
 			  int ObjectChunkNum, bool NeedExplosionSFX)
 {
-	new cSpaceExplosion{Object, ExplType, ExplLocation, Speed, ObjectChunkNum, NeedExplosionSFX};
+	ExplosionList.emplace_front(std::shared_ptr<cSpaceExplosion>{
+		new cSpaceExplosion{Object, ExplType, ExplLocation, Speed, ObjectChunkNum, NeedExplosionSFX},
+		[](cSpaceExplosion *p) {delete p;}});
 }
 
 //-----------------------------------------------------------------------------
@@ -120,13 +84,11 @@ void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 //-----------------------------------------------------------------------------
 void UpdateAllExplosion(float Time)
 {
-	cExplosion *tmp = StartExplosion;
-	while (tmp != nullptr) {
-		cExplosion *tmp2 = tmp->Next;
-		// делаем обновление данных по объекту
-		if (!tmp->Update(Time))
-			delete tmp;
-		tmp = tmp2;
+	for (auto iter = ExplosionList.begin(); iter != ExplosionList.end();) {
+		if (!iter->get()->Update(Time))
+			iter = ExplosionList.erase(iter);
+		else
+			++iter;
 	}
 }
 
@@ -135,13 +97,9 @@ void UpdateAllExplosion(float Time)
 //-----------------------------------------------------------------------------
 void DrawAllExplosions(bool VertexOnlyPass)
 {
-	cExplosion *tmp = StartExplosion;
-	while (tmp != nullptr) {
-		cExplosion *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass);
-		tmp = tmp2;
+	for (auto &tmpObject : ExplosionList) {
+		tmpObject.get()->Draw(VertexOnlyPass);
 	}
-
 }
 
 //-----------------------------------------------------------------------------
@@ -149,15 +107,7 @@ void DrawAllExplosions(bool VertexOnlyPass)
 //-----------------------------------------------------------------------------
 void ReleaseAllExplosions()
 {
-	cExplosion *tmp = StartExplosion;
-	while (tmp != nullptr) {
-		cExplosion *tmp2 = tmp->Next;
-		delete tmp;
-		tmp = tmp2;
-	}
-
-	StartExplosion = nullptr;
-	EndExplosion = nullptr;
+	ExplosionList.clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -475,9 +425,6 @@ cExplosion::cExplosion()
 
 	// нет взрыва, сразу уничтожаем
 	Lifetime = 0.0f;
-
-	// подключаем к своему списку
-	AttachExplosion(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -497,8 +444,6 @@ cExplosion::~cExplosion()
 		}
 	}
 
-
-	DetachExplosion(this);
 }
 
 //-----------------------------------------------------------------------------
