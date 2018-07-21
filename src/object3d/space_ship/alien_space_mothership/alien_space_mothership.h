@@ -37,8 +37,7 @@ namespace astromenace {
 /*
  * All alien motherships.
  */
-class cAlienSpaceMotherShip : public cSpaceShip
-{
+class cAlienSpaceMotherShip : public cSpaceShip {
 public:
 	explicit cAlienSpaceMotherShip(int SpaceShipNum);
 };

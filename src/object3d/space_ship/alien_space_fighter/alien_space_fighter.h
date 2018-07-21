@@ -37,8 +37,7 @@ namespace astromenace {
 /*
  * All alien fighters.
  */
-class cAlienSpaceFighter : public cSpaceShip
-{
+class cAlienSpaceFighter : public cSpaceShip {
 public:
 	explicit cAlienSpaceFighter(int SpaceShipNum);
 };

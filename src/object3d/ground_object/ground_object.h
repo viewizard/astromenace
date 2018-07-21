@@ -166,6 +166,7 @@ private:
 	// Don't allow direct new/delete usage in code, only CreateCivilianBuilding()
 	// allowed for cCivilianBuilding creation and release setup (deleter must be provided).
 	explicit cCivilianBuilding(int BuildingNum);
+	~cCivilianBuilding() = default;
 };
 
 class cMilitaryBuilding final : public cGroundObject {
@@ -174,6 +175,7 @@ private:
 	// Don't allow direct new/delete usage in code, only CreateMilitaryBuilding()
 	// allowed for cMilitaryBuilding creation and release setup (deleter must be provided).
 	explicit cMilitaryBuilding(int MilitaryBuildingNum);
+	~cMilitaryBuilding() = default;
 };
 
 class cTracked final : public cGroundObject {
@@ -182,6 +184,7 @@ private:
 	// Don't allow direct new/delete usage in code, only CreateTracked()
 	// allowed for cTracked creation and release setup (deleter must be provided).
 	explicit cTracked(int TrackedNum);
+	~cTracked() = default;
 };
 
 class cWheeled final : public cGroundObject {
@@ -190,6 +193,7 @@ private:
 	// Don't allow direct new/delete usage in code, only CreateWheeled()
 	// allowed for cWheeled creation and release setup (deleter must be provided).
 	explicit cWheeled(int WheeledNum);
+	~cWheeled() = default;
 };
 
 

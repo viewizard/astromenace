@@ -50,8 +50,7 @@ struct sExplosionPiece {
 	float Life;
 };
 
-class cExplosion : public cObject3D
-{
+class cExplosion : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cExplosion();
@@ -84,36 +83,42 @@ public:
 	cExplosion *Prev{nullptr};
 };
 
-class cBulletExplosion final : public cExplosion
-{
+class cBulletExplosion final : public cExplosion {
 	friend void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 					  int ExplType, const sVECTOR3D &ExplLocation,
 					  float Speed, bool NeedExplosionSFX);
 private:
+	// Don't allow direct new/delete usage in code, only CreateBulletExplosion()
+	// allowed for cBulletExplosion creation and release setup (deleter must be provided).
 	explicit cBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 				  int ExplType, const sVECTOR3D &ExplLocation,
 				  float Speed, bool NeedExplosionSFX);
+	~cBulletExplosion() = default;
 };
 
-class cGroundExplosion final : public cExplosion
-{
+class cGroundExplosion final : public cExplosion {
 	friend void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 					  const sVECTOR3D &ExplLocation,
 					  int ObjectChunkNum, bool NeedExplosionSFX);
 private:
+	// Don't allow direct new/delete usage in code, only CreateGroundExplosion()
+	// allowed for cGroundExplosion creation and release setup (deleter must be provided).
 	explicit cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
 				  int ObjectChunkNum, bool NeedExplosionSFX);
+	~cGroundExplosion() = default;
 };
 
-class cSpaceExplosion final : public cExplosion
-{
+class cSpaceExplosion final : public cExplosion {
 	friend void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 					 const sVECTOR3D &ExplLocation, float Speed,
 					 int ObjectChunkNum, bool NeedExplosionSFX);
 private:
+	// Don't allow direct new/delete usage in code, only CreateSpaceExplosion()
+	// allowed for cSpaceExplosion creation and release setup (deleter must be provided).
 	explicit cSpaceExplosion(cObject3D &Object, int ExplType,
 				 const sVECTOR3D &ExplLocation, float Speed,
 				 int ObjectChunkNum, bool NeedExplosionSFX);
+	~cSpaceExplosion() = default;
 };
 
 

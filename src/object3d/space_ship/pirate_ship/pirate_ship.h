@@ -37,8 +37,7 @@ namespace astromenace {
 /*
  * All pirate ships.
  */
-class cPirateShip : public cSpaceShip
-{
+class cPirateShip : public cSpaceShip {
 public:
 	explicit cPirateShip(int PirateShipNum);
 };

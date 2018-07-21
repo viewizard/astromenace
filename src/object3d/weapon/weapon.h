@@ -47,7 +47,7 @@ namespace astromenace {
 
 enum class eGameSFX;
 
-class cWeapon final : public cObject3D {
+class cWeapon : public cObject3D {
 	friend std::weak_ptr<cWeapon> CreateWeapon(int WeaponNum);
 
 private:

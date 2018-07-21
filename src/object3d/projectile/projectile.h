@@ -57,8 +57,7 @@ enum class eProjectilePairCycle {
 	DeleteBothObjectsAndContinue
 };
 
-class cProjectile : public cObject3D
-{
+class cProjectile : public cObject3D {
 	friend std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum);
 
 private:

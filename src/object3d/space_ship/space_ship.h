@@ -62,8 +62,7 @@ struct sShipWeaponSlot {
 	}
 };
 
-class cSpaceShip : public cObject3D
-{
+class cSpaceShip : public cObject3D {
 public:
 	// базовые конструктор и деструктор объекта
 	cSpaceShip();

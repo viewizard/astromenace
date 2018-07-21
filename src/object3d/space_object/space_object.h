@@ -54,8 +54,7 @@ enum class eSpacePairCycle {
 	DeleteBothObjectsAndContinue
 };
 
-class cSpaceObject : public cObject3D
-{
+class cSpaceObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cSpaceObject();
@@ -92,42 +91,44 @@ private:
 	// Don't allow direct new/delete usage in code, only CreateSmallAsteroid()
 	// allowed for cSmallAsteroid creation and release setup (deleter must be provided).
 	cSmallAsteroid();
+	~cSmallAsteroid() = default;
 };
 
-class cBigAsteroid final : public cSpaceObject
-{
+class cBigAsteroid final : public cSpaceObject {
 	friend std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum);
+
 private:
 	// Don't allow direct new/delete usage in code, only CreateBigAsteroid()
 	// allowed for cBigAsteroid creation and release setup (deleter must be provided).
 	explicit cBigAsteroid(int AsteroidNum);
+	~cBigAsteroid() = default;
 };
 
-class cPlanet final : public cSpaceObject
-{
+class cPlanet final : public cSpaceObject {
 	friend std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreatePlanet()
 	// allowed for cPlanet creation and release setup (deleter must be provided).
 	explicit cPlanet(int PlanetNum);
+	~cPlanet() = default;
 };
 
-class cSpaceDebris final : public cSpaceObject
-{
+class cSpaceDebris final : public cSpaceObject {
 	friend std::weak_ptr<cSpaceObject> CreateSpaceDebris();
 private:
 	// Don't allow direct new/delete usage in code, only CreateSpaceDebris()
 	// allowed for cSpaceDebris creation and release setup (deleter must be provided).
 	cSpaceDebris();
+	~cSpaceDebris() = default;
 };
 
-class cBasePart final : public cSpaceObject
-{
+class cBasePart final : public cSpaceObject {
 	friend std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateBasePart()
 	// allowed for cBasePart creation and release setup (deleter must be provided).
 	explicit cBasePart(int BasePartNum);
+	~cBasePart() = default;
 };
 
 

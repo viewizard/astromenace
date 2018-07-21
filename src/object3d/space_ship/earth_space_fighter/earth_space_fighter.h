@@ -37,8 +37,7 @@ namespace astromenace {
 /*
  * All earth fighters.
  */
-class cEarthSpaceFighter : public cSpaceShip
-{
+class cEarthSpaceFighter : public cSpaceShip {
 public:
 	explicit cEarthSpaceFighter(int SpaceShipNum);
 };
