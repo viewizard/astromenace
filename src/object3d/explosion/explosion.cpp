@@ -38,7 +38,7 @@ namespace astromenace {
 namespace {
 
 // all explosion list
-std::list<std::shared_ptr<cExplosion>> ExplosionList{};
+std::list<std::unique_ptr<cExplosion, std::function<void (cExplosion *p)>>> ExplosionList{};
 
 } // unnamed namespace
 
@@ -52,7 +52,7 @@ void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
 {
 	ExplosionList.emplace_front(
 		new cBulletExplosion{Object, Projectile, ExplType, ExplLocation, Speed, NeedExplosionSFX},
-		[](cBulletExplosion *p) {delete p;});
+		[](cExplosion *p) {delete static_cast<cBulletExplosion*>(p);});
 }
 
 /*
@@ -64,7 +64,7 @@ void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 {
 	ExplosionList.emplace_front(
 		new cGroundExplosion{Object, ExplType, ExplLocation, ObjectChunkNum, NeedExplosionSFX},
-		[](cGroundExplosion *p) {delete p;});
+		[](cExplosion *p) {delete static_cast<cGroundExplosion*>(p);});
 }
 
 /*
@@ -76,7 +76,7 @@ void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 {
 	ExplosionList.emplace_front(
 		new cSpaceExplosion{Object, ExplType, ExplLocation, Speed, ObjectChunkNum, NeedExplosionSFX},
-		[](cSpaceExplosion *p) {delete p;});
+		[](cExplosion *p) {delete static_cast<cSpaceExplosion*>(p);});
 }
 
 //-----------------------------------------------------------------------------
