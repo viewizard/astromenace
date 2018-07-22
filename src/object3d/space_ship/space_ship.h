@@ -40,6 +40,13 @@
 namespace viewizard {
 namespace astromenace {
 
+enum class eShipCycle {
+	Continue,
+	Break,
+	DeleteObjectAndContinue,
+	DeleteObjectAndBreak
+};
+
 struct sShipWeaponSlot {
 	bool SetFire{false};
 	std::weak_ptr<cWeapon> Weapon{};
@@ -225,6 +232,8 @@ void UpdateAllSpaceShip(float Time);
 void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceShips();
+// Managed cycle for each space ship.
+void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function);
 
 // Установка системы двигателей
 void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType);

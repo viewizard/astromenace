@@ -136,6 +136,32 @@ void ReleaseAllSpaceShips()
 	EndSpaceShip = nullptr;
 }
 
+/*
+ * Managed cycle for each space ship.
+ */
+void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function)
+{
+	cSpaceShip *tmpShip = StartSpaceShip;
+	while (tmpShip) {
+		cSpaceShip *tmpShipNext = tmpShip->Next;
+		eShipCycle Command{eShipCycle::Continue};
+		function(*tmpShip, Command);
+		switch (Command) {
+		case eShipCycle::Continue:
+			break;
+		case eShipCycle::Break:
+			return;
+		case eShipCycle::DeleteObjectAndContinue:
+			delete tmpShip;
+			break;
+		case eShipCycle::DeleteObjectAndBreak:
+			delete tmpShip;
+			return;
+		}
+		tmpShip = tmpShipNext;
+	}
+}
+
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
