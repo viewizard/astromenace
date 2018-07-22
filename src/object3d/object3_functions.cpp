@@ -1330,13 +1330,14 @@ bool GetMissileTargetStatus(cObject3D *TargetObject,
 	if (ObjectFound)
 		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp) {
-		cSpaceShip *tmpShip2 = tmp->Next;
-		if (tmp == TargetObject)
-			return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
-		tmp = tmpShip2;
-	}
+	ForEachSpaceShip([&TargetObject, &ObjectFound] (const cSpaceShip &tmpShip, eShipCycle &Command) {
+		if (&tmpShip == TargetObject) {
+			ObjectFound = true;
+			Command = eShipCycle::Break;
+		}
+	});
+	if (ObjectFound)
+		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
 
 	ForEachSpaceObject([&TargetObject, &ObjectFound] (const cSpaceObject &tmpSpace, eSpaceCycle &Command) {
 		if (&tmpSpace == TargetObject) {
