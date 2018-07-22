@@ -47,6 +47,13 @@ enum class eShipCycle {
 	DeleteObjectAndBreak
 };
 
+enum class eShipPairCycle {
+	Continue,
+	DeleteFirstObjectAndContinue,
+	DeleteSecondObjectAndContinue,
+	DeleteBothObjectsAndContinue
+};
+
 struct sShipWeaponSlot {
 	bool SetFire{false};
 	std::weak_ptr<cWeapon> Weapon{};
@@ -234,6 +241,10 @@ void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
 void ReleaseAllSpaceShips();
 // Managed cycle for each space ship.
 void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function);
+// Managed cycle for each space ship pair.
+void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
+					      cSpaceShip &SecondObject,
+					      eShipPairCycle &Command)> function);
 
 // Установка системы двигателей
 void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType);

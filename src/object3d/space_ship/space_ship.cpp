@@ -162,6 +162,44 @@ void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Comman
 	}
 }
 
+/*
+ * Managed cycle for each space ship pair.
+ */
+void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
+					      cSpaceShip &SecondObject,
+					      eShipPairCycle &Command)> function)
+{
+	cSpaceShip *tmpFirstShip = StartSpaceShip;
+	while (tmpFirstShip) {
+		eShipPairCycle Command{eShipPairCycle::Continue};
+		cSpaceShip *tmpSecondShip = tmpFirstShip->Next;
+		while (tmpSecondShip) {
+			Command = eShipPairCycle::Continue;
+			function(*tmpFirstShip, *tmpSecondShip, Command);
+			cSpaceShip *tmpSecondShipNext = tmpSecondShip->Next;
+
+			if ((Command == eShipPairCycle::DeleteSecondObjectAndContinue) ||
+			    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
+				delete tmpSecondShip;
+
+			// break second cycle
+			if ((Command == eShipPairCycle::DeleteFirstObjectAndContinue) ||
+			    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
+				break;
+
+			tmpSecondShip = tmpSecondShipNext;
+		}
+
+		cSpaceShip *tmpFirstShipNext = tmpFirstShip->Next;
+
+		if ((Command == eShipPairCycle::DeleteFirstObjectAndContinue) ||
+		    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
+			delete tmpFirstShip;
+
+		tmpFirstShip = tmpFirstShipNext;
+	}
+}
+
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
