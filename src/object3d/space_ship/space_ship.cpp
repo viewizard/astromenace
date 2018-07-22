@@ -25,11 +25,12 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "space_ship.h"
 #include "../../game.h"
 #include "../../config/config.h"
 #include "../../script/script.h"
-#include "earth_space_fighter/earth_space_fighter.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

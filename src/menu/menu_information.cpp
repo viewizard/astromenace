@@ -31,10 +31,7 @@
 #include "../gfx/shadow_map.h"
 #include "../object3d/object3d.h"
 #include "../object3d/weapon/weapon.h"
-#include "../object3d/space_ship/alien_space_fighter/alien_space_fighter.h"
-#include "../object3d/space_ship/alien_space_mothership/alien_space_mothership.h"
-#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
-#include "../object3d/space_ship/pirate_ship/pirate_ship.h"
+#include "../object3d/space_ship/space_ship.h"
 #include "../object3d/ground_object/ground_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)

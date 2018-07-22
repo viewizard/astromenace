@@ -27,6 +27,8 @@
 
 // TODO translate comments
 
+// TODO split earth fighter and player ship classes
+
 #ifndef OBJECT3D_SPACESHIP_SPACESHIP_H
 #define OBJECT3D_SPACESHIP_SPACESHIP_H
 
@@ -196,6 +198,26 @@ public:
 	cSpaceShip *Prev{nullptr};
 };
 
+class cAlienSpaceFighter : public cSpaceShip {
+public:
+	explicit cAlienSpaceFighter(int SpaceShipNum);
+};
+
+class cAlienSpaceMotherShip : public cSpaceShip {
+public:
+	explicit cAlienSpaceMotherShip(int SpaceShipNum);
+};
+
+class cEarthSpaceFighter : public cSpaceShip {
+public:
+	explicit cEarthSpaceFighter(int SpaceShipNum);
+};
+
+class cPirateShip : public cSpaceShip {
+public:
+	explicit cPirateShip(int PirateShipNum);
+};
+
 
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceShip(float Time);
@@ -203,6 +225,21 @@ void UpdateAllSpaceShip(float Time);
 void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceShips();
+
+// Установка системы двигателей
+void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType);
+// Установка брони для кораблей землян
+void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType);
+// Установка оружия на корабль
+bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum);
+// Получаем возможный поворот орудия в данном слоте
+void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
+//
+float GetEngineAcceleration(int EngineType);
+//
+float GetEnginePower(int EngineType);
+//
+float GetEngineRotatePower(int EngineType);
 
 } // astromenace namespace
 } // viewizard namespace

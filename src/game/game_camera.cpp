@@ -26,7 +26,7 @@
 *************************************************************************************/
 
 #include "../game.h"
-#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
+#include "../object3d/space_ship/space_ship.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

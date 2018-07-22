@@ -44,7 +44,7 @@
 #include "../gfx/star_system.h"
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"
-#include "../object3d/space_ship/earth_space_fighter/earth_space_fighter.h"
+#include "../object3d/space_ship/space_ship.h"
 #include <stdarg.h> // va_start
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 

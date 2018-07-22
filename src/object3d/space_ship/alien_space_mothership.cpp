@@ -27,9 +27,11 @@
 
 // TODO add flare weapons (probably, we need some alien-specific visual effects)
 
-#include "alien_space_mothership.h"
-#include "../../../config/config.h"
-#include "../../../assets/texture.h"
+// TODO translate comments
+
+#include "space_ship.h"
+#include "../../config/config.h"
+#include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

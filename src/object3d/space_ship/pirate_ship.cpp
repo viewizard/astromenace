@@ -27,10 +27,12 @@
 
 // TODO add more flare weapons for big pirate ships
 
-#include "pirate_ship.h"
-#include "../../../config/config.h"
-#include "../../../assets/audio.h"
-#include "../../../assets/texture.h"
+// TODO translate comments
+
+#include "space_ship.h"
+#include "../../config/config.h"
+#include "../../assets/audio.h"
+#include "../../assets/texture.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
