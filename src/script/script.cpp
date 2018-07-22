@@ -47,9 +47,6 @@
 namespace viewizard {
 namespace astromenace {
 
-extern cSpaceShip *StartSpaceShip;
-extern cSpaceShip *EndSpaceShip;
-
 extern int NeedShowBB;
 extern bool UndeadDebugMode;
 extern bool ShowGameTime;
@@ -281,16 +278,14 @@ bool cMissionScript::Update(float Time)
 		bool NeedDecreaseTime{true};
 
 		if (NeedCheckSpaceShip) {
-			cSpaceShip *tmpObject = StartSpaceShip;
-			while (tmpObject) {
-				if ((tmpObject->ObjectStatus == eObjectStatus::Enemy) &&
-				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled) &&
-				    (tmpObject->DeleteAfterLeaveScene != eDeleteAfterLeaveScene::disabled)) {
+			ForEachSpaceShip([&NeedDecreaseTime] (const cSpaceShip &tmpShip, eShipCycle &Command) {
+				if ((tmpShip.ObjectStatus == eObjectStatus::Enemy) &&
+				    (tmpShip.DeleteAfterLeaveScene != eDeleteAfterLeaveScene::enabled) &&
+				    (tmpShip.DeleteAfterLeaveScene != eDeleteAfterLeaveScene::disabled)) {
 					NeedDecreaseTime = false;
-					break;
+					Command = eShipCycle::Break;
 				}
-				tmpObject = tmpObject->Next;
-			}
+			});
 		}
 		if (NeedDecreaseTime && NeedCheckGroundObject) {
 			ForEachGroundObject([&NeedDecreaseTime] (const cGroundObject &tmpGround, eGroundCycle &Command) {
