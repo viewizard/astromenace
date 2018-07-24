@@ -1363,30 +1363,27 @@ cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, // статус �
 	float MinRatius2{-1.0f};
 
 	// перебираем только корабли...
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp) {
-		cSpaceShip *tmpShip2 = tmp->Next;
-
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
 		// если по этому надо стрелять
-		if (NeedCheckCollision(*tmp) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
+		if (NeedCheckCollision(tmpShip) &&
+		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
+		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
 			// получаем квадрат радиуса
-			float MinRatius2TMP = (tmp->Location.x - Location.x) * (tmp->Location.x - Location.x) +
-					      (tmp->Location.y - Location.y) * (tmp->Location.y - Location.y) +
-					      (tmp->Location.z - Location.z) * (tmp->Location.z - Location.z);
+			float MinRatius2TMP = (tmpShip.Location.x - Location.x) * (tmpShip.Location.x - Location.x) +
+					      (tmpShip.Location.y - Location.y) * (tmpShip.Location.y - Location.y) +
+					      (tmpShip.Location.z - Location.z) * (tmpShip.Location.z - Location.z);
 
 			if (MinRatius2 < 0.0f) {
 				MinRatius2 = MinRatius2TMP;
-				Res = tmp;
+				// FIXME we should use std::weak_ptr for target object instead
+				Res = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
 			} else if (MinRatius2TMP < MinRatius2) {
 				MinRatius2 = MinRatius2TMP;
-				Res = tmp;
+				// FIXME we should use std::weak_ptr for target object instead
+				Res = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
 			}
 		}
-
-		tmp = tmpShip2;
-	}
+	});
 
 	return Res;
 }
