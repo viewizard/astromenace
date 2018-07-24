@@ -44,9 +44,6 @@ float GetProjectileSpeed(int Num);
 void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType);
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-extern cSpaceShip *StartSpaceShip;
-extern cSpaceShip *EndSpaceShip;
-
 extern float GameMoney;
 extern float GameExperience;
 extern int CurrentProfile;
@@ -401,82 +398,76 @@ void DetectCollisionAllObject3D()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверка для всех кораблей
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	cSpaceShip *tmpShip = StartSpaceShip;
-	while (tmpShip) {
-		cSpaceShip *tmpShip2 = tmpShip->Next;
-
-		ForEachProjectile([&tmpShip, &tmpShip2] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
+	ForEachSpaceShip([] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
+		ForEachProjectile([&tmpShip, &ShipCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
 			sVECTOR3D IntercPoint;
 			sDamagesData DamagesData;
 			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(*tmpShip, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpShip->Speed)) {
-				tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
-
+			if (DetectProjectileCollision(tmpShip, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpShip.Speed)) {
 				// если на корабле есть щит, сначала его уничтожаем
-				if (tmpShip->ShieldStrength > DamagesData.DamageSystems) {
-					tmpShip->ShieldStrength -= DamagesData.DamageSystems;
+				if (tmpShip.ShieldStrength > DamagesData.DamageSystems) {
+					tmpShip.ShieldStrength -= DamagesData.DamageSystems;
 					DamagesData.DamageSystems = 0.0f;
 				} else {
 					// если щита мало
-					DamagesData.DamageSystems -= tmpShip->ShieldStrength;
-					tmpShip->ShieldStrength = 0.0f;
+					DamagesData.DamageSystems -= tmpShip.ShieldStrength;
+					tmpShip.ShieldStrength = 0.0f;
 				}
 
-				if (tmpShip->ShieldStrength > DamagesData.DamageHull) {
-					tmpShip->ShieldStrength -= DamagesData.DamageHull;
+				if (tmpShip.ShieldStrength > DamagesData.DamageHull) {
+					tmpShip.ShieldStrength -= DamagesData.DamageHull;
 					DamagesData.DamageHull = 0.0f;
 				} else {
 					// если щита мало
-					DamagesData.DamageHull -= tmpShip->ShieldStrength;
-					tmpShip->ShieldStrength = 0.0f;
+					DamagesData.DamageHull -= tmpShip.ShieldStrength;
+					tmpShip.ShieldStrength = 0.0f;
 				}
 
-				if (tmpShip->ShieldStrength < 0.0f)
-					tmpShip->ShieldStrength = 0.0f;
+				if (tmpShip.ShieldStrength < 0.0f)
+					tmpShip.ShieldStrength = 0.0f;
 
-				tmpShip->Strength -= DamagesData.DamageHull / tmpShip->ResistanceHull;
+				tmpShip.Strength -= DamagesData.DamageHull / tmpShip.ResistanceHull;
 
-				tmpShip->Strength -= (DamagesData.DamageSystems / tmpShip->ResistanceHull) * vw_fRand();
+				tmpShip.Strength -= (DamagesData.DamageSystems / tmpShip.ResistanceHull) * vw_fRand();
 				// есть шанс полностью убить пришельца
 				if ((DamagesData.DamageSystems > 0.0f) &&
-				    (tmpShip->ObjectType == eObjectType::AlienFighter) &&
+				    (tmpShip.ObjectType == eObjectType::AlienFighter) &&
 				    (vw_fRand() > 0.7f))
-					tmpShip->Strength = 0;
+					tmpShip.Strength = 0;
 
-				if (tmpShip->Strength <= 0.0f) {
-					AddPlayerBonus(*tmpShip, tmpProjectile.ObjectStatus);
+				if (tmpShip.Strength <= 0.0f) {
+					AddPlayerBonus(tmpShip, tmpProjectile.ObjectStatus);
 
 					// если не корабль игрока! его удалим сами
-					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
-						switch (tmpShip->ObjectType) {
+					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
+						switch (tmpShip.ObjectType) {
 						case eObjectType::AlienFighter:
-							CreateSpaceExplosion(*tmpShip, 2, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(tmpShip, 2, IntercPoint, tmpShip.Speed, ObjectPieceNum);
 							break;
 						case eObjectType::EarthFighter:
-							CreateSpaceExplosion(*tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip.Speed, ObjectPieceNum);
 							break;
 						case eObjectType::AlienMotherShip:
-							CreateSpaceExplosion(*tmpShip, 33, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(tmpShip, 33, IntercPoint, tmpShip.Speed, ObjectPieceNum);
 							break;
 						case eObjectType::PirateShip:
-							if (tmpShip->InternalType <= 5)
-								CreateSpaceExplosion(*tmpShip, 3, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+							if (tmpShip.InternalType <= 5)
+								CreateSpaceExplosion(tmpShip, 3, IntercPoint, tmpShip.Speed, ObjectPieceNum);
 							else
-								CreateSpaceExplosion(*tmpShip, 31, IntercPoint, tmpShip->Speed, ObjectPieceNum);
+								CreateSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip.Speed, ObjectPieceNum);
 							break;
 						default:
 							break;
 						}
-						delete tmpShip;
-						tmpShip = nullptr;
+						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 					} else {
 						// запоминаем, что взорвалось
 						PlayerDeadObjectPieceNum = ObjectPieceNum;
 					}
-				} else if ((tmpShip->ObjectStatus != eObjectStatus::Player) && // игроку тут ничего не делаем!.. с него хватит и щита
+				} else if ((tmpShip.ObjectStatus != eObjectStatus::Player) && // игроку тут ничего не делаем!.. с него хватит и щита
 					// если это не босс уровня (Alien MotherShip)
-					   (tmpShip->ObjectType != eObjectType::AlienMotherShip) &&
+					   (tmpShip.ObjectType != eObjectType::AlienMotherShip) &&
 					// если нужно, смотрим что делать с системами
 					   (DamagesData.DamageSystems > 0.0f)) {
 
@@ -486,24 +477,24 @@ void DetectCollisionAllObject3D()
 
 					// выводим из строя управляемость кораблем
 					if (Rand > 0.6f-DR)
-						tmpShip->MaxSpeed = tmpShip->MaxSpeed / 2.0f;
+						tmpShip.MaxSpeed = tmpShip.MaxSpeed / 2.0f;
 					if ((Rand > 0.3f - DR) && (Rand < 0.6f))
-						tmpShip->MaxSpeedRotate = tmpShip->MaxSpeedRotate / 2.0f;
+						tmpShip.MaxSpeedRotate = tmpShip.MaxSpeedRotate / 2.0f;
 
 					// если есть фларес, есть шанс его вырубить
-					if (!tmpShip->FlareWeaponSlots.empty() &&
+					if (!tmpShip.FlareWeaponSlots.empty() &&
 					    (Rand > 0.5f-DR) && (Rand < 0.8f))
-						tmpShip->FlareWeaponSlots.clear();
+						tmpShip.FlareWeaponSlots.clear();
 				}
 
 				if (tmpProjectile.ProjectileType != 2) {
-					if (!tmpShip)
+					if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue)
 						tmpProjectile.NeedDeadSound = false;
 					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
 					ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
 				}
 
-				if (!tmpShip) {
+				if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue) {
 					// break projectile cycle
 					switch (ProjectileCycleCommand) {
 					case eProjectileCycle::Continue:
@@ -522,18 +513,16 @@ void DetectCollisionAllObject3D()
 
 			// проверка на попадание в оружие (только для игрока и если включено в настройках)
 			// проверять только до OBB
-			if (tmpShip &&
-			    (tmpShip->ObjectStatus == eObjectStatus::Player) &&
+			if ((tmpShip.ObjectStatus == eObjectStatus::Player) &&
 			    (tmpProjectile.ObjectStatus == eObjectStatus::Enemy) &&
-			    !GameUndestroyableWeapon && !tmpShip->WeaponSlots.empty()) {
-				for (auto &tmpWeaponSlot : tmpShip->WeaponSlots) {
+			    !GameUndestroyableWeapon && !tmpShip.WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : tmpShip.WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 						sDamagesData DamagesDataWeapon;
 						int ObjectPieceNumWeapon;
 
 						if ((sharedWeapon->Strength > 0.0f) &&
-						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip->Speed)) {
-							tmpShip2 = tmpShip->Next; // обязательно!!! если попали торпедой или бомбой!!!
+						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip.Speed)) {
 							// FIXME вот тут все очень плохо, т.к. можем убить и сам tmpShip
 
 							// просто делаем изменения в прочности... и больше ничего
@@ -555,45 +544,46 @@ void DetectCollisionAllObject3D()
 				}
 			}
 		});
+		if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue)
+			return;
 
 		// проверяем столкновение
 		// cSpaceObject
-		if (tmpShip) // FIXME should be revised, when tmpShip will also have ForEach...()
-		ForEachSpaceObject([&tmpShip] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
+		ForEachSpaceObject([&tmpShip, &ShipCycleCommand] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 			int ObjectPieceNum;
-			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
+			if (vw_SphereSphereCollision(tmpShip.Radius, tmpShip.Location,
 						     tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
-			    vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
+			    vw_SphereAABBCollision(tmpShip.AABB, tmpShip.Location,
 						   tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
-			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
+			    vw_SphereOBBCollision(tmpShip.OBB.Box, tmpShip.OBB.Location, tmpShip.Location, tmpShip.CurrentRotationMat,
 						  tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
-			    CheckHitBBOBBCollisionDetection(*tmpShip, tmpSpace, ObjectPieceNum)) {
+			    CheckHitBBOBBCollisionDetection(tmpShip, tmpSpace, ObjectPieceNum)) {
 
 				if (((tmpSpace.ObjectType == eObjectType::BasePart) ||
 				     (tmpSpace.ObjectType == eObjectType::BigAsteroid)) &&
-				    !CheckHitBBMeshCollisionDetection(*tmpShip, tmpSpace, ObjectPieceNum))
+				    !CheckHitBBMeshCollisionDetection(tmpShip, tmpSpace, ObjectPieceNum))
 					return; // eSpaceCycle::Continue
 
 				// если столкновение с преградой которую не можем уничтожить
 				if (!NeedCheckCollision(tmpSpace)) {
 					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
-					if (tmpShip->ObjectStatus != eObjectStatus::Player)
-						tmpShip->Strength -= (tmpShip->StrengthStart / 0.5f) * tmpShip->TimeDelta;
+					if (tmpShip.ObjectStatus != eObjectStatus::Player)
+						tmpShip.Strength -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
 					else
-						tmpShip->Strength -= (tmpShip->StrengthStart / 2.0f) * tmpShip->TimeDelta;
+						tmpShip.Strength -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
 				} else {
-					float StrTMP = tmpShip->Strength;
-					tmpShip->Strength -= tmpSpace.Strength / tmpShip->ResistanceHull;
+					float StrTMP = tmpShip.Strength;
+					tmpShip.Strength -= tmpSpace.Strength / tmpShip.ResistanceHull;
 					tmpSpace.Strength -= StrTMP / tmpSpace.ResistanceHull;
 				}
-				if (!NeedCheckCollision(*tmpShip))
+				if (!NeedCheckCollision(tmpShip))
 					tmpSpace.Strength = 0.0f;
 
 
 				// если уже все... удаляем
 				if (NeedCheckCollision(tmpSpace) &&
 				    (tmpSpace.Strength <= 0.0f)) {
-					AddPlayerBonus(tmpSpace, tmpShip->ObjectStatus);
+					AddPlayerBonus(tmpSpace, tmpShip.ObjectStatus);
 
 					switch (tmpSpace.ObjectType) {
 					case eObjectType::SmallAsteroid:
@@ -608,32 +598,31 @@ void DetectCollisionAllObject3D()
 					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
 
-				if (NeedCheckCollision(*tmpShip) &&
+				if (NeedCheckCollision(tmpShip) &&
 					// если уже все... удаляем
-				    (tmpShip->Strength <= 0.0f)) {
+				    (tmpShip.Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
-					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
-						switch (tmpShip->ObjectType) {
+					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
+						switch (tmpShip.ObjectType) {
 						case eObjectType::AlienFighter:
-							CreateSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(tmpShip, 2, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
 							break;
 						case eObjectType::EarthFighter:
-							CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
 							break;
 						case eObjectType::AlienMotherShip:
-							CreateSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+							CreateSpaceExplosion(tmpShip, 33, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
 							break;
 						case eObjectType::PirateShip:
-							if (tmpShip->InternalType <= 5)
-								CreateSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+							if (tmpShip.InternalType <= 5)
+								CreateSpaceExplosion(tmpShip, 3, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
 							else
-								CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum);
+								CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
 							break;
 						default:
 							break;
 						}
-						delete tmpShip;
-						tmpShip = nullptr;
+						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 
 						// break space cycle
 						switch (SpaceCycleCommand) {
@@ -647,54 +636,53 @@ void DetectCollisionAllObject3D()
 							break;
 						}
 
-					} else {
-						// запоминаем, что взорвалось
-						PlayerDeadObjectPieceNum = ObjectPieceNum;
-					}
+					} else
+						PlayerDeadObjectPieceNum = ObjectPieceNum; // запоминаем, что взорвалось
 				}
 			}
 		});
+		if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue)
+			return;
 
 		// проверяем на столкновение с наземнымы объектами
 		// 1 - радиус-радиус
 		// 2 - AABB-AABB
 		// 3 - OBB-OBB
 		// 4 - HitBB-HitBB
-		if (tmpShip) // FIXME should be revised, when tmpShip will also have ForEach...()
-		ForEachGroundObject([&tmpShip] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
+		ForEachGroundObject([&tmpShip, &ShipCycleCommand] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 			int ObjectPieceNum1;
 			int ObjectPieceNum2;
-			if (vw_SphereSphereCollision(tmpShip->Radius, tmpShip->Location,
+			if (vw_SphereSphereCollision(tmpShip.Radius, tmpShip.Location,
 						     tmpGround.Radius, tmpGround.Location, tmpGround.PrevLocation) &&
-			    vw_SphereAABBCollision(tmpShip->AABB, tmpShip->Location,
+			    vw_SphereAABBCollision(tmpShip.AABB, tmpShip.Location,
 						   tmpGround.Radius, tmpGround.Location, tmpGround.PrevLocation) &&
-			    vw_SphereOBBCollision(tmpShip->OBB.Box, tmpShip->OBB.Location, tmpShip->Location, tmpShip->CurrentRotationMat,
+			    vw_SphereOBBCollision(tmpShip.OBB.Box, tmpShip.OBB.Location, tmpShip.Location, tmpShip.CurrentRotationMat,
 						  tmpGround.Radius, tmpGround.Location, tmpGround.PrevLocation) &&
-			    CheckHitBBHitBBCollisionDetection(*tmpShip, tmpGround, ObjectPieceNum1, ObjectPieceNum2)) {
+			    CheckHitBBHitBBCollisionDetection(tmpShip, tmpGround, ObjectPieceNum1, ObjectPieceNum2)) {
 
 				if ((tmpGround.ObjectType == eObjectType::CivilianBuilding) &&
-				    !CheckHitBBMeshCollisionDetection(*tmpShip, tmpGround, ObjectPieceNum2))
+				    !CheckHitBBMeshCollisionDetection(tmpShip, tmpGround, ObjectPieceNum2))
 						return; // eGroundCycle::Continue
 
 				// если столкновение с преградой которую не можем уничтожить
 				if (!NeedCheckCollision(tmpGround)) {
 					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
-					if (tmpShip->ObjectStatus != eObjectStatus::Player)
-						tmpShip->Strength -= (tmpShip->StrengthStart / 0.5f) * tmpShip->TimeDelta;
+					if (tmpShip.ObjectStatus != eObjectStatus::Player)
+						tmpShip.Strength -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
 					else
-						tmpShip->Strength -= (tmpShip->StrengthStart / 2.0f) * tmpShip->TimeDelta;
+						tmpShip.Strength -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
 				} else {
-					float StrTMP = tmpShip->Strength;
-					tmpShip->Strength -= tmpGround.Strength / tmpShip->ResistanceHull;
+					float StrTMP = tmpShip.Strength;
+					tmpShip.Strength -= tmpGround.Strength / tmpShip.ResistanceHull;
 					tmpGround.Strength -= StrTMP / tmpGround.ResistanceHull;
 				}
-				if (!NeedCheckCollision(*tmpShip))
+				if (!NeedCheckCollision(tmpShip))
 					tmpGround.Strength = 0.0f;
 
 				// если уже все... удаляем
 				if (NeedCheckCollision(tmpGround) &&
 				    (tmpGround.Strength <= 0.0f)) {
-					AddPlayerBonus(tmpGround, tmpShip->ObjectStatus);
+					AddPlayerBonus(tmpGround, tmpShip.ObjectStatus);
 
 					switch (tmpGround.ObjectType) {
 					case eObjectType::PirateBuilding:
@@ -709,32 +697,31 @@ void DetectCollisionAllObject3D()
 					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 				}
 
-				if (NeedCheckCollision(*tmpShip) &&
+				if (NeedCheckCollision(tmpShip) &&
 					// если уже все... удаляем
-				    (tmpShip->Strength <= 0.0f)) {
+				    (tmpShip.Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
-					if (tmpShip->ObjectStatus != eObjectStatus::Player) {
-						switch (tmpShip->ObjectType) {
+					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
+						switch (tmpShip.ObjectType) {
 						case eObjectType::AlienFighter:
-							CreateSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(tmpShip, 2, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::EarthFighter:
-							CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::AlienMotherShip:
-							CreateSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							CreateSpaceExplosion(tmpShip, 33, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
 							break;
 						case eObjectType::PirateShip:
-							if (tmpShip->InternalType <= 5)
-								CreateSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+							if (tmpShip.InternalType <= 5)
+								CreateSpaceExplosion(tmpShip, 3, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
 							else
-								CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, ObjectPieceNum1);
+								CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
 							break;
 						default:
 							break;
 						}
-						delete tmpShip;
-						tmpShip = nullptr;
+						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 
 						// break ground cycle
 						switch (GroundCycleCommand) {
@@ -748,15 +735,12 @@ void DetectCollisionAllObject3D()
 							break;
 						}
 
-					} else {
-						// запоминаем, что взорвалось
-						PlayerDeadObjectPieceNum = ObjectPieceNum1;
-					}
+					} else
+						PlayerDeadObjectPieceNum = ObjectPieceNum1; // запоминаем, что взорвалось
 				}
 			}
 		});
-		tmpShip = tmpShip2;
-	}
+	});
 
 	ForEachSpaceShipPair([] (cSpaceShip &FirstShip, cSpaceShip &SecondShip, eShipPairCycle &Command) {
 		int ObjectPieceNum1;

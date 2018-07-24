@@ -36,10 +36,15 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
 // Указатели на начальный и конечный объект в списке
 cSpaceShip *StartSpaceShip = nullptr;
 cSpaceShip *EndSpaceShip = nullptr;
 
+} // unnamed namespace
+
+// FIXME should be fixed, don't allow global scope interaction for local variables
 extern bool PlayerFighterLeftEng;
 extern bool PlayerFighterRightEng;
 
