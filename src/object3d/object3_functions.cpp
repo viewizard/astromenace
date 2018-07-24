@@ -593,17 +593,15 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 	float TargetDist2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp) {
-		cSpaceShip *tmpShip2 = tmp->Next;
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
 		// если по этому надо стрелять
-		if (NeedCheckCollision(*tmp) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
+		if (NeedCheckCollision(tmpShip) &&
+		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
+		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
 
-			sVECTOR3D tmpLocation = tmp->GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
-			sVECTOR3D RealLocation = tmp->Location + tmpLocation;
+			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
+			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat); // поворачиваем в плоскость объекта
+			sVECTOR3D RealLocation = tmpShip.Location + tmpLocation;
 
 			// учитываем, если лазер - наводить не надо
 			if (WeaponType != 110) {
@@ -616,10 +614,10 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 				float ObjCurrentTime = CurrentDist / ProjectileSpeed;
 
 				// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-				sVECTOR3D FutureLocation = tmp->Orientation ^ (tmp->Speed * ObjCurrentTime);
+				sVECTOR3D FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * ObjCurrentTime);
 				// учитываем камеру...
 				sVECTOR3D CamPosTTT(0.0f, 0.0f, 0.0f);
-				if (tmp->ObjectStatus == eObjectStatus::Player)
+				if (tmpShip.ObjectStatus == eObjectStatus::Player)
 					CamPosTTT = GameCameraMovement ^ (GameCameraGetSpeed() * ObjCurrentTime);
 
 				// находи точку по середине... это нам и надо... туда целимся...
@@ -629,10 +627,10 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 				float PossibleDist = TTT.Length();
 				float PoprTime = PossibleDist / ProjectileSpeed;
 
-				FutureLocation = tmp->Orientation ^ (tmp->Speed * PoprTime);
+				FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * PoprTime);
 				// учитываем камеру...
 				CamPosTTT = sVECTOR3D{0.0f, 0.0f, 0.0f};
-				if (tmp->ObjectStatus == eObjectStatus::Player)
+				if (tmpShip.ObjectStatus == eObjectStatus::Player)
 					CamPosTTT = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
 
 				RealLocation = RealLocation + FutureLocation + CamPosTTT;
@@ -650,9 +648,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 				TargetLocked = true;
 			}
 		}
-
-		tmp = tmpShip2;
-	}
+	});
 
 	// находим направление и углы нацеливания на цель, если нужно
 	if (TargetLocked) {
