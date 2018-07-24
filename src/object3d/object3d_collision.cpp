@@ -1278,57 +1278,50 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверка для всех кораблей
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	cSpaceShip *tmpShip = StartSpaceShip;
-	while (tmpShip) {
-		cSpaceShip *tmpShip2 = tmpShip->Next;
-
-		if (NeedCheckCollision(*tmpShip) &&
-		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip->ObjectStatus == eObjectStatus::Enemy)) ||
-		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip->ObjectStatus == eObjectStatus::Ally) || (tmpShip->ObjectStatus == eObjectStatus::Player)))) &&
-		     (&DontTouchObject != tmpShip) && CheckSphereSphereDestroyDetection(*tmpShip, Point, Radius, Distance2))) {
+	ForEachSpaceShip([&] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
+		if (NeedCheckCollision(tmpShip) &&
+		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)) ||
+		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player)))) &&
+		     (&DontTouchObject != &tmpShip) && CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, Distance2))) {
 
 			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
 
 			// просто убираем щит
-			tmpShip->ShieldStrength = 0.0f;
+			tmpShip.ShieldStrength = 0.0f;
 
 			// отнимаем у всех по DamageHull
-			tmpShip->Strength -= DamageHull / tmpShip->ResistanceHull;
+			tmpShip.Strength -= DamageHull / tmpShip.ResistanceHull;
 
 			// если уже все... удаляем
-			if (tmpShip->Strength <= 0.0f) {
+			if ((tmpShip.Strength <= 0.0f) &&
+			    (tmpShip.ObjectStatus != eObjectStatus::Player)) { // если не корабль игрока, его удалим сами
 				// проверка, нужно начислять или нет
-				AddPlayerBonus(*tmpShip, ObjectStatus);
+				AddPlayerBonus(tmpShip, ObjectStatus);
 
-				// если не корабль игрока! его удалим сами
-				if (tmpShip->ObjectStatus != eObjectStatus::Player) {
-					switch (tmpShip->ObjectType) {
-					case eObjectType::AlienFighter:
-						CreateSpaceExplosion(*tmpShip, 2, tmpShip->Location, tmpShip->Speed, -1);
-						break;
-					case eObjectType::EarthFighter:
-						CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, -1);
-						break;
-					case eObjectType::AlienMotherShip:
-						CreateSpaceExplosion(*tmpShip, 33, tmpShip->Location, tmpShip->Speed, 0);
-						break;
-					case eObjectType::PirateShip:
-						if (tmpShip->InternalType <= 5)
-							CreateSpaceExplosion(*tmpShip, 3, tmpShip->Location, tmpShip->Speed, -1);
-						else
-							CreateSpaceExplosion(*tmpShip, 31, tmpShip->Location, tmpShip->Speed, 0);
-						break;
-					default:
-						break;
-					}
-					delete tmpShip;
-					tmpShip = nullptr;
+				switch (tmpShip.ObjectType) {
+				case eObjectType::AlienFighter:
+					CreateSpaceExplosion(tmpShip, 2, tmpShip.Location, tmpShip.Speed, -1);
+					break;
+				case eObjectType::EarthFighter:
+					CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, -1);
+					break;
+				case eObjectType::AlienMotherShip:
+					CreateSpaceExplosion(tmpShip, 33, tmpShip.Location, tmpShip.Speed, 0);
+					break;
+				case eObjectType::PirateShip:
+					if (tmpShip.InternalType <= 5)
+						CreateSpaceExplosion(tmpShip, 3, tmpShip.Location, tmpShip.Speed, -1);
+					else
+						CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, 0);
+					break;
+				default:
+					break;
 				}
+
+				ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 			}
 		}
-
-		tmpShip = tmpShip2;
-	}
+	});
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем все cGroundObject
