@@ -1054,18 +1054,16 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 		}
 	});
 
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp) {
-		cSpaceShip *tmpShip2 = tmp->Next;
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
 		// проверка, чтобы не считать свой корабль
-		if (NeedCheckCollision(*tmp) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
+		if (NeedCheckCollision(tmpShip) &&
+		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
+		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
 
 			// проверяем, спереди или сзади стоит противник
-			float tmp1 = A2 * tmp->Location.x + B2 * tmp->Location.y + C2 * tmp->Location.z + D2;
+			float tmp1 = A2 * tmpShip.Location.x + B2 * tmpShip.Location.y + C2 * tmpShip.Location.z + D2;
 			if (tmp1 > 0.0f) {
-				float TargetDist2TMP = A2 * tmp->Location.x + B2 * tmp->Location.y + C2 * tmp->Location.z + D2;
+				float TargetDist2TMP = A2 * tmpShip.Location.x + B2 * tmpShip.Location.y + C2 * tmpShip.Location.z + D2;
 
 				// проверяем, чтобы объект находился не ближе чем MinDistance
 				if ((MinDistance < TargetDist2TMP) && (MaxDistance > TargetDist2TMP)) {
@@ -1073,7 +1071,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 					// идущим по нашему курсу...
 
 					sVECTOR3D TargetAngleTMP;
-					TargetLocation = tmp->Location;
+					TargetLocation = tmpShip.Location;
 
 					// находим угол между плоскостью и прямой
 					float A3, B3, C3, D3;
@@ -1110,21 +1108,21 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 							Tdist = m * m + n * n + p * p;
 							TargetLocked = true;
 							TType = 3;
-							Target = tmp;
+							// FIXME we should use std::weak_ptr for target object instead
+							Target =  const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
 						}
 					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
 						TargetAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
 						TargetLocked = true;
 						TType = 3;
-						Target = tmp;
+						// FIXME we should use std::weak_ptr for target object instead
+						Target =  const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
 					}
 				}
 			}
 		}
-
-		tmp = tmpShip2;
-	}
+	});
 
 	// проверка по космическим объектам
 	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace, eSpaceCycle &UNUSED(Command)) {
