@@ -744,17 +744,15 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 	float TargetDist2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp) {
-		cSpaceShip *tmpShip2 = tmp->Next;
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
 		// если по этому надо стрелять
-		if (NeedCheckCollision(*tmp) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmp->ObjectStatus == eObjectStatus::Ally) || (tmp->ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmp->ObjectStatus == eObjectStatus::Enemy)))) {
+		if (NeedCheckCollision(tmpShip) &&
+		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
+		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
 
-			sVECTOR3D tmpLocation = tmp->GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmp->CurrentRotationMat); // поворачиваем в плоскость объекта
-			sVECTOR3D RealLocation = tmp->Location + tmpLocation;
+			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
+			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat); // поворачиваем в плоскость объекта
+			sVECTOR3D RealLocation = tmpShip.Location + tmpLocation;
 
 			// находим, за какое время снаряд долетит до объекта сейчас
 			sVECTOR3D TTT = Location - RealLocation;
@@ -765,10 +763,10 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 			float ObjCurrentTime = CurrentDist / ProjectileSpeed;
 
 			// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-			sVECTOR3D FutureLocation = tmp->Orientation ^ (tmp->Speed * ObjCurrentTime);
+			sVECTOR3D FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * ObjCurrentTime);
 			// учитываем камеру...
 			sVECTOR3D CamPosTTT{0.0f,0.0f,0.0f};
-			if (tmp->ObjectStatus == eObjectStatus::Player)
+			if (tmpShip.ObjectStatus == eObjectStatus::Player)
 				CamPosTTT = GameCameraMovement ^ (GameCameraGetSpeed() * ObjCurrentTime);
 
 			// находи точку по середине... это нам и надо... туда целимся...
@@ -778,23 +776,23 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 			float PossibleDist = TTT.Length();
 			float PoprTime = PossibleDist/ProjectileSpeed;
 
-			FutureLocation = tmp->Orientation ^ (tmp->Speed * PoprTime);
+			FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * PoprTime);
 			// учитываем камеру...
 			CamPosTTT = sVECTOR3D{0.0f, 0.0f, 0.0f};
-			if (tmp->ObjectStatus == eObjectStatus::Player)
+			if (tmpShip.ObjectStatus == eObjectStatus::Player)
 				CamPosTTT = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
 
 			RealLocation = RealLocation + FutureLocation + CamPosTTT;
 
 			// проверяем, если все точки выше
-			float tmp1 = A * (RealLocation.x + tmp->OBB.Box[0].x) + B * (RealLocation.y + tmp->OBB.Box[0].y) + C * (RealLocation.z + tmp->OBB.Box[0].z) + D;
-			float tmp2 = A * (RealLocation.x + tmp->OBB.Box[1].x) + B * (RealLocation.y + tmp->OBB.Box[1].y) + C * (RealLocation.z + tmp->OBB.Box[1].z) + D;
-			float tmp3 = A * (RealLocation.x + tmp->OBB.Box[2].x) + B * (RealLocation.y + tmp->OBB.Box[2].y) + C * (RealLocation.z + tmp->OBB.Box[2].z) + D;
-			float tmp4 = A * (RealLocation.x + tmp->OBB.Box[3].x) + B * (RealLocation.y + tmp->OBB.Box[3].y) + C * (RealLocation.z + tmp->OBB.Box[3].z) + D;
-			float tmp5 = A * (RealLocation.x + tmp->OBB.Box[4].x) + B * (RealLocation.y + tmp->OBB.Box[4].y) + C * (RealLocation.z + tmp->OBB.Box[4].z) + D;
-			float tmp6 = A * (RealLocation.x + tmp->OBB.Box[5].x) + B * (RealLocation.y + tmp->OBB.Box[5].y) + C * (RealLocation.z + tmp->OBB.Box[5].z) + D;
-			float tmp7 = A * (RealLocation.x + tmp->OBB.Box[6].x) + B * (RealLocation.y + tmp->OBB.Box[6].y) + C * (RealLocation.z + tmp->OBB.Box[6].z) + D;
-			float tmp8 = A * (RealLocation.x + tmp->OBB.Box[7].x) + B * (RealLocation.y + tmp->OBB.Box[7].y) + C * (RealLocation.z + tmp->OBB.Box[7].z) + D;
+			float tmp1 = A * (RealLocation.x + tmpShip.OBB.Box[0].x) + B * (RealLocation.y + tmpShip.OBB.Box[0].y) + C * (RealLocation.z + tmpShip.OBB.Box[0].z) + D;
+			float tmp2 = A * (RealLocation.x + tmpShip.OBB.Box[1].x) + B * (RealLocation.y + tmpShip.OBB.Box[1].y) + C * (RealLocation.z + tmpShip.OBB.Box[1].z) + D;
+			float tmp3 = A * (RealLocation.x + tmpShip.OBB.Box[2].x) + B * (RealLocation.y + tmpShip.OBB.Box[2].y) + C * (RealLocation.z + tmpShip.OBB.Box[2].z) + D;
+			float tmp4 = A * (RealLocation.x + tmpShip.OBB.Box[3].x) + B * (RealLocation.y + tmpShip.OBB.Box[3].y) + C * (RealLocation.z + tmpShip.OBB.Box[3].z) + D;
+			float tmp5 = A * (RealLocation.x + tmpShip.OBB.Box[4].x) + B * (RealLocation.y + tmpShip.OBB.Box[4].y) + C * (RealLocation.z + tmpShip.OBB.Box[4].z) + D;
+			float tmp6 = A * (RealLocation.x + tmpShip.OBB.Box[5].x) + B * (RealLocation.y + tmpShip.OBB.Box[5].y) + C * (RealLocation.z + tmpShip.OBB.Box[5].z) + D;
+			float tmp7 = A * (RealLocation.x + tmpShip.OBB.Box[6].x) + B * (RealLocation.y + tmpShip.OBB.Box[6].y) + C * (RealLocation.z + tmpShip.OBB.Box[6].z) + D;
+			float tmp8 = A * (RealLocation.x + tmpShip.OBB.Box[7].x) + B * (RealLocation.y + tmpShip.OBB.Box[7].y) + C * (RealLocation.z + tmpShip.OBB.Box[7].z) + D;
 
 			if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
 			    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
@@ -811,9 +809,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 				}
 			}
 		}
-
-		tmp = tmpShip2;
-	}
+	});
 
 	// находим направление и углы нацеливания на цель, если нужно
 	if (TargetLocked) {
