@@ -96,6 +96,14 @@ static void DetachSpaceShip(cSpaceShip *SpaceShip)
 		SpaceShip->Next->Prev = nullptr;
 }
 
+/*
+ * Create cAlienSpaceFighter object.
+ */
+cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum)
+{
+	return new cAlienSpaceFighter{SpaceShipNum};
+}
+
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------
@@ -123,6 +131,14 @@ void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap)
 		tmp->Draw(VertexOnlyPass, ShadowMap);
 		tmp = tmp2;
 	}
+}
+
+/*
+ * Release particular space ship.
+ */
+void ReleaseSpaceShip(cSpaceShip *Ship)
+{
+	delete Ship;
 }
 
 //-----------------------------------------------------------------------------

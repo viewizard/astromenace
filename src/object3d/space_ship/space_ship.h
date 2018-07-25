@@ -79,11 +79,20 @@ struct sShipWeaponSlot {
 };
 
 class cSpaceShip : public cObject3D {
-public:
-	// базовые конструктор и деструктор объекта
+	friend void UpdateAllSpaceShip(float Time);
+	friend void ReleaseSpaceShip(cSpaceShip *Ship);
+	friend void ReleaseAllSpaceShips();
+	friend void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function);
+	friend void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
+							     cSpaceShip &SecondObject,
+							     eShipPairCycle &Command)> function);
+
+protected:
+	// don't allow object of this class creation
 	cSpaceShip();
 	virtual ~cSpaceShip();
 
+public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 	// Установка положения объекта
@@ -212,31 +221,44 @@ public:
 	cSpaceShip *Prev{nullptr};
 };
 
-class cAlienSpaceFighter : public cSpaceShip {
-public:
+class cAlienSpaceFighter final : public cSpaceShip {
+	friend cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum);
+	friend void UpdateAllSpaceShip(float Time);
+	friend void ReleaseSpaceShip(cSpaceShip *Ship);
+	friend void ReleaseAllSpaceShips();
+private:
 	explicit cAlienSpaceFighter(int SpaceShipNum);
+	~cAlienSpaceFighter() = default;
 };
 
-class cAlienSpaceMotherShip : public cSpaceShip {
+class cAlienSpaceMotherShip final : public cSpaceShip {
 public:
 	explicit cAlienSpaceMotherShip(int SpaceShipNum);
+	~cAlienSpaceMotherShip() = default;
 };
 
-class cEarthSpaceFighter : public cSpaceShip {
+class cEarthSpaceFighter final : public cSpaceShip {
 public:
 	explicit cEarthSpaceFighter(int SpaceShipNum);
+	~cEarthSpaceFighter() = default;
 };
 
-class cPirateShip : public cSpaceShip {
+class cPirateShip final : public cSpaceShip {
 public:
 	explicit cPirateShip(int PirateShipNum);
+	~cPirateShip() = default;
 };
 
+
+// Create cAlienSpaceFighter object.
+cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum);
 
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceShip(float Time);
 // Прорисовываем все объекты
 void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
+// Release particular space ship.
+void ReleaseSpaceShip(cSpaceShip *Ship);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceShips();
 // Managed cycle for each space ship.

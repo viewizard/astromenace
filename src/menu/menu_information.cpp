@@ -44,7 +44,7 @@ namespace astromenace {
 cEarthSpaceFighter *InfoFighter = nullptr;
 std::weak_ptr<cWeapon> InfoWeapon{};
 std::weak_ptr<cProjectile> InfoMine{};
-cAlienSpaceFighter *InfoAlien = nullptr;
+cSpaceShip *InfoAlien = nullptr;
 cAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
 cPirateShip *InfoPirateShip = nullptr;
 std::weak_ptr<cGroundObject> InfoGroundObject{};
@@ -265,7 +265,7 @@ void DestroyInfoObject()
 	ReleaseWeapon(InfoWeapon);
 	ReleaseProjectile(InfoMine);
 	if (InfoAlien != nullptr) {
-		delete InfoAlien;
+		ReleaseSpaceShip(InfoAlien);
 		InfoAlien = nullptr;
 	}
 	if (InfoAlienMotherShip != nullptr) {
@@ -386,7 +386,7 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
-		InfoAlien = new cAlienSpaceFighter(tmpCreateNum);
+		InfoAlien = CreateAlienSpaceFighter(tmpCreateNum);
 		InfoAlien->ObjectStatus = eObjectStatus::none;
 		InfoAlien->EngineDestroyType = true;
 		InfoAlien->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoAlien->AABB[6].y, 0.0f});

@@ -714,7 +714,7 @@ void cMissionScript::UpdateTimeLine()
 
 		case constexpr_hash_djb2a("AlienFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cAlienSpaceFighter *SpaceShip = new cAlienSpaceFighter(tmpType);
+				cSpaceShip *SpaceShip = CreateAlienSpaceFighter(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
