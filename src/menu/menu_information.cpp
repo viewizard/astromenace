@@ -41,12 +41,9 @@ namespace astromenace {
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-cEarthSpaceFighter *InfoFighter = nullptr;
+cSpaceShip *InfoShip{nullptr};
 std::weak_ptr<cWeapon> InfoWeapon{};
 std::weak_ptr<cProjectile> InfoMine{};
-cSpaceShip *InfoAlien = nullptr;
-cAlienSpaceMotherShip *InfoAlienMotherShip = nullptr;
-cPirateShip *InfoPirateShip = nullptr;
 std::weak_ptr<cGroundObject> InfoGroundObject{};
 
 
@@ -258,24 +255,12 @@ int GetInfoSwitchToGroup(int Group)
 //------------------------------------------------------------------------------------
 void DestroyInfoObject()
 {
-	if (InfoFighter != nullptr) {
-		delete InfoFighter;
-		InfoFighter = nullptr;
+	if (InfoShip != nullptr) {
+		ReleaseSpaceShip(InfoShip);
+		InfoShip = nullptr;
 	}
 	ReleaseWeapon(InfoWeapon);
 	ReleaseProjectile(InfoMine);
-	if (InfoAlien != nullptr) {
-		ReleaseSpaceShip(InfoAlien);
-		InfoAlien = nullptr;
-	}
-	if (InfoAlienMotherShip != nullptr) {
-		delete InfoAlienMotherShip;
-		InfoAlienMotherShip = nullptr;
-	}
-	if (InfoPirateShip != nullptr) {
-		delete InfoPirateShip;
-		InfoPirateShip = nullptr;
-	}
 	ReleaseGroundObject(InfoGroundObject);
 }
 
@@ -299,34 +284,34 @@ void CreateInfoObject()
 
 	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		int tmpCreateNum = CreateNum-InfoFighterStart+1;
-		InfoFighter = new cEarthSpaceFighter(tmpCreateNum);
-		InfoFighter->ObjectStatus = eObjectStatus::none;
-		InfoFighter->EngineDestroyType = true;
-		InfoFighter->SetLocation(sVECTOR3D{1000.0f,
-						   -1000.0f - InfoFighter->AABB[6].y,
-						   0.0f});
-		ObjectBaseLocation = InfoFighter->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		InfoShip = new cEarthSpaceFighter(tmpCreateNum);
+		InfoShip->ObjectStatus = eObjectStatus::none;
+		InfoShip->EngineDestroyType = true;
+		InfoShip->SetLocation(sVECTOR3D{1000.0f,
+						-1000.0f - InfoShip->AABB[6].y,
+						0.0f});
+		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
 		Point = sVECTOR3D{1000.0f,
-				  -1000.0f + InfoFighter->Height / 3.0f,
+				  -1000.0f + InfoShip->Height / 3.0f,
 				  0.0f};
 
 		PointCamera = sVECTOR3D{0.0f,
-					(InfoFighter->Length + InfoFighter->Width + InfoFighter->Height) * 0.24f + InfoFighter->Height * 0.3f,
-					-(InfoFighter->Length + InfoFighter->Width + InfoFighter->Height) * 0.56f - InfoFighter->Height * 0.7f};
-		InfoObjectWidth = InfoFighter->Width;
-		InfoObjectLength = InfoFighter->Length;
-		InfoObjectHeight = InfoFighter->Height;
-		InfoObjectStrength = InfoFighter->StrengthStart;
-		InfoObjectWeaponQuantity = InfoFighter->WeaponSlots.size();
-		InfoObjectEngineQuantity = InfoFighter->Engines.size();
+					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
+					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
+		InfoObjectWidth = InfoShip->Width;
+		InfoObjectLength = InfoShip->Length;
+		InfoObjectHeight = InfoShip->Height;
+		InfoObjectStrength = InfoShip->StrengthStart;
+		InfoObjectWeaponQuantity = InfoShip->WeaponSlots.size();
+		InfoObjectEngineQuantity = InfoShip->Engines.size();
 
-		for (auto &tmpEngine : InfoFighter->Engines) {
+		for (auto &tmpEngine : InfoShip->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoFighter->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
+		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
@@ -386,79 +371,79 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
-		InfoAlien = CreateAlienSpaceFighter(tmpCreateNum);
-		InfoAlien->ObjectStatus = eObjectStatus::none;
-		InfoAlien->EngineDestroyType = true;
-		InfoAlien->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoAlien->AABB[6].y, 0.0f});
-		ObjectBaseLocation = InfoAlien->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		InfoShip = CreateAlienSpaceFighter(tmpCreateNum);
+		InfoShip->ObjectStatus = eObjectStatus::none;
+		InfoShip->EngineDestroyType = true;
+		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});
+		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f, -1000.0f + InfoAlien->Height / 3.0f, 0.0f};
+		Point = sVECTOR3D{1000.0f, -1000.0f + InfoShip->Height / 3.0f, 0.0f};
 
 		PointCamera = sVECTOR3D{0.0f,
-					(InfoAlien->Length + InfoAlien->Width + InfoAlien->Height) * 0.24f + InfoAlien->Height * 0.3f,
-					-(InfoAlien->Length + InfoAlien->Width + InfoAlien->Height) * 0.56f - InfoAlien->Height * 0.7f};
+					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
+					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
 
-		InfoObjectWidth = InfoAlien->Width;
-		InfoObjectLength = InfoAlien->Length;
-		InfoObjectHeight = InfoAlien->Height;
-		InfoObjectStrength = InfoAlien->StrengthStart;
+		InfoObjectWidth = InfoShip->Width;
+		InfoObjectLength = InfoShip->Length;
+		InfoObjectHeight = InfoShip->Height;
+		InfoObjectStrength = InfoShip->StrengthStart;
 
-		for (auto &tmpEngine : InfoAlien->Engines) {
+		for (auto &tmpEngine : InfoShip->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoAlien->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
+		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
-		InfoAlienMotherShip = new cAlienSpaceMotherShip(tmpCreateNum);
-		InfoAlienMotherShip->ObjectStatus = eObjectStatus::none;
-		InfoAlienMotherShip->EngineDestroyType = true;
-		InfoAlienMotherShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoAlienMotherShip->AABB[6].y, 0.0f});
-		ObjectBaseLocation = InfoAlienMotherShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		InfoShip = new cAlienSpaceMotherShip(tmpCreateNum);
+		InfoShip->ObjectStatus = eObjectStatus::none;
+		InfoShip->EngineDestroyType = true;
+		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});
+		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f, -1000.0f + InfoAlienMotherShip->Height / 3.0f, 0.0f};
+		Point = sVECTOR3D{1000.0f, -1000.0f + InfoShip->Height / 3.0f, 0.0f};
 
 		PointCamera = sVECTOR3D{0.0f,
-					(InfoAlienMotherShip->Length + InfoAlienMotherShip->Width + InfoAlienMotherShip->Height) * 0.24f + InfoAlienMotherShip->Height * 0.3f,
-					-(InfoAlienMotherShip->Length + InfoAlienMotherShip->Width + InfoAlienMotherShip->Height) * 0.56f - InfoAlienMotherShip->Height * 0.7f};
-		InfoObjectWidth = InfoAlienMotherShip->Width;
-		InfoObjectLength = InfoAlienMotherShip->Length;
-		InfoObjectHeight = InfoAlienMotherShip->Height;
-		InfoObjectStrength = InfoAlienMotherShip->StrengthStart;
+					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
+					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
+		InfoObjectWidth = InfoShip->Width;
+		InfoObjectLength = InfoShip->Length;
+		InfoObjectHeight = InfoShip->Height;
+		InfoObjectStrength = InfoShip->StrengthStart;
 
-		for (auto &tmpEngine : InfoAlienMotherShip->Engines) {
+		for (auto &tmpEngine : InfoShip->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoAlienMotherShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
+		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
-		InfoPirateShip = new cPirateShip(tmpCreateNum);
-		InfoPirateShip->ObjectStatus = eObjectStatus::none;
-		InfoPirateShip->EngineDestroyType = true;
-		InfoPirateShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoPirateShip->AABB[6].y, 0.0f});
-		ObjectBaseLocation = InfoPirateShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		InfoShip = new cPirateShip(tmpCreateNum);
+		InfoShip->ObjectStatus = eObjectStatus::none;
+		InfoShip->EngineDestroyType = true;
+		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});
+		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f, -1000.0f + InfoPirateShip->Height / 3.0f, 0.0f};
+		Point = sVECTOR3D{1000.0f, -1000.0f + InfoShip->Height / 3.0f, 0.0f};
 
 		PointCamera = sVECTOR3D{0.0f,
-					(InfoPirateShip->Length + InfoPirateShip->Width + InfoPirateShip->Height) * 0.24f + InfoPirateShip->Height * 0.3f,
-					-(InfoPirateShip->Length + InfoPirateShip->Width + InfoPirateShip->Height) * 0.56f - InfoPirateShip->Height * 0.7f};
-		InfoObjectWidth = InfoPirateShip->Width;
-		InfoObjectLength = InfoPirateShip->Length;
-		InfoObjectHeight = InfoPirateShip->Height;
-		InfoObjectStrength = InfoPirateShip->StrengthStart;
+					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
+					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
+		InfoObjectWidth = InfoShip->Width;
+		InfoObjectLength = InfoShip->Length;
+		InfoObjectHeight = InfoShip->Height;
+		InfoObjectStrength = InfoShip->StrengthStart;
 
-		for (auto &tmpEngine : InfoPirateShip->Engines) {
+		for (auto &tmpEngine : InfoShip->Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
 				sharedEngine->SpeedOnCreation = -1.0f;
 		}
 
-		InfoPirateShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
+		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
@@ -1454,9 +1439,9 @@ void InformationDrawObject()
 
 
 
-	if (InfoFighter) {
-		InfoFighter->SetLocation(TMPLocation);
-		InfoFighter->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
+	if (InfoShip) {
+		InfoShip->SetLocation(TMPLocation);
+		InfoShip->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (auto sharedWeapon = InfoWeapon.lock()) {
 		sharedWeapon->SetLocation(TMPLocation);
@@ -1465,18 +1450,6 @@ void InformationDrawObject()
 	if (auto sharedMine = InfoMine.lock()) {
 		sharedMine->SetLocation(TMPLocation);
 		sharedMine->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
-	}
-	if (InfoAlien) {
-		InfoAlien->SetLocation(TMPLocation);
-		InfoAlien->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
-	}
-	if (InfoAlienMotherShip) {
-		InfoAlienMotherShip->SetLocation(TMPLocation);
-		InfoAlienMotherShip->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
-	}
-	if (InfoPirateShip) {
-		InfoPirateShip->SetLocation(TMPLocation);
-		InfoPirateShip->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (auto sharedObject = InfoGroundObject.lock()) {
 		sharedObject->SetLocation(TMPLocation);
@@ -1495,29 +1468,20 @@ void InformationDrawObject()
 		// and tracks, etc., we are forced to disable face's culling during shadows map generation
 		vw_CullFace(eCullFace::NONE);
 
-		if (InfoFighter) {
-			InfoFighter->Draw(true);
-		}
-		if (auto sharedWeapon = InfoWeapon.lock())
-			sharedWeapon->Draw(true);
-		if (auto sharedMine = InfoMine.lock())
-			sharedMine->Draw(true);
-		if (InfoAlien) {
-			InfoAlien->Draw(true);
-		}
-		if (InfoAlienMotherShip) {
-			InfoAlienMotherShip->Draw(true);
-		}
-		if (InfoPirateShip) {
-			InfoPirateShip->Draw(true);
+		if (InfoShip) {
+			InfoShip->Draw(true);
 			// рисуем оружие
-			if (!InfoPirateShip->WeaponSlots.empty()) {
-				for (auto &tmpWeaponSlot : InfoPirateShip->WeaponSlots) {
+			if (!InfoShip->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : InfoShip->WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->Draw(true);
 				}
 			}
 		}
+		if (auto sharedWeapon = InfoWeapon.lock())
+			sharedWeapon->Draw(true);
+		if (auto sharedMine = InfoMine.lock())
+			sharedMine->Draw(true);
 		if (auto sharedObject = InfoGroundObject.lock())
 			sharedObject->Draw(true);
 
@@ -1530,38 +1494,23 @@ void InformationDrawObject()
 
 
 
-	if (InfoFighter) {
-		InfoFighter->Draw(false, ShadowMap);
+	if (InfoShip) {
+		InfoShip->Draw(false, ShadowMap);
+		// рисуем оружие
+		if (!InfoShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : InfoShip->WeaponSlots) {
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+					sharedWeapon->Draw(false, ShadowMap);
+			}
+		}
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoFighter->Engines);
+		vw_DrawParticleSystems(InfoShip->Engines);
 	}
 	if (auto sharedWeapon = InfoWeapon.lock())
 		sharedWeapon->Draw(false, ShadowMap);
 	if (auto sharedMine = InfoMine.lock()) {
 		sharedMine->Draw(false, ShadowMap);
 		vw_DrawParticleSystems(sharedMine->GraphicFX); // рисуем эффекты двигателей только для этой модели
-	}
-	if (InfoAlien) {
-		InfoAlien->Draw(false, ShadowMap);
-		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoAlien->Engines);
-	}
-	if (InfoAlienMotherShip) {
-		InfoAlienMotherShip->Draw(false, ShadowMap);
-		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoAlienMotherShip->Engines);
-	}
-	if (InfoPirateShip) {
-		InfoPirateShip->Draw(false, ShadowMap);
-		// рисуем оружие
-		if (!InfoPirateShip->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : InfoPirateShip->WeaponSlots) {
-				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
-					sharedWeapon->Draw(false, ShadowMap);
-			}
-		}
-		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoPirateShip->Engines);
 	}
 	if (auto sharedObject = InfoGroundObject.lock())
 		sharedObject->Draw(false, ShadowMap);
