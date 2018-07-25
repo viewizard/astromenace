@@ -207,21 +207,21 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cPirateShip::cPirateShip(int PirateShipNum)
+cPirateShip::cPirateShip(int SpaceShipNum)
 {
-	if ((PirateShipNum <= 0) ||
-	    (static_cast<unsigned>(PirateShipNum) > PresetPirateShipDataCount)) {
+	if ((SpaceShipNum <= 0) ||
+	    (static_cast<unsigned>(SpaceShipNum) > PresetPirateShipDataCount)) {
 		std::cerr << __func__ << "(): "
 			  << "Could not init cPirateShip object with Number "
-			  << PirateShipNum << "\n";
+			  << SpaceShipNum << "\n";
 		return;
 	}
 
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::PirateShip;
-	InternalType = PirateShipNum;
+	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
-	if (PirateShipNum > 5)
+	if (SpaceShipNum > 5)
 		PromptDrawDist2 = 20000.0f; // большие корабли пиратов
 
 	ResistanceHull = 1.0f;
@@ -229,23 +229,23 @@ cPirateShip::cPirateShip(int PirateShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	Strength = StrengthStart = PresetPirateShipData[PirateShipNum - 1].Strength / GameEnemyArmorPenalty;
-	unsigned int EngineQuantity = PresetPirateShipData[PirateShipNum - 1].EngineQuantity;
+	Strength = StrengthStart = PresetPirateShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
+	unsigned int EngineQuantity = PresetPirateShipData[SpaceShipNum - 1].EngineQuantity;
 
-	LoadObjectData(PresetPirateShipData[PirateShipNum - 1].Name, *this);
+	LoadObjectData(PresetPirateShipData[SpaceShipNum - 1].Name, *this);
 
 	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Chunks.size(); i++) {
-		Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[PirateShipNum - 1].TextureName);
-		if (!PresetPirateShipData[PirateShipNum - 1].NormalMapName.empty() && GameConfig().UseGLSL120)
-			NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[PirateShipNum - 1].NormalMapName);
+		Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].TextureName);
+		if (!PresetPirateShipData[SpaceShipNum - 1].NormalMapName.empty() && GameConfig().UseGLSL120)
+			NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].NormalMapName);
 	}
 
 	// начальные установки для двигателей
 	EnginesLocation.resize(EngineQuantity);
 	Engines.resize(EngineQuantity);
 
-	switch (PirateShipNum) {
+	switch (SpaceShipNum) {
 	case 1:
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
