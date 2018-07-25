@@ -35,8 +35,8 @@
 namespace viewizard {
 namespace astromenace {
 
-extern cEarthSpaceFighter *WorkshopFighterGame;
-extern cEarthSpaceFighter *WorkshopNewFighter;
+extern cSpaceShip *WorkshopFighterGame;
+extern cSpaceShip *WorkshopNewFighter;
 extern int	CurrentWorkshopNewFighter;
 extern int	CurrentWorkshopNewWeapon;
 extern float CurrentAlert2;
@@ -226,7 +226,7 @@ int GetWorkshopShipCost(int Num)
 
 
 
-int GetWorkshopShipRepairCost(int Num, cEarthSpaceFighter *Fighter)
+int GetWorkshopShipRepairCost(int Num, cSpaceShip *Fighter)
 {
 	int ShipCost = GetWorkshopShipCost(Num) * GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 	// расчет стоимости ремонта корабля
@@ -238,7 +238,7 @@ int GetWorkshopShipRepairCost(int Num, cEarthSpaceFighter *Fighter)
 
 
 
-int GetWorkshopShipFullCost(int Num, cEarthSpaceFighter *Fighter)
+int GetWorkshopShipFullCost(int Num, cSpaceShip *Fighter)
 {
 	// полная стоимость корпуса корабля с повреждениями корабля
 	int ShipCost = GetWorkshopShipCost(Num) * GameConfig().Profile[CurrentProfile].ShipHullUpgrade -
@@ -335,12 +335,12 @@ void WorkshopCreateBuyShip()
 
 
 	// создаем объект
-	delete WorkshopFighterGame;
+	ReleaseSpaceShip(WorkshopFighterGame);
 
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopFighterGame = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
+	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	WorkshopFighterGame->EngineDestroyType = true;
 	WorkshopFighterGame->ShowStrength = false;

@@ -284,7 +284,7 @@ void CreateInfoObject()
 
 	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		int tmpCreateNum = CreateNum-InfoFighterStart+1;
-		InfoShip = new cEarthSpaceFighter(tmpCreateNum);
+		InfoShip = CreateEarthSpaceFighter(tmpCreateNum);
 		InfoShip->ObjectStatus = eObjectStatus::none;
 		InfoShip->EngineDestroyType = true;
 		InfoShip->SetLocation(sVECTOR3D{1000.0f,
@@ -397,7 +397,7 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
-		InfoShip = new cAlienSpaceMotherShip(tmpCreateNum);
+		InfoShip = CreateAlienSpaceMotherShip(tmpCreateNum);
 		InfoShip->ObjectStatus = eObjectStatus::none;
 		InfoShip->EngineDestroyType = true;
 		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});
@@ -422,7 +422,7 @@ void CreateInfoObject()
 	}
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
-		InfoShip = new cPirateShip(tmpCreateNum);
+		InfoShip = CreatePirateShip(tmpCreateNum);
 		InfoShip->ObjectStatus = eObjectStatus::none;
 		InfoShip->EngineDestroyType = true;
 		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});

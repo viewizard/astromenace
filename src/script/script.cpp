@@ -54,7 +54,7 @@ extern bool ShowGameTime;
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
-extern cEarthSpaceFighter *PlayerFighter;
+extern cSpaceShip *PlayerFighter;
 // FIXME should be fixed, use 'include' instead
 float GameCameraGetSpeed();
 void SetGameMissionComplete();
@@ -698,7 +698,7 @@ void cMissionScript::UpdateTimeLine()
 		switch (TL.NameHash) {
 		case constexpr_hash_djb2a("EarthFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cEarthSpaceFighter *SpaceShip = new cEarthSpaceFighter(tmpType);
+				cSpaceShip *SpaceShip = CreateEarthSpaceFighter(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 
 				int tmpInteger{0};
@@ -721,14 +721,14 @@ void cMissionScript::UpdateTimeLine()
 
 		case constexpr_hash_djb2a("AlienMotherShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cAlienSpaceMotherShip *SpaceShip = new cAlienSpaceMotherShip(tmpType);
+				cSpaceShip *SpaceShip = CreateAlienSpaceMotherShip(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("PirateShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cPirateShip *SpaceShip = new cPirateShip(tmpType);
+				cSpaceShip *SpaceShip = CreatePirateShip(tmpType);
 				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;

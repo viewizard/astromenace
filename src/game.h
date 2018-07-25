@@ -39,7 +39,7 @@ struct sVECTOR3D;
 namespace astromenace {
 
 class cSpaceStars;
-class cEarthSpaceFighter;
+class cSpaceShip;
 enum class eCommand;
 enum class eMusicTheme;
 enum class eMenuStatus;
@@ -335,7 +335,7 @@ const char *GetWeaponIconName(int Num);
 //------------------------------------------------------------------------------------
 // game.cpp
 //------------------------------------------------------------------------------------
-extern cEarthSpaceFighter *PlayerFighter;
+extern cSpaceShip *PlayerFighter;
 
 extern int GameEnemyWeaponPenalty;
 extern int GameEnemyArmorPenalty;

@@ -38,8 +38,8 @@ namespace astromenace {
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-cEarthSpaceFighter *WorkshopFighterGame = nullptr;
-cEarthSpaceFighter *WorkshopNewFighter = nullptr;
+cSpaceShip *WorkshopFighterGame = nullptr;
+cSpaceShip *WorkshopNewFighter = nullptr;
 std::weak_ptr<cWeapon> WorkshopNewWeapon{};
 int	CurrentWorkshopNewFighter = 1;
 int	CurrentWorkshopNewWeapon = 1;
@@ -83,14 +83,14 @@ void WorkshopCreateShip(int Num)
 {
 	// создаем объект
 	if (WorkshopFighterGame != nullptr) {
-		delete WorkshopFighterGame;
+		ReleaseSpaceShip(WorkshopFighterGame);
 		WorkshopFighterGame = nullptr;
 	}
 
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopFighterGame = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
+	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 
 	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	WorkshopFighterGame->EngineDestroyType = true;
@@ -152,14 +152,14 @@ void WorkshopCreateNewShip()
 {
 	// создаем объект
 	if (WorkshopNewFighter != nullptr) {
-		delete WorkshopNewFighter;
+		ReleaseSpaceShip(WorkshopNewFighter);
 		WorkshopNewFighter = nullptr;
 	}
 
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopNewFighter = new cEarthSpaceFighter(CurrentWorkshopNewFighter);
+	WorkshopNewFighter = CreateEarthSpaceFighter(CurrentWorkshopNewFighter);
 
 	WorkshopNewFighter->ObjectStatus = eObjectStatus::none;
 	WorkshopNewFighter->EngineDestroyType = true;
@@ -261,11 +261,11 @@ void WorkshopCreate()
 void WorkshopDestroyData()
 {
 	if (WorkshopFighterGame != nullptr) {
-		delete WorkshopFighterGame;
+		ReleaseSpaceShip(WorkshopFighterGame);
 		WorkshopFighterGame = nullptr;
 	}
 	if (WorkshopNewFighter != nullptr) {
-		delete WorkshopNewFighter;
+		ReleaseSpaceShip(WorkshopNewFighter);
 		WorkshopNewFighter = nullptr;
 	}
 	ReleaseWeapon(WorkshopNewWeapon);

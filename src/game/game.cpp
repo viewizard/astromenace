@@ -108,7 +108,7 @@ bool GameMissionCompleteStatus = false;
 bool GameMissionCompleteStatusShowDialog = false;
 
 // собственно сам файтер
-cEarthSpaceFighter *PlayerFighter = nullptr;
+cSpaceShip *PlayerFighter = nullptr;
 
 
 
@@ -894,7 +894,7 @@ void RealExitGame()
 {
 	// удаляем корабль игрока
 	if (PlayerFighter != nullptr) {
-		delete PlayerFighter;
+		ReleaseSpaceShip(PlayerFighter);
 		PlayerFighter = nullptr;
 	}
 

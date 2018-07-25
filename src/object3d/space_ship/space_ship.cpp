@@ -104,6 +104,30 @@ cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum)
 	return new cAlienSpaceFighter{SpaceShipNum};
 }
 
+/*
+ * Create cAlienSpaceMotherShip object.
+ */
+cSpaceShip *CreateAlienSpaceMotherShip(int SpaceShipNum)
+{
+	return new cAlienSpaceMotherShip{SpaceShipNum};
+}
+
+/*
+ * Create cEarthSpaceFighter object.
+ */
+cSpaceShip *CreateEarthSpaceFighter(int SpaceShipNum)
+{
+	return new cEarthSpaceFighter{SpaceShipNum};
+}
+
+/*
+ * Create cPirateShip object.
+ */
+cSpaceShip *CreatePirateShip(int SpaceShipNum)
+{
+	return new cPirateShip{SpaceShipNum};
+}
+
 //-----------------------------------------------------------------------------
 // Проверяем все объекты, обновляем данные
 //-----------------------------------------------------------------------------

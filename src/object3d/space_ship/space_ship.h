@@ -232,26 +232,44 @@ private:
 };
 
 class cAlienSpaceMotherShip final : public cSpaceShip {
-public:
+	friend cSpaceShip *CreateAlienSpaceMotherShip(int SpaceShipNum);
+	friend void UpdateAllSpaceShip(float Time);
+	friend void ReleaseSpaceShip(cSpaceShip *Ship);
+	friend void ReleaseAllSpaceShips();
+private:
 	explicit cAlienSpaceMotherShip(int SpaceShipNum);
 	~cAlienSpaceMotherShip() = default;
 };
 
 class cEarthSpaceFighter final : public cSpaceShip {
-public:
+	friend cSpaceShip *CreateEarthSpaceFighter(int SpaceShipNum);
+	friend void UpdateAllSpaceShip(float Time);
+	friend void ReleaseSpaceShip(cSpaceShip *Ship);
+	friend void ReleaseAllSpaceShips();
+private:
 	explicit cEarthSpaceFighter(int SpaceShipNum);
 	~cEarthSpaceFighter() = default;
 };
 
 class cPirateShip final : public cSpaceShip {
-public:
-	explicit cPirateShip(int PirateShipNum);
+	friend cSpaceShip *CreatePirateShip(int SpaceShipNum);
+	friend void UpdateAllSpaceShip(float Time);
+	friend void ReleaseSpaceShip(cSpaceShip *Ship);
+	friend void ReleaseAllSpaceShips();
+private:
+	explicit cPirateShip(int SpaceShipNum);
 	~cPirateShip() = default;
 };
 
 
 // Create cAlienSpaceFighter object.
 cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum);
+// Create cAlienSpaceMotherShip object.
+cSpaceShip *CreateAlienSpaceMotherShip(int SpaceShipNum);
+// Create cEarthSpaceFighter object.
+cSpaceShip *CreateEarthSpaceFighter(int SpaceShipNum);
+// Create cPirateShip object.
+cSpaceShip *CreatePirateShip(int SpaceShipNum);
 
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceShip(float Time);

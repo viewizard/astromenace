@@ -38,7 +38,7 @@ namespace astromenace {
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-extern cEarthSpaceFighter *PlayerFighter;
+extern cSpaceShip *PlayerFighter;
 int RightDrawLevelPos = 1;
 int LeftDrawLevelPos = 1;
 

@@ -230,7 +230,7 @@ void InitGamePlayerShip()
 	if (GameConfig().Profile[CurrentProfile].Ship == 0)
 		std::cerr << __func__ << "(): " << "Error, Pilot Profile not created.\n";
 
-	PlayerFighter = new cEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
+	PlayerFighter = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
 
 	PlayerFighter->ShipShake.emplace_back(sVECTOR3D{0.0f, 0.0f, 1.0f},
 					      0,
@@ -419,7 +419,7 @@ void GamePlayerShip()
 			PlayMusicTheme(eMusicTheme::FAILED, 2000, 2000);
 
 			// удаляем и уходим отсюда
-			delete PlayerFighter;
+			ReleaseSpaceShip(PlayerFighter);
 			PlayerFighter = nullptr;
 
 			// 20 секунд просто проигрываем музыку...

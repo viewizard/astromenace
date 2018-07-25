@@ -60,7 +60,7 @@ float StartHideTransp = 1.0f;
 
 // что рисовать в диалоге 6,7,8
 cSpaceShip *DialogSpaceShip = nullptr;
-extern cEarthSpaceFighter *WorkshopFighterGame; // корабль игрока в меню шипярд
+extern cSpaceShip *WorkshopFighterGame; // корабль игрока в меню шипярд
 char *GetShipGroupTitle(int Num);
 char *GetWorkshopShipName(int Num);
 float GetShipArmor(int SpaceShipNum);

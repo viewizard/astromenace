@@ -36,7 +36,7 @@
 namespace viewizard {
 namespace astromenace {
 
-extern cEarthSpaceFighter *WorkshopFighterGame;
+extern cSpaceShip *WorkshopFighterGame;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
