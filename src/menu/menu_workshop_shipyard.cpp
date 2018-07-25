@@ -42,7 +42,7 @@ extern int	CurrentWorkshopNewWeapon;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode);
+void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode);
 void WorkshopCreateNewShip();
 int GetSystemCost(int Num);
 int GetWeaponCost(int Num, int Ammo, int AmmoStart);

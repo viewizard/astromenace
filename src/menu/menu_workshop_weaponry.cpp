@@ -47,7 +47,7 @@ extern float CurrentAlert2;
 extern float CurrentAlert3;
 
 void WorkshopCreateNewWeapon();
-void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode);
+void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode);
 void WorkshopDrawWeapon(cWeapon *Weapon);
 
 int GetWeaponHullDamage(int Num);

@@ -46,7 +46,6 @@ int	CurrentWorkshopNewWeapon = 1;
 
 
 sVECTOR3D WorkShopPointCamera;
-void WorkshopDrawShip(cEarthSpaceFighter *WorkshopFighter, int Mode);
 void WorkshopDrawWeapon(cWeapon *Weapon);
 int CurrentWorkshop = 3;
 
@@ -466,9 +465,9 @@ void WorkshopMenu()
 //------------------------------------------------------------------------------------
 // Прорисовка 3д части
 //------------------------------------------------------------------------------------
-void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
+void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 {
-	if (!CanDrawWorkshop || (SpaceFighter == nullptr))
+	if (!CanDrawWorkshop || (SpaceShip == nullptr))
 		return;
 
 	float tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight;
@@ -476,8 +475,8 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Mode == 1) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 4.0f, -32.0f};
-		SpaceFighter->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
-		SpaceFighter->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
+		SpaceShip->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
+		SpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
 
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
@@ -500,9 +499,9 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, 5.0f, 0.0f}, EffectiveDistance, EffectiveDistance * 2);
 
-			SpaceFighter->Draw(true);
-			if (!SpaceFighter->WeaponSlots.empty()) {
-				for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+			SpaceShip->Draw(true);
+			if (!SpaceShip->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->Draw(true);
 				}
@@ -513,9 +512,9 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			ShadowMap_StartFinalRender();
 		}
 
-		SpaceFighter->Draw(false, ShadowMap);
-		if (!SpaceFighter->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+		SpaceShip->Draw(false, ShadowMap);
+		if (!SpaceShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 					sharedWeapon->Draw(false, ShadowMap);
 			}
@@ -525,7 +524,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			ShadowMap_EndFinalRender();
 
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(SpaceFighter->Engines);
+		vw_DrawParticleSystems(SpaceShip->Engines);
 
 		vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
 		vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
@@ -537,7 +536,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Mode == 4) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 35.0f, -0.01f};
-		SpaceFighter->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
+		SpaceShip->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       (GLint)(30 * (tmpViewportHeight / GameConfig().InternalHeight)),
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -558,9 +557,9 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, 0.0f, 0.0f}, EffectiveDistance, EffectiveDistance*2);
 
-			SpaceFighter->Draw(true);
-			if (!SpaceFighter->WeaponSlots.empty()) {
-				for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+			SpaceShip->Draw(true);
+			if (!SpaceShip->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->Draw(true);
 				}
@@ -571,9 +570,9 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			ShadowMap_StartFinalRender();
 		}
 
-		SpaceFighter->Draw(false, ShadowMap);
-		if (!SpaceFighter->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+		SpaceShip->Draw(false, ShadowMap);
+		if (!SpaceShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 					sharedWeapon->Draw(false, ShadowMap);
 			}
@@ -583,7 +582,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 			ShadowMap_EndFinalRender();
 
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(SpaceFighter->Engines);
+		vw_DrawParticleSystems(SpaceShip->Engines);
 
 		vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
 		vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
@@ -598,7 +597,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 
 	if (Mode == 3) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 10.0f, -34.0f};
-		SpaceFighter->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
+		SpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -609,13 +608,13 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_SetCameraLocation(sVECTOR3D{WorkShopPointCamera.x / 1.2f + 1000.0f,
 					       WorkShopPointCamera.y / 1.2f - 1000.0f,
 					       WorkShopPointCamera.z / 1.2f});
-		vw_SetCameraMoveAroundPoint(sVECTOR3D{1000.0f, -1000.0f - SpaceFighter->AABB[6].y - SpaceFighter->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
+		vw_SetCameraMoveAroundPoint(sVECTOR3D{1000.0f, -1000.0f - SpaceShip->AABB[6].y - SpaceShip->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 	}
 	if (Mode == 2) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 10.0f, -34.0f};
 		sVECTOR3D PointCameraTMP = WorkShopPointCamera;
 		vw_RotatePoint(PointCameraTMP, sVECTOR3D{0.0f, -90.0f, 0.0f});
-		SpaceFighter->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
+		SpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -626,7 +625,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		vw_SetCameraLocation(sVECTOR3D{PointCameraTMP.x / 1.2f + 2000.0f,
 					       PointCameraTMP.y / 1.2f - 2000.0f,
 					       PointCameraTMP.z / 1.2f});
-		vw_SetCameraMoveAroundPoint(sVECTOR3D{2000.0f, -2000.0f - SpaceFighter->AABB[6].y - SpaceFighter->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 170.0f, 0.0f});
+		vw_SetCameraMoveAroundPoint(sVECTOR3D{2000.0f, -2000.0f - SpaceShip->AABB[6].y - SpaceShip->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 170.0f, 0.0f});
 	}
 	vw_CameraLookAt();
 
@@ -637,9 +636,9 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		float EffectiveDistance = 20.0f;
 		ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, -2.0f, 0.0f}, EffectiveDistance, EffectiveDistance * 2.0f);
 
-		SpaceFighter->Draw(true);
-		if (!SpaceFighter->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+		SpaceShip->Draw(true);
+		if (!SpaceShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 					sharedWeapon->Draw(true);
 			}
@@ -650,10 +649,10 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		ShadowMap_StartFinalRender();
 	}
 
-	SpaceFighter->Draw(false, ShadowMap);
+	SpaceShip->Draw(false, ShadowMap);
 
-	if (!SpaceFighter->WeaponSlots.empty()) {
-		for (auto &tmpWeaponSlot : SpaceFighter->WeaponSlots) {
+	if (!SpaceShip->WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
 			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 				sharedWeapon->Draw(false, ShadowMap);
 		}
@@ -663,7 +662,7 @@ void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode)
 		ShadowMap_EndFinalRender();
 
 	// рисуем эффекты двигателей только для этой модели
-	vw_DrawParticleSystems(SpaceFighter->Engines);
+	vw_DrawParticleSystems(SpaceShip->Engines);
 
 	vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);

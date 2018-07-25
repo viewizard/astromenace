@@ -40,7 +40,7 @@ extern cEarthSpaceFighter *WorkshopFighterGame;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-void WorkshopDrawShip(cEarthSpaceFighter *SpaceFighter, int Mode);
+void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode);
 
 float GetShipEngineSystemEnergyUse(int Num);
 float GetShipProtectionSystemEnergyUse(int Num);
