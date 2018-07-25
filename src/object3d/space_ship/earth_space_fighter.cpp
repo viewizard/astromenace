@@ -104,7 +104,7 @@ float GetEngineRotatePower(int EngineType)
 //-----------------------------------------------------------------------------
 // Установка оружия на корабль
 //-----------------------------------------------------------------------------
-bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum)
+bool SetEarthSpaceFighterWeapon(cSpaceShip *SpaceShip, int WeaponSlot, int WeaponNum)
 {
 
 	// проверяем, можно ли вообще ставить в этот слот оружие
@@ -356,7 +356,7 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 //-----------------------------------------------------------------------------
 // Установка системы двигателей
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType)
+void SetEarthSpaceFighterEngine(cSpaceShip *SpaceShip, int EngineType)
 {
 	// если нужен сброс установки двигателя
 	if (EngineType == 0) {
@@ -575,7 +575,7 @@ static GLtexture GetArmourIllumTexture(int ArmourType)
 //-----------------------------------------------------------------------------
 // Установка брони для кораблей землян
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType)
+void SetEarthSpaceFighterArmour(cSpaceShip *SpaceShip, int ArmourType)
 {
 	SpaceShip->ResistanceHull = GetHullResistance(ArmourType);
 	SpaceShip->ResistanceSystems = GetSystemsResistance(ArmourType);

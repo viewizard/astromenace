@@ -269,11 +269,11 @@ void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 					      eShipPairCycle &Command)> function);
 
 // Установка системы двигателей
-void SetEarthSpaceFighterEngine(cEarthSpaceFighter *SpaceShip, int EngineType);
+void SetEarthSpaceFighterEngine(cSpaceShip *SpaceShip, int EngineType);
 // Установка брони для кораблей землян
-void SetEarthSpaceFighterArmour(cEarthSpaceFighter *SpaceShip, int ArmourType);
+void SetEarthSpaceFighterArmour(cSpaceShip *SpaceShip, int ArmourType);
 // Установка оружия на корабль
-bool SetEarthSpaceFighterWeapon(cEarthSpaceFighter *SpaceShip, int WeaponSlot, int WeaponNum);
+bool SetEarthSpaceFighterWeapon(cSpaceShip *SpaceShip, int WeaponSlot, int WeaponNum);
 // Получаем возможный поворот орудия в данном слоте
 void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
 //
