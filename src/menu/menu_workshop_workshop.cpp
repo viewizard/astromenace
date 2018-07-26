@@ -36,11 +36,11 @@
 namespace viewizard {
 namespace astromenace {
 
-extern cSpaceShip *WorkshopFighterGame;
+extern std::weak_ptr<cSpaceShip> WorkshopFighterGame;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode);
+void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode);
 
 float GetShipEngineSystemEnergyUse(int Num);
 float GetShipProtectionSystemEnergyUse(int Num);

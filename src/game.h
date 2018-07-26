@@ -335,7 +335,7 @@ const char *GetWeaponIconName(int Num);
 //------------------------------------------------------------------------------------
 // game.cpp
 //------------------------------------------------------------------------------------
-extern cSpaceShip *PlayerFighter;
+extern std::weak_ptr<cSpaceShip> PlayerFighter;
 
 extern int GameEnemyWeaponPenalty;
 extern int GameEnemyArmorPenalty;

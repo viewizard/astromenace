@@ -98,23 +98,23 @@ void InitGameCamera()
 void GameCameraSetExplosion(sVECTOR3D Location, float Power)
 {
 	// если корабля нет, нам тут делать нечего
-	if (PlayerFighter == nullptr)
+	auto sharedPlayerFighter = PlayerFighter.lock();
+	if (!sharedPlayerFighter)
 		return;
 
 	// вычисляем по дистанции время болтанки....
 	// чуствительность начинается со 100 едениц (10000 в квадрате)
 
-	float dist2 = (PlayerFighter->Location.x - Location.x)*(PlayerFighter->Location.x - Location.x)+
-		      (PlayerFighter->Location.y - Location.y)*(PlayerFighter->Location.y - Location.y)+
-		      (PlayerFighter->Location.z - Location.z)*(PlayerFighter->Location.z - Location.z);
+	float dist2 = (sharedPlayerFighter->Location.x - Location.x) * (sharedPlayerFighter->Location.x - Location.x) +
+		      (sharedPlayerFighter->Location.y - Location.y) * (sharedPlayerFighter->Location.y - Location.y) +
+		      (sharedPlayerFighter->Location.z - Location.z) * (sharedPlayerFighter->Location.z - Location.z);
 
 
 	// слишком далеко
 	if (dist2 > 10000.0f) return;
 	// или очень близко
-	if (dist2 <= PlayerFighter->Radius*PlayerFighter->Radius) {
-		dist2 = PlayerFighter->Radius*PlayerFighter->Radius;
-	}
+	if (dist2 <= sharedPlayerFighter->Radius * sharedPlayerFighter->Radius)
+		dist2 = sharedPlayerFighter->Radius * sharedPlayerFighter->Radius;
 
 
 	// время болтанки
@@ -222,9 +222,9 @@ void GameCameraUpdate(float Time)
 
 
 	// делаем действия над кораблем игрока, если он есть
-	if (PlayerFighter != nullptr) {
+	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		// нужно сместить корабль на расстояние
-		PlayerFighter->SetLocationArcadePlayer(PlayerFighter->Location+TmpNeedPos);
+		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + TmpNeedPos);
 	}
 
 }

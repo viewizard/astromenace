@@ -54,7 +54,7 @@ extern bool ShowGameTime;
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
-extern cSpaceShip *PlayerFighter;
+extern std::weak_ptr<cSpaceShip> PlayerFighter;
 // FIXME should be fixed, use 'include' instead
 float GameCameraGetSpeed();
 void SetGameMissionComplete();
@@ -386,8 +386,8 @@ bool cMissionScript::Update(float Time)
 
 		case constexpr_hash_djb2a("Music"):
 			// change music only if player's ship still alive, otherwise we are playing 'fail' theme
-			if (PlayerFighter)
-				if (PlayerFighter->Strength > 0.0f) {
+			if (auto sharedPlayerFighter = PlayerFighter.lock()) {
+				if (sharedPlayerFighter->Strength > 0.0f) {
 					int Theme{0};
 					if (xmlDoc->iGetEntryAttribute(xmlEntry, "theme", Theme)) {
 						if (Theme == 1)
@@ -396,6 +396,7 @@ bool cMissionScript::Update(float Time)
 							PlayMusicTheme(eMusicTheme::BOSS, 1500, 2000);
 					}
 				}
+			}
 			break;
 
 		case constexpr_hash_djb2a("CreatePlanet"): {
@@ -595,37 +596,41 @@ static void LoadTimeSheetData(cXMLDocument &xmlDoc, const sXMLEntry &XMLEntry,
 /*
  * Load SpaceShip related script data.
  */
-static void LoadSpaceShipScript(cSpaceShip &SpaceShip, const std::unique_ptr<cXMLDocument> &xmlDoc,
+static void LoadSpaceShipScript(std::weak_ptr<cSpaceShip> &SpaceShip, const std::unique_ptr<cXMLDocument> &xmlDoc,
 				const sXMLEntry &xmlEntry, bool ShowLineNumber, float TimeOpLag,
 				const std::shared_ptr<cXMLDocument> &xmlAI)
 {
+	auto sharedSpaceShip = SpaceShip.lock();
+	if (!sharedSpaceShip)
+		return;
+
 	if (ShowLineNumber)
-		SetDebugInformation(SpaceShip, xmlEntry, ShowLineNumber);
+		SetDebugInformation(*sharedSpaceShip, xmlEntry, ShowLineNumber);
 
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", SpaceShip.NeedSpeed))
-		SpaceShip.Speed = SpaceShip.NeedSpeed;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedlr", SpaceShip.NeedSpeedLR))
-		SpaceShip.SpeedLR = SpaceShip.NeedSpeedLR;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedud", SpaceShip.NeedSpeedUD))
-		SpaceShip.SpeedUD = SpaceShip.NeedSpeedUD;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speed", sharedSpaceShip->NeedSpeed))
+		sharedSpaceShip->Speed = sharedSpaceShip->NeedSpeed;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedlr", sharedSpaceShip->NeedSpeedLR))
+		sharedSpaceShip->SpeedLR = sharedSpaceShip->NeedSpeedLR;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedud", sharedSpaceShip->NeedSpeedUD))
+		sharedSpaceShip->SpeedUD = sharedSpaceShip->NeedSpeedUD;
 
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamfb", SpaceShip.NeedSpeedByCamFB))
-		SpaceShip.SpeedByCamFB = SpaceShip.NeedSpeedByCamFB;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamlr", SpaceShip.NeedSpeedByCamLR))
-		SpaceShip.SpeedByCamLR = SpaceShip.NeedSpeedByCamLR;
-	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamud", SpaceShip.NeedSpeedByCamUD))
-		SpaceShip.SpeedByCamUD = SpaceShip.NeedSpeedByCamUD;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamfb", sharedSpaceShip->NeedSpeedByCamFB))
+		sharedSpaceShip->SpeedByCamFB = sharedSpaceShip->NeedSpeedByCamFB;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamlr", sharedSpaceShip->NeedSpeedByCamLR))
+		sharedSpaceShip->SpeedByCamLR = sharedSpaceShip->NeedSpeedByCamLR;
+	if (xmlDoc->fGetEntryAttribute(xmlEntry, "speedbycamud", sharedSpaceShip->NeedSpeedByCamUD))
+		sharedSpaceShip->SpeedByCamUD = sharedSpaceShip->NeedSpeedByCamUD;
 
-	SetDeleteAfterLeaveScene(SpaceShip, xmlEntry, xmlDoc);
-	SetAIMode(SpaceShip.TimeSheetList, xmlEntry, xmlDoc, xmlAI);
-	SetRotation(SpaceShip, xmlEntry, xmlDoc);
-	SetLocation(SpaceShip, xmlEntry, xmlDoc, TimeOpLag);
+	SetDeleteAfterLeaveScene(*sharedSpaceShip, xmlEntry, xmlDoc);
+	SetAIMode(sharedSpaceShip->TimeSheetList, xmlEntry, xmlDoc, xmlAI);
+	SetRotation(*sharedSpaceShip, xmlEntry, xmlDoc);
+	SetLocation(*sharedSpaceShip, xmlEntry, xmlDoc, TimeOpLag);
 
 	for (const auto &tmpXMLEntry : xmlEntry.ChildrenList) {
 		if (tmpXMLEntry.Name == "TimeSheet") {
-			SpaceShip.TimeSheetList.emplace_back();
+			sharedSpaceShip->TimeSheetList.emplace_back();
 			LoadTimeSheetData(*xmlDoc.get(), tmpXMLEntry,
-					  SpaceShip.TimeSheetList.back(), xmlAI);
+					  sharedSpaceShip->TimeSheetList.back(), xmlAI);
 		}
 	}
 }
@@ -698,8 +703,8 @@ void cMissionScript::UpdateTimeLine()
 		switch (TL.NameHash) {
 		case constexpr_hash_djb2a("EarthFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cSpaceShip *SpaceShip = CreateEarthSpaceFighter(tmpType);
-				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cSpaceShip> SpaceShip = CreateEarthSpaceFighter(tmpType);
+				LoadSpaceShipScript(SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 
 				int tmpInteger{0};
 				if (xmlDoc->iGetEntryAttribute(TL, "armour", tmpInteger))
@@ -714,22 +719,22 @@ void cMissionScript::UpdateTimeLine()
 
 		case constexpr_hash_djb2a("AlienFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cSpaceShip *SpaceShip = CreateAlienSpaceFighter(tmpType);
-				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cSpaceShip> SpaceShip = CreateAlienSpaceFighter(tmpType);
+				LoadSpaceShipScript(SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("AlienMotherShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cSpaceShip *SpaceShip = CreateAlienSpaceMotherShip(tmpType);
-				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cSpaceShip> SpaceShip = CreateAlienSpaceMotherShip(tmpType);
+				LoadSpaceShipScript(SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 
 		case constexpr_hash_djb2a("PirateShip"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				cSpaceShip *SpaceShip = CreatePirateShip(tmpType);
-				LoadSpaceShipScript(*SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
+				std::weak_ptr<cSpaceShip> SpaceShip = CreatePirateShip(tmpType);
+				LoadSpaceShipScript(SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 			}
 			break;
 

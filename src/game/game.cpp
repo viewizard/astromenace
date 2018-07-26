@@ -108,7 +108,7 @@ bool GameMissionCompleteStatus = false;
 bool GameMissionCompleteStatusShowDialog = false;
 
 // собственно сам файтер
-cSpaceShip *PlayerFighter = nullptr;
+std::weak_ptr<cSpaceShip> PlayerFighter{};
 
 
 
@@ -840,8 +840,10 @@ void InitGame()
 	AsteroidsKillBonus = 0.0f;
 
 	CurrentDrawEnergNumFull = 1.0f;
-	if (GamePowerSystem == 0) CurrentDrawEnergNumFull = 0.0f;
-	CurrentDrawLifeNumFull = PlayerFighter->Strength/PlayerFighter->StrengthStart;
+	if (GamePowerSystem == 0)
+		CurrentDrawEnergNumFull = 0.0f;
+	if (auto sharedPlayerFighter = PlayerFighter.lock())
+		CurrentDrawLifeNumFull = sharedPlayerFighter->Strength / sharedPlayerFighter->StrengthStart;
 
 	CurrentTime = vw_GetTimeThread(0);
 	CurrentAlert2 = 1.0f;
@@ -893,10 +895,7 @@ void ExitGame()
 void RealExitGame()
 {
 	// удаляем корабль игрока
-	if (PlayerFighter != nullptr) {
-		ReleaseSpaceShip(PlayerFighter);
-		PlayerFighter = nullptr;
-	}
+	ReleaseSpaceShip(PlayerFighter);
 
 	vw_ReleaseAllParticleSystems2D();
 
@@ -924,20 +923,22 @@ void ExitGameWithSave()
 	// увеличиваем счетчик пройденной миссии
 	ChangeGameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]++;
 
-	// состояние корпуса коробля
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = PlayerFighter->Strength;
+	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
+		// состояние корпуса коробля
+		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedPlayerFighter->Strength;
 
-	// учет состояния оружия
-	for (unsigned i = 0; i < PlayerFighter->WeaponSlots.size(); i++) {
-		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
-			if (auto sharedWeapon = PlayerFighter->WeaponSlots[i].Weapon.lock()) {
-				// если оружие было уничтожено во время игры
-				if (sharedWeapon->Strength <= 0.0f) {
-					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
-					ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
-				} else {
-					// если все ок, нужно запомнить сколько осталось в боекомплекте
-					ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = sharedWeapon->Ammo;
+		// учет состояния оружия
+		for (unsigned i = 0; i < sharedPlayerFighter->WeaponSlots.size(); i++) {
+			if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
+				if (auto sharedWeapon = sharedPlayerFighter->WeaponSlots[i].Weapon.lock()) {
+					// если оружие было уничтожено во время игры
+					if (sharedWeapon->Strength <= 0.0f) {
+						ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
+						ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
+					} else {
+						// если все ок, нужно запомнить сколько осталось в боекомплекте
+						ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = sharedWeapon->Ammo;
+					}
 				}
 			}
 		}
@@ -988,7 +989,7 @@ void ExitGameWithSave()
 void SetGameMissionComplete()
 {
 	// если убили, не устанавливаем!
-	if (PlayerFighter == nullptr)
+	if (PlayerFighter.expired())
 		return;
 	GameMissionCompleteStatus = true;
 	GameMissionCompleteStatusShowDialog = true;
@@ -1111,13 +1112,13 @@ void DrawGame()
 		if (sharedEnergyParticleSystem2D->ParticlesPerSec == 0)
 			sharedEnergyParticleSystem2D->ParticlesPerSec = 1;
 	}
-	if (PlayerFighter != nullptr) {
+	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
 			sharedLifeParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLifeParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
-			sharedLifeParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+			sharedLifeParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
+			sharedLifeParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
 			// если меньше 10% нужно бить тревогу
-			if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
+			if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart/10.0f) {
 				sharedLifeParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
 				sharedLifeParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
 			} else { // подчинились, восстанавливаем данные
@@ -1128,10 +1129,10 @@ void DrawGame()
 
 		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
 			sharedLife2ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
-			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
+			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
 			// если меньше 10% нужно бить тревогу
-			if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
+			if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart/10.0f) {
 				if (CurrentAlert2 > 0.6f) {
 					sharedLife2ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
 					sharedLife2ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
@@ -1147,11 +1148,11 @@ void DrawGame()
 
 		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
 			sharedLife3ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
-			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f*(PlayerFighter->Strength/PlayerFighter->StrengthStart);
+			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
+			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
 
 			// если меньше 10% нужно бить тревогу
-			if (PlayerFighter->Strength < PlayerFighter->StrengthStart/10.0f) {
+			if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart/10.0f) {
 				if (CurrentAlert2 > 0.6f) {
 					sharedLife3ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
 					sharedLife3ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
@@ -1170,15 +1171,14 @@ void DrawGame()
 	vw_DrawAllParticleSystems2D();
 
 
-
 	// выводим состояние жизни и энергии
 	float NeedDrawEnergNumFull = 0.0f;
 	float NeedDrawLifeNumFull = 0.0f;
-	if (PlayerFighter != nullptr) {
+	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
 		NeedDrawEnergNumFull = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-		NeedDrawLifeNumFull = PlayerFighter->Strength / PlayerFighter->StrengthStart;
+		NeedDrawLifeNumFull = sharedPlayerFighter->Strength / sharedPlayerFighter->StrengthStart;
 	}
 
 
@@ -1632,7 +1632,7 @@ void DrawGame()
 				Y = Y+Prir;
 				if (DrawButton384(X,Y, vw_GetText("RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
 					// если убили, выводить диалог не нужно
-					if (PlayerFighter == nullptr) {
+					if (PlayerFighter.expired()) {
 						ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
 						ExitGame();
 					} else
@@ -1643,7 +1643,7 @@ void DrawGame()
 				Y = Y+Prir;
 				if (DrawButton384(X,Y, vw_GetText("QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 					// если убили, выводить диалог не нужно
-					if (PlayerFighter == nullptr) {
+					if (PlayerFighter.expired()) {
 						ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
 						ExitGame();
 					} else
@@ -1696,7 +1696,7 @@ void DrawGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// если в игре - меню, если в меню - выход
 	if (!isDialogBoxDrawing()) {
-		if (PlayerFighter != nullptr) { // если не убили
+		if (!PlayerFighter.expired()) { // если не убили
 			if (vw_GetKeyStatus(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
 				bool NeedPlaySfx = true;
 				if (GameMissionCompleteStatusShowDialog) {

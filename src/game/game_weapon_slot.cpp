@@ -38,7 +38,7 @@ namespace astromenace {
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-extern cSpaceShip *PlayerFighter;
+extern std::weak_ptr<cSpaceShip> PlayerFighter;
 int RightDrawLevelPos = 1;
 int LeftDrawLevelPos = 1;
 
@@ -48,7 +48,11 @@ int LeftDrawLevelPos = 1;
 //------------------------------------------------------------------------------------
 void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 {
-	auto sharedWeapon = PlayerFighter->WeaponSlots[WeaponNum].Weapon.lock();
+	auto sharedPlayerFighter = PlayerFighter.lock();
+	if (!sharedPlayerFighter)
+		return;
+
+	auto sharedWeapon = sharedPlayerFighter->WeaponSlots[WeaponNum].Weapon.lock();
 	if (!sharedWeapon)
 		return;
 
@@ -113,7 +117,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(56.0f - (56.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -179,7 +183,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -217,7 +221,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -244,7 +248,11 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 //------------------------------------------------------------------------------------
 void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 {
-	auto sharedWeapon = PlayerFighter->WeaponSlots[WeaponNum].Weapon.lock();
+	auto sharedPlayerFighter = PlayerFighter.lock();
+	if (!sharedPlayerFighter)
+		return;
+
+	auto sharedWeapon = sharedPlayerFighter->WeaponSlots[WeaponNum].Weapon.lock();
 	if (!sharedWeapon)
 		return;
 
@@ -308,7 +316,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(PlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(56.0f - (56.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -373,7 +381,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -412,7 +420,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(PlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -441,7 +449,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 void DrawGameWeaponSlots()
 {
 	// если корабля нет - нам тут делать нечего
-	if (PlayerFighter == nullptr)
+	if (PlayerFighter.expired())
 		return;
 
 	// сбрасываем в первоначальное состояние счетчики уровня

@@ -104,35 +104,38 @@ float GetEngineRotatePower(int EngineType)
 //-----------------------------------------------------------------------------
 // Установка оружия на корабль
 //-----------------------------------------------------------------------------
-bool SetEarthSpaceFighterWeapon(cSpaceShip *SpaceShip, int WeaponSlot, int WeaponNum)
+bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, int WeaponSlot, int WeaponNum)
 {
+	auto sharedSpaceShip = SpaceShip.lock();
+	if (!sharedSpaceShip)
+		return false;
 
 	// проверяем, можно ли вообще ставить в этот слот оружие
-	if (static_cast<int>(SpaceShip->WeaponSlots.size()) < WeaponSlot) {
+	if (static_cast<int>(sharedSpaceShip->WeaponSlots.size()) < WeaponSlot) {
 		return false;
 	}
 
 	// удаляем оружие, если оно уже тут есть
-	if (!SpaceShip->WeaponSlots[WeaponSlot-1].Weapon.expired())
-		ReleaseWeapon(SpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
+	if (!sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon.expired())
+		ReleaseWeapon(sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
 
 	// создаем нужное оружие
-	SpaceShip->WeaponSlots[WeaponSlot-1].Weapon = CreateWeapon(WeaponNum);
+	sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon = CreateWeapon(WeaponNum);
 
-	auto sharedWeapon = SpaceShip->WeaponSlots[WeaponSlot-1].Weapon.lock();
+	auto sharedWeapon = sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon.lock();
 	if (!sharedWeapon)
 		return false;
 
 	// проверяем уровень оружия и уровень слота
-	if (SpaceShip->WeaponSlots[WeaponSlot-1].Type < sharedWeapon->WeaponLevel) {
-		ReleaseWeapon(SpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
+	if (sharedSpaceShip->WeaponSlots[WeaponSlot-1].Type < sharedWeapon->WeaponLevel) {
+		ReleaseWeapon(sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
 		return false;
 	}
 
 	// если тут, значит все нормально - можно подключать
-	sharedWeapon->SetLocation(SpaceShip->WeaponSlots[WeaponSlot-1].Location);
+	sharedWeapon->SetLocation(sharedSpaceShip->WeaponSlots[WeaponSlot-1].Location);
 	// передаем статус корабля, чтобы учесть что это игрока оружие
-	sharedWeapon->ObjectStatus = SpaceShip->ObjectStatus;
+	sharedWeapon->ObjectStatus = sharedSpaceShip->ObjectStatus;
 
 	return true;
 }
@@ -356,51 +359,55 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 //-----------------------------------------------------------------------------
 // Установка системы двигателей
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterEngine(cSpaceShip *SpaceShip, int EngineType)
+void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, int EngineType)
 {
+	auto sharedSpaceShip = SpaceShip.lock();
+	if (!sharedSpaceShip)
+		return;
+
 	// если нужен сброс установки двигателя
 	if (EngineType == 0) {
-		for (auto &tmpEngine : SpaceShip->Engines) {
+		for (auto &tmpEngine : sharedSpaceShip->Engines) {
 			vw_ReleaseParticleSystem(tmpEngine);
 		}
 
-		if (!SpaceShip->EnginesLeft.empty()) {
-			for (auto &tmpEngineLeft : SpaceShip->EnginesLeft) {
+		if (!sharedSpaceShip->EnginesLeft.empty()) {
+			for (auto &tmpEngineLeft : sharedSpaceShip->EnginesLeft) {
 				vw_ReleaseParticleSystem(tmpEngineLeft);
 			}
 		}
 
-		if (!SpaceShip->EnginesRight.empty()) {
-			for (auto &tmpEngineRight : SpaceShip->EnginesRight) {
+		if (!sharedSpaceShip->EnginesRight.empty()) {
+			for (auto &tmpEngineRight : sharedSpaceShip->EnginesRight) {
 				vw_ReleaseParticleSystem(tmpEngineRight);
 			}
 		}
 
-		SpaceShip->MaxSpeed = 0.0f;
-		SpaceShip->MaxAcceler = 0.0f;
-		SpaceShip->MaxSpeedRotate = 0.0f;
+		sharedSpaceShip->MaxSpeed = 0.0f;
+		sharedSpaceShip->MaxAcceler = 0.0f;
+		sharedSpaceShip->MaxSpeedRotate = 0.0f;
 		return;
 	}
 
 
-	for (unsigned int i = 0; i < SpaceShip->Engines.size(); i++) {
-		vw_ReleaseParticleSystem(SpaceShip->Engines[i]);
-		SpaceShip->Engines[i] = vw_CreateParticleSystem();
-		if (auto sharedEngine =SpaceShip->Engines[i].lock()) {
+	for (unsigned int i = 0; i < sharedSpaceShip->Engines.size(); i++) {
+		vw_ReleaseParticleSystem(sharedSpaceShip->Engines[i]);
+		sharedSpaceShip->Engines[i] = vw_CreateParticleSystem();
+		if (auto sharedEngine = sharedSpaceShip->Engines[i].lock()) {
 			CreateSpaceShipEngine(sharedEngine, EngineType);
-			sharedEngine->SetStartLocation(SpaceShip->EnginesLocation[i]);
+			sharedEngine->SetStartLocation(sharedSpaceShip->EnginesLocation[i]);
 			sharedEngine->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 		}
 	}
 
 
-	if (!SpaceShip->EnginesLeft.empty()) {
-		for (unsigned int i = 0; i < SpaceShip->EnginesLeft.size(); i++) {
-			vw_ReleaseParticleSystem(SpaceShip->EnginesLeft[i]);
-			SpaceShip->EnginesLeft[i] = vw_CreateParticleSystem();
-			if (auto sharedEngineLeft =SpaceShip->EnginesLeft[i].lock()) {
+	if (!sharedSpaceShip->EnginesLeft.empty()) {
+		for (unsigned int i = 0; i < sharedSpaceShip->EnginesLeft.size(); i++) {
+			vw_ReleaseParticleSystem(sharedSpaceShip->EnginesLeft[i]);
+			sharedSpaceShip->EnginesLeft[i] = vw_CreateParticleSystem();
+			if (auto sharedEngineLeft = sharedSpaceShip->EnginesLeft[i].lock()) {
 				CreateRotateSpaceShipEngine(sharedEngineLeft, EngineType);
-				sharedEngineLeft->SetStartLocation(SpaceShip->EnginesLeftLocation[i]);
+				sharedEngineLeft->SetStartLocation(sharedSpaceShip->EnginesLeftLocation[i]);
 				sharedEngineLeft->Direction = sVECTOR3D{1.0f, 0.0f, 0.6f};
 				sharedEngineLeft->IsSuppressed = true;
 			}
@@ -408,13 +415,13 @@ void SetEarthSpaceFighterEngine(cSpaceShip *SpaceShip, int EngineType)
 	}
 
 
-	if (!SpaceShip->EnginesRight.empty()) {
-		for (unsigned int i = 0; i < SpaceShip->EnginesRight.size(); i++) {
-			vw_ReleaseParticleSystem(SpaceShip->EnginesRight[i]);
-			SpaceShip->EnginesRight[i] = vw_CreateParticleSystem();
-			if (auto sharedEngineRight =SpaceShip->EnginesRight[i].lock()) {
+	if (!sharedSpaceShip->EnginesRight.empty()) {
+		for (unsigned int i = 0; i < sharedSpaceShip->EnginesRight.size(); i++) {
+			vw_ReleaseParticleSystem(sharedSpaceShip->EnginesRight[i]);
+			sharedSpaceShip->EnginesRight[i] = vw_CreateParticleSystem();
+			if (auto sharedEngineRight = sharedSpaceShip->EnginesRight[i].lock()) {
 				CreateRotateSpaceShipEngine(sharedEngineRight, EngineType);
-				sharedEngineRight->SetStartLocation(SpaceShip->EnginesRightLocation[i]);
+				sharedEngineRight->SetStartLocation(sharedSpaceShip->EnginesRightLocation[i]);
 				sharedEngineRight->Direction = sVECTOR3D{-1.0f, 0.0f, 0.6f};
 				sharedEngineRight->IsSuppressed = true;
 			}
@@ -423,17 +430,17 @@ void SetEarthSpaceFighterEngine(cSpaceShip *SpaceShip, int EngineType)
 
 
 	// параметрами игрока управляем в другом месте!!!! пользуй поиск
-	SpaceShip->MaxSpeed = GetEnginePower(EngineType) * SpaceShip->Engines.size() - SpaceShip->Weight / 1000.0f;
-	SpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * SpaceShip->Engines.size() - SpaceShip->Weight / 1000.0f;
-	SpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * SpaceShip->Engines.size() - SpaceShip->Weight / 1000.0f;
+	sharedSpaceShip->MaxSpeed = GetEnginePower(EngineType) * sharedSpaceShip->Engines.size() - sharedSpaceShip->Weight / 1000.0f;
+	sharedSpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * sharedSpaceShip->Engines.size() - sharedSpaceShip->Weight / 1000.0f;
+	sharedSpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * sharedSpaceShip->Engines.size() - sharedSpaceShip->Weight / 1000.0f;
 
 
-	if (SpaceShip->MaxSpeed <= 0.5f)
-		SpaceShip->MaxSpeed = 0.5f;
-	if (SpaceShip->MaxAcceler <= 0.5f)
-		SpaceShip->MaxAcceler = 0.5f;
-	if (SpaceShip->MaxSpeedRotate <= 0.5f)
-		SpaceShip->MaxSpeedRotate = 0.5f;
+	if (sharedSpaceShip->MaxSpeed <= 0.5f)
+		sharedSpaceShip->MaxSpeed = 0.5f;
+	if (sharedSpaceShip->MaxAcceler <= 0.5f)
+		sharedSpaceShip->MaxAcceler = 0.5f;
+	if (sharedSpaceShip->MaxSpeedRotate <= 0.5f)
+		sharedSpaceShip->MaxSpeedRotate = 0.5f;
 
 }
 
@@ -575,14 +582,18 @@ static GLtexture GetArmourIllumTexture(int ArmourType)
 //-----------------------------------------------------------------------------
 // Установка брони для кораблей землян
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterArmour(cSpaceShip *SpaceShip, int ArmourType)
+void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, int ArmourType)
 {
-	SpaceShip->ResistanceHull = GetHullResistance(ArmourType);
-	SpaceShip->ResistanceSystems = GetSystemsResistance(ArmourType);
+	auto sharedSpaceShip = SpaceShip.lock();
+	if (!sharedSpaceShip)
+		return;
 
-	for (unsigned int i = 0; i < SpaceShip->Chunks.size(); i++) {
-		SpaceShip->Texture[i] = GetArmourTexture(ArmourType);
-		SpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmourType);
+	sharedSpaceShip->ResistanceHull = GetHullResistance(ArmourType);
+	sharedSpaceShip->ResistanceSystems = GetSystemsResistance(ArmourType);
+
+	for (unsigned int i = 0; i < sharedSpaceShip->Chunks.size(); i++) {
+		sharedSpaceShip->Texture[i] = GetArmourTexture(ArmourType);
+		sharedSpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmourType);
 	}
 
 }
@@ -1461,24 +1472,6 @@ cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
 		EnginesRightLocation[0] = sVECTOR3D{-1.9f, -0.3f, 2.6f};
 		break;
 	}
-
-
-
-	SetEarthSpaceFighterEngine(this, 1);
-	/*	MaxSpeed = 4.5f;
-		MaxAcceler = 4.5f;
-		MaxSpeedRotate = 4.5f;*/
-
-	for (unsigned int i = 0; i < Engines.size(); i++) {
-		if (auto sharedEngine = Engines[i].lock()) {
-			// находим кол-во внутренних источников света
-			if (!sharedEngine->Light.expired())
-				InternalLights++;
-		}
-	}
-
-	// делаем предварительную уснановку брони-текстур
-	SetEarthSpaceFighterArmour(this, 0);
 }
 
 } // astromenace namespace

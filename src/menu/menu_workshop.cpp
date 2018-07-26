@@ -38,8 +38,8 @@ namespace astromenace {
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-cSpaceShip *WorkshopFighterGame = nullptr;
-cSpaceShip *WorkshopNewFighter = nullptr;
+std::weak_ptr<cSpaceShip> WorkshopFighterGame{};
+std::weak_ptr<cSpaceShip> WorkshopNewFighter{};
 std::weak_ptr<cWeapon> WorkshopNewWeapon{};
 int	CurrentWorkshopNewFighter = 1;
 int	CurrentWorkshopNewWeapon = 1;
@@ -82,38 +82,38 @@ extern int WeaponSetupSlot;
 void WorkshopCreateShip(int Num)
 {
 	// создаем объект
-	if (WorkshopFighterGame != nullptr) {
-		ReleaseSpaceShip(WorkshopFighterGame);
-		WorkshopFighterGame = nullptr;
-	}
+	ReleaseSpaceShip(WorkshopFighterGame);
 
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
 	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
+	auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
+	if (!sharedWorkshopFighterGame)
+		return;
 
-	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
-	WorkshopFighterGame->EngineDestroyType = true;
-	WorkshopFighterGame->ShowStrength = false;
+	sharedWorkshopFighterGame->ObjectStatus = eObjectStatus::none;
+	sharedWorkshopFighterGame->EngineDestroyType = true;
+	sharedWorkshopFighterGame->ShowStrength = false;
 
-	WorkshopFighterGame->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
-	WorkshopFighterGame->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+	sharedWorkshopFighterGame->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
+	sharedWorkshopFighterGame->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 
 
 	// создаем оружие
-	for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
+	for (unsigned i = 0; i < sharedWorkshopFighterGame->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] &&
 		    SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
-			if (auto sharedWeapon = WorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
+			if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
 				// убираем источник света
 				if (auto sharedFire = sharedWeapon->Fire.lock())
 					vw_ReleaseLight(sharedFire->Light);
 
 				sharedWeapon->Ammo = GameConfig().Profile[CurrentProfile].WeaponAmmo[i];
-				WorkshopFighterGame->WeaponSlots[i].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
+				sharedWorkshopFighterGame->WeaponSlots[i].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i];
 
-				sVECTOR3D NeedAngle = WorkshopFighterGame->Rotation;
-				NeedAngle.y += WorkshopFighterGame->WeaponSlots[i].YAngle;
+				sVECTOR3D NeedAngle = sharedWorkshopFighterGame->Rotation;
+				NeedAngle.y += sharedWorkshopFighterGame->WeaponSlots[i].YAngle;
 				sharedWeapon->SetRotation(NeedAngle);
 			}
 		}
@@ -128,16 +128,16 @@ void WorkshopCreateShip(int Num)
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
-	WorkshopFighterGame->SetLocation(sVECTOR3D{1000.0f,
-						   -1000.0f - (WorkshopFighterGame->Height / 2.0f + WorkshopFighterGame->AABB[6].y),
-						   -(WorkshopFighterGame->Length / 2.0f + WorkshopFighterGame->AABB[6].z)});
+	sharedWorkshopFighterGame->SetLocation(sVECTOR3D{1000.0f,
+							 -1000.0f - (sharedWorkshopFighterGame->Height / 2.0f + sharedWorkshopFighterGame->AABB[6].y),
+							 -(sharedWorkshopFighterGame->Length / 2.0f + sharedWorkshopFighterGame->AABB[6].z)});
 
 	if (Num == 1)
-		WorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 150.0f, 0.0f});
+		sharedWorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 150.0f, 0.0f});
 	if (Num == 2)
-		WorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 170.0f, 0.0f});
+		sharedWorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 170.0f, 0.0f});
 	if (Num == 3)
-		WorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
+		sharedWorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 180.0f, 0.0f});
 }
 
 
@@ -151,25 +151,25 @@ void WorkshopCreateShip(int Num)
 void WorkshopCreateNewShip()
 {
 	// создаем объект
-	if (WorkshopNewFighter != nullptr) {
-		ReleaseSpaceShip(WorkshopNewFighter);
-		WorkshopNewFighter = nullptr;
-	}
+	ReleaseSpaceShip(WorkshopNewFighter);
 
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
 	WorkshopNewFighter = CreateEarthSpaceFighter(CurrentWorkshopNewFighter);
+	auto sharedWorkshopNewFighter = WorkshopNewFighter.lock();
+	if (!sharedWorkshopNewFighter)
+		return;
 
-	WorkshopNewFighter->ObjectStatus = eObjectStatus::none;
-	WorkshopNewFighter->EngineDestroyType = true;
+	sharedWorkshopNewFighter->ObjectStatus = eObjectStatus::none;
+	sharedWorkshopNewFighter->EngineDestroyType = true;
 
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
-	WorkshopNewFighter->SetLocation(sVECTOR3D{2000.0f,
-						  -2000.0f - (WorkshopNewFighter->Height / 2.0f + WorkshopNewFighter->AABB[6].y),
-						  -(WorkshopNewFighter->Length / 2.0f + WorkshopNewFighter->AABB[6].z)});
+	sharedWorkshopNewFighter->SetLocation(sVECTOR3D{2000.0f,
+							-2000.0f - (sharedWorkshopNewFighter->Height / 2.0f + sharedWorkshopNewFighter->AABB[6].y),
+							-(sharedWorkshopNewFighter->Length / 2.0f + sharedWorkshopNewFighter->AABB[6].z)});
 
-	WorkshopNewFighter->SetRotation(sVECTOR3D{0.0f, -45.0f, 0.0f});
+	sharedWorkshopNewFighter->SetRotation(sVECTOR3D{0.0f, -45.0f, 0.0f});
 }
 
 
@@ -260,14 +260,8 @@ void WorkshopCreate()
 //------------------------------------------------------------------------------------
 void WorkshopDestroyData()
 {
-	if (WorkshopFighterGame != nullptr) {
-		ReleaseSpaceShip(WorkshopFighterGame);
-		WorkshopFighterGame = nullptr;
-	}
-	if (WorkshopNewFighter != nullptr) {
-		ReleaseSpaceShip(WorkshopNewFighter);
-		WorkshopNewFighter = nullptr;
-	}
+	ReleaseSpaceShip(WorkshopFighterGame);
+	ReleaseSpaceShip(WorkshopNewFighter);
 	ReleaseWeapon(WorkshopNewWeapon);
 }
 
@@ -465,9 +459,13 @@ void WorkshopMenu()
 //------------------------------------------------------------------------------------
 // Прорисовка 3д части
 //------------------------------------------------------------------------------------
-void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
+void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode)
 {
-	if (!CanDrawWorkshop || (SpaceShip == nullptr))
+	if (!CanDrawWorkshop)
+		return;
+
+	auto sharedSpaceShip = SpaceShip.lock();
+	if (!sharedSpaceShip)
 		return;
 
 	float tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight;
@@ -475,8 +473,8 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 
 	if (Mode == 1) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 4.0f, -32.0f};
-		SpaceShip->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
-		SpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
+		sharedSpaceShip->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
+		sharedSpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
 
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
@@ -499,9 +497,9 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, 5.0f, 0.0f}, EffectiveDistance, EffectiveDistance * 2);
 
-			SpaceShip->Draw(true);
-			if (!SpaceShip->WeaponSlots.empty()) {
-				for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
+			sharedSpaceShip->Draw(true);
+			if (!sharedSpaceShip->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->Draw(true);
 				}
@@ -512,9 +510,9 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 			ShadowMap_StartFinalRender();
 		}
 
-		SpaceShip->Draw(false, ShadowMap);
-		if (!SpaceShip->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
+		sharedSpaceShip->Draw(false, ShadowMap);
+		if (!sharedSpaceShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 					sharedWeapon->Draw(false, ShadowMap);
 			}
@@ -524,7 +522,7 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 			ShadowMap_EndFinalRender();
 
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(SpaceShip->Engines);
+		vw_DrawParticleSystems(sharedSpaceShip->Engines);
 
 		vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
 		vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
@@ -536,7 +534,7 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 
 	if (Mode == 4) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 35.0f, -0.01f};
-		SpaceShip->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
+		sharedSpaceShip->SetRotation(sVECTOR3D{0.0f, 0.0f, CurrentDeviation});
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       (GLint)(30 * (tmpViewportHeight / GameConfig().InternalHeight)),
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -557,9 +555,9 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 			float EffectiveDistance = 20.0f;
 			ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, 0.0f, 0.0f}, EffectiveDistance, EffectiveDistance*2);
 
-			SpaceShip->Draw(true);
-			if (!SpaceShip->WeaponSlots.empty()) {
-				for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
+			sharedSpaceShip->Draw(true);
+			if (!sharedSpaceShip->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->Draw(true);
 				}
@@ -570,9 +568,9 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 			ShadowMap_StartFinalRender();
 		}
 
-		SpaceShip->Draw(false, ShadowMap);
-		if (!SpaceShip->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
+		sharedSpaceShip->Draw(false, ShadowMap);
+		if (!sharedSpaceShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 					sharedWeapon->Draw(false, ShadowMap);
 			}
@@ -582,7 +580,7 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 			ShadowMap_EndFinalRender();
 
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(SpaceShip->Engines);
+		vw_DrawParticleSystems(sharedSpaceShip->Engines);
 
 		vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
 		vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
@@ -597,7 +595,7 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 
 	if (Mode == 3) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 10.0f, -34.0f};
-		SpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
+		sharedSpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -608,13 +606,13 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 		vw_SetCameraLocation(sVECTOR3D{WorkShopPointCamera.x / 1.2f + 1000.0f,
 					       WorkShopPointCamera.y / 1.2f - 1000.0f,
 					       WorkShopPointCamera.z / 1.2f});
-		vw_SetCameraMoveAroundPoint(sVECTOR3D{1000.0f, -1000.0f - SpaceShip->AABB[6].y - SpaceShip->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
+		vw_SetCameraMoveAroundPoint(sVECTOR3D{1000.0f, -1000.0f - sharedSpaceShip->AABB[6].y - sharedSpaceShip->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 	}
 	if (Mode == 2) {
 		WorkShopPointCamera = sVECTOR3D{0.0f, 10.0f, -34.0f};
 		sVECTOR3D PointCameraTMP = WorkShopPointCamera;
 		vw_RotatePoint(PointCameraTMP, sVECTOR3D{0.0f, -90.0f, 0.0f});
-		SpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
+		sharedSpaceShip->SetRotation(sVECTOR3D{0.0f, CurrentDeviation / 2.0f, 0.0f});
 		vw_SetViewport((GLint)((GameConfig().InternalWidth / 2 - 512) * (tmpViewportWidth / GameConfig().InternalWidth)),
 			       0,
 			       (GLsizei)(512 * (tmpViewportWidth / GameConfig().InternalWidth)),
@@ -625,7 +623,7 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 		vw_SetCameraLocation(sVECTOR3D{PointCameraTMP.x / 1.2f + 2000.0f,
 					       PointCameraTMP.y / 1.2f - 2000.0f,
 					       PointCameraTMP.z / 1.2f});
-		vw_SetCameraMoveAroundPoint(sVECTOR3D{2000.0f, -2000.0f - SpaceShip->AABB[6].y - SpaceShip->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 170.0f, 0.0f});
+		vw_SetCameraMoveAroundPoint(sVECTOR3D{2000.0f, -2000.0f - sharedSpaceShip->AABB[6].y - sharedSpaceShip->Height / 3.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 170.0f, 0.0f});
 	}
 	vw_CameraLookAt();
 
@@ -636,9 +634,9 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 		float EffectiveDistance = 20.0f;
 		ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, -2.0f, 0.0f}, EffectiveDistance, EffectiveDistance * 2.0f);
 
-		SpaceShip->Draw(true);
-		if (!SpaceShip->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
+		sharedSpaceShip->Draw(true);
+		if (!sharedSpaceShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 					sharedWeapon->Draw(true);
 			}
@@ -649,10 +647,10 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 		ShadowMap_StartFinalRender();
 	}
 
-	SpaceShip->Draw(false, ShadowMap);
+	sharedSpaceShip->Draw(false, ShadowMap);
 
-	if (!SpaceShip->WeaponSlots.empty()) {
-		for (auto &tmpWeaponSlot : SpaceShip->WeaponSlots) {
+	if (!sharedSpaceShip->WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 				sharedWeapon->Draw(false, ShadowMap);
 		}
@@ -662,7 +660,7 @@ void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode)
 		ShadowMap_EndFinalRender();
 
 	// рисуем эффекты двигателей только для этой модели
-	vw_DrawParticleSystems(SpaceShip->Engines);
+	vw_DrawParticleSystems(sharedSpaceShip->Engines);
 
 	vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
 	vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);

@@ -41,7 +41,7 @@ namespace astromenace {
 //------------------------------------------------------------------------------------
 // переменные
 //------------------------------------------------------------------------------------
-cSpaceShip *InfoShip{nullptr};
+std::weak_ptr<cSpaceShip> InfoShip{};
 std::weak_ptr<cWeapon> InfoWeapon{};
 std::weak_ptr<cProjectile> InfoMine{};
 std::weak_ptr<cGroundObject> InfoGroundObject{};
@@ -255,10 +255,7 @@ int GetInfoSwitchToGroup(int Group)
 //------------------------------------------------------------------------------------
 void DestroyInfoObject()
 {
-	if (InfoShip != nullptr) {
-		ReleaseSpaceShip(InfoShip);
-		InfoShip = nullptr;
-	}
+	ReleaseSpaceShip(InfoShip);
 	ReleaseWeapon(InfoWeapon);
 	ReleaseProjectile(InfoMine);
 	ReleaseGroundObject(InfoGroundObject);
@@ -285,33 +282,35 @@ void CreateInfoObject()
 	if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
 		int tmpCreateNum = CreateNum-InfoFighterStart+1;
 		InfoShip = CreateEarthSpaceFighter(tmpCreateNum);
-		InfoShip->ObjectStatus = eObjectStatus::none;
-		InfoShip->EngineDestroyType = true;
-		InfoShip->SetLocation(sVECTOR3D{1000.0f,
-						-1000.0f - InfoShip->AABB[6].y,
-						0.0f});
-		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		if (auto sharedShip = InfoShip.lock()) {
+			sharedShip->ObjectStatus = eObjectStatus::none;
+			sharedShip->EngineDestroyType = true;
+			sharedShip->SetLocation(sVECTOR3D{1000.0f,
+							  -1000.0f - sharedShip->AABB[6].y,
+							  0.0f});
+			ObjectBaseLocation = sharedShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f,
-				  -1000.0f + InfoShip->Height / 3.0f,
-				  0.0f};
+			Point = sVECTOR3D{1000.0f,
+					  -1000.0f + sharedShip->Height / 3.0f,
+					  0.0f};
 
-		PointCamera = sVECTOR3D{0.0f,
-					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
-					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
-		InfoObjectWidth = InfoShip->Width;
-		InfoObjectLength = InfoShip->Length;
-		InfoObjectHeight = InfoShip->Height;
-		InfoObjectStrength = InfoShip->StrengthStart;
-		InfoObjectWeaponQuantity = InfoShip->WeaponSlots.size();
-		InfoObjectEngineQuantity = InfoShip->Engines.size();
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.24f + sharedShip->Height * 0.3f,
+						-(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.56f - sharedShip->Height * 0.7f};
+			InfoObjectWidth = sharedShip->Width;
+			InfoObjectLength = sharedShip->Length;
+			InfoObjectHeight = sharedShip->Height;
+			InfoObjectStrength = sharedShip->StrengthStart;
+			InfoObjectWeaponQuantity = sharedShip->WeaponSlots.size();
+			InfoObjectEngineQuantity = sharedShip->Engines.size();
 
-		for (auto &tmpEngine : InfoShip->Engines) {
-			if (auto sharedEngine = tmpEngine.lock())
-				sharedEngine->SpeedOnCreation = -1.0f;
+			for (auto &tmpEngine : sharedShip->Engines) {
+				if (auto sharedEngine = tmpEngine.lock())
+					sharedEngine->SpeedOnCreation = -1.0f;
+			}
+
+			sharedShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
-
-		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
 		int tmpCreateNum = CreateNum-InfoWeaponStart+1;
@@ -372,78 +371,84 @@ void CreateInfoObject()
 	if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienStart+1;
 		InfoShip = CreateAlienSpaceFighter(tmpCreateNum);
-		InfoShip->ObjectStatus = eObjectStatus::none;
-		InfoShip->EngineDestroyType = true;
-		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});
-		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		if (auto sharedShip = InfoShip.lock()) {
+			sharedShip->ObjectStatus = eObjectStatus::none;
+			sharedShip->EngineDestroyType = true;
+			sharedShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedShip->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f, -1000.0f + InfoShip->Height / 3.0f, 0.0f};
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedShip->Height / 3.0f, 0.0f};
 
-		PointCamera = sVECTOR3D{0.0f,
-					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
-					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.24f + sharedShip->Height * 0.3f,
+						-(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.56f - sharedShip->Height * 0.7f};
 
-		InfoObjectWidth = InfoShip->Width;
-		InfoObjectLength = InfoShip->Length;
-		InfoObjectHeight = InfoShip->Height;
-		InfoObjectStrength = InfoShip->StrengthStart;
+			InfoObjectWidth = sharedShip->Width;
+			InfoObjectLength = sharedShip->Length;
+			InfoObjectHeight = sharedShip->Height;
+			InfoObjectStrength = sharedShip->StrengthStart;
 
-		for (auto &tmpEngine : InfoShip->Engines) {
-			if (auto sharedEngine = tmpEngine.lock())
-				sharedEngine->SpeedOnCreation = -1.0f;
+			for (auto &tmpEngine : sharedShip->Engines) {
+				if (auto sharedEngine = tmpEngine.lock())
+					sharedEngine->SpeedOnCreation = -1.0f;
+			}
+
+			sharedShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
-
-		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
 		int tmpCreateNum = CreateNum-InfoAlienMotherShipStart+1;
 		InfoShip = CreateAlienSpaceMotherShip(tmpCreateNum);
-		InfoShip->ObjectStatus = eObjectStatus::none;
-		InfoShip->EngineDestroyType = true;
-		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});
-		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		if (auto sharedShip = InfoShip.lock()) {
+			sharedShip->ObjectStatus = eObjectStatus::none;
+			sharedShip->EngineDestroyType = true;
+			sharedShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedShip->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f, -1000.0f + InfoShip->Height / 3.0f, 0.0f};
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedShip->Height / 3.0f, 0.0f};
 
-		PointCamera = sVECTOR3D{0.0f,
-					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
-					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
-		InfoObjectWidth = InfoShip->Width;
-		InfoObjectLength = InfoShip->Length;
-		InfoObjectHeight = InfoShip->Height;
-		InfoObjectStrength = InfoShip->StrengthStart;
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.24f + sharedShip->Height * 0.3f,
+						-(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.56f - sharedShip->Height * 0.7f};
+			InfoObjectWidth = sharedShip->Width;
+			InfoObjectLength = sharedShip->Length;
+			InfoObjectHeight = sharedShip->Height;
+			InfoObjectStrength = sharedShip->StrengthStart;
 
-		for (auto &tmpEngine : InfoShip->Engines) {
-			if (auto sharedEngine = tmpEngine.lock())
-				sharedEngine->SpeedOnCreation = -1.0f;
+			for (auto &tmpEngine : sharedShip->Engines) {
+				if (auto sharedEngine = tmpEngine.lock())
+					sharedEngine->SpeedOnCreation = -1.0f;
+			}
+
+			sharedShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
-
-		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
 		int tmpCreateNum = CreateNum-InfoPirateShipStart+1;
 		InfoShip = CreatePirateShip(tmpCreateNum);
-		InfoShip->ObjectStatus = eObjectStatus::none;
-		InfoShip->EngineDestroyType = true;
-		InfoShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - InfoShip->AABB[6].y, 0.0f});
-		ObjectBaseLocation = InfoShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
+		if (auto sharedShip = InfoShip.lock()) {
+			sharedShip->ObjectStatus = eObjectStatus::none;
+			sharedShip->EngineDestroyType = true;
+			sharedShip->SetLocation(sVECTOR3D{1000.0f, -1000.0f - sharedShip->AABB[6].y, 0.0f});
+			ObjectBaseLocation = sharedShip->Location - sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
-		Point = sVECTOR3D{1000.0f, -1000.0f + InfoShip->Height / 3.0f, 0.0f};
+			Point = sVECTOR3D{1000.0f, -1000.0f + sharedShip->Height / 3.0f, 0.0f};
 
-		PointCamera = sVECTOR3D{0.0f,
-					(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.24f + InfoShip->Height * 0.3f,
-					-(InfoShip->Length + InfoShip->Width + InfoShip->Height) * 0.56f - InfoShip->Height * 0.7f};
-		InfoObjectWidth = InfoShip->Width;
-		InfoObjectLength = InfoShip->Length;
-		InfoObjectHeight = InfoShip->Height;
-		InfoObjectStrength = InfoShip->StrengthStart;
+			PointCamera = sVECTOR3D{0.0f,
+						(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.24f + sharedShip->Height * 0.3f,
+						-(sharedShip->Length + sharedShip->Width + sharedShip->Height) * 0.56f - sharedShip->Height * 0.7f};
+			InfoObjectWidth = sharedShip->Width;
+			InfoObjectLength = sharedShip->Length;
+			InfoObjectHeight = sharedShip->Height;
+			InfoObjectStrength = sharedShip->StrengthStart;
 
-		for (auto &tmpEngine : InfoShip->Engines) {
-			if (auto sharedEngine = tmpEngine.lock())
-				sharedEngine->SpeedOnCreation = -1.0f;
+			for (auto &tmpEngine : sharedShip->Engines) {
+				if (auto sharedEngine = tmpEngine.lock())
+					sharedEngine->SpeedOnCreation = -1.0f;
+			}
+
+			sharedShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
-
-		InfoShip->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 	}
 	if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
 		int tmpCreateNum = CreateNum-InfoBuildingStart+1;
@@ -1439,9 +1444,9 @@ void InformationDrawObject()
 
 
 
-	if (InfoShip) {
-		InfoShip->SetLocation(TMPLocation);
-		InfoShip->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
+	if (auto sharedShip = InfoShip.lock()) {
+		sharedShip->SetLocation(TMPLocation);
+		sharedShip->SetRotation(sVECTOR3D{0.0f, RotateInfoObjectY, 0.0f});
 	}
 	if (auto sharedWeapon = InfoWeapon.lock()) {
 		sharedWeapon->SetLocation(TMPLocation);
@@ -1468,11 +1473,11 @@ void InformationDrawObject()
 		// and tracks, etc., we are forced to disable face's culling during shadows map generation
 		vw_CullFace(eCullFace::NONE);
 
-		if (InfoShip) {
-			InfoShip->Draw(true);
+		if (auto sharedShip = InfoShip.lock()) {
+			sharedShip->Draw(true);
 			// рисуем оружие
-			if (!InfoShip->WeaponSlots.empty()) {
-				for (auto &tmpWeaponSlot : InfoShip->WeaponSlots) {
+			if (!sharedShip->WeaponSlots.empty()) {
+				for (auto &tmpWeaponSlot : sharedShip->WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->Draw(true);
 				}
@@ -1494,17 +1499,17 @@ void InformationDrawObject()
 
 
 
-	if (InfoShip) {
-		InfoShip->Draw(false, ShadowMap);
+	if (auto sharedShip = InfoShip.lock()) {
+		sharedShip->Draw(false, ShadowMap);
 		// рисуем оружие
-		if (!InfoShip->WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : InfoShip->WeaponSlots) {
+		if (!sharedShip->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : sharedShip->WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 					sharedWeapon->Draw(false, ShadowMap);
 			}
 		}
 		// рисуем эффекты двигателей только для этой модели
-		vw_DrawParticleSystems(InfoShip->Engines);
+		vw_DrawParticleSystems(sharedShip->Engines);
 	}
 	if (auto sharedWeapon = InfoWeapon.lock())
 		sharedWeapon->Draw(false, ShadowMap);

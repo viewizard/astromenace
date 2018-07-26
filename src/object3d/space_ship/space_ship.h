@@ -79,17 +79,9 @@ struct sShipWeaponSlot {
 };
 
 class cSpaceShip : public cObject3D {
-	friend void UpdateAllSpaceShip(float Time);
-	friend void ReleaseSpaceShip(cSpaceShip *Ship);
-	friend void ReleaseAllSpaceShips();
-	friend void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function);
-	friend void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
-							     cSpaceShip &SecondObject,
-							     eShipPairCycle &Command)> function);
-
 protected:
 	// don't allow object of this class creation
-	cSpaceShip();
+	cSpaceShip() = default;
 	virtual ~cSpaceShip();
 
 public:
@@ -215,68 +207,60 @@ public:
 	// двигатели поворотов, правый
 	std::vector<std::weak_ptr<cParticleSystem>> EnginesRight{}; // двигатели
 	std::vector<sVECTOR3D> EnginesRightLocation{}; // положение двигателей
-
-	// для собственного списка
-	cSpaceShip *Next{nullptr};
-	cSpaceShip *Prev{nullptr};
 };
 
 class cAlienSpaceFighter final : public cSpaceShip {
-	friend cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum);
-	friend void UpdateAllSpaceShip(float Time);
-	friend void ReleaseSpaceShip(cSpaceShip *Ship);
-	friend void ReleaseAllSpaceShips();
+	friend std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(int SpaceShipNum);
 private:
+	// Don't allow direct new/delete usage in code, only CreateAlienSpaceFighter()
+	// allowed for cAlienSpaceFighter creation and release setup (deleter must be provided).
 	explicit cAlienSpaceFighter(int SpaceShipNum);
 	~cAlienSpaceFighter() = default;
 };
 
 class cAlienSpaceMotherShip final : public cSpaceShip {
-	friend cSpaceShip *CreateAlienSpaceMotherShip(int SpaceShipNum);
-	friend void UpdateAllSpaceShip(float Time);
-	friend void ReleaseSpaceShip(cSpaceShip *Ship);
-	friend void ReleaseAllSpaceShips();
+	friend std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(int SpaceShipNum);
 private:
+	// Don't allow direct new/delete usage in code, only CreateAlienSpaceMotherShip()
+	// allowed for cAlienSpaceMotherShip creation and release setup (deleter must be provided).
 	explicit cAlienSpaceMotherShip(int SpaceShipNum);
 	~cAlienSpaceMotherShip() = default;
 };
 
 class cEarthSpaceFighter final : public cSpaceShip {
-	friend cSpaceShip *CreateEarthSpaceFighter(int SpaceShipNum);
-	friend void UpdateAllSpaceShip(float Time);
-	friend void ReleaseSpaceShip(cSpaceShip *Ship);
-	friend void ReleaseAllSpaceShips();
+	friend std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(int SpaceShipNum);
 private:
+	// Don't allow direct new/delete usage in code, only cEarthSpaceFighter()
+	// allowed for cEarthSpaceFighter creation and release setup (deleter must be provided).
 	explicit cEarthSpaceFighter(int SpaceShipNum);
 	~cEarthSpaceFighter() = default;
 };
 
 class cPirateShip final : public cSpaceShip {
-	friend cSpaceShip *CreatePirateShip(int SpaceShipNum);
-	friend void UpdateAllSpaceShip(float Time);
-	friend void ReleaseSpaceShip(cSpaceShip *Ship);
-	friend void ReleaseAllSpaceShips();
+	friend std::weak_ptr<cSpaceShip> CreatePirateShip(int SpaceShipNum);
 private:
+	// Don't allow direct new/delete usage in code, only cPirateShip()
+	// allowed for cPirateShip creation and release setup (deleter must be provided).
 	explicit cPirateShip(int SpaceShipNum);
 	~cPirateShip() = default;
 };
 
 
 // Create cAlienSpaceFighter object.
-cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(int SpaceShipNum);
 // Create cAlienSpaceMotherShip object.
-cSpaceShip *CreateAlienSpaceMotherShip(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(int SpaceShipNum);
 // Create cEarthSpaceFighter object.
-cSpaceShip *CreateEarthSpaceFighter(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(int SpaceShipNum);
 // Create cPirateShip object.
-cSpaceShip *CreatePirateShip(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreatePirateShip(int SpaceShipNum);
 
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceShip(float Time);
 // Прорисовываем все объекты
 void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular space ship.
-void ReleaseSpaceShip(cSpaceShip *Ship);
+void ReleaseSpaceShip(std::weak_ptr<cSpaceShip> &Ship);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceShips();
 // Managed cycle for each space ship.
@@ -287,11 +271,11 @@ void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 					      eShipPairCycle &Command)> function);
 
 // Установка системы двигателей
-void SetEarthSpaceFighterEngine(cSpaceShip *SpaceShip, int EngineType);
+void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, int EngineType);
 // Установка брони для кораблей землян
-void SetEarthSpaceFighterArmour(cSpaceShip *SpaceShip, int ArmourType);
+void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, int ArmourType);
 // Установка оружия на корабль
-bool SetEarthSpaceFighterWeapon(cSpaceShip *SpaceShip, int WeaponSlot, int WeaponNum);
+bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, int WeaponSlot, int WeaponNum);
 // Получаем возможный поворот орудия в данном слоте
 void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
 //

@@ -38,9 +38,8 @@ namespace astromenace {
 
 namespace {
 
-// Указатели на начальный и конечный объект в списке
-cSpaceShip *StartSpaceShip = nullptr;
-cSpaceShip *EndSpaceShip = nullptr;
+// all ship list
+std::list<std::shared_ptr<cSpaceShip>> ShipList{};
 
 } // unnamed namespace
 
@@ -49,83 +48,61 @@ extern bool PlayerFighterLeftEng;
 extern bool PlayerFighterRightEng;
 
 
-//-----------------------------------------------------------------------------
-// Включаем в список
-//-----------------------------------------------------------------------------
-static void AttachSpaceShip(cSpaceShip *SpaceShip)
-{
-	if (SpaceShip == nullptr)
-		return;
-
-	// первый в списке...
-	if (EndSpaceShip == nullptr) {
-		SpaceShip->Prev = nullptr;
-		SpaceShip->Next = nullptr;
-		StartSpaceShip = SpaceShip;
-		EndSpaceShip = SpaceShip;
-	} else { // продолжаем заполнение...
-		SpaceShip->Prev = EndSpaceShip;
-		SpaceShip->Next = nullptr;
-		EndSpaceShip->Next = SpaceShip;
-		EndSpaceShip = SpaceShip;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Исключаем из списка
-//-----------------------------------------------------------------------------
-static void DetachSpaceShip(cSpaceShip *SpaceShip)
-{
-	if (SpaceShip == nullptr)
-		return;
-
-	// переустанавливаем указатели...
-	if (StartSpaceShip == SpaceShip)
-		StartSpaceShip = SpaceShip->Next;
-	if (EndSpaceShip == SpaceShip)
-		EndSpaceShip = SpaceShip->Prev;
-
-	if (SpaceShip->Next != nullptr)
-		SpaceShip->Next->Prev = SpaceShip->Prev;
-	else if (SpaceShip->Prev != nullptr)
-		SpaceShip->Prev->Next = nullptr;
-
-	if (SpaceShip->Prev != nullptr)
-		SpaceShip->Prev->Next = SpaceShip->Next;
-	else if (SpaceShip->Next != nullptr)
-		SpaceShip->Next->Prev = nullptr;
-}
-
 /*
  * Create cAlienSpaceFighter object.
  */
-cSpaceShip *CreateAlienSpaceFighter(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(int SpaceShipNum)
 {
-	return new cAlienSpaceFighter{SpaceShipNum};
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	ShipList.emplace_front(new cAlienSpaceFighter{SpaceShipNum}, [](cAlienSpaceFighter *p) {delete p;});
+	return ShipList.front();
 }
 
 /*
  * Create cAlienSpaceMotherShip object.
  */
-cSpaceShip *CreateAlienSpaceMotherShip(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(int SpaceShipNum)
 {
-	return new cAlienSpaceMotherShip{SpaceShipNum};
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	ShipList.emplace_front(new cAlienSpaceMotherShip{SpaceShipNum}, [](cAlienSpaceMotherShip *p) {delete p;});
+	return ShipList.front();
 }
 
 /*
  * Create cEarthSpaceFighter object.
  */
-cSpaceShip *CreateEarthSpaceFighter(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(int SpaceShipNum)
 {
-	return new cEarthSpaceFighter{SpaceShipNum};
+	ShipList.emplace_front(new cEarthSpaceFighter{SpaceShipNum}, [](cEarthSpaceFighter *p) {delete p;});
+
+	std::weak_ptr<cSpaceShip> tmpSpaceShip = ShipList.front();
+
+	SetEarthSpaceFighterEngine(tmpSpaceShip, 1);
+	for (unsigned int i = 0; i < ShipList.front()->Engines.size(); i++) {
+		if (auto sharedEngine = ShipList.front()->Engines[i].lock()) {
+			// находим кол-во внутренних источников света
+			if (!sharedEngine->Light.expired())
+				ShipList.front()->InternalLights++;
+		}
+	}
+
+	// делаем предварительную уснановку брони-текстур
+	SetEarthSpaceFighterArmour(tmpSpaceShip, 0);
+
+	return ShipList.front();
 }
 
 /*
  * Create cPirateShip object.
  */
-cSpaceShip *CreatePirateShip(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreatePirateShip(int SpaceShipNum)
 {
-	return new cPirateShip{SpaceShipNum};
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	ShipList.emplace_front(new cPirateShip{SpaceShipNum}, [](cPirateShip *p) {delete p;});
+	return ShipList.front();
 }
 
 //-----------------------------------------------------------------------------
@@ -133,14 +110,11 @@ cSpaceShip *CreatePirateShip(int SpaceShipNum)
 //-----------------------------------------------------------------------------
 void UpdateAllSpaceShip(float Time)
 {
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp != nullptr) {
-		cSpaceShip *tmp2 = tmp->Next;
-		// делаем обновление данных по объекту
-		if (!tmp->Update(Time))
-			// если его нужно уничтожить - делаем это
-			delete tmp;
-		tmp = tmp2;
+	for (auto iter = ShipList.begin(); iter != ShipList.end();) {
+		if (!iter->get()->Update(Time))
+			iter = ShipList.erase(iter);
+		else
+			++iter;
 	}
 }
 
@@ -149,20 +123,27 @@ void UpdateAllSpaceShip(float Time)
 //-----------------------------------------------------------------------------
 void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap)
 {
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp != nullptr) {
-		cSpaceShip *tmp2 = tmp->Next;
-		tmp->Draw(VertexOnlyPass, ShadowMap);
-		tmp = tmp2;
+	for (auto &tmpShip : ShipList) {
+		tmpShip.get()->Draw(VertexOnlyPass, ShadowMap);
 	}
 }
 
 /*
  * Release particular space ship.
  */
-void ReleaseSpaceShip(cSpaceShip *Ship)
+void ReleaseSpaceShip(std::weak_ptr<cSpaceShip> &Ship)
 {
-	delete Ship;
+	auto sharedObject = Ship.lock();
+	if (!sharedObject)
+		return;
+
+	for (auto iter = ShipList.begin(); iter != ShipList.end();) {
+		if (iter->get() == sharedObject.get()) {
+			ShipList.erase(iter);
+			return;
+		}
+		++iter;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -170,15 +151,7 @@ void ReleaseSpaceShip(cSpaceShip *Ship)
 //-----------------------------------------------------------------------------
 void ReleaseAllSpaceShips()
 {
-	cSpaceShip *tmp = StartSpaceShip;
-	while (tmp != nullptr) {
-		cSpaceShip *tmp2 = tmp->Next;
-		delete tmp;
-		tmp = tmp2;
-	}
-
-	StartSpaceShip = nullptr;
-	EndSpaceShip = nullptr;
+	ShipList.clear();
 }
 
 /*
@@ -186,24 +159,23 @@ void ReleaseAllSpaceShips()
  */
 void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function)
 {
-	cSpaceShip *tmpShip = StartSpaceShip;
-	while (tmpShip) {
-		cSpaceShip *tmpShipNext = tmpShip->Next;
+	for (auto iter = ShipList.begin(); iter != ShipList.end();) {
 		eShipCycle Command{eShipCycle::Continue};
-		function(*tmpShip, Command);
+		function(*iter->get(), Command);
+
 		switch (Command) {
 		case eShipCycle::Continue:
+			++iter;
 			break;
 		case eShipCycle::Break:
 			return;
 		case eShipCycle::DeleteObjectAndContinue:
-			delete tmpShip;
+			iter = ShipList.erase(iter);
 			break;
 		case eShipCycle::DeleteObjectAndBreak:
-			delete tmpShip;
+			ShipList.erase(iter);
 			return;
 		}
-		tmpShip = tmpShipNext;
 	}
 }
 
@@ -214,44 +186,31 @@ void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 					      cSpaceShip &SecondObject,
 					      eShipPairCycle &Command)> function)
 {
-	cSpaceShip *tmpFirstShip = StartSpaceShip;
-	while (tmpFirstShip) {
+	for (auto iterFirst = ShipList.begin(); iterFirst != ShipList.end();) {
 		eShipPairCycle Command{eShipPairCycle::Continue};
-		cSpaceShip *tmpSecondShip = tmpFirstShip->Next;
-		while (tmpSecondShip) {
+
+		for (auto iterSecond = std::next(iterFirst, 1); iterSecond != ShipList.end();) {
 			Command = eShipPairCycle::Continue;
-			function(*tmpFirstShip, *tmpSecondShip, Command);
-			cSpaceShip *tmpSecondShipNext = tmpSecondShip->Next;
+			function(*iterFirst->get(), *iterSecond->get(), Command);
 
 			if ((Command == eShipPairCycle::DeleteSecondObjectAndContinue) ||
 			    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
-				delete tmpSecondShip;
+				iterSecond = ShipList.erase(iterSecond);
+			else
+				++iterSecond;
 
 			// break second cycle
 			if ((Command == eShipPairCycle::DeleteFirstObjectAndContinue) ||
 			    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
 				break;
-
-			tmpSecondShip = tmpSecondShipNext;
 		}
-
-		cSpaceShip *tmpFirstShipNext = tmpFirstShip->Next;
 
 		if ((Command == eShipPairCycle::DeleteFirstObjectAndContinue) ||
 		    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
-			delete tmpFirstShip;
-
-		tmpFirstShip = tmpFirstShipNext;
+			iterFirst = ShipList.erase(iterFirst);
+		else
+			++iterFirst;
 	}
-}
-
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
-cSpaceShip::cSpaceShip()
-{
-	// подключаем к своему списку
-	AttachSpaceShip(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -292,8 +251,6 @@ cSpaceShip::~cSpaceShip()
 			}
 		}
 	}
-
-	DetachSpaceShip(this);
 }
 
 //-----------------------------------------------------------------------------

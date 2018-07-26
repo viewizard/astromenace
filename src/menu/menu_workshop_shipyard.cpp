@@ -35,21 +35,21 @@
 namespace viewizard {
 namespace astromenace {
 
-extern cSpaceShip *WorkshopFighterGame;
-extern cSpaceShip *WorkshopNewFighter;
+extern std::weak_ptr<cSpaceShip> WorkshopFighterGame;
+extern std::weak_ptr<cSpaceShip> WorkshopNewFighter;
 extern int	CurrentWorkshopNewFighter;
 extern int	CurrentWorkshopNewWeapon;
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-void WorkshopDrawShip(cSpaceShip *SpaceShip, int Mode);
+void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode);
 void WorkshopCreateNewShip();
 int GetSystemCost(int Num);
 int GetWeaponCost(int Num, int Ammo, int AmmoStart);
 int GetWeaponBaseCost(int Num);
 
 // что рисовать в диалоге 6,7,8
-extern cSpaceShip *DialogSpaceShip;
+extern std::weak_ptr<cSpaceShip> DialogSpaceShip;
 
 
 
@@ -226,11 +226,13 @@ int GetWorkshopShipCost(int Num)
 
 
 
-int GetWorkshopShipRepairCost(int Num, cSpaceShip *Fighter)
+int GetWorkshopShipRepairCost(int Num, std::weak_ptr<cSpaceShip> &Fighter)
 {
 	int ShipCost = GetWorkshopShipCost(Num) * GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 	// расчет стоимости ремонта корабля
-	return ShipCost - (int)(ShipCost*(Fighter->Strength/Fighter->StrengthStart));
+	if (auto sharedFighter = Fighter.lock())
+		ShipCost -= (int)(ShipCost * (sharedFighter->Strength / sharedFighter->StrengthStart));
+	return ShipCost;
 }
 
 
@@ -238,7 +240,7 @@ int GetWorkshopShipRepairCost(int Num, cSpaceShip *Fighter)
 
 
 
-int GetWorkshopShipFullCost(int Num, cSpaceShip *Fighter)
+int GetWorkshopShipFullCost(int Num, std::weak_ptr<cSpaceShip> &Fighter)
 {
 	// полная стоимость корпуса корабля с повреждениями корабля
 	int ShipCost = GetWorkshopShipCost(Num) * GameConfig().Profile[CurrentProfile].ShipHullUpgrade -
@@ -246,12 +248,14 @@ int GetWorkshopShipFullCost(int Num, cSpaceShip *Fighter)
 
 
 	// прибавить стоимость оружия
-	if (!WorkshopFighterGame->WeaponSlots.empty()) {
-		for (auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
-			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
-				ShipCost += GetWeaponCost(sharedWeapon->InternalType,
-							  sharedWeapon->Ammo,
-							  sharedWeapon->AmmoStart);
+	if (auto sharedWorkshopFighterGame = WorkshopFighterGame.lock()) {
+		if (!sharedWorkshopFighterGame->WeaponSlots.empty()) {
+			for (auto &tmpWeaponSlot : sharedWorkshopFighterGame->WeaponSlots) {
+				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
+					ShipCost += GetWeaponCost(sharedWeapon->InternalType,
+								  sharedWeapon->Ammo,
+								  sharedWeapon->AmmoStart);
+			}
 		}
 	}
 
@@ -311,13 +315,16 @@ void WorkshopCreateBuyShip()
 	ChangeGameConfig().Profile[CurrentProfile].AdvancedProtectionSystem = 0;
 
 	// 2 - Оружие
-	unsigned OldWeaponQuantity = WorkshopFighterGame->WeaponSlots.size();
-	for (auto &tmpWeaponSlot : WorkshopFighterGame->WeaponSlots) {
-		if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-			ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(sharedWeapon->InternalType,
-											  sharedWeapon->Ammo,
-											  sharedWeapon->AmmoStart);
-			ReleaseWeapon(tmpWeaponSlot.Weapon);
+	unsigned OldWeaponQuantity = 0;
+	if (auto sharedWorkshopFighterGame = WorkshopFighterGame.lock()) {
+		OldWeaponQuantity = sharedWorkshopFighterGame->WeaponSlots.size();
+		for (auto &tmpWeaponSlot : sharedWorkshopFighterGame->WeaponSlots) {
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+				ChangeGameConfig().Profile[CurrentProfile].Money += GetWeaponCost(sharedWeapon->InternalType,
+												  sharedWeapon->Ammo,
+												  sharedWeapon->AmmoStart);
+				ReleaseWeapon(tmpWeaponSlot.Weapon);
+			}
 		}
 	}
 
@@ -341,10 +348,14 @@ void WorkshopCreateBuyShip()
 	GameEnemyArmorPenalty = 1;
 
 	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
-	WorkshopFighterGame->ObjectStatus = eObjectStatus::none;
-	WorkshopFighterGame->EngineDestroyType = true;
-	WorkshopFighterGame->ShowStrength = false;
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = WorkshopFighterGame->Strength;
+	auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
+	if (!sharedWorkshopFighterGame)
+		return;
+
+	sharedWorkshopFighterGame->ObjectStatus = eObjectStatus::none;
+	sharedWorkshopFighterGame->EngineDestroyType = true;
+	sharedWorkshopFighterGame->ShowStrength = false;
+	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->Strength;
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullUpgrade = 1;
 
 
@@ -381,11 +392,11 @@ void WorkshopCreateBuyShip()
 
 	// покупаем оружие, если можем... нет - ставим что продали его (это сделали ранее)
 	// всегда покупаем новое, т.е. с полным боекомплектом!
-	for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
+	for (unsigned i = 0; i < sharedWorkshopFighterGame->WeaponSlots.size(); i++) {
 		if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 			if (GameConfig().Profile[CurrentProfile].Money >= GetWeaponBaseCost(GameConfig().Profile[CurrentProfile].Weapon[i])) {
 				if (SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
-					if (auto sharedWeapon = WorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
+					if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
 						if (auto sharedFire = sharedWeapon->Fire.lock())
 							vw_ReleaseLight(sharedFire->Light);
 
@@ -404,14 +415,12 @@ void WorkshopCreateBuyShip()
 		}
 	}
 	// если было больше слотов чем есть сейчас
-	if (OldWeaponQuantity > WorkshopFighterGame->WeaponSlots.size()) {
+	if (OldWeaponQuantity > sharedWorkshopFighterGame->WeaponSlots.size()) {
 		for (unsigned j = 0; j < OldWeaponQuantity; j++) {
-			if (WorkshopFighterGame->WeaponSlots.size() <= j)
+			if (sharedWorkshopFighterGame->WeaponSlots.size() <= j)
 				ChangeGameConfig().Profile[CurrentProfile].Weapon[j] = 0;
 		}
 	}
-
-
 
 
 	// создаем системы (визуальные)
@@ -422,13 +431,13 @@ void WorkshopCreateBuyShip()
 		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
-	WorkshopFighterGame->SetLocation(sVECTOR3D{1000.0f,
-						   -1000.0f - (WorkshopFighterGame->Height / 2.0f + WorkshopFighterGame->AABB[6].y),
-						   -(WorkshopFighterGame->Length / 2.0f + WorkshopFighterGame->AABB[6].z)});
+	sharedWorkshopFighterGame->SetLocation(sVECTOR3D{1000.0f,
+							-1000.0f - (sharedWorkshopFighterGame->Height / 2.0f + sharedWorkshopFighterGame->AABB[6].y),
+							-(sharedWorkshopFighterGame->Length / 2.0f + sharedWorkshopFighterGame->AABB[6].z)});
 	// чтобы оружие заняло свое место...
-	WorkshopFighterGame->Update(vw_GetTimeThread(0));
+	sharedWorkshopFighterGame->Update(vw_GetTimeThread(0));
 
-	WorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 150.0f, 0.0f});
+	sharedWorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 150.0f, 0.0f});
 }
 
 
@@ -438,8 +447,10 @@ void WorkshopCreateBuyShip()
 void BuyShip()
 {
 	// сбрасываем особенные настройки слотов оружия
-	for (unsigned i = 0; i < WorkshopFighterGame->WeaponSlots.size(); i++) {
-		ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i] = 0;
+	if (auto sharedWorkshopFighterGame = WorkshopFighterGame.lock()) {
+		for (unsigned i = 0; i < sharedWorkshopFighterGame->WeaponSlots.size(); i++) {
+			ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i] = 0;
+		}
 	}
 
 	// создаем новый корабль
@@ -464,23 +475,27 @@ void BuyShip()
 
 void RepairShip()
 {
+	auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
+	if (!sharedWorkshopFighterGame)
+		return;
+
 	// смотрим, если денег достаточно для полного ремонта - делаем его
 	if (GameConfig().Profile[CurrentProfile].Money >= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame)) {
 		ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame);
-		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = WorkshopFighterGame->StrengthStart;
-		WorkshopFighterGame->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->StrengthStart;
+		sharedWorkshopFighterGame->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 		return;
 	}
 
 
 	// вычисляем, сколько можем отремонтировать
-	float StrengtRepair = WorkshopFighterGame->StrengthStart - WorkshopFighterGame->Strength;
+	float StrengtRepair = sharedWorkshopFighterGame->StrengthStart - sharedWorkshopFighterGame->Strength;
 	float MoneyRepair = static_cast<float>(GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
 	// сколько можем отремонтировать
 	float CanRepair = StrengtRepair * (GameConfig().Profile[CurrentProfile].Money/MoneyRepair);
 	// ремонтируем сколько можем
-	WorkshopFighterGame->Strength += CanRepair;
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = WorkshopFighterGame->Strength;
+	sharedWorkshopFighterGame->Strength += CanRepair;
+	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->Strength;
 	// это будет стоить все имеющиеся деньги
 	ChangeGameConfig().Profile[CurrentProfile].Money = 0;
 
@@ -494,18 +509,22 @@ void RepairShip()
 
 void UpgradeShip()
 {
+	auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
+	if (!sharedWorkshopFighterGame)
+		return;
+
 	// ув. данные о базовой прочности корабля
-	float OldStr = WorkshopFighterGame->StrengthStart;
-	WorkshopFighterGame->StrengthStart /= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
+	float OldStr = sharedWorkshopFighterGame->StrengthStart;
+	sharedWorkshopFighterGame->StrengthStart /= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 
 	// ув. данные о номере апгрейда
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullUpgrade++;
 
-	WorkshopFighterGame->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
-	WorkshopFighterGame->Strength = WorkshopFighterGame->StrengthStart - OldStr +
-					GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+	sharedWorkshopFighterGame->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
+	sharedWorkshopFighterGame->Strength = sharedWorkshopFighterGame->StrengthStart - OldStr +
+					      GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = WorkshopFighterGame->Strength;
+	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->Strength;
 
 
 	// вычитаем деньги за апгрейд
@@ -579,6 +598,9 @@ void Workshop_Shipyard()
 		DialogSpaceShip = WorkshopNewFighter;
 	}
 
+	auto sharedWorkshopNewFighter = WorkshopNewFighter.lock();
+	if (!sharedWorkshopNewFighter)
+		return;
 
 	// находим смещение, чтобы было красиво
 	int SmSizeI = vw_TextWidth(vw_GetText("Armor:"));
@@ -587,20 +609,20 @@ void Workshop_Shipyard()
 	SmSizeI = std::max({SmSizeI, SmSizeI2, SmSizeI3});
 
 	vw_DrawText(GameConfig().InternalWidth/2-440, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
-	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", (int)WorkshopNewFighter->StrengthStart);
+	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", (int)sharedWorkshopNewFighter->StrengthStart);
 
 	vw_DrawText(GameConfig().InternalWidth/2-440, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
-	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponSlots.size());
+	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", sharedWorkshopNewFighter->WeaponSlots.size());
 
 	vw_DrawText(GameConfig().InternalWidth/2-440, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
 	int SSS = 0;
-	if (WorkshopNewFighter->WeaponSlots.size()>0) {
-		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopNewFighter->WeaponSlots[0].Type);
-		SSS += vw_TextWidth("%i", WorkshopNewFighter->WeaponSlots[0].Type);
+	if (sharedWorkshopNewFighter->WeaponSlots.size()>0) {
+		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", sharedWorkshopNewFighter->WeaponSlots[0].Type);
+		SSS += vw_TextWidth("%i", sharedWorkshopNewFighter->WeaponSlots[0].Type);
 	}
-	for (unsigned i=1; i<WorkshopNewFighter->WeaponSlots.size(); i++) {
-		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", WorkshopNewFighter->WeaponSlots[i].Type);
-		SSS += vw_TextWidth("/%i", WorkshopNewFighter->WeaponSlots[i].Type);
+	for (unsigned i=1; i<sharedWorkshopNewFighter->WeaponSlots.size(); i++) {
+		vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", sharedWorkshopNewFighter->WeaponSlots[i].Type);
+		SSS += vw_TextWidth("/%i", sharedWorkshopNewFighter->WeaponSlots[i].Type);
 	}
 
 	// вывод стоимости корабля
@@ -677,6 +699,9 @@ void Workshop_Shipyard()
 
 
 
+	auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
+	if (!sharedWorkshopFighterGame)
+		return;
 
 
 	int LinePos = 420;
@@ -709,26 +734,26 @@ void Workshop_Shipyard()
 
 		// надпись Armor, красная
 		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*MenuContentTransp, "%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*MenuContentTransp, "%i/%i", static_cast<int>(sharedWorkshopFighterGame->Strength), static_cast<int>(sharedWorkshopFighterGame->StrengthStart));
 	} else {
 		// надпись Armor, нормальная
 		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i/%i", static_cast<int>(WorkshopFighterGame->Strength), static_cast<int>(WorkshopFighterGame->StrengthStart));
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i/%i", static_cast<int>(sharedWorkshopFighterGame->Strength), static_cast<int>(sharedWorkshopFighterGame->StrengthStart));
 	}
 
 	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
-	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponSlots.size());
+	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", sharedWorkshopFighterGame->WeaponSlots.size());
 
 
 	vw_DrawText(GameConfig().InternalWidth/2+74, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
 	SSS = 0;
-	if (WorkshopFighterGame->WeaponSlots.size()>0) {
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", WorkshopFighterGame->WeaponSlots[0].Type);
-		SSS += vw_TextWidth("%i", WorkshopFighterGame->WeaponSlots[0].Type);
+	if (sharedWorkshopFighterGame->WeaponSlots.size()>0) {
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i", sharedWorkshopFighterGame->WeaponSlots[0].Type);
+		SSS += vw_TextWidth("%i", sharedWorkshopFighterGame->WeaponSlots[0].Type);
 	}
-	for (unsigned i=1; i<WorkshopFighterGame->WeaponSlots.size(); i++) {
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", WorkshopFighterGame->WeaponSlots[i].Type);
-		SSS += vw_TextWidth("/%i", WorkshopFighterGame->WeaponSlots[i].Type);
+	for (unsigned i=1; i<sharedWorkshopFighterGame->WeaponSlots.size(); i++) {
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI+SSS, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "/%i", sharedWorkshopFighterGame->WeaponSlots[i].Type);
+		SSS += vw_TextWidth("/%i", sharedWorkshopFighterGame->WeaponSlots[i].Type);
 	}
 
 
