@@ -213,6 +213,19 @@ void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 	}
 }
 
+/*
+ * Get object ptr by reference.
+ */
+std::weak_ptr<cObject3D> GetSpaceShipPtr(const cSpaceShip &Object)
+{
+	for (auto &tmpShip : ShipList) {
+		if (tmpShip.get() == &Object)
+			return tmpShip;
+	}
+
+	return std::weak_ptr<cObject3D>{};
+}
+
 //-----------------------------------------------------------------------------
 // Деструктор
 //-----------------------------------------------------------------------------

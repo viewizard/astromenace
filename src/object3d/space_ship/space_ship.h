@@ -269,6 +269,9 @@ void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Comman
 void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 					      cSpaceShip &SecondObject,
 					      eShipPairCycle &Command)> function);
+// Get object ptr by reference.
+std::weak_ptr<cObject3D> GetSpaceShipPtr(const cSpaceShip &Object);
+
 
 // Установка системы двигателей
 void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, int EngineType);
