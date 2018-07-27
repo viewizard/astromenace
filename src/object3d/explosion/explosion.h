@@ -63,8 +63,9 @@ public:
 	int ExplosionType{0};
 	int ExplosionTypeByClass{0};
 
-	// набор управления частицами
-	sExplosionPiece *ExplosionPieceData{nullptr};
+	// std::unique_ptr, we need only memory allocation without container's features
+	// don't use std::vector here, since it allocates AND value-initializes
+	std::unique_ptr<sExplosionPiece[]> ExplosionPieceData{};
 
 	float ExplosionGeometryMoveLastTime{-1}; // последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
 

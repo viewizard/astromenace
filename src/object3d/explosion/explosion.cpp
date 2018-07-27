@@ -432,18 +432,12 @@ cExplosion::cExplosion()
 //-----------------------------------------------------------------------------
 cExplosion::~cExplosion()
 {
-	if (ExplosionPieceData != nullptr) {
-		delete [] ExplosionPieceData;
-		ExplosionPieceData = nullptr;
-	}
-
 	for (auto &tmpGFX : GraphicFX) {
 		if (auto sharedGFX = tmpGFX.lock()) {
 			sharedGFX->IsSuppressed = true;
 			sharedGFX->DestroyIfNoParticles = true;
 		}
 	}
-
 }
 
 //-----------------------------------------------------------------------------

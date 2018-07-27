@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 // TODO translate comments
 
 #include "explosion.h"
@@ -905,7 +907,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 
 		// для каждого треугольника - свои данные (фактически, у нас 1 объект, с ним и работаем)
 		int Count = 0;
-		ExplosionPieceData = new sExplosionPiece[Chunks[0].VertexQuantity / 3];
+		ExplosionPieceData.reset(new sExplosionPiece[Chunks[0].VertexQuantity / 3]);
 		for (unsigned int i = 0; i < Chunks[0].VertexQuantity; i += 3) {
 			ExplosionPieceData[Count].Velocity.x = Chunks[0].VertexArray.get()[i * Chunks[0].VertexStride];
 			ExplosionPieceData[Count].Velocity.y = Chunks[0].VertexArray.get()[i * Chunks[0].VertexStride + 1];
@@ -933,7 +935,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 
 
 			// в данном случае, это и есть направление, потому что геометрия в точке 0,0,0
-			ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^VelocityTMP;
+			ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity ^ VelocityTMP;
 
 			ExplosionPieceData[Count].Life = 1.0f + vw_fRand() / 2.0f;
 

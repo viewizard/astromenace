@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
+
 // TODO translate comments
 
 #include "explosion.h"
@@ -681,7 +683,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 
 		// для каждого треугольника - свои данные
 		int Count = 0;
-		ExplosionPieceData = new sExplosionPiece[TotalCount/3];
+		ExplosionPieceData.reset(new sExplosionPiece[TotalCount / 3]);
 		for (auto &tmpChunk : Chunks) {
 			for (unsigned int i = 0; i < tmpChunk.VertexQuantity; i+=3) {
 				ExplosionPieceData[Count].Velocity.x = tmpChunk.VertexArray.get()[tmpChunk.VertexStride *  i];
@@ -736,21 +738,23 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 				}
 
 
-				if (dist/Diag < 0.01f)
-					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^(Acc+4.0f*vw_fRand0());
+				if (dist / Diag < 0.01f)
+					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity ^ (Acc + 4.0f * vw_fRand0());
 				else
-					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity^Acc;
+					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity ^ Acc;
 
 
 				ExplosionPieceData[Count].Life = (Lifetime - 1.0f) + vw_fRand();
-				if (ExplosionPieceData[Count].Life < 0.0f) ExplosionPieceData[Count].Life = 0.0f;
+				if (ExplosionPieceData[Count].Life < 0.0f)
+					ExplosionPieceData[Count].Life = 0.0f;
 
 
 				// делаем анализ для ААBB, смотрим отлет частицы
-				float tmpSpeed = ExplosionPieceData[Count].Velocity.x*ExplosionPieceData[Count].Velocity.x +
-						 ExplosionPieceData[Count].Velocity.y*ExplosionPieceData[Count].Velocity.y +
-						 ExplosionPieceData[Count].Velocity.z*ExplosionPieceData[Count].Velocity.z;
-				if (tmpSpeed > AABBSpeed) AABBSpeed = tmpSpeed;
+				float tmpSpeed = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +
+						 ExplosionPieceData[Count].Velocity.y * ExplosionPieceData[Count].Velocity.y +
+						 ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z;
+				if (tmpSpeed > AABBSpeed)
+					AABBSpeed = tmpSpeed;
 
 				Count++;
 			}
