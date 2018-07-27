@@ -77,10 +77,6 @@ public:
 
 	// для прорисовки графических эффектов
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
-
-	// для собственного списка
-	cExplosion *Next{nullptr};
-	cExplosion *Prev{nullptr};
 };
 
 class cBulletExplosion final : public cExplosion {
