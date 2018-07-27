@@ -162,6 +162,19 @@ void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle
 	}
 }
 
+/*
+ * Get object ptr by reference.
+ */
+std::weak_ptr<cObject3D> GetGroundObjectPtr(const cGroundObject &Object)
+{
+	for (auto &tmpGround : GroundObjectList) {
+		if (tmpGround.get() == &Object)
+			return tmpGround;
+	}
+
+	return std::weak_ptr<cObject3D>{};
+}
+
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------

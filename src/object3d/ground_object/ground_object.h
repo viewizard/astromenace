@@ -216,6 +216,8 @@ void ReleaseAllGroundObjects();
 // Managed cycle for each ground object.
 // Note, caller must guarantee, that 'Object' will not released in callback function call.
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function);
+// Get object ptr by reference.
+std::weak_ptr<cObject3D> GetGroundObjectPtr(const cGroundObject &Object);
 
 } // astromenace namespace
 } // viewizard namespace
