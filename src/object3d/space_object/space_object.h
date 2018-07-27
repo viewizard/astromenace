@@ -160,6 +160,8 @@ void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &C
 void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 						cSpaceObject &SecondObject,
 						eSpacePairCycle &Command)> function);
+// Get object ptr by reference.
+std::weak_ptr<cObject3D> GetSpaceObjectPtr(const cSpaceObject &Object);
 
 } // astromenace namespace
 } // viewizard namespace

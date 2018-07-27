@@ -212,6 +212,19 @@ void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 	}
 }
 
+/*
+ * Get object ptr by reference.
+ */
+std::weak_ptr<cObject3D> GetSpaceObjectPtr(const cSpaceObject &Object)
+{
+	for (auto &tmpSpace : SpaceObjectList) {
+		if (tmpSpace.get() == &Object)
+			return tmpSpace;
+	}
+
+	return std::weak_ptr<cObject3D>{};
+}
+
 //-----------------------------------------------------------------------------
 // Создание эффектов для космических объектов (двигатели для базы)
 //-----------------------------------------------------------------------------
