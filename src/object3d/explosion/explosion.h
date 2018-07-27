@@ -45,9 +45,9 @@ class cGroundObject;
 
 struct sExplosionPiece {
 	// вектор направления движения частицы (скорости включены)
-	sVECTOR3D Velocity;
+	sVECTOR3D Velocity{};
 	// оставшееся время жизни частицы
-	float Life;
+	float Life{0.0f};
 };
 
 class cExplosion : public cObject3D {
