@@ -513,9 +513,10 @@ bool cSpaceShip::Update(float Time)
 		bool NeedFlare{false};
 		ForEachProjectile([&] (cProjectile &Projectile, eProjectileCycle &UNUSED(Command)) {
 			// homing missile or homing mine targeted on this ship
-			if (Projectile.Target == this) {
+			auto sharedTarget = Projectile.Target.lock();
+			if (sharedTarget.get() == this) {
 				NeedFlare = true;
-				Projectile.Target = nullptr; // reset target, since we will fire flares
+				Projectile.Target.reset(); // reset target, since we will fire flares
 			}
 		});
 

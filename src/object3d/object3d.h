@@ -234,13 +234,14 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &
 				   const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
 				   sVECTOR3D &NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
-cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-					  const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-					  sVECTOR3D &NeedAngle, float MaxDistance);
+std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+					const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
+					sVECTOR3D &NeedAngle, float MaxDistance);
 bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, const sVECTOR3D &CurrentObjectRotation,
 				    const float (&RotationMatrix)[9],
-				    cObject3D *TargetObject, sVECTOR3D &NeedAngle);
-bool GetMissileTargetStatus(cObject3D *TargetObject, const sVECTOR3D &Location, const float (&RotationMatrix)[9]);
+				    std::weak_ptr<cObject3D> &TargetObject, sVECTOR3D &NeedAngle);
+bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject, const sVECTOR3D &Location,
+			    const float (&RotationMatrix)[9]);
 // Получение положения ближайшего врага, для мин
 cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, const sVECTOR3D &Location);
 // Setup shaders.

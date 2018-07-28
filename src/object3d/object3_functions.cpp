@@ -870,12 +870,12 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 //-----------------------------------------------------------------------------
 // Получение угла поворота ракеты, торпеды или бомбы
 //-----------------------------------------------------------------------------
-cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // статус объекта, который целится
-					  const sVECTOR3D &Location, // положение точки относительно которой будем наводить
-					  const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
-					  const float (&RotationMatrix)[9], // матрица вращения объекта
-					  sVECTOR3D &NeedAngle, // нужные углы, чтобы получить нужное направление
-					  float MaxDistance) // максимальная дистанция, на которую может лететь снаряд
+std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // статус объекта, который целится
+					const sVECTOR3D &Location, // положение точки относительно которой будем наводить
+					const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
+					const float (&RotationMatrix)[9], // матрица вращения объекта
+					sVECTOR3D &NeedAngle, // нужные углы, чтобы получить нужное направление
+					float MaxDistance) // максимальная дистанция, на которую может лететь снаряд
 {
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
@@ -905,7 +905,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 	float MinDistance{0.0f};
 
 	// цель
-	cObject3D *Target{nullptr};
+	std::weak_ptr<cObject3D> Target{};
 
 	// проверка по снарядам, фларес
 	ForEachProjectile([&] (const cProjectile &tmpProjectile, eProjectileCycle &UNUSED(Command)) {
@@ -960,7 +960,7 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 						Tdist = m * m + n * n + p * p;
 						TargetLocked = true;
 						TType = 1;
-						Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpProjectile));
+						Target = GetProjectilePtr(tmpProjectile);
 					}
 				}
 			}
@@ -1024,16 +1024,14 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 							Tdist = m * m + n * n + p * p;
 							TargetLocked = true;
 							TType = 2;
-							// FIXME we should use std::weak_ptr for target object instead
-							Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpGround));
+							Target = GetGroundObjectPtr(tmpGround);
 						}
 					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
 						TargetAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
 						TargetLocked = true;
 						TType = 2;
-						// FIXME we should use std::weak_ptr for target object instead
-						Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpGround));
+						Target = GetGroundObjectPtr(tmpGround);
 					}
 				}
 			}
@@ -1094,16 +1092,14 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 							Tdist = m * m + n * n + p * p;
 							TargetLocked = true;
 							TType = 3;
-							// FIXME we should use std::weak_ptr for target object instead
-							Target =  const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
+							Target = GetSpaceShipPtr(tmpShip);
 						}
 					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
 						TargetAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
 						TargetLocked = true;
 						TType = 3;
-						// FIXME we should use std::weak_ptr for target object instead
-						Target =  const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
+						Target = GetSpaceShipPtr(tmpShip);
 					}
 				}
 			}
@@ -1165,16 +1161,14 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 							Tdist = m * m + n * n + p * p;
 							TargetLocked = true;
 							TType = 4;
-							// FIXME we should use std::weak_ptr for target object instead
-							Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpSpace));
+							Target = GetSpaceObjectPtr(tmpSpace);
 						}
 					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
 						TargetAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
 						TargetLocked = true;
 						TType = 4;
-						// FIXME we should use std::weak_ptr for target object instead
-						Target = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpSpace));
+						Target = GetSpaceObjectPtr(tmpSpace);
 					}
 				}
 			}
@@ -1194,10 +1188,11 @@ cObject3D *GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, // ста�
 bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				    const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
 				    const float (&RotationMatrix)[9], // матрица вращения объекта
-				    cObject3D *TargetObject, // объект на который прицеливаемся
+				    std::weak_ptr<cObject3D> &TargetObject, // объект на который прицеливаемся
 				    sVECTOR3D &NeedAngle) // нужные углы, чтобы получить нужное направление
 {
-	if (!TargetObject)
+	auto sharedTarget = TargetObject.lock();
+	if (!sharedTarget)
 		return false;
 
 	// получаем точки для создания плоскости
@@ -1221,11 +1216,11 @@ bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, // положен
 	NeedAngle = CurrentObjectRotation;
 
 	// проверяем, спереди или сзади стоит противник
-	float tmp1 = A2 * TargetObject->Location.x + B2 * TargetObject->Location.y + C2 * TargetObject->Location.z + D2;
+	float tmp1 = A2 * sharedTarget->Location.x + B2 * sharedTarget->Location.y + C2 * sharedTarget->Location.z + D2;
 	if (tmp1 > 0.0f) {
-		sVECTOR3D tmpLocation = TargetObject->GeometryCenter;
-		vw_Matrix33CalcPoint(tmpLocation, TargetObject->CurrentRotationMat); // поворачиваем в плоскость объекта
-		TargetLocation = TargetObject->Location + tmpLocation;
+		sVECTOR3D tmpLocation = sharedTarget->GeometryCenter;
+		vw_Matrix33CalcPoint(tmpLocation, sharedTarget->CurrentRotationMat); // поворачиваем в плоскость объекта
+		TargetLocation = sharedTarget->Location + tmpLocation;
 
 		// находим угол между плоскостью и прямой
 		float A3, B3, C3, D3;
@@ -1262,12 +1257,10 @@ bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, // положен
 //-----------------------------------------------------------------------------
 // Проверяем где по отношению ракеты находится объект
 //-----------------------------------------------------------------------------
-static bool GetMissileTargetPosition(cObject3D *TargetObject,
+static bool GetMissileTargetPosition(const cObject3D &TargetObject,
 				     const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				     const float (&RotationMatrix)[9]) // матрица вращения объекта
 {
-	// (!) TargetObject должен существовать, до вызова этой функции проверять это, в этой функции проверки не делаем
-
 	sVECTOR3D PointUp(0.0f, 1.0f, 0.0f);
 	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
@@ -1277,7 +1270,7 @@ static bool GetMissileTargetPosition(cObject3D *TargetObject,
 	float A2, B2, C2, D2;
 	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
 
-	float tmp1 = A2 * TargetObject->Location.x + B2 * TargetObject->Location.y + C2 * TargetObject->Location.z + D2;
+	float tmp1 = A2 * TargetObject.Location.x + B2 * TargetObject.Location.y + C2 * TargetObject.Location.z + D2;
 	if (tmp1 > 0.0f)
 		return true;
 
@@ -1288,49 +1281,50 @@ static bool GetMissileTargetPosition(cObject3D *TargetObject,
 // Проверяем статус цели для ракет, жива она еще или нет, и где по отношению ракеты находится
 //-----------------------------------------------------------------------------
 // FIXME we should use std::weak_ptr for target object instead
-bool GetMissileTargetStatus(cObject3D *TargetObject,
+bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 			    const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 			    const float (&RotationMatrix)[9]) // матрица вращения объекта
 {
-	if (!TargetObject)
+	auto sharedTarget = TargetObject.lock();
+	if (!sharedTarget)
 		return false;
 
 	bool ObjectFound{false};
-	ForEachProjectile([&TargetObject, &ObjectFound] (const cProjectile &tmpProjectile, eProjectileCycle &Command) {
-		if (&tmpProjectile == TargetObject) {
+	ForEachProjectile([&sharedTarget, &ObjectFound] (const cProjectile &tmpProjectile, eProjectileCycle &Command) {
+		if (&tmpProjectile == sharedTarget.get()) {
 			ObjectFound = true;
 			Command = eProjectileCycle::Break;
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
 
-	ForEachGroundObject([&TargetObject, &ObjectFound] (const cGroundObject &tmpGround, eGroundCycle &Command) {
-		if (&tmpGround == TargetObject) {
+	ForEachGroundObject([&sharedTarget, &ObjectFound] (const cGroundObject &tmpGround, eGroundCycle &Command) {
+		if (&tmpGround == sharedTarget.get()) {
 			ObjectFound = true;
 			Command = eGroundCycle::Break;
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
 
-	ForEachSpaceShip([&TargetObject, &ObjectFound] (const cSpaceShip &tmpShip, eShipCycle &Command) {
-		if (&tmpShip == TargetObject) {
+	ForEachSpaceShip([&sharedTarget, &ObjectFound] (const cSpaceShip &tmpShip, eShipCycle &Command) {
+		if (&tmpShip == sharedTarget.get()) {
 			ObjectFound = true;
 			Command = eShipCycle::Break;
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
 
-	ForEachSpaceObject([&TargetObject, &ObjectFound] (const cSpaceObject &tmpSpace, eSpaceCycle &Command) {
-		if (&tmpSpace == TargetObject) {
+	ForEachSpaceObject([&sharedTarget, &ObjectFound] (const cSpaceObject &tmpSpace, eSpaceCycle &Command) {
+		if (&tmpSpace == sharedTarget.get()) {
 			ObjectFound = true;
 			Command = eSpaceCycle::Break;
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(TargetObject, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
 
 	return false;
 }

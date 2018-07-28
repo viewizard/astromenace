@@ -443,10 +443,12 @@ void GamePlayerShip()
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		bool CheckStatus{false};
 		ForEachProjectile([&] (const cProjectile &Projectile, eProjectileCycle &UNUSED(Command)) {
-			if (Projectile.Target == sharedPlayerFighter.get())
-				// homing missile targeted on this ship, but not homing mine
-				if ((Projectile.Num < 26) || (Projectile.Num > 29))
+			if (auto sharedTarget = Projectile.Target.lock()) {
+				if ((sharedTarget.get() == sharedPlayerFighter.get()) &&
+				    // homing missile targeted on this ship, but not homing mine
+				    ((Projectile.Num < 26) || (Projectile.Num > 29)))
 					CheckStatus = true;
+			}
 		});
 
 		if (CheckStatus) {

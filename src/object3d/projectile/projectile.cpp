@@ -2407,7 +2407,7 @@ missile:
 				EffectiveRange = Lifetime * Speed;
 
 			// устанавливаем в Target на что наведен этот снаряд, если еще ничего не выбрано
-			if (Target == nullptr) {
+			if (Target.expired()) {
 				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, EffectiveRange);
 			} else { // если уже что-то выбрали
 				// 1. надо проверить, есть ли еще вообще этот объект и где по отношению ракеты он находится, если он есть и впереди - летим к нему
@@ -2483,7 +2483,7 @@ missile:
 		// получаем положение ближайшего врага
 		cObject3D *tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
 
-		// !!! упращенно, не учитываем положение плоскости
+		// !!! не учитываем положение плоскости
 		if (tmpTarget != nullptr) {
 			float MineSpeed = 5.0f;
 			float SpeedTmp = MineSpeed*TimeDelta;
@@ -2554,13 +2554,14 @@ missile:
 
 
 			// если есть цель, поднимаемся на ее уровень
-			if (Target != nullptr) {
+			auto sharedTarget = Target.lock();
+			if (sharedTarget) {
 				float MineSpeed = 5.0f;
 
 				// получаем положение ближайшего врага
-				sVECTOR3D NeedPoint = Target->Location;
+				sVECTOR3D NeedPoint = sharedTarget->Location;
 
-				// !!! упращенно, не учитываем положение плоскости
+				// !!! не учитываем положение плоскости
 
 				float SpeedTmp = MineSpeed*TimeDelta;
 				if (SpeedTmp > fabs(Location.y-NeedPoint.y))
@@ -2580,7 +2581,7 @@ missile:
 					sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 
 			// сбрасываем установку, чтобы не было голосового предупреждения
-			Target = nullptr;
+			Target.reset();
 		}
 		break;
 
@@ -2628,13 +2629,14 @@ missile:
 
 
 			// если есть цель, поднимаемся на ее уровень
-			if (Target != nullptr) {
+			auto sharedTarget = Target.lock();
+			if (sharedTarget) {
 				float MineSpeed = 5.0f;
 
 				// получаем положение ближайшего врага
-				sVECTOR3D NeedPoint = Target->Location;
+				sVECTOR3D NeedPoint = sharedTarget->Location;
 
-				// !!! упращенно, не учитываем положение плоскости
+				// !!! не учитываем положение плоскости
 
 				float SpeedTmp = MineSpeed*TimeDelta;
 				if (SpeedTmp > fabs(Location.y-2.0f-NeedPoint.y)) SpeedTmp = fabs(Location.y-2.0f-NeedPoint.y);
@@ -2681,7 +2683,7 @@ missile:
 
 
 			// сбрасываем установку, чтобы не было голосового предупреждения
-			Target = nullptr;
+			Target.reset();
 		}
 		break;
 
@@ -2728,13 +2730,14 @@ missile:
 
 
 			// если есть цель, поднимаемся на ее уровень
-			if (Target != nullptr) {
+			auto sharedTarget = Target.lock();
+			if (sharedTarget) {
 				float MineSpeed = 5.0f;
 
 				// получаем положение ближайшего врага
-				sVECTOR3D NeedPoint = Target->Location;
+				sVECTOR3D NeedPoint = sharedTarget->Location;
 
-				// !!! упращенно, не учитываем положение плоскости
+				// !!! не учитываем положение плоскости
 
 				float SpeedTmp = MineSpeed*TimeDelta;
 				if (SpeedTmp > fabs(Location.y+2.0f-NeedPoint.y)) SpeedTmp = fabs(Location.y+2.0f-NeedPoint.y);
@@ -2781,7 +2784,7 @@ missile:
 
 
 			// сбрасываем установку, чтобы не было голосового предупреждения
-			Target = nullptr;
+			Target.reset();
 		}
 		break;
 	}
