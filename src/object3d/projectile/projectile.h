@@ -142,6 +142,8 @@ void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle
 void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 					       cProjectile &SecondObject,
 					       eProjectilePairCycle &Command)> function);
+// Get object ptr by reference.
+std::weak_ptr<cObject3D> GetProjectilePtr(const cProjectile &Object);
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
 

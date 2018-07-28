@@ -286,6 +286,18 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 	}
 }
 
+/*
+ * Get object ptr by reference.
+ */
+std::weak_ptr<cObject3D> GetProjectilePtr(const cProjectile &Object)
+{
+	for (auto &tmpProjectile : ProjectileList) {
+		if (tmpProjectile.get() == &Object)
+			return tmpProjectile;
+	}
+
+	return std::weak_ptr<cObject3D>{};
+}
 
 
 
