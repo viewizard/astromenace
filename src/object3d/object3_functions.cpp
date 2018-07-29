@@ -192,7 +192,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	// нам нужна только половина ширины
 	float Width2 = Width / 2.0f;
 
-	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// проверка, чтобы не считать свой корабль
 		if ((NeedCheckCollision(tmpShip)) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
@@ -587,7 +587,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 	float TargetDist2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
-	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpShip) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
@@ -734,7 +734,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 	float TargetDist2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
-	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpShip) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
@@ -1038,7 +1038,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 		}
 	});
 
-	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// проверка, чтобы не считать свой корабль
 		if (NeedCheckCollision(tmpShip) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
@@ -1340,7 +1340,7 @@ std::weak_ptr<cObject3D> GetCloserTargetPosition(eObjectStatus ObjectStatus, // 
 	float MinRatius2{-1.0f};
 
 	// перебираем только корабли...
-	ForEachSpaceShip([&] (const cSpaceShip &tmpShip, eShipCycle &UNUSED(Command)) {
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpShip) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||

@@ -263,9 +263,14 @@ void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
 void ReleaseSpaceShip(std::weak_ptr<cSpaceShip> &Ship);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceShips();
+// Cycle for each space ship.
+// Note, caller must guarantee, that 'Object' will not released in callback function call.
+void ForEachSpaceShip(std::function<void (cSpaceShip &Object)> function);
 // Managed cycle for each space ship.
+// Note, caller must guarantee, that 'Object' will not released in callback function call.
 void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function);
 // Managed cycle for each space ship pair.
+// Note, caller must guarantee, that 'FirstObject' and 'SecondObject' will not released in callback function call.
 void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 					      cSpaceShip &SecondObject,
 					      eShipPairCycle &Command)> function);

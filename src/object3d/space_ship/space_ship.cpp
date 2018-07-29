@@ -155,7 +155,19 @@ void ReleaseAllSpaceShips()
 }
 
 /*
+ * Cycle for each space ship.
+ * Note, caller must guarantee, that 'Object' will not released in callback function call.
+ */
+void ForEachSpaceShip(std::function<void (cSpaceShip &Object)> function)
+{
+	for (auto &tmpShip : ShipList) {
+		function(*tmpShip);
+	}
+}
+
+/*
  * Managed cycle for each space ship.
+ * Note, caller must guarantee, that 'Object' will not released in callback function call.
  */
 void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function)
 {
@@ -181,6 +193,7 @@ void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Comman
 
 /*
  * Managed cycle for each space ship pair.
+ * Note, caller must guarantee, that 'FirstObject' and 'SecondObject' will not released in callback function call.
  */
 void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 					      cSpaceShip &SecondObject,
