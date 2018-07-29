@@ -2481,18 +2481,19 @@ missile:
 	// мина пришельцев, энергетическая (1-й тип)
 	case 106: {
 		// получаем положение ближайшего врага
-		cObject3D *tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
+		std::weak_ptr<cObject3D> tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
 
 		// !!! не учитываем положение плоскости
-		if (tmpTarget != nullptr) {
+		auto sharedTarget = tmpTarget.lock();
+		if (sharedTarget) {
 			float MineSpeed = 5.0f;
 			float SpeedTmp = MineSpeed*TimeDelta;
-			if (SpeedTmp > fabs(Location.y-tmpTarget->Location.y))
-				SpeedTmp = fabs(Location.y-tmpTarget->Location.y);
+			if (SpeedTmp > fabs(Location.y - sharedTarget->Location.y))
+				SpeedTmp = fabs(Location.y - sharedTarget->Location.y);
 
 			if (SpeedTmp != 0.0f) {
 				// находим направление (если нужно вниз, меняем знак)
-				if (Location.y > tmpTarget->Location.y) SpeedTmp *= -1.0f;
+				if (Location.y > sharedTarget->Location.y) SpeedTmp *= -1.0f;
 
 				sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
 				SetLocation(Location+VelocityUp);

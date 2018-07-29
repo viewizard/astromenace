@@ -1280,7 +1280,6 @@ static bool GetMissileTargetPosition(const cObject3D &TargetObject,
 //-----------------------------------------------------------------------------
 // Проверяем статус цели для ракет, жива она еще или нет, и где по отношению ракеты находится
 //-----------------------------------------------------------------------------
-// FIXME we should use std::weak_ptr for target object instead
 bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 			    const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 			    const float (&RotationMatrix)[9]) // матрица вращения объекта
@@ -1332,11 +1331,11 @@ bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 //-----------------------------------------------------------------------------
 // Получение положения ближайшего врага, для мин
 //-----------------------------------------------------------------------------
-cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, // статус объекта, который целится
-				   const sVECTOR3D &Location) // положение точки относительно которой будем наводить
+std::weak_ptr<cObject3D> GetCloserTargetPosition(eObjectStatus ObjectStatus, // статус объекта, который целится
+						 const sVECTOR3D &Location) // положение точки относительно которой будем наводить
 {
 	// результат
-	cObject3D *Res{nullptr};
+	std::weak_ptr<cObject3D> Res{};
 	// пока ставим отрицательный, т.е. вообще ничего нет
 	float MinRatius2{-1.0f};
 
@@ -1353,12 +1352,10 @@ cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, // статус �
 
 			if (MinRatius2 < 0.0f) {
 				MinRatius2 = MinRatius2TMP;
-				// FIXME we should use std::weak_ptr for target object instead
-				Res = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
+				Res = GetSpaceShipPtr(tmpShip);
 			} else if (MinRatius2TMP < MinRatius2) {
 				MinRatius2 = MinRatius2TMP;
-				// FIXME we should use std::weak_ptr for target object instead
-				Res = const_cast<cObject3D*>(static_cast<const cObject3D*>(&tmpShip));
+				Res = GetSpaceShipPtr(tmpShip);
 			}
 		}
 	});

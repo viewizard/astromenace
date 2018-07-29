@@ -243,7 +243,7 @@ bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, const sVECTOR3D &
 bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject, const sVECTOR3D &Location,
 			    const float (&RotationMatrix)[9]);
 // Получение положения ближайшего врага, для мин
-cObject3D *GetCloserTargetPosition(eObjectStatus ObjectStatus, const sVECTOR3D &Location);
+std::weak_ptr<cObject3D> GetCloserTargetPosition(eObjectStatus ObjectStatus, const sVECTOR3D &Location);
 // Setup shaders.
 bool SetupObject3DShaders();
 
