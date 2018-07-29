@@ -311,7 +311,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	// не стрелять по "мирным" постойкам
 	// !!! ВАЖНО
 	// у всех наземных объектов ноль на уровне пола...
-	ForEachGroundObject([&] (const cGroundObject &tmpGround, eGroundCycle &UNUSED(Command)) {
+	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||
@@ -969,7 +969,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 
 	// проверка по наземным объектам
 	// не стрелять по "мирным" постойкам
-	ForEachGroundObject([&] (const cGroundObject &tmpGround, eGroundCycle &UNUSED(Command)) {
+	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||

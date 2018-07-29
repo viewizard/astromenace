@@ -137,6 +137,17 @@ void ReleaseAllGroundObjects()
 }
 
 /*
+ * Cycle for each ground object.
+ * Note, caller must guarantee, that 'Object' will not released in callback function call.
+ */
+void ForEachGroundObject(std::function<void (cGroundObject &Object)> function)
+{
+	for (auto &tmpGround : GroundObjectList) {
+		function(*tmpGround);
+	}
+}
+
+/*
  * Managed cycle for each ground object.
  * Note, caller must guarantee, that 'Object' will not released in callback function call.
  */
