@@ -228,7 +228,19 @@ void ReleaseAllProjectiles()
 }
 
 /*
+ * Cycle for each projectile.
+ * Note, caller must guarantee, that 'Object' will not released in callback function call.
+ */
+void ForEachProjectile(std::function<void (cProjectile &Object)> function)
+{
+	for (auto &tmpProjectile : ProjectileList) {
+		function(*tmpProjectile);
+	}
+}
+
+/*
  * Managed cycle for each projectile.
+ * Note, caller must guarantee, that 'Object' will not released in callback function call.
  */
 void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function)
 {
@@ -254,6 +266,7 @@ void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle
 
 /*
  * Managed cycle for each projectile pair.
+ * Note, caller must guarantee, that 'FirstObject' and 'SecondObject' will not released in callback function call.
  */
 void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 					       cProjectile &SecondObject,

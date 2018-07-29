@@ -908,7 +908,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 	std::weak_ptr<cObject3D> Target{};
 
 	// проверка по снарядам, фларес
-	ForEachProjectile([&] (const cProjectile &tmpProjectile, eProjectileCycle &UNUSED(Command)) {
+	ForEachProjectile([&] (const cProjectile &tmpProjectile) {
 		// только фларес
 		if ((tmpProjectile.ProjectileType == 3) && NeedCheckCollision(tmpProjectile) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpProjectile.ObjectStatus == eObjectStatus::Ally) || (tmpProjectile.ObjectStatus == eObjectStatus::Player))) ||

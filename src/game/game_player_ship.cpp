@@ -442,7 +442,7 @@ void GamePlayerShip()
 		// Вывод голосового предупреждения, если навелась ракета
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		bool CheckStatus{false};
-		ForEachProjectile([&] (const cProjectile &Projectile, eProjectileCycle &UNUSED(Command)) {
+		ForEachProjectile([&] (const cProjectile &Projectile) {
 			if (auto sharedTarget = Projectile.Target.lock()) {
 				if ((sharedTarget.get() == sharedPlayerFighter.get()) &&
 				    // homing missile targeted on this ship, but not homing mine

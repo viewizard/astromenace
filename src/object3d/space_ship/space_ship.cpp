@@ -524,7 +524,7 @@ bool cSpaceShip::Update(float Time)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!FlareWeaponSlots.empty()) {
 		bool NeedFlare{false};
-		ForEachProjectile([&] (cProjectile &Projectile, eProjectileCycle &UNUSED(Command)) {
+		ForEachProjectile([&] (cProjectile &Projectile) {
 			// homing missile or homing mine targeted on this ship
 			auto sharedTarget = Projectile.Target.lock();
 			if (sharedTarget.get() == this) {
