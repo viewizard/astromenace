@@ -291,7 +291,7 @@ void StarSystemDraw(eDrawType DrawType)
 
 	// FIXME should be moved to 'space_object' code
 	// planets and big asteroids should be rendered before 'space dust'
-	ForEachSpaceObject([&] (cSpaceObject &tmpSpace, eSpaceCycle &UNUSED(Command)) {
+	ForEachSpaceObject([&] (cSpaceObject &tmpSpace) {
 		if (tmpSpace.ObjectType == eObjectType::Planet) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();

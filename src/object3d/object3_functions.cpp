@@ -432,7 +432,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	});
 
 	// проверка по космическим объектам
-	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace, eSpaceCycle &UNUSED(Command)) {
+	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpSpace) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpSpace.ObjectStatus == eObjectStatus::Ally) || (tmpSpace.ObjectStatus == eObjectStatus::Player))) ||
@@ -1107,7 +1107,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 	});
 
 	// проверка по космическим объектам
-	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace, eSpaceCycle &UNUSED(Command)) {
+	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpSpace) &&
 		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpSpace.ObjectStatus == eObjectStatus::Ally) || (tmpSpace.ObjectStatus == eObjectStatus::Player))) ||

@@ -152,6 +152,17 @@ void ReleaseAllSpaceObjects()
 }
 
 /*
+ * Cycle for each ground object.
+ * Note, caller must guarantee, that 'Object' will not released in callback function call.
+ */
+void ForEachSpaceObject(std::function<void (cSpaceObject &Object)> function)
+{
+	for (auto &tmpSpace : SpaceObjectList) {
+		function(*tmpSpace);
+	}
+}
+
+/*
  * Managed cycle for each ground object.
  * Note, caller must guarantee, that 'Object' will not released in callback function call.
  */
