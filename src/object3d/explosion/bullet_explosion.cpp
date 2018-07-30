@@ -937,7 +937,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			// в данном случае, это и есть направление, потому что геометрия в точке 0,0,0
 			ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity ^ VelocityTMP;
 
-			ExplosionPieceData[Count].Life = 1.0f + vw_fRand() / 2.0f;
+			ExplosionPieceData[Count].RemainTime = 1.0f + vw_fRand() / 2.0f;
 
 			// делаем анализ для ААBB, смотрим отлет частицы
 			float tmpSpeed = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +

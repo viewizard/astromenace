@@ -44,10 +44,8 @@ namespace astromenace {
 class cGroundObject;
 
 struct sExplosionPiece {
-	// вектор направления движения частицы (скорости включены)
 	sVECTOR3D Velocity{};
-	// оставшееся время жизни частицы
-	float Life{0.0f};
+	float RemainTime{0.0f};
 };
 
 class cExplosion : public cObject3D {

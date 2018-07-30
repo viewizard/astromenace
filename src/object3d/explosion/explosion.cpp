@@ -541,17 +541,17 @@ bool cExplosion::Update(float Time)
 
 				for (auto &tmpChunk : Chunks) {
 					for (unsigned int i = 0; i < tmpChunk.VertexQuantity; i+=3) {
-						if (ExplosionPieceData[Count].Life > 0.0f) {
+						if (ExplosionPieceData[Count].RemainTime > 0.0f) {
 							// получаем текущий вектор движения данного треугольника
 							TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
 							ExplosionPieceData[Count].Velocity -= TMP;
 
 							// вычисляем время жизни
-							ExplosionPieceData[Count].Life -= ExplosionGeometryMove;
+							ExplosionPieceData[Count].RemainTime -= ExplosionGeometryMove;
 
 
-							if (ExplosionPieceData[Count].Life<=0.001f) {
-								ExplosionPieceData[Count].Life = 0.0f;
+							if (ExplosionPieceData[Count].RemainTime <= 0.001f) {
+								ExplosionPieceData[Count].RemainTime = 0.0f;
 
 								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride];
 								tmpChunk.VertexArray.get()[(i + 1) * tmpChunk.VertexStride + 1] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 1];
@@ -564,18 +564,18 @@ bool cExplosion::Update(float Time)
 								// уменьшаем частицу, перебираем размер и текстурные координаты
 								{
 									float tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
 									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride*(i + 1) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].RemainTime)*ExplosionGeometryMove;
 									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].Life)*ExplosionGeometryMove;
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].RemainTime)*ExplosionGeometryMove;
 
 									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
 									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
 									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].Life) * ExplosionGeometryMove;
+									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
 								}
 
 								tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride] += TMP.x;

@@ -744,9 +744,9 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 					ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity ^ Acc;
 
 
-				ExplosionPieceData[Count].Life = (Lifetime - 1.0f) + vw_fRand();
-				if (ExplosionPieceData[Count].Life < 0.0f)
-					ExplosionPieceData[Count].Life = 0.0f;
+				ExplosionPieceData[Count].RemainTime = (Lifetime - 1.0f) + vw_fRand();
+				if (ExplosionPieceData[Count].RemainTime < 0.0f)
+					ExplosionPieceData[Count].RemainTime = 0.0f;
 
 
 				// делаем анализ для ААBB, смотрим отлет частицы
