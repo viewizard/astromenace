@@ -79,9 +79,9 @@ void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 		[](cExplosion *p) {delete static_cast<cSpaceExplosion*>(p);});
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем все объекты, обновляем данные
-//-----------------------------------------------------------------------------
+/*
+ * Update and remove (erase) expired explosions.
+ */
 void UpdateAllExplosion(float Time)
 {
 	for (auto iter = ExplosionList.begin(); iter != ExplosionList.end();) {
@@ -92,9 +92,9 @@ void UpdateAllExplosion(float Time)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовываем все объекты
-//-----------------------------------------------------------------------------
+/*
+ * Draw all explosions.
+ */
 void DrawAllExplosions(bool VertexOnlyPass)
 {
 	for (auto &tmpObject : ExplosionList) {
@@ -102,17 +102,17 @@ void DrawAllExplosions(bool VertexOnlyPass)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Удаляем все объекты в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all explosions.
+ */
 void ReleaseAllExplosions()
 {
 	ExplosionList.clear();
 }
 
-//-----------------------------------------------------------------------------
-// Создание графического эффекта
-//-----------------------------------------------------------------------------
+/*
+ * Setup explosion gfx.
+ */
 void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");

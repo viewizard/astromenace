@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 // TODO switch to enumerations
 
 // TODO correct hierarchy, explosion to "dust" and explosion to "debris" should be separated
@@ -64,7 +62,8 @@ public:
 	// don't use std::vector here, since it allocates AND value-initializes
 	std::unique_ptr<sExplosionPiece[]> ExplosionPieceData{};
 
-	float ExplosionGeometryMoveLastTime{-1}; // последнее время изменения геометрии, нет смысла постоянно менять геометрию, делаем это 30 раз в секунду только
+	// NOTE this is part of non shader geometry calculation
+	float ExplosionGeometryMoveLastTime{-1};
 
 	sVECTOR3D VelocityOrientation{0.0f, 0.0f, 0.0f};
 	float OldSpeed{0.0f};
@@ -126,13 +125,13 @@ void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 			  const sVECTOR3D &ExplLocation, float Speed,
 			  int ObjectChunkNum, bool NeedExplosionSFX = true);
-// Проверяем все объекты, обновляем данные
+// Update and remove (erase) expired explosions.
 void UpdateAllExplosion(float Time);
-// Прорисовываем все объекты
+// Draw all explosions.
 void DrawAllExplosions(bool VertexOnlyPass);
-// Удаляем все объекты в списке
+// Release all explosions.
 void ReleaseAllExplosions();
-//
+// Setup explosion gfx.
 void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum);
 
 } // astromenace namespace
