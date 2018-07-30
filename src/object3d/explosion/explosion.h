@@ -55,7 +55,6 @@ protected:
 	virtual ~cExplosion();
 
 public:
-	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 
 	int ExplosionType{0};
@@ -71,10 +70,8 @@ public:
 	float OldSpeed{0.0f};
 	bool NeedStop{true};
 
-	// скорость изменения AABB
-	float AABBSpeed{0.0f};
+	float AABBResizeSpeed{0.0f};
 
-	// для прорисовки графических эффектов
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 };
 

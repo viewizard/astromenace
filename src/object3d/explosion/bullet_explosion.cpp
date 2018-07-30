@@ -943,13 +943,14 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			float tmpSpeed = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +
 					 ExplosionPieceData[Count].Velocity.y * ExplosionPieceData[Count].Velocity.y +
 					 ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z;
-			if (tmpSpeed > AABBSpeed) AABBSpeed = tmpSpeed;
+			if (tmpSpeed > AABBResizeSpeed)
+				AABBResizeSpeed = tmpSpeed;
 
 			Count++;
 		}
 
 		// тк был квадрат, теперь вытягиваем нормальное значение
-		AABBSpeed = sqrtf(AABBSpeed);
+		AABBResizeSpeed = sqrtf(AABBResizeSpeed);
 
 		// установка шейдера
 		if (GameConfig().UseGLSL120) {

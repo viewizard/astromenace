@@ -753,8 +753,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 				float tmpSpeed = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +
 						 ExplosionPieceData[Count].Velocity.y * ExplosionPieceData[Count].Velocity.y +
 						 ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z;
-				if (tmpSpeed > AABBSpeed)
-					AABBSpeed = tmpSpeed;
+				if (tmpSpeed > AABBResizeSpeed)
+					AABBResizeSpeed = tmpSpeed;
 
 				Count++;
 			}
@@ -794,7 +794,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 
 		}
 		// тк был квадрат, теперь вытягиваем нормальное значение
-		AABBSpeed = sqrtf(AABBSpeed);
+		AABBResizeSpeed = sqrtf(AABBResizeSpeed);
 	}
 
 

@@ -636,8 +636,8 @@ bool cExplosion::Update(float Time)
 	}
 
 	// делаем AABB по упращенной схеме, главное для нас - скорость
-	float AABBSpeedTmp = AABBSpeed*TimeDelta;
-	AABBSpeed -= AABBSpeedTmp;
+	float AABBSpeedTmp = AABBResizeSpeed * TimeDelta;
+	AABBResizeSpeed -= AABBSpeedTmp;
 	if (!Chunks.empty()) {
 		float MinX = AABB[6].x - AABBSpeedTmp;
 		float MaxX = AABB[0].x + AABBSpeedTmp;
