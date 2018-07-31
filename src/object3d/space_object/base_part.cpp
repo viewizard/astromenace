@@ -38,6 +38,70 @@ namespace viewizard {
 namespace astromenace {
 
 //-----------------------------------------------------------------------------
+// Создание эффектов для космических объектов (двигатели для базы)
+//-----------------------------------------------------------------------------
+static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType)
+{
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+	ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+
+	switch(GFXType) {
+	// двигатели на базе пиратов
+	case 1:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.30f;
+		ParticleSystem->SizeEnd    = 0.60f;
+		ParticleSystem->Speed      = 10.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 5.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.1f, 0.8f};
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
+		break;
+	case 2:
+		ParticleSystem->ColorStart.r = 0.60f;
+		ParticleSystem->ColorStart.g = 0.60f;
+		ParticleSystem->ColorStart.b = 0.30f;
+		ParticleSystem->ColorEnd.r = 0.30f;
+		ParticleSystem->ColorEnd.g = 1.00f;
+		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->AlphaStart = 1.00f;
+		ParticleSystem->AlphaEnd   = 0.00f;
+		ParticleSystem->SizeStart  = 0.30f;
+		ParticleSystem->SizeVar    = 0.20f;
+		ParticleSystem->SizeEnd    = 0.10f;
+		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar   = 2.00f;
+		ParticleSystem->Theta      = 180.00f;
+		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->ParticlesPerSec = 100;
+		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->Direction = sVECTOR3D{0.0f, 1.0f, 0.0f};
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
+		break;
+
+	default:
+		std::cerr << __func__ << "(): " << "wrong GFXType.\n";
+		break;
+	}
+
+}
+
+//-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
 cBasePart::cBasePart(int BasePartNum)
@@ -86,36 +150,36 @@ case1next:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		GraphicFXLocation[0] = sVECTOR3D{14.3f, -4.0f, -14.3f};
 		if (auto sharedGFX = GraphicFX[0].lock())
-			SetSpaceObjectGFX(sharedGFX, 1);
+			SetBaseGFX(sharedGFX, 1);
 		GraphicFX[1] = vw_CreateParticleSystem();
 		GraphicFXLocation[1] = sVECTOR3D{14.3f, -4.0f, 14.3f};
 		if (auto sharedGFX = GraphicFX[1].lock())
-			SetSpaceObjectGFX(sharedGFX, 1);
+			SetBaseGFX(sharedGFX, 1);
 		GraphicFX[2] = vw_CreateParticleSystem();
 		GraphicFXLocation[2] = sVECTOR3D{-14.3f, -4.0f, -14.3f};
 		if (auto sharedGFX = GraphicFX[2].lock())
-			SetSpaceObjectGFX(sharedGFX, 1);
+			SetBaseGFX(sharedGFX, 1);
 		GraphicFX[3] = vw_CreateParticleSystem();
 		GraphicFXLocation[3] = sVECTOR3D{-14.3f, -4.0f, 14.3f};
 		if (auto sharedGFX = GraphicFX[3].lock())
-			SetSpaceObjectGFX(sharedGFX, 1);
+			SetBaseGFX(sharedGFX, 1);
 		//----
 		GraphicFX[4] = vw_CreateParticleSystem();
 		GraphicFXLocation[4] = sVECTOR3D{14.3f, 3.2f, -14.3f};
 		if (auto sharedGFX = GraphicFX[4].lock())
-			SetSpaceObjectGFX(sharedGFX, 2);
+			SetBaseGFX(sharedGFX, 2);
 		GraphicFX[5] = vw_CreateParticleSystem();
 		GraphicFXLocation[5] = sVECTOR3D{14.3f, 3.2f, 14.3f};
 		if (auto sharedGFX = GraphicFX[5].lock())
-			SetSpaceObjectGFX(sharedGFX, 2);
+			SetBaseGFX(sharedGFX, 2);
 		GraphicFX[6] = vw_CreateParticleSystem();
 		GraphicFXLocation[6] = sVECTOR3D{-14.3f, 3.2f, -14.3f};
 		if (auto sharedGFX = GraphicFX[6].lock())
-			SetSpaceObjectGFX(sharedGFX, 2);
+			SetBaseGFX(sharedGFX, 2);
 		GraphicFX[7] = vw_CreateParticleSystem();
 		GraphicFXLocation[7] = sVECTOR3D{-14.3f, 3.2f, 14.3f};
 		if (auto sharedGFX = GraphicFX[7].lock())
-			SetSpaceObjectGFX(sharedGFX, 2);
+			SetBaseGFX(sharedGFX, 2);
 		break;
 
 	case 21:
@@ -158,12 +222,12 @@ case2next:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, -5.0f, 13.7f};
 		if (auto sharedGFX = GraphicFX[0].lock())
-			SetSpaceObjectGFX(sharedGFX, 1);
+			SetBaseGFX(sharedGFX, 1);
 		//----
 		GraphicFX[1] = vw_CreateParticleSystem();
 		GraphicFXLocation[1] = sVECTOR3D{0.0f, 5.0f, 13.7f};
 		if (auto sharedGFX = GraphicFX[1].lock())
-			SetSpaceObjectGFX(sharedGFX, 2);
+			SetBaseGFX(sharedGFX, 2);
 		break;
 
 	case 4:

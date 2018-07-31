@@ -149,8 +149,6 @@ void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 void ReleaseSpaceObject(std::weak_ptr<cSpaceObject> &Object);
 // Удаляем все объекты в списке
 void ReleaseAllSpaceObjects();
-// установка эффекта, если нужно
-void SetSpaceObjectGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType);
 // Cycle for each space object.
 // Note, caller must guarantee, that 'Object' will not released in callback function call.
 void ForEachSpaceObject(std::function<void (cSpaceObject &Object)> function);
