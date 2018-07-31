@@ -39,8 +39,6 @@ namespace viewizard {
 namespace astromenace {
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-float GetProjectileSpeed(int Num);
-
 std::weak_ptr<cGLSL> GLSLShaderType1{};
 std::weak_ptr<cGLSL> GLSLShaderType2{};
 std::weak_ptr<cGLSL> GLSLShaderType3{};

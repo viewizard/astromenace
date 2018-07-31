@@ -48,8 +48,6 @@ std::weak_ptr<cProjectile> InfoMine{};
 std::weak_ptr<cGroundObject> InfoGroundObject{};
 
 
-int GetWeaponHullDamage(int Num);
-int GetWeaponSystemsDamage(int Num);
 char *GetWeaponGroupTitle(int Num);
 char *GetWeaponName(int Num);
 char *GetShipGroupTitle(int Num);
@@ -635,18 +633,18 @@ void InformationObject3DText(int ObjectNum)
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
 		    (CreateNum-InfoWeaponStart+1 == 12) |
 		    (CreateNum-InfoWeaponStart+1 == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileHullDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Systems:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
 		    (CreateNum-InfoWeaponStart+1 == 12) |
 		    (CreateNum-InfoWeaponStart+1 == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
+			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileSystemsDamage(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Energy Use:"));

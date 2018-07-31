@@ -40,8 +40,6 @@
 namespace viewizard {
 namespace astromenace {
 
-float GetProjectileSpeed(int Num);
-
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern float GameMoney;
 extern float GameExperience;

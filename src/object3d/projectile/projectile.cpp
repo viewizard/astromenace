@@ -334,7 +334,8 @@ float GetProjectileRange(int Num)
 
 	return 0.0f;
 }
-int GetWeaponHullDamage(int Num)
+
+int GetProjectileHullDamage(int Num)
 {
 	if (Num >= 1 && Num <= 99) {
 		// если система залпового огня
@@ -347,7 +348,8 @@ int GetWeaponHullDamage(int Num)
 	}
 	return 0;
 }
-int GetWeaponSystemsDamage(int Num)
+
+int GetProjectileSystemsDamage(int Num)
 {
 	if (Num >= 1 && Num <= 99) {
 		// если система залпового огня
@@ -360,6 +362,7 @@ int GetWeaponSystemsDamage(int Num)
 	}
 	return 0;
 }
+
 float GetProjectileSpeed(int Num)
 {
 	if (Num >= 1 && Num <= 99) {

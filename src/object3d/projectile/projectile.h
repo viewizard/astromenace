@@ -148,8 +148,15 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 					       eProjectilePairCycle &Command)> function);
 // Get object ptr by reference.
 std::weak_ptr<cObject3D> GetProjectilePtr(const cProjectile &Object);
+
 // получаем время жизни снаряда
 float GetProjectileRange(int Num);
+//
+int GetProjectileHullDamage(int Num);
+//
+int GetProjectileSystemsDamage(int Num);
+//
+float GetProjectileSpeed(int Num);
 
 } // astromenace namespace
 } // viewizard namespace

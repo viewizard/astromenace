@@ -33,6 +33,7 @@
 #include "../assets/texture.h"
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/space_ship.h"
+#include "../object3d/projectile/projectile.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -50,8 +51,6 @@ void WorkshopCreateNewWeapon();
 void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode);
 void WorkshopDrawWeapon(cWeapon *Weapon);
 
-int GetWeaponHullDamage(int Num);
-int GetWeaponSystemsDamage(int Num);
 
 // что рисовать в диалоге 6,7,8
 extern cWeapon *DialogWeapon;
@@ -1162,25 +1161,25 @@ void Workshop_Weaponry()
 
 
 	int k2 = 0;
-	if (GetWeaponHullDamage(WorkshopNewWeapon->InternalType) > 0.0f) {
+	if (GetProjectileHullDamage(WorkshopNewWeapon->InternalType) > 0.0f) {
 		vw_DrawText(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, Hull:"));
 		if ((WorkshopNewWeapon->InternalType == 11) ||
 		    (WorkshopNewWeapon->InternalType == 12) ||
 		    (WorkshopNewWeapon->InternalType == 14))
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
 		else
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
 
 		k2=20;
 	}
-	if (GetWeaponSystemsDamage(WorkshopNewWeapon->InternalType) > 0.0f) {
+	if (GetProjectileSystemsDamage(WorkshopNewWeapon->InternalType) > 0.0f) {
 		vw_DrawText(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, Systems:"));
 		if ((WorkshopNewWeapon->InternalType == 11) ||
 		    (WorkshopNewWeapon->InternalType == 12) ||
 		    (WorkshopNewWeapon->InternalType == 14))
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileSystemsDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
 		else
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetWeaponSystemsDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileSystemsDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
 
 	}
 
