@@ -75,13 +75,13 @@ public:
 };
 
 class cBulletExplosion final : public cExplosion {
-	friend void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+	friend void CreateBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
 					  int ExplType, const sVECTOR3D &ExplLocation,
 					  float Speed, bool NeedExplosionSFX);
 private:
 	// Don't allow direct new/delete usage in code, only CreateBulletExplosion()
 	// allowed for cBulletExplosion creation and release setup (deleter must be provided).
-	explicit cBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+	explicit cBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
 				  int ExplType, const sVECTOR3D &ExplLocation,
 				  float Speed, bool NeedExplosionSFX);
 	~cBulletExplosion() = default;
@@ -114,7 +114,7 @@ private:
 
 
 // Create cBulletExplosion object.
-void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+void CreateBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
 			   int ExplType, const sVECTOR3D &ExplLocation,
 			   float Speed, bool NeedExplosionSFX = true);
 // Create cGroundExplosion object.

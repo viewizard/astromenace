@@ -148,7 +148,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					return false;
 				} else {
 					// "разбиваем" снаряд о корпус, звук тянем отдельно!
-					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, ObjectSpeed, false);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed, false);
 
 					// где сейчас, там и погибли
 					IntercPoint = Projectile.Location;
@@ -184,9 +184,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				// "разбиваем" снаряд о корпус
 				// звук тянем отдельно!
 				if (NeedCheckCollision(Object))
-					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, ObjectSpeed, false);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, ObjectSpeed, false);
 				else
-					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, IntercPoint, 0.0f, false);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, 0.0f, false);
 
 				// столкновение было
 				return true;
@@ -205,7 +205,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					IntercPoint = Projectile.Location;
 
 					// "разбиваем" снаряд о корпус
-					CreateBulletExplosion(&Object, &Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
+					CreateBulletExplosion(&Object, Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
 
 					// корректируем данные щита
 					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
@@ -240,9 +240,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 						// взрываем...
 						if (NeedCheckCollision(Object))
-							CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
+							CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
 						else
-							CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
+							CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, 0.0f);
 
 						return true;
 					} else
@@ -257,9 +257,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				}
 				// взрываем...
 				if (NeedCheckCollision(Object))
-					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
 				else
-					CreateBulletExplosion(&Object, &Projectile, Projectile.Num, Projectile.Location, 0.0f);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, 0.0f);
 				// столкновение было
 				return true;
 			}
@@ -1117,12 +1117,12 @@ void DetectCollisionAllObject3D()
 
 					if ((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) {
 						FirstObject.Speed = 0.0f;
-						CreateBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+						CreateBulletExplosion(nullptr, FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
 						Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
 					}
 					if ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) {
 						SecondObject.Speed = 0.0f;
-						CreateBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+						CreateBulletExplosion(nullptr, SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 
 						if (Command == eProjectilePairCycle::DeleteFirstObjectAndContinue)
 							Command = eProjectilePairCycle::DeleteBothObjectsAndContinue;
@@ -1137,7 +1137,7 @@ void DetectCollisionAllObject3D()
 				    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
 						       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
 					FirstObject.Speed = 0.0f;
-					CreateBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+					CreateBulletExplosion(nullptr, FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
 					Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
 				}
 			} else if (((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) && (FirstObject.ProjectileType == 2)) {
@@ -1146,7 +1146,7 @@ void DetectCollisionAllObject3D()
 				    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
 						       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
 					SecondObject.Speed = 0.0f;
-					CreateBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+					CreateBulletExplosion(nullptr, SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 					Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
 				}
 			// missile/mine with projectile/flare
@@ -1158,7 +1158,7 @@ void DetectCollisionAllObject3D()
 				    vw_SphereOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
 							  SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation)) {
 					FirstObject.Speed = 0.0f;
-					CreateBulletExplosion(nullptr, &FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
+					CreateBulletExplosion(nullptr, FirstObject, -FirstObject.Num, FirstObject.Location, FirstObject.Speed);
 					Command = eProjectilePairCycle::DeleteFirstObjectAndContinue;
 				}
 			} else if ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4)) {
@@ -1169,7 +1169,7 @@ void DetectCollisionAllObject3D()
 				    vw_SphereOBBCollision(SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat,
 							  FirstObject.Radius, FirstObject.Location, FirstObject.PrevLocation)) {
 					SecondObject.Speed = 0.0f;
-					CreateBulletExplosion(nullptr, &SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
+					CreateBulletExplosion(nullptr, SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 					Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
 				}
 			}

@@ -46,7 +46,7 @@ std::list<std::unique_ptr<cExplosion, std::function<void (cExplosion *p)>>> Expl
 /*
  * Create cBulletExplosion object.
  */
-void CreateBulletExplosion(const cObject3D *Object, cProjectile *Projectile,
+void CreateBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
 			   int ExplType, const sVECTOR3D &ExplLocation,
 			   float Speed, bool NeedExplosionSFX)
 {

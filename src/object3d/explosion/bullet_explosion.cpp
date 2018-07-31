@@ -198,10 +198,10 @@ void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, in
 /*
  * cBulletExplosion constructor.
  */
-cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Projectile, int ExplType,
+cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Projectile, int ExplType,
 				   const sVECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX)
 {
-	TimeLastUpdate = Projectile->TimeLastUpdate;
+	TimeLastUpdate = Projectile.TimeLastUpdate;
 	ExplosionTypeByClass = 2;
 
 	// 1-взрыв на части, 2-разлет геометрии
@@ -209,26 +209,26 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 
 	// AABB нужен, т.к. по нему рисуем, если во фруструме
 	// копируем AABB, т.к. они сейчас подходят...
-	AABB[0] = Projectile->AABB[0];
-	AABB[1] = Projectile->AABB[1];
-	AABB[2] = Projectile->AABB[2];
-	AABB[3] = Projectile->AABB[3];
-	AABB[4] = Projectile->AABB[4];
-	AABB[5] = Projectile->AABB[5];
-	AABB[6] = Projectile->AABB[6];
-	AABB[7] = Projectile->AABB[7];
+	AABB[0] = Projectile.AABB[0];
+	AABB[1] = Projectile.AABB[1];
+	AABB[2] = Projectile.AABB[2];
+	AABB[3] = Projectile.AABB[3];
+	AABB[4] = Projectile.AABB[4];
+	AABB[5] = Projectile.AABB[5];
+	AABB[6] = Projectile.AABB[6];
+	AABB[7] = Projectile.AABB[7];
 
 	// сохраняем данные объекта, чтобы не было скачков и не учитывать смещение в меше
-	SetLocation(Projectile->Location);
-	Orientation = Projectile->Orientation;
+	SetLocation(Projectile.Location);
+	Orientation = Projectile.Orientation;
 
 	// сохраняем статус объекта, чтобы правильно создавать части-снаряды и обломки
-	ObjectStatus = Projectile->ObjectStatus;
+	ObjectStatus = Projectile.ObjectStatus;
 
 	ExplosionType = ExplType;
 
 	// поправка в зависимости от скорости объекта до взрыва
-	VelocityOrientation = Projectile->Orientation^(-1);
+	VelocityOrientation = Projectile.Orientation ^ (-1);
 	OldSpeed = Speed;
 
 
@@ -259,8 +259,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	case -216:
 	case -217: {
 		// поправка в зависимости от скорости объекта до взрыва
-		VelocityOrientation = Projectile->Orientation;
-		OldSpeed = Projectile->Speed - 0.5f*Projectile->Radius;
+		VelocityOrientation = Projectile.Orientation;
+		OldSpeed = Projectile.Speed - 0.5f * Projectile.Radius;
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
 		// эффект
@@ -270,20 +270,20 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 1);
-			sharedGFX->Speed = 0.5f * Projectile->Radius;
+			sharedGFX->Speed = 0.5f * Projectile.Radius;
 			sharedGFX->SpeedVar = vw_fRand0();
-			sharedGFX->SetStartLocation(Projectile->Location);
-			if (Projectile->Speed != 0.0f)
+			sharedGFX->SetStartLocation(Projectile.Location);
+			if (Projectile.Speed != 0.0f)
 				sharedGFX->Theta = 360.00f;
-			sharedGFX->ParticlesPerSec = (int)(30 * Projectile->Radius);
+			sharedGFX->ParticlesPerSec = (int)(30 * Projectile.Radius);
 			sharedGFX->CreationType = eParticleCreationType::Sphere;
 			sharedGFX->CreationSize = sVECTOR3D{AABB[0].x, AABB[0].y, AABB[0].z};
 			// разварачиваем взрыв по объекту
-			sharedGFX->RotateSystemAndParticlesByAngle(Projectile->Rotation);
+			sharedGFX->RotateSystemAndParticlesByAngle(Projectile.Rotation);
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (int)(3*Projectile->Radius) + (int)(vw_fRand0()*3*Projectile->Radius);
+		int ttt = (int)(3 * Projectile.Radius) + (int)(vw_fRand0() * 3 * Projectile.Radius);
 		for (int i=0; i<ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
 			if (auto sharedProjectile = tmpProjectile.lock()) {
@@ -292,8 +292,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				sharedProjectile->SetRotation(sVECTOR3D{360.0f * vw_fRand0(),
 									360.0f * vw_fRand0(),
 									360.0f * vw_fRand0()});
-				sVECTOR3D TM1 = Projectile->Orientation ^ Projectile->Speed;
-				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 6.0f));
+				sVECTOR3D TM1 = Projectile.Orientation ^ Projectile.Speed;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile.Radius * 6.0f));
 				sharedProjectile->Orientation.Normalize();
 
 				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
@@ -305,10 +305,10 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				}
 				sharedProjectile->ObjectStatus = ObjectStatus;
 				// учитываем пенальти
-				sharedProjectile->Speed = Projectile->Speed + Projectile->Radius * 1.5f + 2.0f * vw_fRand0();
+				sharedProjectile->Speed = Projectile.Speed + Projectile.Radius * 1.5f + 2.0f * vw_fRand0();
 				sharedProjectile->SpeedEnd = 0.0f;
 				sharedProjectile->SpeedStart = sharedProjectile->Speed;
-				sharedProjectile->Lifetime = Projectile->Age = 2.0f + vw_fRand0();
+				sharedProjectile->Lifetime = Projectile.Age = 2.0f + vw_fRand0();
 			}
 		}
 
@@ -364,10 +364,10 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		GraphicFX.resize(1);
 
 		// установка эффекта вспышки в месте попадания
-		if (!Projectile->GraphicFX.empty() && !Projectile->GraphicFX[0].expired()) {
+		if (!Projectile.GraphicFX.empty() && !Projectile.GraphicFX[0].expired()) {
 			GraphicFX[0] = vw_CreateParticleSystem();
 			auto sharedGFX = GraphicFX[0].lock();
-			auto sharedProjectileGFX = Projectile->GraphicFX[0].lock();
+			auto sharedProjectileGFX = Projectile.GraphicFX[0].lock();
 			if (sharedGFX && sharedProjectileGFX) {
 				SetExplosionGFX(sharedGFX, 0);
 				float Rexpl = (sharedProjectileGFX->ColorStart.r + sharedProjectileGFX->ColorEnd.r) / 2.0f;
@@ -392,7 +392,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			}
 		}
 
-		Projectile->NeedStopPartic = true;
+		Projectile.NeedStopPartic = true;
 		NeedStop = false;
 
 		break;
@@ -425,10 +425,10 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		GraphicFX.resize(1);
 
 		// установка эффекта вспышки в месте попадания
-		if (!Projectile->GraphicFX.empty() && !Projectile->GraphicFX[0].expired()) {
+		if (!Projectile.GraphicFX.empty() && !Projectile.GraphicFX[0].expired()) {
 			GraphicFX[0] = vw_CreateParticleSystem();
 			auto sharedGFX = GraphicFX[0].lock();
-			auto sharedProjectileGFX = Projectile->GraphicFX[0].lock();
+			auto sharedProjectileGFX = Projectile.GraphicFX[0].lock();
 			if (sharedGFX && sharedProjectileGFX) {
 				SetExplosionGFX(sharedGFX, 0);
 				float Rexpl = (sharedProjectileGFX->ColorStart.r + sharedProjectileGFX->ColorEnd.r) / 2.0f;
@@ -453,7 +453,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			}
 		}
 
-		Projectile->NeedStopPartic = true;
+		Projectile.NeedStopPartic = true;
 		NeedStop = false;
 
 		break;
@@ -477,7 +477,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	case 216:
 	case 217: {
 		// поправка в зависимости от скорости объекта до взрыва
-		VelocityOrientation = Projectile->Orientation^(-1);
+		VelocityOrientation = Projectile.Orientation ^ (-1);
 		OldSpeed = Speed = 0.0f;
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
@@ -488,11 +488,11 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 10);
-			sharedGFX->SetStartLocation(Projectile->Location);
+			sharedGFX->SetStartLocation(Projectile.Location);
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (3 + vw_fRand()) * Projectile->Radius;
+		int ttt = (3 + vw_fRand()) * Projectile.Radius;
 		for (int i = 0; i < ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
 			if (auto sharedProjectile = tmpProjectile.lock()) {
@@ -501,8 +501,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				sharedProjectile->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
 									360.0f * vw_fRand0(),
 									0.0f});
-				sVECTOR3D TM1 = Projectile->Orientation;
-				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 2.0f));
+				sVECTOR3D TM1 = Projectile.Orientation;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile.Radius * 2.0f));
 				sharedProjectile->Orientation.Normalize();
 
 				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
@@ -528,7 +528,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	// рой
 	case 17: {
 		// поправка в зависимости от скорости объекта до взрыва
-		VelocityOrientation = Projectile->Orientation^(-1);
+		VelocityOrientation = Projectile.Orientation ^ (-1);
 		OldSpeed = Speed = 0.0f;
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
@@ -541,11 +541,11 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			SetExplosionGFX(sharedGFX, 10);
 			sharedGFX->ParticlesPerSec = 30;
 			sharedGFX->CreationSize = sVECTOR3D{2.0f, 0.3f, 2.0f};
-			sharedGFX->SetStartLocation(Projectile->Location);
+			sharedGFX->SetStartLocation(Projectile.Location);
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (1 + vw_fRand()) * Projectile->Radius;
+		int ttt = (1 + vw_fRand()) * Projectile.Radius;
 		//vw_LogMessage(LOG_MESS_INF, "%i", ttt);
 		for (int i = 0; i < ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
@@ -555,8 +555,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				sharedProjectile->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
 									360.0f * vw_fRand0(),
 									0.0f});
-				sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
-				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 2.0f));
+				sVECTOR3D TM1 = Projectile.Orientation;//^Speed;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile.Radius * 2.0f));
 				sharedProjectile->Orientation.Normalize();
 
 				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
@@ -584,9 +584,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	case 209: {
 		// убиваем всех, кто рядом
 		// FIXME this act as hidden trap (objects release), should be moved to collision detection code
-		DestroyRadiusCollisionAllObject3D(*Object, Projectile->Location, 75.0f, Projectile->DamageHull, Projectile->ObjectStatus);
+		DestroyRadiusCollisionAllObject3D(*Object, Projectile.Location, 75.0f, Projectile.DamageHull, Projectile.ObjectStatus);
 
-		VelocityOrientation = Projectile->Orientation^(-1);
+		VelocityOrientation = Projectile.Orientation ^ (-1);
 		OldSpeed = Speed = 0.0f;
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
@@ -597,11 +597,11 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 8);
-			sharedGFX->SetStartLocation(Projectile->Location);
+			sharedGFX->SetStartLocation(Projectile.Location);
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (2 + vw_fRand()) * Projectile->Radius;
+		int ttt = (2 + vw_fRand()) * Projectile.Radius;
 		for (int i=0; i<ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(2);
 			if (auto sharedProjectile = tmpProjectile.lock()) {
@@ -611,8 +611,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				sharedProjectile->SetRotation(sVECTOR3D{20.0f * vw_fRand0(),
 									360.0f * vw_fRand0(),
 									0.0f});
-				sVECTOR3D TM1 = Projectile->Orientation;//^Speed;
-				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 2.0f));
+				sVECTOR3D TM1 = Projectile.Orientation;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile.Radius * 2.0f));
 				sharedProjectile->Orientation.Normalize();
 
 				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
@@ -641,9 +641,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	case 210: {
 		// убиваем всех, кто рядом
 		// FIXME this act as hidden trap (objects release), should be moved to collision detection code
-		DestroyRadiusCollisionAllObject3D(*Object, Projectile->Location, 150.0f, Projectile->DamageHull, Projectile->ObjectStatus);
+		DestroyRadiusCollisionAllObject3D(*Object, Projectile.Location, 150.0f, Projectile.DamageHull, Projectile.ObjectStatus);
 
-		VelocityOrientation = Projectile->Orientation^(-1);
+		VelocityOrientation = Projectile.Orientation ^ (-1);
 		OldSpeed = Speed = 0.0f;
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
@@ -654,13 +654,13 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 7);
-			sharedGFX->SetStartLocation(Projectile->Location);
+			sharedGFX->SetStartLocation(Projectile.Location);
 		}
 
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetExplosionGFX(sharedGFX, 9);
-			sharedGFX->SetStartLocation(Projectile->Location);
+			sharedGFX->SetStartLocation(Projectile.Location);
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
@@ -673,8 +673,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 				sharedProjectile->SetRotation(sVECTOR3D{5.0f * vw_fRand0(),
 									360.0f * vw_fRand0(),
 									0.0f});
-				sVECTOR3D TM1 = Projectile->Orientation;
-				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile->Radius * 4.0f));
+				sVECTOR3D TM1 = Projectile.Orientation;
+				sharedProjectile->Orientation = TM1 + (sharedProjectile->Orientation ^ (Projectile.Radius * 4.0f));
 				sharedProjectile->Orientation.Normalize();
 
 				for (auto &tmpGFX : sharedProjectile->GraphicFX) {
@@ -691,8 +691,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			}
 		}
 		// создаем немного разлетающихся кусков-снарядов
-		int ttt = (3  + vw_fRand()) * Projectile->Radius;
-		for (int i=0; i<ttt; i++) {
+		int ttt = (3  + vw_fRand()) * Projectile.Radius;
+		for (int i = 0; i < ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(2);
 			if (auto sharedProjectile = tmpProjectile.lock()) {
 				sharedProjectile->Num = 1;
@@ -715,7 +715,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			}
 		}
 		// создаем немного разлетающихся кусков-снарядов
-		ttt = (3 + vw_fRand()) * Projectile->Radius;
+		ttt = (3 + vw_fRand()) * Projectile.Radius;
 		for (int i=0; i<ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(3);
 			if (auto sharedProjectile = tmpProjectile.lock()) {
@@ -739,8 +739,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			}
 		}
 
-		ttt = (3 + vw_fRand() * 5) * Projectile->Radius;
-		for (int i=0; i<ttt; i++) {
+		ttt = (3 + vw_fRand() * 5) * Projectile.Radius;
+		for (int i = 0; i < ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(1);
 			if (auto sharedProjectile = tmpProjectile.lock()) {
 				sharedProjectile->SetLocation(Location);
@@ -763,8 +763,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		}
 
 		// создаем немного разлетающихся кусков-снарядов
-		ttt = (5 + vw_fRand() * 3) * Projectile->Radius;
-		for (int i=0; i<ttt; i++) {
+		ttt = (5 + vw_fRand() * 3) * Projectile.Radius;
+		for (int i = 0; i < ttt; i++) {
 			std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(5);
 			if (auto sharedProjectile = tmpProjectile.lock()) {
 				sharedProjectile->Num = 1;
@@ -796,7 +796,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	case 205:
 	case 206: {
 		// поправка в зависимости от скорости объекта до взрыва
-		VelocityOrientation = Projectile->Orientation^(-1);
+		VelocityOrientation = Projectile.Orientation ^ (-1);
 		OldSpeed = Speed = 0.0f;
 		Lifetime = 2.0f; // должно соотв. максимальной жизни частицы
 
@@ -807,7 +807,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			SetExplosionGFX(sharedGFX, 10);
-			sharedGFX->SetStartLocation(Projectile->Location);
+			sharedGFX->SetStartLocation(Projectile.Location);
 		}
 
 		// собираем геометрию и рисуем ее разлет
@@ -845,8 +845,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 		// создаем новые данные, переносим туда
 		// объекты малы, по этому не применяем сдесь настройки качества взрыва, делаем со всей геометрией
 		// копируем данные снаряда
-		Texture = Projectile->Texture;
-		Chunks = Projectile->Chunks;
+		Texture = Projectile.Texture;
+		Chunks = Projectile.Chunks;
 
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
 			// делаем изменения
@@ -871,33 +871,33 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			for (unsigned int j = 0; j < Chunks[i].VertexQuantity; j++) {
 				int j1 = j * Chunks[i].VertexStride;
 				int j2;
-				if (Projectile->Chunks[i].IndexArray)
-					j2 = Projectile->Chunks[i].IndexArray.get()[Projectile->Chunks[i].RangeStart + j] *
-					     Projectile->Chunks[i].VertexStride;
+				if (Projectile.Chunks[i].IndexArray)
+					j2 = Projectile.Chunks[i].IndexArray.get()[Projectile.Chunks[i].RangeStart + j] *
+					     Projectile.Chunks[i].VertexStride;
 				else
-					j2 = (Projectile->Chunks[i].RangeStart + j) *
-					     Projectile->Chunks[i].VertexStride;
+					j2 = (Projectile.Chunks[i].RangeStart + j) *
+					     Projectile.Chunks[i].VertexStride;
 
 
-				TMP.x = Projectile->Chunks[i].VertexArray.get()[j2] + Chunks[i].Location.x;
-				TMP.y = Projectile->Chunks[i].VertexArray.get()[j2 + 1] + Chunks[i].Location.y;
-				TMP.z = Projectile->Chunks[i].VertexArray.get()[j2 + 2] + Chunks[i].Location.z;
-				vw_Matrix33CalcPoint(TMP, Projectile->CurrentRotationMat);
+				TMP.x = Projectile.Chunks[i].VertexArray.get()[j2] + Chunks[i].Location.x;
+				TMP.y = Projectile.Chunks[i].VertexArray.get()[j2 + 1] + Chunks[i].Location.y;
+				TMP.z = Projectile.Chunks[i].VertexArray.get()[j2 + 2] + Chunks[i].Location.z;
+				vw_Matrix33CalcPoint(TMP, Projectile.CurrentRotationMat);
 				// координаты
 				Chunks[i].VertexArray.get()[j1] = TMP.x;
 				Chunks[i].VertexArray.get()[j1 + 1] = TMP.y;
 				Chunks[i].VertexArray.get()[j1 + 2] = TMP.z;
 				// нормали
-				TMP.x = Projectile->Chunks[i].VertexArray.get()[j2 + 3];
-				TMP.y = Projectile->Chunks[i].VertexArray.get()[j2 + 4];
-				TMP.z = Projectile->Chunks[i].VertexArray.get()[j2 + 5];
-				vw_Matrix33CalcPoint(TMP, Projectile->CurrentRotationMat);
+				TMP.x = Projectile.Chunks[i].VertexArray.get()[j2 + 3];
+				TMP.y = Projectile.Chunks[i].VertexArray.get()[j2 + 4];
+				TMP.z = Projectile.Chunks[i].VertexArray.get()[j2 + 5];
+				vw_Matrix33CalcPoint(TMP, Projectile.CurrentRotationMat);
 				Chunks[i].VertexArray.get()[j1 + 3] = TMP.x;
 				Chunks[i].VertexArray.get()[j1 + 4] = TMP.y;
 				Chunks[i].VertexArray.get()[j1 + 5] = TMP.z;
 				// текстура
-				Chunks[i].VertexArray.get()[j1 + 6] = Projectile->Chunks[i].VertexArray.get()[j2 + 6];
-				Chunks[i].VertexArray.get()[j1 + 7] = Projectile->Chunks[i].VertexArray.get()[j2 + 7];
+				Chunks[i].VertexArray.get()[j1 + 6] = Projectile.Chunks[i].VertexArray.get()[j2 + 6];
+				Chunks[i].VertexArray.get()[j1 + 7] = Projectile.Chunks[i].VertexArray.get()[j2 + 7];
 			}
 
 
@@ -906,7 +906,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 			Chunks[i].IndexArray.reset();
 		}
 
-		float tRadius2 = Projectile->Radius/1.5f;
+		float tRadius2 = Projectile.Radius / 1.5f;
 
 		// для каждого треугольника - свои данные (фактически, у нас 1 объект, с ним и работаем)
 		int Count = 0;
