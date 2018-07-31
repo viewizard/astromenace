@@ -35,6 +35,7 @@
 #include "../object3d/space_object/space_object.h"
 #include "../object3d/ground_object/ground_object.h"
 #include "../object3d/space_ship/space_ship.h"
+#include "../object3d/projectile/projectile.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

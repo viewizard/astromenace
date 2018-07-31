@@ -28,6 +28,7 @@
 // TODO translate comments
 
 #include "weapon.h"
+#include "../projectile/projectile.h"
 #include "../../assets/audio.h"
 #include "../../assets/texture.h"
 

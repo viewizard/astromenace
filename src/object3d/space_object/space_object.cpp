@@ -28,6 +28,7 @@
 // TODO translate comments
 
 #include "space_object.h"
+#include "../explosion/explosion.h"
 #include "../../assets/texture.h"
 #include "../../game.h" // FIXME "game.h" should be replaced by individual headers
 

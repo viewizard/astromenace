@@ -46,8 +46,6 @@
 namespace viewizard {
 namespace astromenace {
 
-class cWeapon;
-
 enum class eGroundCycle {
 	Continue,
 	Break,

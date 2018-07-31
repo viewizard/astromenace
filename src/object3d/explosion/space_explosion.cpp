@@ -30,6 +30,7 @@
 // TODO translate comments
 
 #include "explosion.h"
+#include "../projectile/projectile.h"
 #include "../../config/config.h"
 #include "../../assets/audio.h"
 #include "../space_object/space_object.h"
