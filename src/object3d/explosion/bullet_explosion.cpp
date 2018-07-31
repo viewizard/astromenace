@@ -43,7 +43,10 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 				       float Radius, float Damage, eObjectStatus ObjectStatus);
 
 
-void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType)
+/*
+ * Play sfx for bullet explosion.
+ */
+void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, int ExplType)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// звуковые спец эффекты
@@ -192,9 +195,9 @@ void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Создание взрыва из частей объекта
-//-----------------------------------------------------------------------------
+/*
+ * cBulletExplosion constructor.
+ */
 cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Projectile, int ExplType,
 				   const sVECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX)
 {
@@ -1007,7 +1010,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile *Project
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// звуковые спец эффекты
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	PlayBulletExplosion(Location, NeedExplosionSFX, ExplType);
+	PlayBulletExplosionSFX(Location, NeedExplosionSFX, ExplType);
 
 
 

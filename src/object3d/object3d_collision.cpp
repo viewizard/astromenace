@@ -41,7 +41,6 @@ namespace viewizard {
 namespace astromenace {
 
 float GetProjectileSpeed(int Num);
-void PlayBulletExplosion(sVECTOR3D Location, bool NeedExplosionSFX, int ExplType);
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern float GameMoney;
@@ -299,7 +298,7 @@ void DestroyProjectileWithExplosion(const cProjectile &Projectile, const sVECTOR
 	switch (Projectile.ProjectileType) {
 	// обычные снаряды
 	case 0:
-		PlayBulletExplosion(IntercPoint, Projectile.NeedDeadSound, Projectile.Num);
+		PlayBulletExplosionSFX(IntercPoint, Projectile.NeedDeadSound, Projectile.Num);
 		break;
 
 	// ракеты-торпеды-бомбы
