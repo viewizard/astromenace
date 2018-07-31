@@ -64,7 +64,6 @@ std::weak_ptr<cSpaceShip> DialogSpaceShip{};
 extern std::weak_ptr<cSpaceShip> WorkshopFighterGame; // корабль игрока в меню шипярд
 char *GetShipGroupTitle(int Num);
 char *GetWorkshopShipName(int Num);
-float GetShipArmor(int SpaceShipNum);
 
 cWeapon *DialogWeapon = nullptr;
 char *GetWeaponName(int Num);

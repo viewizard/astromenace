@@ -292,6 +292,8 @@ float GetEngineAcceleration(int EngineType);
 float GetEnginePower(int EngineType);
 //
 float GetEngineRotatePower(int EngineType);
+//
+float GetShipArmor(int SpaceShipNum);
 
 } // astromenace namespace
 } // viewizard namespace
