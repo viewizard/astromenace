@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO should be separated for explosion with geometry and without (see InternalExplosionType)
+
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 // TODO translate comments
@@ -48,27 +50,24 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
  */
 void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, int ExplType)
 {
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// звуковые спец эффекты
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (NeedExplosionSFX) {
 		float fVol = 1.0f;
 
-		switch (ExplType) {
-		// самоликвидация рокет-торпед... и вообще всех снарядов...
-		// идет со знаком "-" к номеру снаряда при создании
+		// use same ID as for projectile creation
+		// negative value mean self-destruct
 
-		// ракеты землян
+		switch (ExplType) {
+		// earth missiles
 		case -16:
 		case -17:
 		case -18:
 		case -19:
-		// ракеты пиратов
+		// pirate missiles
 		case -205:
 		case -206:
 		case -209:
 		case -210:
-		// мины пиратов
+		// pirate mines
 		case -214:
 		case -215:
 		case -216:
@@ -76,17 +75,12 @@ void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, in
 			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
 			break;
 
-
-		// взрыв и разлет при попадании снарядов в объект
-		// используем аналогичный номер, как при создании
-
-
 		// Kinetic
 		case 1:
 		case 2:
 		case 3:
 		case 4:
-		// пираты (турели + стрельба как Kinetic1)
+		// pirate (turrets + Kinetic1)
 		case 201:
 		case 202:
 		case 204:
@@ -95,14 +89,13 @@ void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, in
 			PlayGameSFX(eGameSFX::Hit_Kinetic, fVol, Location);
 			break;
 
-
 		// Ion
 		case 5:
 		case 6:
 		case 7:
-		// пришельцы (как Kinetic1)
+		// aliens (Kinetic1)
 		case 101:
-		// пираты (как Ion2)
+		// pirate (Ion2)
 		case 207:
 			PlayGameSFX(eGameSFX::Hit_Ion, fVol, Location);
 			break;
@@ -111,52 +104,40 @@ void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, in
 		case 8:
 		case 9:
 		case 10:
-		// пришельцы (как Kinetic2 и Kinetic3)
+		// aliens (Kinetic2, Kinetic3)
 		case 102:
 		case 103:
 		case 104:
 		case 105:
-		// пришельцы (как Plasma3 и Plasma2)
+		// aliens (Plasma3, Plasma2)
 		case 108:
 		case 109:
-		// пираты (как Plasma2)
+		// pirate (Plasma2)
 		case 213:
 			PlayGameSFX(eGameSFX::Hit_Plasma, fVol, Location);
 			break;
 
-
-		// Maser - у него луч, тут не учитываем
-		/*	case 11:
-				break;
-			case 12:
-				break;*/
-
-
 		// Antimatter
 		case 13:
-		// пришельцы (мина 1 тип)
+		// aliens (mine 1)
 		case 106:
-		// пришельцы (мина 2 тип)
+		// aliens (mine 2)
 		case 107:
-		// пираты (как Antimatter)
+		// pirate (Antimatter)
 		case 208:
 			PlayGameSFX(eGameSFX::Hit_Antimatter, fVol, Location);
 			break;
-
-		// Laser - у него луч, тут не учитываем
-		/*	case 14:
-				break;*/
 
 		// Gauss
 		case 15:
 			PlayGameSFX(eGameSFX::Hit_Gauss, fVol, Location);
 			break;
 
-		// ракета
+		// earth missile
 		case 16:
-		// ракеты пиратов
+		// pirate missile
 		case 205:
-		// мины пиратов
+		// pirate mines
 		case 214:
 		case 215:
 		case 216:
@@ -164,32 +145,28 @@ void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, in
 			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
 			break;
 
-		// рой
+		// earth missile swarm
 		case 17:
-		// ракеты пиратов
+		// pirate small missile
 		case 206:
 			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
 			break;
 
-		// торпеда
+		// earth torpedo
 		case 18:
-		// торпеда пиратов
+		// pirate torpedo
 		case 209:
 			PlayGameSFX(eGameSFX::Explosion_Big, fVol, Location, 2);
 			break;
 
-		// бомба
+		// earth bomb
 		case 19:
-		// бомба пиратов
+		// pirate bomb
 		case 210:
 			PlayGameSFX(eGameSFX::Explosion_Big_Energy, fVol, Location, 2);
 			break;
 
-
-
 		default:
-			// если тут, значит взрыв делать не нужно... все и так само уничтожется
-
 			break;
 		}
 	}
