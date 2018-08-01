@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// FIXME split big asteroid code to big asteroid + 'planetoid' (backgroind big asteroid)
 
 #include "space_object.h"
 #include "../../config/config.h"
@@ -35,78 +35,52 @@
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * cBigAsteroid.
+ */
 cBigAsteroid::cBigAsteroid(int AsteroidNum)
 {
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BigAsteroid;
 
-	// задали первичный, нужно случайным образом найти
-	if (AsteroidNum == 1 || AsteroidNum == 2) {
-		int Rand = 1 + vw_iRandNum(4);
-		AsteroidNum = AsteroidNum * 10 + Rand;
-	}
-	InternalType = AsteroidNum;
+	// we could provide an Asteroid type (1 or 2) and pick random asteroid, or asteroid number:
+	// 11-15 - planetoids (backgroind big asteroids)
+	// 21-25 - big asteroids
+	if ((AsteroidNum == 1) ||
+	    (AsteroidNum == 2))
+		InternalType = AsteroidNum * 10 + 1 + vw_iRandNum(4);
+	else
+		InternalType = AsteroidNum;
 
-
-	// перебираем и ставим нужные данные
-	switch (AsteroidNum) {
+	switch (InternalType) {
 	case 11:
-		LoadObjectData("models/space/bigasteroid-01.vw3d", *this);
-		goto case9next;
-	case 12:
-		LoadObjectData("models/space/bigasteroid-02.vw3d", *this);
-		goto case9next;
-	case 13:
-		LoadObjectData("models/space/bigasteroid-03.vw3d", *this);
-		goto case9next;
-	case 14:
-		LoadObjectData("models/space/bigasteroid-04.vw3d", *this);
-		goto case9next;
-	case 15:
-		LoadObjectData("models/space/bigasteroid-05.vw3d", *this);
-
-case9next:
-
-		//Speed = 25.0f;
-		RotationSpeed.x = 10.0f + 10.0f * vw_fRand0();
-		RotationSpeed.y = 2.0f + 20.0f * vw_fRand0();
-
-		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
-		TextureIllum[0] = 0;
-		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-		break;
-
-
-	// те же астероиды, но они летят сверху...
 	case 21:
 		LoadObjectData("models/space/bigasteroid-01.vw3d", *this);
-		goto case10next;
+		break;
+	case 12:
 	case 22:
 		LoadObjectData("models/space/bigasteroid-02.vw3d", *this);
-		goto case10next;
+		break;
+	case 13:
 	case 23:
 		LoadObjectData("models/space/bigasteroid-03.vw3d", *this);
-		goto case10next;
+		break;
+	case 14:
 	case 24:
 		LoadObjectData("models/space/bigasteroid-04.vw3d", *this);
-		goto case10next;
+		break;
+	case 15:
 	case 25:
 		LoadObjectData("models/space/bigasteroid-05.vw3d", *this);
-
-case10next:
-
-		//Speed = 25.0f;
-		RotationSpeed.x = 10.0f + 10.0f * vw_fRand0();
-		RotationSpeed.y = 2.0f + 20.0f * vw_fRand0();
-
-		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
-		TextureIllum[0] = 0;
-		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		break;
 	}
+
+	RotationSpeed.x = 10.0f + 10.0f * vw_fRand0();
+	RotationSpeed.y = 2.0f + 20.0f * vw_fRand0();
+
+	Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+	TextureIllum[0] = 0;
+	NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 }
 
 } // astromenace namespace
