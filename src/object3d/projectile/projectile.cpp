@@ -170,7 +170,7 @@ std::list<std::shared_ptr<cProjectile>> ProjectileList{};
 /*
  * Create cProjectile object.
  */
-std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum)
+std::weak_ptr<cProjectile> CreateProjectile(const int ProjectileNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -1230,7 +1230,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cProjectile::cProjectile(int ProjectileNum)
+cProjectile::cProjectile(const int ProjectileNum)
 {
 	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::Projectile;

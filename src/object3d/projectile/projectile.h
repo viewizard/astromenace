@@ -58,12 +58,12 @@ enum class eProjectilePairCycle {
 };
 
 class cProjectile : public cObject3D {
-	friend std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum);
+	friend std::weak_ptr<cProjectile> CreateProjectile(const int ProjectileNum);
 
 private:
 	// Don't allow direct new/delete usage in code, only CreateProjectile()
 	// allowed for cProjectile creation and release setup (deleter must be provided).
-	explicit cProjectile(int ProjectileNum);
+	explicit cProjectile(const int ProjectileNum);
 	virtual ~cProjectile();
 
 public:
@@ -126,7 +126,7 @@ public:
 
 
 // Create cProjectile object.
-std::weak_ptr<cProjectile> CreateProjectile(int ProjectileNum);
+std::weak_ptr<cProjectile> CreateProjectile(const int ProjectileNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllProjectile(float Time);
 // Прорисовываем все объекты
