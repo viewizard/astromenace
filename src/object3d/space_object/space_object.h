@@ -94,21 +94,21 @@ private:
 };
 
 class cBigAsteroid final : public cSpaceObject {
-	friend std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum);
+	friend std::weak_ptr<cSpaceObject> CreateBigAsteroid(const int AsteroidNum);
 
 private:
 	// Don't allow direct new/delete usage in code, only CreateBigAsteroid()
 	// allowed for cBigAsteroid creation and release setup (deleter must be provided).
-	explicit cBigAsteroid(int AsteroidNum);
+	explicit cBigAsteroid(const int AsteroidNum);
 	~cBigAsteroid() = default;
 };
 
 class cPlanet final : public cSpaceObject {
-	friend std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum);
+	friend std::weak_ptr<cSpaceObject> CreatePlanet(const int PlanetNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreatePlanet()
 	// allowed for cPlanet creation and release setup (deleter must be provided).
-	explicit cPlanet(int PlanetNum);
+	explicit cPlanet(const int PlanetNum);
 	~cPlanet() = default;
 };
 
@@ -122,11 +122,11 @@ private:
 };
 
 class cBasePart final : public cSpaceObject {
-	friend std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum);
+	friend std::weak_ptr<cSpaceObject> CreateBasePart(const int BasePartNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateBasePart()
 	// allowed for cBasePart creation and release setup (deleter must be provided).
-	explicit cBasePart(int BasePartNum);
+	explicit cBasePart(const int BasePartNum);
 	~cBasePart() = default;
 };
 
@@ -134,13 +134,13 @@ private:
 // Create cSmallAsteroid object.
 std::weak_ptr<cSpaceObject> CreateSmallAsteroid();
 // Create cBigAsteroid object.
-std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum);
+std::weak_ptr<cSpaceObject> CreateBigAsteroid(const int AsteroidNum);
 // Create cPlanet object.
-std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum);
+std::weak_ptr<cSpaceObject> CreatePlanet(const int PlanetNum);
 // Create cSpaceDebris object.
 std::weak_ptr<cSpaceObject> CreateSpaceDebris();
 // Create cBasePart object.
-std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum);
+std::weak_ptr<cSpaceObject> CreateBasePart(const int BasePartNum);
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceObject(float Time);
 // Прорисовываем все объекты

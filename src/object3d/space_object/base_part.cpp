@@ -99,7 +99,7 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 /*
  * cBasePart.
  */
-cBasePart::cBasePart(int BasePartNum)
+cBasePart::cBasePart(const int BasePartNum)
 {
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BasePart;

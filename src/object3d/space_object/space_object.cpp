@@ -58,7 +58,7 @@ std::weak_ptr<cSpaceObject> CreateSmallAsteroid()
 /*
  * Create cBigAsteroid object.
  */
-std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum)
+std::weak_ptr<cSpaceObject> CreateBigAsteroid(const int AsteroidNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -69,7 +69,7 @@ std::weak_ptr<cSpaceObject> CreateBigAsteroid(int AsteroidNum)
 /*
  * Create cPlanet object.
  */
-std::weak_ptr<cSpaceObject> CreatePlanet(int PlanetNum)
+std::weak_ptr<cSpaceObject> CreatePlanet(const int PlanetNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -91,7 +91,7 @@ std::weak_ptr<cSpaceObject> CreateSpaceDebris()
 /*
  * Create cBasePart object.
  */
-std::weak_ptr<cSpaceObject> CreateBasePart(int BasePartNum)
+std::weak_ptr<cSpaceObject> CreateBasePart(const int BasePartNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined

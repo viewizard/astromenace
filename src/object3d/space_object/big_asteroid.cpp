@@ -38,7 +38,7 @@ namespace astromenace {
 /*
  * cBigAsteroid.
  */
-cBigAsteroid::cBigAsteroid(int AsteroidNum)
+cBigAsteroid::cBigAsteroid(const int AsteroidNum)
 {
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BigAsteroid;

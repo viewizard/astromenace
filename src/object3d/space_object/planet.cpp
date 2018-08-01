@@ -38,7 +38,7 @@ namespace astromenace {
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cPlanet::cPlanet(int PlanetNum)
+cPlanet::cPlanet(const int PlanetNum)
 {
 	ObjectStatus = eObjectStatus::none;
 	ObjectType = eObjectType::Planet;
@@ -47,7 +47,7 @@ cPlanet::cPlanet(int PlanetNum)
 
 
 	// перебираем и ставим нужные данные
-	switch (PlanetNum) {
+	switch (InternalType) {
 
 	// планета с астероидным кольцом
 	case 1:
