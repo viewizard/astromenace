@@ -413,6 +413,20 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
+		case constexpr_hash_djb2a("CreatePlanetoid"): {
+				int tmpType{0};
+				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
+					std::weak_ptr<cSpaceObject> Planetoid = CreateBigAsteroid(tmpType);
+					if (auto sharedPlanetoid = Planetoid.lock()) {
+						SetRotation(*sharedPlanetoid, xmlEntry, xmlDoc);
+						SetLocation(*sharedPlanetoid, xmlEntry, xmlDoc, 0.0f);
+						sharedPlanetoid->DeleteAfterLeaveScene = eDeleteAfterLeaveScene::enabled;
+						xmlDoc->fGetEntryAttribute(xmlEntry, "speed", sharedPlanetoid->Speed);
+					}
+				}
+			}
+			break;
+
 		case constexpr_hash_djb2a("AsteroidField"):
 			xmlDoc->bGetEntryAttribute(xmlEntry, "status", AsterOn);
 			xmlDoc->fGetEntryAttribute(xmlEntry, "persec", AsterQuant);
