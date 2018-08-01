@@ -52,7 +52,7 @@ extern bool PlayerFighterRightEng;
 /*
  * Create cAlienSpaceFighter object.
  */
-std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(const int SpaceShipNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -63,7 +63,7 @@ std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(int SpaceShipNum)
 /*
  * Create cAlienSpaceMotherShip object.
  */
-std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(const int SpaceShipNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -74,7 +74,7 @@ std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(int SpaceShipNum)
 /*
  * Create cEarthSpaceFighter object.
  */
-std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(const int SpaceShipNum)
 {
 	ShipList.emplace_front(new cEarthSpaceFighter{SpaceShipNum}, [](cEarthSpaceFighter *p) {delete p;});
 
@@ -98,7 +98,7 @@ std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(int SpaceShipNum)
 /*
  * Create cPirateShip object.
  */
-std::weak_ptr<cSpaceShip> CreatePirateShip(int SpaceShipNum)
+std::weak_ptr<cSpaceShip> CreatePirateShip(const int SpaceShipNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined

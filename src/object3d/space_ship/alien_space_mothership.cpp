@@ -501,7 +501,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cAlienSpaceMotherShip::cAlienSpaceMotherShip(int SpaceShipNum)
+cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
 	    (static_cast<unsigned>(SpaceShipNum) > PresetAlienSpaceMotherShipDataCount)) {

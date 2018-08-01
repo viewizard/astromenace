@@ -207,7 +207,7 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cPirateShip::cPirateShip(int SpaceShipNum)
+cPirateShip::cPirateShip(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
 	    (static_cast<unsigned>(SpaceShipNum) > PresetPirateShipDataCount)) {

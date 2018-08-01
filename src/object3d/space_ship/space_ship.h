@@ -210,50 +210,50 @@ public:
 };
 
 class cAlienSpaceFighter final : public cSpaceShip {
-	friend std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(int SpaceShipNum);
+	friend std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(const int SpaceShipNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateAlienSpaceFighter()
 	// allowed for cAlienSpaceFighter creation and release setup (deleter must be provided).
-	explicit cAlienSpaceFighter(int SpaceShipNum);
+	explicit cAlienSpaceFighter(const int SpaceShipNum);
 	~cAlienSpaceFighter() = default;
 };
 
 class cAlienSpaceMotherShip final : public cSpaceShip {
-	friend std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(int SpaceShipNum);
+	friend std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(const int SpaceShipNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateAlienSpaceMotherShip()
 	// allowed for cAlienSpaceMotherShip creation and release setup (deleter must be provided).
-	explicit cAlienSpaceMotherShip(int SpaceShipNum);
+	explicit cAlienSpaceMotherShip(const int SpaceShipNum);
 	~cAlienSpaceMotherShip() = default;
 };
 
 class cEarthSpaceFighter final : public cSpaceShip {
-	friend std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(int SpaceShipNum);
+	friend std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(const int SpaceShipNum);
 private:
 	// Don't allow direct new/delete usage in code, only cEarthSpaceFighter()
 	// allowed for cEarthSpaceFighter creation and release setup (deleter must be provided).
-	explicit cEarthSpaceFighter(int SpaceShipNum);
+	explicit cEarthSpaceFighter(const int SpaceShipNum);
 	~cEarthSpaceFighter() = default;
 };
 
 class cPirateShip final : public cSpaceShip {
-	friend std::weak_ptr<cSpaceShip> CreatePirateShip(int SpaceShipNum);
+	friend std::weak_ptr<cSpaceShip> CreatePirateShip(const int SpaceShipNum);
 private:
 	// Don't allow direct new/delete usage in code, only cPirateShip()
 	// allowed for cPirateShip creation and release setup (deleter must be provided).
-	explicit cPirateShip(int SpaceShipNum);
+	explicit cPirateShip(const int SpaceShipNum);
 	~cPirateShip() = default;
 };
 
 
 // Create cAlienSpaceFighter object.
-std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreateAlienSpaceFighter(const int SpaceShipNum);
 // Create cAlienSpaceMotherShip object.
-std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreateAlienSpaceMotherShip(const int SpaceShipNum);
 // Create cEarthSpaceFighter object.
-std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(const int SpaceShipNum);
 // Create cPirateShip object.
-std::weak_ptr<cSpaceShip> CreatePirateShip(int SpaceShipNum);
+std::weak_ptr<cSpaceShip> CreatePirateShip(const int SpaceShipNum);
 
 // Проверяем все объекты, обновляем данные
 void UpdateAllSpaceShip(float Time);

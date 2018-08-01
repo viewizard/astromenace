@@ -1064,7 +1064,7 @@ float GetShipArmor(int SpaceShipNum)
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cEarthSpaceFighter::cEarthSpaceFighter(int SpaceShipNum)
+cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
 	    (static_cast<unsigned>(SpaceShipNum) > PresetEarthSpaceFighterDataCount)) {

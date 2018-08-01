@@ -241,7 +241,7 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cAlienSpaceFighter::cAlienSpaceFighter(int SpaceShipNum)
+cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
 	    (static_cast<unsigned>(SpaceShipNum) > PresetAlienSpaceFighterDataCount)) {
