@@ -157,7 +157,7 @@ static std::vector<sWeaponData> PresetPirateWeaponData{
 /*
  * Create cWeapon object.
  */
-std::weak_ptr<cWeapon> CreateWeapon(int WeaponNum)
+std::weak_ptr<cWeapon> CreateWeapon(const int WeaponNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -602,7 +602,7 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cWeapon::cWeapon(int WeaponNum)
+cWeapon::cWeapon(const int WeaponNum)
 {
 	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::ShipWeapon;
