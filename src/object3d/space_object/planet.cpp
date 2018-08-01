@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "space_object.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"

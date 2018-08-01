@@ -25,23 +25,18 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "space_object.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * cSpaceDebris
+ */
 cSpaceDebris::cSpaceDebris()
 {
 	ObjectType = eObjectType::SpaceDebris;
-
-	// тут все делаем сами...
-	// т.к. это часть большого корабля
 }
 
 } // astromenace namespace
