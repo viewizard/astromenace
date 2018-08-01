@@ -58,7 +58,7 @@ const std::vector<sBuildingData> PresetBuildingData{
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cCivilianBuilding::cCivilianBuilding(int BuildingNum)
+cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 {
 	if ((BuildingNum <= 0) || (static_cast<unsigned>(BuildingNum) > PresetBuildingData.size())) {
 		std::cerr << __func__ << "(): " << "Could not init cBuilding object with Number " << BuildingNum << "\n";

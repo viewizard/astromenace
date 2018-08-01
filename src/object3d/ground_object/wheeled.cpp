@@ -60,7 +60,7 @@ const std::vector<sWheeledData> PresetWheeledData{
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cWheeled::cWheeled(int WheeledNum)
+cWheeled::cWheeled(const int WheeledNum)
 {
 	if ((WheeledNum <= 0) ||
 	    (static_cast<unsigned>(WheeledNum) > PresetWheeledData.size())) {

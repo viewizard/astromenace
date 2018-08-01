@@ -58,7 +58,7 @@ const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData{
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cMilitaryBuilding::cMilitaryBuilding(int MilitaryBuildingNum)
+cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
 {
 	if ((MilitaryBuildingNum <= 0) ||
 	    (static_cast<unsigned>(MilitaryBuildingNum) > PresetMilitaryBuildingData.size())) {

@@ -46,7 +46,7 @@ std::list<std::shared_ptr<cGroundObject>> GroundObjectList{};
 /*
  * Create cCivilianBuilding object.
  */
-std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum)
+std::weak_ptr<cGroundObject> CreateCivilianBuilding(const int BuildingNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -57,7 +57,7 @@ std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum)
 /*
  * Create cMilitaryBuilding object.
  */
-std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum)
+std::weak_ptr<cGroundObject> CreateMilitaryBuilding(const int MilitaryBuildingNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -68,7 +68,7 @@ std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum)
 /*
  * Create cTracked object.
  */
-std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum)
+std::weak_ptr<cGroundObject> CreateTracked(const int TrackedNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined
@@ -79,7 +79,7 @@ std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum)
 /*
  * Create cWheeled object.
  */
-std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum)
+std::weak_ptr<cGroundObject> CreateWheeled(const int WheeledNum)
 {
 	// NOTE emplace_front() return reference to the inserted element (since C++17)
 	//      this two lines could be combined

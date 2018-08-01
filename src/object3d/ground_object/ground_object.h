@@ -159,50 +159,50 @@ public:
 };
 
 class cCivilianBuilding final : public cGroundObject {
-	friend std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum);
+	friend std::weak_ptr<cGroundObject> CreateCivilianBuilding(const int BuildingNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateCivilianBuilding()
 	// allowed for cCivilianBuilding creation and release setup (deleter must be provided).
-	explicit cCivilianBuilding(int BuildingNum);
+	explicit cCivilianBuilding(const int BuildingNum);
 	~cCivilianBuilding() = default;
 };
 
 class cMilitaryBuilding final : public cGroundObject {
-	friend std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum);
+	friend std::weak_ptr<cGroundObject> CreateMilitaryBuilding(const int MilitaryBuildingNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateMilitaryBuilding()
 	// allowed for cMilitaryBuilding creation and release setup (deleter must be provided).
-	explicit cMilitaryBuilding(int MilitaryBuildingNum);
+	explicit cMilitaryBuilding(const int MilitaryBuildingNum);
 	~cMilitaryBuilding() = default;
 };
 
 class cTracked final : public cGroundObject {
-	friend std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum);
+	friend std::weak_ptr<cGroundObject> CreateTracked(const int TrackedNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateTracked()
 	// allowed for cTracked creation and release setup (deleter must be provided).
-	explicit cTracked(int TrackedNum);
+	explicit cTracked(const int TrackedNum);
 	~cTracked() = default;
 };
 
 class cWheeled final : public cGroundObject {
-	friend std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum);
+	friend std::weak_ptr<cGroundObject> CreateWheeled(const int WheeledNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateWheeled()
 	// allowed for cWheeled creation and release setup (deleter must be provided).
-	explicit cWheeled(int WheeledNum);
+	explicit cWheeled(const int WheeledNum);
 	~cWheeled() = default;
 };
 
 
 // Create cCivilianBuilding object.
-std::weak_ptr<cGroundObject> CreateCivilianBuilding(int BuildingNum);
+std::weak_ptr<cGroundObject> CreateCivilianBuilding(const int BuildingNum);
 // Create cMilitaryBuilding object.
-std::weak_ptr<cGroundObject> CreateMilitaryBuilding(int MilitaryBuildingNum);
+std::weak_ptr<cGroundObject> CreateMilitaryBuilding(const int MilitaryBuildingNum);
 // Create cTracked object.
-std::weak_ptr<cGroundObject> CreateTracked(int TrackedNum);
+std::weak_ptr<cGroundObject> CreateTracked(const int TrackedNum);
 // Create cWheeled object.
-std::weak_ptr<cGroundObject> CreateWheeled(int WheeledNum);
+std::weak_ptr<cGroundObject> CreateWheeled(const int WheeledNum);
 // Update and remove (erase) dead objects.
 void UpdateAllGroundObjects(float Time);
 // Draw all ground objects.

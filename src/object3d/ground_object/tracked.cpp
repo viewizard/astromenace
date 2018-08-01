@@ -63,7 +63,7 @@ const std::vector<sTrackedData> PresetTrackedData{
 //-----------------------------------------------------------------------------
 // Конструктор, инициализация всех переменных
 //-----------------------------------------------------------------------------
-cTracked::cTracked(int TrackedNum)
+cTracked::cTracked(const int TrackedNum)
 {
 	if ((TrackedNum <= 0) ||
 	    (static_cast<unsigned>(TrackedNum) > PresetTrackedData.size())) {
