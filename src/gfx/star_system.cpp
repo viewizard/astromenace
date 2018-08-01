@@ -302,7 +302,14 @@ void StarSystemDraw(eDrawType DrawType)
 			tmpSpace.Draw(false);
 			if (DrawType == eDrawType::GAME)
 				vw_PopMatrix();
-		} else if ((tmpSpace.ObjectType == eObjectType::BigAsteroid) &&
+		}
+	});
+
+	// planetoids much more closer to player, than planets, clear the depth buffer
+	vw_Clear(RI_DEPTH_BUFFER);
+
+	ForEachSpaceObject([&] (cSpaceObject &tmpSpace) {
+		if ((tmpSpace.ObjectType == eObjectType::BigAsteroid) &&
 			   ((tmpSpace.InternalType > 10) && (tmpSpace.InternalType < 20))) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
@@ -316,7 +323,7 @@ void StarSystemDraw(eDrawType DrawType)
 		}
 	});
 
-	// 'space dust' much more closer to player, than planets, clear the depth buffer
+	// 'space dust' much more closer to player, than planets and planetoids, clear the depth buffer
 	vw_Clear(RI_DEPTH_BUFFER);
 
 	float width_2{0.0f};
