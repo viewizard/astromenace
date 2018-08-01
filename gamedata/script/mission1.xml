@@ -16,6 +16,17 @@
 	<CreatePlanet type="1" speed="0.9" posax="150" posay="-250" posaz="700" anglax="-25"/>
 	<CreatePlanet type="4" speed="1.5" posax="-40" posay="-700" posaz="600" anglax="-90"/>
 	<CreatePlanet type="4" speed="2.0" posax="-100" posay="-300" posaz="1800" anglax="-90"/>
+	<!-- Planetoids -->
+	<CreatePlanetoid type="11" speed="4" posx="0" posy="-150" posz="530"/>
+	<CreatePlanetoid type="12" speed="4" posx="200" posy="-120" posz="700"/>
+	<CreatePlanetoid type="13" speed="4" posx="-260" posy="-160" posz="870"/>
+	<CreatePlanetoid type="14" speed="4" posx="100" posy="-110" posz="1040"/>
+	<CreatePlanetoid type="15" speed="4" posx="-140" posy="-150" posz="1200"/>
+	<CreatePlanetoid type="11" speed="4" posx="-40" posy="-90" posz="1480"/>
+	<CreatePlanetoid type="12" speed="4" posx="240" posy="-150" posz="1700"/>
+	<CreatePlanetoid type="13" speed="4" posx="-200" posy="-100" posz="1910"/>
+	<CreatePlanetoid type="14" speed="4" posx="140" posy="-150" posz="2140"/>
+	<CreatePlanetoid type="15" speed="4" posx="-100" posy="-110" posz="2300"/>
 	<!-- Lights -->
 	<Light dirx="0.75" diry="-0.75" dirz="-0.5" diffr="0.6" diffg="0.6" diffb="0.9" specr="0.6" specg="0.6" specb="0.9" ambir="1" ambig="1" ambib="1"/>
 	<!-- Asteroids field generation, switch to on -->
@@ -34,21 +45,6 @@
 			<TimeSheet time="7.7" speed="15"/>
 			<TimeSheet time="-1" aimode="1001"/>
 		</EarthFighter>
-
-		<!--big asteroids with low speed movement /-->
-		<CreateBigAsteroid type="11" speed="4" posx="0" posy="-150" posz="530"/>
-		<CreateBigAsteroid type="12" speed="4" posx="200" posy="-120" posz="700"/>
-		<CreateBigAsteroid type="13" speed="4" posx="-260" posy="-160" posz="870"/>
-
-		<CreateBigAsteroid type="14" speed="4" posx="100" posy="-110" posz="1040"/>
-		<CreateBigAsteroid type="15" speed="4" posx="-140" posy="-150" posz="1200"/>
-
-		<CreateBigAsteroid type="11" speed="4" posx="-40" posy="-90" posz="1480"/>
-		<CreateBigAsteroid type="12" speed="4" posx="240" posy="-150" posz="1700"/>
-		<CreateBigAsteroid type="13" speed="4" posx="-200" posy="-100" posz="1910"/>
-
-		<CreateBigAsteroid type="14" speed="4" posx="140" posy="-150" posz="2140"/>
-		<CreateBigAsteroid type="15" speed="4" posx="-100" posy="-110" posz="2300"/>
 
 	</TimeLine>
 
