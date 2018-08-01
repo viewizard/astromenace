@@ -102,6 +102,9 @@ bool NeedCheckCollision(const cObject3D &Object3D)
 	case eObjectType::Planet:
 		return false;
 
+	case eObjectType::Planetoid:
+		return false;
+
 	case eObjectType::BigAsteroid:
 		return false;
 	}

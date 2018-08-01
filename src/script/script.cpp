@@ -416,7 +416,7 @@ bool cMissionScript::Update(float Time)
 		case constexpr_hash_djb2a("CreatePlanetoid"): {
 				int tmpType{0};
 				if (xmlDoc->iGetEntryAttribute(xmlEntry, "type", tmpType)) {
-					std::weak_ptr<cSpaceObject> Planetoid = CreateBigAsteroid(tmpType);
+					std::weak_ptr<cSpaceObject> Planetoid = CreatePlanetoid(tmpType);
 					if (auto sharedPlanetoid = Planetoid.lock()) {
 						SetRotation(*sharedPlanetoid, xmlEntry, xmlDoc);
 						SetLocation(*sharedPlanetoid, xmlEntry, xmlDoc, 0.0f);

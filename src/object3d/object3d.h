@@ -82,6 +82,7 @@ enum class eObjectType {
 	CivilianBuilding,
 	BasePart,
 	Planet,
+	Planetoid,
 	BigAsteroid
 };
 

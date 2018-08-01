@@ -112,6 +112,15 @@ private:
 	~cPlanet() = default;
 };
 
+class cPlanetoid final : public cSpaceObject {
+	friend std::weak_ptr<cSpaceObject> CreatePlanetoid(const int PlanetoidNum);
+private:
+	// Don't allow direct new/delete usage in code, only CreatePlanetoid()
+	// allowed for cPlanetoid creation and release setup (deleter must be provided).
+	explicit cPlanetoid(const int PlanetoidNum);
+	~cPlanetoid() = default;
+};
+
 class cSpaceDebris final : public cSpaceObject {
 	friend std::weak_ptr<cSpaceObject> CreateSpaceDebris();
 private:
@@ -137,6 +146,8 @@ std::weak_ptr<cSpaceObject> CreateSmallAsteroid();
 std::weak_ptr<cSpaceObject> CreateBigAsteroid(const int AsteroidNum);
 // Create cPlanet object.
 std::weak_ptr<cSpaceObject> CreatePlanet(const int PlanetNum);
+// Create cPlanetoid object.
+std::weak_ptr<cSpaceObject> CreatePlanetoid(const int PlanetoidNum);
 // Create cSpaceDebris object.
 std::weak_ptr<cSpaceObject> CreateSpaceDebris();
 // Create cBasePart object.

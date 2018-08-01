@@ -78,6 +78,17 @@ std::weak_ptr<cSpaceObject> CreatePlanet(const int PlanetNum)
 }
 
 /*
+ * Create cPlanetoid object.
+ */
+std::weak_ptr<cSpaceObject> CreatePlanetoid(const int PlanetoidNum)
+{
+	// NOTE emplace_front() return reference to the inserted element (since C++17)
+	//      this two lines could be combined
+	SpaceObjectList.emplace_front(new cPlanetoid{PlanetoidNum}, [](cPlanetoid *p) {delete p;});
+	return SpaceObjectList.front();
+}
+
+/*
  * Create cSpaceDebris object.
  */
 std::weak_ptr<cSpaceObject> CreateSpaceDebris()
@@ -120,8 +131,7 @@ void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 	for (auto &tmpObject : SpaceObjectList) {
 		// планеты и астероиды рисуем до тайловой анимации в игре!!!
 		if ((tmpObject.get()->ObjectType != eObjectType::Planet) &&
-		    !((tmpObject.get()->ObjectType == eObjectType::BigAsteroid) &&
-		      ((tmpObject.get()->InternalType > 10) && (tmpObject.get()->InternalType < 20))))
+		    (tmpObject.get()->ObjectType != eObjectType::Planetoid))
 			tmpObject.get()->Draw(VertexOnlyPass, ShadowMap);
 	}
 }
@@ -329,21 +339,23 @@ bool cSpaceObject::Update(float Time)
 
 	// если астероиды
 	if ((ObjectType == eObjectType::SmallAsteroid) ||
-	    (ObjectType == eObjectType::BigAsteroid)) {
+	    (ObjectType == eObjectType::BigAsteroid) ||
+	    (ObjectType == eObjectType::Planetoid)) {
 		// если большие астероиды летящие сверху
-		if ((ObjectType == eObjectType::BigAsteroid) &&
-		    ((InternalType > 20) && (InternalType < 30))) {
+		if (ObjectType == eObjectType::BigAsteroid) {
 			SetRotation(sVECTOR3D{RotationSpeed.x * TimeDelta,
 					      RotationSpeed.y * TimeDelta,
 					      0.0f});
 		} else {
 			if (RotationSpeed.x != 0.0f) {
-				Rotation.x -= RotationSpeed.x*TimeDelta;
-				if (Rotation.x <= 360.0f) Rotation.x += 360.0f;
+				Rotation.x -= RotationSpeed.x * TimeDelta;
+				if (Rotation.x <= 360.0f)
+					Rotation.x += 360.0f;
 			}
 			if (RotationSpeed.y != 0.0f) {
-				Rotation.y -= RotationSpeed.y*TimeDelta;
-				if (Rotation.y <= 360.0f) Rotation.y += 360.0f;
+				Rotation.y -= RotationSpeed.y * TimeDelta;
+				if (Rotation.y <= 360.0f)
+					Rotation.y += 360.0f;
 			}
 		}
 	}
@@ -377,6 +389,7 @@ bool cSpaceObject::Update(float Time)
 
 	// если планеты, должны учесть положение камеры т.е. ее смещение
 	if ((ObjectType == eObjectType::Planet) ||
+	    (ObjectType == eObjectType::Planetoid) ||
 	    (ObjectType == eObjectType::BigAsteroid)) {
 		sVECTOR3D Temp = GamePoint - LastCameraPoint;
 
@@ -434,9 +447,8 @@ bool cSpaceObject::Update(float Time)
 					tmpChunk.Rotation.y += 360.0f;
 			}
 		}
-	} else {
+	} else
 		SetLocation(Location + (Orientation ^ (Speed * TimeDelta)));
-	}
 
 	if (Velocity.x + Velocity.y + Velocity.z != 0.0f) {
 		SetLocation(Location + (Velocity ^ TimeDelta));

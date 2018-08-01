@@ -336,6 +336,7 @@ void AddPlayerBonus(const cObject3D &Object, eObjectStatus KilledByObjectStatus)
 		case eObjectType::CivilianBuilding:
 		case eObjectType::BasePart:
 		case eObjectType::Planet:
+		case eObjectType::Planetoid:
 		case eObjectType::BigAsteroid:
 		case eObjectType::Projectile:
 			break;

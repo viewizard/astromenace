@@ -309,8 +309,7 @@ void StarSystemDraw(eDrawType DrawType)
 	vw_Clear(RI_DEPTH_BUFFER);
 
 	ForEachSpaceObject([&] (cSpaceObject &tmpSpace) {
-		if ((tmpSpace.ObjectType == eObjectType::BigAsteroid) &&
-			   ((tmpSpace.InternalType > 10) && (tmpSpace.InternalType < 20))) {
+		if (tmpSpace.ObjectType == eObjectType::Planetoid) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
 				vw_Translate(sVECTOR3D{CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
