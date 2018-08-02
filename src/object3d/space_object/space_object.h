@@ -143,7 +143,7 @@ private:
 	void SetRotation(const sVECTOR3D &NewRotation) override;
 
 	// engine gfx
-	std::vector<sVECTOR3D> GraphicFXLocation{};
+	std::vector<sVECTOR3D> GraphicFXLocation{}; // relative to 3d model center
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 };
 

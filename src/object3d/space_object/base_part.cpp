@@ -41,7 +41,6 @@ namespace astromenace {
 static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const int GFXType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-	ParticleSystem->Direction(0.0f, -1.0f, 0.0f);
 
 	switch (GFXType) {
 	case 1:
@@ -147,6 +146,13 @@ void cBasePart::SetupBasePartType1()
 	GraphicFXLocation[7] = sVECTOR3D{-14.3f, 3.2f, 14.3f};
 	if (auto sharedGFX = GraphicFX[7].lock())
 		SetBaseGFX(sharedGFX, 2);
+
+	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+		if (auto sharedGFX = GraphicFX[i].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[i]);
+			sharedGFX->SetStartLocation(GraphicFXLocation[i]);
+		}
+	}
 }
 
 /*
@@ -184,6 +190,13 @@ void cBasePart::SetupBasePartType3()
 	GraphicFXLocation[1] = sVECTOR3D{0.0f, 5.0f, 13.7f};
 	if (auto sharedGFX = GraphicFX[1].lock())
 		SetBaseGFX(sharedGFX, 2);
+
+	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+		if (auto sharedGFX = GraphicFX[i].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[i]);
+			sharedGFX->SetStartLocation(GraphicFXLocation[i]);
+		}
+	}
 }
 
 /*
