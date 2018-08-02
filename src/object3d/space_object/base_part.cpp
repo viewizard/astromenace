@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
+
 #include "space_object.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"
