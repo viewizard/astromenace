@@ -34,33 +34,34 @@ namespace viewizard {
 namespace astromenace {
 
 /*
- * cPlanetoid.
+ * Constructor.
  */
 cPlanetoid::cPlanetoid(const int PlanetoidNum)
 {
 	ObjectStatus = eObjectStatus::none;
 	ObjectType = eObjectType::Planetoid;
 
-	// we could provide type "1" and pick random planetoid, or planetoid number
-	if (PlanetoidNum == 1)
-		InternalType = 11 + vw_iRandNum(4);
+	// we could create random planetoid, or provide particular planetoid id
+	if ((PlanetoidNum < 1) ||
+	    (PlanetoidNum > 5))
+		InternalType = 1 + vw_iRandNum(4);
 	else
 		InternalType = PlanetoidNum;
 
 	switch (InternalType) {
-	case 11:
+	case 1:
 		LoadObjectData("models/space/bigasteroid-01.vw3d", *this);
 		break;
-	case 12:
+	case 2:
 		LoadObjectData("models/space/bigasteroid-02.vw3d", *this);
 		break;
-	case 13:
+	case 3:
 		LoadObjectData("models/space/bigasteroid-03.vw3d", *this);
 		break;
-	case 14:
+	case 4:
 		LoadObjectData("models/space/bigasteroid-04.vw3d", *this);
 		break;
-	case 15:
+	case 5:
 		LoadObjectData("models/space/bigasteroid-05.vw3d", *this);
 		break;
 	}
