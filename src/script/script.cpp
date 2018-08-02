@@ -765,12 +765,13 @@ void cMissionScript::UpdateTimeLine()
 			}
 			break;
 
-		case constexpr_hash_djb2a("CreateBigAsteroid"):
-			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
-				std::weak_ptr<cSpaceObject> SpaceObject = CreateBigAsteroid(tmpType);
-				LoadSpaceObjectScript(SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
-			}
+		case constexpr_hash_djb2a("CreateBigAsteroid"): {
+			// we could create random asteroid, or provide particular asteroid id
+			xmlDoc->iGetEntryAttribute(TL, "type", tmpType);
+			std::weak_ptr<cSpaceObject> SpaceObject = CreateBigAsteroid(tmpType);
+			LoadSpaceObjectScript(SpaceObject, xmlDoc, TL, ShowLineNumber, TimeOpLag);
 			break;
+		}
 
 		case constexpr_hash_djb2a("CreateMBuilding"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
