@@ -130,6 +130,15 @@ private:
 	explicit cBasePart(const int BasePartNum);
 	~cBasePart();
 
+	void SetupBasePartType1();
+	void SetupBasePartType2();
+	void SetupBasePartType3();
+	void SetupBasePartType4();
+	void SetupBasePartType5();
+	void SetupBasePartType6();
+	void SetupBasePartType7();
+	void SetupBasePartType8();
+
 	void SetLocation(const sVECTOR3D &NewLocation) override;
 	void SetRotation(const sVECTOR3D &NewRotation) override;
 

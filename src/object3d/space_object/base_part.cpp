@@ -97,6 +97,147 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const i
 }
 
 /*
+ * Setup base part type 1.
+ */
+void cBasePart::SetupBasePartType1()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+	TextureIllum[0] = 0;
+	NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+	Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[1] = 0;
+	Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+	TextureIllum[2] = 0;
+
+	GraphicFXLocation.resize(8);
+	GraphicFX.resize(8);
+
+	GraphicFX[0] = vw_CreateParticleSystem();
+	GraphicFXLocation[0] = sVECTOR3D{14.3f, -4.0f, -14.3f};
+	if (auto sharedGFX = GraphicFX[0].lock())
+		SetBaseGFX(sharedGFX, 1);
+	GraphicFX[1] = vw_CreateParticleSystem();
+	GraphicFXLocation[1] = sVECTOR3D{14.3f, -4.0f, 14.3f};
+	if (auto sharedGFX = GraphicFX[1].lock())
+		SetBaseGFX(sharedGFX, 1);
+	GraphicFX[2] = vw_CreateParticleSystem();
+	GraphicFXLocation[2] = sVECTOR3D{-14.3f, -4.0f, -14.3f};
+	if (auto sharedGFX = GraphicFX[2].lock())
+		SetBaseGFX(sharedGFX, 1);
+	GraphicFX[3] = vw_CreateParticleSystem();
+	GraphicFXLocation[3] = sVECTOR3D{-14.3f, -4.0f, 14.3f};
+	if (auto sharedGFX = GraphicFX[3].lock())
+		SetBaseGFX(sharedGFX, 1);
+
+	GraphicFX[4] = vw_CreateParticleSystem();
+	GraphicFXLocation[4] = sVECTOR3D{14.3f, 3.2f, -14.3f};
+	if (auto sharedGFX = GraphicFX[4].lock())
+		SetBaseGFX(sharedGFX, 2);
+	GraphicFX[5] = vw_CreateParticleSystem();
+	GraphicFXLocation[5] = sVECTOR3D{14.3f, 3.2f, 14.3f};
+	if (auto sharedGFX = GraphicFX[5].lock())
+		SetBaseGFX(sharedGFX, 2);
+	GraphicFX[6] = vw_CreateParticleSystem();
+	GraphicFXLocation[6] = sVECTOR3D{-14.3f, 3.2f, -14.3f};
+	if (auto sharedGFX = GraphicFX[6].lock())
+		SetBaseGFX(sharedGFX, 2);
+	GraphicFX[7] = vw_CreateParticleSystem();
+	GraphicFXLocation[7] = sVECTOR3D{-14.3f, 3.2f, 14.3f};
+	if (auto sharedGFX = GraphicFX[7].lock())
+		SetBaseGFX(sharedGFX, 2);
+}
+
+/*
+ * Setup base part type 2.
+ */
+void cBasePart::SetupBasePartType2()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[0] = 0;
+	Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+	TextureIllum[1] = 0;
+	NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+	Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+	TextureIllum[2] = 0;
+}
+
+/*
+ * Setup base part type 3.
+ */
+void cBasePart::SetupBasePartType3()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+	TextureIllum[0] = 0;
+	Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[1] = 0;
+
+	GraphicFXLocation.resize(2);
+	GraphicFX.resize(2);
+
+	GraphicFX[0] = vw_CreateParticleSystem();
+	GraphicFXLocation[0] = sVECTOR3D{0.0f, -5.0f, 13.7f};
+	if (auto sharedGFX = GraphicFX[0].lock())
+		SetBaseGFX(sharedGFX, 1);
+	GraphicFX[1] = vw_CreateParticleSystem();
+	GraphicFXLocation[1] = sVECTOR3D{0.0f, 5.0f, 13.7f};
+	if (auto sharedGFX = GraphicFX[1].lock())
+		SetBaseGFX(sharedGFX, 2);
+}
+
+/*
+ * Setup base part type 4.
+ */
+void cBasePart::SetupBasePartType4()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[0] = 0;
+}
+
+/*
+ * Setup base part type 5.
+ */
+void cBasePart::SetupBasePartType5()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[0] = 0;
+}
+
+/*
+ * Setup base part type 6.
+ */
+void cBasePart::SetupBasePartType6()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[0] = 0;
+	Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+	TextureIllum[1] = 0;
+	NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+}
+
+/*
+ * Setup base part type 7.
+ */
+void cBasePart::SetupBasePartType7()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[0] = 0;
+}
+
+/*
+ * Setup base part type 8.
+ */
+void cBasePart::SetupBasePartType8()
+{
+	Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+	TextureIllum[0] = 0;
+	Texture[1] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+	TextureIllum[1] = 0;
+	Texture[2] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+	TextureIllum[2] = 0;
+	NormalMap[2] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+}
+
+/*
  * Constructor.
  */
 cBasePart::cBasePart(const int BasePartNum)
@@ -114,202 +255,109 @@ cBasePart::cBasePart(const int BasePartNum)
 	else
 		InternalType = BasePartNum;
 
-	auto Setup1Type = [&] () {
-		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
-		TextureIllum[0] = 0;
-		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-		Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[1] = 0;
-		Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
-		TextureIllum[2] = 0;
-
-		GraphicFXLocation.resize(8);
-		GraphicFX.resize(8);
-
-		GraphicFX[0] = vw_CreateParticleSystem();
-		GraphicFXLocation[0] = sVECTOR3D{14.3f, -4.0f, -14.3f};
-		if (auto sharedGFX = GraphicFX[0].lock())
-			SetBaseGFX(sharedGFX, 1);
-		GraphicFX[1] = vw_CreateParticleSystem();
-		GraphicFXLocation[1] = sVECTOR3D{14.3f, -4.0f, 14.3f};
-		if (auto sharedGFX = GraphicFX[1].lock())
-			SetBaseGFX(sharedGFX, 1);
-		GraphicFX[2] = vw_CreateParticleSystem();
-		GraphicFXLocation[2] = sVECTOR3D{-14.3f, -4.0f, -14.3f};
-		if (auto sharedGFX = GraphicFX[2].lock())
-			SetBaseGFX(sharedGFX, 1);
-		GraphicFX[3] = vw_CreateParticleSystem();
-		GraphicFXLocation[3] = sVECTOR3D{-14.3f, -4.0f, 14.3f};
-		if (auto sharedGFX = GraphicFX[3].lock())
-			SetBaseGFX(sharedGFX, 1);
-
-		GraphicFX[4] = vw_CreateParticleSystem();
-		GraphicFXLocation[4] = sVECTOR3D{14.3f, 3.2f, -14.3f};
-		if (auto sharedGFX = GraphicFX[4].lock())
-			SetBaseGFX(sharedGFX, 2);
-		GraphicFX[5] = vw_CreateParticleSystem();
-		GraphicFXLocation[5] = sVECTOR3D{14.3f, 3.2f, 14.3f};
-		if (auto sharedGFX = GraphicFX[5].lock())
-			SetBaseGFX(sharedGFX, 2);
-		GraphicFX[6] = vw_CreateParticleSystem();
-		GraphicFXLocation[6] = sVECTOR3D{-14.3f, 3.2f, -14.3f};
-		if (auto sharedGFX = GraphicFX[6].lock())
-			SetBaseGFX(sharedGFX, 2);
-		GraphicFX[7] = vw_CreateParticleSystem();
-		GraphicFXLocation[7] = sVECTOR3D{-14.3f, 3.2f, 14.3f};
-		if (auto sharedGFX = GraphicFX[7].lock())
-			SetBaseGFX(sharedGFX, 2);
-	};
-
-	auto Setup2Type = [&] () {
-		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[0] = 0;
-		Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
-		TextureIllum[1] = 0;
-		NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-		Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
-		TextureIllum[2] = 0;
-	};
-
-	auto Setup6Type = [&] () {
-		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[0] = 0;
-		Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
-		TextureIllum[1] = 0;
-		NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-	};
-
-	auto Setup8Type = [&] () {
-		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[0] = 0;
-		Texture[1] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
-		TextureIllum[1] = 0;
-		Texture[2] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
-		TextureIllum[2] = 0;
-		NormalMap[2] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-	};
-
 	switch (InternalType) {
 	case 11:
 		LoadObjectData("models/spacebase/1/1.vw3d", *this);
-		Setup1Type();
+		SetupBasePartType1();
 		break;
 	case 12:
 		LoadObjectData("models/spacebase/1/2.vw3d", *this);
-		Setup1Type();
+		SetupBasePartType1();
 		break;
 	case 13:
 		LoadObjectData("models/spacebase/1/3.vw3d", *this);
-		Setup1Type();
+		SetupBasePartType1();
 		break;
 	case 14:
 		LoadObjectData("models/spacebase/1/4.vw3d", *this);
-		Setup1Type();
+		SetupBasePartType1();
 		break;
 	case 15:
 		LoadObjectData("models/spacebase/1/5.vw3d", *this);
-		Setup1Type();
+		SetupBasePartType1();
 		break;
 
 	case 21:
 		LoadObjectData("models/spacebase/2/1.vw3d", *this);
-		Setup2Type();
+		SetupBasePartType2();
 		break;
 	case 22:
 		LoadObjectData("models/spacebase/2/2.vw3d", *this);
-		Setup2Type();
+		SetupBasePartType2();
 		break;
 	case 23:
 		LoadObjectData("models/spacebase/2/3.vw3d", *this);
-		Setup2Type();
+		SetupBasePartType2();
 		break;
 	case 24:
 		LoadObjectData("models/spacebase/2/4.vw3d", *this);
-		Setup2Type();
+		SetupBasePartType2();
 		break;
 	case 25:
 		LoadObjectData("models/spacebase/2/5.vw3d", *this);
-		Setup2Type();
+		SetupBasePartType2();
 		break;
 
 	case 3:
 		LoadObjectData("models/spacebase/3/1.vw3d", *this);
-		Texture[0] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
-		TextureIllum[0] = 0;
-		Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[1] = 0;
-
-		GraphicFXLocation.resize(2);
-		GraphicFX.resize(2);
-
-		GraphicFX[0] = vw_CreateParticleSystem();
-		GraphicFXLocation[0] = sVECTOR3D{0.0f, -5.0f, 13.7f};
-		if (auto sharedGFX = GraphicFX[0].lock())
-			SetBaseGFX(sharedGFX, 1);
-		GraphicFX[1] = vw_CreateParticleSystem();
-		GraphicFXLocation[1] = sVECTOR3D{0.0f, 5.0f, 13.7f};
-		if (auto sharedGFX = GraphicFX[1].lock())
-			SetBaseGFX(sharedGFX, 2);
+		SetupBasePartType3();
 		break;
 
 	case 4:
 		LoadObjectData("models/spacebase/4/1.vw3d", *this);
-		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[0] = 0;
+		SetupBasePartType4();
 		break;
 
 	case 5:
 		LoadObjectData("models/spacebase/5/1.vw3d", *this);
-		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[0] = 0;
+		SetupBasePartType5();
 		break;
 
 	case 61:
 		LoadObjectData("models/spacebase/6/1.vw3d", *this);
-		Setup6Type();
+		SetupBasePartType6();
 		break;
 	case 62:
 		LoadObjectData("models/spacebase/6/2.vw3d", *this);
-		Setup6Type();
+		SetupBasePartType6();
 		break;
 	case 63:
 		LoadObjectData("models/spacebase/6/3.vw3d", *this);
-		Setup6Type();
+		SetupBasePartType6();
 		break;
 	case 64:
 		LoadObjectData("models/spacebase/6/4.vw3d", *this);
-		Setup6Type();
+		SetupBasePartType6();
 		break;
 	case 65:
 		LoadObjectData("models/spacebase/6/5.vw3d", *this);
-		Setup6Type();
+		SetupBasePartType6();
 		break;
 
 	case 7:
 		LoadObjectData("models/spacebase/7/1.vw3d", *this);
-		Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
-		TextureIllum[0] = 0;
+		SetupBasePartType7();
 		break;
 
 	case 81:
 		LoadObjectData("models/spacebase/8/1.vw3d", *this);
-		Setup8Type();
+		SetupBasePartType8();
 		break;
 	case 82:
 		LoadObjectData("models/spacebase/8/2.vw3d", *this);
-		Setup8Type();
+		SetupBasePartType8();
 		break;
 	case 83:
 		LoadObjectData("models/spacebase/8/3.vw3d", *this);
-		Setup8Type();
+		SetupBasePartType8();
 		break;
 	case 84:
 		LoadObjectData("models/spacebase/8/4.vw3d", *this);
-		Setup8Type();
+		SetupBasePartType8();
 		break;
 	case 85:
 		LoadObjectData("models/spacebase/8/5.vw3d", *this);
-		Setup8Type();
+		SetupBasePartType8();
 		break;
 	}
 }
