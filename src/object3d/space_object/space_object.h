@@ -57,15 +57,11 @@ class cSpaceObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cSpaceObject();
-	virtual ~cSpaceObject();
+	virtual ~cSpaceObject() = default;
 
 public:
 	// Обновление данных объектa
 	virtual bool Update(float Time) override;
-	// Установка положения объекта
-	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
-	// Установка углов поворота объекта
-	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 
 	// скорость
 	float Speed{0.0f};
@@ -74,10 +70,6 @@ public:
 
 	// последнее положение камеры нужно для планет
 	sVECTOR3D LastCameraPoint{0.0f, 0.0f, 0.0f};
-
-	// эффекты
-	std::vector<sVECTOR3D> GraphicFXLocation{};
-	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 
 	// чтобы возрвать часть корабля босса пришельцев через время
 	float BossPartCountDown{-1.0f};
@@ -136,7 +128,14 @@ private:
 	// Don't allow direct new/delete usage in code, only CreateBasePart()
 	// allowed for cBasePart creation and release setup (deleter must be provided).
 	explicit cBasePart(const int BasePartNum);
-	~cBasePart() = default;
+	~cBasePart();
+
+	void SetLocation(const sVECTOR3D &NewLocation) override;
+	void SetRotation(const sVECTOR3D &NewRotation) override;
+
+	// engine gfx
+	std::vector<sVECTOR3D> GraphicFXLocation{};
+	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
 };
 
 

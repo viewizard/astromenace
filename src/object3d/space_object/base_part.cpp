@@ -97,7 +97,7 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 }
 
 /*
- * cBasePart.
+ * Constructor.
  */
 cBasePart::cBasePart(const int BasePartNum)
 {
@@ -311,6 +311,64 @@ cBasePart::cBasePart(const int BasePartNum)
 		LoadObjectData("models/spacebase/8/5.vw3d", *this);
 		Setup8Type();
 		break;
+	}
+}
+
+/*
+ * Destructor.
+ */
+cBasePart::~cBasePart()
+{
+	if (!GraphicFX.empty()) {
+		for (auto &tmpGFX : GraphicFX) {
+			if (auto sharedGFX = tmpGFX.lock()) {
+				sharedGFX->IsSuppressed = true;
+				sharedGFX->DestroyIfNoParticles = true;
+			}
+		}
+	}
+}
+
+/*
+ * Set location.
+ */
+void cBasePart::SetLocation(const sVECTOR3D &NewLocation)
+{
+	cObject3D::SetLocation(NewLocation);
+
+	if (!GraphicFX.empty()) {
+		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+			if (auto sharedGFX = GraphicFX[i].lock()) {
+				sharedGFX->MoveSystem(NewLocation + GraphicFXLocation[i]);
+				sharedGFX->SetStartLocation(GraphicFXLocation[i] + NewLocation);
+			}
+		}
+	}
+}
+
+/*
+ * Set rotation.
+ */
+void cBasePart::SetRotation(const sVECTOR3D &NewRotation)
+{
+	cObject3D::SetRotation(NewRotation);
+
+	if (!GraphicFX.empty()) {
+		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+			if (auto sharedGFX = GraphicFX[i].lock()) {
+				vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
+				vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
+
+				if (sharedGFX->SpeedOnCreation == -1.0f) {
+					sharedGFX->MoveSystem(GraphicFXLocation[i] + Location);
+					sharedGFX->SetStartLocation(GraphicFXLocation[i] + Location);
+					sharedGFX->RotateSystemAndParticlesByAngle(Rotation);
+				} else {
+					sharedGFX->MoveSystemLocation(GraphicFXLocation[i] + Location);
+					sharedGFX->RotateSystemByAngle(Rotation);
+				}
+			}
+		}
 	}
 }
 
