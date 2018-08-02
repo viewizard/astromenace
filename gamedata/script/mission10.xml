@@ -44,23 +44,23 @@
 
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="50" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="50" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="4">
-		<CreateBigAsteroid type="2" speed="10" posx="-40" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-40" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="10" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="10" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="4">
-		<CreateBigAsteroid type="2" speed="10" posx="-60" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-60" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="60" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="60" posy="-2" posz="350"/>
 	</TimeLine>
 
 
@@ -489,37 +489,37 @@
 
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="10" posx="60" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="60" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="-60" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-60" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="-30" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-30" posy="-2" posz="350"/>
 	</TimeLine>
 
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="6">
-		<CreateBigAsteroid type="2" speed="10" posx="60" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="60" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="2">
-		<CreateBigAsteroid type="2" speed="10" posx="-60" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-60" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="10" posx="40" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="40" posy="-2" posz="350"/>
 	</TimeLine>
 
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="6">
-		<CreateBigAsteroid type="2" speed="15" posx="5" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="15" posx="5" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="15" posx="-20" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="15" posx="-20" posy="-2" posz="350"/>
 	</TimeLine>
 
 
@@ -796,38 +796,38 @@
 
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="12" posx="-50" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="12" posx="-50" posy="-2" posz="350"/>
 	</TimeLine>
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="-5" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-5" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="65" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="65" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="11" posx="40" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="11" posx="40" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="2">
-		<CreateBigAsteroid type="2" speed="10" posx="-60" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-60" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="2">
-		<CreateBigAsteroid type="2" speed="13" posx="-30" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="13" posx="-30" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="15" posx="20" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="15" posx="20" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="10" posx="0" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="0" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="2">
-		<CreateBigAsteroid type="2" speed="12" posx="40" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="12" posx="40" posy="-2" posz="350"/>
 	</TimeLine>
 
 
@@ -1360,21 +1360,21 @@
 
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="12" posx="-50" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="12" posx="-50" posy="-2" posz="350"/>
 	</TimeLine>
 	<TimeLine value="2">
-		<CreateBigAsteroid type="2" speed="10" posx="35" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="35" posy="-2" posz="350"/>
 	</TimeLine>
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="-5" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="-5" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="3">
-		<CreateBigAsteroid type="2" speed="10" posx="65" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="10" posx="65" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="0">
-		<CreateBigAsteroid type="2" speed="9" posx="30" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="9" posx="30" posy="-2" posz="350"/>
 	</TimeLine>
 
 
@@ -1387,15 +1387,15 @@
 
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="15" posx="-35" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="15" posx="-35" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="1">
-		<CreateBigAsteroid type="2" speed="15" posx="-65" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="15" posx="-65" posy="-2" posz="350"/>
 	</TimeLine>
 	<!-- undestroyable big asteroid /-->
 	<TimeLine value="2">
-		<CreateBigAsteroid type="2" speed="12" posx="-40" posy="-2" posz="350"/>
+		<CreateBigAsteroid speed="12" posx="-40" posy="-2" posz="350"/>
 	</TimeLine>
 
 

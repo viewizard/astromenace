@@ -34,33 +34,34 @@ namespace viewizard {
 namespace astromenace {
 
 /*
- * cBigAsteroid.
+ * Constructor.
  */
 cBigAsteroid::cBigAsteroid(const int AsteroidNum)
 {
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::BigAsteroid;
 
-	// we could provide type "2" and pick random asteroid, or asteroid number
-	if (AsteroidNum == 2)
-		InternalType = 21 + vw_iRandNum(4);
+	// we could create random asteroid, or provide particular asteroid id
+	if ((AsteroidNum < 1) ||
+	    (AsteroidNum > 5))
+		InternalType = 1 + vw_iRandNum(4);
 	else
 		InternalType = AsteroidNum;
 
 	switch (InternalType) {
-	case 21:
+	case 1:
 		LoadObjectData("models/space/bigasteroid-01.vw3d", *this);
 		break;
-	case 22:
+	case 2:
 		LoadObjectData("models/space/bigasteroid-02.vw3d", *this);
 		break;
-	case 23:
+	case 3:
 		LoadObjectData("models/space/bigasteroid-03.vw3d", *this);
 		break;
-	case 24:
+	case 4:
 		LoadObjectData("models/space/bigasteroid-04.vw3d", *this);
 		break;
-	case 25:
+	case 5:
 		LoadObjectData("models/space/bigasteroid-05.vw3d", *this);
 		break;
 	}
