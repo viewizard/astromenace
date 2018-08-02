@@ -36,12 +36,12 @@ namespace astromenace {
 /*
  * Setup gfx (engine).
  */
-static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXType)
+static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const int GFXType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-	ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+	ParticleSystem->Direction(0.0f, -1.0f, 0.0f);
 
-	switch(GFXType) {
+	switch (GFXType) {
 	case 1:
 		ParticleSystem->ColorStart.r = 0.60f;
 		ParticleSystem->ColorStart.g = 0.60f;
@@ -50,20 +50,20 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.30f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.60f;
-		ParticleSystem->Speed      = 10.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.60f;
+		ParticleSystem->Speed = 10.00f;
 		ParticleSystem->SpeedOnCreation = -1.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 5.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 5.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.1f, 0.8f};
-		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->CreationSize(0.8f, 0.1f, 0.8f);
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->Direction(0.0f, -1.0f, 0.0f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.025f);
 		break;
 
@@ -75,18 +75,18 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFX
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.30f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.20f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.20f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
 		ParticleSystem->SpeedOnCreation = -1.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 180.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 180.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D{0.0f, 1.0f, 0.0f};
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->Direction(0.0f, 1.0f, 0.0f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.3f);
 		break;
 
@@ -319,12 +319,13 @@ cBasePart::cBasePart(const int BasePartNum)
  */
 cBasePart::~cBasePart()
 {
-	if (!GraphicFX.empty()) {
-		for (auto &tmpGFX : GraphicFX) {
-			if (auto sharedGFX = tmpGFX.lock()) {
-				sharedGFX->IsSuppressed = true;
-				sharedGFX->DestroyIfNoParticles = true;
-			}
+	if (GraphicFX.empty())
+		return;
+
+	for (auto &tmpGFX : GraphicFX) {
+		if (auto sharedGFX = tmpGFX.lock()) {
+			sharedGFX->IsSuppressed = true;
+			sharedGFX->DestroyIfNoParticles = true;
 		}
 	}
 }
@@ -336,12 +337,13 @@ void cBasePart::SetLocation(const sVECTOR3D &NewLocation)
 {
 	cObject3D::SetLocation(NewLocation);
 
-	if (!GraphicFX.empty()) {
-		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-			if (auto sharedGFX = GraphicFX[i].lock()) {
-				sharedGFX->MoveSystem(NewLocation + GraphicFXLocation[i]);
-				sharedGFX->SetStartLocation(GraphicFXLocation[i] + NewLocation);
-			}
+	if (GraphicFX.empty())
+		return;
+
+	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+		if (auto sharedGFX = GraphicFX[i].lock()) {
+			sharedGFX->MoveSystem(GraphicFXLocation[i] + NewLocation);
+			sharedGFX->SetStartLocation(GraphicFXLocation[i] + NewLocation);
 		}
 	}
 }
@@ -353,20 +355,21 @@ void cBasePart::SetRotation(const sVECTOR3D &NewRotation)
 {
 	cObject3D::SetRotation(NewRotation);
 
-	if (!GraphicFX.empty()) {
-		for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-			if (auto sharedGFX = GraphicFX[i].lock()) {
-				vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
-				vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
+	if (GraphicFX.empty())
+		return;
 
-				if (sharedGFX->SpeedOnCreation == -1.0f) {
-					sharedGFX->MoveSystem(GraphicFXLocation[i] + Location);
-					sharedGFX->SetStartLocation(GraphicFXLocation[i] + Location);
-					sharedGFX->RotateSystemAndParticlesByAngle(Rotation);
-				} else {
-					sharedGFX->MoveSystemLocation(GraphicFXLocation[i] + Location);
-					sharedGFX->RotateSystemByAngle(Rotation);
-				}
+	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
+		if (auto sharedGFX = GraphicFX[i].lock()) {
+			vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
+
+			if (sharedGFX->SpeedOnCreation == -1.0f) {
+				sharedGFX->MoveSystem(GraphicFXLocation[i] + Location);
+				sharedGFX->SetStartLocation(GraphicFXLocation[i] + Location);
+				sharedGFX->RotateSystemAndParticlesByAngle(Rotation);
+			} else {
+				sharedGFX->MoveSystemLocation(GraphicFXLocation[i] + Location);
+				sharedGFX->RotateSystemByAngle(Rotation);
 			}
 		}
 	}
