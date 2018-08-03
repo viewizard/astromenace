@@ -25,7 +25,9 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
+
+// TODO why we need Strength/StrengthStart setup for immortal object?
 
 #include "ground_object.h"
 #include "../../config/config.h"
@@ -34,6 +36,8 @@
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+namespace {
 
 struct sBuildingData {
 	float Strength;
@@ -54,10 +58,12 @@ const std::vector<sBuildingData> PresetBuildingData{
 	{150,	"models/building/bld-11.vw3d"}
 };
 
+} // unnamed namespace
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+
+/*
+ * Constructor.
+ */
 cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 {
 	if ((BuildingNum <= 0) || (static_cast<unsigned>(BuildingNum) > PresetBuildingData.size())) {
@@ -67,7 +73,6 @@ cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 
 	ObjectType = eObjectType::CivilianBuilding;
 	InternalType = BuildingNum;
-	// здания неразрушимы, не показываем вообще их жизнь
 	ShowStrength = false;
 	PromptDrawDist2 = 100.0f;
 
