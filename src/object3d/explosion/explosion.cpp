@@ -25,7 +25,9 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
+
+// TODO codestyle should be fixed
 
 #include "explosion.h"
 #include "../../config/config.h"
@@ -118,7 +120,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
 	switch(GFXNum) {
-	case 0:	// разлет снаряда
+	case 0: // projectile
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -126,19 +128,20 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.20f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.05f;
-		ParticleSystem->Speed      = 2.0f;
-		ParticleSystem->SpeedVar   = 2.0f*vw_fRand0();
-		ParticleSystem->Life       = 1.0f;
-		ParticleSystem->LifeVar	 = vw_fRand0()/10.0f;
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.20f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.05f;
+		ParticleSystem->Speed = 2.0f;
+		ParticleSystem->SpeedVar = 2.0f * vw_fRand0();
+		ParticleSystem->Life = 1.0f;
+		ParticleSystem->LifeVar = vw_fRand0() / 10.0f;
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 10;
 		ParticleSystem->NeedStop = true;
 		break;
-	case 1:	// малый взрыв, астероид
+
+	case 1: // asteroid
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -146,20 +149,22 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 1.00f;
-		ParticleSystem->SizeVar    = 0.50f;
-		ParticleSystem->SizeEnd    = 0.05f;
-		ParticleSystem->Speed      = 2.0f;
-		ParticleSystem->SpeedVar   = 2.0f*vw_fRand0();
-		ParticleSystem->Life       = 2.0f;
-		ParticleSystem->LifeVar	 = vw_fRand0()/10.0f;
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 1.00f;
+		ParticleSystem->SizeVar = 0.50f;
+		ParticleSystem->SizeEnd = 0.05f;
+		ParticleSystem->Speed = 2.0f;
+		ParticleSystem->SpeedVar = 2.0f * vw_fRand0();
+		ParticleSystem->Life = 2.0f;
+		ParticleSystem->LifeVar = vw_fRand0() / 10.0f;
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f},
+							    1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
-	case 2:	// средний взрыв, пришельцы
+
+	case 2: // small alien
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -167,19 +172,20 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.20f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 5.0f;
-		ParticleSystem->SpeedVar   = 1.5f*vw_fRand0();
-		ParticleSystem->Life       = 3.0f;
-		ParticleSystem->LifeVar	 = vw_fRand0()/10.0f;
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.20f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 5.0f;
+		ParticleSystem->SpeedVar = 1.5f * vw_fRand0();
+		ParticleSystem->Life = 3.0f;
+		ParticleSystem->LifeVar = vw_fRand0() / 10.0f;
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->NeedStop = true;
 		break;
-	case 3:	// средний взрыв, пришельцы
+
+	case 3: // alien
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -187,21 +193,22 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.80f;
-		ParticleSystem->SizeVar    = 0.40f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 5.0f;
-		ParticleSystem->SpeedVar   = 1.5f*vw_fRand0();
-		ParticleSystem->Life       = 2.0f;
-		ParticleSystem->LifeVar	 = vw_fRand0()/10.0f;
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.80f;
+		ParticleSystem->SizeVar = 0.40f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 5.0f;
+		ParticleSystem->SpeedVar = 1.5f * vw_fRand0();
+		ParticleSystem->Life = 2.0f;
+		ParticleSystem->LifeVar = vw_fRand0() / 10.0f;
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 20;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D{2.8f, 2.8f, 2.8f};
 		ParticleSystem->NeedStop = true;
 		break;
-	case 4:	// средний взрыв
+
+	case 4: // medium explision
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -209,20 +216,22 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 1.00f;
-		ParticleSystem->SizeVar    = 0.50f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 2.0f;
-		ParticleSystem->SpeedVar   = 2.0f*vw_fRand0();
-		ParticleSystem->Life       = 2.3f;
-		ParticleSystem->LifeVar	 = vw_fRand0();
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 1.00f;
+		ParticleSystem->SizeVar = 0.50f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 2.0f;
+		ParticleSystem->SpeedVar = 2.0f * vw_fRand0();
+		ParticleSystem->Life = 2.3f;
+		ParticleSystem->LifeVar = vw_fRand0();
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.05f, 0.85f, 1.0f, 0.0f, 0.002f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f},
+							    0.05f, 0.85f, 1.0f, 0.0f, 0.002f);
 		break;
-	case 5:	// средний взрыв, земляне
+
+	case 5: // earth
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -230,20 +239,22 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.20f;
-		ParticleSystem->SizeEnd    = 0.05f;
-		ParticleSystem->Speed      = 2.0f;
-		ParticleSystem->SpeedVar   = 2.0f*vw_fRand0();
-		ParticleSystem->Life       = 3.0f;
-		ParticleSystem->LifeVar	 = vw_fRand0()/10.0f;
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.20f;
+		ParticleSystem->SizeEnd = 0.05f;
+		ParticleSystem->Speed = 2.0f;
+		ParticleSystem->SpeedVar = 2.0f * vw_fRand0();
+		ParticleSystem->Life = 3.0f;
+		ParticleSystem->LifeVar = vw_fRand0() / 10.0f;
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.003f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f},
+							    1.0f, 0.35f, 0.15f, 0.0f, 0.003f);
 		break;
-	case 6:	// средний взрыв, земляне
+
+	case 6: // earth
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -251,18 +262,19 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 1.00f;
-		ParticleSystem->SizeVar    = 0.50f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 2.0f;
-		ParticleSystem->SpeedVar   = 2.0f*vw_fRand0();
-		ParticleSystem->Life       = 2.3f;
-		ParticleSystem->LifeVar	 = vw_fRand0();
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 1.00f;
+		ParticleSystem->SizeVar = 0.50f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 2.0f;
+		ParticleSystem->SpeedVar = 2.0f * vw_fRand0();
+		ParticleSystem->Life = 2.3f;
+		ParticleSystem->LifeVar = vw_fRand0();
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
 		break;
+
 	case 7: // nuke
 		ParticleSystem->ColorStart.r = 0.30f;
 		ParticleSystem->ColorStart.g = 0.70f;
@@ -271,14 +283,14 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 3.00f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 3.00f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 300;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D{2.0f, 0.3f, 2.0f};
@@ -286,8 +298,10 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.15f, 0.35f, 1.0f, 0.0f, 0.0001f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f},
+							    0.15f, 0.35f, 1.0f, 0.0f, 0.0001f);
 		break;
+
 	case 8: // torpedo
 		ParticleSystem->ColorStart.r = 0.70f;
 		ParticleSystem->ColorStart.g = 1.00f;
@@ -296,14 +310,14 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 1.00f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.30f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 1.00f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.30f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D{3.0f, 0.3f, 3.0f};
@@ -311,8 +325,10 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 1.0f, 0.15f, 0.0f, 0.0005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f},
+							    0.35f, 1.0f, 0.15f, 0.0f, 0.0005f);
 		break;
+
 	case 9: // nuke
 		ParticleSystem->ColorStart.r = 0.30f;
 		ParticleSystem->ColorStart.g = 0.70f;
@@ -321,14 +337,14 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 2.00f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.30f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 2.00f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.30f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D{3.0f, 0.3f, 3.0f};
@@ -337,6 +353,7 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
+
 	case 10: // missile, swarm
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
@@ -345,14 +362,14 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 1.00f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.30f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 1.00f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.30f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
 		ParticleSystem->CreationSize = sVECTOR3D{3.0f, 0.3f, 3.0f};
@@ -360,11 +377,11 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->AlphaShowHide = false;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f},
+							    1.0f, 0.35f, 0.15f, 0.0f, 0.005f);
 		break;
 
-
-	case 11:	// взрыв осколка босса, как средний взрыв, земляне
+	case 11: // alien mothership explision
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -372,20 +389,22 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.20f;
-		ParticleSystem->SizeEnd    = 0.05f;
-		ParticleSystem->Speed      = 2.0f;
-		ParticleSystem->SpeedVar   = 2.0f*vw_fRand0();
-		ParticleSystem->Life       = 3.0f;
-		ParticleSystem->LifeVar	 = vw_fRand0()/10.0f;
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.20f;
+		ParticleSystem->SizeEnd = 0.05f;
+		ParticleSystem->Speed = 2.0f;
+		ParticleSystem->SpeedVar = 2.0f * vw_fRand0();
+		ParticleSystem->Life = 3.0f;
+		ParticleSystem->LifeVar = vw_fRand0() / 10.0f;
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
-		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.05f, 0.85f, 1.0f, 0.0f, 0.001f);
+		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f},
+							    0.05f, 0.85f, 1.0f, 0.0f, 0.001f);
 		break;
-	case 12:	// взрыв осколка босса, как средний взрыв, земляне
+
+	case 12: // alien mothership explision
 		ParticleSystem->ColorStart.r = 0.10f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -393,15 +412,15 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 1.00f;
-		ParticleSystem->SizeVar    = 0.50f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 2.0f;
-		ParticleSystem->SpeedVar   = 2.0f*vw_fRand0();
-		ParticleSystem->Life       = 2.3f;
-		ParticleSystem->LifeVar	 = vw_fRand0();
-		ParticleSystem->Theta      = 360.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 1.00f;
+		ParticleSystem->SizeVar = 0.50f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 2.0f;
+		ParticleSystem->SpeedVar = 2.0f * vw_fRand0();
+		ParticleSystem->Life = 2.3f;
+		ParticleSystem->LifeVar = vw_fRand0();
+		ParticleSystem->Theta = 360.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->NeedStop = true;
 		break;
@@ -412,24 +431,20 @@ void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNu
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cExplosion::cExplosion()
 {
 	ObjectStatus = eObjectStatus::Enemy;
 	ObjectType = eObjectType::Explosion;
-
-	// нужно рисовать без оптимизации
 	NeedCullFaces = false;
-
-	// нет взрыва, сразу уничтожаем
 	Lifetime = 0.0f;
 }
 
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
+/*
+ * Destructor.
+ */
 cExplosion::~cExplosion()
 {
 	for (auto &tmpGFX : GraphicFX) {
@@ -440,19 +455,17 @@ cExplosion::~cExplosion()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Обновление данных объектa
-//-----------------------------------------------------------------------------
+/*
+ * Update.
+ */
 bool cExplosion::Update(float Time)
 {
-	// вызываем родительскую функцию
-	// если там передали удалить - выходим
 	if (!cObject3D::Update(Time)) {
-		// делаем правильную остановку частиц...
 		for (auto &tmpGFX : GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock()) {
 				sharedGFX->StopAllParticles();
 
+				// FIXME why we need this in update? should be moved to initialization?
 				if (!(ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
 								    || ExplosionType == 18 || ExplosionType == 19
 								    || ExplosionType == 205 || ExplosionType == 206
@@ -464,49 +477,75 @@ bool cExplosion::Update(float Time)
 		return false;
 	}
 
-
-
-
-	// остановка испускания частиц... для взрывов
-	if (ExplosionTypeByClass == 1 ||
-	    (ExplosionTypeByClass == 2 && (ExplosionType == 16 || ExplosionType == 17
-					   || ExplosionType == 18 || ExplosionType == 19
-					   || ExplosionType == 205 || ExplosionType == 206 || ExplosionType == 209 || ExplosionType == 210
-					   || ExplosionType == 214 || ExplosionType == 215 || ExplosionType == 216
-					   || ExplosionType == 217)) ||
-	    (ExplosionTypeByClass == 2 && (ExplosionType == -16 || ExplosionType == -17
-					   || ExplosionType == -18 || ExplosionType == -19
-					   || ExplosionType == -205 || ExplosionType == -206 || ExplosionType == -209 || ExplosionType == -210
-					   || ExplosionType == -214 || ExplosionType == -215 || ExplosionType == -216
-					   || ExplosionType == -217))) {
+	if (ExplosionTypeByClass == 1) { // FIXME why we need this on each update? should be moved to initialization?
 		for (auto &tmpGFX : GraphicFX) {
 			if (auto sharedGFX = tmpGFX.lock()) {
-				if (Lifetime < sharedGFX->Life) {
-					// только говорим, чтобы больше не создавал частиц!!!
-					// не удаляем и не зануляем - иначе не сможем им управлять
+				if (Lifetime < sharedGFX->Life)
 					sharedGFX->IsSuppressed = true;
-				}
 			}
 		}
 	}
+	if (ExplosionTypeByClass == 2) { // FIXME why we need this on each update? should be moved to initialization?
+		switch (ExplosionType) {
+		case -16:
+		case -17:
+		case -18:
+		case -19:
+		case -205:
+		case -206:
+		case -209:
+		case -210:
+		case -214:
+		case -215:
+		case -216:
+		case -217:
+		case 16:
+		case 17:
+		case 18:
+		case 19:
+		case 205:
+		case 206:
+		case 209:
+		case 210:
+		case 214:
+		case 215:
+		case 216:
+		case 217:
+			for (auto &tmpGFX : GraphicFX) {
+				if (auto sharedGFX = tmpGFX.lock()) {
+					if (Lifetime < sharedGFX->Life)
+						sharedGFX->IsSuppressed = true;
+				}
+			}
+			break;
 
-	// работа с эффектами
-	if (ExplosionTypeByClass == 2) {
-		if (ExplosionType == 16 || ExplosionType == 17 || ExplosionType == 205 || ExplosionType == 206) {
+		default:
+			break;
+		}
+
+		switch (ExplosionType) {
+		case 16:
+		case 17:
+		case 205:
+		case 206:
 			if (auto sharedGFX = GraphicFX[0].lock()) {
 				sharedGFX->CreationSize.x -= sharedGFX->CreationSize.x * TimeDelta;
 				sharedGFX->CreationSize.z -= sharedGFX->CreationSize.z * TimeDelta;
 				sharedGFX->DeadZone -= sharedGFX->DeadZone * TimeDelta;
 			}
-		}
-		if (ExplosionType == 18 || ExplosionType == 209) {
+			break;
+
+		case 18:
+		case 209:
 			if (auto sharedGFX = GraphicFX[0].lock()) {
 				sharedGFX->CreationSize.x -= sharedGFX->CreationSize.x * TimeDelta;
 				sharedGFX->CreationSize.z -= sharedGFX->CreationSize.z * TimeDelta;
 				sharedGFX->DeadZone -= sharedGFX->DeadZone * TimeDelta;
 			}
-		}
-		if (ExplosionType == 19 || ExplosionType == 210) {
+			break;
+
+		case 19:
+		case 210:
 			if (auto sharedGFX = GraphicFX[0].lock()) {
 				sharedGFX->CreationSize.x += 10.0f * TimeDelta;
 				sharedGFX->CreationSize.z += 10.0f * TimeDelta;
@@ -517,38 +556,31 @@ bool cExplosion::Update(float Time)
 				sharedGFX->CreationSize.z -= sharedGFX->CreationSize.z * TimeDelta;
 				sharedGFX->DeadZone -= sharedGFX->DeadZone * TimeDelta;
 			}
+			break;
+
+		default:
+			break;
 		}
 	}
 
-
-	// если не считаем в шейдере, нужно перебрать геометрию и собрать новые буферы
 	if (!GameConfig().UseGLSL120) {
-		// первый раз - просто запоминаем время
 		if (ExplosionGeometryMoveLastTime == -1)
 			ExplosionGeometryMoveLastTime = Time;
 
-		// если время подошло - делаем анимацию, иначе - пропускаем этот цикл
+		// re-calculation only about 30 times per second
 		if (ExplosionGeometryMoveLastTime + 0.035f < Time) {
-			// поворачиваем все объекты
-			float ExplosionGeometryMove = Time-ExplosionGeometryMoveLastTime;
+			float ExplosionGeometryMove = Time - ExplosionGeometryMoveLastTime;
 			ExplosionGeometryMoveLastTime = Time;
 
-
-			// расчет физики для каждой частицы
 			if (!Chunks.empty()) {
-				sVECTOR3D TMP;
 				int Count = 0;
 
 				for (auto &tmpChunk : Chunks) {
-					for (unsigned int i = 0; i < tmpChunk.VertexQuantity; i+=3) {
+					for (unsigned int i = 0; i < tmpChunk.VertexQuantity; i += 3) {
 						if (ExplosionPieceData[Count].RemainTime > 0.0f) {
-							// получаем текущий вектор движения данного треугольника
-							TMP = ExplosionPieceData[Count].Velocity^ExplosionGeometryMove;
+							sVECTOR3D TMP = ExplosionPieceData[Count].Velocity ^ ExplosionGeometryMove;
 							ExplosionPieceData[Count].Velocity -= TMP;
-
-							// вычисляем время жизни
 							ExplosionPieceData[Count].RemainTime -= ExplosionGeometryMove;
-
 
 							if (ExplosionPieceData[Count].RemainTime <= 0.001f) {
 								ExplosionPieceData[Count].RemainTime = 0.0f;
@@ -561,22 +593,19 @@ bool cExplosion::Update(float Time)
 								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 1] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 1];
 								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 2] = tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 2];
 							} else {
-								// уменьшаем частицу, перебираем размер и текстурные координаты
-								{
-									float tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
-									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride*(i + 1) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].RemainTime)*ExplosionGeometryMove;
-									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].RemainTime)*ExplosionGeometryMove;
+								float tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
+								tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1)] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
+								tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride*(i + 1) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
+								tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 1] -= (tmp/ExplosionPieceData[Count].RemainTime)*ExplosionGeometryMove;
+								tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
+								tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 1) + 2] -= (tmp/ExplosionPieceData[Count].RemainTime)*ExplosionGeometryMove;
 
-									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
-									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
-									tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
-									tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
-								}
+								tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i];
+								tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2)] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
+								tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 1];
+								tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 1] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
+								tmp = tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] - tmpChunk.VertexArray.get()[tmpChunk.VertexStride * i + 2];
+								tmpChunk.VertexArray.get()[tmpChunk.VertexStride * (i + 2) + 2] -= (tmp / ExplosionPieceData[Count].RemainTime) * ExplosionGeometryMove;
 
 								tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride] += TMP.x;
 								tmpChunk.VertexArray.get()[i * tmpChunk.VertexStride + 1] += TMP.y;
@@ -590,34 +619,25 @@ bool cExplosion::Update(float Time)
 								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 1] += TMP.y;
 								tmpChunk.VertexArray.get()[(i + 2) * tmpChunk.VertexStride + 2] += TMP.z;
 							}
-
 						}
 
 						Count++;
 					}
 
-
-					// пересоздаем буферы vbo и vao
-					// удаляем старые буферы, если они есть, создаем новые
-					// ! индексный буфер не трогаем, его не надо пересоздавать вообще
-
 					if (tmpChunk.VBO)
 						vw_DeleteBufferObject(tmpChunk.VBO);
-					if (tmpChunk.VAO)
-						vw_DeleteVAO(tmpChunk.VAO);
-
-
-					// делаем VBO
-					if (!vw_BuildBufferObject(eBufferObject::Vertex, tmpChunk.VertexQuantity * tmpChunk.VertexStride * sizeof(float), tmpChunk.VertexArray.get(), tmpChunk.VBO))
+					if (!vw_BuildBufferObject(eBufferObject::Vertex, tmpChunk.VertexQuantity * tmpChunk.VertexStride * sizeof(float),
+								  tmpChunk.VertexArray.get(), tmpChunk.VBO))
 						tmpChunk.VBO = 0;
 
-					// делаем IBO, создаем его один раз, если его нет
 					if (!tmpChunk.IBO) {
-						if (!vw_BuildBufferObject(eBufferObject::Index, tmpChunk.VertexQuantity * sizeof(unsigned), tmpChunk.IndexArray.get(), tmpChunk.IBO))
+						if (!vw_BuildBufferObject(eBufferObject::Index, tmpChunk.VertexQuantity * sizeof(unsigned),
+									  tmpChunk.IndexArray.get(), tmpChunk.IBO))
 							tmpChunk.IBO = 0;
 					}
 
-					// делаем VAO
+					if (tmpChunk.VAO)
+						vw_DeleteVAO(tmpChunk.VAO);
 					if (!vw_BuildVAO(tmpChunk.VAO, tmpChunk.VertexFormat,
 							 tmpChunk.VertexStride * sizeof(float),
 							 tmpChunk.VBO, tmpChunk.IBO))
@@ -626,16 +646,15 @@ bool cExplosion::Update(float Time)
 			}
 		}
 	} else {
-		// меняем данные глобальные для шейдера, тут делаем столько столько позволяет, а не 30 раз как с изменением геометрии
 		for (auto &tmpChunk : Chunks) {
-			// общий коэф. расстояния
+			// speed delta
 			tmpChunk.ShaderData[1] += tmpChunk.ShaderData[0] * TimeDelta;
-			// дельта скорости
+			// range factor
 			tmpChunk.ShaderData[0] -= tmpChunk.ShaderData[0] * TimeDelta;
 		}
 	}
 
-	// делаем AABB по упращенной схеме, главное для нас - скорость
+	// simplified AABB recalculation (we don't need real AABB for sure here)
 	float AABBSpeedTmp = AABBResizeSpeed * TimeDelta;
 	AABBResizeSpeed -= AABBSpeedTmp;
 	if (!Chunks.empty()) {
@@ -656,15 +675,13 @@ bool cExplosion::Update(float Time)
 		AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 	}
 
-	sVECTOR3D TMP2 = VelocityOrientation^(OldSpeed*TimeDelta);
+	sVECTOR3D TMP2 = VelocityOrientation ^ (OldSpeed * TimeDelta);
 
-	// перемещаем эффекты
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
 		if (auto sharedGFX = GraphicFX[i].lock()) {
 			sVECTOR3D tmpLocation{sharedGFX->GetLocation()};
 			tmpLocation += TMP2;
 
-			// взрыв пришельцев
 			if ((ExplosionTypeByClass == 1) && (ExplosionType == 2)) {
 				if (i == 1)
 					sharedGFX->MoveSystemLocation(tmpLocation);
@@ -673,19 +690,17 @@ bool cExplosion::Update(float Time)
 			} else
 				sharedGFX->MoveSystem(tmpLocation);
 
-			// всегда подтягиваем данные
 			sharedGFX->SetStartLocation(tmpLocation);
 		}
 	}
 
-	// плавно замедляем...
-	if (NeedStop) OldSpeed -= OldSpeed*TimeDelta;
-	if (OldSpeed<0.0f) OldSpeed = 0.0f;
+	if (NeedStop)
+		OldSpeed -= OldSpeed * TimeDelta;
+	if (OldSpeed < 0.0f)
+		OldSpeed = 0.0f;
 
-	// перемещаем объект
-	SetLocation(Location+TMP2);
+	SetLocation(Location + TMP2);
 
-	// объект в порядке - удалять не нужно
 	return true;
 }
 
