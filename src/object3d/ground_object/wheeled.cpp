@@ -284,13 +284,6 @@ cWheeled::cWheeled(const int WheeledNum)
 		else
 			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
-
-	assert(WheelChunkNums.capacity() == WheelChunkNums.size());
-	assert(SteerableWheelChunkNums.capacity() == SteerableWheelChunkNums.size());
-	assert(WeaponSlots.capacity() == WeaponSlots.size());
-	assert(TargetHorizChunkNums.capacity() == TargetHorizChunkNums.size());
-	assert(TargetVertChunkNums.capacity() == TargetVertChunkNums.size());
-	assert(BarrelChunkNums.capacity() == BarrelChunkNums.size());
 }
 
 } // astromenace namespace

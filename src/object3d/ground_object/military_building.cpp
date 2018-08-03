@@ -237,11 +237,6 @@ cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
 		else
 			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
-
-	assert(WeaponSlots.capacity() == WeaponSlots.size());
-	assert(TargetHorizChunkNums.capacity() == TargetHorizChunkNums.size());
-	assert(TargetVertChunkNums.capacity() == TargetVertChunkNums.size());
-	assert(BarrelChunkNums.capacity() == BarrelChunkNums.size());
 }
 
 } // astromenace namespace

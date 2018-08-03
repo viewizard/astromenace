@@ -688,10 +688,6 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 				InternalLights++;
 		}
 	}
-
-	assert(WeaponSlots.capacity() == WeaponSlots.size());
-	assert(BossWeaponSlots.capacity() == BossWeaponSlots.size());
-	assert(FlareWeaponSlots.capacity() == FlareWeaponSlots.size());
 }
 
 } // astromenace namespace

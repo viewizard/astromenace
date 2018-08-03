@@ -554,12 +554,6 @@ cTracked::cTracked(const int TrackedNum)
 		else
 			tmpWeaponSlot.Bound = tmpWeaponSlot.Location;
 	}
-
-	assert(WheelChunkNums.capacity() == WheelChunkNums.size());
-	assert(WeaponSlots.capacity() == WeaponSlots.size());
-	assert(TargetHorizChunkNums.capacity() == TargetHorizChunkNums.size());
-	assert(TargetVertChunkNums.capacity() == TargetVertChunkNums.size());
-	assert(BarrelChunkNums.capacity() == BarrelChunkNums.size());
 }
 
 } // astromenace namespace
