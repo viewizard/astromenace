@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "ground_object.h"
 #include "../../assets/texture.h"
 #include "../weapon/weapon.h"
@@ -57,9 +55,9 @@ const std::vector<sWheeledData> PresetWheeledData{
 #pragma GCC diagnostic pop
 
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cWheeled::cWheeled(const int WheeledNum)
 {
 	if ((WheeledNum <= 0) ||
@@ -260,12 +258,11 @@ cWheeled::cWheeled(const int WheeledNum)
 		break;
 	}
 
-	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
+	// randomize wheels initial rotation for better look
 	for (const auto &WheelChunkNum : WheelChunkNums) {
 		Chunks[WheelChunkNum].Rotation.x = vw_fRandNum(360.0f);
 	}
 
-	// вычисляем данные для нахождения точки стрельбы
 	if (!TargetHorizChunkNums.empty())
 		BaseBound = Chunks[TargetHorizChunkNums[0]].Location;
 
