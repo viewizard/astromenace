@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "ground_object.h"
 #include "../../assets/texture.h"
 #include "../weapon/weapon.h"
@@ -60,9 +58,9 @@ const std::vector<sTrackedData> PresetTrackedData{
 };
 
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cTracked::cTracked(const int TrackedNum)
 {
 	if ((TrackedNum <= 0) ||
@@ -79,7 +77,6 @@ cTracked::cTracked(const int TrackedNum)
 	MaxSpeedRotate = 20.0f;
 	InternalType = TrackedNum;
 
-	// ставим без оптимизации, иначе не увидим гусениц
 	NeedCullFaces = false;
 
 	LoadObjectData(PresetTrackedData[TrackedNum - 1].Model3DFileName, *this);
@@ -530,12 +527,11 @@ cTracked::cTracked(const int TrackedNum)
 	assert(TrackChunkNum < static_cast<int>(Texture.size()));
 	Texture[TrackChunkNum] = GetPreloadedTextureAsset("models/track.vw2d");
 
-	// делаем сдвиг поворота колес, чтобы смотрелось естественнее
+	// randomize wheels initial rotation for better look
 	for (const auto &WheelChunkNum : WheelChunkNums) {
 		Chunks[WheelChunkNum].Rotation.x = vw_fRandNum(360.0f);
 	}
 
-	// вычисляем данные для нахождения точки стрельбы
 	if (!TargetHorizChunkNums.empty())
 		BaseBound = Chunks[TargetHorizChunkNums[0]].Location;
 
