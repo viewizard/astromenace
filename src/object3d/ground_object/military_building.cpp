@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "ground_object.h"
 #include "../../assets/texture.h"
 #include "../weapon/weapon.h"
@@ -55,9 +53,9 @@ const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData{
 #pragma GCC diagnostic pop
 
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
 {
 	if ((MilitaryBuildingNum <= 0) ||
@@ -218,7 +216,6 @@ cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
 		break;
 	}
 
-	// вычисляем данные для нахождения точки стрельбы
 	if (!TargetHorizChunkNums.empty())
 		BaseBound = Chunks[TargetHorizChunkNums[0]].Location;
 
