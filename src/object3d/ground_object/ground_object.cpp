@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "ground_object.h"
 #include "../../script/script.h"
 #include "../../config/config.h"
@@ -186,20 +184,19 @@ std::weak_ptr<cObject3D> GetGroundObjectPtr(const cGroundObject &Object)
 	return std::weak_ptr<cObject3D>{};
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cGroundObject::cGroundObject()
 {
 	ObjectStatus = eObjectStatus::Enemy;
 }
 
-//-----------------------------------------------------------------------------
-// Установка положения объекта
-//-----------------------------------------------------------------------------
+/*
+ * Set location.
+ */
 void cGroundObject::SetLocation(const sVECTOR3D &NewLocation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
 
 	if (!WeaponSlots.empty()) {
@@ -210,15 +207,13 @@ void cGroundObject::SetLocation(const sVECTOR3D &NewLocation)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Установка углов поворота объекта
-//-----------------------------------------------------------------------------
+/*
+ * Set rotation.
+ */
 void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);
 
-	// оружие
 	sVECTOR3D RotationBase = Rotation;
 	sVECTOR3D BaseBoundTMP = BaseBound;
 	vw_RotatePoint(BaseBoundTMP, RotationBase);
@@ -241,10 +236,9 @@ void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 
 				tmpWeaponSlot.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
-				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 				if (TargetHorizChunkNums.empty() &&
 				    TargetVertChunkNums.empty() &&
-				    !DoNotCalculateRotation) // и если нужно считать...
+				    !DoNotCalculateRotation)
 					RotationWeapon = sVECTOR3D{TargetVertChunksNeedAngle,
 								   TargetHorizChunksNeedAngle,
 								   0.0f} +
@@ -257,22 +251,17 @@ void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Обновление данных объектa Object3D
-//-----------------------------------------------------------------------------
+/*
+ * Update.
+ */
 bool cGroundObject::Update(float Time)
 {
-	// вызываем родительскую функцию
-	// если там передали удалить - выходим
 	if (!cObject3D::Update(Time))
 		return false;
-	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
+
 	if (TimeDelta == 0.0f)
 		return true;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// обработка скрипта
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!TimeSheetList.empty() &&
 	    !TimeSheetList.front().InUse) {
 		TimeSheetList.front().InUse = true;
@@ -291,15 +280,8 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-	// если нужно наводить на цель
 	if (WeaponTargeting) {
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// наводим на цель, если есть возможность
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-		// находимся в начальном состоянии поворота ствола
-		int WeapNum{204}; // номер самого простого из пиратского оружия
+		int WeapNum{204}; // default pirate weapon
 		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
 		if (!WeaponSlots.empty()) {
 			if (auto sharedWeapon = WeaponSlots[0].Weapon.lock())
@@ -317,117 +299,96 @@ bool cGroundObject::Update(float Time)
 		sVECTOR3D NeedAngle(TargetVertChunksNeedAngle,TargetHorizChunksNeedAngle,0);
 		if (GetTurretOnTargetOrientateion(ObjectStatus, Location + FirePos, Rotation,
 						  CurrentRotationMat, NeedAngle, WeapNum)) {
-			// наводим на цель
 			TargetHorizChunksNeedAngle = NeedAngle.y;
 			TargetVertChunksNeedAngle = NeedAngle.x;
-		} else {
-			// врагов нет, нужно просто поднять ствол
+		} else
 			TargetVertChunksNeedAngle = TargetVertChunksMaxAngle * 0.5f;
-		}
 	} else {
-		// устанавливаем в начальное положение
 		TargetHorizChunksNeedAngle = 0.0f;
 		TargetVertChunksNeedAngle = 0.0f;
 
 	}
 
-	// собственно повороты элементов модели на углы
-	{
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// поворот башни по горизонтале
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (!TargetHorizChunkNums.empty() &&
-		    (TargetHorizChunksNeedAngle != TargetHorizChunksCurrentAngle)) {
-			if (fabsf(TargetHorizChunksNeedAngle-TargetHorizChunksCurrentAngle) > 180.0f) {
-				if (TargetHorizChunksCurrentAngle - TargetHorizChunksNeedAngle > 180.0f)
-					TargetHorizChunksCurrentAngle -= 360.0f;
-				if (TargetHorizChunksNeedAngle - TargetHorizChunksCurrentAngle > 180.0f)
-					TargetHorizChunksCurrentAngle += 360.0f;
-			}
 
-			// находим угол, на который нужно повернуть
-			float NeedRotateCalculation = TargetHorizChunksCurrentAngle;
-
-			if (TargetHorizChunksNeedAngle>TargetHorizChunksCurrentAngle) {
-				NeedRotateCalculation += 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
-				if (NeedRotateCalculation > TargetHorizChunksNeedAngle)
-					NeedRotateCalculation = TargetHorizChunksNeedAngle;
-			} else {
-				NeedRotateCalculation -= 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
-				if (NeedRotateCalculation < TargetHorizChunksNeedAngle)
-					NeedRotateCalculation = TargetHorizChunksNeedAngle;
-			}
-
-			// устанавливаем текущий поворот
-			TargetHorizChunksCurrentAngle = NeedRotateCalculation;
-
-			// поворачиваем все объекты
-			for (auto tmpChunkNum : TargetHorizChunkNums) {
-
-				sVECTOR3D tmpLocation = Chunks[tmpChunkNum].Location -
-							Chunks[TargetHorizChunkNums[0]].Location;
-
-				vw_RotatePointInv(tmpLocation, Chunks[tmpChunkNum].Rotation ^ (-1.0f));
-
-				SetChunkRotation(sVECTOR3D{Chunks[tmpChunkNum].Rotation.x,
-							   -NeedRotateCalculation,
-							   Chunks[tmpChunkNum].Rotation.z},
-						  tmpChunkNum);
-
-				vw_RotatePoint(tmpLocation, Chunks[tmpChunkNum].Rotation);
-
-				SetChunkLocation(tmpLocation + Chunks[TargetHorizChunkNums[0]].Location, tmpChunkNum);
-			}
+	if (!TargetHorizChunkNums.empty() &&
+	    (TargetHorizChunksNeedAngle != TargetHorizChunksCurrentAngle)) {
+		if (fabsf(TargetHorizChunksNeedAngle-TargetHorizChunksCurrentAngle) > 180.0f) {
+			if (TargetHorizChunksCurrentAngle - TargetHorizChunksNeedAngle > 180.0f)
+				TargetHorizChunksCurrentAngle -= 360.0f;
+			if (TargetHorizChunksNeedAngle - TargetHorizChunksCurrentAngle > 180.0f)
+				TargetHorizChunksCurrentAngle += 360.0f;
 		}
 
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// поворот стволов по вертикали
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		if (!TargetVertChunkNums.empty() &&
-		    (TargetVertChunksNeedAngle != TargetVertChunksCurrentAngle)) {
+		float NeedRotateCalculation = TargetHorizChunksCurrentAngle;
 
-			// находим угол, на который нужно повернуть
-			float NeedRotateCalculation = TargetVertChunksCurrentAngle;
-			if (TargetVertChunksNeedAngle>TargetVertChunksCurrentAngle) {
-				NeedRotateCalculation += 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
-				if (NeedRotateCalculation > TargetVertChunksNeedAngle)
-					NeedRotateCalculation = TargetVertChunksNeedAngle;
-				if (NeedRotateCalculation > TargetVertChunksMaxAngle)
-					NeedRotateCalculation = TargetVertChunksMaxAngle;
-			} else {
-				NeedRotateCalculation -= 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
-				if (NeedRotateCalculation < TargetVertChunksNeedAngle)
-					NeedRotateCalculation = TargetVertChunksNeedAngle;
-				if (NeedRotateCalculation < TargetVertChunksMinAngle)
-					NeedRotateCalculation = TargetVertChunksMinAngle;
-			}
+		if (TargetHorizChunksNeedAngle>TargetHorizChunksCurrentAngle) {
+			NeedRotateCalculation += 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
+			if (NeedRotateCalculation > TargetHorizChunksNeedAngle)
+				NeedRotateCalculation = TargetHorizChunksNeedAngle;
+		} else {
+			NeedRotateCalculation -= 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
+			if (NeedRotateCalculation < TargetHorizChunksNeedAngle)
+				NeedRotateCalculation = TargetHorizChunksNeedAngle;
+		}
 
-			// устанавливаем текущий поворот
-			TargetVertChunksCurrentAngle = NeedRotateCalculation;
+		TargetHorizChunksCurrentAngle = NeedRotateCalculation;
 
-			// поворачиваем все объекты
-			for (auto tmpChunkNum : TargetVertChunkNums) {
+		for (auto tmpChunkNum : TargetHorizChunkNums) {
 
-				sVECTOR3D tmpLocation = Chunks[tmpChunkNum].Location -
-							Chunks[TargetVertChunkNums[0]].Location;
+			sVECTOR3D tmpLocation = Chunks[tmpChunkNum].Location -
+						Chunks[TargetHorizChunkNums[0]].Location;
 
-				vw_RotatePointInv(tmpLocation, Chunks[tmpChunkNum].Rotation ^ (-1.0f));
+			vw_RotatePointInv(tmpLocation, Chunks[tmpChunkNum].Rotation ^ (-1.0f));
 
-				SetChunkRotation(sVECTOR3D{-NeedRotateCalculation,
-							   Chunks[tmpChunkNum].Rotation.y,
-							   Chunks[tmpChunkNum].Rotation.z},
-						  tmpChunkNum);
+			SetChunkRotation(sVECTOR3D{Chunks[tmpChunkNum].Rotation.x,
+						   -NeedRotateCalculation,
+						   Chunks[tmpChunkNum].Rotation.z},
+					 tmpChunkNum);
 
-				vw_RotatePoint(tmpLocation, Chunks[tmpChunkNum].Rotation);
+			vw_RotatePoint(tmpLocation, Chunks[tmpChunkNum].Rotation);
 
-				SetChunkLocation(tmpLocation + Chunks[TargetVertChunkNums[0]].Location, tmpChunkNum);
-			}
+			SetChunkLocation(tmpLocation + Chunks[TargetHorizChunkNums[0]].Location, tmpChunkNum);
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// находим точку стрельбы и учитываем направление
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (!TargetVertChunkNums.empty() &&
+	    (TargetVertChunksNeedAngle != TargetVertChunksCurrentAngle)) {
+
+		float NeedRotateCalculation = TargetVertChunksCurrentAngle;
+		if (TargetVertChunksNeedAngle>TargetVertChunksCurrentAngle) {
+			NeedRotateCalculation += 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
+			if (NeedRotateCalculation > TargetVertChunksNeedAngle)
+				NeedRotateCalculation = TargetVertChunksNeedAngle;
+			if (NeedRotateCalculation > TargetVertChunksMaxAngle)
+				NeedRotateCalculation = TargetVertChunksMaxAngle;
+		} else {
+			NeedRotateCalculation -= 80.0f * TimeDelta/GameEnemyTargetingSpeedPenalty;
+			if (NeedRotateCalculation < TargetVertChunksNeedAngle)
+				NeedRotateCalculation = TargetVertChunksNeedAngle;
+			if (NeedRotateCalculation < TargetVertChunksMinAngle)
+				NeedRotateCalculation = TargetVertChunksMinAngle;
+		}
+
+		TargetVertChunksCurrentAngle = NeedRotateCalculation;
+
+		for (auto tmpChunkNum : TargetVertChunkNums) {
+
+			sVECTOR3D tmpLocation = Chunks[tmpChunkNum].Location -
+						Chunks[TargetVertChunkNums[0]].Location;
+
+			vw_RotatePointInv(tmpLocation, Chunks[tmpChunkNum].Rotation ^ (-1.0f));
+
+			SetChunkRotation(sVECTOR3D{-NeedRotateCalculation,
+						   Chunks[tmpChunkNum].Rotation.y,
+						   Chunks[tmpChunkNum].Rotation.z},
+					 tmpChunkNum);
+
+			vw_RotatePoint(tmpLocation, Chunks[tmpChunkNum].Rotation);
+
+			SetChunkLocation(tmpLocation + Chunks[TargetVertChunkNums[0]].Location, tmpChunkNum);
+		}
+	}
+
 	sVECTOR3D RotationBase = Rotation;
 	sVECTOR3D BaseBoundTMP = BaseBound;
 	vw_RotatePoint(BaseBoundTMP, RotationBase);
@@ -450,10 +411,9 @@ bool cGroundObject::Update(float Time)
 
 				tmpWeaponSlot.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
-				// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 				if (TargetHorizChunkNums.empty() &&
 				    TargetVertChunkNums.empty() &&
-				    !DoNotCalculateRotation) // и если нужно считать...
+				    !DoNotCalculateRotation)
 					RotationWeapon = Rotation - sVECTOR3D{TargetVertChunksNeedAngle,
 									      TargetHorizChunksNeedAngle,
 									      0.0f};
@@ -465,11 +425,7 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// смотрим, есть ли команда открыть огонь
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!WeaponSlots.empty()) {
-		// если залп или игрок (игроку регулируем сами)
 		// FIXME switch from if-else-if to case (?)
 		if (WeaponFireType == 1) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
@@ -477,7 +433,7 @@ bool cGroundObject::Update(float Time)
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->WeaponFire(Time);
 			}
-		} else if (WeaponFireType == 2) { // переменный огонь
+		} else if (WeaponFireType == 2) {
 			int PrimCount{0};
 			float PrimTime{0.0f};
 			unsigned FirstWeapon{config::MAX_WEAPONS};
@@ -485,7 +441,6 @@ bool cGroundObject::Update(float Time)
 
 			WeaponGroupCurrentFireDelay -= TimeDelta;
 
-			// находим кол-во оружия
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
@@ -496,11 +451,10 @@ bool cGroundObject::Update(float Time)
 						LastWeapon = i;
 				}
 			}
-			// если еще не было начальной установки
+
 			if (WeaponGroupCurrentFireNum == -1)
 				WeaponGroupCurrentFireNum = FirstWeapon;
 
-			// стреляем
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (!WeaponSlots[i].Weapon.expired() &&
 				    WeaponSlots[i].SetFire) {
@@ -509,12 +463,12 @@ bool cGroundObject::Update(float Time)
 						if (auto sharedWeapon = WeaponSlots[i].Weapon.lock())
 							sharedWeapon->WeaponFire(Time);
 
-						WeaponGroupCurrentFireDelay = (PrimTime/PrimCount)*((1.0f+GameEnemyWeaponPenalty)/2.0f);
+						WeaponGroupCurrentFireDelay = (PrimTime / PrimCount) *
+									      ((1.0f + GameEnemyWeaponPenalty) / 2.0f);
 						WeaponGroupCurrentFireNum++;
 						if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 							WeaponGroupCurrentFireNum = FirstWeapon;
 
-						// если такого оружия нет, берем что есть
 						if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired()) {
 							bool exit = false;
 							while (!exit) {
@@ -528,7 +482,7 @@ bool cGroundObject::Update(float Time)
 					}
 				}
 			}
-		} else if (WeaponFireType == 3) { // переменный огонь2 (залп ракет или чего-то еще)
+		} else if (WeaponFireType == 3) {
 			int PrimCount{0};
 			float PrimTime{0.0f};
 			unsigned FirstWeapon{config::MAX_WEAPONS};
@@ -536,7 +490,6 @@ bool cGroundObject::Update(float Time)
 
 			WeaponGroupCurrentFireDelay -= TimeDelta;
 
-			// находим кол-во оружия
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
@@ -547,11 +500,10 @@ bool cGroundObject::Update(float Time)
 						LastWeapon = i;
 				}
 			}
-			// если еще не было начальной установки
+
 			if (WeaponGroupCurrentFireNum == -1)
 				WeaponGroupCurrentFireNum = FirstWeapon;
 
-			// стреляем
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (!WeaponSlots[i].Weapon.expired() &&
 				    WeaponSlots[i].SetFire) {
@@ -560,12 +512,11 @@ bool cGroundObject::Update(float Time)
 						if (auto sharedWeapon = WeaponSlots[i].Weapon.lock())
 							sharedWeapon->WeaponFire(Time);
 
-						WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
+						WeaponGroupCurrentFireDelay = PrimTime / (PrimCount * PrimCount);
 						WeaponGroupCurrentFireNum++;
 						if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 							WeaponGroupCurrentFireNum = FirstWeapon;
 
-						// если такого оружия нет, берем что есть
 						if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired()) {
 							bool exit = false;
 							while (!exit) {
@@ -582,9 +533,6 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// вращение стволов пулемета
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!BarrelChunkNums.empty()) {
 		for (auto tmpChunkNum : BarrelChunkNums) {
 			Chunks[tmpChunkNum].NeedGeometryAnimation = true;
@@ -594,12 +542,8 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// вращение колес в транспорте
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!WheelChunkNums.empty() &&
 	    ((WheelRotarySpeed >= 0.00001f) || (WheelRotarySpeed <= -0.00001f))) {
-		// перебираем все и ув. их угол вращения
 		for (auto tmpChunkNum : WheelChunkNums) {
 			Chunks[tmpChunkNum].Rotation.x += WheelRotarySpeed * TimeDelta;
 
@@ -610,10 +554,8 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// тайловая анимация для траков
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((TrackChunkNum != -1) && ((WheelRotarySpeed >= 0.00001f) || (WheelRotarySpeed <= -0.00001f))) {
+	if ((TrackChunkNum != -1) &&
+	    ((WheelRotarySpeed >= 0.00001f) || (WheelRotarySpeed <= -0.00001f))) {
 		Chunks[TrackChunkNum].NeedTextureAnimation = true;
 		Chunks[TrackChunkNum].TextureAnimation.x +=
 				(WheelRotarySpeed / 500.0f) * TimeDelta * TrackRotationDirection;
@@ -623,21 +565,18 @@ bool cGroundObject::Update(float Time)
 			Chunks[TrackChunkNum].TextureAnimation.x += 1.0f;
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// поворот
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if ((NeedRotate.x != 0.0f) || (NeedRotate.y != 0.0f) || (NeedRotate.z != 0.0f)) {
-		// Находим допустимый поворот по углу
+	if ((NeedRotate.x != 0.0f) ||
+	    (NeedRotate.y != 0.0f) ||
+	    (NeedRotate.z != 0.0f)) {
 		sVECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
 
-		// угол по x
 		if (NeedRotate.x != 0.0f) {
 			float Sign{1.0f};
 			if (NeedRotate.x < 0.0f)
 				Sign = -1.0f;
-			// вычисляем скорость поворота по данным двигателя
+
 			tmpRotate.x = Sign * MaxSpeedRotate * RotationSpeed.x * TimeDelta;
-			// смотрим, если уже повернули - снимаем
+
 			if (Sign == 1.0f) {
 				if (tmpRotate.x >= NeedRotate.x) {
 					tmpRotate.x = NeedRotate.x;
@@ -649,19 +588,17 @@ bool cGroundObject::Update(float Time)
 					NeedRotate.x = 0.0f;
 				}
 			}
-			// меняем значение
 			if (NeedRotate.x != 0.0f)
 				NeedRotate.x -= tmpRotate.x;
 		}
 
-		// угол по y
 		if (NeedRotate.y != 0.0f) {
 			float Sign{1.0f};
 			if (NeedRotate.y < 0.0f)
 				Sign = -1.0f;
-			// вычисляем скорость поворота по данным двигателя
+
 			tmpRotate.y = Sign * MaxSpeedRotate * RotationSpeed.y * TimeDelta;
-			// смотрим, если уже повернули - снимаем
+
 			if (Sign == 1.0f) {
 				if (tmpRotate.y >= NeedRotate.y) {
 					tmpRotate.y = NeedRotate.y;
@@ -673,19 +610,16 @@ bool cGroundObject::Update(float Time)
 					NeedRotate.y = 0.0f;
 				}
 			}
-			// меняем значение
 			if (NeedRotate.y != 0.0f)
 				NeedRotate.y -= tmpRotate.y;
 		}
 
-		// угол по z
 		if (NeedRotate.z != 0.0f) {
 			float Sign{1.0f};
 			if (NeedRotate.z < 0.0f)
 				Sign = -1.0f;
-			// вычисляем скорость поворота по данным двигателя
+
 			tmpRotate.z = Sign * MaxSpeedRotate * RotationSpeed.z * TimeDelta;
-			// смотрим, если уже повернули - снимаем
 			if (Sign == 1.0f) {
 				if (tmpRotate.z >= NeedRotate.z) {
 					tmpRotate.z = NeedRotate.z;
@@ -697,17 +631,12 @@ bool cGroundObject::Update(float Time)
 					NeedRotate.z = 0.0f;
 				}
 			}
-			// меняем значение
 			if (NeedRotate.z != 0.0f)
 				NeedRotate.z -= tmpRotate.z;
 		}
 
-		// установка поворота там же сохраняем, какой общий поворот модели
 		SetRotation(tmpRotate);
 
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// поворот колес в транспорте
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (!SteerableWheelChunkNums.empty()) {
 			for (auto tmpChunkNum : SteerableWheelChunkNums) {
 				float tmpRotateY = Chunks[tmpChunkNum].Rotation.y;
@@ -730,30 +659,21 @@ bool cGroundObject::Update(float Time)
 				SetChunkRotation(sVECTOR3D{Chunks[tmpChunkNum].Rotation.x,
 							   tmpRotateY,
 							   Chunks[tmpChunkNum].Rotation.z},
-						  tmpChunkNum);
+						 tmpChunkNum);
 			}
 		}
 	}
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// ускорение-замедление
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// если нужно разогнаться, или управление на игроке - и нужно стремиться к нулю
 	if (NeedSpeed != 0.0f) {
 		float Sign{1.0f};
-		// нужно двигать назад
 		if (NeedSpeed < 0.0f)
 			Sign = -1.0f;
 
-		// "ровняем" скорость под модель
 		if (Sign == 1.0f)
 			vw_Clamp(NeedSpeed, 0.0f, MaxSpeed);
 		else
 			vw_Clamp(NeedSpeed, -MaxSpeed, 0.0f);
 
-		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
 			if (NeedSpeed < Speed)
 				Sign = -1.0f;
@@ -762,14 +682,9 @@ bool cGroundObject::Update(float Time)
 				Sign = 1.0f;
 		}
 
-
-		// даем полный газ, учитывая сколько процентов можем выдать
 		Acceler = Sign * MaxAcceler * NeedAcceler;
-
-		// считаем текущую скорость
 		Speed = Speed + Acceler * TimeDelta;
 
-		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
 			if (NeedSpeed <= Speed) {
 				Speed = NeedSpeed;
@@ -783,9 +698,6 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// небольшая девиация-болтание колес, если нужно
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!WheelShake.empty()) {
 		for (auto &tmpWheelShake : WheelShake) {
 			tmpWheelShake.Update(TimeDelta, [&] (const float ShakeIncrement,
@@ -797,19 +709,15 @@ bool cGroundObject::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// считаем вектор движения
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	sVECTOR3D tmpShift = (Orientation ^ (Speed * TimeDelta));
-
-	// перемещение объекта, если нужно
-	if ((tmpShift.x != 0.0f) || (tmpShift.y != 0.0f) || (tmpShift.z != 0.0f)) {
+	if ((tmpShift.x != 0.0f) ||
+	    (tmpShift.y != 0.0f) ||
+	    (tmpShift.z != 0.0f)) {
 		WheelRotarySpeed = Speed * SpeedToWheelRotarySpeedFactor;
 		// делаем сдвиг модели в указанную точку
 		SetLocation(Location + tmpShift);
 	}
 
-	// объект в порядке - удалять не нужно
 	return true;
 }
 

@@ -33,8 +33,6 @@
 
 // TODO WeaponFireType should be enumeration
 
-// TODO translate comments
-
 #ifndef OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
 #define OBJECT3D_GROUNDOBJECT_GROUNDOBJECT_H
 
@@ -83,11 +81,8 @@ protected:
 	virtual ~cGroundObject() = default;
 
 public:
-	// Обновление данных объектa
 	virtual bool Update(float Time) override;
-	// Установка положения объекта
 	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
-	// Установка углов поворота объекта
 	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 
 	// rotary speed (deg/sec) for all wheels (for both, wheeled and tracked)
@@ -102,46 +97,29 @@ public:
 	std::vector<unsigned> SteerableWheelChunkNums{};
 	float MaxSteerableWheelAngle{20.0f};
 
-	// если нужно, номер объекта с траком для тайловой анимации
 	int TrackChunkNum{-1};
-	int TrackRotationDirection{1};// направление вращения траков
+	int TrackRotationDirection{1};
 
-	// нужно повернуть (пересчитать мэш) при следующем проходе
-	// Update + учесть эти данные в Rotation
 	sVECTOR3D NeedRotate{0.0f, 0.0f, 0.0f};
-	// скорость поворота по каждому раправлению
 	sVECTOR3D RotationSpeed{1.0f, 1.0f, 1.0f};
 
-	// максимальная скорость units/sec, зависит от двигателя
 	float MaxSpeed{0.0f};
-	// текущая скорость
 	float Speed{0.0f};
-	// нужная скорость
 	float NeedSpeed{0.0f};
 
-	// максимальное ускорение units/sec*sec, зависит от двигателя
 	float MaxAcceler{0.0f};
-	// макс. маневровых двигателей
 	float MaxSpeedRotate{0.0f};
-	// текущее ускорение
 	float Acceler{0.0f};
-	// нужное ускорение
 	float NeedAcceler{1.0f};
 
 	std::vector<sGroundWeaponSlot> WeaponSlots{};
-	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
 	int WeaponFireType{2};
 	int WeaponGroupCurrentFireNum{-1};
 	float WeaponGroupCurrentFireDelay{0.0f};
-	// наведение на цель
 	bool WeaponTargeting{false};
 
-	// для просчета положения точки стрельбы, считаем как кости
 	sVECTOR3D BaseBound{0.0f, 0.0f, 0.0f};
 	sVECTOR3D MiddleBound{0.0f, 0.0f, 0.0f};
-	// если точки фиксированы, не нужно менять направление точки выстрела
-	// только учитываем общий поворот модели и соотв. точку выстрела
-	// работает только если объекты поворота башни и ствола не заданы!
 	bool DoNotCalculateRotation{false};
 
 	// horizontal targeting related (turret can rotate at 360 deg)
