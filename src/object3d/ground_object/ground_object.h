@@ -78,7 +78,7 @@ class cGroundObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cGroundObject();
-	virtual ~cGroundObject() = default;
+	~cGroundObject() = default;
 
 public:
 	virtual bool Update(float Time) override;

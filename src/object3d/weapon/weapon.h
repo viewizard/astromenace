@@ -47,14 +47,14 @@ namespace astromenace {
 enum class eGameSFX;
 class cProjectile;
 
-class cWeapon : public cObject3D {
+class cWeapon final : public cObject3D {
 	friend std::weak_ptr<cWeapon> CreateWeapon(const int WeaponNum);
 
 private:
 	// Don't allow direct new/delete usage in code, only CreateWeapon()
 	// allowed for cWeapon creation and release setup (deleter must be provided).
 	explicit cWeapon(const int WeaponNum);
-	virtual ~cWeapon();
+	~cWeapon();
 
 public:
 	// Обновление данных объектa

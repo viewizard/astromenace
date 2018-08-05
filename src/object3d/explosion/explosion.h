@@ -50,7 +50,7 @@ class cExplosion : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cExplosion();
-	virtual ~cExplosion();
+	~cExplosion();
 
 public:
 	virtual bool Update(float Time) override;

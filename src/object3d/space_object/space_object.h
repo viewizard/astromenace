@@ -55,7 +55,7 @@ class cSpaceObject : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cSpaceObject();
-	virtual ~cSpaceObject() = default;
+	~cSpaceObject() = default;
 
 public:
 	virtual bool Update(float Time) override;

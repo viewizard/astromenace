@@ -55,14 +55,14 @@ enum class eProjectilePairCycle {
 	DeleteBothObjectsAndContinue
 };
 
-class cProjectile : public cObject3D {
+class cProjectile final : public cObject3D {
 	friend std::weak_ptr<cProjectile> CreateProjectile(const int ProjectileNum);
 
 private:
 	// Don't allow direct new/delete usage in code, only CreateProjectile()
 	// allowed for cProjectile creation and release setup (deleter must be provided).
 	explicit cProjectile(const int ProjectileNum);
-	virtual ~cProjectile();
+	~cProjectile();
 
 public:
 	virtual bool Update(float Time) override;

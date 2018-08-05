@@ -100,7 +100,7 @@ class cObject3D : public sModel3D {
 protected:
 	// don't allow object of this class creation
 	cObject3D() = default;
-	virtual ~cObject3D() = default;
+	~cObject3D() = default;
 
 public:
 	// Прорисовка объектa Object3D

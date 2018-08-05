@@ -82,7 +82,7 @@ class cSpaceShip : public cObject3D {
 protected:
 	// don't allow object of this class creation
 	cSpaceShip() = default;
-	virtual ~cSpaceShip();
+	~cSpaceShip();
 
 public:
 	// Обновление данных объектa
