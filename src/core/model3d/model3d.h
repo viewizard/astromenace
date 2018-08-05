@@ -103,8 +103,11 @@ struct sChunk3D {
 };
 
 struct sModel3D {
-	virtual ~sModel3D() = default;
+protected:
+	sModel3D() = default;
+	~sModel3D() = default;
 
+public:
 	// attached chunks
 	std::vector<sChunk3D> Chunks{};
 
