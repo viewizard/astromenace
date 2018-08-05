@@ -25,7 +25,11 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
+
+// TODO remove goto statement
+
+// TODO codestyle should be fixed
 
 // NOTE we use ReleaseProjectile() in weapon code for beam, since we use beam weapon for
 //      player and motherships only (rare enough). If enemy will have beam weapon, revise
@@ -53,7 +57,7 @@ struct sProjectileData {
 	float Radius;
 	float DamageHull;
 	float DamageSystems;
-	// 0-обычный снаряд, 1-уничтожаемый, 2-лучевой, 3- фларес/мина пришельцев, 4-мина (уничтожаемая)
+	// 0-projectile, 1-with 3d model, 2-beam, 3- flares/alien mine, 4-mine with 3d model
 	int ProjectileType;
 	float Speed;
 	float Age;
@@ -66,7 +70,7 @@ const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
 					 {"gfx/trail4.tga"},
 					 {"gfx/trail5.tga"}};
 
-// снаряды для оружия землян 1-99
+// earth 1-99
 const std::vector<sProjectileData> PresetEarthProjectileData{
 	// Kinetic
 	{0.3f, 5, 0,	0, 50, 4, 1},
@@ -94,72 +98,72 @@ const std::vector<sProjectileData> PresetEarthProjectileData{
 	{0.2f, 100, 0,	1, 40, 8, 2},
 	{0.2f, 20, 0,	1, 40, 6, 2},
 	{0.2f, 400, 0,	1, 35, 7, 2},
-	{0.2f, 800, 0,	1, 30, 6, 2},
+	{0.2f, 800, 0,	1, 30, 6, 2}
 };
 
-// снаряды для оружия пришельцев 101-199
+// alien 101-199
 const std::vector<sProjectileData> PresetAlienProjectileData{
-	// как Kinetic1
+	// like Kinetic1
 	{0.3f, 5, 0,	0, 70, 4, 1},
-	// с наведением, как Kinetic2
+	// homing, like Kinetic2
 	{0.6f, 10, 0,	0, 50, 4, 2},
-	// как Kinetic3
+	// like Kinetic3
 	{0.6f, 20, 0,	0, 60, 4, 1},
-	// с наведением, как Kinetic3
+	// homing, like Kinetic3
 	{0.6f, 20, 0,	0, 60, 4, 2},
-	// как Kinetic2
+	// like Kinetic2
 	{0.6f, 10, 0,	0, 50, 4, 1},
-	// энергетическая мина (1-й тип), только позиционируется по высоте (на ближайшего врага)
+	// emergy mine 1
 	{2.0f, 60, 0,	3, 0, 16, 1},
-	// энергетическая мина (2-й тип), позиционируется по высоте (на ближайшего врага) + немного приближается
+	// emergy mine 2, with homing
 	{2.0f, 120, 0,	3, 7, 16, 1},
-	// как Plasma3
+	// like Plasma3
 	{1.3f, 50, 50,	0, 55, 4, 3},
-	// как Plasma2
+	// like Plasma2
 	{1.3f, 40, 25,	0, 55, 4, 3},
-	// как Laser (для больших кораблей)
-	{1.0f, 250, 0,	2, 0, 1, 1},
+	// like Laser (for matherships)
+	{1.0f, 250, 0,	2, 0, 1, 1}
 
 };
 
-// снаряды для оружия пиратов 201-299
+// pirate 201-299
 const std::vector<sProjectileData> PresetPirateProjectileData{
-	// стрельба турели 1
+	// turrent 1
 	{0.3f, 5, 0,	0, 60, 4, 1},
-	// стрельба турели 2
+	// turrent 2
 	{0.6f, 20, 0,	0, 45, 4, 1},
-	// фларес
+	// flares
 	{3.0f, 5, 0,	3, 5, 5, 1},
 
-	// как Kinetic1
+	// like Kinetic1
 	{0.3f, 5, 0,	0, 60, 4, 1},
-	// как Missile1
+	// like Missile1
 	{0.2f, 40, 0,	1, 60, 6, 2},
-	// как Missile2
+	// like Missile2
 	{0.2f, 20, 0,	1, 60, 6, 2},
-	// как Ion2
+	// like Ion2
 	{1.5f, 0, 30,	0, 40, 4, 2},
-	// как Antimatter
+	// like Antimatter
 	{1.0f, 80, 10,	0, 70, 3, 1},
-	// как Missile3 (торпеда)
+	// like Missile3 (torpedo)
 	{0.2f, 400, 0,	1, 55, 7, 2},
-	// как Missile4 (бомба)
+	// like Missile4 (bomb)
 	{0.2f, 1000, 0,	1, 50, 6, 2},
-	// как Kinetic2
+	// like Kinetic2
 	{0.6f, 20, 0,	0, 45, 4, 1},
-	// как Kinetic3
+	// like Kinetic3
 	{0.6f, 40, 0,	0, 45, 4, 1},
-	// как Plasma2
+	// like Plasma2
 	{1.3f, 40, 25,	0, 40, 4, 3},
 
-	// мина1 (простое наведение по высоте)
+	// mine 1
 	{1.2f, 50, 0,	4, 0, -1, 1},
-	// мина2 (наведение по высоте + приближение)
+	// mine 2
 	{1.2f, 100, 0,	4, 7, -1, 1},
-	// мина3 (наведение по высоте + стрельба снарядами)
+	// mine 3
 	{1.2f, 150, 0,	4, 0, -1, 1},
-	// мина4 (наведение по высоте + стрельба ракетами)
-	{1.2f, 200, 0,	4, 0, -1, 1},
+	// mine 4
+	{1.2f, 200, 0,	4, 0, -1, 1}
 };
 
 std::list<std::shared_ptr<cProjectile>> ProjectileList{};
@@ -178,9 +182,9 @@ std::weak_ptr<cProjectile> CreateProjectile(const int ProjectileNum)
 	return ProjectileList.front();
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем все объекты, обновляем данные
-//-----------------------------------------------------------------------------
+/*
+ * Update and remove (erase) dead objects.
+ */
 void UpdateAllProjectile(float Time)
 {
 	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
@@ -191,9 +195,9 @@ void UpdateAllProjectile(float Time)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовываем все объекты
-//-----------------------------------------------------------------------------
+/*
+ * Draw all objects.
+ */
 void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	for (auto &tmpProjectile : ProjectileList) {
@@ -219,9 +223,9 @@ void ReleaseProjectile(std::weak_ptr<cProjectile> &Object)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Удаляем все объекты в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all objects.
+ */
 void ReleaseAllProjectiles()
 {
 	ProjectileList.clear();
@@ -312,83 +316,102 @@ std::weak_ptr<cObject3D> GetProjectilePtr(const cProjectile &Object)
 	return std::weak_ptr<cObject3D>{};
 }
 
-
-
-
-// получаем время жизни снаряда
+/*
+ * Get projectile fly range.
+ */
 float GetProjectileRange(int Num)
 {
-
-	if (Num >= 1 && Num <= 99) {
-		float Return = PresetEarthProjectileData[Num-1].Age * PresetEarthProjectileData[Num-1].Speed;
-		if (Num == 11) Return = 100.0f;
-		if (Num == 12) Return = 110.0f;
-		if (Num == 14) Return = 120.0f;
+	if ((Num >= 1) &&
+	    (Num <= 99)) {
+		float Return = PresetEarthProjectileData[Num - 1].Age * PresetEarthProjectileData[Num - 1].Speed;
+		if (Num == 11)
+			Return = 100.0f;
+		if (Num == 12)
+			Return = 110.0f;
+		if (Num == 14)
+			Return = 120.0f;
 		return Return;
-	} else if (Num >= 101 && Num <= 199) {
-		if (Num == 110) return 200.0f;
-		return PresetAlienProjectileData[Num-101].Age * PresetAlienProjectileData[Num-101].Speed;
-	} else if (Num >= 201 && Num <= 299) {
-		return PresetPirateProjectileData[Num-201].Age * PresetPirateProjectileData[Num-201].Speed;
-	}
+	} else if ((Num >= 101) &&
+		   (Num <= 199)) {
+		if (Num == 110)
+			return 200.0f;
+		return PresetAlienProjectileData[Num - 101].Age * PresetAlienProjectileData[Num - 101].Speed;
+	} else if ((Num >= 201) &&
+		   (Num <= 299))
+		return PresetPirateProjectileData[Num - 201].Age * PresetPirateProjectileData[Num - 201].Speed;
 
 	return 0.0f;
 }
 
+/*
+ * Get projectile hull (main) damage.
+ */
 int GetProjectileHullDamage(int Num)
 {
-	if (Num >= 1 && Num <= 99) {
-		// если система залпового огня
-		if (Num == 17) return 10 * (int)PresetEarthProjectileData[Num-1].DamageHull;
-		return (int)PresetEarthProjectileData[Num-1].DamageHull;
-	} else if (Num >= 101 && Num <= 199) {
-		return (int)PresetAlienProjectileData[Num-101].DamageHull;
-	} else if (Num >= 201 && Num <= 299) {
-		return (int)PresetPirateProjectileData[Num-201].DamageHull;
-	}
+	if ((Num >= 1) &&
+	    (Num <= 99)) {
+		// missile swarm
+		if (Num == 17)
+			return 10 * (int)PresetEarthProjectileData[Num - 1].DamageHull;
+		return (int)PresetEarthProjectileData[Num - 1].DamageHull;
+	} else if ((Num >= 101) &&
+		   (Num <= 199))
+		return (int)PresetAlienProjectileData[Num - 101].DamageHull;
+	else if ((Num >= 201) &&
+		 (Num <= 299))
+		return (int)PresetPirateProjectileData[Num - 201].DamageHull;
+
 	return 0;
 }
 
+/*
+ * Get projectile system (internal) damage.
+ */
 int GetProjectileSystemsDamage(int Num)
 {
-	if (Num >= 1 && Num <= 99) {
-		// если система залпового огня
-		if (Num == 17) return 10 * (int)PresetEarthProjectileData[Num-1].DamageSystems;
-		return (int)PresetEarthProjectileData[Num-1].DamageSystems;
-	} else if (Num >= 101 && Num <= 199) {
-		return (int)PresetAlienProjectileData[Num-101].DamageSystems;
-	} else if (Num >= 201 && Num <= 299) {
-		return (int)PresetPirateProjectileData[Num-201].DamageSystems;
-	}
+	if ((Num >= 1) &&
+	    (Num <= 99)) {
+		// missile swarm
+		if (Num == 17)
+			return 10 * (int)PresetEarthProjectileData[Num - 1].DamageSystems;
+		return (int)PresetEarthProjectileData[Num - 1].DamageSystems;
+	} else if ((Num >= 101) &&
+		   (Num <= 199))
+		return (int)PresetAlienProjectileData[Num - 101].DamageSystems;
+	else if ((Num >= 201) &&
+		 (Num <= 299))
+		return (int)PresetPirateProjectileData[Num - 201].DamageSystems;
+
 	return 0;
 }
 
+/*
+ * Get projectile speed.
+ */
 float GetProjectileSpeed(int Num)
 {
-	if (Num >= 1 && Num <= 99) {
-		return PresetEarthProjectileData[Num-1].Speed;
-	} else if (Num >= 101 && Num <= 199) {
-		return PresetAlienProjectileData[Num-101].Speed;
-	} else if (Num >= 201 && Num <= 299) {
-		return PresetPirateProjectileData[Num-201].Speed;
-	}
+	if ((Num >= 1) &&
+	    (Num <= 99))
+		return PresetEarthProjectileData[Num - 1].Speed;
+	else if ((Num >= 101) &&
+		 (Num <= 199))
+		return PresetAlienProjectileData[Num - 101].Speed;
+	else if ((Num >= 201) &&
+		 (Num <= 299))
+		return PresetPirateProjectileData[Num - 201].Speed;
+
 	return 0.0f;
 }
 
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Создание графического эффекта
-//-----------------------------------------------------------------------------
+/*
+ * Setup gfx.
+ */
 static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
 	switch(GFXNum) {
-	case 1:	// Kinetic
+	case 1: // Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -407,7 +430,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 300;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		break;
-	case 2:	// Kinetic
+
+	case 2: // Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -426,7 +450,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
 		break;
-	case 3:	// Kinetic
+
+	case 3: // Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -445,7 +470,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
 		break;
-	case 4:	// Kinetic
+
+	case 4: // Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -464,7 +490,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 300;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.17f);
 		break;
-	case 5:	// Ion
+
+	case 5: // Ion
 		ParticleSystem->ColorStart.r = 0.70f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.70f;
@@ -489,7 +516,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->MagnetFactor = 25.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.1f);
 		break;
-	case 6:	// Ion
+
+	case 6: // Ion
 		ParticleSystem->ColorStart.r = 0.70f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.70f;
@@ -509,7 +537,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -20.0f;
 		break;
-	case 7:	// Plasma
+
+	case 7: // Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -531,7 +560,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.15f);
 		break;
-	case 8:	// Plasma
+
+	case 8: // Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -554,7 +584,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 2.0f;
 		break;
-	case 9:	// Plasma
+
+	case 9: // Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -577,7 +608,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 2.0f;
 		break;
-	case 10:	// Plasma
+
+	case 10: // Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -595,7 +627,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 30;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.10f);
 		break;
-	case 11:	// Plasma
+
+	case 11: // Plasma
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -614,7 +647,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.08f);
 		break;
-	case 12:	// Ion
+
+	case 12: // Ion
 		ParticleSystem->ColorStart.r = 0.70f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.70f;
@@ -633,8 +667,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 200;
 		break;
 
-
-	case 13:	// Missile
+	case 13: // Missile
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -653,7 +686,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 250;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
 		break;
-	case 14:	// Torpedo
+
+	case 14: // Torpedo
 		ParticleSystem->ColorStart.r = 0.70f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -672,7 +706,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 250;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
 		break;
-	case 15:	// Nuke
+
+	case 15: // Nuke
 		ParticleSystem->ColorStart.r = 0.30f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -691,7 +726,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 250;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
 		break;
-	case 16:	// Swarm
+
+	case 16: // Swarm
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -711,9 +747,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		break;
 
-
-
-	case 17:	// maser
+	case 17: // maser
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.00f;
@@ -733,7 +767,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->CreationSize = sVECTOR3D{0.4f, 0.4f, 0.2f};
 		ParticleSystem->AlphaShowHide = true;
 		break;
-	case 18:	// maser2
+
+	case 18: // maser2
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.00f;
@@ -753,7 +788,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.8f, 0.2f};
 		ParticleSystem->AlphaShowHide = true;
 		break;
-	case 19:	// Antimatter
+
+	case 19: // Antimatter
 		ParticleSystem->ColorStart.r = 0.50f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.00f;
@@ -776,7 +812,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->MagnetFactor = -20.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 1.0f, 0.0f, 0.0f, 0.05f);
 		break;
-	case 20:	// Laser
+
+	case 20: // Laser
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.00f;
@@ -795,7 +832,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->CreationType = eParticleCreationType::Tube;
 		ParticleSystem->CreationSize = sVECTOR3D{0.2f, 0.2f, 0.1f};
 		break;
-	case 21:	// Antimatter
+
+	case 21: // Antimatter
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 0.00f;
@@ -817,9 +855,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->MagnetFactor = -40.0f;
 		break;
 
-
-
-	case 22: // Оружие пришельцев 1
+	case 22: // alien weapon 1
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -838,7 +874,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 300;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 		break;
-	case 23:	// Оружие пришельцев 2
+
+	case 23: // alien weapon 2
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -857,7 +894,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
 		break;
-	case 24:	// Оружие пришельцев 2
+
+	case 24: // alien weapon 2
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -877,7 +915,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.1f);
 		break;
 
-	case 25:	// фларес
+	case 25: // flares
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 0.10f;
@@ -899,7 +937,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
 		break;
-	case 26:	// стрельба 1-го пирата Kinetic
+
+	case 26: // pirate 1, like Kinetic
 		ParticleSystem->ColorStart.r = 0.60f;
 		ParticleSystem->ColorStart.g = 0.60f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -918,7 +957,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 300;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
 		break;
-	case 27:	// стрельба 2-го пирата Missile
+
+	case 27: // pirate 2, like Kinetic
 		ParticleSystem->ColorStart.r = 0.60f;
 		ParticleSystem->ColorStart.g = 0.60f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -938,8 +978,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		break;
 
-
-	case 28:	// 2-я мина
+	case 28: // mine 2
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -961,7 +1000,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		break;
-	case 29:	// 3-я мина
+
+	case 29: // mine 3
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -983,7 +1023,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.15f);
 		break;
-	case 30:	// 4-я мина
+
+	case 30: // mine 4
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -1007,7 +1048,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.1f);
 		break;
-	case 31:	// Swarm для пиратов
+
+	case 31: // pirate missile swarm
 		ParticleSystem->ColorStart.r = 0.60f;
 		ParticleSystem->ColorStart.g = 0.60f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -1026,7 +1068,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 250;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.2f);
 		break;
-	case 32:	// Torpedo пиратов
+
+	case 32: // pirate torpedo
 		ParticleSystem->ColorStart.r = 0.70f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -1045,7 +1088,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 250;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 1.0f, 0.15f, 0.0f, 0.075f);
 		break;
-	case 33:	// Nuke пиратов
+
+	case 33: // pirate bomb
 		ParticleSystem->ColorStart.r = 0.30f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -1064,7 +1108,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 250;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.15f, 0.35f, 1.0f, 0.0f, 0.05f);
 		break;
-	case 34:	// Kinetic2 пиратов
+
+	case 34: // pirate, like Kinetic2
 		ParticleSystem->ColorStart.r = 0.60f;
 		ParticleSystem->ColorStart.g = 0.60f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -1083,7 +1128,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.15f);
 		break;
-	case 35:	// Kinetic3 пиратов
+
+	case 35: // pirate, like Kinetic3
 		ParticleSystem->ColorStart.r = 0.60f;
 		ParticleSystem->ColorStart.g = 0.60f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -1103,7 +1149,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		break;
 
-	case 36:	// Оружие пришельцев, мина 1 тип
+	case 36: // alien, energy mine 1
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -1128,7 +1174,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.1f);
 		break;
 
-	case 37:	// Оружие пришельцев, мина 2 тип
+	case 37: // alien, energy mine 2
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.20f;
 		ParticleSystem->ColorStart.b = 0.20f;
@@ -1152,7 +1198,8 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->MagnetFactor = 2.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.2f, 0.2f, 0.0f, 0.1f);
 		break;
-	case 38:	// Оружие пришельцев, Laser
+
+	case 38: // alien mothership, Laser
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -1173,7 +1220,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->AlphaShowHide = true;
 		break;
 
-	case 101:	// шлейф ракеты землян и пиратов
+	case 101: // earth/pirate missile trail
 		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
@@ -1195,7 +1242,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		ParticleSystem->TextureBlend = true;
 		break;
 
-	case 102:	// шлейф ракет пришельцев
+	case 102: // alien missile trail
 		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
@@ -1223,87 +1270,85 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 	}
 }
 
-
-
-
-
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cProjectile::cProjectile(const int ProjectileNum)
 {
 	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::Projectile;
 
-	// проверяем на столкновения только по радиусу
 	Radius = 0.0f;
 
 	Ambient[0] = Ambient[1] = Ambient[2] = Ambient[3] = 0.35f;
 
 	if (ProjectileNum <= 0) {
-		std::cerr << __func__ << "(): " << "Could not init cProjectile object with Number " << ProjectileNum << "\n";
+		std::cerr << __func__ << "(): " << "Could not init cProjectile object with Number "
+			  << ProjectileNum << "\n";
 		return;
-	} else if ((ProjectileNum >= 1 && ProjectileNum <= 99) && ((unsigned int)ProjectileNum > PresetEarthProjectileData.size())) {
-		std::cerr << __func__ << "(): " << "Could not init cProjectile(1) object with Number " << ProjectileNum << "\n";
+	} else if ((ProjectileNum >= 1) &&
+		   (ProjectileNum <= 99) &&
+		   ((unsigned int)ProjectileNum > PresetEarthProjectileData.size())) {
+		std::cerr << __func__ << "(): " << "Could not init cProjectile(1) object with Number "
+			  << ProjectileNum << "\n";
 		return;
-	} else if ((ProjectileNum >= 101 && ProjectileNum <= 199) && ((unsigned int)ProjectileNum-100 > PresetAlienProjectileData.size())) {
-		std::cerr << __func__ << "(): " << "Could not init cProjectile(2) object with Number " << ProjectileNum << "\n";
+	} else if ((ProjectileNum >= 101) &&
+		   (ProjectileNum <= 199) &&
+		   ((unsigned int)ProjectileNum - 100 > PresetAlienProjectileData.size())) {
+		std::cerr << __func__ << "(): " << "Could not init cProjectile(2) object with Number "
+			  << ProjectileNum << "\n";
 		return;
-	} else if ((ProjectileNum >= 201 && ProjectileNum <= 299) && ((unsigned int)ProjectileNum-200 > PresetPirateProjectileData.size())) {
-		std::cerr << __func__ << "(): " << "Could not init cProjectile(3) object with Number " << ProjectileNum << "\n";
+	} else if ((ProjectileNum >= 201) &&
+		   (ProjectileNum <= 299) &&
+		   ((unsigned int)ProjectileNum-200 > PresetPirateProjectileData.size())) {
+		std::cerr << __func__ << "(): " << "Could not init cProjectile(3) object with Number "
+			  << ProjectileNum << "\n";
 		return;
 	}
 
 	Num = ProjectileNum;
 
-	// внутренний номер, номер в таблицах
 	int IntNum = ProjectileNum;
 	int GraphicFXQuantity{0};
 
-
-	if (Num >= 1 && Num <= 99) {
-		Radius = PresetEarthProjectileData[IntNum-1].Radius;
-		DamageHull = PresetEarthProjectileData[IntNum-1].DamageHull;
-		DamageSystems = PresetEarthProjectileData[IntNum-1].DamageSystems;
-		ProjectileType = PresetEarthProjectileData[IntNum-1].ProjectileType;
-		SpeedStart = SpeedEnd = Speed = PresetEarthProjectileData[IntNum-1].Speed;
-		Age = Lifetime = PresetEarthProjectileData[IntNum-1].Age;
-		GraphicFXQuantity = PresetEarthProjectileData[IntNum-1].GraphicFXQuantity;
-	} else if (Num >= 101 && Num <= 199) {
+	if ((Num >= 1) &&
+	    (Num <= 99)) {
+		Radius = PresetEarthProjectileData[IntNum - 1].Radius;
+		DamageHull = PresetEarthProjectileData[IntNum - 1].DamageHull;
+		DamageSystems = PresetEarthProjectileData[IntNum - 1].DamageSystems;
+		ProjectileType = PresetEarthProjectileData[IntNum - 1].ProjectileType;
+		SpeedStart = SpeedEnd = Speed = PresetEarthProjectileData[IntNum - 1].Speed;
+		Age = Lifetime = PresetEarthProjectileData[IntNum - 1].Age;
+		GraphicFXQuantity = PresetEarthProjectileData[IntNum - 1].GraphicFXQuantity;
+	} else if ((Num >= 101) &&
+		   (Num <= 199)) {
 		IntNum = ProjectileNum - 100;
-		Radius = PresetAlienProjectileData[IntNum-1].Radius;
-		DamageHull = PresetAlienProjectileData[IntNum-1].DamageHull;
-		DamageSystems = PresetAlienProjectileData[IntNum-1].DamageSystems;
-		ProjectileType = PresetAlienProjectileData[IntNum-1].ProjectileType;
-		SpeedStart = SpeedEnd = Speed = PresetAlienProjectileData[IntNum-1].Speed;
-		Age = Lifetime = PresetAlienProjectileData[IntNum-1].Age;
-		GraphicFXQuantity = PresetAlienProjectileData[IntNum-1].GraphicFXQuantity;
-	} else if (Num >= 201 && Num <= 299) {
+		Radius = PresetAlienProjectileData[IntNum - 1].Radius;
+		DamageHull = PresetAlienProjectileData[IntNum - 1].DamageHull;
+		DamageSystems = PresetAlienProjectileData[IntNum - 1].DamageSystems;
+		ProjectileType = PresetAlienProjectileData[IntNum - 1].ProjectileType;
+		SpeedStart = SpeedEnd = Speed = PresetAlienProjectileData[IntNum - 1].Speed;
+		Age = Lifetime = PresetAlienProjectileData[IntNum - 1].Age;
+		GraphicFXQuantity = PresetAlienProjectileData[IntNum - 1].GraphicFXQuantity;
+	} else if ((Num >= 201) &&
+		   (Num <= 299)) {
 		IntNum = ProjectileNum - 200;
-		// радиус для мин потом изменим при инициализации геометрии
-		Radius = PresetPirateProjectileData[IntNum-1].Radius;
-		DamageHull = PresetPirateProjectileData[IntNum-1].DamageHull;
-		DamageSystems = PresetPirateProjectileData[IntNum-1].DamageSystems;
-		ProjectileType = PresetPirateProjectileData[IntNum-1].ProjectileType;
-		SpeedStart = SpeedEnd = Speed = PresetPirateProjectileData[IntNum-1].Speed;
-		Age = Lifetime = PresetPirateProjectileData[IntNum-1].Age;
-		GraphicFXQuantity = PresetPirateProjectileData[IntNum-1].GraphicFXQuantity;
+		Radius = PresetPirateProjectileData[IntNum - 1].Radius;
+		DamageHull = PresetPirateProjectileData[IntNum - 1].DamageHull;
+		DamageSystems = PresetPirateProjectileData[IntNum - 1].DamageSystems;
+		ProjectileType = PresetPirateProjectileData[IntNum - 1].ProjectileType;
+		SpeedStart = SpeedEnd = Speed = PresetPirateProjectileData[IntNum - 1].Speed;
+		Age = Lifetime = PresetPirateProjectileData[IntNum - 1].Age;
+		GraphicFXQuantity = PresetPirateProjectileData[IntNum - 1].GraphicFXQuantity;
 	}
 
-
-
-	// начальные установки
 	GraphicFXLocation.resize(GraphicFXQuantity, sVECTOR3D{0.0f, 0.0f, 0.0f});
 	GraphicFX.resize(GraphicFXQuantity);
 
-	if (ProjectileType == 1) {
+	if (ProjectileType == 1)
 		Strength = StrengthStart = 1.0f;
-	}
-
 
 	switch (ProjectileNum) {
-	// снаряды землян
-
 	// Kinetic
 	case 1:
 		GraphicFX[0] = vw_CreateParticleSystem();
@@ -1387,13 +1432,12 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 17);
 			sharedGFX->CreationSize = sVECTOR3D{0.8f, 0.8f, 100.0f};
 
-			float MinX = -sharedGFX->CreationSize.x/2;
-			float MaxX = sharedGFX->CreationSize.x/2;
-			float MinY = -sharedGFX->CreationSize.y/2;
-			float MaxY = sharedGFX->CreationSize.y/2;
-			float MinZ = -sharedGFX->CreationSize.z/2;
-			float MaxZ = sharedGFX->CreationSize.z/2;
-			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
+			float MinX = -sharedGFX->CreationSize.x / 2;
+			float MaxX = sharedGFX->CreationSize.x / 2;
+			float MinY = -sharedGFX->CreationSize.y / 2;
+			float MaxY = sharedGFX->CreationSize.y / 2;
+			float MinZ = -sharedGFX->CreationSize.z / 2;
+			float MaxZ = sharedGFX->CreationSize.z / 2;
 			OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
 			OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
 			OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
@@ -1421,13 +1465,12 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 17);
 			sharedGFX->CreationSize = sVECTOR3D{0.8f, 0.8f, 110.0f};
 
-			float MinX = -sharedGFX->CreationSize.x/2;
-			float MaxX = sharedGFX->CreationSize.x/2;
-			float MinY = -sharedGFX->CreationSize.y/2;
-			float MaxY = sharedGFX->CreationSize.y/2;
-			float MinZ = -sharedGFX->CreationSize.z/2;
-			float MaxZ = sharedGFX->CreationSize.z/2;
-			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
+			float MinX = -sharedGFX->CreationSize.x / 2;
+			float MaxX = sharedGFX->CreationSize.x / 2;
+			float MinY = -sharedGFX->CreationSize.y / 2;
+			float MaxY = sharedGFX->CreationSize.y / 2;
+			float MinZ = -sharedGFX->CreationSize.z / 2;
+			float MaxZ = sharedGFX->CreationSize.z / 2;
 			OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
 			OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
 			OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
@@ -1437,9 +1480,9 @@ cProjectile::cProjectile(const int ProjectileNum)
 			OBB.Box[6] = AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
 			OBB.Box[7] = AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 			OBB.Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
-			Width = fabsf(MaxX-MinX);
-			Height = fabsf(MaxY-MinY);
-			Length = fabsf(MaxZ-MinZ);
+			Width = fabsf(MaxX - MinX);
+			Height = fabsf(MaxY - MinY);
+			Length = fabsf(MaxZ - MinZ);
 		}
 		break;
 	// Antimatter
@@ -1457,13 +1500,12 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 20);
 			sharedGFX->CreationSize = sVECTOR3D{0.4f, 0.4f, 120.0f};
 
-			float MinX = -sharedGFX->CreationSize.x/2;
-			float MaxX = sharedGFX->CreationSize.x/2;
-			float MinY = -sharedGFX->CreationSize.y/2;
-			float MaxY = sharedGFX->CreationSize.y/2;
-			float MinZ = -sharedGFX->CreationSize.z/2;
-			float MaxZ = sharedGFX->CreationSize.z/2;
-			// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
+			float MinX = -sharedGFX->CreationSize.x / 2;
+			float MaxX = sharedGFX->CreationSize.x / 2;
+			float MinY = -sharedGFX->CreationSize.y / 2;
+			float MaxY = sharedGFX->CreationSize.y / 2;
+			float MinZ = -sharedGFX->CreationSize.z / 2;
+			float MaxZ = sharedGFX->CreationSize.z / 2;
 			OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
 			OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
 			OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
@@ -1473,9 +1515,9 @@ cProjectile::cProjectile(const int ProjectileNum)
 			OBB.Box[6] = AABB[6] = sVECTOR3D{MinX, MinY, MinZ};
 			OBB.Box[7] = AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 			OBB.Location = sVECTOR3D{0.0f, 0.0f, 0.0f};
-			Width = fabsf(MaxX-MinX);
-			Height = fabsf(MaxY-MinY);
-			Length = fabsf(MaxZ-MinZ);
+			Width = fabsf(MaxX - MinX);
+			Height = fabsf(MaxY - MinY);
+			Length = fabsf(MaxZ - MinZ);
 		}
 		break;
 	// Gauss
@@ -1484,7 +1526,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 21);
 		break;
-	// ракета
+	// missile
 	case 16:
 		LoadObjectData("models/earthfighter/missile.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1493,13 +1535,13 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 13);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
-	// рой
+	// swarm
 	case 17:
 		LoadObjectData("models/earthfighter/swarm.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1508,15 +1550,15 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 16);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock()) {
 			SetProjectileGFX(sharedGFX, 101);
-			sharedGFX->Life = 1.00f; // у роя слишком много ракет, если делать долгий шлейф - может просесть фпс
+			sharedGFX->Life = 1.00f;
 		}
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
-	// торпеда
+	// torpedo
 	case 18:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1525,13 +1567,13 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 14);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
-	// бомба
+	// bomb
 	case 19:
 		LoadObjectData("models/earthfighter/nuke.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1540,75 +1582,66 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 15);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
 
-
-
-
-
-
-	// снаряды пришельцев
-
-
-
-	// как Kinetic1
+	// alien, like Kinetic1
 	case 101:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 22);
 		break;
-	// с наведением, как Kinetic2
+	// alien, homing, like Kinetic2
 	case 102:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 23);
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 102);
 		break;
-	// как Kinetic3
+	// alien, like Kinetic3
 	case 103:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 24);
 		break;
-	// с наведением, как Kinetic3
+	// alien, homing, like Kinetic3
 	case 104:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 24);
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 102);
 		break;
-	// как Kinetic2
+	// alien, like Kinetic2
 	case 105:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 23);
 		break;
-	// энергетическая мина (1-й тип)
+	// alien, energy mine 1
 	case 106:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 36);
 		break;
-	// энергетическая мина (2-й тип)
+	// alien, energy mine 2
 	case 107:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 37);
 		break;
-	// как Plasma3
+	// alien, like Plasma3
 	case 108:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -1620,7 +1653,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 		if (auto sharedGFX = GraphicFX[2].lock())
 			SetProjectileGFX(sharedGFX, 11);
 		break;
-	// как Plasma2
+	// alien, like Plasma2
 	case 109:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -1632,7 +1665,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 		if (auto sharedGFX = GraphicFX[2].lock())
 			SetProjectileGFX(sharedGFX, 9);
 		break;
-	// как Laser
+	// alien, like Laser
 	case 110:
 		ProjectileCenter = sVECTOR3D{0.0f, 0.0f, 55.0f};
 		NeedStopPartic = true;
@@ -1662,26 +1695,19 @@ cProjectile::cProjectile(const int ProjectileNum)
 			Length = fabsf(MaxZ-MinZ);
 		}
 		break;
-
-
-
-
-	// снаряды пиратов
-
-
-	// стрельба турели 1
+	// pirate, turret 1
 	case 201:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 26);
 		break;
-	// стрельба турели 2
+	// pirate, turret 2
 	case 202:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 34);
 		break;
-	// фларес
+	// flares
 	case 203:
 		// смотрит вверх
 		Orientation = sVECTOR3D{0.0f, 0.5f, 0.5f};
@@ -1689,13 +1715,13 @@ cProjectile::cProjectile(const int ProjectileNum)
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 25);
 		break;
-	// как Kinetic1
+	// pirate, like Kinetic1
 	case 204:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 26);
 		break;
-	// как Missile1
+	// pirate, like Missile1
 	case 205:
 		LoadObjectData("models/earthfighter/missile.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1704,13 +1730,13 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 27);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
-	// как Missile2
+	// pirate, like Missile2
 	case 206:
 		LoadObjectData("models/earthfighter/swarm.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1719,13 +1745,13 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 31);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
-	// как Ion2
+	// pirate, like Ion2
 	case 207:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -1737,13 +1763,13 @@ cProjectile::cProjectile(const int ProjectileNum)
 			sharedGFX->DeadZone = 1.9f;
 		}
 		break;
-	// как Antimatter
+	// pirate, like Antimatter
 	case 208:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 19);
 		break;
-	// как торпеда
+	// pirate, like torpedo
 	case 209:
 		LoadObjectData("models/earthfighter/torpedo.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1752,13 +1778,13 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 32);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
-	// как бомба
+	// pirate, like bomb
 	case 210:
 		LoadObjectData("models/earthfighter/nuke.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
@@ -1767,25 +1793,25 @@ cProjectile::cProjectile(const int ProjectileNum)
 			SetProjectileGFX(sharedGFX, 33);
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, 0.0f, -Length / 2.0f};
 		NeedStopPartic = true;
-		// шлейф
+		// missile trail
 		GraphicFX[1] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[1].lock())
 			SetProjectileGFX(sharedGFX, 101);
 		GraphicFXLocation[1] = GraphicFXLocation[0];
 		break;
-	// как Kinetic2
+	// pirate, like Kinetic2
 	case 211:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 34);
 		break;
-	// как Kinetic3
+	// pirate, like Kinetic3
 	case 212:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
 			SetProjectileGFX(sharedGFX, 35);
 		break;
-	// как Plasma2
+	// pirate, like Plasma2
 	case 213:
 		GraphicFX[0] = vw_CreateParticleSystem();
 		if (auto sharedGFX = GraphicFX[0].lock())
@@ -1797,10 +1823,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 		if (auto sharedGFX = GraphicFX[2].lock())
 			SetProjectileGFX(sharedGFX, 9);
 		break;
-
-
-
-	// мина1 (простое наведение по высоте)
+	// mine 1
 	case 214:
 		MineIData = 0.0f;
 		Strength = StrengthStart = 10.0f;
@@ -1808,7 +1831,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 		Texture[0] = GetPreloadedTextureAsset("models/mine/mine1.tga");
 		TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine1i.tga");
 		break;
-	// мина2 (наведение по высоте + приближение)
+	// mine 2
 	case 215:
 		MineIData = 0.0f;
 		Strength = StrengthStart = 15.0f;
@@ -1822,7 +1845,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, -0.8f, 0.0f};
 		NeedStopPartic = true;
 		break;
-	// мина3 (наведение по высоте + стрельба снарядами)
+	// mine 3
 	case 216:
 		MineIData = 0.0f;
 		Strength = StrengthStart = 20.0f;
@@ -1837,7 +1860,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 		GraphicFXLocation[0] = sVECTOR3D{0.0f, -2.5f, 0.0f};
 		NeedStopPartic = true;
 		break;
-	// мина4 (наведение по высоте + стрельба ракетами)
+	// mine 4
 	case 217:
 		MineIData = 0.0f;
 		Strength = StrengthStart = 40.0f;
@@ -1853,41 +1876,28 @@ cProjectile::cProjectile(const int ProjectileNum)
 		NeedStopPartic = true;
 		break;
 
-
-
-
-
 	default:
 		std::cerr << __func__ << "(): " << "wrong ProjectileNum.\n";
 	}
-
-
-
-
 }
 
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
+/*
+ * Destructor.
+ */
 cProjectile::~cProjectile()
 {
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
-		/* this GFX is not in use */
 		auto sharedGFX = GraphicFX[i].lock();
 		if (!sharedGFX)
 			continue;
-
-		/* should destroy GFX right now */
 		if (GraphicFXDestroyType) {
 			vw_ReleaseParticleSystem(GraphicFX[i]);
 			continue;
 		}
 
-		/* time to suppress GFX and destroy it at the end */
 		sharedGFX->IsSuppressed = true;
 		sharedGFX->DestroyIfNoParticles = true;
 
-		/* change speed only */
 		if (!NeedStopPartic) {
 			sharedGFX->ChangeSpeed(Orientation ^ Speed);
 			continue;
@@ -1895,11 +1905,11 @@ cProjectile::~cProjectile()
 
 		sharedGFX->StopAllParticles();
 
-		// только для ракет землян и пиратов делаем изменение шлейфа при взрыве (только шлейф!, он всегда 2-й эффект)
+		// small trail dispersion on explosion
 		if (i != 1)
 			continue;
 
-		// для разных типов ракет делаем разную "ударную волну"
+		// shock wave setup
 		float effective_dist2 = 300;
 		switch(Num) {
 		case 16:
@@ -1950,61 +1960,36 @@ cProjectile::~cProjectile()
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Установка положения
-//-----------------------------------------------------------------------------
+/*
+ * Set rotation.
+ */
 void cProjectile::SetRotation(const sVECTOR3D &NewRotation)
 {
-
-	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);
-
 
 	for (unsigned int i = 0; i < GraphicFX.size(); i++) {
 		if (auto sharedGFX = GraphicFX[i].lock()) {
 			vw_Matrix33CalcPoint(GraphicFXLocation[i], OldInvRotationMat);
 			vw_Matrix33CalcPoint(GraphicFXLocation[i], CurrentRotationMat);
-			// если лучевое оружие, нужно вращать все, и частицы тоже
 			if (ProjectileType == 2)
 				sharedGFX->RotateSystemAndParticlesByAngle(Rotation);
 			else
 				sharedGFX->RotateSystemByAngle(Rotation);
 		}
 	}
-
 }
 
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Установка положения
-//-----------------------------------------------------------------------------
+/*
+ * Set location.
+ */
 void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
 
 	if (GraphicFX.empty())
 		return;
 
 	switch (Num) {
-
-	// снаряды землян
-
 	// Kinetic
 	case 1:
 	case 2:
@@ -2095,49 +2080,46 @@ void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
 		if (auto sharedGFX = GraphicFX[1].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
-
-	// снаряды пришельцев
-
-	// как Kinetic1
+	// alien, like Kinetic1
 	case 101:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// с наведением, как Kinetic2
+	// alien, homing, like Kinetic2
 	case 102:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		if (auto sharedGFX = GraphicFX[1].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
+	// alien, like Kinetic3
 	case 103:
-		// как Kinetic3
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// с наведением, как Kinetic3
+	// alien, homing, like Kinetic3
 	case 104:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		if (auto sharedGFX = GraphicFX[1].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
-	// как Kinetic2
+	// alien, like Kinetic2
 	case 105:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// энергетическая мина (1-й тип)
+	// alien, energy mine 1
 	case 106:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// энергетическая мина (2-й тип)
+	// alien, energy mine 2
 	case 107:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// как Plasma3
+	// alien, like Plasma3
 	case 108:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
@@ -2146,7 +2128,7 @@ void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
 		if (auto sharedGFX = GraphicFX[2].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[2] + Location);
 		break;
-	// как Plasma2
+	// alien, like Plasma2
 	case 109:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
@@ -2155,60 +2137,57 @@ void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
 		if (auto sharedGFX = GraphicFX[2].lock())
 			sharedGFX->MoveSystem(GraphicFXLocation[2] + Location);
 		break;
-	// как Laser
+	// alien, like Laser
 	case 110:
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
-
-	// снаряды пиратов
-
-	// стрельба турели 1
+	// pirate, turret 1
 	case 201:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// стрельба турели 2
+	// pirate, turret 2
 	case 202:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// фларес
+	// flares
 	case 203:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	// как Kinetic1
+	// pirate, like Kinetic1
 	case 204:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		break;
-	case 205: // как Missile1
-	case 206: // как Missile2
-	case 209: // как Missile3
-	case 210: // как Missile4
+	case 205: // pirate, like missile
+	case 206: // pirate, like swarm
+	case 209: // pirate, like torpedo
+	case 210: // pirate, like bomb
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
 		if (auto sharedGFX = GraphicFX[1].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[1] + Location);
 		break;
-	// как Ion2
+	// pirate, like Ion2
 	case 207:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 		if (auto sharedGFX = GraphicFX[1].lock())
 			sharedGFX->MoveSystem(GraphicFXLocation[1] + Location);
 		break;
-	// Antimatter
+	// pirate, like Antimatter
 	case 208:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 		break;
-	// как Kinetic2
+	// pirate, like Kinetic2
 	case 211:
-	// как Kinetic3
+	// pirate, like Kinetic3
 	case 212:
 		if (auto sharedGFX = GraphicFX[0].lock())
 			sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
@@ -2222,24 +2201,24 @@ void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
 		if (auto sharedGFX = GraphicFX[2].lock())
 			sharedGFX->MoveSystem(GraphicFXLocation[2] + Location);
 		break;
-
-	// снаряды без оружия
-
-	// мины
+	// mine 1
 	case 214:
 		break;
+	// mine 2
 	case 215:
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
+	// mine 3
 	case 216:
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
 			sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
 		}
 		break;
+	// mine 4
 	case 217:
 		if (auto sharedGFX = GraphicFX[0].lock()) {
 			sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
@@ -2249,53 +2228,29 @@ void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
 	}
 }
 
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// выполнение действий
-//-----------------------------------------------------------------------------
+/*
+ * Update.
+ */
 bool cProjectile::Update(float Time)
 {
-	// вызываем родительскую функцию
-	// если там передали удалить - выходим
 	if (!cObject3D::Update(Time)) {
-		// если лучевое оружие, никогда не уничтожаем его!!!
-		// это сделаем в пушке...
 		if (ProjectileType == 2)
 			return true;
-		// передаем на самоуничтожение... там все сделаем правильно
 		CreateBulletExplosion(nullptr, *this, -Num, Location, Speed);
 		return false;
 	}
 
-	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
 	if (TimeDelta == 0.0f)
 		return true;
 
+	Speed = SpeedStart * (Lifetime / Age) + SpeedEnd * ((Age - Lifetime) / Age);
 
-
-	Speed = SpeedStart*(Lifetime/Age) + SpeedEnd*((Age-Lifetime)/Age);
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Общее перемещение снаряда...
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	sVECTOR3D Velocity = Orientation^(Speed*TimeDelta);
-	SetLocation(Location+Velocity);
-
-
-
+	sVECTOR3D Velocity = Orientation ^ (Speed * TimeDelta);
+	SetLocation(Location + Velocity);
 
 	float CurrentPenalty{1.0f};
 	if (ObjectStatus == eObjectStatus::Enemy)
 		CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty);
-
-
 
 	float RotationSpeed;
 
@@ -2372,14 +2327,7 @@ bool cProjectile::Update(float Time)
 			sharedGFX->RotateParticlesByAngle(sVECTOR3D{0.0f, 0.0f, 360.0f * TimeDelta * 6.0f});
 		break;
 
-
-
-
-	// ракеты
-
-
-
-	// ракеты землян
+	// missile
 	case 16:
 		RotationSpeed = 50.0f;
 		goto missile;
@@ -2418,67 +2366,57 @@ missile:
 			sVECTOR3D NeedAngle = Rotation;
 
 			float EffectiveRange = 1000000.0f;
-			// только для ракет игрока учитываем максимальную дальность полета
 			if (ObjectStatus == eObjectStatus::Player)
 				EffectiveRange = Lifetime * Speed;
 
-			// устанавливаем в Target на что наведен этот снаряд, если еще ничего не выбрано
 			if (Target.expired()) {
-				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, EffectiveRange);
-			} else { // если уже что-то выбрали
-				// 1. надо проверить, есть ли еще вообще этот объект и где по отношению ракеты он находится, если он есть и впереди - летим к нему
+				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
+									CurrentRotationMat, NeedAngle, EffectiveRange);
+			} else {
 				if (GetMissileTargetStatus(Target, Location, CurrentRotationMat)) {
-					// получаем углы, возвращает false - значит цель уже проскочили, и надо навестись на новую
-					if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat, Target, NeedAngle))
-						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, EffectiveRange);
-				}
-				// 2. если объекта нет (уже взорвали) или мы его уже проскочили, надо наводить на другой
-				else {
-					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, EffectiveRange);
-				}
+					if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat,
+									    Target, NeedAngle))
+						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
+											CurrentRotationMat, NeedAngle,
+											EffectiveRange);
+				} else
+					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
+										CurrentRotationMat, NeedAngle, EffectiveRange);
 			}
 
-
-
-			// учитываем скорость поворота по вертикали
 			if (Rotation.y < NeedAngle.y) {
-				float NeedAngle_y = Rotation.y+RotationSpeed*TimeDelta;
-				if (NeedAngle_y > NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y + RotationSpeed * TimeDelta;
+				if (NeedAngle_y > NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
 
 			}
 			if (Rotation.y > NeedAngle.y) {
-				float NeedAngle_y = Rotation.y-RotationSpeed*TimeDelta;
-				if (NeedAngle_y < NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y - RotationSpeed * TimeDelta;
+				if (NeedAngle_y < NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
 			}
 
 			if (Rotation.x < NeedAngle.x) {
-				float NeedAngle_x = Rotation.x+RotationSpeed*TimeDelta;
-				if (NeedAngle_x > NeedAngle.x) NeedAngle_x = NeedAngle.x;
+				float NeedAngle_x = Rotation.x + RotationSpeed * TimeDelta;
+				if (NeedAngle_x > NeedAngle.x)
+					NeedAngle_x = NeedAngle.x;
 				NeedAngle.x = NeedAngle_x;
 
 			}
 			if (Rotation.x > NeedAngle.x) {
-				float NeedAngle_x = Rotation.x-RotationSpeed*TimeDelta;
-				if (NeedAngle_x < NeedAngle.x) NeedAngle_x = NeedAngle.x;
+				float NeedAngle_x = Rotation.x - RotationSpeed * TimeDelta;
+				if (NeedAngle_x < NeedAngle.x)
+					NeedAngle_x = NeedAngle.x;
 				NeedAngle.x = NeedAngle_x;
 			}
 
-
-			sVECTOR3D TTT = NeedAngle-Rotation;
-			SetRotation(TTT);
-
+			SetRotation(NeedAngle - Rotation);
 		}
 		break;
 
-
-
-	// мины
-
-
-
-	// мина пиратов (1-й тип)
+	// pirate, mine 1
 	case 214:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
@@ -2494,38 +2432,32 @@ missile:
 		}
 		// wip, disabled for now
 	break;
-	// мина пришельцев, энергетическая (1-й тип)
+	// alien, energy mine 1
 	case 106: {
-		// получаем положение ближайшего врага
 		std::weak_ptr<cObject3D> tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
 
-		// !!! не учитываем положение плоскости
 		auto sharedTarget = tmpTarget.lock();
 		if (sharedTarget) {
 			float MineSpeed = 5.0f;
-			float SpeedTmp = MineSpeed*TimeDelta;
+			float SpeedTmp = MineSpeed * TimeDelta;
 			if (SpeedTmp > fabs(Location.y - sharedTarget->Location.y))
 				SpeedTmp = fabs(Location.y - sharedTarget->Location.y);
 
 			if (SpeedTmp != 0.0f) {
-				// находим направление (если нужно вниз, меняем знак)
-				if (Location.y > sharedTarget->Location.y) SpeedTmp *= -1.0f;
+				if (Location.y > sharedTarget->Location.y)
+					SpeedTmp *= -1.0f;
 
 				sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
 				SetLocation(Location+VelocityUp);
 			}
 		}
-
-		if (!GraphicFX.empty())
+		if (!GraphicFX.empty()) {
 			if (auto sharedGFX = GraphicFX[0].lock())
 				sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
+		}
 	}
 	break;
-
-
-
-
-	// мина пиратов (2-й тип)
+	// pirate, mine 2
 	case 215:
 		MineIData += TimeDelta;
 		if (MineIData >= 0.1f) {
@@ -2541,32 +2473,35 @@ missile:
 		}
 		// wip, disabled for now
 	break;
-	// мина пришельцев, энергетическая (2-й тип)
+	// alien, energy mine 2
 	case 107:
 		RotationSpeed = 180.0f;
 		{
 			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
+								CurrentRotationMat, NeedAngle, 1000000);
 
 
 			// учитываем скорость поворота по вертикали
 			if (Rotation.y < NeedAngle.y) {
-				float NeedAngle_y = Rotation.y+RotationSpeed*TimeDelta;
-				if (NeedAngle_y > NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y + RotationSpeed * TimeDelta;
+				if (NeedAngle_y > NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
 
 			}
 			if (Rotation.y > NeedAngle.y) {
-				float NeedAngle_y = Rotation.y-RotationSpeed*TimeDelta;
-				if (NeedAngle_y < NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y - RotationSpeed * TimeDelta;
+				if (NeedAngle_y < NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
 			}
 
 			NeedAngle.z = Rotation.z;
 			NeedAngle.x = Rotation.x;
 
-			sVECTOR3D TTT = NeedAngle-Rotation;
+			sVECTOR3D TTT = NeedAngle - Rotation;
 			SetRotation(TTT);
 
 
@@ -2580,22 +2515,24 @@ missile:
 
 				// !!! не учитываем положение плоскости
 
-				float SpeedTmp = MineSpeed*TimeDelta;
-				if (SpeedTmp > fabs(Location.y-NeedPoint.y))
-					SpeedTmp = fabs(Location.y-NeedPoint.y);
+				float SpeedTmp = MineSpeed * TimeDelta;
+				if (SpeedTmp > fabs(Location.y - NeedPoint.y))
+					SpeedTmp = fabs(Location.y - NeedPoint.y);
 
 				if (SpeedTmp != 0.0f) {
 					// находим направление (если нужно вниз, меняем знак)
-					if (Location.y > NeedPoint.y) SpeedTmp *= -1.0f;
+					if (Location.y > NeedPoint.y)
+						SpeedTmp *= -1.0f;
 
 					sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
 					SetLocation(Location+VelocityUp);
 				}
 			}
 
-			if (!GraphicFX.empty())
+			if (!GraphicFX.empty()) {
 				if (auto sharedGFX = GraphicFX[0].lock())
 					sharedGFX->SetStartLocation(GraphicFXLocation[0] + Location);
+			}
 
 			// сбрасываем установку, чтобы не было голосового предупреждения
 			Target.reset();
@@ -2622,54 +2559,49 @@ missile:
 		{
 			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
+								CurrentRotationMat, NeedAngle, 1000000);
 
 
 			// учитываем скорость поворота по вертикали
 			if (Rotation.y < NeedAngle.y) {
-				float NeedAngle_y = Rotation.y+RotationSpeed*TimeDelta;
-				if (NeedAngle_y > NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y + RotationSpeed * TimeDelta;
+				if (NeedAngle_y > NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
 
 			}
 			if (Rotation.y > NeedAngle.y) {
-				float NeedAngle_y = Rotation.y-RotationSpeed*TimeDelta;
-				if (NeedAngle_y < NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y - RotationSpeed * TimeDelta;
+				if (NeedAngle_y < NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
 			}
 
 			NeedAngle.z = Rotation.z;
 			NeedAngle.x = Rotation.x;
 
-			sVECTOR3D TTT = NeedAngle-Rotation;
-			SetRotation(TTT);
+			SetRotation(NeedAngle - Rotation);
 
-
-			// если есть цель, поднимаемся на ее уровень
 			auto sharedTarget = Target.lock();
 			if (sharedTarget) {
 				float MineSpeed = 5.0f;
-
-				// получаем положение ближайшего врага
 				sVECTOR3D NeedPoint = sharedTarget->Location;
-
-				// !!! не учитываем положение плоскости
-
 				float SpeedTmp = MineSpeed*TimeDelta;
-				if (SpeedTmp > fabs(Location.y-2.0f-NeedPoint.y)) SpeedTmp = fabs(Location.y-2.0f-NeedPoint.y);
+
+				if (SpeedTmp > fabs(Location.y - 2.0f - NeedPoint.y))
+					SpeedTmp = fabs(Location.y - 2.0f - NeedPoint.y);
 
 				if (SpeedTmp != 0.0f) {
-					// находим направление (если нужно вниз, меняем знак)
-					if (Location.y-2.0f > NeedPoint.y) SpeedTmp *= -1.0f;
+					if (Location.y - 2.0f > NeedPoint.y)
+						SpeedTmp *= -1.0f;
 
 					sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
-					SetLocation(Location+VelocityUp);
+					SetLocation(Location + VelocityUp);
 				}
 
-				// стрельба
 				MineNextFireTime -= TimeDelta;
 				if (MineNextFireTime <= 0.0f) {
-					// создаем снаряд
 					cProjectile *Projectile = new cProjectile{204};
 					Projectile->SetLocation(Location + sVECTOR3D{0.0f, -2.0f, 0.0f});
 
@@ -2677,7 +2609,6 @@ missile:
 					for (auto &tmpGFX : Projectile->GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
 							sharedGFX->Direction = Orientation;
-							// учитываем пенальти для визуальных эффектов
 							sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
 
 							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
@@ -2686,24 +2617,17 @@ missile:
 						}
 					}
 					Projectile->ObjectStatus = ObjectStatus;
-					// учитываем пенальти для снаряда
-					Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-					Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
-					Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-					Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
-
+					Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart / CurrentPenalty;
+					Projectile->Age = Projectile->Lifetime = Projectile->Age * CurrentPenalty;
+					Projectile->DamageHull = Projectile->DamageHull / CurrentPenalty;
+					Projectile->DamageSystems = Projectile->DamageSystems / CurrentPenalty;
 
 					MineNextFireTime = MineReloadTime;
 				}
-
 			}
-
-
-			// сбрасываем установку, чтобы не было голосового предупреждения
 			Target.reset();
 		}
 		break;
-
 
 	case 217:
 		MineIData += TimeDelta;
@@ -2722,55 +2646,44 @@ missile:
 		RotationSpeed = 180.0f;
 		{
 			sVECTOR3D NeedAngle = Rotation;
-			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation, CurrentRotationMat, NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
+								CurrentRotationMat, NeedAngle, 1000000);
 
-
-			// учитываем скорость поворота по вертикали
 			if (Rotation.y < NeedAngle.y) {
-				float NeedAngle_y = Rotation.y+RotationSpeed*TimeDelta;
-				if (NeedAngle_y > NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y + RotationSpeed * TimeDelta;
+				if (NeedAngle_y > NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
-
 			}
 			if (Rotation.y > NeedAngle.y) {
-				float NeedAngle_y = Rotation.y-RotationSpeed*TimeDelta;
-				if (NeedAngle_y < NeedAngle.y) NeedAngle_y = NeedAngle.y;
+				float NeedAngle_y = Rotation.y - RotationSpeed * TimeDelta;
+				if (NeedAngle_y < NeedAngle.y)
+					NeedAngle_y = NeedAngle.y;
 				NeedAngle.y = NeedAngle_y;
 			}
 
 			NeedAngle.z = Rotation.z;
 			NeedAngle.x = Rotation.x;
+			SetRotation(NeedAngle - Rotation);
 
-			sVECTOR3D TTT = NeedAngle-Rotation;
-			SetRotation(TTT);
-
-
-			// если есть цель, поднимаемся на ее уровень
 			auto sharedTarget = Target.lock();
 			if (sharedTarget) {
 				float MineSpeed = 5.0f;
-
-				// получаем положение ближайшего врага
 				sVECTOR3D NeedPoint = sharedTarget->Location;
-
-				// !!! не учитываем положение плоскости
-
-				float SpeedTmp = MineSpeed*TimeDelta;
-				if (SpeedTmp > fabs(Location.y+2.0f-NeedPoint.y)) SpeedTmp = fabs(Location.y+2.0f-NeedPoint.y);
+				float SpeedTmp = MineSpeed * TimeDelta;
+				if (SpeedTmp > fabs(Location.y + 2.0f - NeedPoint.y))
+					SpeedTmp = fabs(Location.y + 2.0f - NeedPoint.y);
 
 				if (SpeedTmp != 0.0f) {
-					// находим направление (если нужно вниз, меняем знак)
-					if (Location.y+2.0f > NeedPoint.y) SpeedTmp *= -1.0f;
+					if (Location.y + 2.0f > NeedPoint.y)
+						SpeedTmp *= -1.0f;
 
 					sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
-					SetLocation(Location+VelocityUp);
+					SetLocation(Location + VelocityUp);
 				}
 
-				// стрельба
 				MineNextFireTime -= TimeDelta;
 				if (MineNextFireTime <= 0.0f) {
-					// создаем снаряд
 					cProjectile *Projectile = new cProjectile{206};
 					Projectile->SetLocation(Location + sVECTOR3D{0.0f, 0.0f, 0.0f});
 
@@ -2778,7 +2691,6 @@ missile:
 					for (auto &tmpGFX : Projectile->GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
 							sharedGFX->Direction = Orientation;
-							// учитываем пенальти для визуальных эффектов
 							sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
 
 							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
@@ -2787,29 +2699,18 @@ missile:
 						}
 					}
 					Projectile->ObjectStatus = ObjectStatus;
-					// учитываем пенальти для снаряда
-					Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart/CurrentPenalty;
-					Projectile->Age = Projectile->Lifetime = Projectile->Age*CurrentPenalty;
-					Projectile->DamageHull = Projectile->DamageHull/CurrentPenalty;
-					Projectile->DamageSystems = Projectile->DamageSystems/CurrentPenalty;
-
-
+					Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart / CurrentPenalty;
+					Projectile->Age = Projectile->Lifetime = Projectile->Age * CurrentPenalty;
+					Projectile->DamageHull = Projectile->DamageHull / CurrentPenalty;
+					Projectile->DamageSystems = Projectile->DamageSystems / CurrentPenalty;
 					MineNextFireTime = MineReloadTime;
 				}
-
 			}
-
-
-			// сбрасываем установку, чтобы не было голосового предупреждения
 			Target.reset();
 		}
 		break;
 	}
 
-
-
-
-	// объект в порядке - удалять не нужно
 	return true;
 }
 

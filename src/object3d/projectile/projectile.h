@@ -32,8 +32,6 @@
 // TODO switch to enumeration for projectile type (ProjectileType)
 //      split flare and alien's mine
 
-// TODO translate comments
-
 #ifndef OBJECT3D_PROJECTILE_PROJECTILE_H
 #define OBJECT3D_PROJECTILE_PROJECTILE_H
 
@@ -67,73 +65,59 @@ private:
 	virtual ~cProjectile();
 
 public:
-	// Обновление данных объектa
 	virtual bool Update(float Time) override;
-	// Установка углов поворота
 	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
-	// Установка положения
 	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
 
-	// Номер типа снаряда при создании
-	int Num{0};
+	int Num{0}; // internal id (same as creation number ProjectileNum)
 
-	// повреждение снаряда
 	float DamageHull{0.0f};
 	float DamageSystems{0.0f};
 
-	// Класс снаряда
-	// 0 - обычный
-	// 1 - можем наводится и сбивать снаряд
-	// 2 - лучевое оружие
-	// 3 - фларе против ракет / мина пришельцев
-	// 4 - мина (уничтожаемая)
+	// 0 - projectile
+	// 1 - projectile with 3d model
+	// 2 - beam
+	// 3 - flares / energy mine (aliens)
+	// 4 - mine with 3d model
 	int ProjectileType{0};
 
-	// для ракет, тянем на кого навелись... чтобы цель могла принять действия
+	// target for himing missile/mine
 	std::weak_ptr<cObject3D> Target{};
 
-	// данные для 2-го класса (лучевого снаряда)
-	// эти данные меняем только в объекте-орудии!!!
-	// точка центра снаряда
+	// projectile center for beam, since we need correct it with weapon rotation
 	sVECTOR3D ProjectileCenter{0.0f, 0.0f, 0.0f};
 
-	// скорость снаряда
 	float Speed{0.0f};
 	float SpeedStart{0.0f};
 	float SpeedEnd{0.0f};
 
-	// общее время жизни снаряда
 	float Age{0.0f};
 
-	// нужно ли играть звук при уничтожении
 	bool NeedDeadSound{true};
 
-	// временные данные, для подсветки мин
+	// texture illumination in mine 3d model
 	float MineIData{0.0f};
 
-	// временные данные, для мин которые стреляют - время перезарядки
 	float MineReloadTime{1.0f};
 	float MineNextFireTime{1.0f};
 
-	// для прорисовки графических эффектов
-	// тип, как будем удалять -сразу, или глушить
+	// gfx
 	bool GraphicFXDestroyType{false};
 	std::vector<sVECTOR3D> GraphicFXLocation{};
 	std::vector<std::weak_ptr<cParticleSystem>> GraphicFX{};
-
 	bool NeedStopPartic{false};
 };
 
 
 // Create cProjectile object.
 std::weak_ptr<cProjectile> CreateProjectile(const int ProjectileNum);
-// Проверяем все объекты, обновляем данные
+// Update and remove (erase) dead objects.
 void UpdateAllProjectile(float Time);
-// Прорисовываем все объекты
+// Draw all objects.
 void DrawAllProjectiles(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular projectile object.
 void ReleaseProjectile(std::weak_ptr<cProjectile> &Object);
-// Удаляем все объекты в списке
+// Release all objects.
 void ReleaseAllProjectiles();
 // Cycle for each projectile.
 // Note, caller must guarantee, that 'Object' will not released in callback function call.
@@ -149,13 +133,13 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 // Get object ptr by reference.
 std::weak_ptr<cObject3D> GetProjectilePtr(const cProjectile &Object);
 
-// получаем время жизни снаряда
+// Get projectile fly range.
 float GetProjectileRange(int Num);
-//
+// Get projectile hull (main) damage.
 int GetProjectileHullDamage(int Num);
-//
+// Get projectile system (internal) damage.
 int GetProjectileSystemsDamage(int Num);
-//
+// Get projectile speed.
 float GetProjectileSpeed(int Num);
 
 } // astromenace namespace
