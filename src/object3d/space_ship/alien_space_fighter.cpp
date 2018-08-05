@@ -35,14 +35,16 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
 struct sAlienSpaceFighterData {
 	unsigned int EngineQuantity;
 	float Strength;
 	float ShieldStrength;
-	const char *Name;
+	std::string Name;
 };
 
-const sAlienSpaceFighterData PresetAlienSpaceFighterData[] = {
+const std::vector<sAlienSpaceFighterData> PresetAlienSpaceFighterData{
 	{4,	5,	0,	"models/alienfighter/al-01.vw3d"},
 	{5,	15,	0,	"models/alienfighter/al-02.vw3d"},
 	{5,	60,	0,	"models/alienfighter/al-03.vw3d"},
@@ -61,7 +63,8 @@ const sAlienSpaceFighterData PresetAlienSpaceFighterData[] = {
 	{4,	100,	150,	"models/alienfighter/al-16.vw3d"},
 	{6,	150,	200,	"models/alienfighter/al-17.vw3d"}
 };
-#define PresetAlienSpaceFighterDataCount sizeof(PresetAlienSpaceFighterData)/sizeof(PresetAlienSpaceFighterData[0])
+
+} // unnamed namespace
 
 
 //-----------------------------------------------------------------------------
@@ -244,7 +247,7 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
-	    (static_cast<unsigned>(SpaceShipNum) > PresetAlienSpaceFighterDataCount)) {
+	    (static_cast<unsigned>(SpaceShipNum) > PresetAlienSpaceFighterData.size())) {
 		std::cerr << __func__ << "(): "
 			  << "Could not init cAlienSpaceFighter object with Number "
 			  << SpaceShipNum << "\n";

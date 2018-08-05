@@ -34,6 +34,43 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
+struct sEarthSpaceFighterData {
+	float Weight;
+	float Strength;
+	unsigned int WeaponQuantity;
+	unsigned int EngineQuantity;
+	std::string Name;
+};
+
+const std::vector<sEarthSpaceFighterData> PresetEarthSpaceFighterData{
+	{5000,	30,	5,	2,	"models/earthfighter/sf-01.vw3d"},
+	{8000,	40,	4,	4,	"models/earthfighter/sf-02.vw3d"},
+	{10000,	60,	3,	4,	"models/earthfighter/sf-03.vw3d"},
+	{6000,	35,	5,	2,	"models/earthfighter/sf-04.vw3d"},
+	{7000,	45,	2,	4,	"models/earthfighter/sf-05.vw3d"},
+	{6000,	50,	5,	2,	"models/earthfighter/sf-06.vw3d"},
+	{10000,	60,	5,	3,	"models/earthfighter/sf-07.vw3d"},
+	{3000,	25,	2,	4,	"models/earthfighter/sf-08.vw3d"},
+	{3000,	55,	2,	2,	"models/earthfighter/sf-09.vw3d"},
+	{6500,	55,	5,	2,	"models/earthfighter/sf-10.vw3d"},
+	{3000,	60,	3,	2,	"models/earthfighter/sf-11.vw3d"},
+	{6000,	70,	3,	2,	"models/earthfighter/sf-12.vw3d"},
+	{15000,	80,	5,	4,	"models/earthfighter/sf-13.vw3d"},
+	{7000,	65,	5,	2,	"models/earthfighter/sf-14.vw3d"},
+	{6000,	70,	3,	2,	"models/earthfighter/sf-15.vw3d"},
+	{13000,	90,	3,	4,	"models/earthfighter/sf-16.vw3d"},
+	{6500,	75,	5,	2,	"models/earthfighter/sf-17.vw3d"},
+	{17000,	110,	4,	4,	"models/earthfighter/sf-18.vw3d"},
+	{8000,	55,	3,	4,	"models/earthfighter/sf-19.vw3d"},
+	{7000,	80,	4,	4,	"models/earthfighter/sf-20.vw3d"},
+	{4000,	80,	3,	2,	"models/earthfighter/sf-21.vw3d"},
+	{1500,	100,	1,	1,	"models/earthfighter/sf-22.vw3d"}
+};
+
+} // unnamed namespace
+
 
 //-----------------------------------------------------------------------------
 // получение мощности одного двигателя
@@ -1022,40 +1059,6 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 	}
 }
 
-struct sEarthSpaceFighterData {
-	float Weight;
-	float Strength;
-	unsigned int WeaponQuantity;
-	unsigned int EngineQuantity;
-	const char *Name;
-};
-
-const sEarthSpaceFighterData PresetEarthSpaceFighterData[] = {
-	{5000,	30,	5,	2,	"models/earthfighter/sf-01.vw3d"},
-	{8000,	40,	4,	4,	"models/earthfighter/sf-02.vw3d"},
-	{10000,	60,	3,	4,	"models/earthfighter/sf-03.vw3d"},
-	{6000,	35,	5,	2,	"models/earthfighter/sf-04.vw3d"},
-	{7000,	45,	2,	4,	"models/earthfighter/sf-05.vw3d"},
-	{6000,	50,	5,	2,	"models/earthfighter/sf-06.vw3d"},
-	{10000,	60,	5,	3,	"models/earthfighter/sf-07.vw3d"},
-	{3000,	25,	2,	4,	"models/earthfighter/sf-08.vw3d"},
-	{3000,	55,	2,	2,	"models/earthfighter/sf-09.vw3d"},
-	{6500,	55,	5,	2,	"models/earthfighter/sf-10.vw3d"},
-	{3000,	60,	3,	2,	"models/earthfighter/sf-11.vw3d"},
-	{6000,	70,	3,	2,	"models/earthfighter/sf-12.vw3d"},
-	{15000,	80,	5,	4,	"models/earthfighter/sf-13.vw3d"},
-	{7000,	65,	5,	2,	"models/earthfighter/sf-14.vw3d"},
-	{6000,	70,	3,	2,	"models/earthfighter/sf-15.vw3d"},
-	{13000,	90,	3,	4,	"models/earthfighter/sf-16.vw3d"},
-	{6500,	75,	5,	2,	"models/earthfighter/sf-17.vw3d"},
-	{17000,	110,	4,	4,	"models/earthfighter/sf-18.vw3d"},
-	{8000,	55,	3,	4,	"models/earthfighter/sf-19.vw3d"},
-	{7000,	80,	4,	4,	"models/earthfighter/sf-20.vw3d"},
-	{4000,	80,	3,	2,	"models/earthfighter/sf-21.vw3d"},
-	{1500,	100,	1,	1,	"models/earthfighter/sf-22.vw3d"}
-};
-#define PresetEarthSpaceFighterDataCount sizeof(PresetEarthSpaceFighterData)/sizeof(PresetEarthSpaceFighterData[0])
-
 float GetShipArmor(int SpaceShipNum)
 {
 	return PresetEarthSpaceFighterData[SpaceShipNum-1].Strength;
@@ -1067,7 +1070,7 @@ float GetShipArmor(int SpaceShipNum)
 cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
-	    (static_cast<unsigned>(SpaceShipNum) > PresetEarthSpaceFighterDataCount)) {
+	    (static_cast<unsigned>(SpaceShipNum) > PresetEarthSpaceFighterData.size())) {
 		std::cerr << __func__ << "(): "
 			  << "Could not init cEarthSpaceFighter object with Number "
 			  << SpaceShipNum << "\n";

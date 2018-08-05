@@ -38,15 +38,17 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
 struct sPirateShipData {
 	unsigned int EngineQuantity;
 	float Strength;
-	const std::string Name;
-	const std::string TextureName;
-	const std::string NormalMapName;
+	std::string Name;
+	std::string TextureName;
+	std::string NormalMapName;
 };
 
-const sPirateShipData PresetPirateShipData[] = {
+const std::vector<sPirateShipData> PresetPirateShipData{
 	{2,	20,	"models/pirateship/gunship-01.vw3d",	"models/gr-04.vw2d", ""},
 	{2,	30,	"models/pirateship/bomber-07.vw3d",	"models/gr-04.vw2d", ""},
 	{2,	100,	"models/pirateship/gunship-03.vw3d",	"models/gr-03.vw2d", ""},
@@ -65,7 +67,8 @@ const sPirateShipData PresetPirateShipData[] = {
 	{6,	1000,	"models/pirateship/bomber-05.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"},
 	{8,	1500,	"models/pirateship/bomber-06.vw3d",	"models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"}
 };
-#define PresetPirateShipDataCount sizeof(PresetPirateShipData)/sizeof(PresetPirateShipData[0])
+
+} // unnamed namespace
 
 
 //-----------------------------------------------------------------------------
@@ -210,7 +213,7 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 cPirateShip::cPirateShip(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
-	    (static_cast<unsigned>(SpaceShipNum) > PresetPirateShipDataCount)) {
+	    (static_cast<unsigned>(SpaceShipNum) > PresetPirateShipData.size())) {
 		std::cerr << __func__ << "(): "
 			  << "Could not init cPirateShip object with Number "
 			  << SpaceShipNum << "\n";
