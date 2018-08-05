@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "space_object.h"
 #include "../explosion/explosion.h"
 #include "../../assets/texture.h"
@@ -110,9 +108,9 @@ std::weak_ptr<cSpaceObject> CreateBasePart(const int BasePartNum)
 	return SpaceObjectList.front();
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем все объекты, обновляем данные
-//-----------------------------------------------------------------------------
+/*
+ * Update and remove (erase) dead objects.
+ */
 void UpdateAllSpaceObject(float Time)
 {
 	for (auto iter = SpaceObjectList.begin(); iter != SpaceObjectList.end();) {
@@ -123,9 +121,9 @@ void UpdateAllSpaceObject(float Time)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовываем все объекты
-//-----------------------------------------------------------------------------
+/*
+ * Draw all objects.
+ */
 void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	for (auto &tmpObject : SpaceObjectList) {
@@ -154,16 +152,16 @@ void ReleaseSpaceObject(std::weak_ptr<cSpaceObject> &Object)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Удаляем все объекты в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all objects.
+ */
 void ReleaseAllSpaceObjects()
 {
 	SpaceObjectList.clear();
 }
 
 /*
- * Cycle for each ground object.
+ * Cycle for each space object.
  * Note, caller must guarantee, that 'Object' will not released in callback function call.
  */
 void ForEachSpaceObject(std::function<void (cSpaceObject &Object)> function)
@@ -174,7 +172,7 @@ void ForEachSpaceObject(std::function<void (cSpaceObject &Object)> function)
 }
 
 /*
- * Managed cycle for each ground object.
+ * Managed cycle for each space object.
  * Note, caller must guarantee, that 'Object' will not released in callback function call.
  */
 void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function)
@@ -247,27 +245,23 @@ std::weak_ptr<cObject3D> GetSpaceObjectPtr(const cSpaceObject &Object)
 	return std::weak_ptr<cObject3D>{};
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cSpaceObject::cSpaceObject()
 {
 	ObjectStatus = eObjectStatus::Enemy;
-
 	LastCameraPoint = GamePoint;
 }
 
-//-----------------------------------------------------------------------------
-// Обновление данных объектa
-//-----------------------------------------------------------------------------
+/*
+ * Update.
+ */
 bool cSpaceObject::Update(float Time)
 {
-	// вызываем родительскую функцию
-	// если там передали удалить - выходим
 	if (!cObject3D::Update(Time))
 		return false;
 
-	// если это часть корабля босса, взрываем через время
 	if (BossPartCountDown > -1.0f) {
 		BossPartCountDown -= TimeDelta;
 
@@ -277,11 +271,9 @@ bool cSpaceObject::Update(float Time)
 		}
 	}
 
-	// если астероиды
 	if ((ObjectType == eObjectType::SmallAsteroid) ||
 	    (ObjectType == eObjectType::BigAsteroid) ||
 	    (ObjectType == eObjectType::Planetoid)) {
-		// если большие астероиды летящие сверху
 		if (ObjectType == eObjectType::BigAsteroid) {
 			SetRotation(sVECTOR3D{RotationSpeed.x * TimeDelta,
 					      RotationSpeed.y * TimeDelta,
@@ -300,7 +292,6 @@ bool cSpaceObject::Update(float Time)
 		}
 	}
 
-	// если части корабля или техники, останавливаем
 	if (ObjectType == eObjectType::SpaceDebris) {
 		if (Speed > 0.0f) {
 			Speed -= TimeDelta;
@@ -327,50 +318,39 @@ bool cSpaceObject::Update(float Time)
 		}
 	}
 
-	// если планеты, должны учесть положение камеры т.е. ее смещение
 	if ((ObjectType == eObjectType::Planet) ||
 	    (ObjectType == eObjectType::Planetoid) ||
 	    (ObjectType == eObjectType::BigAsteroid)) {
 		sVECTOR3D Temp = GamePoint - LastCameraPoint;
 
-		// у планет особое движение... они немного могут двигаться на камеру...
 		sVECTOR3D OrientTTT = Temp ^ (-1);
 		OrientTTT.Normalize();
 		SetLocation(Location + (OrientTTT ^ (Speed * TimeDelta)) + Temp);
 		LastCameraPoint = GamePoint;
 
-		// вращения планет и их частей
 		if (ObjectType == eObjectType::Planet) {
 			switch (InternalType) {
-			// планета с астероидным кольцом
 			case 1:
 				Chunks[0].Rotation.y += 0.5f * TimeDelta;
-				// кольца
 				Chunks[1].Rotation.y += 0.7f * TimeDelta;
 				Chunks[2].Rotation.y += 0.8f * TimeDelta;
 				Chunks[3].Rotation.y += 0.9f * TimeDelta;
 				break;
-			// полу разрушенная планета
 			case 2:
 				Rotation.y += 0.5f * TimeDelta;
 				if (Rotation.y >= 360.0f)
 					Rotation.y -= 360.0f;
 				break;
-			// планета с атмосферой
 			case 3:
 				Chunks[0].Rotation.y += 0.5f * TimeDelta;
-				// атмосфера
 				Chunks[1].Rotation.y -= 0.7 * TimeDelta;
 				break;
-			// луна
 			case 4:
 				Chunks[0].Rotation.y += TimeDelta;
 				break;
-			// планета пришельцев, с подсветкой
 			case 5:
 				Chunks[0].Rotation.y += 0.5f * TimeDelta;
 				break;
-			// планета пришельцев
 			case 6:
 				Chunks[0].Rotation.y += 0.5f * TimeDelta;
 				break;
@@ -395,7 +375,6 @@ bool cSpaceObject::Update(float Time)
 		Velocity -= Velocity ^ (0.5f * TimeDelta);
 	}
 
-	// объект в порядке - удалять не нужно
 	return true;
 }
 

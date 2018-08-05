@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
 
 #include "space_object.h"
 #include "../../config/config.h"
@@ -35,9 +35,9 @@
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cPlanet::cPlanet(const int PlanetNum)
 {
 	ObjectStatus = eObjectStatus::none;
@@ -45,11 +45,7 @@ cPlanet::cPlanet(const int PlanetNum)
 
 	InternalType = PlanetNum;
 
-
-	// перебираем и ставим нужные данные
 	switch (InternalType) {
-
-	// планета с астероидным кольцом
 	case 1:
 		NeedCullFaces = false;
 		NeedAlphaTest = true;
@@ -67,9 +63,9 @@ cPlanet::cPlanet(const int PlanetNum)
 		TextureIllum[3] = 0;
 		NormalMap[3] = GetPreloadedTextureAsset("models/normalmap/planet_asteroids_nm.tga");
 		break;
-	// полу-разрушенная планета
+
 	case 2:
-		PromptDrawDist2 = 100.0f; // только для этой планеты ставим такое !!!
+		PromptDrawDist2 = 100.0f;
 		LoadObjectData("models/planet/dplanet.vw3d", *this);
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
 			Texture[i] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
@@ -77,7 +73,7 @@ cPlanet::cPlanet(const int PlanetNum)
 			NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
 		}
 		break;
-	// планета с атмосферой
+
 	case 3:
 		NeedCullFaces = false;
 		LoadObjectData("models/planet/gplanet.vw3d", *this);
@@ -87,23 +83,23 @@ cPlanet::cPlanet(const int PlanetNum)
 
 		Texture[1] = GetPreloadedTextureAsset("models/planet/clouds.tga");
 		TextureIllum[1] = 0;
-		Chunks[1].DrawType = eModel3DDrawType::Blend; // рисуем прозрачным
+		Chunks[1].DrawType = eModel3DDrawType::Blend;
 		break;
-	// "красная" планета
+
 	case 4:
 		LoadObjectData("models/planet/moon.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/q_class2.tga");
 		TextureIllum[0] = 0;
 		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/q_class2_nm.tga");
 		break;
-	// планета пришельцев, лава
+
 	case 5:
 		LoadObjectData("models/planet/planet5.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/a_class4.tga");
 		TextureIllum[0] = 0;
 		NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/a_class4_nm.tga");
 		break;
-	// планета пришельцев
+
 	case 6:
 		LoadObjectData("models/planet/planet6.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");

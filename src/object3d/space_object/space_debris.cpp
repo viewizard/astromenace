@@ -32,7 +32,7 @@ namespace viewizard {
 namespace astromenace {
 
 /*
- * cSpaceDebris
+ * Constructor.
  */
 cSpaceDebris::cSpaceDebris()
 {

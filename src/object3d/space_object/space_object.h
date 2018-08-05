@@ -28,8 +28,6 @@
 // FIXME split backgroind big asteroid code, render with separate function ('planet' and
 //       'planetoid' (backgroind big asteroid)), remove related code from StarSystemDraw()
 
-// TODO translate comments
-
 #ifndef OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
 #define OBJECT3D_SPACEOBJECT_SPACEOBJECT_H
 
@@ -60,18 +58,14 @@ protected:
 	virtual ~cSpaceObject() = default;
 
 public:
-	// Обновление данных объектa
 	virtual bool Update(float Time) override;
 
-	// скорость
 	float Speed{0.0f};
 	sVECTOR3D RotationSpeed{0.0f, 0.0f, 0.0f};
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
-	// последнее положение камеры нужно для планет
 	sVECTOR3D LastCameraPoint{0.0f, 0.0f, 0.0f};
 
-	// чтобы возрвать часть корабля босса пришельцев через время
 	float BossPartCountDown{-1.0f};
 };
 
@@ -160,13 +154,13 @@ std::weak_ptr<cSpaceObject> CreatePlanetoid(const int PlanetoidNum);
 std::weak_ptr<cSpaceObject> CreateSpaceDebris();
 // Create cBasePart object.
 std::weak_ptr<cSpaceObject> CreateBasePart(const int BasePartNum);
-// Проверяем все объекты, обновляем данные
+// Update and remove (erase) dead objects.
 void UpdateAllSpaceObject(float Time);
-// Прорисовываем все объекты
+// Draw all objects.
 void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular space object.
 void ReleaseSpaceObject(std::weak_ptr<cSpaceObject> &Object);
-// Удаляем все объекты в списке
+// Release all objects.
 void ReleaseAllSpaceObjects();
 // Cycle for each space object.
 // Note, caller must guarantee, that 'Object' will not released in callback function call.

@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
 
 #include "space_object.h"
 #include "../../assets/texture.h"
@@ -34,9 +34,9 @@
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cSmallAsteroid::cSmallAsteroid()
 {
 	ObjectType = eObjectType::SmallAsteroid;
@@ -53,10 +53,7 @@ cSmallAsteroid::cSmallAsteroid()
 	RotationSpeed.x = 100.0f + 50.0f * vw_fRand0();
 	RotationSpeed.y = 20.0f + 20.0f * vw_fRand0();
 
-	// небольшая поправка... в зависимости от размеров объекта
 	Strength = StrengthStart = Radius * StrengthStart;
-
-	// ставим правильный радиус
 	Radius = Width / 2.0f;
 }
 
