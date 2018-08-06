@@ -55,17 +55,17 @@ std::weak_ptr<sFBO> CurrentFBO{};
  */
 std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor, bool NeedDepth, GLsizei MSAA, GLsizei *CSAA)
 {
-	if (!_glGenRenderbuffers ||
-	    !_glBindRenderbuffer ||
-	    !_glRenderbufferStorageMultisample ||
-	    !_glGenFramebuffers ||
-	    !_glBindFramebuffer ||
-	    !_glFramebufferRenderbuffer ||
-	    !_glCheckFramebufferStatus)
+	if (!pfn_glGenRenderbuffers ||
+	    !pfn_glBindRenderbuffer ||
+	    !pfn_glRenderbufferStorageMultisample ||
+	    !pfn_glGenFramebuffers ||
+	    !pfn_glBindFramebuffer ||
+	    !pfn_glFramebufferRenderbuffer ||
+	    !pfn_glCheckFramebufferStatus)
 		return std::shared_ptr<sFBO> {};
 
 	// if hardware don't support coverage, switch to MSAA
-	if (!_glRenderbufferStorageMultisampleCoverageNV && CSAA)
+	if (!pfn_glRenderbufferStorageMultisampleCoverageNV && CSAA)
 		*CSAA = MSAA;
 
 	GLsizei InternalCSAA = MSAA;
@@ -87,23 +87,23 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 	std::cout << Width << " " << Height << " " << NeedColor << " "
 		  << NeedDepth << " " << MSAA << " " << InternalCSAA << "\n";
 
-	_glGenFramebuffers(1, &FBO->FrameBufferObject);
-	_glBindFramebuffer(GL_FRAMEBUFFER, FBO->FrameBufferObject);
+	pfn_glGenFramebuffers(1, &FBO->FrameBufferObject);
+	pfn_glBindFramebuffer(GL_FRAMEBUFFER, FBO->FrameBufferObject);
 
 
 	if (NeedColor) {
 		// if we need multisamples, use FBO
 		if (MSAA >= 2) {
-			_glGenRenderbuffers(1, &FBO->ColorBuffer);
-			_glBindRenderbuffer(GL_RENDERBUFFER, FBO->ColorBuffer);
+			pfn_glGenRenderbuffers(1, &FBO->ColorBuffer);
+			pfn_glBindRenderbuffer(GL_RENDERBUFFER, FBO->ColorBuffer);
 			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
-				_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_RGBA,
+				pfn_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_RGBA,
 								  FBO->Width.i(), FBO->Height.i());
 			else
-				_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
+				pfn_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
 									    GL_RGBA, FBO->Width.i(), FBO->Height.i());
-			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
-			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			pfn_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, FBO->ColorBuffer);
+			if (pfn_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}
@@ -116,8 +116,8 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, FBO->Width.i(), FBO->Height.i(),
 				     0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
-			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			pfn_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBO->ColorTexture, 0);
+			if (pfn_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}
@@ -127,18 +127,18 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 	if (NeedDepth) {
 		// // if we need multisamples, use FBO
 		if (MSAA >= 2) {
-			_glGenRenderbuffers(1, &FBO->DepthBuffer);
-			_glBindRenderbuffer(GL_RENDERBUFFER, FBO->DepthBuffer);
+			pfn_glGenRenderbuffers(1, &FBO->DepthBuffer);
+			pfn_glBindRenderbuffer(GL_RENDERBUFFER, FBO->DepthBuffer);
 			if ((InternalCSAA == MSAA) || (InternalCSAA == 0))
-				_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT,
+				pfn_glRenderbufferStorageMultisample(GL_RENDERBUFFER, MSAA, GL_DEPTH_COMPONENT,
 								  FBO->Width.i(), FBO->Height.i());
 			else
-				_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
+				pfn_glRenderbufferStorageMultisampleCoverageNV(GL_RENDERBUFFER, InternalCSAA, MSAA,
 									    GL_DEPTH_COMPONENT, FBO->Width.i(), FBO->Height.i());
-			_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
-			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+			pfn_glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, FBO->DepthBuffer);
+			pfn_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
-			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			if (pfn_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}
@@ -151,17 +151,17 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, FBO->Width.i(), FBO->Height.i(), 0,
 				     GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
-			_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
-			_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+			pfn_glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FBO->DepthTexture, 0);
+			pfn_glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 							       GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &FBO->DepthSize);
-			if (_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			if (pfn_glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << __func__ << "(): " << "Can't create FRAMEBUFFER.\n\n";
 				return std::shared_ptr<sFBO> {};
 			}
 		}
 	}
 
-	_glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	pfn_glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	std::cout << "Frame Buffer Object created. Depth Size: " << FBO->DepthSize << "\n";
 
@@ -177,7 +177,7 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
  */
 void vw_BindFBO(std::shared_ptr<sFBO> &FBO)
 {
-	if (!_glBindFramebuffer ||
+	if (!pfn_glBindFramebuffer ||
 	    (FBO && !FBO->FrameBufferObject))
 		return;
 
@@ -189,9 +189,9 @@ void vw_BindFBO(std::shared_ptr<sFBO> &FBO)
 	if (FBO) {
 		if (FBO->ColorBuffer || FBO->DepthBuffer)
 			glEnable(GL_MULTISAMPLE);
-		_glBindFramebuffer(GL_FRAMEBUFFER, FBO->FrameBufferObject);
+		pfn_glBindFramebuffer(GL_FRAMEBUFFER, FBO->FrameBufferObject);
 	} else
-		_glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		pfn_glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	CurrentFBO = FBO;
 }
@@ -210,13 +210,13 @@ std::weak_ptr<sFBO> &vw_GetCurrentFBO()
 void vw_BlitFBO(std::shared_ptr<sFBO> &SourceFBO, std::shared_ptr<sFBO> &TargetFBO)
 {
 	if (!SourceFBO || !TargetFBO ||
-	    !_glBindFramebuffer || !_glBlitFramebuffer ||
+	    !pfn_glBindFramebuffer || !pfn_glBlitFramebuffer ||
 	    !SourceFBO->FrameBufferObject || !TargetFBO->FrameBufferObject)
 		return;
 
-	_glBindFramebuffer(GL_READ_FRAMEBUFFER, SourceFBO->FrameBufferObject);
-	_glBindFramebuffer(GL_DRAW_FRAMEBUFFER, TargetFBO->FrameBufferObject);
-	_glBlitFramebuffer(0, 0, SourceFBO->Width.i(), SourceFBO->Height.i(),
+	pfn_glBindFramebuffer(GL_READ_FRAMEBUFFER, SourceFBO->FrameBufferObject);
+	pfn_glBindFramebuffer(GL_DRAW_FRAMEBUFFER, TargetFBO->FrameBufferObject);
+	pfn_glBlitFramebuffer(0, 0, SourceFBO->Width.i(), SourceFBO->Height.i(),
 			   0, 0, TargetFBO->Width.i(), TargetFBO->Height.i(),
 			   GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
@@ -280,16 +280,16 @@ sFBO::~sFBO()
 	if (DepthTexture)
 		glDeleteTextures(1, &DepthTexture);
 
-	if (_glDeleteRenderbuffers) {
+	if (pfn_glDeleteRenderbuffers) {
 		if (ColorBuffer)
-			_glDeleteRenderbuffers(1, &ColorBuffer);
+			pfn_glDeleteRenderbuffers(1, &ColorBuffer);
 		if (DepthBuffer)
-			_glDeleteRenderbuffers(1, &DepthBuffer);
+			pfn_glDeleteRenderbuffers(1, &DepthBuffer);
 	}
 
-	if (_glDeleteFramebuffers &&
+	if (pfn_glDeleteFramebuffers &&
 	    FrameBufferObject)
-		_glDeleteFramebuffers(1, &FrameBufferObject);
+		pfn_glDeleteFramebuffers(1, &FrameBufferObject);
 }
 
 } // viewizard namespace

@@ -42,8 +42,8 @@ namespace viewizard {
  */
 bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, GLuint IndexBO)
 {
-	if (!_glGenVertexArrays ||
-	    !_glIsVertexArray)
+	if (!pfn_glGenVertexArrays ||
+	    !pfn_glIsVertexArray)
 		return false;
 
 	// we can not generate VAO without VBO
@@ -52,7 +52,7 @@ bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, G
 		return false;
 	}
 
-	_glGenVertexArrays(1, &VAO);
+	pfn_glGenVertexArrays(1, &VAO);
 
 	vw_BindVAO(VAO);
 	Draw3D_EnableStates(DataFormat, nullptr, Stride, VertexBO, IndexBO);
@@ -60,7 +60,7 @@ bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, G
 	vw_BindVAO(0);
 	Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
 
-	if (!_glIsVertexArray(VAO))
+	if (!pfn_glIsVertexArray(VAO))
 		return false;
 
 	return true;
@@ -72,10 +72,10 @@ bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, G
 void vw_BindVAO(GLuint VAO)
 {
 	// don't call glIsVertexArray() here, for best speed
-	if (!_glBindVertexArray)
+	if (!pfn_glBindVertexArray)
 		return;
 
-	_glBindVertexArray(VAO);
+	pfn_glBindVertexArray(VAO);
 }
 
 /*
@@ -83,12 +83,12 @@ void vw_BindVAO(GLuint VAO)
  */
 void vw_DeleteVAO(GLuint &VAO)
 {
-	if (!_glIsVertexArray ||
-	    !_glDeleteVertexArrays ||
-	    !_glIsVertexArray(VAO))
+	if (!pfn_glIsVertexArray ||
+	    !pfn_glDeleteVertexArrays ||
+	    !pfn_glIsVertexArray(VAO))
 		return;
 
-	_glDeleteVertexArrays(1, &VAO);
+	pfn_glDeleteVertexArrays(1, &VAO);
 	VAO = 0;
 }
 

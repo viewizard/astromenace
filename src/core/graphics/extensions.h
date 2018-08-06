@@ -41,93 +41,93 @@ Rules for functions and variables naming:
 namespace viewizard {
 
 // OpenGL 1.3 (only what we need or would need in future)
-extern PFNGLACTIVETEXTUREPROC _glActiveTexture;
-extern PFNGLCLIENTACTIVETEXTUREPROC _glClientActiveTexture;
+extern PFNGLACTIVETEXTUREPROC pfn_glActiveTexture;
+extern PFNGLCLIENTACTIVETEXTUREPROC pfn_glClientActiveTexture;
 
 // OpenGL 1.5 (only what we need or would need in future)
-extern PFNGLBINDBUFFERPROC _glBindBuffer;
-extern PFNGLDELETEBUFFERSPROC _glDeleteBuffers;
-extern PFNGLGENBUFFERSPROC _glGenBuffers;
-extern PFNGLISBUFFERPROC _glIsBuffer;
-extern PFNGLBUFFERDATAPROC _glBufferData;
+extern PFNGLBINDBUFFERPROC pfn_glBindBuffer;
+extern PFNGLDELETEBUFFERSPROC pfn_glDeleteBuffers;
+extern PFNGLGENBUFFERSPROC pfn_glGenBuffers;
+extern PFNGLISBUFFERPROC pfn_glIsBuffer;
+extern PFNGLBUFFERDATAPROC pfn_glBufferData;
 
 // OpenGL 2.0 (only what we need or would need in future)
-extern PFNGLATTACHSHADERPROC _glAttachShader;
-extern PFNGLBINDATTRIBLOCATIONPROC _glBindAttribLocation;
-extern PFNGLCOMPILESHADERPROC _glCompileShader;
-extern PFNGLCREATEPROGRAMPROC _glCreateProgram;
-extern PFNGLCREATESHADERPROC _glCreateShader;
-extern PFNGLDELETEPROGRAMPROC _glDeleteProgram;
-extern PFNGLDELETESHADERPROC _glDeleteShader;
-extern PFNGLDETACHSHADERPROC _glDetachShader;
-extern PFNGLGETACTIVEATTRIBPROC _glGetActiveAttrib;
-extern PFNGLGETACTIVEUNIFORMPROC _glGetActiveUniform;
-extern PFNGLGETATTACHEDSHADERSPROC _glGetAttachedShaders;
-extern PFNGLGETATTRIBLOCATIONPROC _glGetAttribLocation;
-extern PFNGLGETPROGRAMIVPROC _glGetProgramiv;
-extern PFNGLGETPROGRAMINFOLOGPROC _glGetProgramInfoLog;
-extern PFNGLGETSHADERIVPROC _glGetShaderiv;
-extern PFNGLGETSHADERINFOLOGPROC _glGetShaderInfoLog;
-extern PFNGLGETSHADERSOURCEPROC _glGetShaderSource;
-extern PFNGLGETUNIFORMLOCATIONPROC _glGetUniformLocation;
-extern PFNGLGETUNIFORMFVPROC _glGetUniformfv;
-extern PFNGLGETUNIFORMIVPROC _glGetUniformiv;
-extern PFNGLISPROGRAMPROC _glIsProgram;
-extern PFNGLISSHADERPROC _glIsShader;
-extern PFNGLLINKPROGRAMPROC _glLinkProgram;
-extern PFNGLSHADERSOURCEPROC _glShaderSource;
-extern PFNGLUSEPROGRAMPROC _glUseProgram;
-extern PFNGLUNIFORM1FPROC _glUniform1f;
-extern PFNGLUNIFORM2FPROC _glUniform2f;
-extern PFNGLUNIFORM3FPROC _glUniform3f;
-extern PFNGLUNIFORM4FPROC _glUniform4f;
-extern PFNGLUNIFORM1IPROC _glUniform1i;
-extern PFNGLUNIFORM2IPROC _glUniform2i;
-extern PFNGLUNIFORM3IPROC _glUniform3i;
-extern PFNGLUNIFORM4IPROC _glUniform4i;
-extern PFNGLUNIFORM1FVPROC _glUniform1fv;
-extern PFNGLUNIFORM2FVPROC _glUniform2fv;
-extern PFNGLUNIFORM3FVPROC _glUniform3fv;
-extern PFNGLUNIFORM4FVPROC _glUniform4fv;
-extern PFNGLUNIFORM1IVPROC _glUniform1iv;
-extern PFNGLUNIFORM2IVPROC _glUniform2iv;
-extern PFNGLUNIFORM3IVPROC _glUniform3iv;
-extern PFNGLUNIFORM4IVPROC _glUniform4iv;
-extern PFNGLVALIDATEPROGRAMPROC _glValidateProgram;
+extern PFNGLATTACHSHADERPROC pfn_glAttachShader;
+extern PFNGLBINDATTRIBLOCATIONPROC pfn_glBindAttribLocation;
+extern PFNGLCOMPILESHADERPROC pfn_glCompileShader;
+extern PFNGLCREATEPROGRAMPROC pfn_glCreateProgram;
+extern PFNGLCREATESHADERPROC pfn_glCreateShader;
+extern PFNGLDELETEPROGRAMPROC pfn_glDeleteProgram;
+extern PFNGLDELETESHADERPROC pfn_glDeleteShader;
+extern PFNGLDETACHSHADERPROC pfn_glDetachShader;
+extern PFNGLGETACTIVEATTRIBPROC pfn_glGetActiveAttrib;
+extern PFNGLGETACTIVEUNIFORMPROC pfn_glGetActiveUniform;
+extern PFNGLGETATTACHEDSHADERSPROC pfn_glGetAttachedShaders;
+extern PFNGLGETATTRIBLOCATIONPROC pfn_glGetAttribLocation;
+extern PFNGLGETPROGRAMIVPROC pfn_glGetProgramiv;
+extern PFNGLGETPROGRAMINFOLOGPROC pfn_glGetProgramInfoLog;
+extern PFNGLGETSHADERIVPROC pfn_glGetShaderiv;
+extern PFNGLGETSHADERINFOLOGPROC pfn_glGetShaderInfoLog;
+extern PFNGLGETSHADERSOURCEPROC pfn_glGetShaderSource;
+extern PFNGLGETUNIFORMLOCATIONPROC pfn_glGetUniformLocation;
+extern PFNGLGETUNIFORMFVPROC pfn_glGetUniformfv;
+extern PFNGLGETUNIFORMIVPROC pfn_glGetUniformiv;
+extern PFNGLISPROGRAMPROC pfn_glIsProgram;
+extern PFNGLISSHADERPROC pfn_glIsShader;
+extern PFNGLLINKPROGRAMPROC pfn_glLinkProgram;
+extern PFNGLSHADERSOURCEPROC pfn_glShaderSource;
+extern PFNGLUSEPROGRAMPROC pfn_glUseProgram;
+extern PFNGLUNIFORM1FPROC pfn_glUniform1f;
+extern PFNGLUNIFORM2FPROC pfn_glUniform2f;
+extern PFNGLUNIFORM3FPROC pfn_glUniform3f;
+extern PFNGLUNIFORM4FPROC pfn_glUniform4f;
+extern PFNGLUNIFORM1IPROC pfn_glUniform1i;
+extern PFNGLUNIFORM2IPROC pfn_glUniform2i;
+extern PFNGLUNIFORM3IPROC pfn_glUniform3i;
+extern PFNGLUNIFORM4IPROC pfn_glUniform4i;
+extern PFNGLUNIFORM1FVPROC pfn_glUniform1fv;
+extern PFNGLUNIFORM2FVPROC pfn_glUniform2fv;
+extern PFNGLUNIFORM3FVPROC pfn_glUniform3fv;
+extern PFNGLUNIFORM4FVPROC pfn_glUniform4fv;
+extern PFNGLUNIFORM1IVPROC pfn_glUniform1iv;
+extern PFNGLUNIFORM2IVPROC pfn_glUniform2iv;
+extern PFNGLUNIFORM3IVPROC pfn_glUniform3iv;
+extern PFNGLUNIFORM4IVPROC pfn_glUniform4iv;
+extern PFNGLVALIDATEPROGRAMPROC pfn_glValidateProgram;
 
 // OpenGL 2.1 (only what we need or would need in future)
-extern PFNGLUNIFORMMATRIX2X3FVPROC _glUniformMatrix2x3fv;
-extern PFNGLUNIFORMMATRIX3X2FVPROC _glUniformMatrix3x2fv;
-extern PFNGLUNIFORMMATRIX2X4FVPROC _glUniformMatrix2x4fv;
-extern PFNGLUNIFORMMATRIX4X2FVPROC _glUniformMatrix4x2fv;
-extern PFNGLUNIFORMMATRIX3X4FVPROC _glUniformMatrix3x4fv;
-extern PFNGLUNIFORMMATRIX4X3FVPROC _glUniformMatrix4x3fv;
+extern PFNGLUNIFORMMATRIX2X3FVPROC pfn_glUniformMatrix2x3fv;
+extern PFNGLUNIFORMMATRIX3X2FVPROC pfn_glUniformMatrix3x2fv;
+extern PFNGLUNIFORMMATRIX2X4FVPROC pfn_glUniformMatrix2x4fv;
+extern PFNGLUNIFORMMATRIX4X2FVPROC pfn_glUniformMatrix4x2fv;
+extern PFNGLUNIFORMMATRIX3X4FVPROC pfn_glUniformMatrix3x4fv;
+extern PFNGLUNIFORMMATRIX4X3FVPROC pfn_glUniformMatrix4x3fv;
 
 // OpenGL 3.0 (only what we need or would need in future)
-extern PFNGLBINDRENDERBUFFERPROC _glBindRenderbuffer;
-extern PFNGLDELETERENDERBUFFERSPROC _glDeleteRenderbuffers;
-extern PFNGLGENRENDERBUFFERSPROC _glGenRenderbuffers;
-extern PFNGLISFRAMEBUFFERPROC _glIsFramebuffer;
-extern PFNGLBINDFRAMEBUFFERPROC _glBindFramebuffer;
-extern PFNGLDELETEFRAMEBUFFERSPROC _glDeleteFramebuffers;
-extern PFNGLGENFRAMEBUFFERSPROC _glGenFramebuffers;
-extern PFNGLCHECKFRAMEBUFFERSTATUSPROC _glCheckFramebufferStatus;
-extern PFNGLFRAMEBUFFERTEXTURE2DPROC _glFramebufferTexture2D;
-extern PFNGLFRAMEBUFFERRENDERBUFFERPROC _glFramebufferRenderbuffer;
-extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC _glGetFramebufferAttachmentParameteriv;
-extern PFNGLGENERATEMIPMAPPROC _glGenerateMipmap;
-extern PFNGLBLITFRAMEBUFFERPROC _glBlitFramebuffer;
-extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC _glRenderbufferStorageMultisample;
-extern PFNGLBINDVERTEXARRAYPROC _glBindVertexArray;
-extern PFNGLDELETEVERTEXARRAYSPROC _glDeleteVertexArrays;
-extern PFNGLGENVERTEXARRAYSPROC _glGenVertexArrays;
-extern PFNGLISVERTEXARRAYPROC _glIsVertexArray;
+extern PFNGLBINDRENDERBUFFERPROC pfn_glBindRenderbuffer;
+extern PFNGLDELETERENDERBUFFERSPROC pfn_glDeleteRenderbuffers;
+extern PFNGLGENRENDERBUFFERSPROC pfn_glGenRenderbuffers;
+extern PFNGLISFRAMEBUFFERPROC pfn_glIsFramebuffer;
+extern PFNGLBINDFRAMEBUFFERPROC pfn_glBindFramebuffer;
+extern PFNGLDELETEFRAMEBUFFERSPROC pfn_glDeleteFramebuffers;
+extern PFNGLGENFRAMEBUFFERSPROC pfn_glGenFramebuffers;
+extern PFNGLCHECKFRAMEBUFFERSTATUSPROC pfn_glCheckFramebufferStatus;
+extern PFNGLFRAMEBUFFERTEXTURE2DPROC pfn_glFramebufferTexture2D;
+extern PFNGLFRAMEBUFFERRENDERBUFFERPROC pfn_glFramebufferRenderbuffer;
+extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC pfn_glGetFramebufferAttachmentParameteriv;
+extern PFNGLGENERATEMIPMAPPROC pfn_glGenerateMipmap;
+extern PFNGLBLITFRAMEBUFFERPROC pfn_glBlitFramebuffer;
+extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC pfn_glRenderbufferStorageMultisample;
+extern PFNGLBINDVERTEXARRAYPROC pfn_glBindVertexArray;
+extern PFNGLDELETEVERTEXARRAYSPROC pfn_glDeleteVertexArrays;
+extern PFNGLGENVERTEXARRAYSPROC pfn_glGenVertexArrays;
+extern PFNGLISVERTEXARRAYPROC pfn_glIsVertexArray;
 
 // OpenGL 4.2 (only what we need or would need in future)
-extern PFNGLTEXSTORAGE2DPROC _glTexStorage2D;
+extern PFNGLTEXSTORAGE2DPROC pfn_glTexStorage2D;
 
 // GL_NV_framebuffer_multisample_coverage
-extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisampleCoverageNV;
+extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC pfn_glRenderbufferStorageMultisampleCoverageNV;
 
 
 bool Initialize_OpenGL_1_3();

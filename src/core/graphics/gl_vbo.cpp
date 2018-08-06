@@ -49,18 +49,18 @@ bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *d
 {
 	// Don't check 'data' parameter, since nullptr is appropriate value for glBufferData().
 	if (!data ||
-	    !_glGenBuffers ||
-	    !_glBindBuffer ||
-	    !_glBufferData ||
-	    !_glIsBuffer)
+	    !pfn_glGenBuffers ||
+	    !pfn_glBindBuffer ||
+	    !pfn_glBufferData ||
+	    !pfn_glIsBuffer)
 		return false;
 
-	_glGenBuffers(1, &buffer);
-	_glBindBuffer(static_cast<GLenum>(target), buffer);
-	_glBufferData(static_cast<GLenum>(target), size, data, static_cast<GLenum>(usage));
-	_glBindBuffer(static_cast<GLenum>(target), 0); // disable buffer (bind buffer 0)
+	pfn_glGenBuffers(1, &buffer);
+	pfn_glBindBuffer(static_cast<GLenum>(target), buffer);
+	pfn_glBufferData(static_cast<GLenum>(target), size, data, static_cast<GLenum>(usage));
+	pfn_glBindBuffer(static_cast<GLenum>(target), 0); // disable buffer (bind buffer 0)
 
-	if (!_glIsBuffer(buffer))
+	if (!pfn_glIsBuffer(buffer))
 		return false;
 
 	return true;
@@ -71,10 +71,10 @@ bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *d
  */
 void vw_BindBufferObject(eBufferObject target, GLuint buffer)
 {
-	if (!_glBindBuffer)
+	if (!pfn_glBindBuffer)
 		return;
 
-	_glBindBuffer(static_cast<GLenum>(target), buffer);
+	pfn_glBindBuffer(static_cast<GLenum>(target), buffer);
 }
 
 /*
@@ -82,12 +82,12 @@ void vw_BindBufferObject(eBufferObject target, GLuint buffer)
  */
 void vw_DeleteBufferObject(GLuint &buffer)
 {
-	if (!_glIsBuffer ||
-	    !_glDeleteBuffers ||
-	    !_glIsBuffer(buffer))
+	if (!pfn_glIsBuffer ||
+	    !pfn_glDeleteBuffers ||
+	    !pfn_glIsBuffer(buffer))
 		return;
 
-	_glDeleteBuffers(1, &buffer);
+	pfn_glDeleteBuffers(1, &buffer);
 	buffer = 0;
 }
 

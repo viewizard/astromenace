@@ -100,16 +100,16 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 
 	if (MipMap) {
 		// use newest available first
-		if (_glGenerateMipmap && _glTexStorage2D) {
+		if (pfn_glGenerateMipmap && pfn_glTexStorage2D) {
 			GLsizei NeedMipMapLvls = 1 + static_cast<GLsizei>(std::floor(std::log2(std::max(Width, Height))));
-			_glTexStorage2D(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
+			pfn_glTexStorage2D(GL_TEXTURE_2D, NeedMipMapLvls, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format,
 					GL_UNSIGNED_BYTE, PixelsArray.get());
-			_glGenerateMipmap(GL_TEXTURE_2D);
-		} else if (_glGenerateMipmap) {
+			pfn_glGenerateMipmap(GL_TEXTURE_2D);
+		} else if (pfn_glGenerateMipmap) {
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
 				     GL_UNSIGNED_BYTE, PixelsArray.get());
-			_glGenerateMipmap(GL_TEXTURE_2D);
+			pfn_glGenerateMipmap(GL_TEXTURE_2D);
 		} else if (vw_DevCaps().SGIS_generate_mipmap) {
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
@@ -118,8 +118,8 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 			gluBuild2DMipmaps(GL_TEXTURE_2D, InternalFormat, Width, Height, Format,
 					  GL_UNSIGNED_BYTE, PixelsArray.get());
 	} else {
-		if (_glTexStorage2D) {
-			_glTexStorage2D(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
+		if (pfn_glTexStorage2D) {
+			pfn_glTexStorage2D(GL_TEXTURE_2D, 1, InternalFormat, Width, Height);
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Width, Height, Format,
 					GL_UNSIGNED_BYTE, PixelsArray.get());
 		} else
@@ -135,8 +135,8 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
  */
 void vw_SelectActiveTextureUnit(GLenum Unit)
 {
-	if (_glActiveTexture)
-		_glActiveTexture(GL_TEXTURE0 + Unit);
+	if (pfn_glActiveTexture)
+		pfn_glActiveTexture(GL_TEXTURE0 + Unit);
 }
 
 /*

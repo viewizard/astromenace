@@ -99,8 +99,8 @@ void Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
 	int TexturesCount = DataFormat & RI_TEX_COUNT;
 	if (TexturesCount > 0) {
 		for (int i = 0; i < TexturesCount; i++) {
-			if (_glClientActiveTexture)
-				_glClientActiveTexture(GL_TEXTURE0 + i);
+			if (pfn_glClientActiveTexture)
+				pfn_glClientActiveTexture(GL_TEXTURE0 + i);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glTexCoordPointer(2, GL_FLOAT, stride, tmpPointer);
 			if ((DataFormat & RI_TEX_COORD_TYPE) == RI_SEPARATE_TEX_COORD)
@@ -122,8 +122,8 @@ void Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO)
 
 	int TexturesCount = DataFormat & RI_TEX_COUNT;
 	for (int i = 0; i < TexturesCount; i++) {
-		if (_glClientActiveTexture)
-			_glClientActiveTexture(GL_TEXTURE0 + i);
+		if (pfn_glClientActiveTexture)
+			pfn_glClientActiveTexture(GL_TEXTURE0 + i);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 
