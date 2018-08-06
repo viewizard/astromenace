@@ -52,8 +52,8 @@ namespace viewizard {
  * Setup states and pointers.
  * Also used for VAO generation.
  */
-void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
-			   GLsizei stride, GLuint VertexBO, GLuint IndexBO)
+void Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
+			 GLsizei stride, GLuint VertexBO, GLuint IndexBO)
 {
 	if (!VertexArray && !VertexBO)
 		return;
@@ -112,7 +112,7 @@ void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
 /*
  * Disable states.
  */
-void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO)
+void Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO)
 {
 	if (DataFormat & RI_NORMAL)
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -146,10 +146,10 @@ void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *Verte
 	if (VAO && vw_DevCaps().OpenGL_3_0_supported)
 		vw_BindVAO(VAO);
 	else
-		__Draw3D_EnableStates(DataFormat, VertexArray, Stride, VertexBO, IndexBO);
+		Draw3D_EnableStates(DataFormat, VertexArray, Stride, VertexBO, IndexBO);
 
 	if (IndexArray || IndexBO) {
-		// all IBO binding related code moved to __Draw3D_EnableStates(),
+		// all IBO binding related code moved to Draw3D_EnableStates(),
 		// we should care only about index array pointer here
 		GLuint *indices{nullptr};
 		if (!IndexBO || !vw_DevCaps().OpenGL_1_5_supported)
@@ -161,7 +161,7 @@ void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *Verte
 	if (VAO && vw_DevCaps().OpenGL_3_0_supported)
 		vw_BindVAO(0);
 	else
-		__Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
+		Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
 }
 
 } // viewizard namespace

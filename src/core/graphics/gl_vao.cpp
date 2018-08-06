@@ -55,10 +55,10 @@ bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, G
 	_glGenVertexArrays(1, &VAO);
 
 	vw_BindVAO(VAO);
-	__Draw3D_EnableStates(DataFormat, nullptr, Stride, VertexBO, IndexBO);
+	Draw3D_EnableStates(DataFormat, nullptr, Stride, VertexBO, IndexBO);
 
 	vw_BindVAO(0);
-	__Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
+	Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
 
 	if (!_glIsVertexArray(VAO))
 		return false;

@@ -27,10 +27,6 @@
 
 /*
 Should be for graphic's internal use only.
-
-Rules for functions and variables naming:
-"__" prefix for functions;
-"_" prefix for variables.
 */
 
 #ifndef CORE_GRAPHICS_GRAPHICSINTERNAL_H
@@ -53,9 +49,9 @@ sDevCaps &ChangeDevCaps();
  * gl_draw3d
  */
 
-void __Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
-			   GLsizei stride, GLuint VertexBO, GLuint IndexBO);
-void __Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO);
+void Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
+			 GLsizei stride, GLuint VertexBO, GLuint IndexBO);
+void Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO);
 
 } // viewizard namespace
 
