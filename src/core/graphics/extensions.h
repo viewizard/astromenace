@@ -130,13 +130,13 @@ extern PFNGLTEXSTORAGE2DPROC _glTexStorage2D;
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisampleCoverageNV;
 
 
-bool __Initialize_OpenGL_1_3();
-bool __Initialize_OpenGL_1_5();
-bool __Initialize_OpenGL_2_0();
-bool __Initialize_OpenGL_2_1();
-bool __Initialize_OpenGL_3_0();
-bool __Initialize_OpenGL_4_2();
-bool __Initialize_GL_NV_framebuffer_multisample_coverage();
+bool Initialize_OpenGL_1_3();
+bool Initialize_OpenGL_1_5();
+bool Initialize_OpenGL_2_0();
+bool Initialize_OpenGL_2_1();
+bool Initialize_OpenGL_3_0();
+bool Initialize_OpenGL_4_2();
+bool Initialize_GL_NV_framebuffer_multisample_coverage();
 
 } // viewizard namespace
 

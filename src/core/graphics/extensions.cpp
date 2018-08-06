@@ -123,7 +123,7 @@ PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC _glRenderbufferStorageMultisam
 /*
  * OpenGL 1.3 initialization (only what we need or would need in future).
  */
-bool __Initialize_OpenGL_1_3()
+bool Initialize_OpenGL_1_3()
 {
 	_glActiveTexture = (PFNGLACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glActiveTexture");
 	_glClientActiveTexture = (PFNGLCLIENTACTIVETEXTUREPROC) SDL_GL_GetProcAddress("glClientActiveTexture");
@@ -142,7 +142,7 @@ bool __Initialize_OpenGL_1_3()
 /*
  * OpenGL 1.5 initialization (only what we need or would need in future).
  */
-bool __Initialize_OpenGL_1_5()
+bool Initialize_OpenGL_1_5()
 {
 	// get pointers to the GL functions
 	_glBindBuffer = (PFNGLBINDBUFFERPROC) SDL_GL_GetProcAddress("glBindBuffer");
@@ -171,7 +171,7 @@ bool __Initialize_OpenGL_1_5()
 /*
  * OpenGL 2.0 initialization (only what we need or would need in future).
  */
-bool __Initialize_OpenGL_2_0()
+bool Initialize_OpenGL_2_0()
 {
 	_glAttachShader = (PFNGLATTACHSHADERPROC) SDL_GL_GetProcAddress("glAttachShader");
 	_glBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC) SDL_GL_GetProcAddress("glBindAttribLocation");
@@ -310,7 +310,7 @@ bool __Initialize_OpenGL_2_0()
 /*
  * OpenGL 2.1 initialization (only what we need or would need in future).
  */
-bool __Initialize_OpenGL_2_1()
+bool Initialize_OpenGL_2_1()
 {
 	_glUniformMatrix2x3fv = (PFNGLUNIFORMMATRIX2X3FVPROC) SDL_GL_GetProcAddress("glUniformMatrix2x3fv");
 	_glUniformMatrix3x2fv = (PFNGLUNIFORMMATRIX3X2FVPROC) SDL_GL_GetProcAddress("glUniformMatrix3x2fv");
@@ -341,7 +341,7 @@ bool __Initialize_OpenGL_2_1()
 /*
  * OpenGL 3.0 initialization (only what we need or would need in future).
  */
-bool __Initialize_OpenGL_3_0()
+bool Initialize_OpenGL_3_0()
 {
 	_glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC) SDL_GL_GetProcAddress("glBindRenderbuffer");
 	_glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC) SDL_GL_GetProcAddress("glDeleteRenderbuffers");
@@ -410,7 +410,7 @@ bool __Initialize_OpenGL_3_0()
 /*
  * OpenGL 4.2 initialization (only what we need or would need in future).
  */
-bool __Initialize_OpenGL_4_2()
+bool Initialize_OpenGL_4_2()
 {
 	_glTexStorage2D = (PFNGLTEXSTORAGE2DPROC) SDL_GL_GetProcAddress("glTexStorage2D");
 
@@ -420,7 +420,7 @@ bool __Initialize_OpenGL_4_2()
 /*
  * GL_NV_framebuffer_multisample_coverage initialization.
  */
-bool __Initialize_GL_NV_framebuffer_multisample_coverage()
+bool Initialize_GL_NV_framebuffer_multisample_coverage()
 {
 	_glRenderbufferStorageMultisampleCoverageNV =
 		(PFNGLRENDERBUFFERSTORAGEMULTISAMPLECOVERAGENVPROC)

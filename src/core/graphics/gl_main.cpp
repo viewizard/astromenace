@@ -167,13 +167,13 @@ bool vw_CreateOpenGLContext(int VSync)
 	DevCaps.MaxAnisotropyLevel = 0;
 	DevCaps.FramebufferObjectDepthSize = 0;
 
-	DevCaps.OpenGL_1_3_supported = __Initialize_OpenGL_1_3();
-	DevCaps.OpenGL_1_5_supported = __Initialize_OpenGL_1_5();
-	DevCaps.OpenGL_2_0_supported = __Initialize_OpenGL_2_0();
-	DevCaps.OpenGL_2_1_supported = __Initialize_OpenGL_2_1();
-	DevCaps.OpenGL_3_0_supported = __Initialize_OpenGL_3_0();
-	DevCaps.OpenGL_4_2_supported = __Initialize_OpenGL_4_2();
-	__Initialize_GL_NV_framebuffer_multisample_coverage(); // we don't have it in DevCaps, this is 1 function check only
+	DevCaps.OpenGL_1_3_supported = Initialize_OpenGL_1_3();
+	DevCaps.OpenGL_1_5_supported = Initialize_OpenGL_1_5();
+	DevCaps.OpenGL_2_0_supported = Initialize_OpenGL_2_0();
+	DevCaps.OpenGL_2_1_supported = Initialize_OpenGL_2_1();
+	DevCaps.OpenGL_3_0_supported = Initialize_OpenGL_3_0();
+	DevCaps.OpenGL_4_2_supported = Initialize_OpenGL_4_2();
+	Initialize_GL_NV_framebuffer_multisample_coverage(); // we don't have it in DevCaps, this is 1 function check only
 
 	DevCaps.EXT_texture_compression_s3tc = ExtensionSupported("GL_EXT_texture_compression_s3tc");
 	DevCaps.ARB_texture_compression_bptc = ExtensionSupported("GL_ARB_texture_compression_bptc");
