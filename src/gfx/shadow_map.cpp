@@ -109,7 +109,7 @@ void ShadowMap_SizeSetup(eShadowMapSetup ShadowMapSetup)
 	if (GameConfig().ShadowMap <= 0)
 		return;
 
-	int ShadowMapSize = vw_GetDevCaps().MaxTextureWidth;
+	int ShadowMapSize = vw_DevCaps().MaxTextureWidth;
 
 	switch (ShadowMapSetup) {
 	case eShadowMapSetup::Menu:

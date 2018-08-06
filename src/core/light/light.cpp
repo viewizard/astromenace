@@ -96,7 +96,7 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Locati
 	auto range = LightsMap.equal_range(eLightType::Directional);
 	for (; (range.first != range.second) &&
 	       (Type1 < DirLimit) &&
-	       (Type1 < vw_GetDevCaps().MaxActiveLights); ++range.first) {
+	       (Type1 < vw_DevCaps().MaxActiveLights); ++range.first) {
 		auto &tmpLight = *range.first;
 		if (tmpLight.second->Activate(Type1, Matrix))
 			Type1++;
@@ -111,7 +111,7 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Locati
 		// enable lights with less attenuation first
 		for (auto &tmpLight : AffectedLightsMap) {
 			if ((Type2 >= PointLimit) ||
-			    (Type1 + Type2 >= vw_GetDevCaps().MaxActiveLights))
+			    (Type1 + Type2 >= vw_DevCaps().MaxActiveLights))
 				break;
 			if (tmpLight.second->Activate(Type1 + Type2, Matrix))
 				Type2++;

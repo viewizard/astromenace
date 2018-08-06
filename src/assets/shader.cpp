@@ -54,8 +54,8 @@ const std::vector<sShaderMetadata> ShaderArray{
  */
 bool ForEachShaderAssetLoad(std::function<void ()> function)
 {
-	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
-	    !vw_GetDevCaps().OpenGL_2_1_supported)
+	if (!vw_DevCaps().OpenGL_2_0_supported ||
+	    !vw_DevCaps().OpenGL_2_1_supported)
 		return false;
 
 	for (auto &tmpAsset : ShaderArray) {

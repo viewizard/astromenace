@@ -408,7 +408,7 @@ void vw_InitOpenGLStuff(int Width, int Height, int *MSAA, int *CSAA);
 // Release OpenGL related stuff.
 void vw_ReleaseOpenGLStuff();
 // Get device capability.
-const sDevCaps &vw_GetDevCaps();
+const sDevCaps &vw_DevCaps();
 
 // Set virtual internal resolution size and status.
 void vw_SetInternalResolution(float Width, float Height, bool Status);

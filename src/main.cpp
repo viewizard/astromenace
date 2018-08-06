@@ -139,7 +139,7 @@ static bool VideoConfig(bool FirstStart)
 static bool CheckOpenGLCapabilities(bool FirstStart)
 {
 	// hardware must support multtextures (OpenGL 1.3)
-	if (!vw_GetDevCaps().OpenGL_1_3_supported) {
+	if (!vw_DevCaps().OpenGL_1_3_supported) {
 		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
 #ifdef WIN32
 		MessageBox(nullptr,
@@ -151,15 +151,15 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
 	}
 
 	if (FirstStart) {
-		if (vw_GetDevCaps().OpenGL_3_0_supported) {
+		if (vw_DevCaps().OpenGL_3_0_supported) {
 			ChangeGameConfig().UseGLSL120 = true;
 			ChangeGameConfig().ShadowMap = 1;
 			ChangeGameConfig().MSAA = 2;
 			ChangeGameConfig().CSAA = 2;
-			ChangeGameConfig().AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
+			ChangeGameConfig().AnisotropyLevel = vw_DevCaps().MaxAnisotropyLevel;
 			ChangeGameConfig().MaxPointLights = 4;
 		}
-		if (vw_GetDevCaps().OpenGL_4_2_supported) {
+		if (vw_DevCaps().OpenGL_4_2_supported) {
 			ChangeGameConfig().ShadowMap = 1;
 			ChangeGameConfig().MSAA = 4;
 			ChangeGameConfig().CSAA = 4;
@@ -168,26 +168,26 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
 	}
 
 	// NOTE in future, use std::clamp (since C++17)
-	if (GameConfig().AnisotropyLevel > vw_GetDevCaps().MaxAnisotropyLevel)
-		ChangeGameConfig().AnisotropyLevel = vw_GetDevCaps().MaxAnisotropyLevel;
+	if (GameConfig().AnisotropyLevel > vw_DevCaps().MaxAnisotropyLevel)
+		ChangeGameConfig().AnisotropyLevel = vw_DevCaps().MaxAnisotropyLevel;
 	if (GameConfig().AnisotropyLevel < 1) // don't use "else-if" here, since MaxAnisotropyLevel could be 0 (not supported)
 		ChangeGameConfig().AnisotropyLevel = 1;
 
 	// for shaders version 120, check OpenGL 2.0 and 2.1
-	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
-	    !vw_GetDevCaps().OpenGL_2_1_supported)
+	if (!vw_DevCaps().OpenGL_2_0_supported ||
+	    !vw_DevCaps().OpenGL_2_1_supported)
 		ChangeGameConfig().UseGLSL120 = false;
 
 	// for shadowmap we need shaders (OpenGL 2.0 and 2.1) and fbo (OpenGL 3.0) support
-	if (!vw_GetDevCaps().OpenGL_2_0_supported ||
-	    !vw_GetDevCaps().OpenGL_2_1_supported ||
-	    !vw_GetDevCaps().OpenGL_3_0_supported ||
-	    (vw_GetDevCaps().MaxTextureWidth < 2048))
+	if (!vw_DevCaps().OpenGL_2_0_supported ||
+	    !vw_DevCaps().OpenGL_2_1_supported ||
+	    !vw_DevCaps().OpenGL_3_0_supported ||
+	    (vw_DevCaps().MaxTextureWidth < 2048))
 		ChangeGameConfig().ShadowMap = 0;
 
 	// check MSAA/CSAA mode from cofig
 	bool FoundAAMode{false};
-	for (auto &Sample : vw_GetDevCaps().MultisampleCoverageModes) {
+	for (auto &Sample : vw_DevCaps().MultisampleCoverageModes) {
 		if ((GameConfig().MSAA == Sample.ColorSamples) &&
 		    (GameConfig().CSAA == Sample.CoverageSamples)) {
 			FoundAAMode = true;

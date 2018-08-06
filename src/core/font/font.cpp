@@ -569,7 +569,7 @@ static void DrawBuffersRoutine(unsigned TextSize)
 	}
 
 	// IBO should be re-generated on game restart and on index array size change
-	if (!IndexBO && IndexArraySize && IndexArray.get() && vw_GetDevCaps().OpenGL_1_5_supported)
+	if (!IndexBO && IndexArraySize && IndexArray.get() && vw_DevCaps().OpenGL_1_5_supported)
 		vw_BuildBufferObject(eBufferObject::Index, IndexArraySize * sizeof(unsigned), IndexArray.get(), IndexBO);
 }
 

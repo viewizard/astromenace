@@ -476,7 +476,7 @@ GLtexture vw_CreateTextureFromMemory(const std::string &TextureName, std::unique
 	newTexture.SrcHeight = newTexture.Height;
 
 	// if hardware don't support NPOT textures, forced to resize image manually
-	if (!vw_GetDevCaps().ARB_texture_non_power_of_two)
+	if (!vw_DevCaps().ARB_texture_non_power_of_two)
 		ResizeToPOT(PixelsArray, newTexture);
 
 	GLtexture TextureID = vw_BuildTexture(PixelsArray, newTexture.Width, newTexture.Height,

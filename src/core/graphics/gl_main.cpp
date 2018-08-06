@@ -305,7 +305,7 @@ void vw_ReleaseOpenGLStuff()
 /*
  * Get device capability.
  */
-const sDevCaps &vw_GetDevCaps()
+const sDevCaps &vw_DevCaps()
 {
 	return DevCaps;
 }
