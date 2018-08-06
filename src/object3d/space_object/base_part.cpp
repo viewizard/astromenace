@@ -51,14 +51,13 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const e
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
+	sRGBCOLOR MuddyYellow{0.60f, 0.60f, 0.30f};
+	sRGBCOLOR LightGreen{0.30f, 1.00f, 0.30f};
+
 	switch (EngineType) {
 	case eEngineGFX::Primary:
-		ParticleSystem->ColorStart.r = 0.60f;
-		ParticleSystem->ColorStart.g = 0.60f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.30f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -78,12 +77,8 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const e
 		break;
 
 	case eEngineGFX::Auxiliary:
-		ParticleSystem->ColorStart.r = 0.60f;
-		ParticleSystem->ColorStart.g = 0.60f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.30f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
