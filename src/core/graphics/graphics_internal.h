@@ -47,7 +47,7 @@ struct sDevCaps;
  */
 
 // Internal access to DevCaps, with write access.
-sDevCaps &__GetDevCaps();
+sDevCaps &ChangeDevCaps();
 
 /*
  * gl_draw3d

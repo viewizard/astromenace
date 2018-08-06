@@ -70,8 +70,8 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 	GLenum InternalFormat{GL_RGB8};
 	switch (CompressionType) {
 	case eTextureCompressionType::BPTC:
-		if (!__GetDevCaps().ARB_texture_compression_bptc &&
-		    !__GetDevCaps().OpenGL_4_2_supported) // also part of OpenGL 4.2
+		if (!vw_DevCaps().ARB_texture_compression_bptc &&
+		    !vw_DevCaps().OpenGL_4_2_supported) // also part of OpenGL 4.2
 			return 0;
 		if (Bytes == 4)
 			InternalFormat = GL_COMPRESSED_RGBA_BPTC_UNORM;
@@ -80,7 +80,7 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 		break;
 
 	case eTextureCompressionType::S3TC:
-		if (!__GetDevCaps().EXT_texture_compression_s3tc)
+		if (!vw_DevCaps().EXT_texture_compression_s3tc)
 			return 0;
 		if (Bytes == 4)
 			InternalFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
@@ -110,7 +110,7 @@ GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
 				     GL_UNSIGNED_BYTE, PixelsArray.get());
 			_glGenerateMipmap(GL_TEXTURE_2D);
-		} else if (__GetDevCaps().SGIS_generate_mipmap) {
+		} else if (vw_DevCaps().SGIS_generate_mipmap) {
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 			glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, Width, Height, 0, Format,
 				     GL_UNSIGNED_BYTE, PixelsArray.get());
@@ -194,16 +194,16 @@ void vw_SetTextureFiltering(const sTextureFilter &Filter)
  */
 void vw_SetTextureAnisotropy(GLint AnisotropyLevel)
 {
-	if (__GetDevCaps().MaxAnisotropyLevel > 0) {
+	if (vw_DevCaps().MaxAnisotropyLevel > 0) {
 		if (AnisotropyLevel < 1) {
 			std::cerr << __func__ << "(): " << "anisotropy level " << AnisotropyLevel
 				  << " not supported, changed to 1\n";
 			AnisotropyLevel = 1;
-		} else if (AnisotropyLevel > __GetDevCaps().MaxAnisotropyLevel) {
+		} else if (AnisotropyLevel > vw_DevCaps().MaxAnisotropyLevel) {
 			std::cerr << __func__ << "(): " << "anisotropy level " << AnisotropyLevel
-				  << " not supported, reduced to " << __GetDevCaps().MaxAnisotropyLevel
+				  << " not supported, reduced to " << vw_DevCaps().MaxAnisotropyLevel
 				  << "\n";
-			AnisotropyLevel = __GetDevCaps().MaxAnisotropyLevel;
+			AnisotropyLevel = vw_DevCaps().MaxAnisotropyLevel;
 		}
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, AnisotropyLevel);
 	}

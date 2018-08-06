@@ -166,8 +166,8 @@ std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
 	std::cout << "Frame Buffer Object created. Depth Size: " << FBO->DepthSize << "\n";
 
 	// store new maximum depth size
-	if (__GetDevCaps().FramebufferObjectDepthSize < FBO->DepthSize)
-		__GetDevCaps().FramebufferObjectDepthSize = FBO->DepthSize;
+	if (vw_DevCaps().FramebufferObjectDepthSize < FBO->DepthSize)
+		ChangeDevCaps().FramebufferObjectDepthSize = FBO->DepthSize;
 
 	return FBO;
 }

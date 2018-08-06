@@ -313,7 +313,7 @@ const sDevCaps &vw_DevCaps()
 /*
  * Internal access to DevCaps, with write access.
  */
-sDevCaps &__GetDevCaps()
+sDevCaps &ChangeDevCaps()
 {
 	return DevCaps;
 }
