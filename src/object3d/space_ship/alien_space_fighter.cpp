@@ -85,14 +85,14 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
+	sRGBCOLOR Turquoise{0.0f, 0.7f, 1.0f};
+	sRGBCOLOR LightViolet{0.0f, 0.4f, 1.0f};
+	sRGBCOLOR LightSkyey{0.7f, 1.0f, 1.0f};
+
 	switch (EngineType) {
 	case eEngineGFX::BigEngine:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -111,12 +111,8 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 		break;
 
 	case eEngineGFX::BigEngineBase:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.40f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.00f;
-		ParticleSystem->ColorEnd.g = 0.70f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = LightViolet;
+		ParticleSystem->ColorEnd = Turquoise;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -133,12 +129,8 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 		break;
 
 	case eEngineGFX::SmallEngine1:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.20f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -157,12 +149,8 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 		break;
 
 	case eEngineGFX::SmallEngine2:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.20f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -181,12 +169,8 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 		break;
 
 	case eEngineGFX::Cockpit:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 0.50f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -201,12 +185,8 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 		break;
 
 	case eEngineGFX::DualCockpit:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 0.50f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -223,12 +203,8 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 		break;
 
 	case eEngineGFX::Illumination:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.20f;
 		ParticleSystem->SizeStart = 0.30f;
