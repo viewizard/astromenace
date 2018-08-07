@@ -25,6 +25,11 @@
 
 *************************************************************************************/
 
+// TODO move StreamBuffersMap.second to std::shared_ptr/std::weak_ptr
+
+// FIXME something wrong with ReadOggBlock() for sure, why we call CheckALError() in order to
+//       reset errors, and after that, check it on caller? why we don't check result in caller?
+
 /*
 Note, stream buffers have limitation of usage and can't be used more than one time
 simultaneously.
@@ -55,7 +60,7 @@ std::unordered_map<std::string, sStreamBuffer> StreamBuffersMap;
 
 
 /*
- * Vorbis callback functions
+ * Vorbis callback functions.
  */
 static size_t VorbisRead(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource)
 {
@@ -209,7 +214,7 @@ sStreamBuffer *vw_CreateStreamBufferFromOGG(const std::string &Name, const std::
 		return nullptr;
 	}
 
-	// return vorbis_info structures
+	// return pointer to vorbis_info structures
 	StreamBuffersMap[Name].mInfo = ov_info(&StreamBuffersMap[Name].mVF, -1);
 
 	// create buffers
@@ -289,13 +294,11 @@ bool vw_UnqueueStreamBuffer(sStreamBuffer *StreamBuffer, ALuint Source)
 
 	int Queued;
 	alGetSourcei(Source, AL_BUFFERS_QUEUED, &Queued);
-	alGetError(); // reset errors
 	while (Queued--) {
 		ALuint tmpBuffer;
 		alSourceUnqueueBuffers(Source, 1, &tmpBuffer);
-		alGetError(); // reset errors
 	}
-
+	ResetALError();
 	return true;
 }
 
@@ -352,7 +355,7 @@ void vw_ReleaseAllStreamBuffers()
 		alDeleteBuffers(NUM_OF_DYNBUF, tmpStream.second.Buffers.data());
 	}
 	StreamBuffersMap.clear();
-	alGetError(); // reset errors
+	ResetALError();
 }
 
 /*
@@ -480,7 +483,7 @@ void vw_ReleaseAllSoundBuffers()
 			alDeleteBuffers(1, &tmpBuffer.second);
 	}
 	SoundBuffersMap.clear();
-	alGetError(); // reset errors
+	ResetALError();
 }
 
 /*
@@ -500,7 +503,7 @@ void vw_ReleaseSoundBuffer(const std::string &Name)
 
 	if (tmpBuffer->second) {
 		alDeleteBuffers(1, &tmpBuffer->second);
-		alGetError(); // reset errors
+		ResetALError();
 	}
 
 	SoundBuffersMap.erase(tmpBuffer);

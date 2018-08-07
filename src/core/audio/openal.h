@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// FIXME don't call ResetALError() all around, use it only before al call we need to check
+
 /*
 Should be used for 'sound' system internal purposes only. Don't include into other
 sources, you are free to change or add methods to sound.h header file instead.
@@ -73,6 +75,14 @@ inline ALboolean CheckALError(const char *FunctionName)
 }
 
 /*
+ * Reset AL errors.
+ */
+inline void ResetALError()
+{
+	alGetError();
+}
+
+/*
  * Check ALUT errors.
  */
 inline ALboolean CheckALUTError(const char *FunctionName)
@@ -92,7 +102,7 @@ inline bool CheckALSourceState(ALuint Source, ALint State)
 {
 	ALint tmpState;
 	alGetSourcei(Source, AL_SOURCE_STATE, &tmpState);
-	alGetError(); // reset errors
+	ResetALError();
 	return (tmpState == State);
 }
 

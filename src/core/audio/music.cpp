@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO struct sMusic should use encapsulation (switch to class)
+
 /*
 In the case of music we based on several main principles:
 1. All music connected to its name, so, name is the key (for map).
@@ -46,7 +48,6 @@ namespace viewizard {
 namespace {
 
 struct sMusic {
-
 	~sMusic()
 	{
 		if (!alIsSource(Source))
@@ -56,8 +57,8 @@ struct sMusic {
 		if (Stream)
 			vw_UnqueueStreamBuffer(Stream, Source);
 		alDeleteSources(1, &Source);
-		alGetError(); // reset errors
-	};
+		ResetALError();
+	}
 
 	void FadeIn(float EndVol, uint32_t Ticks);
 	void FadeOut(uint32_t Ticks);
@@ -120,7 +121,7 @@ bool vw_PlayMusic(const std::string &Name, float _LocalVolume, float _GlobalVolu
 	alSourcefv(MusicMap[Name].Source, AL_VELOCITY, SourceVel);
 	alSourcei(MusicMap[Name].Source, AL_SOURCE_RELATIVE, AL_TRUE);
 	alSourcei(MusicMap[Name].Source, AL_LOOPING, AL_FALSE);
-	alGetError(); // reset errors
+	ResetALError();
 	MusicMap[Name].Looped = Loop;
 
 	MusicMap[Name].Stream = vw_CreateStreamBufferFromOGG(Name, LoopFileName);
@@ -161,7 +162,7 @@ bool sMusic::Update(uint32_t CurrentTick)
 			FadeInSwitch = false;
 		}
 		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume );
-		alGetError(); // reset errors
+		ResetALError();
 	}
 
 	if (FadeOutSwitch) {
@@ -174,7 +175,7 @@ bool sMusic::Update(uint32_t CurrentTick)
 			FadeOutSwitch = false;
 		}
 		alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
-		alGetError(); // reset errors
+		ResetALError();
 		if (!FadeOutSwitch) // use boolean check in order to avoid float's comparison
 			return false;
 	}

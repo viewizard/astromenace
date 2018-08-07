@@ -90,10 +90,6 @@ bool vw_InitAudio()
 	if (!CheckALCError(Device, __func__))
 		return false;
 
-	// reset errors
-	alGetError();
-	alcGetError(Device);
-
 	// set listener properties
 	alListenerfv(AL_POSITION, ListenerPos);
 	alListenerfv(AL_VELOCITY, ListenerVel);
@@ -119,9 +115,7 @@ bool vw_InitAudio()
 
 	std::cout << "\n";
 
-	// reset errors
-	alGetError();
-	alcGetError(Device);
+	ResetALError();
 
 	AlutInitStatus = true;
 	return true;
@@ -144,24 +138,26 @@ void vw_ShutdownAudio()
 	ALCcontext *Context = alcGetCurrentContext();
 	// get device for active context
 	ALCdevice *Device = alcGetContextsDevice(Context);
+	CheckALCError(Device, __func__);
 
 	// change current context (remove our context)
 	if (alcMakeContextCurrent(nullptr)) {
-		alcGetError(Device);
-
 		// destroy context
-		if (Context && (alcGetCurrentContext() != Context))
+		if (Context && (alcGetCurrentContext() != Context)) {
 			alcDestroyContext(Context);
-		alcGetError(Device);
+			CheckALCError(Device, __func__);
+		}
 
 		// close sound device
-		if (Device)
+		if (Device) {
 			alcCloseDevice(Device);
+			CheckALCError(Device, __func__);
+		}
 	}
 
 	alutExit();
-	AlutInitStatus = false;
 	CheckALUTError(__func__);
+	AlutInitStatus = false;
 }
 
 /*
@@ -173,7 +169,7 @@ void vw_Listener(float (&ListenerPosition)[3], float (&ListenerVelocity)[3], flo
 	alListenerfv(AL_POSITION, ListenerPosition);
 	alListenerfv(AL_VELOCITY, ListenerVelocity);
 	alListenerfv(AL_ORIENTATION, ListenerOrientation);
-	alGetError(); // reset errors
+	ResetALError();
 }
 
 } // viewizard namespace

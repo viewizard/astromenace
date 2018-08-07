@@ -28,6 +28,8 @@
 // FIXME fix mess with vw_PlaySound() AtType parameter, probably, we need setup this
 //       by additional function call instead of hard code it
 
+// TODO struct sSound should use encapsulation (switch to class)
+
 #include "buffer.h"
 #include "../math/math.h"
 
@@ -36,7 +38,6 @@ namespace viewizard {
 namespace {
 
 struct sSound {
-
 	~sSound()
 	{
 		if (!alIsSource(Source))
@@ -44,7 +45,7 @@ struct sSound {
 		// stop playing before other actions
 		alSourceStop(Source);
 		alDeleteSources(1, &Source);
-		alGetError(); // reset errors
+		ResetALError();
 	}
 
 	void Replay();
@@ -148,20 +149,19 @@ unsigned int vw_PlaySound(const std::string &Name, float LocalVolume, float Glob
 	alSourcefv(SoundsMap[tmpSoundID].Source, AL_VELOCITY, SourceVel);
 	alSourcei(SoundsMap[tmpSoundID].Source, AL_LOOPING, false);
 	alSourcei(SoundsMap[tmpSoundID].Source, AL_SOURCE_RELATIVE, Relative);
-	alGetError(); // reset errors
 
 	// attenuation-related factors
 	if (AtType == 1) {
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_REFERENCE_DISTANCE, 30.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_MAX_DISTANCE, 250.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_ROLLOFF_FACTOR, 0.5f);
-		alGetError(); // reset errors
 	} else if (AtType == 2) {
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_REFERENCE_DISTANCE, 150.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_MAX_DISTANCE, 600.0f);
 		alSourcef(SoundsMap[tmpSoundID].Source, AL_ROLLOFF_FACTOR, 0.2f);
-		alGetError(); // reset errors
 	}
+
+	ResetALError();
 
 	alSourcePlay(SoundsMap[tmpSoundID].Source);
 	if (!CheckALError(__func__)) {
@@ -196,7 +196,7 @@ void sSound::Stop(uint32_t StopDelayTicks)
 
 	if (!StopDelayTicks) {
 		alSourceStop(Source);
-		alGetError(); // reset errors
+		ResetALError();
 	} else {
 		DestroyPeriod = StopDelayTicks;
 		DestroyTicks = 0;
@@ -213,7 +213,7 @@ void sSound::SetLocation(float x, float y, float z)
 
 	ALfloat SourcePos[] = {x, y, z};
 	alSourcefv(Source, AL_POSITION, SourcePos);
-	alGetError(); // reset errors
+	ResetALError();
 }
 
 /*
@@ -226,7 +226,7 @@ void sSound::SetGlobalVolume(float NewGlobalVolume)
 
 	GlobalVolume = NewGlobalVolume;
 	alSourcef(Source, AL_GAIN, GlobalVolume * LocalVolume);
-	alGetError(); // reset errors
+	ResetALError();
 }
 
 /*
@@ -307,7 +307,7 @@ void vw_UpdateSound(uint32_t CurrentTick)
 					  iter->second.GlobalVolume * iter->second.LocalVolume *
 					  (1.0f - static_cast<float>(iter->second.DestroyTicks) /
 						  static_cast<float>(iter->second.DestroyPeriod)));
-				alGetError(); // reset errors
+				ResetALError();
 			} else {
 				// release, volume less or equal zero
 				NeedRelease = true;
