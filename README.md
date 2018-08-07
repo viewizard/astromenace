@@ -56,71 +56,72 @@ sudo emerge openastromenace
 ## Build
 
 Build dependencies:
-libSDL2 (ver 2.0.5+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+), GLU
+libSDL2 (ver 2.0.5+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+)
 
 
 The easy way to get up to date AstroMenace on your computer:
 
 ### 1) Make sure all necessary packages with development headers installed in your system: 
 
-   gcc (with g++) or clang, cmake, make, git, libsdl2, libogg, libvorbis, openal, 
-   alut (freealut), GLU, freetype2
+gcc or clang, cmake, make, git, libsdl2, libogg, libvorbis, openal, alut (freealut), freetype2
 
 #### For macOS:
 Download and install "Command Line Tools for Xcode" or "Xcode".
 Install HomeBrew package manager: https://brew.sh/
-```bash
+```
 $ brew install cmake sdl2 git libogg libvorbis freealut freetype
 ```
 
 #### For Ubuntu/Mint/Debian:
-```bash
-$ sudo apt-get install g++ cmake make git libsdl2-dev
-  libogg-dev libvorbis-dev libopenal-dev libalut-dev
-  libfreetype6-dev
+```
+$ sudo apt-get install g++ cmake make git libsdl2-dev libogg-dev \
+  libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev
 ```
 
 #### For Mageia:
-```bash
-$ sudo urpmi gcc-c++ cmake make git libsdl2.0-devel libogg-devel
+```
+$ sudo urpmi gcc-c++ cmake make git libsdl2.0-devel libogg-devel \
   libvorbis-devel libopenal-devel libfreealut-devel freetype2-devel
 ```
 
 #### For OpenSuse:
-```bash
-$ sudo zypper install gcc-c++ cmake make git libSDL2-devel
-  libogg-devel libvorbis-devel openal-soft-devel freealut-devel
-  freetype2-devel
+```
+$ sudo zypper install gcc-c++ cmake make git libSDL2-devel libogg-devel \
+  libvorbis-devel openal-soft-devel freealut-devel freetype2-devel
 ```
 
 #### For Fedora:
-```bash
-$ sudo yum install gcc-c++ cmake make git SDL2-devel libogg-devel
-  libvorbis-devel openal-soft-devel freealut-devel freetype-devel
-  linux-libertine-fonts
+```
+$ sudo yum install gcc-c++ cmake make git SDL2-devel libogg-devel libvorbis-devel \
+  openal-soft-devel freealut-devel freetype-devel linux-libertine-fonts
 ```
 
 #### For FreeBSD:
-```bash
-$ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal
-  freealut freetype2
+```
+$ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal freealut freetype2
 ```
 
 ### 2) Clone git with latest source files
-```bash
+```
 $ cd ~/
+```
+```
 $ git clone https://github.com/viewizard/astromenace.git astromenace
 ```
 
 ### 3) Compile game binary (game data file will be created automatically)
-```bash
+```
 $ cd ~/astromenace
+```
+```
 $ cmake ./
+```
+```
 $ make
 ```
 
 ### 4) Create desktop shortcut or start AstroMenace
-```bash
+```
 $ ~/astromenace/astromenace
 ```
 
