@@ -1364,7 +1364,7 @@ bool cSpaceShip::Update(float Time)
 						// учитываем скорость поворота по горизонтали
 						float Min = 0.0f;
 						float Max = 0.0f;
-						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
+						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, Min, Max);
 						if (sharedWeapon->Rotation.y < NeedAngle.y) {
 							float NeedAngle_y = sharedWeapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
 							if (NeedAngle_y > NeedAngle.y)
@@ -1487,7 +1487,7 @@ bool cSpaceShip::Update(float Time)
 						// учитываем скорость поворота по горизонтали
 						float Min = 0.0f;
 						float Max = 0.0f;
-						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, &Min, &Max);
+						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, Min, Max);
 						if (sharedWeapon->Rotation.y > NeedAngle.y) {
 							float NeedAngle_y = sharedWeapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
 							if (NeedAngle_y > NeedAngle.y)

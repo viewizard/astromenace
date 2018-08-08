@@ -77,7 +77,7 @@ const std::vector<sEarthSpaceFighterData> PresetEarthSpaceFighterData{
 //-----------------------------------------------------------------------------
 // получение мощности одного двигателя
 //-----------------------------------------------------------------------------
-float GetEnginePower(int EngineType)
+float GetEnginePower(const int EngineType)
 {
 	switch(EngineType) {
 	case 1:
@@ -98,7 +98,7 @@ float GetEnginePower(int EngineType)
 //-----------------------------------------------------------------------------
 // получение ускорения одного двигателя
 //-----------------------------------------------------------------------------
-float GetEngineAcceleration(int EngineType)
+float GetEngineAcceleration(const int EngineType)
 {
 	switch(EngineType) {
 	case 1:
@@ -119,7 +119,7 @@ float GetEngineAcceleration(int EngineType)
 //-----------------------------------------------------------------------------
 // получение мощности маневровых двигателя
 //-----------------------------------------------------------------------------
-float GetEngineRotatePower(int EngineType)
+float GetEngineRotatePower(const int EngineType)
 {
 	switch(EngineType) {
 	case 1:
@@ -143,7 +143,7 @@ float GetEngineRotatePower(int EngineType)
 //-----------------------------------------------------------------------------
 // Установка оружия на корабль
 //-----------------------------------------------------------------------------
-bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, int WeaponSlot, int WeaponNum)
+bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, const int WeaponSlot, const int WeaponNum)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip)
@@ -184,7 +184,7 @@ bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, int Weapon
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
+static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
@@ -396,7 +396,7 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 //-----------------------------------------------------------------------------
 // Установка системы двигателей
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, int EngineType)
+void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int EngineType)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip)
@@ -484,7 +484,7 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, int Engine
 //-----------------------------------------------------------------------------
 // HullResistance для брони
 //-----------------------------------------------------------------------------
-static float GetHullResistance(int ArmourType)
+static float GetHullResistance(const int ArmourType)
 {
 	switch(ArmourType) {
 	case 0:
@@ -513,7 +513,7 @@ static float GetHullResistance(int ArmourType)
 //-----------------------------------------------------------------------------
 // SystemsResistance для брони
 //-----------------------------------------------------------------------------
-static float GetSystemsResistance(int ArmourType)
+static float GetSystemsResistance(const int ArmourType)
 {
 	switch(ArmourType) {
 	case 0:
@@ -542,7 +542,7 @@ static float GetSystemsResistance(int ArmourType)
 //-----------------------------------------------------------------------------
 // Тестура для брони
 //-----------------------------------------------------------------------------
-static GLtexture GetArmourTexture(int ArmourType)
+static GLtexture GetArmourTexture(const int ArmourType)
 {
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус
@@ -578,7 +578,7 @@ static GLtexture GetArmourTexture(int ArmourType)
 	return 0;
 }
 
-static GLtexture GetArmourIllumTexture(int ArmourType)
+static GLtexture GetArmourIllumTexture(const int ArmourType)
 {
 	switch(ArmourType) {
 	// фактически - брони нет, только стальной корпус
@@ -619,7 +619,7 @@ static GLtexture GetArmourIllumTexture(int ArmourType)
 //-----------------------------------------------------------------------------
 // Установка брони для кораблей землян
 //-----------------------------------------------------------------------------
-void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, int ArmourType)
+void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmourType)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip)
@@ -638,417 +638,417 @@ void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, int Armour
 //-----------------------------------------------------------------------------
 // Получаем возможный поворот орудия в данном слоте
 //-----------------------------------------------------------------------------
-void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
+void GetShipWeaponSlotAngle(const int ShipNum, const int SlotNum, float &Min, float &Max)
 {
-	*Min = 0.0f;
-	*Max = 0.0f;
+	Min = 0.0f;
+	Max = 0.0f;
 
 	switch (ShipNum) {
 	case 1:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 5.0f;
+			Min = -45.0f;
+			Max = 5.0f;
 			break;
 		case 1:
-			*Min = -5.0f;
-			*Max = 45.0f;
+			Min = -5.0f;
+			Max = 45.0f;
 			break;
 		case 2:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 3:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		case 4:
-			*Min = -30.0f;
-			*Max = 30.0f;
+			Min = -30.0f;
+			Max = 30.0f;
 			break;
 		}
 		break;
 	case 2:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 5.0f;
+			Min = -45.0f;
+			Max = 5.0f;
 			break;
 		case 1:
-			*Min = -5.0f;
-			*Max = 45.0f;
+			Min = -5.0f;
+			Max = 45.0f;
 			break;
 		case 2:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 3:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		}
 		break;
 	case 3:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 45.0f;
+			Min = -45.0f;
+			Max = 45.0f;
 			break;
 		case 1:
-			*Min = -20.0f;
-			*Max = 20.0f;
+			Min = -20.0f;
+			Max = 20.0f;
 			break;
 		case 2:
-			*Min = -20.0f;
-			*Max = 20.0f;
+			Min = -20.0f;
+			Max = 20.0f;
 			break;
 		}
 		break;
 	case 4:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 1:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		case 2:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 3:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		case 4:
-			*Min = -30.0f;
-			*Max = 30.0f;
+			Min = -30.0f;
+			Max = 30.0f;
 			break;
 		}
 		break;
 	case 5:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 5.0f;
+			Min = -45.0f;
+			Max = 5.0f;
 			break;
 		case 1:
-			*Min = -5.0f;
-			*Max = 45.0f;
+			Min = -5.0f;
+			Max = 45.0f;
 			break;
 		}
 		break;
 	case 6:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 5.0f;
+			Min = -45.0f;
+			Max = 5.0f;
 			break;
 		case 1:
-			*Min = -5.0f;
-			*Max = 45.0f;
+			Min = -5.0f;
+			Max = 45.0f;
 			break;
 		case 2:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 3:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		case 4:
-			*Min = -30.0f;
-			*Max = 30.0f;
+			Min = -30.0f;
+			Max = 30.0f;
 			break;
 		}
 		break;
 	case 7:
 		switch (SlotNum) {
 		case 0:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		case 1:
-			*Min = -45.0f;
-			*Max = 25.0f;
+			Min = -45.0f;
+			Max = 25.0f;
 			break;
 		case 2:
-			*Min = -25.0f;
-			*Max = 45.0f;
+			Min = -25.0f;
+			Max = 45.0f;
 			break;
 		case 3:
-			*Min = -45.0f;
-			*Max = 15.0f;
+			Min = -45.0f;
+			Max = 15.0f;
 			break;
 		case 4:
-			*Min = -15.0f;
-			*Max = 45.0f;
+			Min = -15.0f;
+			Max = 45.0f;
 			break;
 		}
 		break;
 	case 8:
 		switch (SlotNum) {
 		case 0:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		case 1:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		}
 		break;
 	case 9:
 		switch (SlotNum) {
 		case 0:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		case 1:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		}
 		break;
 	case 10:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 1:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		case 2:
-			*Min = -20.0f;
-			*Max = 5.0f;
+			Min = -20.0f;
+			Max = 5.0f;
 			break;
 		case 3:
-			*Min = -5.0f;
-			*Max = 20.0f;
+			Min = -5.0f;
+			Max = 20.0f;
 			break;
 		case 4:
-			*Min = -30.0f;
-			*Max = 30.0f;
+			Min = -30.0f;
+			Max = 30.0f;
 			break;
 		}
 		break;
 	case 11:
 		switch (SlotNum) {
 		case 0:
-			*Min = -30.0f;
-			*Max = 0.0f;
+			Min = -30.0f;
+			Max = 0.0f;
 			break;
 		case 1:
-			*Min = -0.0f;
-			*Max = 30.0f;
+			Min = -0.0f;
+			Max = 30.0f;
 			break;
 		case 2:
-			*Min = -30.0f;
-			*Max = 30.0f;
+			Min = -30.0f;
+			Max = 30.0f;
 			break;
 		}
 		break;
 	case 12:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 25.0f;
+			Min = -45.0f;
+			Max = 25.0f;
 			break;
 		case 1:
-			*Min = -25.0f;
-			*Max = 45.0f;
+			Min = -25.0f;
+			Max = 45.0f;
 			break;
 		case 2:
-			*Min = -30.0f;
-			*Max = 30.0f;
+			Min = -30.0f;
+			Max = 30.0f;
 			break;
 		}
 		break;
 	case 13:
 		switch (SlotNum) {
 		case 0:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		case 1:
-			*Min = -45.0f;
-			*Max = 20.0f;
+			Min = -45.0f;
+			Max = 20.0f;
 			break;
 		case 2:
-			*Min = -20.0f;
-			*Max = 45.0f;
+			Min = -20.0f;
+			Max = 45.0f;
 			break;
 		case 3:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 4:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		}
 		break;
 	case 14:
 		switch (SlotNum) {
 		case 0:
-			*Min = -30.0f;
-			*Max = 5.0f;
+			Min = -30.0f;
+			Max = 5.0f;
 			break;
 		case 1:
-			*Min = -5.0f;
-			*Max = 30.0f;
+			Min = -5.0f;
+			Max = 30.0f;
 			break;
 		case 2:
-			*Min = -35.0f;
-			*Max = 5.0f;
+			Min = -35.0f;
+			Max = 5.0f;
 			break;
 		case 3:
-			*Min = -5.0f;
-			*Max = 35.0f;
+			Min = -5.0f;
+			Max = 35.0f;
 			break;
 		case 4:
-			*Min = -15.0f;
-			*Max = 15.0f;
+			Min = -15.0f;
+			Max = 15.0f;
 			break;
 		}
 		break;
 	case 15:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 45.0f;
+			Min = -45.0f;
+			Max = 45.0f;
 			break;
 		case 1:
-			*Min = -45.0f;
-			*Max = 20.0f;
+			Min = -45.0f;
+			Max = 20.0f;
 			break;
 		case 2:
-			*Min = -20.0f;
-			*Max = 45.0f;
+			Min = -20.0f;
+			Max = 45.0f;
 			break;
 		}
 		break;
 	case 16:
 		switch (SlotNum) {
 		case 0:
-			*Min = -20.0f;
-			*Max = 20.0f;
+			Min = -20.0f;
+			Max = 20.0f;
 			break;
 		case 1:
-			*Min = -30.0f;
-			*Max = 0.0f;
+			Min = -30.0f;
+			Max = 0.0f;
 			break;
 		case 2:
-			*Min = -0.0f;
-			*Max = 30.0f;
+			Min = -0.0f;
+			Max = 30.0f;
 			break;
 		}
 		break;
 	case 17:
 		switch (SlotNum) {
 		case 0:
-			*Min = -30.0f;
-			*Max = 5.0f;
+			Min = -30.0f;
+			Max = 5.0f;
 			break;
 		case 1:
-			*Min = -5.0f;
-			*Max = 30.0f;
+			Min = -5.0f;
+			Max = 30.0f;
 			break;
 		case 2:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 3:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		case 4:
-			*Min = -20.0f;
-			*Max = 20.0f;
+			Min = -20.0f;
+			Max = 20.0f;
 			break;
 		}
 		break;
 	case 18:
 		switch (SlotNum) {
 		case 0:
-			*Min = -20.0f;
-			*Max = 20.0f;
+			Min = -20.0f;
+			Max = 20.0f;
 			break;
 		case 1:
-			*Min = -20.0f;
-			*Max = 20.0f;
+			Min = -20.0f;
+			Max = 20.0f;
 			break;
 		case 2:
-			*Min = -25.0f;
-			*Max = 5.0f;
+			Min = -25.0f;
+			Max = 5.0f;
 			break;
 		case 3:
-			*Min = -5.0f;
-			*Max = 25.0f;
+			Min = -5.0f;
+			Max = 25.0f;
 			break;
 		}
 		break;
 	case 19:
 		switch (SlotNum) {
 		case 0:
-			*Min = -45.0f;
-			*Max = 45.0f;
+			Min = -45.0f;
+			Max = 45.0f;
 			break;
 		case 1:
-			*Min = -45.0f;
-			*Max = 10.0f;
+			Min = -45.0f;
+			Max = 10.0f;
 			break;
 		case 2:
-			*Min = -10.0f;
-			*Max = 45.0f;
+			Min = -10.0f;
+			Max = 45.0f;
 			break;
 		}
 		break;
 	case 20:
 		switch (SlotNum) {
 		case 0:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		case 1:
-			*Min = -10.0f;
-			*Max = 10.0f;
+			Min = -10.0f;
+			Max = 10.0f;
 			break;
 		case 2:
-			*Min = -45.0f;
-			*Max = 20.0f;
+			Min = -45.0f;
+			Max = 20.0f;
 			break;
 		case 3:
-			*Min = -20.0f;
-			*Max = 45.0f;
+			Min = -20.0f;
+			Max = 45.0f;
 			break;
 		}
 		break;
 	case 21:
 		switch (SlotNum) {
 		case 0:
-			*Min = -25.0f;
-			*Max = 0.0f;
+			Min = -25.0f;
+			Max = 0.0f;
 			break;
 		case 1:
-			*Min = -0.0f;
-			*Max = 25.0f;
+			Min = -0.0f;
+			Max = 25.0f;
 			break;
 		case 2:
-			*Min = -20.0f;
-			*Max = 20.0f;
+			Min = -20.0f;
+			Max = 20.0f;
 			break;
 		}
 		break;
 	case 22:
 		switch (SlotNum) {
 		case 0:
-			*Min = -25.0f;
-			*Max = 25.0f;
+			Min = -25.0f;
+			Max = 25.0f;
 			break;
 		}
 		break;
@@ -1059,7 +1059,7 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 	}
 }
 
-float GetShipArmor(int SpaceShipNum)
+float GetShipArmor(const int SpaceShipNum)
 {
 	return PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength;
 }

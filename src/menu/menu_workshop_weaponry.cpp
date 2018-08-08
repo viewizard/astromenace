@@ -767,7 +767,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 			float Min = 0.0f;
 			float Max = 0.0f;
-			GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, SlotNum, &Min, &Max);
+			GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, SlotNum, Min, Max);
 
 
 			if (GameConfig().Profile[CurrentProfile].TargetingSystem <= 2) {

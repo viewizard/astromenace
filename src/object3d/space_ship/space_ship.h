@@ -279,21 +279,21 @@ std::weak_ptr<cObject3D> GetSpaceShipPtr(const cSpaceShip &Object);
 
 
 // Установка системы двигателей
-void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, int EngineType);
+void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int EngineType);
 // Установка брони для кораблей землян
-void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, int ArmourType);
+void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmourType);
 // Установка оружия на корабль
-bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, int WeaponSlot, int WeaponNum);
+bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, const int WeaponSlot, const int WeaponNum);
 // Получаем возможный поворот орудия в данном слоте
-void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max);
+void GetShipWeaponSlotAngle(const int ShipNum, const int SlotNum, float &Min, float &Max);
 //
-float GetEngineAcceleration(int EngineType);
+float GetEngineAcceleration(const int EngineType);
 //
-float GetEnginePower(int EngineType);
+float GetEnginePower(const int EngineType);
 //
-float GetEngineRotatePower(int EngineType);
+float GetEngineRotatePower(const int EngineType);
 //
-float GetShipArmor(int SpaceShipNum);
+float GetShipArmor(const int SpaceShipNum);
 
 } // astromenace namespace
 } // viewizard namespace
