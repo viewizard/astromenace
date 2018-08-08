@@ -51,8 +51,8 @@ static void SetBaseGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const e
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
-	sRGBCOLOR MuddyYellow{0.60f, 0.60f, 0.30f};
-	sRGBCOLOR LightGreen{0.30f, 1.00f, 0.30f};
+	static const sRGBCOLOR MuddyYellow{0.6f, 0.6f, 0.3f};
+	static const sRGBCOLOR LightGreen{0.3f, 1.0f, 0.3f};
 
 	switch (EngineType) {
 	case eEngineGFX::Primary:

@@ -85,9 +85,9 @@ static void SetAlienSpaceFighterEngine(std::shared_ptr<cParticleSystem> &Particl
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
-	sRGBCOLOR Turquoise{0.0f, 0.7f, 1.0f};
-	sRGBCOLOR LightViolet{0.0f, 0.4f, 1.0f};
-	sRGBCOLOR LightSkyey{0.7f, 1.0f, 1.0f};
+	static const sRGBCOLOR Turquoise{0.0f, 0.7f, 1.0f};
+	static const sRGBCOLOR LightViolet{0.0f, 0.4f, 1.0f};
+	static const sRGBCOLOR LightSkyey{0.7f, 1.0f, 1.0f};
 
 	switch (EngineType) {
 	case eEngineGFX::BigEngine:
