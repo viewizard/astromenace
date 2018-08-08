@@ -27,7 +27,11 @@
 
 // TODO add flare weapons (probably, we need some alien-specific visual effects)
 
-// TODO translate comments
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
+
+// TODO switch to enumeration EngineType in SetAlienSpaceMotherShipEngine()
+
+// TODO switch to color preset in SetAlienSpaceMotherShipEngine()
 
 #include "space_ship.h"
 #include "../../config/config.h"
@@ -85,18 +89,19 @@ const std::vector<sAlienSpaceMotherShipData> PresetAlienSpaceMotherShipData{
 } // unnamed namespace
 
 
-//-----------------------------------------------------------------------------
-// Создание двигателя
-//-----------------------------------------------------------------------------
-static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
+/*
+ * Setup gfx.
+ */
+static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-	ParticleSystem->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
+	ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
-	switch(EngineType) {
-	// красно-желтые
-	case 1:
-		// большой двигатель
+	switch (EngineType) {
+
+	// red-yellow
+
+	case 1: // big engine
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -104,23 +109,23 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.30f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.80f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.50f;
-		ParticleSystem->SizeEnd    = 1.00f;
-		ParticleSystem->Speed      = 15.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.80f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.50f;
+		ParticleSystem->SizeEnd = 1.00f;
+		ParticleSystem->Speed = 15.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{2.4f, 2.4f, 0.1f};
+		ParticleSystem->CreationSize(2.4f, 2.4f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.65f, 0.15f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
-	case 2:
-		// средний двигатель
+
+	case 2: // mid engine
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -128,21 +133,21 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.30f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.80f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.80f;
-		ParticleSystem->Speed      = 10.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.80f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.80f;
+		ParticleSystem->Speed = 10.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{1.2f, 1.2f, 0.1f};
+		ParticleSystem->CreationSize(1.2f, 1.2f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		break;
-	case 3:
-		// внутренности
+
+	case 3: // internal illumination
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -150,24 +155,24 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.30f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{15.0f, 15.0f, 3.0f};
+		ParticleSystem->CreationSize(15.0f, 15.0f, 3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
-	case 4:
-		// внутренности2
+
+	case 4: // internal illumination
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -175,24 +180,24 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.30f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.40f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.40f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{15.0f, 15.0f, 3.0f};
+		ParticleSystem->CreationSize(15.0f, 15.0f, 3.0f);
 		ParticleSystem->DeadZone = 14.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 15.0f;
 		break;
-	case 5:
-		// внутренности3
+
+	case 5: // internal illumination
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -200,24 +205,24 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.30f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{9.0f, 9.0f, 2.0f};
+		ParticleSystem->CreationSize(9.0f, 9.0f, 2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
-	case 6:
-		// внутренности4
+
+	case 6: // internal illumination
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 0.30f;
@@ -225,31 +230,26 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.30f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.40f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.40f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{9.0f, 9.0f, 2.0f};
+		ParticleSystem->CreationSize(9.0f, 9.0f, 2.0f);
 		ParticleSystem->DeadZone = 8.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 15.0f;
 		break;
 
+	// white-blue
 
-
-
-	// бело-синие
-
-
-	case 9:
-		// малый двигатель 2
+	case 9: // small engine
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -257,21 +257,21 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.20f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.00f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 6.00f;
-		ParticleSystem->SpeedOnCreation	   = 6.00f;
-		ParticleSystem->Theta      = 20.00f;
-		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->AlphaEnd = 0.20f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.00f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 6.00f;
+		ParticleSystem->SpeedOnCreation = 6.00f;
+		ParticleSystem->Theta = 20.00f;
+		ParticleSystem->Life = 0.30f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{0.5f, 0.5f, 0.1f};
+		ParticleSystem->CreationSize(0.5f, 0.5f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		break;
-	case 10:
-		// двигатель
+
+	case 10: // engine
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -279,21 +279,21 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.50f;
-		ParticleSystem->Speed      = 10.00f;
-		ParticleSystem->SpeedOnCreation	   = 10.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.50f;
+		ParticleSystem->Speed = 10.00f;
+		ParticleSystem->SpeedOnCreation = 10.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{0.8f, 0.8f, 0.8f};
+		ParticleSystem->CreationSize(0.8f, 0.8f, 0.8f);
 		ParticleSystem->IsMagnet = true;
 		break;
-	case 11:
-		// большой двигатель
+
+	case 11: // big engine
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -301,22 +301,22 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.80f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.50f;
-		ParticleSystem->Speed      = 10.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.80f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.50f;
+		ParticleSystem->Speed = 10.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{1.4f, 1.4f, 0.1f};
+		ParticleSystem->CreationSize(1.4f, 1.4f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 13.0f;
 		break;
-	case 12:
-		// большой двигатель
+
+	case 12: // big engine
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -324,23 +324,23 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.80f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.50f;
-		ParticleSystem->Speed      = 15.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.80f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.50f;
+		ParticleSystem->Speed = 15.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{2.4f, 2.4f, 0.1f};
+		ParticleSystem->CreationSize(2.4f, 2.4f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.03f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
-	case 13:
-		// внутренности2
+
+	case 13: // internal illumination
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -348,17 +348,17 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.40f;
-		ParticleSystem->SizeVar    = 0.20f;
-		ParticleSystem->SizeEnd    = 0.50f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 0.70f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.40f;
+		ParticleSystem->SizeVar = 0.20f;
+		ParticleSystem->SizeEnd = 0.50f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 0.70f;
 		ParticleSystem->ParticlesPerSec = 200;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{14.0f, 5.0f, 10.0f};
+		ParticleSystem->CreationSize(14.0f, 5.0f, 10.0f);
 		ParticleSystem->DeadZone = 4.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
@@ -367,14 +367,9 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
+	// white-violet
 
-
-
-	// фиолетовое
-
-
-	case 15:
-		// большой двигатель
+	case 15: // big engine
 		ParticleSystem->ColorStart.r = 0.50f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -382,24 +377,24 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.80f;
-		ParticleSystem->SizeStart  = 0.80f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.60f;
-		ParticleSystem->Speed      = 20.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.50f;
+		ParticleSystem->AlphaEnd = 0.80f;
+		ParticleSystem->SizeStart = 0.80f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.60f;
+		ParticleSystem->Speed = 20.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.50f;
 		ParticleSystem->ParticlesPerSec = 150;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{5.0f, 3.0f, 3.0f};
+		ParticleSystem->CreationSize(5.0f, 3.0f, 3.0f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 30.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
-	case 16:
-		// средний двигатель
+
+	case 16: // mid engine
 		ParticleSystem->ColorStart.r = 0.50f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -407,23 +402,23 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.80f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.80f;
-		ParticleSystem->Speed      = 10.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.80f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.80f;
+		ParticleSystem->Speed = 10.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{1.2f, 1.2f, 0.1f};
+		ParticleSystem->CreationSize(1.2f, 1.2f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
-	case 17:
-		// внутренности
+
+	case 17: // internal illumination
 		ParticleSystem->ColorStart.r = 0.50f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -431,24 +426,24 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 400;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{14.0f, 1.0f, 14.0f};
+		ParticleSystem->CreationSize(14.0f, 1.0f, 14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
-	case 18:
-		// внутренности2
+
+	case 18: // internal illumination
 		ParticleSystem->ColorStart.r = 0.50f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -456,24 +451,24 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 0.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 0.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{14.0f, 1.0f, 14.0f};
+		ParticleSystem->CreationSize(14.0f, 1.0f, 14.0f);
 		ParticleSystem->DeadZone = 13.9f;
 		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 20.0f;
 		break;
-	case 19:
-		// внутренности
+
+	case 19: // internal illumination
 		ParticleSystem->ColorStart.r = 0.50f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -481,21 +476,21 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.90f;
-		ParticleSystem->SizeVar    = 0.10f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 10.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 360.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.90f;
+		ParticleSystem->SizeVar = 0.10f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 10.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 360.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
-	case 20:
-		// большой двигатель
+
+	case 20: // big engine
 		ParticleSystem->ColorStart.r = 0.50f;
 		ParticleSystem->ColorStart.g = 0.50f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -503,30 +498,31 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.80f;
-		ParticleSystem->SizeStart  = 0.40f;
-		ParticleSystem->SizeVar    = 0.40f;
-		ParticleSystem->SizeEnd    = 0.50f;
-		ParticleSystem->Speed      = 11.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 1.00f;
+		ParticleSystem->AlphaEnd = 0.80f;
+		ParticleSystem->SizeStart = 0.40f;
+		ParticleSystem->SizeVar = 0.40f;
+		ParticleSystem->SizeEnd = 0.50f;
+		ParticleSystem->Speed = 11.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 1.00f;
 		ParticleSystem->ParticlesPerSec = 50;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{2.0f, 2.0f, 0.1f};
+		ParticleSystem->CreationSize(2.0f, 2.0f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
+
 	default:
 		std::cerr << __func__ << "(): " << "wrong EngineType.\n";
 		break;
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
@@ -547,22 +543,20 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 80.0f;
-	Strength = StrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
-	ShieldStrength = ShieldStrengthStart = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].ShieldStrength / GameEnemyArmorPenalty;
+	Strength = StrengthStart =
+			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
+	ShieldStrength = ShieldStrengthStart =
+			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].ShieldStrength / GameEnemyArmorPenalty;
 	ShieldRecharge = ShieldStrengthStart / 15.0f;
 
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Name, *this);
 
-	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Texture);
 		TextureIllum[i] = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].TextureIllum);
-		// если шейдеры выключены - вернет ноль (не загружаем текстуры нормал мепов если нет шейдеров)
-		// в LoadObjectData указываем Setup.UseGLSL
 		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/alien_mothership_nm.tga");
 	}
 
-	// начальные установки для двигателей
 	Engines.resize(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].EngineQuantity);
 	EnginesLocation.resize(Engines.size());
 
@@ -1206,7 +1200,6 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 	for (unsigned int i = 0; i < Engines.size(); i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			sharedEngine->SetStartLocation(EnginesLocation[i]);
-			// находим кол-во внутренних источников света
 			if (!sharedEngine->Light.expired())
 				InternalLights++;
 		}
