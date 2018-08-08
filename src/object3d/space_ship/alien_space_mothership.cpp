@@ -31,8 +31,6 @@
 
 // TODO switch to enumeration EngineType in SetAlienSpaceMotherShipEngine()
 
-// TODO switch to color preset in SetAlienSpaceMotherShipEngine()
-
 #include "space_ship.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"
@@ -97,17 +95,19 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
+	static const sRGBCOLOR LightYellow{1.0f, 1.0f, 0.3f};
+	static const sRGBCOLOR Orange{1.0f, 0.3f, 0.0f};
+	static const sRGBCOLOR Turquoise{0.0f, 0.5f, 1.0f};
+	static const sRGBCOLOR LightSkyey{0.7f, 1.0f, 1.0f};
+	static const sRGBCOLOR Violet{0.5f, 0.5f, 1.0f};
+
 	switch (EngineType) {
 
 	// red-yellow
 
 	case 1: // big engine
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.30f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.80f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -126,12 +126,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 2: // mid engine
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.30f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.80f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -148,12 +144,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 3: // internal illumination
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.30f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -173,12 +165,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 4: // internal illumination
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.30f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.40f;
@@ -198,12 +186,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 5: // internal illumination
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.30f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -223,12 +207,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 6: // internal illumination
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.30f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.40f;
@@ -250,12 +230,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 	// white-blue
 
 	case 9: // small engine
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd =LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.20f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -272,12 +248,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 10: // engine
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -294,12 +266,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 11: // big engine
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.80f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -317,12 +285,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 12: // big engine
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.80f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -341,12 +305,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 13: // internal illumination
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.40f;
@@ -370,12 +330,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 	// white-violet
 
 	case 15: // big engine
-		ParticleSystem->ColorStart.r = 0.50f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.80f;
 		ParticleSystem->SizeStart = 0.80f;
@@ -395,12 +351,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 16: // mid engine
-		ParticleSystem->ColorStart.r = 0.50f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.80f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -419,12 +371,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 17: // internal illumination
-		ParticleSystem->ColorStart.r = 0.50f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -444,12 +392,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 18: // internal illumination
-		ParticleSystem->ColorStart.r = 0.50f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -469,12 +413,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 19: // internal illumination
-		ParticleSystem->ColorStart.r = 0.50f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.90f;
@@ -491,12 +431,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		break;
 
 	case 20: // big engine
-		ParticleSystem->ColorStart.r = 0.50f;
-		ParticleSystem->ColorStart.g = 0.50f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.80f;
 		ParticleSystem->SizeStart = 0.40f;
