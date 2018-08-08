@@ -29,8 +29,6 @@
 
 // TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
 
-// TODO switch to enumeration EngineType in SetAlienSpaceMotherShipEngine()
-
 #include "space_ship.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"
@@ -40,6 +38,28 @@ namespace viewizard {
 namespace astromenace {
 
 namespace {
+
+enum class eGFX {
+	Orange_BigEngine,
+	Orange_MidEngine,
+	Orange_BigEnergyRingExt,
+	Orange_BigEnergyRingInt,
+	Orange_MidEnergyRingExt,
+	Orange_MidEnergyRingInt,
+
+	Blue_MicroEngine,
+	Blue_SmallEngine,
+	Blue_MidEngine,
+	Blue_BigEngine,
+	Blue_EnergyCollector,
+
+	Violet_BigEngine,
+	Violet_SmallEngine,
+	Violet_BigEnergyRingExt,
+	Violet_BigEnergyRingInt,
+	Violet_EnergyOrb,
+	Violet_MidEngine
+};
 
 struct sAlienSpaceMotherShipData {
 	unsigned int EngineQuantity;
@@ -90,7 +110,7 @@ const std::vector<sAlienSpaceMotherShipData> PresetAlienSpaceMotherShipData{
 /*
  * Setup gfx.
  */
-static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
+static void SetupGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const eGFX Type)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
@@ -101,11 +121,8 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 	static const sRGBCOLOR LightSkyey{0.7f, 1.0f, 1.0f};
 	static const sRGBCOLOR Violet{0.5f, 0.5f, 1.0f};
 
-	switch (EngineType) {
-
-	// red-yellow
-
-	case 1: // big engine
+	switch (Type) {
+	case eGFX::Orange_BigEngine:
 		ParticleSystem->ColorStart = LightYellow;
 		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -125,7 +142,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
-	case 2: // mid engine
+	case eGFX::Orange_MidEngine:
 		ParticleSystem->ColorStart = LightYellow;
 		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -143,7 +160,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->IsMagnet = true;
 		break;
 
-	case 3: // internal illumination
+	case eGFX::Orange_BigEnergyRingExt:
 		ParticleSystem->ColorStart = LightYellow;
 		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -164,7 +181,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
 
-	case 4: // internal illumination
+	case eGFX::Orange_BigEnergyRingInt:
 		ParticleSystem->ColorStart = LightYellow;
 		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -185,7 +202,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->MagnetFactor = 15.0f;
 		break;
 
-	case 5: // internal illumination
+	case eGFX::Orange_MidEnergyRingExt:
 		ParticleSystem->ColorStart = LightYellow;
 		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -206,7 +223,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
 
-	case 6: // internal illumination
+	case eGFX::Orange_MidEnergyRingInt:
 		ParticleSystem->ColorStart = LightYellow;
 		ParticleSystem->ColorEnd = Orange;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -227,9 +244,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->MagnetFactor = 15.0f;
 		break;
 
-	// white-blue
-
-	case 9: // small engine
+	case eGFX::Blue_MicroEngine:
 		ParticleSystem->ColorStart = Turquoise;
 		ParticleSystem->ColorEnd =LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -247,7 +262,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->IsMagnet = true;
 		break;
 
-	case 10: // engine
+	case eGFX::Blue_SmallEngine:
 		ParticleSystem->ColorStart = Turquoise;
 		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -265,7 +280,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->IsMagnet = true;
 		break;
 
-	case 11: // big engine
+	case eGFX::Blue_MidEngine:
 		ParticleSystem->ColorStart = Turquoise;
 		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -284,7 +299,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->MagnetFactor = 13.0f;
 		break;
 
-	case 12: // big engine
+	case eGFX::Blue_BigEngine:
 		ParticleSystem->ColorStart = Turquoise;
 		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -304,7 +319,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
-	case 13: // internal illumination
+	case eGFX::Blue_EnergyCollector:
 		ParticleSystem->ColorStart = Turquoise;
 		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -327,9 +342,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
-	// white-violet
-
-	case 15: // big engine
+	case eGFX::Violet_BigEngine:
 		ParticleSystem->ColorStart = Violet;
 		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -350,7 +363,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
-	case 16: // mid engine
+	case eGFX::Violet_SmallEngine:
 		ParticleSystem->ColorStart = Violet;
 		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -370,7 +383,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
-	case 17: // internal illumination
+	case eGFX::Violet_BigEnergyRingExt:
 		ParticleSystem->ColorStart = Violet;
 		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -391,7 +404,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->MagnetFactor = -2.5f;
 		break;
 
-	case 18: // internal illumination
+	case eGFX::Violet_BigEnergyRingInt:
 		ParticleSystem->ColorStart = Violet;
 		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -412,7 +425,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->MagnetFactor = 20.0f;
 		break;
 
-	case 19: // internal illumination
+	case eGFX::Violet_EnergyOrb:
 		ParticleSystem->ColorStart = Violet;
 		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -430,7 +443,7 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 
-	case 20: // big engine
+	case eGFX::Violet_MidEngine:
 		ParticleSystem->ColorStart = Violet;
 		ParticleSystem->ColorEnd = Violet;
 		ParticleSystem->AlphaStart = 1.00f;
@@ -448,10 +461,6 @@ static void SetAlienSpaceMotherShipEngine(std::shared_ptr<cParticleSystem> &Part
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.5f, 1.0f, 0.0f, 0.01f);
 		ParticleSystem->LightNeedDeviation = true;
-		break;
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong EngineType.\n";
 		break;
 	}
 }
@@ -517,43 +526,43 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{8.4f, 5.2f, -24.0f};
 		if (auto sharedEngine = Engines[0].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{-8.4f, 5.2f, -24.0f};
 		if (auto sharedEngine = Engines[1].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{8.4f, -5.6f, -24.0f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{-8.4f, -5.6f, -24.0f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{0.0f, 8.2f, -15.0f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{0.0f, -8.2f, -15.0f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D{0.0f, 0.0f, -8.0f};
 		if (auto sharedEngine = Engines[6].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 3);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEnergyRingExt);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D{0.0f, 0.0f, -8.0f};
 		if (auto sharedEngine = Engines[7].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 4);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEnergyRingInt);
 		Engines[8] = vw_CreateParticleSystem();
 		EnginesLocation[8] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[8].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 5);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEnergyRingExt);
 		Engines[9] = vw_CreateParticleSystem();
 		EnginesLocation[9] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[9].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEnergyRingInt);
 		break;
 
 	case 2:
@@ -596,43 +605,43 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{5.6f, 7.0f, -27.6f};
 		if (auto sharedEngine = Engines[0].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{-5.6f, 7.0f, -27.6f};
 		if (auto sharedEngine = Engines[1].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{5.6f, -7.0f, -27.6f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{-5.6f, -7.0f, -27.6f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{10.7f, 0.0f, -21.5f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{-10.7f, 0.0f, -21.5f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D{0.0f, 0.0f, -14.0f};
 		if (auto sharedEngine = Engines[6].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 3);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEnergyRingExt);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D{0.0f, 0.0f, -14.0f};
 		if (auto sharedEngine = Engines[7].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 4);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEnergyRingInt);
 		Engines[8] = vw_CreateParticleSystem();
 		EnginesLocation[8] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[8].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 5);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEnergyRingExt);
 		Engines[9] = vw_CreateParticleSystem();
 		EnginesLocation[9] = sVECTOR3D{0.0f, 0.0f, 15.0f};
 		if (auto sharedEngine = Engines[9].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEnergyRingInt);
 		break;
 
 	case 3:
@@ -651,35 +660,35 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{5.5f, 8.1f, -26.1f};
 		if (auto sharedEngine = Engines[0].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{-5.5f, 8.1f, -26.1f};
 		if (auto sharedEngine = Engines[1].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{5.6f, -7.2f, -28.6f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{-5.6f, -7.2f, -28.6f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{11.9f, -1.0f, -14.8f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{-11.9f, -1.0f, -14.8f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D{0.0f, -1.0f, -10.0f};
 		if (auto sharedEngine = Engines[6].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 3);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEnergyRingExt);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D{0.0f, -1.0f, -10.0f};
 		if (auto sharedEngine = Engines[7].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 4);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEnergyRingInt);
 		break;
 
 	case 4:
@@ -718,54 +727,54 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{1.9f, 5.9f, -24.6f};
 		if (auto sharedEngine = Engines[0].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{-1.9f, 5.9f, -24.6f};
 		if (auto sharedEngine = Engines[1].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{1.9f, -2.9f, -24.6f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{-1.9f, -2.9f, -24.6f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 2);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEngine);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{2.9f, 1.6f, -24.6f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{-2.9f, 1.6f, -24.6f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D{8.9f, -0.6f, -12.6f};
 		if (auto sharedEngine = Engines[6].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D{-8.9f, -0.6f, -12.6f};
 		if (auto sharedEngine = Engines[7].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[8] = vw_CreateParticleSystem();
 		EnginesLocation[8] = sVECTOR3D{10.0f, -5.6f, -5.2f};
 		if (auto sharedEngine = Engines[8].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[9] = vw_CreateParticleSystem();
 		EnginesLocation[9] = sVECTOR3D{-10.0f, -5.6f, -5.2f};
 		if (auto sharedEngine = Engines[9].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 1);
+			SetupGFX(sharedEngine, eGFX::Orange_BigEngine);
 		Engines[10] = vw_CreateParticleSystem();
 		EnginesLocation[10] = sVECTOR3D{0.0f, -6.0f, 10.0f};
 		if (auto sharedEngine = Engines[10].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 5);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEnergyRingExt);
 			sharedEngine->CreationSize = sVECTOR3D{6.0f, 6.0f, 2.0f};
 			sharedEngine->DeadZone = 5.9f;
 		}
 		Engines[11] = vw_CreateParticleSystem();
 		EnginesLocation[11] = sVECTOR3D{0.0f, -6.0f, 10.0f};
 		if (auto sharedEngine = Engines[11].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 6);
+			SetupGFX(sharedEngine, eGFX::Orange_MidEnergyRingInt);
 			sharedEngine->CreationSize = sVECTOR3D{6.0f, 6.0f, 2.0f};
 			sharedEngine->DeadZone = 5.9f;
 		}
@@ -805,83 +814,83 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{25.1f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[0].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
+			SetupGFX(sharedEngine, eGFX::Blue_MicroEngine);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{-25.1f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[1].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
+			SetupGFX(sharedEngine, eGFX::Blue_MicroEngine);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{20.6f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
+			SetupGFX(sharedEngine, eGFX::Blue_MicroEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{-20.6f, 0.65f, -18.8f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 9);
+			SetupGFX(sharedEngine, eGFX::Blue_MicroEngine);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{22.9f, 0.65f, -20.0f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{-22.9f, 0.65f, -20.0f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D{22.9f, -5.1f, -20.0f};
 		if (auto sharedEngine = Engines[6].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D{-22.9f, -5.1f, -20.0f};
 		if (auto sharedEngine = Engines[7].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[8] = vw_CreateParticleSystem();
 		EnginesLocation[8] = sVECTOR3D{8.85f, 5.65f, -15.2f};
 		if (auto sharedEngine = Engines[8].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[9] = vw_CreateParticleSystem();
 		EnginesLocation[9] = sVECTOR3D{-8.85f, 5.65f, -15.2f};
 		if (auto sharedEngine = Engines[9].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[10] = vw_CreateParticleSystem();
 		EnginesLocation[10] = sVECTOR3D{4.0f, 7.0f, -21.2f};
 		if (auto sharedEngine = Engines[10].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[11] = vw_CreateParticleSystem();
 		EnginesLocation[11] = sVECTOR3D{-4.0f, 7.0f, -21.2f};
 		if (auto sharedEngine = Engines[11].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[12] = vw_CreateParticleSystem();
 		EnginesLocation[12] = sVECTOR3D{20.4f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[12].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[13] = vw_CreateParticleSystem();
 		EnginesLocation[13] = sVECTOR3D{-20.4f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[13].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[14] = vw_CreateParticleSystem();
 		EnginesLocation[14] = sVECTOR3D{25.2f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[14].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[15] = vw_CreateParticleSystem();
 		EnginesLocation[15] = sVECTOR3D{-25.2f, -2.4f, -20.0f};
 		if (auto sharedEngine = Engines[15].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[16] = vw_CreateParticleSystem();
 		EnginesLocation[16] = sVECTOR3D{35.7f, -3.0f, -13.0f};
 		if (auto sharedEngine = Engines[16].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 12);
+			SetupGFX(sharedEngine, eGFX::Blue_BigEngine);
 			sharedEngine->Direction = sVECTOR3D{0.4f, 0.0f, -0.8f};
 		}
 		Engines[17] = vw_CreateParticleSystem();
 		EnginesLocation[17] = sVECTOR3D{-35.7f, -3.0f, -13.0f};
 		if (auto sharedEngine = Engines[17].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 12);
+			SetupGFX(sharedEngine, eGFX::Blue_BigEngine);
 			sharedEngine->Direction = sVECTOR3D{-0.4f, 0.0f, -0.8f};
 		}
 		Engines[18] = vw_CreateParticleSystem();
 		EnginesLocation[18] = sVECTOR3D{0.0f, -2.4f, -23.0f};
 		if (auto sharedEngine = Engines[18].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 13);
+			SetupGFX(sharedEngine, eGFX::Blue_EnergyCollector);
 		break;
 
 	case 6:
@@ -942,63 +951,63 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, -7.0f, -23.0f};
 		if (auto sharedEngine = Engines[0].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 13);
+			SetupGFX(sharedEngine, eGFX::Blue_EnergyCollector);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{-25.4f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[1].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{20.6f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{-20.6f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{23.4f, -1.0f, -20.0f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{-23.4f, -1.0f, -20.0f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D{23.4f, -7.0f, -20.0f};
 		if (auto sharedEngine = Engines[6].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D{-23.4f, -7.0f, -20.0f};
 		if (auto sharedEngine = Engines[7].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[8] = vw_CreateParticleSystem();
 		EnginesLocation[8] = sVECTOR3D{5.3f, 4.7f, -22.9f};
 		if (auto sharedEngine = Engines[8].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[9] = vw_CreateParticleSystem();
 		EnginesLocation[9] = sVECTOR3D{-5.3f, 4.7f, -22.9f};
 		if (auto sharedEngine = Engines[9].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 10);
+			SetupGFX(sharedEngine, eGFX::Blue_SmallEngine);
 		Engines[10] = vw_CreateParticleSystem();
 		EnginesLocation[10] = sVECTOR3D{2.6f, 6.6f, -21.5f};
 		if (auto sharedEngine = Engines[10].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[11] = vw_CreateParticleSystem();
 		EnginesLocation[11] = sVECTOR3D{-2.6f, 6.6f, -21.5f};
 		if (auto sharedEngine = Engines[11].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[12] = vw_CreateParticleSystem();
 		EnginesLocation[12] = sVECTOR3D{2.6f, 2.0f, -21.5f};
 		if (auto sharedEngine = Engines[12].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[13] = vw_CreateParticleSystem();
 		EnginesLocation[13] = sVECTOR3D{-2.6f, 2.0f, -21.5f};
 		if (auto sharedEngine = Engines[13].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		Engines[14] = vw_CreateParticleSystem();
 		EnginesLocation[14] = sVECTOR3D{25.4f, -4.0f, -20.0f};
 		if (auto sharedEngine = Engines[14].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 11);
+			SetupGFX(sharedEngine, eGFX::Blue_MidEngine);
 		break;
 
 	case 7:
@@ -1034,27 +1043,27 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{0.0f, 2.3f, -25.0f};
 		if (auto sharedEngine = Engines[0].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 15);
+			SetupGFX(sharedEngine, eGFX::Violet_BigEngine);
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{12.5f, 1.6f, -20.3f};
 		if (auto sharedEngine = Engines[1].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 16);
+			SetupGFX(sharedEngine, eGFX::Violet_SmallEngine);
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{-12.5f, 1.6f, -20.3f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 16);
+			SetupGFX(sharedEngine, eGFX::Violet_SmallEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{0.0f, -8.0f, 0.0f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 17);
+			SetupGFX(sharedEngine, eGFX::Violet_BigEnergyRingExt);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{0.0f, -8.0f, 0.0f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 18);
+			SetupGFX(sharedEngine, eGFX::Violet_BigEnergyRingInt);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{0.0f, -8.0f, 0.0f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 19);
+			SetupGFX(sharedEngine, eGFX::Violet_EnergyOrb);
 		break;
 
 	case 8:
@@ -1083,50 +1092,50 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 		Engines[0] = vw_CreateParticleSystem();
 		EnginesLocation[0] = sVECTOR3D{15.0f, 4.4f, -29.0f};
 		if (auto sharedEngine = Engines[0].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 15);
+			SetupGFX(sharedEngine, eGFX::Violet_BigEngine);
 			sharedEngine->CreationSize = sVECTOR3D{4.0f, 6.0f, 3.0f};
 		}
 		Engines[1] = vw_CreateParticleSystem();
 		EnginesLocation[1] = sVECTOR3D{-15.0f, 4.4f, -29.0f};
 		if (auto sharedEngine = Engines[1].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 15);
+			SetupGFX(sharedEngine, eGFX::Violet_BigEngine);
 			sharedEngine->CreationSize = sVECTOR3D{4.0f, 6.0f, 3.0f};
 		}
 		Engines[2] = vw_CreateParticleSystem();
 		EnginesLocation[2] = sVECTOR3D{5.2f, 5.4f, -20.6f};
 		if (auto sharedEngine = Engines[2].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
+			SetupGFX(sharedEngine, eGFX::Violet_MidEngine);
 		Engines[3] = vw_CreateParticleSystem();
 		EnginesLocation[3] = sVECTOR3D{-5.2f, 5.4f, -20.6f};
 		if (auto sharedEngine = Engines[3].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
+			SetupGFX(sharedEngine, eGFX::Violet_MidEngine);
 		Engines[4] = vw_CreateParticleSystem();
 		EnginesLocation[4] = sVECTOR3D{5.2f, -8.8f, -22.6f};
 		if (auto sharedEngine = Engines[4].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
+			SetupGFX(sharedEngine, eGFX::Violet_MidEngine);
 		Engines[5] = vw_CreateParticleSystem();
 		EnginesLocation[5] = sVECTOR3D{-5.2f, -8.8f, -22.6f};
 		if (auto sharedEngine = Engines[5].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
+			SetupGFX(sharedEngine, eGFX::Violet_MidEngine);
 		Engines[6] = vw_CreateParticleSystem();
 		EnginesLocation[6] = sVECTOR3D{11.2f, -2.8f, -10.0f};
 		if (auto sharedEngine = Engines[6].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
+			SetupGFX(sharedEngine, eGFX::Violet_MidEngine);
 		Engines[7] = vw_CreateParticleSystem();
 		EnginesLocation[7] = sVECTOR3D{-11.2f, -2.8f, -10.0f};
 		if (auto sharedEngine = Engines[7].lock())
-			SetAlienSpaceMotherShipEngine(sharedEngine, 20);
+			SetupGFX(sharedEngine, eGFX::Violet_MidEngine);
 		Engines[8] = vw_CreateParticleSystem();
 		EnginesLocation[8] = sVECTOR3D{0.0f, -10.0f, -3.0f};
 		if (auto sharedEngine = Engines[8].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 17);
+			SetupGFX(sharedEngine, eGFX::Violet_BigEnergyRingExt);
 			sharedEngine->CreationSize = sVECTOR3D{17.0f, 1.0f, 17.0f};
 			sharedEngine->DeadZone = 16.9f;
 		}
 		Engines[9] = vw_CreateParticleSystem();
 		EnginesLocation[9] = sVECTOR3D{0.0f, -10.0f, -3.0f};
 		if (auto sharedEngine = Engines[9].lock()) {
-			SetAlienSpaceMotherShipEngine(sharedEngine, 18);
+			SetupGFX(sharedEngine, eGFX::Violet_BigEnergyRingInt);
 			sharedEngine->CreationSize = sVECTOR3D{17.0f, 1.0f, 17.0f};
 			sharedEngine->DeadZone = 16.9f;
 		}
