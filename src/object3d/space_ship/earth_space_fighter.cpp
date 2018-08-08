@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO split earth fighter and player ship classes
+
 // TODO translate comments
 
 #include "space_ship.h"
@@ -184,6 +186,8 @@ bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, int Weapon
 //-----------------------------------------------------------------------------
 static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
 {
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+
 	switch(EngineType) {
 	case 1:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -203,7 +207,6 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->Theta      = 30.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -225,7 +228,6 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->Theta      = 12.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -247,7 +249,6 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->Theta      = 3.00f;
 		ParticleSystem->Life       = 0.50f;
 		ParticleSystem->ParticlesPerSec = 80;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -272,7 +273,6 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->CreationSize = sVECTOR3D{0.6f, 0.6f, 0.1f};
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 50.0f;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -288,7 +288,7 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 //-----------------------------------------------------------------------------
 // Создание двигателя
 //-----------------------------------------------------------------------------
-static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
+static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
 	switch(EngineType) {
 	case 1:
@@ -1061,12 +1061,12 @@ void GetShipWeaponSlotAngle(int ShipNum, int SlotNum, float *Min, float *Max)
 
 float GetShipArmor(int SpaceShipNum)
 {
-	return PresetEarthSpaceFighterData[SpaceShipNum-1].Strength;
+	return PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength;
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
@@ -1110,10 +1110,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{-1.9f, -1.25f, 6.5f};
 		WeaponSlots[4].Type = 4;
 		WeaponSlots[4].Location = sVECTOR3D{0.0f, -1.20f, 1.0f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{3.0f, -1.2f, -4.7f};
 		EnginesLocation[1] = sVECTOR3D{-3.0f, -1.2f, -4.7f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.7f, 3.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.7f, 3.7f};
 		break;
@@ -1127,12 +1125,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[2].Location = sVECTOR3D{1.7f, -1.03f, 3.9f};
 		WeaponSlots[3].Type = 1;
 		WeaponSlots[3].Location = sVECTOR3D{-1.7f, -1.03f, 3.9f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{4.9f, -1.1f, -8.9f};
 		EnginesLocation[1] = sVECTOR3D{-4.9f, -1.1f, -8.9f};
 		EnginesLocation[2] = sVECTOR3D{0.75f, 0.7f, -9.6f};
 		EnginesLocation[3] = sVECTOR3D{-0.75f, 0.7f, -9.6f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.7f, 5.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.7f, 5.7f};
 		break;
@@ -1144,12 +1140,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[1].Location = sVECTOR3D{7.15f, -0.38f, -4.4f};
 		WeaponSlots[2].Type = 1;
 		WeaponSlots[2].Location = sVECTOR3D{-7.15f, -0.38f, -4.4f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{4.4f, -3.0f, -9.7f};
 		EnginesLocation[1] = sVECTOR3D{-4.4f, -3.0f, -9.7f};
 		EnginesLocation[2] = sVECTOR3D{4.4f, 3.0f, -9.7f};
 		EnginesLocation[3] = sVECTOR3D{-4.4f, 3.0f, -9.7f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{0.8f, -1.6f, 8.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-0.8f, -1.6f, 8.7f};
 		break;
@@ -1165,10 +1159,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{-5.10f, -1.2f, -2.5f};
 		WeaponSlots[4].Type = 4;
 		WeaponSlots[4].Location = sVECTOR3D{0.0f, -1.5f, 5.3f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{0.8f, 0.1f, -9.6f};
 		EnginesLocation[1] = sVECTOR3D{-0.8f, 0.1f, -9.6f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.9f, 5.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.9f, 5.7f};
 		break;
@@ -1178,12 +1170,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[0].Location = sVECTOR3D{4.0f, -0.5f, 1.0f};
 		WeaponSlots[1].Type = 2;
 		WeaponSlots[1].Location = sVECTOR3D{-4.0f, -0.5f, 1.0f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{6.72f, -0.28f, -7.98f};
 		EnginesLocation[1] = sVECTOR3D{-6.72f, -0.28f, -7.98f};
 		EnginesLocation[2] = sVECTOR3D{6.72f, -1.96f, -7.28f};
 		EnginesLocation[3] = sVECTOR3D{-6.72f, -1.96f, -7.28f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, 0.0f, 3.92f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, 0.0f, 3.92f};
 		break;
@@ -1199,10 +1189,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{-5.20f, 0.6f, -6.0f};
 		WeaponSlots[4].Type = 4;
 		WeaponSlots[4].Location = sVECTOR3D{0.0f, -1.3f, 2.6f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{0.6f, 0.45f, -9.9f};
 		EnginesLocation[1] = sVECTOR3D{-0.6f, 0.45f, -9.9f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.9f, 4.7f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.9f, 4.7f};
 		break;
@@ -1218,11 +1206,9 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{8.2f, -0.75f, -3.6f};
 		WeaponSlots[4].Type = 1;
 		WeaponSlots[4].Location = sVECTOR3D{-8.2f, -0.75f, -3.6f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{3.75f, -0.5f, -10.9f};
 		EnginesLocation[1] = sVECTOR3D{0.0f, 0.4f, -8.3f};
 		EnginesLocation[2] = sVECTOR3D{-3.75f, -0.5f, -10.9f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, 0.1f, 1.1f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, 0.1f, 1.1f};
 		break;
@@ -1232,12 +1218,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[0].Location = sVECTOR3D{1.0f, -0.3f, 0.4f};
 		WeaponSlots[1].Type = 1;
 		WeaponSlots[1].Location = sVECTOR3D{-1.0f, -0.3f, 0.4f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{3.5f, 1.4f, -7.4f};
 		EnginesLocation[1] = sVECTOR3D{-3.5f, 1.4f, -7.4f};
 		EnginesLocation[2] = sVECTOR3D{3.65f, 0.5f, -7.9f};
 		EnginesLocation[3] = sVECTOR3D{-3.65f, 0.5f, -7.9f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, 0.0f, 2.4f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, 0.0f, 2.4f};
 		break;
@@ -1247,10 +1231,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[0].Location = sVECTOR3D{1.2f, 0.2f, 1.6f};
 		WeaponSlots[1].Type = 2;
 		WeaponSlots[1].Location = sVECTOR3D{-1.2f, 0.2f, 1.6f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{3.30f, -1.20f, -0.7f};
 		EnginesLocation[1] = sVECTOR3D{-3.30f, -1.20f, -0.7f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, 0.2f, 2.2f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, 0.2f, 2.2f};
 		break;
@@ -1266,10 +1248,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{-2.55f, -0.7f, -0.7f};
 		WeaponSlots[4].Type = 4;
 		WeaponSlots[4].Location = sVECTOR3D{0.0f, -0.9f, 6.1f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{0.8f, 0.55f, -9.9f};
 		EnginesLocation[1] = sVECTOR3D{-0.8f, 0.55f, -9.9f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.4f, 5.3f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.4f, 5.3f};
 		break;
@@ -1281,10 +1261,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[1].Location = sVECTOR3D{-2.0f, -0.55f, -2.2f};
 		WeaponSlots[2].Type = 1;
 		WeaponSlots[2].Location = sVECTOR3D{0.0f, -0.7f, 2.2f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{4.35f, -0.35f, -4.4f};
 		EnginesLocation[1] = sVECTOR3D{-4.35f, -0.35f, -4.4f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.5f, -0.6f, 2.0f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.5f, -0.6f, 2.0f};
 		break;
@@ -1296,10 +1274,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[1].Location = sVECTOR3D{-2.25f, -0.85f, 3.3f};
 		WeaponSlots[2].Type = 4;
 		WeaponSlots[2].Location = sVECTOR3D{0.0f, -0.35f, 2.8f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{4.8f, -1.2f, -2.8f};
 		EnginesLocation[1] = sVECTOR3D{-4.8f, -1.2f, -2.8f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.2f, -0.2f, 6.3f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.2f, -0.2f, 6.3f};
 		break;
@@ -1315,12 +1291,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{3.05f, -1.95f, -0.4f};
 		WeaponSlots[4].Type = 1;
 		WeaponSlots[4].Location = sVECTOR3D{-3.05f, -1.95f, -0.4f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{2.2f, -1.35f, -9.8f};
 		EnginesLocation[1] = sVECTOR3D{-2.2f, -1.35f, -9.8f};
 		EnginesLocation[2] = sVECTOR3D{1.1f, -1.0f, -9.8f};
 		EnginesLocation[3] = sVECTOR3D{-1.1f, -1.0f, -9.8f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, -0.1f, 0.5f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, -0.1f, 0.5f};
 		break;
@@ -1336,10 +1310,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{-4.1f, 0.2f, -6.3f};
 		WeaponSlots[4].Type = 4;
 		WeaponSlots[4].Location = sVECTOR3D{0.0f, -0.9f, 3.3f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{0.85f, 0.1f, -8.1f};
 		EnginesLocation[1] = sVECTOR3D{-0.85f, 0.1f, -8.1f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.3f, -0.7f, 6.3f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.3f, -0.7f, 6.3f};
 		break;
@@ -1351,10 +1323,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[1].Location = sVECTOR3D{7.1f, -0.2f, -5.8f};
 		WeaponSlots[2].Type = 3;
 		WeaponSlots[2].Location = sVECTOR3D{-7.1f, -0.2f, -5.8f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{4.75f, -0.5f, -7.2f};
 		EnginesLocation[1] = sVECTOR3D{-4.75f, -0.5f, -7.2f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.6f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.6f, 6.25f};
 		break;
@@ -1366,12 +1336,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[1].Location = sVECTOR3D{2.0f, -1.05f, 0.4f};
 		WeaponSlots[2].Type = 4;
 		WeaponSlots[2].Location = sVECTOR3D{-2.0f, -1.05f, 0.4f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{3.8f, -0.75f, -11.4f};
 		EnginesLocation[1] = sVECTOR3D{-3.8f, -0.75f, -11.4f};
 		EnginesLocation[2] = sVECTOR3D{3.5f, 0.85f, -10.85f};
 		EnginesLocation[3] = sVECTOR3D{-3.5f, 0.85f, -10.85f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.6f, -0.6f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.6f, -0.6f, 6.25f};
 		break;
@@ -1387,10 +1355,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[3].Location = sVECTOR3D{-5.85f, -0.5f, -5.6f};
 		WeaponSlots[4].Type = 4;
 		WeaponSlots[4].Location = sVECTOR3D{0.0f, -0.5f, -0.5f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{0.65f, 0.2f, -8.2f};
 		EnginesLocation[1] = sVECTOR3D{-0.65f, 0.2f, -8.2f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.4f, -0.5f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.4f, -0.5f, 6.25f};
 		break;
@@ -1404,12 +1370,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[2].Location = sVECTOR3D{5.1f, -1.0f, -5.4f};
 		WeaponSlots[3].Type = 3;
 		WeaponSlots[3].Location = sVECTOR3D{-5.1f, -1.0f, -5.4f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{7.5f, 0.15f, -9.1f};
 		EnginesLocation[1] = sVECTOR3D{-7.5f, 0.15f, -9.1f};
 		EnginesLocation[2] = sVECTOR3D{7.7f, -1.15f, -9.6f};
 		EnginesLocation[3] = sVECTOR3D{-7.7f, -1.15f, -9.6f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.9f, -1.6f, 6.25f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.9f, -1.6f, 6.25f};
 		break;
@@ -1421,12 +1385,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[1].Location = sVECTOR3D{4.7f, -0.4f, -5.0f};
 		WeaponSlots[2].Type = 2;
 		WeaponSlots[2].Location = sVECTOR3D{-4.7f, -0.4f, -5.0f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{6.3f, 0.60f, -8.1f};
 		EnginesLocation[1] = sVECTOR3D{-6.3f, 0.60f, -8.1f};
 		EnginesLocation[2] = sVECTOR3D{6.7f, -0.60f, -8.8f};
 		EnginesLocation[3] = sVECTOR3D{-6.7f, -0.60f, -8.8f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.45f, 0.05f, 5.0f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.45f, 0.05f, 5.0f};
 		break;
@@ -1440,12 +1402,10 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[2].Location = sVECTOR3D{3.9f, -1.25f, -3.2f};
 		WeaponSlots[3].Type = 4;
 		WeaponSlots[3].Location = sVECTOR3D{-3.9f, -1.25f, -3.2f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{3.45f, -0.3f, -7.3f};
 		EnginesLocation[1] = sVECTOR3D{-3.45f, -0.3f, -7.3f};
 		EnginesLocation[2] = sVECTOR3D{4.55f, -0.5f, -7.0f};
 		EnginesLocation[3] = sVECTOR3D{-4.55f, -0.5f, -7.0f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.4f, 1.45f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.4f, 1.45f};
 		break;
@@ -1457,10 +1417,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		WeaponSlots[1].Location = sVECTOR3D{-2.05f, -0.22f, -1.2f};
 		WeaponSlots[2].Type = 2;
 		WeaponSlots[2].Location = sVECTOR3D{0.0f, -0.5f, 0.5f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{0.7f, 0.0f, -4.4f};
 		EnginesLocation[1] = sVECTOR3D{-0.7f, 0.0f, -4.4f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.0f, -0.4f, 3.0f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.0f, -0.4f, 3.0f};
 		break;
@@ -1468,9 +1426,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 	case 22:
 		WeaponSlots[0].Type = 3;
 		WeaponSlots[0].Location = sVECTOR3D{0.0f, 0.05f, 3.6f};
-		// двигатели, маршевые
 		EnginesLocation[0] = sVECTOR3D{0.0f, 0.3f, -5.2f};
-		// маневровые
 		EnginesLeftLocation[0] = sVECTOR3D{1.9f, -0.3f, 2.6f};
 		EnginesRightLocation[0] = sVECTOR3D{-1.9f, -0.3f, 2.6f};
 		break;
