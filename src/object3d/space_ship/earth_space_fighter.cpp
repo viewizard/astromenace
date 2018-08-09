@@ -27,7 +27,11 @@
 
 // TODO split earth fighter and player ship classes
 
-// TODO translate comments
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
+
+// TODO switch to enumeration EngineType in CreateRotateSpaceShipEngine(), CreateSpaceShipEngine()
+
+// TODO switch to color preset in CreateRotateSpaceShipEngine(), CreateSpaceShipEngine()
 
 #include "space_ship.h"
 #include "../../assets/texture.h"
@@ -74,12 +78,12 @@ const std::vector<sEarthSpaceFighterData> PresetEarthSpaceFighterData{
 } // unnamed namespace
 
 
-//-----------------------------------------------------------------------------
-// получение мощности одного двигателя
-//-----------------------------------------------------------------------------
+/*
+ * Get engine power.
+ */
 float GetEnginePower(const int EngineType)
 {
-	switch(EngineType) {
+	switch (EngineType) {
 	case 1:
 		return 14.0f;
 	case 2:
@@ -95,12 +99,13 @@ float GetEnginePower(const int EngineType)
 
 	return 0.0f;
 }
-//-----------------------------------------------------------------------------
-// получение ускорения одного двигателя
-//-----------------------------------------------------------------------------
+
+/*
+ * Get max engine acceleration.
+ */
 float GetEngineAcceleration(const int EngineType)
 {
-	switch(EngineType) {
+	switch (EngineType) {
 	case 1:
 		return 15.0f;
 	case 2:
@@ -116,12 +121,13 @@ float GetEngineAcceleration(const int EngineType)
 
 	return 0.0f;
 }
-//-----------------------------------------------------------------------------
-// получение мощности маневровых двигателя
-//-----------------------------------------------------------------------------
+
+/*
+ * Get rotate engine power.
+ */
 float GetEngineRotatePower(const int EngineType)
 {
-	switch(EngineType) {
+	switch (EngineType) {
 	case 1:
 		return 15.0f;
 	case 2:
@@ -138,57 +144,46 @@ float GetEngineRotatePower(const int EngineType)
 	return 0.0f;
 }
 
-
-
-//-----------------------------------------------------------------------------
-// Установка оружия на корабль
-//-----------------------------------------------------------------------------
+/*
+ * Setup weapon.
+ */
 bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, const int WeaponSlot, const int WeaponNum)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip)
 		return false;
 
-	// проверяем, можно ли вообще ставить в этот слот оружие
-	if (static_cast<int>(sharedSpaceShip->WeaponSlots.size()) < WeaponSlot) {
+	if (static_cast<int>(sharedSpaceShip->WeaponSlots.size()) < WeaponSlot)
 		return false;
-	}
 
-	// удаляем оружие, если оно уже тут есть
-	if (!sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon.expired())
-		ReleaseWeapon(sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
+	if (!sharedSpaceShip->WeaponSlots[WeaponSlot - 1].Weapon.expired())
+		ReleaseWeapon(sharedSpaceShip->WeaponSlots[WeaponSlot - 1].Weapon);
 
-	// создаем нужное оружие
-	sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon = CreateWeapon(WeaponNum);
+	sharedSpaceShip->WeaponSlots[WeaponSlot - 1].Weapon = CreateWeapon(WeaponNum);
 
-	auto sharedWeapon = sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon.lock();
+	auto sharedWeapon = sharedSpaceShip->WeaponSlots[WeaponSlot - 1].Weapon.lock();
 	if (!sharedWeapon)
 		return false;
 
-	// проверяем уровень оружия и уровень слота
-	if (sharedSpaceShip->WeaponSlots[WeaponSlot-1].Type < sharedWeapon->WeaponLevel) {
-		ReleaseWeapon(sharedSpaceShip->WeaponSlots[WeaponSlot-1].Weapon);
+	if (sharedSpaceShip->WeaponSlots[WeaponSlot - 1].Type < sharedWeapon->WeaponLevel) {
+		ReleaseWeapon(sharedSpaceShip->WeaponSlots[WeaponSlot - 1].Weapon);
 		return false;
 	}
 
-	// если тут, значит все нормально - можно подключать
-	sharedWeapon->SetLocation(sharedSpaceShip->WeaponSlots[WeaponSlot-1].Location);
-	// передаем статус корабля, чтобы учесть что это игрока оружие
+	sharedWeapon->SetLocation(sharedSpaceShip->WeaponSlots[WeaponSlot - 1].Location);
 	sharedWeapon->ObjectStatus = sharedSpaceShip->ObjectStatus;
 
 	return true;
 }
 
-
-
-//-----------------------------------------------------------------------------
-// Создание двигателя
-//-----------------------------------------------------------------------------
+/*
+ * Setup engine gfx.
+ */
 static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
-	switch(EngineType) {
+	switch (EngineType) {
 	case 1:
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
@@ -197,15 +192,15 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.50f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 7.00f;
-		ParticleSystem->SpeedOnCreation	   = 7.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.50f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 7.00f;
+		ParticleSystem->SpeedOnCreation = 7.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
@@ -218,15 +213,15 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.70f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 7.00f;
-		ParticleSystem->SpeedOnCreation	   = 7.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 12.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.70f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 7.00f;
+		ParticleSystem->SpeedOnCreation = 7.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 12.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.4f, 0.75f, 0.15f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
@@ -239,15 +234,15 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->ColorEnd.g = 0.20f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.50f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 7.00f;
-		ParticleSystem->SpeedOnCreation	   = 7.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 3.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.50f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 7.00f;
+		ParticleSystem->SpeedOnCreation = 7.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 3.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->ParticlesPerSec = 80;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.25f, 0.25f, 1.0f, 0.0f, 0.07f);
 		ParticleSystem->LightNeedDeviation = true;
@@ -260,17 +255,17 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.00f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 12.00f;
-		ParticleSystem->SpeedOnCreation	   = 12.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.00f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 12.00f;
+		ParticleSystem->SpeedOnCreation = 12.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.30f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{0.6f, 0.6f, 0.1f};
+		ParticleSystem->CreationSize(0.6f, 0.6f, 0.1f);
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->MagnetFactor = 50.0f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, 0.7f, 1.0f, 0.0f, 0.07f);
@@ -283,14 +278,14 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 	}
 }
 
-
-
-//-----------------------------------------------------------------------------
-// Создание двигателя
-//-----------------------------------------------------------------------------
+/*
+ * Setup rotate engine gfx.
+ */
 static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
-	switch(EngineType) {
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+
+	switch (EngineType) {
 	case 1:
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
@@ -299,17 +294,16 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 5.00f;
-		ParticleSystem->SpeedVar   = 5.00f;
-		ParticleSystem->Theta      = 40.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 5.00f;
+		ParticleSystem->SpeedVar = 5.00f;
+		ParticleSystem->Theta = 40.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.35f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -321,17 +315,16 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.5f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 5.00f;
-		ParticleSystem->SpeedVar   = 5.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.5f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 5.00f;
+		ParticleSystem->SpeedVar = 5.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.4f, 0.75f, 0.15f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -343,17 +336,16 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->ColorEnd.g = 0.20f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.5f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 5.00f;
-		ParticleSystem->SpeedVar   = 5.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.5f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 5.00f;
+		ParticleSystem->SpeedVar = 5.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.25f, 0.25f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -365,17 +357,16 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.5f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 5.00f;
-		ParticleSystem->SpeedVar   = 5.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.5f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 5.00f;
+		ParticleSystem->SpeedVar = 5.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->IsSuppressed = true;
 		ParticleSystem->ParticlesPerSec = 50;
-		ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.85f, 1.0f, 0.0f, 0.2f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -386,23 +377,15 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 	}
 }
 
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Установка системы двигателей
-//-----------------------------------------------------------------------------
+/*
+ * Setup engines.
+ */
 void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int EngineType)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip)
 		return;
 
-	// если нужен сброс установки двигателя
 	if (EngineType == 0) {
 		for (auto &tmpEngine : sharedSpaceShip->Engines) {
 			vw_ReleaseParticleSystem(tmpEngine);
@@ -426,7 +409,6 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 		return;
 	}
 
-
 	for (unsigned int i = 0; i < sharedSpaceShip->Engines.size(); i++) {
 		vw_ReleaseParticleSystem(sharedSpaceShip->Engines[i]);
 		sharedSpaceShip->Engines[i] = vw_CreateParticleSystem();
@@ -436,7 +418,6 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 			sharedEngine->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 		}
 	}
-
 
 	if (!sharedSpaceShip->EnginesLeft.empty()) {
 		for (unsigned int i = 0; i < sharedSpaceShip->EnginesLeft.size(); i++) {
@@ -451,7 +432,6 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 		}
 	}
 
-
 	if (!sharedSpaceShip->EnginesRight.empty()) {
 		for (unsigned int i = 0; i < sharedSpaceShip->EnginesRight.size(); i++) {
 			vw_ReleaseParticleSystem(sharedSpaceShip->EnginesRight[i]);
@@ -465,12 +445,12 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 		}
 	}
 
-
-	// параметрами игрока управляем в другом месте!!!! пользуй поиск
-	sharedSpaceShip->MaxSpeed = GetEnginePower(EngineType) * sharedSpaceShip->Engines.size() - sharedSpaceShip->Weight / 1000.0f;
-	sharedSpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * sharedSpaceShip->Engines.size() - sharedSpaceShip->Weight / 1000.0f;
-	sharedSpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * sharedSpaceShip->Engines.size() - sharedSpaceShip->Weight / 1000.0f;
-
+	sharedSpaceShip->MaxSpeed = GetEnginePower(EngineType) * sharedSpaceShip->Engines.size() -
+				    sharedSpaceShip->Weight / 1000.0f;
+	sharedSpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * sharedSpaceShip->Engines.size() -
+				      sharedSpaceShip->Weight / 1000.0f;
+	sharedSpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * sharedSpaceShip->Engines.size() -
+					  sharedSpaceShip->Weight / 1000.0f;
 
 	if (sharedSpaceShip->MaxSpeed <= 0.5f)
 		sharedSpaceShip->MaxSpeed = 0.5f;
@@ -478,31 +458,26 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 		sharedSpaceShip->MaxAcceler = 0.5f;
 	if (sharedSpaceShip->MaxSpeedRotate <= 0.5f)
 		sharedSpaceShip->MaxSpeedRotate = 0.5f;
-
 }
 
-//-----------------------------------------------------------------------------
-// HullResistance для брони
-//-----------------------------------------------------------------------------
+/*
+ * Get hull resistance for particular armor.
+ */
 static float GetHullResistance(const int ArmourType)
 {
 	switch(ArmourType) {
 	case 0:
-		return 1.0f;
 	case 1:
-		return 1.0f;
 	case 2:
-		return 1.0f;
 	case 3:
-		return 1.0f;
 	case 4:
-		return 1.0f;
 	case 5:
-		return 1.0f;
 	case 6:
 		return 1.0f;
+
 	case 7:
 		return 4.0f;
+
 	default:
 		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
 		break;
@@ -510,28 +485,25 @@ static float GetHullResistance(const int ArmourType)
 
 	return 0.0f;
 }
-//-----------------------------------------------------------------------------
-// SystemsResistance для брони
-//-----------------------------------------------------------------------------
+
+/*
+ * Get system resistance for particular armor.
+ */
 static float GetSystemsResistance(const int ArmourType)
 {
 	switch(ArmourType) {
 	case 0:
-		return 1.0f;
 	case 1:
-		return 1.0f;
 	case 2:
-		return 1.0f;
 	case 3:
-		return 1.0f;
 	case 4:
-		return 1.0f;
 	case 5:
-		return 1.0f;
 	case 6:
 		return 1.0f;
+
 	case 7:
 		return 5.0f;
+
 	default:
 		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
 		break;
@@ -539,34 +511,34 @@ static float GetSystemsResistance(const int ArmourType)
 
 	return 0.0f;
 }
-//-----------------------------------------------------------------------------
-// Тестура для брони
-//-----------------------------------------------------------------------------
+
+/*
+ * Get texture for particular armor.
+ */
 static GLtexture GetArmourTexture(const int ArmourType)
 {
 	switch(ArmourType) {
-	// фактически - брони нет, только стальной корпус
 	case 0:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text00.vw2d");
-	// примитивная броня
+
 	case 1:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text04.vw2d");
-	// модернизированная броня
+
 	case 2:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text05.vw2d");
-	// и против иона
+
 	case 3:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text07.vw2d");
-	// и против иона+
+
 	case 4:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text08.vw2d");
-	// и против иона++
+
 	case 5:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text09.vw2d");
-	// и против плазмы
+
 	case 6:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text10.vw2d");
-	// универсальная
+
 	case 7:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text06.vw2d");
 
@@ -578,31 +550,33 @@ static GLtexture GetArmourTexture(const int ArmourType)
 	return 0;
 }
 
+/*
+ * Get illumination texture for particular armor.
+ */
 static GLtexture GetArmourIllumTexture(const int ArmourType)
 {
 	switch(ArmourType) {
-	// фактически - брони нет, только стальной корпус
 	case 0:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum01.vw2d");
-	// примитивная броня
+
 	case 1:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum02.vw2d");
-	// модернизированная броня
+
 	case 2:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
-	// и против иона
+
 	case 3:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
-	// и против иона+
+
 	case 4:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
-	// и против иона++
+
 	case 5:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum02.vw2d");
-	// и против плазмы
+
 	case 6:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum04.vw2d");
-	// универсальная
+
 	case 7:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
 
@@ -614,11 +588,9 @@ static GLtexture GetArmourIllumTexture(const int ArmourType)
 	return 0;
 }
 
-
-
-//-----------------------------------------------------------------------------
-// Установка брони для кораблей землян
-//-----------------------------------------------------------------------------
+/*
+ * Setup armor.
+ */
 void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmourType)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
@@ -632,12 +604,11 @@ void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 		sharedSpaceShip->Texture[i] = GetArmourTexture(ArmourType);
 		sharedSpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmourType);
 	}
-
 }
 
-//-----------------------------------------------------------------------------
-// Получаем возможный поворот орудия в данном слоте
-//-----------------------------------------------------------------------------
+/*
+ * Get max and min weapon slot angle for particular ship.
+ */
 void GetShipWeaponSlotAngle(const int ShipNum, const int SlotNum, float &Min, float &Max)
 {
 	Min = 0.0f;
@@ -1059,6 +1030,9 @@ void GetShipWeaponSlotAngle(const int ShipNum, const int SlotNum, float &Min, fl
 	}
 }
 
+/*
+ * Get armor strength for particular ship.
+ */
 float GetShipArmor(const int SpaceShipNum)
 {
 	return PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength;
@@ -1082,13 +1056,12 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
 
-	// ставим нужные данные
 	Weight = PresetEarthSpaceFighterData[SpaceShipNum - 1].Weight;
-	Strength = StrengthStart = PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength; // GameEnemyArmorPenalty for enemies only
+	Strength = StrengthStart =
+			PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength; // GameEnemyArmorPenalty for enemies only
 	WeaponSlots.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].WeaponQuantity);
 	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum - 1].Name, *this);
 
-	// начальные установки для двигателей
 	Engines.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity);
 	EnginesLocation.resize(Engines.size());
 

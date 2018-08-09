@@ -277,22 +277,21 @@ void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 // Get object ptr by reference.
 std::weak_ptr<cObject3D> GetSpaceShipPtr(const cSpaceShip &Object);
 
-
-// Установка системы двигателей
+// Setup engines.
 void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int EngineType);
-// Установка брони для кораблей землян
+// Setup armor.
 void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmourType);
-// Установка оружия на корабль
+// Setup weapon.
 bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, const int WeaponSlot, const int WeaponNum);
-// Получаем возможный поворот орудия в данном слоте
+// Get max and min weapon slot angle for particular ship.
 void GetShipWeaponSlotAngle(const int ShipNum, const int SlotNum, float &Min, float &Max);
-//
+// Get max engine acceleration.
 float GetEngineAcceleration(const int EngineType);
-//
+// Get engine power.
 float GetEnginePower(const int EngineType);
-//
+// Get rotate engine power.
 float GetEngineRotatePower(const int EngineType);
-//
+// Get armor strength for particular ship.
 float GetShipArmor(const int SpaceShipNum);
 
 } // astromenace namespace
