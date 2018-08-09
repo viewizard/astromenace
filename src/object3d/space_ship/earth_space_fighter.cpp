@@ -31,8 +31,6 @@
 
 // TODO switch to enumeration EngineType in CreateRotateSpaceShipEngine(), CreateSpaceShipEngine()
 
-// TODO switch to color preset in CreateRotateSpaceShipEngine(), CreateSpaceShipEngine()
-
 #include "space_ship.h"
 #include "../../assets/texture.h"
 
@@ -183,14 +181,22 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
+	static const sRGBCOLOR LightYellow{1.0f, 0.7f, 0.3f};
+	static const sRGBCOLOR Red{1.0f, 0.0f, 0.0f};
+
+	static const sRGBCOLOR MuddyYellow{0.6f, 0.6f, 0.3f};
+	static const sRGBCOLOR LightGreen{0.3f, 1.0f, 0.3f};
+
+	static const sRGBCOLOR Violet{0.5f, 0.5f, 1.0f};
+	static const sRGBCOLOR LightViolet{0.0f, 0.4f, 1.0f};
+
+	static const sRGBCOLOR Turquoise{0.0f, 0.7f, 1.0f};
+	static const sRGBCOLOR LightSkyey{0.7f, 1.0f, 1.0f};
+
 	switch (EngineType) {
 	case 1:
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.00f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Red;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.10f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -206,12 +212,8 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
-		ParticleSystem->ColorStart.r = 0.30f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -227,12 +229,8 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
-		ParticleSystem->ColorStart.r = 0.30f;
-		ParticleSystem->ColorStart.g = 0.30f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.20f;
-		ParticleSystem->ColorEnd.g = 0.20f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = LightViolet;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -248,12 +246,8 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -285,14 +279,22 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
+	static const sRGBCOLOR LightYellow{1.0f, 0.7f, 0.3f};
+	static const sRGBCOLOR Red{1.0f, 0.0f, 0.0f};
+
+	static const sRGBCOLOR MuddyYellow{0.6f, 0.6f, 0.3f};
+	static const sRGBCOLOR LightGreen{0.3f, 1.0f, 0.3f};
+
+	static const sRGBCOLOR Violet{0.5f, 0.5f, 1.0f};
+	static const sRGBCOLOR LightViolet{0.0f, 0.4f, 1.0f};
+
+	static const sRGBCOLOR Turquoise{0.0f, 0.7f, 1.0f};
+	static const sRGBCOLOR LightSkyey{0.7f, 1.0f, 1.0f};
+
 	switch (EngineType) {
 	case 1:
-		ParticleSystem->ColorStart.r = 1.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 1.00f;
-		ParticleSystem->ColorEnd.g = 0.00f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = LightYellow;
+		ParticleSystem->ColorEnd = Red;
 		ParticleSystem->AlphaStart = 0.60f;
 		ParticleSystem->AlphaEnd = 0.10f;
 		ParticleSystem->SizeStart = 0.50f;
@@ -308,12 +310,8 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 2:
-		ParticleSystem->ColorStart.r = 0.30f;
-		ParticleSystem->ColorStart.g = 1.00f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.50f;
-		ParticleSystem->ColorEnd.g = 0.50f;
-		ParticleSystem->ColorEnd.b = 0.00f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 0.60f;
 		ParticleSystem->AlphaEnd = 0.10f;
 		ParticleSystem->SizeStart = 0.5f;
@@ -329,12 +327,8 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 3:
-		ParticleSystem->ColorStart.r = 0.30f;
-		ParticleSystem->ColorStart.g = 0.30f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.20f;
-		ParticleSystem->ColorEnd.g = 0.20f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Violet;
+		ParticleSystem->ColorEnd = LightViolet;
 		ParticleSystem->AlphaStart = 0.60f;
 		ParticleSystem->AlphaEnd = 0.10f;
 		ParticleSystem->SizeStart = 0.5f;
@@ -350,12 +344,8 @@ static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &Partic
 		ParticleSystem->LightNeedDeviation = true;
 		break;
 	case 4:
-		ParticleSystem->ColorStart.r = 0.00f;
-		ParticleSystem->ColorStart.g = 0.70f;
-		ParticleSystem->ColorStart.b = 1.00f;
-		ParticleSystem->ColorEnd.r = 0.70f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 1.00f;
+		ParticleSystem->ColorStart = Turquoise;
+		ParticleSystem->ColorEnd = LightSkyey;
 		ParticleSystem->AlphaStart = 0.60f;
 		ParticleSystem->AlphaEnd = 0.10f;
 		ParticleSystem->SizeStart = 0.5f;
