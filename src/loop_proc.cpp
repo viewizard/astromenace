@@ -77,7 +77,7 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// рисуем то, что нужно
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	switch(MenuStatus) {
+	switch (MenuStatus) {
 	case eMenuStatus::MAIN_MENU:
 	case eMenuStatus::TOP_SCORES:
 	case eMenuStatus::INTERFACE:
@@ -170,7 +170,7 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (ComBuffer != eCommand::DO_NOTHING) {
 
-		switch(ComBuffer) {
+		switch (ComBuffer) {
 		case eCommand::SWITCH_TO_MAIN_MENU:
 			SetMenu(eMenuStatus::MAIN_MENU);
 			break;

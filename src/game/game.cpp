@@ -1588,7 +1588,7 @@ void DrawGame()
 			}
 
 		} else {
-			switch(GameMenuStatus) {
+			switch (GameMenuStatus) {
 			// основное меню игры
 			case eGameMenuStatus::GAME_MENU: {
 				// выводим подложку меню

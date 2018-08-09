@@ -260,7 +260,7 @@ static void CreateAlpha(std::unique_ptr<uint8_t[]> &PixelsArray, sTexture &Textu
 			       sizeof(PixelsArray.get()[0]) * 3);
 
 			// create alpha
-			switch(AlphaFlag) {
+			switch (AlphaFlag) {
 			case eAlphaCreateMode::GREYSC:
 				PixelsArray.get()[tmpOffsetDst + 3] = static_cast<uint8_t>(
 					static_cast<float>(PixelsArray.get()[tmpOffsetDst]) / 255 * 28 +
@@ -413,7 +413,7 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
 	}
 
 	// load texture
-	switch(LoadAs) {
+	switch (LoadAs) {
 	case eLoadTextureAs::TGA:
 		ReadTGA(tmpPixelsArray, pFile.get(), DWidth, DHeight, DChanels);
 		break;

@@ -465,7 +465,7 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
  */
 static float GetHullResistance(const int ArmourType)
 {
-	switch(ArmourType) {
+	switch (ArmourType) {
 	case 0:
 	case 1:
 	case 2:
@@ -491,7 +491,7 @@ static float GetHullResistance(const int ArmourType)
  */
 static float GetSystemsResistance(const int ArmourType)
 {
-	switch(ArmourType) {
+	switch (ArmourType) {
 	case 0:
 	case 1:
 	case 2:
@@ -517,7 +517,7 @@ static float GetSystemsResistance(const int ArmourType)
  */
 static GLtexture GetArmourTexture(const int ArmourType)
 {
-	switch(ArmourType) {
+	switch (ArmourType) {
 	case 0:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text00.vw2d");
 
@@ -555,7 +555,7 @@ static GLtexture GetArmourTexture(const int ArmourType)
  */
 static GLtexture GetArmourIllumTexture(const int ArmourType)
 {
-	switch(ArmourType) {
+	switch (ArmourType) {
 	case 0:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum01.vw2d");
 

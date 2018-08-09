@@ -487,7 +487,7 @@ void DrawMenu()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_Start2DMode(-1,1);
 
-	switch(MenuStatus) {
+	switch (MenuStatus) {
 	case eMenuStatus::MAIN_MENU:
 		MainMenu();
 		break;
@@ -551,7 +551,7 @@ void DrawMenu()
 
 
 	// если нужно - рисуем в окошке еще одном
-	switch(MenuStatus) {
+	switch (MenuStatus) {
 	case eMenuStatus::INFORMATION:
 		InformationDrawObject();
 		break;

@@ -141,7 +141,7 @@ void CheckMouseKeybJState()
 				// note, SDL provide button's number that starts from 1
 				for (unsigned i = 1; i <= vw_GetMaxMouseButtonNum(); i++)
 					if (vw_GetMouseButtonStatus(i)) {
-						switch(NeedCheck) {
+						switch (NeedCheck) {
 						case 7:
 							ChangeGameConfig().MousePrimary = i;
 							break;
@@ -164,7 +164,7 @@ void CheckMouseKeybJState()
 				if ((NeedCheck >= 9 && NeedCheck <= 10) || NeedCheck == 100) {
 					for (int i = 0; i < GetJoystickButtonsQuantity(); i++)
 						if (GetJoystickButton(i)) {
-							switch(NeedCheck) {
+							switch (NeedCheck) {
 							case 9:
 								ChangeGameConfig().JoystickPrimary = i;
 								break;

@@ -79,7 +79,7 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	ParticleSystem->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
 
-	switch(EngineType) {
+	switch (EngineType) {
 	case 1:
 		ParticleSystem->ColorStart.r = 0.60f;
 		ParticleSystem->ColorStart.g = 0.60f;

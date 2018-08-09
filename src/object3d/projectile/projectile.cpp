@@ -410,7 +410,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 
-	switch(GFXNum) {
+	switch (GFXNum) {
 	case 1: // Kinetic
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
@@ -1911,7 +1911,7 @@ cProjectile::~cProjectile()
 
 		// shock wave setup
 		float effective_dist2 = 300;
-		switch(Num) {
+		switch (Num) {
 		case 16:
 		case 205:
 			effective_dist2 = 500.0f;
@@ -1926,7 +1926,7 @@ cProjectile::~cProjectile()
 			break;
 		}
 
-		switch(Num) {
+		switch (Num) {
 		case 16:
 		case 17:
 		case 18:
