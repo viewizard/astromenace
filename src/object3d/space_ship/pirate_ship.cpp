@@ -27,7 +27,9 @@
 
 // TODO add more flare weapons for big pirate ships
 
-// TODO translate comments
+// TODO switch to enumeration EngineType in SetPirateShipEngine()
+
+// TODO switch to color preset in SetPirateShipEngine()
 
 #include "space_ship.h"
 #include "../../config/config.h"
@@ -71,13 +73,13 @@ const std::vector<sPirateShipData> PresetPirateShipData{
 } // unnamed namespace
 
 
-//-----------------------------------------------------------------------------
-// Создание двигателя
-//-----------------------------------------------------------------------------
-static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, int EngineType)
+/*
+ * Setup engine gfx.
+ */
+static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-	ParticleSystem->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
+	ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
 	switch (EngineType) {
 	case 1:
@@ -88,19 +90,19 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.30f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.10f;
-		ParticleSystem->SizeVar    = 0.20f;
-		ParticleSystem->SizeEnd    = 0.40f;
-		ParticleSystem->Speed      = 6.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 5.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.10f;
+		ParticleSystem->SizeVar = 0.20f;
+		ParticleSystem->SizeEnd = 0.40f;
+		ParticleSystem->Speed = 6.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 5.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{0.4f, 0.4f, 0.4f};
-		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->CreationSize(0.4f, 0.4f, 0.4f);
+		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -112,19 +114,19 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.30f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.60f;
-		ParticleSystem->Speed      = 8.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 5.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.60f;
+		ParticleSystem->Speed = 8.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 5.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{0.6f, 0.6f, 0.1f};
-		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->CreationSize(0.6f, 0.6f, 0.1f);
+		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -136,20 +138,20 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.30f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.60f;
-		ParticleSystem->Speed      = 10.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 5.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.60f;
+		ParticleSystem->Speed = 10.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 5.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{1.0f, 0.1f, 1.0f};
-		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D{0.0f, -1.0f, 0.0f};
+		ParticleSystem->CreationSize(1.0f, 0.1f, 1.0f);
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->Direction(0.0f, -1.0f, 0.0f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -161,18 +163,18 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.30f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.20f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 180.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.20f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 180.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->ParticlesPerSec = 100;
-		ParticleSystem->AlphaShowHide= true;
-		ParticleSystem->Direction = sVECTOR3D{0.0f, 1.0f, 0.0f};
+		ParticleSystem->AlphaShowHide = true;
+		ParticleSystem->Direction(0.0f, 1.0f, 0.0f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.1f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -184,19 +186,19 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.30f;
 		ParticleSystem->AlphaStart = 1.00f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.30f;
-		ParticleSystem->SizeEnd    = 0.60f;
-		ParticleSystem->Speed      = 8.00f;
-		ParticleSystem->SpeedOnCreation	   = -1.00f;
-		ParticleSystem->SpeedVar   = 2.00f;
-		ParticleSystem->Theta      = 5.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.30f;
+		ParticleSystem->SizeEnd = 0.60f;
+		ParticleSystem->Speed = 8.00f;
+		ParticleSystem->SpeedOnCreation = -1.00f;
+		ParticleSystem->SpeedVar = 2.00f;
+		ParticleSystem->Theta = 5.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->ParticlesPerSec = 100;
 		ParticleSystem->CreationType = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize = sVECTOR3D{1.0f, 1.0f, 1.0f};
-		ParticleSystem->AlphaShowHide= true;
+		ParticleSystem->CreationSize(1.0f, 1.0f, 1.0f);
+		ParticleSystem->AlphaShowHide = true;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.45f, 0.8f, 0.3f, 0.0f, 0.05f);
 		ParticleSystem->LightNeedDeviation = true;
 		break;
@@ -207,9 +209,9 @@ static void SetPirateShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cPirateShip::cPirateShip(const int SpaceShipNum)
 {
 	if ((SpaceShipNum <= 0) ||
@@ -224,8 +226,8 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 	ObjectType = eObjectType::PirateShip;
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
-	if (SpaceShipNum > 5)
-		PromptDrawDist2 = 20000.0f; // большие корабли пиратов
+	if (SpaceShipNum > 5) // big pirate ships
+		PromptDrawDist2 = 20000.0f;
 
 	ResistanceHull = 1.0f;
 	ResistanceSystems = 1.0f;
@@ -237,14 +239,12 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 
 	LoadObjectData(PresetPirateShipData[SpaceShipNum - 1].Name, *this);
 
-	// всегда только эти текстуры
 	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].TextureName);
 		if (!PresetPirateShipData[SpaceShipNum - 1].NormalMapName.empty() && GameConfig().UseGLSL120)
 			NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].NormalMapName);
 	}
 
-	// начальные установки для двигателей
 	EnginesLocation.resize(EngineQuantity);
 	Engines.resize(EngineQuantity);
 
@@ -305,6 +305,7 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 		if (auto sharedEngine = Engines[1].lock())
 			SetPirateShipEngine(sharedEngine, 1);
 		break;
+
 	case 4:
 		MaxSpeed = 30.0f;
 		MaxAcceler = 30.0f;
@@ -686,7 +687,6 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 	for (unsigned int i = 0; i < EngineQuantity; i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			sharedEngine->SetStartLocation(EnginesLocation[i]);
-			// находим кол-во внутренних источников света
 			if (!sharedEngine->Light.expired())
 				InternalLights++;
 		}
