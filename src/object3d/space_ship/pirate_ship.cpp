@@ -81,14 +81,13 @@ static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, con
 	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 	ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
+	static const sRGBCOLOR MuddyYellow{0.6f, 0.6f, 0.3f};
+	static const sRGBCOLOR LightGreen{0.3f, 1.0f, 0.3f};
+
 	switch (EngineType) {
 	case 1:
-		ParticleSystem->ColorStart.r = 0.60f;
-		ParticleSystem->ColorStart.g = 0.60f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.30f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.10f;
@@ -108,12 +107,8 @@ static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, con
 		break;
 
 	case 2:
-		ParticleSystem->ColorStart.r = 0.60f;
-		ParticleSystem->ColorStart.g = 0.60f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.30f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -133,12 +128,8 @@ static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, con
 		break;
 
 	case 3:
-		ParticleSystem->ColorStart.r = 0.60f;
-		ParticleSystem->ColorStart.g = 0.60f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.30f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -159,12 +150,8 @@ static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, con
 		break;
 
 	case 4:
-		ParticleSystem->ColorStart.r = 0.60f;
-		ParticleSystem->ColorStart.g = 0.60f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.30f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
@@ -183,12 +170,8 @@ static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, con
 		break;
 
 	case 5:
-		ParticleSystem->ColorStart.r = 0.60f;
-		ParticleSystem->ColorStart.g = 0.60f;
-		ParticleSystem->ColorStart.b = 0.30f;
-		ParticleSystem->ColorEnd.r = 0.30f;
-		ParticleSystem->ColorEnd.g = 1.00f;
-		ParticleSystem->ColorEnd.b = 0.30f;
+		ParticleSystem->ColorStart = MuddyYellow;
+		ParticleSystem->ColorEnd = LightGreen;
 		ParticleSystem->AlphaStart = 1.00f;
 		ParticleSystem->AlphaEnd = 0.00f;
 		ParticleSystem->SizeStart = 0.30f;
