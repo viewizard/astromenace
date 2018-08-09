@@ -25,7 +25,9 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO codestyle should be fixed
+
+// TODO a lot of code duplication, should be fixed
 
 #include "space_ship.h"
 #include "../projectile/projectile.h"
@@ -89,7 +91,7 @@ std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(const int SpaceShipNum)
 		}
 	}
 
-	// делаем предварительную уснановку брони-текстур
+	// default armor
 	SetEarthSpaceFighterArmour(tmpSpaceShip, 0);
 
 	return ShipList.front();
@@ -106,9 +108,9 @@ std::weak_ptr<cSpaceShip> CreatePirateShip(const int SpaceShipNum)
 	return ShipList.front();
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем все объекты, обновляем данные
-//-----------------------------------------------------------------------------
+/*
+ * Update and remove (erase) dead objects.
+ */
 void UpdateAllSpaceShip(float Time)
 {
 	for (auto iter = ShipList.begin(); iter != ShipList.end();) {
@@ -119,9 +121,9 @@ void UpdateAllSpaceShip(float Time)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовываем все объекты
-//-----------------------------------------------------------------------------
+/*
+ * Draw all objects.
+ */
 void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	for (auto &tmpShip : ShipList) {
@@ -147,9 +149,9 @@ void ReleaseSpaceShip(std::weak_ptr<cSpaceShip> &Ship)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Удаляем все объекты в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all objects.
+ */
 void ReleaseAllSpaceShips()
 {
 	ShipList.clear();
@@ -240,9 +242,9 @@ std::weak_ptr<cObject3D> GetSpaceShipPtr(const cSpaceShip &Object)
 	return std::weak_ptr<cObject3D>{};
 }
 
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
+/*
+ * Destructor.
+ */
 cSpaceShip::~cSpaceShip()
 {
 	for (auto &tmpEngine : Engines) {
@@ -280,27 +282,27 @@ cSpaceShip::~cSpaceShip()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Установка положения объекта
-//-----------------------------------------------------------------------------
+/*
+ * Set location.
+ */
 void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
 
-	// если оружие вообще есть
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
 			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 				sharedWeapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
 		}
 	}
+
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock())
 				sharedWeapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
 	}
+
 	if (!FlareWeaponSlots.empty()) {
 		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
 			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock())
@@ -308,13 +310,13 @@ void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 		}
 	}
 
-	// положение двигателей
 	for (unsigned int i = 0; i < Engines.size(); i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			sharedEngine->MoveSystem(NewLocation + EnginesLocation[i]);
 			sharedEngine->SetStartLocation(EnginesLocation[i] + NewLocation);
 		}
 	}
+
 	if (!EnginesLeft.empty()) {
 		for (unsigned int i = 0; i < EnginesLeft.size(); i++) {
 			if (auto sharedEngineLeft = EnginesLeft[i].lock()) {
@@ -323,6 +325,7 @@ void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 			}
 		}
 	}
+
 	if (!EnginesRight.empty()) {
 		for (unsigned int i = 0; i < EnginesRight.size(); i++) {
 			if (auto sharedEngineRight = EnginesRight[i].lock()) {
@@ -333,27 +336,27 @@ void cSpaceShip::SetLocation(const sVECTOR3D &NewLocation)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Установка положения объекта, для аркадного режима
-//-----------------------------------------------------------------------------
+/*
+ * Set location.
+ */
 void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
 
-	// если оружие вообще есть
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
 			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 				sharedWeapon->SetLocation(tmpWeaponSlot.Location + NewLocation);
 		}
 	}
+
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock())
 				sharedWeapon->SetLocation(tmpBossWeaponSlot.Location + NewLocation);
 		}
 	}
+
 	if (!FlareWeaponSlots.empty()) {
 		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
 			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock())
@@ -361,13 +364,13 @@ void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 		}
 	}
 
-	// положение двигателей
 	for (unsigned int i = 0; i < Engines.size(); i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			sharedEngine->MoveSystem(NewLocation + EnginesLocation[i]);
 			sharedEngine->SetStartLocation(NewLocation + EnginesLocation[i]);
 		}
 	}
+
 	if (!EnginesLeft.empty()) {
 		for (unsigned int i = 0; i < EnginesLeft.size(); i++) {
 			if (auto sharedEngineLeft = EnginesLeft[i].lock()) {
@@ -376,6 +379,7 @@ void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 			}
 		}
 	}
+
 	if (!EnginesRight.empty()) {
 		for (unsigned int i = 0; i < EnginesRight.size(); i++) {
 			if (auto sharedEngineRight = EnginesRight[i].lock()) {
@@ -386,15 +390,13 @@ void cSpaceShip::SetLocationArcadePlayer(const sVECTOR3D &NewLocation)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Установка углов поворота объекта
-//-----------------------------------------------------------------------------
+/*
+ * Set rotation.
+ */
 void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);
 
-	// оружие
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
 			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
@@ -406,6 +408,7 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 			}
 		}
 	}
+
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
@@ -417,6 +420,7 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 			}
 		}
 	}
+
 	if (!FlareWeaponSlots.empty()) {
 		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
 			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock()) {
@@ -429,7 +433,6 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 		}
 	}
 
-	// двигатели
 	for (unsigned int i = 0; i < Engines.size(); i++) {
 		if (auto sharedEngine = Engines[i].lock()) {
 			vw_Matrix33CalcPoint(EnginesLocation[i], OldInvRotationMat);
@@ -471,20 +474,17 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Обновление данных объектa Object3D
-//-----------------------------------------------------------------------------
+/*
+ * Update.
+ */
 bool cSpaceShip::Update(float Time)
 {
-	// вызываем родительскую функцию
-	// если там передали удалить - выходим
-	if (!cObject3D::Update(Time)) return false;
-	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
-	if (TimeDelta == 0.0f) return true;
+	if (!cObject3D::Update(Time))
+		return false;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// обработка скрипта
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (TimeDelta == 0.0f)
+		return true;
+
 	if (!TimeSheetList.empty() &&
 	    !TimeSheetList.front().InUse) {
 		TimeSheetList.front().InUse = true;
@@ -520,9 +520,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// если у корабля есть спец средства против ракет...
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!FlareWeaponSlots.empty()) {
 		bool NeedFlare{false};
 		ForEachProjectile([&] (cProjectile &Projectile) {
@@ -542,31 +539,28 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// обработка указателей действия, нужно для управления кораблем игрока
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (ObjectStatus == eObjectStatus::Player) {
-		if (MoveForward > 0.0f || MoveBackward > 0.0f) {
-			NeedSpeed = MaxSpeed*MoveForward-MaxSpeed*MoveBackward;
-		} else NeedSpeed = 0.0f;
+		if ((MoveForward > 0.0f) ||
+		    (MoveBackward > 0.0f)) {
+			NeedSpeed = MaxSpeed * MoveForward - MaxSpeed * MoveBackward;
+		} else
+			NeedSpeed = 0.0f;
 
-		if (MoveLeft > 0.0f || MoveRight > 0.0f) {
-			NeedRotate.y = MaxAcceler*MaxSpeed*MoveRight-MaxAcceler*MaxSpeed*MoveLeft;
-		} else NeedRotate.y = 0.0f;
+		if ((MoveLeft > 0.0f) ||
+		    (MoveRight > 0.0f)) {
+			NeedRotate.y = MaxAcceler * MaxSpeed * MoveRight - MaxAcceler * MaxSpeed * MoveLeft;
+		} else
+			NeedRotate.y = 0.0f;
 
-		if (MoveUp > 0.0f || MoveDown > 0.0f) {
-			NeedRotate.x = MaxAcceler*MaxSpeed*MoveUp-MaxAcceler*MaxSpeed*MoveDown;
-		} else NeedRotate.x = 0.0f;
+		if ((MoveUp > 0.0f) ||
+		    (MoveDown > 0.0f)) {
+			NeedRotate.x = MaxAcceler * MaxSpeed * MoveUp - MaxAcceler * MaxSpeed * MoveDown;
+		} else
+			NeedRotate.x = 0.0f;
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// повотор
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// если нужно поворачивать
 	if (ObjectStatus != eObjectStatus::Player) {
 
-		// выключаем двигатели, если нужно - включим
 		if (!EnginesLeft.empty()) {
 			for (auto &tmpEngineLeft : EnginesLeft) {
 				if (auto sharedEngineLeft = tmpEngineLeft.lock())
@@ -580,17 +574,18 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 
-		if (NeedRotate.x != 0.0f || NeedRotate.y != 0.0f || NeedRotate.z != 0.0f) {
-			// Находим допустимый поворот по углу
+		if ((NeedRotate.x != 0.0f) ||
+		    (NeedRotate.y != 0.0f) ||
+		    (NeedRotate.z != 0.0f)) {
 			sVECTOR3D tmpRotate(0.0f, 0.0f, 0.0f);
 
-			// угол по x
 			if (NeedRotate.x != 0.0f) {
-				float Sign = 1.0f;
-				if (NeedRotate.x < 0.0f) Sign = -1.0f;
-				// вычисляем скорость поворота по данным двигателя
-				tmpRotate.x = Sign*MaxSpeedRotate*RotationSpeed.x*TimeDelta;
-				// смотрим, если уже повернули - снимаем
+				float Sign{1.0f};
+				if (NeedRotate.x < 0.0f)
+					Sign = -1.0f;
+
+				tmpRotate.x = Sign * MaxSpeedRotate * RotationSpeed.x * TimeDelta;
+
 				if (Sign == 1.0f) {
 					if (tmpRotate.x >= NeedRotate.x) {
 						tmpRotate.x = NeedRotate.x;
@@ -602,18 +597,18 @@ bool cSpaceShip::Update(float Time)
 						NeedRotate.x = 0.0f;
 					}
 				}
-				// меняем значение
+
 				if (NeedRotate.x != 0.0f)
 					NeedRotate.x -= tmpRotate.x;
 			}
 
-			// угол по y
 			if (NeedRotate.y != 0.0f) {
-				float Sign = 1.0f;
-				if (NeedRotate.y < 0.0f) Sign = -1.0f;
-				// вычисляем скорость поворота по данным двигателя
-				tmpRotate.y = Sign*MaxSpeedRotate*RotationSpeed.y*TimeDelta;
-				// смотрим, если уже повернули - снимаем
+				float Sign{1.0f};
+				if (NeedRotate.y < 0.0f)
+					Sign = -1.0f;
+
+				tmpRotate.y = Sign * MaxSpeedRotate * RotationSpeed.y * TimeDelta;
+
 				if (Sign == 1.0f) {
 					if (tmpRotate.y >= NeedRotate.y) {
 						tmpRotate.y = NeedRotate.y;
@@ -625,11 +620,10 @@ bool cSpaceShip::Update(float Time)
 						NeedRotate.y = 0.0f;
 					}
 				}
-				// меняем значение
+
 				if (NeedRotate.y != 0.0f)
 					NeedRotate.y -= tmpRotate.y;
 
-				// включаем двигатель на поворот
 				if (NeedRotate.y < 0.0f) {
 					if (!EnginesLeft.empty()) {
 						for (auto &tmpEngineLeft : EnginesLeft) {
@@ -647,13 +641,13 @@ bool cSpaceShip::Update(float Time)
 				}
 			}
 
-			// угол по z
 			if (NeedRotate.z != 0.0f) {
-				float Sign = 1.0f;
-				if (NeedRotate.z < 0.0f) Sign = -1.0f;
-				// вычисляем скорость поворота по данным двигателя
-				tmpRotate.z = Sign*MaxSpeedRotate*RotationSpeed.z*TimeDelta;
-				// смотрим, если уже повернули - снимаем
+				float Sign{1.0f};
+				if (NeedRotate.z < 0.0f)
+					Sign = -1.0f;
+
+				tmpRotate.z = Sign * MaxSpeedRotate * RotationSpeed.z * TimeDelta;
+
 				if (Sign == 1.0f) {
 					if (tmpRotate.z >= NeedRotate.z) {
 						tmpRotate.z = NeedRotate.z;
@@ -665,13 +659,11 @@ bool cSpaceShip::Update(float Time)
 						NeedRotate.z = 0.0f;
 					}
 				}
-				// меняем значение
+
 				if (NeedRotate.z != 0.0f)
 					NeedRotate.z -= tmpRotate.z;
 			}
 
-
-			// установка поворота там же сохраняем, какой общий поворот модели
 			SetRotation(tmpRotate);
 
 		}
@@ -690,25 +682,17 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// ускорение-замедление
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// вперед-назад
-	// если нужно разогнаться, или управление на игроке - и нужно стремиться к нулю
-	if ((NeedSpeed != 0.0f) || ((ObjectStatus == eObjectStatus::Player) && (Speed != 0.0f))) {
-		float Sign = 1.0f;
-		// нужно двигать назад
+	if ((NeedSpeed != 0.0f) ||
+	    ((ObjectStatus == eObjectStatus::Player) && (Speed != 0.0f))) {
+		float Sign{1.0f};
 		if (NeedSpeed < 0.0f)
 			Sign = -1.0f;
 
-		// "ровняем" скорость под модель
 		if (Sign == 1.0f)
 			vw_Clamp(NeedSpeed, 0.0f, MaxSpeed);
 		else
 			vw_Clamp(NeedSpeed, -MaxSpeed, 0.0f);
 
-		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
 			if (NeedSpeed < Speed)
 				Sign = -1.0f;
@@ -717,13 +701,9 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-		// даем полный газ, учитывая сколько процентов можем выдать
-		Acceler = Sign*MaxAcceler*NeedAcceler;
+		Acceler = Sign * MaxAcceler * NeedAcceler;
+		Speed = Speed + Acceler * TimeDelta;
 
-		// считаем текущую скорость
-		Speed = Speed + Acceler*TimeDelta;
-
-		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
 			if (NeedSpeed <= Speed) {
 				Speed = NeedSpeed;
@@ -736,7 +716,6 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 
-		// если нужны двигатели торможения - включаем маневровые
 		if (Sign == -1.0f) {
 			if (!EnginesLeft.empty()) {
 				for (auto &tmpEngineLeft : EnginesLeft) {
@@ -752,33 +731,27 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	}
-	// влево-вправо
-	if (NeedSpeedLR != 0.0f) {
-		float Sign = 1.0f;
-		// нужно двигать назад
-		if (NeedSpeedLR < 0.0f) Sign = -1.0f;
 
-		// "ровняем" скорость под модель
+	if (NeedSpeedLR != 0.0f) {
+		float Sign{1.0f};
+		if (NeedSpeedLR < 0.0f)
+			Sign = -1.0f;
+
 		if (Sign == 1.0f) {
 			vw_Clamp(NeedSpeedLR, 0.0f, MaxSpeed);
 		} else {
 			vw_Clamp(NeedSpeedLR, -MaxSpeed, 0.0f);
 		}
 
-		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
 			if (NeedSpeedLR < SpeedLR) Sign = -1.0f;
 		} else {
 			if (NeedSpeedLR > SpeedLR) Sign = 1.0f;
 		}
 
-		// даем полный газ, учитывая сколько процентов можем выдать
-		AccelerLR = Sign*MaxAcceler*NeedAccelerLR;
+		AccelerLR = Sign * MaxAcceler * NeedAccelerLR;
+		SpeedLR = SpeedLR + AccelerLR * TimeDelta;
 
-		// считаем текущую скорость
-		SpeedLR = SpeedLR + AccelerLR*TimeDelta;
-
-		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
 			if (NeedSpeedLR <= SpeedLR) {
 				SpeedLR = NeedSpeedLR;
@@ -791,19 +764,17 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	}
-	// вверх-вниз
-	if (NeedSpeedUD != 0.0f) {
-		float Sign = 1.0f;
-		// нужно двигать назад
-		if (NeedSpeedUD < 0.0f) Sign = -1.0f;
 
-		// "ровняем" скорость под модель
+	if (NeedSpeedUD != 0.0f) {
+		float Sign{1.0f};
+		if (NeedSpeedUD < 0.0f)
+			Sign = -1.0f;
+
 		if (Sign == 1.0f)
 			vw_Clamp(NeedSpeedUD, 0.0f, MaxSpeed);
 		else
 			vw_Clamp(NeedSpeedUD, -MaxSpeed, 0.0f);
 
-		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
 			if (NeedSpeedUD < SpeedUD)
 				Sign = -1.0f;
@@ -812,13 +783,9 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-		// даем полный газ, учитывая сколько процентов можем выдать
-		AccelerUD = Sign*MaxAcceler*NeedAccelerUD;
+		AccelerUD = Sign * MaxAcceler * NeedAccelerUD;
+		SpeedUD = SpeedUD + AccelerUD * TimeDelta;
 
-		// считаем текущую скорость
-		SpeedUD = SpeedUD + AccelerUD*TimeDelta;
-
-		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
 			if (NeedSpeedUD <= SpeedUD) {
 				SpeedUD = NeedSpeedUD;
@@ -832,23 +799,16 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// ускорение-замедление по вектору камеры
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	// вперед-назад
 	if (NeedSpeedByCamFB != 0.0f) {
-		float Sign = 1.0f;
-		// нужно двигать назад
-		if (NeedSpeedByCamFB < 0.0f) Sign = -1.0f;
+		float Sign{1.0f};
+		if (NeedSpeedByCamFB < 0.0f)
+			Sign = -1.0f;
 
-		// "ровняем" скорость под модель
 		if (Sign == 1.0f)
 			vw_Clamp(NeedSpeedByCamFB, 0.0f, MaxSpeed);
 		else
 			vw_Clamp(NeedSpeedByCamFB, -MaxSpeed, 0.0f);
 
-		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
 			if (NeedSpeedByCamFB < SpeedByCamFB)
 				Sign = -1.0f;
@@ -857,13 +817,9 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-		// даем полный газ, учитывая сколько процентов можем выдать
-		AccelerByCamFB = Sign*MaxAcceler*NeedAccelerByCamFB;
+		AccelerByCamFB = Sign * MaxAcceler * NeedAccelerByCamFB;
+		SpeedByCamFB = SpeedByCamFB + AccelerByCamFB * TimeDelta;
 
-		// считаем текущую скорость
-		SpeedByCamFB = SpeedByCamFB + AccelerByCamFB*TimeDelta;
-
-		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
 			if (NeedSpeedByCamFB <= SpeedByCamFB) {
 				SpeedByCamFB = NeedSpeedByCamFB;
@@ -876,19 +832,16 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	}
-	// влево-вправо
 	if (NeedSpeedByCamLR != 0.0f) {
-		float Sign = 1.0f;
-		// нужно двигать назад
-		if (NeedSpeedByCamLR < 0.0f) Sign = -1.0f;
+		float Sign{1.0f};
+		if (NeedSpeedByCamLR < 0.0f)
+			Sign = -1.0f;
 
-		// "ровняем" скорость под модель
 		if (Sign == 1.0f)
 			vw_Clamp(NeedSpeedByCamLR, 0.0f, MaxSpeed);
 		else
 			vw_Clamp(NeedSpeedByCamLR, -MaxSpeed, 0.0f);
 
-		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
 			if (NeedSpeedByCamLR < SpeedByCamLR)
 				Sign = -1.0f;
@@ -897,13 +850,9 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-		// даем полный газ, учитывая сколько процентов можем выдать
-		AccelerByCamLR = Sign*MaxAcceler*NeedAccelerByCamLR;
+		AccelerByCamLR = Sign * MaxAcceler * NeedAccelerByCamLR;
+		SpeedByCamLR = SpeedByCamLR + AccelerByCamLR * TimeDelta;
 
-		// считаем текущую скорость
-		SpeedByCamLR = SpeedByCamLR + AccelerByCamLR*TimeDelta;
-
-		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
 			if (NeedSpeedByCamLR <= SpeedByCamLR) {
 				SpeedByCamLR = NeedSpeedByCamLR;
@@ -916,19 +865,17 @@ bool cSpaceShip::Update(float Time)
 			}
 		}
 	}
-	// вверх-вниз
-	if (NeedSpeedByCamUD != 0.0f) {
-		float Sign = 1.0f;
-		// нужно двигать назад
-		if (NeedSpeedByCamUD < 0.0f) Sign = -1.0f;
 
-		// "ровняем" скорость под модель
+	if (NeedSpeedByCamUD != 0.0f) {
+		float Sign{1.0f};
+		if (NeedSpeedByCamUD < 0.0f)
+			Sign = -1.0f;
+
 		if (Sign == 1.0f)
 			vw_Clamp(NeedSpeedByCamUD, 0.0f, MaxSpeed);
 		else
 			vw_Clamp(NeedSpeedByCamUD, -MaxSpeed, 0.0f);
 
-		// случай, когда нужно затормозить а не менять направление
 		if (Sign == 1.0f) {
 			if (NeedSpeedByCamUD < SpeedByCamUD)
 				Sign = -1.0f;
@@ -937,13 +884,9 @@ bool cSpaceShip::Update(float Time)
 				Sign = 1.0f;
 		}
 
-		// даем полный газ, учитывая сколько процентов можем выдать
-		AccelerByCamUD = Sign*MaxAcceler*NeedAccelerByCamUD;
+		AccelerByCamUD = Sign * MaxAcceler * NeedAccelerByCamUD;
+		SpeedByCamUD = SpeedByCamUD + AccelerByCamUD * TimeDelta;
 
-		// считаем текущую скорость
-		SpeedByCamUD = SpeedByCamUD + AccelerByCamUD*TimeDelta;
-
-		// смотрим, если уже разогнались - снимаем
 		if (Sign == 1.0f) {
 			if (NeedSpeedByCamUD <= SpeedByCamUD) {
 				SpeedByCamUD = NeedSpeedByCamUD;
@@ -957,19 +900,16 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// смотрим, есть ли команда открыть огонь
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!WeaponSlots.empty()) {
-		// если залп или игрок (игроку регулируем сами)
-		if ((WeaponFireType == 1) || (ObjectStatus == eObjectStatus::Player)) {
+		// volley fire
+		if ((WeaponFireType == 1) ||
+		    (ObjectStatus == eObjectStatus::Player)) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
 				if (tmpWeaponSlot.SetFire)
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock())
 						sharedWeapon->WeaponFire(Time);
 			}
-		} else { // переменный огонь
-
+		} else { // alternate fire
 			int PrimCount = 0;
 			float PrimTime = 0.0f;
 			unsigned FirstWeapon = WeaponSlots.size();
@@ -977,8 +917,7 @@ bool cSpaceShip::Update(float Time)
 
 			WeaponGroupCurrentFireDelay -= TimeDelta;
 
-			// находим кол-во оружия
-			for (unsigned i = 0; i < WeaponSlots.size(); i++)
+			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
 					PrimTime += sharedWeapon->NextFireTime;
@@ -987,12 +926,10 @@ bool cSpaceShip::Update(float Time)
 					if (LastWeapon < i)
 						LastWeapon = i;
 				}
-			// если еще не было начальной установки
+			}
 			if (WeaponGroupCurrentFireNum == -1)
 				WeaponGroupCurrentFireNum = FirstWeapon;
 
-
-			// стреляем
 			for (unsigned i = 0; i < WeaponSlots.size(); i++)
 				if (!WeaponSlots[i].Weapon.expired() &&
 				    WeaponSlots[i].SetFire &&
@@ -1001,14 +938,13 @@ bool cSpaceShip::Update(float Time)
 					if (auto sharedWeapon = WeaponSlots[i].Weapon.lock())
 						sharedWeapon->WeaponFire(Time);
 
-					WeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
+					WeaponGroupCurrentFireDelay = PrimTime / (PrimCount * PrimCount);
 					WeaponGroupCurrentFireNum++;
 					if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 						WeaponGroupCurrentFireNum = FirstWeapon;
 
-					// если такого оружия нет, берем что есть
 					if (WeaponSlots[WeaponGroupCurrentFireNum].Weapon.expired()) {
-						bool exit = false;
+						bool exit{false};
 						while (!exit) {
 							WeaponGroupCurrentFireNum++;
 							if (WeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
@@ -1021,15 +957,13 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 	if (!BossWeaponSlots.empty()) {
-		// если залп
-		if (BossWeaponFireType == 1) {
+		if (BossWeaponFireType == 1) { // volley fire
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 				if (tmpBossWeaponSlot.SetFire)
 					if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock())
 						sharedWeapon->WeaponFire(Time);
 			}
-		} else { // переменный огонь
-
+		} else { // alternate fire
 			int PrimCount = 0;
 			float PrimTime = 0.0f;
 			unsigned FirstWeapon = BossWeaponSlots.size();
@@ -1037,7 +971,6 @@ bool cSpaceShip::Update(float Time)
 
 			BossWeaponGroupCurrentFireDelay -= TimeDelta;
 
-			// находим кол-во оружия
 			for (unsigned i = 0; i < BossWeaponSlots.size(); i++) {
 				if (auto sharedWeapon = BossWeaponSlots[i].Weapon.lock()) {
 					PrimCount++;
@@ -1048,11 +981,9 @@ bool cSpaceShip::Update(float Time)
 						LastWeapon = i;
 				}
 			}
-			// если еще не было начальной установки
 			if (BossWeaponGroupCurrentFireNum == -1)
 				BossWeaponGroupCurrentFireNum = FirstWeapon;
 
-			// стреляем
 			for (unsigned i = 0; i < BossWeaponSlots.size(); i++) {
 				if (!BossWeaponSlots[i].Weapon.expired() &&
 				    BossWeaponSlots[i].SetFire &&
@@ -1061,14 +992,13 @@ bool cSpaceShip::Update(float Time)
 					if (auto sharedWeapon = BossWeaponSlots[i].Weapon.lock())
 						sharedWeapon->WeaponFire(Time);
 
-					BossWeaponGroupCurrentFireDelay = PrimTime/(PrimCount*PrimCount);
+					BossWeaponGroupCurrentFireDelay = PrimTime / (PrimCount * PrimCount);
 					BossWeaponGroupCurrentFireNum++;
 					if (BossWeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
 						BossWeaponGroupCurrentFireNum = FirstWeapon;
 
-					// если такого оружия нет, берем что есть
 					if (BossWeaponSlots[BossWeaponGroupCurrentFireNum].Weapon.expired()) {
-						bool exit = false;
+						bool exit{false};
 						while (!exit) {
 							BossWeaponGroupCurrentFireNum++;
 							if (BossWeaponGroupCurrentFireNum > static_cast<int>(LastWeapon))
@@ -1082,9 +1012,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// небольшая девиация-болтание корпуса
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!ShipShake.empty()) {
 		ShipShake[0].Update(TimeDelta, [&] (const float ShakeIncrement,
 						    const sVECTOR3D &ShakeDirection,
@@ -1093,52 +1020,45 @@ bool cSpaceShip::Update(float Time)
 		});
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// считаем вектор движения
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Velocity = Orientation^(Speed*TimeDelta);
+	Velocity = Orientation ^ (Speed * TimeDelta);
 	if (fabs(SpeedLR) > 0.01f) {
-		sVECTOR3D tmp(SpeedLR*TimeDelta,0.0f,0.0f);
+		sVECTOR3D tmp(SpeedLR * TimeDelta, 0.0f, 0.0f);
 		vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 	if (fabs(SpeedUD) > 0.01f) {
-		sVECTOR3D tmp(0.0f,SpeedUD*TimeDelta,0.0f);
+		sVECTOR3D tmp(0.0f, SpeedUD * TimeDelta, 0.0f);
 		vw_Matrix33CalcPoint(tmp, CurrentRotationMat);
 		Velocity += tmp;
 	}
 
 	if (fabs(SpeedByCamFB) > 0.01f) {
-		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamFB*TimeDelta);
+		sVECTOR3D tmp = GameCameraMovement ^ (SpeedByCamFB * TimeDelta);
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamLR) > 0.01f) {
-		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamLR*TimeDelta);
+		sVECTOR3D tmp = GameCameraMovement ^ (SpeedByCamLR * TimeDelta);
 		vw_RotatePoint(tmp, sVECTOR3D{0.0, -90.0f ,0.0f});
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamUD) > 0.01f) {
-		sVECTOR3D tmp = GameCameraMovement^(SpeedByCamUD*TimeDelta);
+		sVECTOR3D tmp = GameCameraMovement ^ (SpeedByCamUD * TimeDelta);
 		vw_RotatePoint(tmp, sVECTOR3D{90.0f, 0.0f, 0.0f});
 		Velocity += tmp;
 	}
 
-	// перемещение объекта, если нужно
-	if (Velocity.x != 0.0f || Velocity.y != 0.0f  || Velocity.z != 0.0f ) {
-		// делаем сдвиг модели в указанную точку
-		SetLocation(Location+Velocity);
-	}
+	if ((Velocity.x != 0.0f) ||
+	    (Velocity.y != 0.0f) ||
+	    (Velocity.z != 0.0f) )
+		SetLocation(Location + Velocity);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Делаем установку работы двигателей, согласуем со скоростью корабля
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (!Engines.empty()) {
 		float tmpSpeed = Speed;
 		if (tmpSpeed > 6.0f)
-			tmpSpeed=6.0f;
+			tmpSpeed = 6.0f;
 		else if (tmpSpeed < -6.0f)
-			tmpSpeed=-6.0f;
-		tmpSpeed/=2.0f;
+			tmpSpeed = -6.0f;
+		tmpSpeed /= 2.0f;
 
 		for (auto &tmpEngine : Engines) {
 			if (auto sharedEngine = tmpEngine.lock())
@@ -1147,11 +1067,7 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// работа с оружием - наведение его на ближайшую цель
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// а нужно ли стерять
-	bool NeedFire = false;
+	bool NeedFire{false};
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
 			if (!tmpWeaponSlot.Weapon.expired() &&
@@ -1176,8 +1092,8 @@ bool cSpaceShip::Update(float Time)
 	if ((ObjectStatus == eObjectStatus::Enemy) && NeedFire) {
 		sVECTOR3D NeedAngle = Rotation;
 
-		// находим среднюю точку положение оружия
-		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		// weapons 'center' point
+		sVECTOR3D WeaponAvLocation(0.0f, 0.0f, 0.0f);
 		int UsedWeaponQunt = 0;
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
@@ -1193,11 +1109,9 @@ bool cSpaceShip::Update(float Time)
 		WeaponAvLocation.y = WeaponAvLocation.y / UsedWeaponQunt;
 		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
 
-
-		int WeapNum = -1;
-		sVECTOR3D	FirePos(0.0f,0.0f,0.0f);
+		int WeapNum{-1};
+		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
 		if (!WeaponSlots.empty()) {
-			// находим номер
 			for (auto &tmpWeaponSlot : WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
@@ -1207,10 +1121,9 @@ bool cSpaceShip::Update(float Time)
 				}
 			}
 			if (WeapNum == -1)
-				WeapNum = 204; // номер самого простого из пиратского оружия
+				WeapNum = 204; // by default - pirate weapon
 
-
-			int Count = 0;
+			int Count{0};
 			for (auto &tmpWeaponSlot : WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
@@ -1219,13 +1132,12 @@ bool cSpaceShip::Update(float Time)
 					}
 				}
 			}
-			FirePos = FirePos^(1.0f/Count);
+			FirePos = FirePos ^ (1.0f / Count);
 		}
 
 		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
 						 CurrentRotationMat, NeedAngle, WeapNum);
 
-		// всему оружию ставим нужную ориентацию
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
@@ -1233,7 +1145,7 @@ bool cSpaceShip::Update(float Time)
 						NeedAngle.y = sharedWeapon->Rotation.y;
 						NeedAngle.z = sharedWeapon->Rotation.z;
 
-						sharedWeapon->SetRotation(sharedWeapon->Rotation^(-1));
+						sharedWeapon->SetRotation(sharedWeapon->Rotation ^ (-1));
 						sharedWeapon->SetRotation(NeedAngle);
 					}
 				}
@@ -1243,9 +1155,8 @@ bool cSpaceShip::Update(float Time)
 
 	if ((ObjectStatus == eObjectStatus::Enemy) && NeedBossFire) {
 		sVECTOR3D NeedAngle = Rotation;
-
-		// находим среднюю точку положение оружия
-		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		// weapons 'center' point
+		sVECTOR3D WeaponAvLocation(0.0f, 0.0f, 0.0f);
 		int UsedWeaponQunt = 0;
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
@@ -1262,9 +1173,8 @@ bool cSpaceShip::Update(float Time)
 		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
 
 		int WeapNum{-1};
-		sVECTOR3D FirePos(0.0f,0.0f,0.0f);
+		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
 		if (!BossWeaponSlots.empty()) {
-			// находим номер
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
@@ -1274,10 +1184,9 @@ bool cSpaceShip::Update(float Time)
 				}
 			}
 			if (WeapNum == -1)
-				WeapNum = 204; // номер самого простого из пиратского оружия
+				WeapNum = 204; // by default - pirate weapon
 
-
-			int Count = 0;
+			int Count{0};
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
@@ -1286,13 +1195,12 @@ bool cSpaceShip::Update(float Time)
 					}
 				}
 			}
-			FirePos = FirePos^(1.0f/Count);
+			FirePos = FirePos ^ (1.0f / Count);
 		}
 
 		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
 						 CurrentRotationMat, NeedAngle, WeapNum);
 
-		// всему оружию ставим нужную ориентацию
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
@@ -1308,11 +1216,9 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	// так стреляют только свои :)
 	if (ObjectStatus == eObjectStatus::Ally) {
-
-		// находим среднюю точку положение оружия
-		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		// weapons 'center' point
+		sVECTOR3D WeaponAvLocation(0.0f, 0.0f, 0.0f);
 		int UsedWeaponQunt = 0;
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
@@ -1328,16 +1234,13 @@ bool cSpaceShip::Update(float Time)
 
 		sVECTOR3D NeedAngle = Rotation;
 
-		// всему оружию ставим нужную ориентацию
 		if (!WeaponSlots.empty()) {
-			// ставим скорость наведения оружия
-			float TargetingSpeed = 1.0f;
+			float TargetingSpeed{1.0f};
 
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
 						NeedAngle = Rotation;
-						// добавляем базовый угол, чтобы по умолчанию устанавливало его
 						NeedAngle.y += WeaponSlots[i].YAngle;
 
 						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, Rotation,
@@ -1346,51 +1249,45 @@ bool cSpaceShip::Update(float Time)
 
 						sVECTOR3D NeedAngleTmp = NeedAngle;
 
-						// учитываем скорость поворота по вертикали
 						if (sharedWeapon->Rotation.x < NeedAngle.x) {
-							float NeedAngle_x = sharedWeapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_x = sharedWeapon->Rotation.x + 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_x > NeedAngle.x)
 								NeedAngle_x = NeedAngle.x;
 							NeedAngle.x = NeedAngle_x;
 
 						}
 						if (sharedWeapon->Rotation.x > NeedAngle.x) {
-							float NeedAngle_x = sharedWeapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_x = sharedWeapon->Rotation.x - 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_x < NeedAngle.x)
 								NeedAngle_x = NeedAngle.x;
 							NeedAngle.x = NeedAngle_x;
 						}
 
-						// учитываем скорость поворота по горизонтали
-						float Min = 0.0f;
-						float Max = 0.0f;
+						float Min{0.0f};
+						float Max{0.0f};
 						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, Min, Max);
 						if (sharedWeapon->Rotation.y < NeedAngle.y) {
-							float NeedAngle_y = sharedWeapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_y = sharedWeapon->Rotation.y + 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_y > NeedAngle.y)
 								NeedAngle_y = NeedAngle.y;
 							NeedAngle.y = NeedAngle_y;
-							// проверка на достижение предела поворота
-							if (NeedAngle.y > Max+Rotation.y)
-								NeedAngle.y = Max+Rotation.y;
+							if (NeedAngle.y > Max + Rotation.y)
+								NeedAngle.y = Max + Rotation.y;
 						}
 						if (sharedWeapon->Rotation.y > NeedAngle.y) {
-							float NeedAngle_y = sharedWeapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_y = sharedWeapon->Rotation.y - 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_y < NeedAngle.y)
 								NeedAngle_y = NeedAngle.y;
 							NeedAngle.y = NeedAngle_y;
-							// проверка на достижение предела поворота
-							if (NeedAngle.y < Min+Rotation.y)
-								NeedAngle.y = Min+Rotation.y;
+							if (NeedAngle.y < Min + Rotation.y)
+								NeedAngle.y = Min + Rotation.y;
 						}
 
-						// если выключен прикол с поворотом - моментально поворачиваем ствол
 						if (GameWeaponTargetingMode == 1)
 							NeedAngle = NeedAngleTmp;
 
-						// если это не ракетные системы, нужно повернуть
-						if (sharedWeapon->InternalType < 16) {
-							sharedWeapon->SetRotation(sharedWeapon->Rotation^(-1));
+						if (sharedWeapon->InternalType < 16) { // not missile
+							sharedWeapon->SetRotation(sharedWeapon->Rotation ^ (-1));
 							sharedWeapon->SetRotation(NeedAngle);
 						}
 					}
@@ -1399,14 +1296,11 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	// если корабль игрока
 	if (ObjectStatus == eObjectStatus::Player) {
+		float TargetingSpeed = static_cast<float>(GameTargetingMechanicSystem);
 
-		// ставим скорость наведения оружия
-		float TargetingSpeed = GameTargetingMechanicSystem*1.0f;
-
-		// находим среднюю точку положение оружия
-		sVECTOR3D WeaponAvLocation(0.0f,0.0f,0.0f);
+		// weapons 'center' point
+		sVECTOR3D WeaponAvLocation(0.0f, 0.0f, 0.0f);
 		int UsedWeaponQunt = 0;
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
@@ -1422,44 +1316,30 @@ bool cSpaceShip::Update(float Time)
 
 		sVECTOR3D NeedAngle = Rotation;
 
-// у оружия есть (для каждого слота в корабле свои)
-// мин-макс и базовый (выставляет пользователь) углы поворота орудия
-// передавать на проверку всегда базовый угол!!! не текущий!
-
-		/* типы наведения
-		1 - простое наведение всех орудий по кораблю
-		2 - простое наведение всех орудий по кораблю + доворот на центр
-		3 - наведение каждого орудия на свою цель
-		4 - наведение каждого орудия на свою цель + доворот
-
-		*/
-
-		// всему оружию ставим нужную ориентацию
 		if (!WeaponSlots.empty()) {
 			for (unsigned i = 0; i < WeaponSlots.size(); i++) {
 				if (auto sharedWeapon = WeaponSlots[i].Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
 						NeedAngle = Rotation;
-						// добавляем базовый угол, чтобы по умолчанию устанавливало его
 						NeedAngle.y += WeaponSlots[i].YAngle;
 
 						switch (GameTargetingSystem) {
-						case 1:
+						case 1: // for all weapon by height only
 							GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
 										    Length, CurrentRotationMat, NeedAngle, Width, false, true,
 										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
-						case 2:
+						case 2: // for all weapon by height, with correction to target center
 							GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
 										    Length, CurrentRotationMat, NeedAngle, Width, true, true,
 										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
-						case 3:
+						case 3: // for each weapon by height only
 							GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->Rotation,
 										    Length, sharedWeapon->CurrentRotationMat, NeedAngle, sharedWeapon->Width, false, true,
 										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
-						case 4:
+						case 4: // for each weapon by height, with correction to target center
 							GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation,
 										    sVECTOR3D{sharedWeapon->Rotation.x, 0.0f, sharedWeapon->Rotation.z} + sVECTOR3D{0.0f, WeaponSlots[i].YAngle, 0.0f},
 										    Length, sharedWeapon->CurrentRotationMat, NeedAngle, Width, false, true,
@@ -1469,49 +1349,44 @@ bool cSpaceShip::Update(float Time)
 
 						sVECTOR3D NeedAngleTmp = NeedAngle;
 
-						// учитываем скорость поворота по вертикали
 						if (sharedWeapon->Rotation.x < NeedAngle.x) {
-							float NeedAngle_x = sharedWeapon->Rotation.x+40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_x = sharedWeapon->Rotation.x + 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_x > NeedAngle.x)
 								NeedAngle_x = NeedAngle.x;
 							NeedAngle.x = NeedAngle_x;
 
 						}
 						if (sharedWeapon->Rotation.x > NeedAngle.x) {
-							float NeedAngle_x = sharedWeapon->Rotation.x-40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_x = sharedWeapon->Rotation.x - 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_x < NeedAngle.x)
 								NeedAngle_x = NeedAngle.x;
 							NeedAngle.x = NeedAngle_x;
 						}
 
-						// учитываем скорость поворота по горизонтали
-						float Min = 0.0f;
-						float Max = 0.0f;
+						float Min{0.0f};
+						float Max{0.0f};
 						GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, i, Min, Max);
 						if (sharedWeapon->Rotation.y > NeedAngle.y) {
-							float NeedAngle_y = sharedWeapon->Rotation.y+40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_y = sharedWeapon->Rotation.y + 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_y > NeedAngle.y)
 								NeedAngle_y = NeedAngle.y;
 							NeedAngle.y = NeedAngle_y;
-							// проверка на достижение предела поворота
-							if (NeedAngle.y > Max+sharedWeapon->Rotation.y)
-								NeedAngle.y = Max+sharedWeapon->Rotation.y;
+							if (NeedAngle.y > Max + sharedWeapon->Rotation.y)
+								NeedAngle.y = Max + sharedWeapon->Rotation.y;
 						}
 						if (sharedWeapon->Rotation.y < NeedAngle.y) {
-							float NeedAngle_y = sharedWeapon->Rotation.y-40.0f*TargetingSpeed*TimeDelta;
+							float NeedAngle_y = sharedWeapon->Rotation.y - 40.0f * TargetingSpeed * TimeDelta;
 							if (NeedAngle_y < NeedAngle.y)
 								NeedAngle_y = NeedAngle.y;
 							NeedAngle.y = NeedAngle_y;
-							// проверка на достижение предела поворота
-							if (NeedAngle.y < Min+sharedWeapon->Rotation.y)
-								NeedAngle.y = Min+sharedWeapon->Rotation.y;
+							if (NeedAngle.y < Min + sharedWeapon->Rotation.y)
+								NeedAngle.y = Min + sharedWeapon->Rotation.y;
 						}
 
-						// если выключен прикол с поворотом - моментально поворачиваем ствол
 						if (GameWeaponTargetingMode == 1)
 							NeedAngle = NeedAngleTmp;
 
-						sharedWeapon->SetRotation(sharedWeapon->Rotation^(-1));
+						sharedWeapon->SetRotation(sharedWeapon->Rotation ^ (-1));
 						sharedWeapon->SetRotation(NeedAngle);
 					}
 				}
@@ -1519,7 +1394,6 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	// объект в порядке - удалять не нужно
 	return true;
 }
 

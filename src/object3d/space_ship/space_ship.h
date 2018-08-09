@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO switch fire type to enumeration
 
 // TODO split earth fighter and player ship classes
 
@@ -85,92 +85,50 @@ protected:
 	~cSpaceShip();
 
 public:
-	// Обновление данных объектa
 	virtual bool Update(float Time) override;
-	// Установка положения объекта
 	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
 	virtual void SetLocationArcadePlayer(const sVECTOR3D &NewLocation);
-	// Установка углов поворота объекта
 	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 
-	// текущей вектор движения корабля
 	sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};
 
-	// нужно повернуть (пересчитать мэш) при следующем проходе
-	// Update + учесть эти данные в Rotation
 	sVECTOR3D NeedRotate{0.0f, 0.0f, 0.0f};
-	// скорость поворота по каждому раправлению
 	sVECTOR3D RotationSpeed{1.0f, 1.0f, 1.0f};
 
-	// максимальная скорость units/sec, зависит от двигателя
 	float MaxSpeed{0.0f};
-	// максимальное ускорение units/sec*sec, зависит от двигателя
 	float MaxAcceler{0.0f};
-	// макс. маневровых двигателей
 	float MaxSpeedRotate{0.0f};
 
-	// вперед-назад
-	// текущая скорость
 	float Speed{0.0f};
-	// нужная скорость
 	float NeedSpeed{0.0f};
-	// текущее ускорение
 	float Acceler{0.0f};
-	// нужное ускорение
 	float NeedAcceler{1.0f};
 
-	// влево-вправо
-	// текущая скорость
 	float SpeedLR{0.0f};
-	// нужная скорость
 	float NeedSpeedLR{0.0f};
-	// текущее ускорение
 	float AccelerLR{0.0f};
-	// нужное ускорение
 	float NeedAccelerLR{1.0f};
 
-	// вверх-вниз
-	// текущая скорость
 	float SpeedUD{0.0f};
-	// нужная скорость
 	float NeedSpeedUD{0.0f};
-	// текущее ускорение
 	float AccelerUD{0.0f};
-	// нужное ускорение
 	float NeedAccelerUD{1.0f};
 
-	// вперед-назад по вектору камеры
-	// текущая скорость
 	float SpeedByCamFB{0.0f};
-	// нужная скорость
 	float NeedSpeedByCamFB{0.0f};
-	// текущее ускорение
 	float AccelerByCamFB{0.0f};
-	// нужное ускорение
 	float NeedAccelerByCamFB{1.0f};
 
-	// влево-вправо
-	// текущая скорость
 	float SpeedByCamLR{0.0f};
-	// нужная скорость
 	float NeedSpeedByCamLR{0.0f};
-	// текущее ускорение
 	float AccelerByCamLR{0.0f};
-	// нужное ускорение
 	float NeedAccelerByCamLR{1.0f};
 
-	// вверх-вниз
-	// текущая скорость
 	float SpeedByCamUD{0.0f};
-	// нужная скорость
 	float NeedSpeedByCamUD{0.0f};
-	// текущее ускорение
 	float AccelerByCamUD{0.0f};
-	// нужное ускорение
 	float NeedAccelerByCamUD{1.0f};
 
-	// управление - куда перемещаться при сделующем Update'е
-	// от 0.0 до 1.0, по "силе" движения в нужную сторону
 	float MoveForward{0.0f};
 	float MoveBackward{0.0f};
 	float MoveLeft{0.0f};
@@ -178,35 +136,29 @@ public:
 	float MoveUp{0.0f};
 	float MoveDown{0.0f};
 
-	// небольшая девиация-болтание корабля
 	std::vector<cShake> ShipShake{};
 
 	std::vector<sShipWeaponSlot> WeaponSlots{};
-	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
-	int WeaponFireType{2};
+	int WeaponFireType{2}; // 1- volley fire, 2 - alternate fire
 	int WeaponGroupCurrentFireNum{-1};
 	float WeaponGroupCurrentFireDelay{0.0f};
 
 	std::vector<sShipWeaponSlot> BossWeaponSlots{};
-	// тип стрельбы из оружия 1-обычный, 2-переменный (по умолчанию)
-	int BossWeaponFireType{2};
+	int BossWeaponFireType{2}; // 1- volley fire, 2 - alternate fire
 	int BossWeaponGroupCurrentFireNum{-1};
 	float BossWeaponGroupCurrentFireDelay{0.0f};
 
 	std::vector<sShipWeaponSlot> FlareWeaponSlots{};
 
-	// тип, как будем удалять двигатели -сразу, или глушить
 	bool EngineDestroyType{false};
-	std::vector<std::weak_ptr<cParticleSystem>> Engines{}; // двигатели
-	std::vector<sVECTOR3D> EnginesLocation{}; // положение двигателей
+	std::vector<std::weak_ptr<cParticleSystem>> Engines{};
+	std::vector<sVECTOR3D> EnginesLocation{};
 
-	// двигатели поворотов, левый
-	std::vector<std::weak_ptr<cParticleSystem>> EnginesLeft{}; // двигатели
-	std::vector<sVECTOR3D> EnginesLeftLocation{}; // положение двигателей
+	std::vector<std::weak_ptr<cParticleSystem>> EnginesLeft{};
+	std::vector<sVECTOR3D> EnginesLeftLocation{};
 
-	// двигатели поворотов, правый
-	std::vector<std::weak_ptr<cParticleSystem>> EnginesRight{}; // двигатели
-	std::vector<sVECTOR3D> EnginesRightLocation{}; // положение двигателей
+	std::vector<std::weak_ptr<cParticleSystem>> EnginesRight{};
+	std::vector<sVECTOR3D> EnginesRightLocation{};
 };
 
 class cAlienSpaceFighter final : public cSpaceShip {
@@ -255,13 +207,13 @@ std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(const int SpaceShipNum);
 // Create cPirateShip object.
 std::weak_ptr<cSpaceShip> CreatePirateShip(const int SpaceShipNum);
 
-// Проверяем все объекты, обновляем данные
+// Update and remove (erase) dead objects.
 void UpdateAllSpaceShip(float Time);
-// Прорисовываем все объекты
+// Draw all objects.
 void DrawAllSpaceShips(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular space ship.
 void ReleaseSpaceShip(std::weak_ptr<cSpaceShip> &Ship);
-// Удаляем все объекты в списке
+// Release all objects.
 void ReleaseAllSpaceShips();
 // Cycle for each space ship.
 // Note, caller must guarantee, that 'Object' will not released in callback function call.
