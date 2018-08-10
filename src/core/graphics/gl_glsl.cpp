@@ -32,6 +32,8 @@
 // NOTE since OpenGL 3.1 core profile, OpenGL must render with a program,
 //      vw_StopShaderProgram() should be removed
 
+// TODO struct cGLSL should use encapsulation (switch to class)
+
 #include "../vfs/vfs.h"
 #include "graphics.h"
 #include "extensions.h"

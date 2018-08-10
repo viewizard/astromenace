@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO struct sFILE should use encapsulation (switch to class)
+
 #ifndef CORE_VFS_VFS_H
 #define CORE_VFS_VFS_H
 

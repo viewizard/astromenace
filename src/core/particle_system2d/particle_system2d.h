@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO class cParticleSystem2D should use encapsulation
+
 #ifndef CORE_PARTICLESYSTEM2D_PARTICLESYSTEM2D_H
 #define CORE_PARTICLESYSTEM2D_PARTICLESYSTEM2D_H
 

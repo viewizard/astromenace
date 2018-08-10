@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO class cLight should use encapsulation
+
 #ifndef CORE_LIGHT_LIGHT_H
 #define CORE_LIGHT_LIGHT_H
 
