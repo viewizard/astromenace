@@ -33,8 +33,6 @@
 
 // TODO switch to enumeration for weapon type
 
-// TODO translate comments
-
 #ifndef OBJECT3D_WEAPON_WEAPON_H
 #define OBJECT3D_WEAPON_WEAPON_H
 
@@ -57,69 +55,47 @@ private:
 	~cWeapon();
 
 public:
-	// Обновление данных объектa
 	virtual bool Update(float Time) override;
-	// Выстрел
 	virtual bool WeaponFire(float Time);
-	// Установка углов поворота
 	virtual void SetRotation(const sVECTOR3D &NewRotation) override;
-	// Установка положения
 	virtual void SetLocation(const sVECTOR3D &NewLocation) override;
 
-	// уровень оружия, по мощности
-	int WeaponLevel{1};
+	int WeaponLevel{1}; // by power required (by slot)
 
-	// боекомплект
 	int Ammo{100};
-	// начальное значение боекомплекта
 	int AmmoStart{100};
 
-	// скорострельность, в секундах - время между выстрелами
-	float NextFireTime{0.3f};
-	// время последнего выстрела
+	float NextFireTime{0.3f}; // fire rate
 	float LastFireTime{-10.0f};
 
-	// потребление энергии на выстрел
-	float EnergyUse{1.0f};
-	// текущее состояние энергии
-	float CurrentEnergyAccumulated{0.0f};
+	float EnergyUse{1.0f}; // energy consumption
+	float CurrentEnergyAccumulated{0.0f}; // current capacitor status
 
-	// swarm
-	int SwarmNum{0};
+	int SwarmNum{0}; // need this for swarm missiles and flares
 
-	// нужно вращать-поворачивать при наведении внешне ( не нужно для турелей и ракетных систем)
 	bool NeedRotateOnTargeting{true};
 
-	// лучевое оружие
-	// собственно объект=снаряд
-	std::weak_ptr<cProjectile> LaserMaser{};
-	// номер проигрываемого звука, чтобы была возможность выключить при уничтожении
+	std::weak_ptr<cProjectile> LaserMaser{}; // beam
 	unsigned int LaserMaserSoundNum{0};
-	// флаг, это турель
-	bool WeaponTurret{false};
+	bool WeaponTurret{false}; // this object is turret
 
-	// для просчета положения точки стрельбы, считаем как кости
 	sVECTOR3D BaseBound{0.0f, 0.0f, 0.0f};
 	sVECTOR3D MiddleBound{0.0f, 0.0f, 0.0f};
 	sVECTOR3D WeaponBound{0.0f, 0.0f, 0.0f};
 
-	// номер части, которой наводимся по горизонтали
 	int TargetHorizChunkNum{-1};
 	float TargetHorizChunkCurrentAngle{0.0f};
 	float TargetHorizChunkNeedAngle{0.0f};
-	// номер части, которой наводимся по вертикали
 	int TargetVertChunkNum{-1};
 	float TargetVertChunkMaxAngle{80.0f};
 	float TargetVertChunkMinAngle{0.0f};
 	float TargetVertChunkCurrentAngle{0.0f};
 	float TargetVertChunkNeedAngle{0.0f};
 
-	// выстрел - вылет частиц (засветка возле ствола)
 	std::weak_ptr<cParticleSystem> Fire{};
 	sVECTOR3D FireLocation{0.0f, 0.0f, 0.0f};
-	eGameSFX SFX{static_cast<eGameSFX>(0)}; // would be value initialized to 0, eGameSFX::none
+	eGameSFX SFX{static_cast<eGameSFX>(0)}; // initialized to 0, eGameSFX::none
 
-	// если оружие уничтожено, делаем вырывающийся огонь
 	std::weak_ptr<cParticleSystem> DestroyedFire{};
 	std::weak_ptr<cParticleSystem> DestroyedSmoke{};
 	sVECTOR3D DestroyedFireLocation{0.0f, 0.0f, 0.0f};
@@ -128,15 +104,15 @@ public:
 
 // Create cWeapon object.
 std::weak_ptr<cWeapon> CreateWeapon(const int WeaponNum);
-// Проверяем все объекты, обновляем данные
+// Update and remove (erase) dead objects.
 void UpdateAllWeapon(float Time);
-// Прорисовываем все объекты
+// Draw all objects.
 void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap);
 // Release particular weapon object.
 void ReleaseWeapon(std::weak_ptr<cWeapon> &Object);
 // Release particular weapon object during update cycle.
 void ReleaseWeaponLazy(std::weak_ptr<cWeapon> &Object);
-// Удаляем все объекты в списке
+// Release all objects.
 void ReleaseAllWeapons();
 
 } // astromenace namespace

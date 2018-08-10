@@ -25,7 +25,11 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO switch to color preset in SetWeaponFire()
+
+// TODO switch to enumeration SetWeaponFire()
+
+// TODO codestyle should be fixed
 
 #include "weapon.h"
 #include "../projectile/projectile.h"
@@ -40,8 +44,6 @@ namespace {
 
 std::list<std::shared_ptr<cWeapon>> WeaponList{};
 
-} // unnamed namespace
-
 struct sWeaponData {
 	eGameSFX SFX;
 	bool NeedRotateOnTargeting;
@@ -52,12 +54,14 @@ struct sWeaponData {
 	float NextFireTime;
 	sVECTOR3D FireLocation;
 	sVECTOR3D DestrFireLocation;
-	const char *NameVW3D;
-	const char *TextureName;
-	const char *TextureIllumName;
+	std::string NameVW3D;
+	std::string TextureName;
+	std::string TextureIllumName;
 };
 
-// оружие землян 1-99
+// earth 1-99
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetEarthWeaponData{
 	// Kinetic
 	{eGameSFX::WeaponFire_Kinetic1,		true, 25,	1,	1.5f,	3000,	0.4f, sVECTOR3D{0.0f, -0.613f, 2.0f}, sVECTOR3D{0.0f, -0.65f, 1.0f}, "models/earthfighter/weapon5.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
@@ -85,73 +89,82 @@ const std::vector<sWeaponData> PresetEarthWeaponData{
 	{eGameSFX::WeaponFire_SmallMissile,	false, 30,	4,	5,	200,	3.0f, sVECTOR3D{0.0f, -0.8f, 4.7f}, sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch1.vw3d", "models/earthfighter/lnch12.tga", ""},
 	{eGameSFX::WeaponFire_NormalMissile,	false, 30,	4,	15,	400,	8.0f, sVECTOR3D{0.2f, -0.95f, 2.6f}, sVECTOR3D{0.0f, -0.6f, 1.0f}, "models/earthfighter/lnch2.vw3d", "models/earthfighter/lnch12.tga", ""},
 	{eGameSFX::WeaponFire_Torpedo,		false, 25,	5,	10,	50,	8.0f, sVECTOR3D{0.0f, -0.95f, 4.0f}, sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch3.vw3d", "models/earthfighter/lnch34.tga", ""},
-	{eGameSFX::WeaponFire_Bomb,		false, 30,	5,	15,	25,	10.0f, sVECTOR3D{0.0f, -0.95f, 5.0f}, sVECTOR3D{0.0f, -0.9f, 1.8f}, "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""},
+	{eGameSFX::WeaponFire_Bomb,		false, 30,	5,	15,	25,	10.0f, sVECTOR3D{0.0f, -0.95f, 5.0f}, sVECTOR3D{0.0f, -0.9f, 1.8f}, "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""}
 };
+#pragma GCC diagnostic pop
 
-// оружие пришельцев 101-199
-static std::vector<sWeaponData> PresetAlienWeaponData{
-	// оружие пришельцев (как Kinetic1)
-	{eGameSFX::WeaponFire_Ion2, true, 1.0f,		1,	1,	5000,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев (с наведением, как Kinetic2)
-	{eGameSFX::WeaponFire_Plasma1, false, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев (как Kinetic3)
-	{eGameSFX::WeaponFire_Plasma2, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев (с наведением, как Kinetic3)
-	{eGameSFX::WeaponFire_Plasma2, false, 1.0f,	1,	1,	2500,	2.5f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев (как Kinetic2)
-	{eGameSFX::WeaponFire_Plasma1, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев для выброса мин (1 типа)
-	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев для выброса мин (2 типа)
-	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев (как Plasma3)
-	{eGameSFX::WeaponFire_Plasma3, true, 10,	3,	50,	800,	0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев (как Plasma2)
-	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// оружие пришельцев (как Laser) для больших кораблей
-	{eGameSFX::WeaponFire_Laser, true, 15,		5,	150,	800,	1.2f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
+// alien 101-199
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
+const std::vector<sWeaponData> PresetAlienWeaponData{
+	// like Kinetic1
+	{eGameSFX::WeaponFire_Ion2, true, 1.0f,		1,	1,	5000,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// homing, like Kinetic2
+	{eGameSFX::WeaponFire_Plasma1, false, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Kinetic3
+	{eGameSFX::WeaponFire_Plasma2, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// homing, like Kinetic3
+	{eGameSFX::WeaponFire_Plasma2, false, 1.0f,	1,	1,	2500,	2.5f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Kinetic2
+	{eGameSFX::WeaponFire_Plasma1, true, 1.0f,	1,	1,	2500,	3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// emergy mine 1
+	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// emergy mine 2, with homing
+	{eGameSFX::WeaponFire_Antimatter, false, 1.0f,	1,	1,	50,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Plasma3
+	{eGameSFX::WeaponFire_Plasma3, true, 10,	3,	50,	800,	0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Plasma2
+	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Laser (for matherships)
+	{eGameSFX::WeaponFire_Laser, true, 15,		5,	150,	800,	1.2f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""}
 };
+#pragma GCC diagnostic pop
 
-// оружие пиратов 201-299
-static std::vector<sWeaponData> PresetPirateWeaponData{
-	// турель для кораблей пиратов
+// pirate 201-299
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
+const std::vector<sWeaponData> PresetPirateWeaponData{
+	// turrent 1
 	{eGameSFX::WeaponFire_Kinetic1, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D{0.0f, 1.5f, 1.0f}, sVECTOR3D{0.0f, 1.5f, 1.0f}, "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
-	// турель для кораблей пиратов
+	// turrent 2
 	{eGameSFX::WeaponFire_Kinetic2, false, 10,	1,	1,	3000,	0.7f, sVECTOR3D{0.0f, 1.0f, 0.0f}, sVECTOR3D{0.0f, 1.0f, 0.0f}, "models/turret/turret-02.vw3d", "models/turret/turrets.tga", ""},
 
-	// оружие пиратов - отстрел фларес для больших кораблей
-	{eGameSFX::WeaponFire_Kinetic1, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
+	// flares
+	{eGameSFX::WeaponFire_Kinetic1, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
 
-	// как Kinetic1
-	{eGameSFX::WeaponFire_Kinetic1, true, 10,	1,	1.7f,	3000,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Missile1
-	{eGameSFX::WeaponFire_SmallMissile, false, 80,	4,	5,	200,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Missile2
-	{eGameSFX::WeaponFire_NormalMissile, false, 30,	4,	5,	800,	8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Ion2
-	{eGameSFX::WeaponFire_Ion2, true, 10,	1,	10,		2000,	0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Antimatter
-	{eGameSFX::WeaponFire_Antimatter, true, 20,	4,	50,	5000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Missile3 (торпеда)
-	{eGameSFX::WeaponFire_Torpedo, false, 25,	5,	10,	200,	8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Missile4 (бомба)
-	{eGameSFX::WeaponFire_Bomb, false, 30,	5,	15,		100,	10.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Kinetic2
-	{eGameSFX::WeaponFire_Kinetic2, true, 25,	1,	3,	1500,	0.6f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Kinetic3
-	{eGameSFX::WeaponFire_Kinetic3, true, 30,	2,	3.5,	500,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// как Plasma2
-	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
+	// like Kinetic1
+	{eGameSFX::WeaponFire_Kinetic1, true, 10,	1,	1.7f,	3000,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Missile1
+	{eGameSFX::WeaponFire_SmallMissile, false, 80,	4,	5,	200,	5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Missile2
+	{eGameSFX::WeaponFire_NormalMissile, false, 30,	4,	5,	800,	8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Ion2
+	{eGameSFX::WeaponFire_Ion2, true, 10,	1,	10,		2000,	0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Antimatter
+	{eGameSFX::WeaponFire_Antimatter, true, 20,	4,	50,	5000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Missile3 (torpedo)
+	{eGameSFX::WeaponFire_Torpedo, false, 25,	5,	10,	200,	8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Missile4 (bomb)
+	{eGameSFX::WeaponFire_Bomb, false, 30,	5,	15,		100,	10.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Kinetic2
+	{eGameSFX::WeaponFire_Kinetic2, true, 25,	1,	3,	1500,	0.6f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Kinetic3
+	{eGameSFX::WeaponFire_Kinetic3, true, 30,	2,	3.5,	500,	0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// like Plasma2
+	{eGameSFX::WeaponFire_Plasma2, true, 15,	2,	25,	1000,	0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
 
-	// мина1 (простое наведение по высоте)
-	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// мина2 (наведение по высоте + приближение)
-	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// мина3 (наведение по высоте + стрельба снарядами)
-	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
-	// мина4 (наведение по высоте + стрельба ракетами)
-	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "none", "none", "none"},
+	// mine 1
+	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// mine 2
+	{eGameSFX::WeaponFire_Torpedo, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// mine 31
+	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+	// mine 4
+	{eGameSFX::WeaponFire_Bomb, false, 1.0f,	1,	1,	2500,	4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""}
 };
+#pragma GCC diagnostic pop
+
+} // unnamed namespace
 
 
 /*
@@ -165,9 +178,9 @@ std::weak_ptr<cWeapon> CreateWeapon(const int WeaponNum)
 	return WeaponList.front();
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем все объекты, обновляем данные
-//-----------------------------------------------------------------------------
+/*
+ * Update and remove (erase) dead objects.
+ */
 void UpdateAllWeapon(float Time)
 {
 	for (auto iter = WeaponList.begin(); iter != WeaponList.end();) {
@@ -178,9 +191,9 @@ void UpdateAllWeapon(float Time)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовываем все объекты
-//-----------------------------------------------------------------------------
+/*
+ * Draw all objects.
+ */
 void DrawAllWeapons(bool VertexOnlyPass, unsigned int ShadowMap)
 {
 	for (auto &tmpWeapon : WeaponList) {
@@ -221,19 +234,23 @@ void ReleaseWeaponLazy(std::weak_ptr<cWeapon> &Object)
 	sharedObject->Lifetime = 0.0f;
 }
 
-//-----------------------------------------------------------------------------
-// Удаляем все объекты в списке
-//-----------------------------------------------------------------------------
+/*
+ * Release all objects.
+ */
 void ReleaseAllWeapons()
 {
 	WeaponList.clear();
 }
 
-//-----------------------------------------------------------------------------
-// Установка нужных данных для вспышки возле ствола
-//-----------------------------------------------------------------------------
-static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int WeaponNum)
+/*
+ * Setup fire gfx.
+ */
+static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, const int WeaponNum)
 {
+	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+	ParticleSystem->ParticlesPerSec = 50;
+	ParticleSystem->IsSuppressed = true;
+
 	switch (WeaponNum) {
 	case 1:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -243,14 +260,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.70f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.4f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.4f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
 		break;
 	case 2:
@@ -261,14 +278,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 2.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 40.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 2.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 40.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
 		break;
 	case 3:
@@ -279,14 +296,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.60f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 1.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 50.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.60f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 1.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 50.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.5f, 0.05f, 0.0f, 0.02f);
 		break;
 	case 4:
@@ -297,14 +314,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.70f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.50f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.50f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.7f, 0.15f, 0.0f, 0.02f);
 		break;
 	case 5:
@@ -315,13 +332,13 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.00f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeEnd    = 0.00f;
-		ParticleSystem->Speed      = 4.00f;
-		ParticleSystem->SpeedVar   = 1.00f;
-		ParticleSystem->Theta      = 10.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.00f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeEnd = 0.00f;
+		ParticleSystem->Speed = 4.00f;
+		ParticleSystem->SpeedVar = 1.00f;
+		ParticleSystem->Theta = 10.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 6:
@@ -332,13 +349,13 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.20f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 1.00f;
-		ParticleSystem->Theta      = 20.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.20f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 1.00f;
+		ParticleSystem->Theta = 20.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 7:
@@ -349,13 +366,13 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.20f;
-		ParticleSystem->SizeStart  = 0.50f;
-		ParticleSystem->SizeEnd    = 0.20f;
-		ParticleSystem->Speed      = 6.00f;
-		ParticleSystem->SpeedVar   = 1.00f;
-		ParticleSystem->Theta      = 10.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.20f;
+		ParticleSystem->SizeStart = 0.50f;
+		ParticleSystem->SizeEnd = 0.20f;
+		ParticleSystem->Speed = 6.00f;
+		ParticleSystem->SpeedVar = 1.00f;
+		ParticleSystem->Theta = 10.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.5f, 0.35f, 0.0f, 0.02f);
 		break;
 	case 8:
@@ -366,16 +383,16 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.2f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.2f;
-		ParticleSystem->Speed      = 4.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 0.30f;
-		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D{0.4f, 0.4f, 0.4f};
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.2f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.2f;
+		ParticleSystem->Speed = 4.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 0.30f;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize(0.4f, 0.4f, 0.4f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 	case 9:
@@ -386,16 +403,16 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.15f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.15f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 0.40f;
-		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.3f, 0.3f};
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.15f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.15f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 0.40f;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize(0.3f, 0.3f, 0.3f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
 	case 10:
@@ -406,21 +423,18 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 1.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.30f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.30f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 0.00f;
-		ParticleSystem->Life       = 0.50f;
-		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.3f, 0.3f};
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.30f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.30f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 0.00f;
+		ParticleSystem->Life = 0.50f;
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize(0.3f, 0.3f, 0.3f);
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.35f, 0.75f, 1.0f, 0.0f, 0.02f);
 		break;
-
-
-
 	case 11:
 		ParticleSystem->ColorStart.r = 0.70f;
 		ParticleSystem->ColorStart.g = 1.00f;
@@ -429,18 +443,18 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.60f;
-		ParticleSystem->SizeStart  = 0.1f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.00f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->AlphaEnd = 0.60f;
+		ParticleSystem->SizeStart = 0.1f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.00f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.30f;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.2f, 0.3f};
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize(0.3f, 0.2f, 0.3f);
 		break;
 	case 12:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -450,18 +464,18 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.60f;
-		ParticleSystem->SizeStart  = 0.1f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.00f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.30f;
+		ParticleSystem->AlphaEnd = 0.60f;
+		ParticleSystem->SizeStart = 0.1f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.00f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.30f;
 		ParticleSystem->IsMagnet = true;
 		ParticleSystem->ParticlesPerSec = 20;
-		ParticleSystem->CreationType       = eParticleCreationType::Sphere;
-		ParticleSystem->CreationSize       = sVECTOR3D{0.3f, 0.2f, 0.3f};
+		ParticleSystem->CreationType = eParticleCreationType::Sphere;
+		ParticleSystem->CreationSize(0.3f, 0.2f, 0.3f);
 		break;
 	case 13:
 		ParticleSystem->ColorStart.r = 0.70f;
@@ -471,14 +485,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 1.00f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.4f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.4f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.7f, 1.0f, 0.0f, 0.0f, 0.02f);
 		break;
 	case 14:
@@ -509,14 +523,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.50f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.4f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.4f;
+		ParticleSystem->SizeVar= 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.40f;
 		ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 1.0f, 0.5f, 0.0f, 0.0f, 0.02f);
 		break;
 	case 16:
@@ -527,14 +541,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.70f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.4f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.4f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.40f;
 		break;
 	case 17:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -544,14 +558,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.70f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.4f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.4f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.40f;
 		break;
 	case 18:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -561,14 +575,14 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.70f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.4f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.4f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.40f;
 		break;
 	case 19:
 		ParticleSystem->ColorStart.r = 1.00f;
@@ -578,39 +592,31 @@ static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, int 
 		ParticleSystem->ColorEnd.g = 0.70f;
 		ParticleSystem->ColorEnd.b = 0.00f;
 		ParticleSystem->AlphaStart = 0.60f;
-		ParticleSystem->AlphaEnd   = 0.10f;
-		ParticleSystem->SizeStart  = 0.4f;
-		ParticleSystem->SizeVar    = 0.05f;
-		ParticleSystem->SizeEnd    = 0.10f;
-		ParticleSystem->Speed      = 3.00f;
-		ParticleSystem->SpeedVar   = 3.00f;
-		ParticleSystem->Theta      = 30.00f;
-		ParticleSystem->Life       = 0.40f;
+		ParticleSystem->AlphaEnd = 0.10f;
+		ParticleSystem->SizeStart = 0.4f;
+		ParticleSystem->SizeVar = 0.05f;
+		ParticleSystem->SizeEnd = 0.10f;
+		ParticleSystem->Speed = 3.00f;
+		ParticleSystem->SpeedVar = 3.00f;
+		ParticleSystem->Theta = 30.00f;
+		ParticleSystem->Life = 0.40f;
 		break;
 
 	default:
 		std::cerr << __func__ << "(): " << "wrong WeaponNum.\n";
 		break;
 	}
-
-	ParticleSystem->IsSuppressed = true;
-	ParticleSystem->ParticlesPerSec = 50;
-	ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-
 }
 
-//-----------------------------------------------------------------------------
-// Конструктор, инициализация всех переменных
-//-----------------------------------------------------------------------------
+/*
+ * Constructor.
+ */
 cWeapon::cWeapon(const int WeaponNum)
 {
 	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::ShipWeapon;
 
-	// никогда не показываем линию
 	ShowStrength = false;
-
-	// вес
 	Weight = 500;
 
 	if (WeaponNum <= 0) {
@@ -619,32 +625,31 @@ cWeapon::cWeapon(const int WeaponNum)
 	} else if ((WeaponNum >= 1 && WeaponNum <= 99) && ((unsigned int)WeaponNum > PresetEarthWeaponData.size())) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(1) object with Number " << WeaponNum << "\n";
 		return;
-	} else if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum-100 > PresetAlienWeaponData.size())) {
+	} else if ((WeaponNum >= 101 && WeaponNum <= 199) && ((unsigned int)WeaponNum - 100 > PresetAlienWeaponData.size())) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(2) object with Number " << WeaponNum << "\n";
 		return;
-	} else if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum-200 > PresetPirateWeaponData.size())) {
+	} else if ((WeaponNum >= 201 && WeaponNum <= 299) && ((unsigned int)WeaponNum - 200 > PresetPirateWeaponData.size())) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon(3) object with Number " << WeaponNum << "\n";
 		return;
 	}
 
 	InternalType = WeaponNum;
 
-
-	// 1-99 - это оружие землян
+	// earth 1-99
 	if (WeaponNum >= 1 && WeaponNum <= 99) {
 		ObjectStatus = eObjectStatus::Ally;
 
-		Strength = StrengthStart = PresetEarthWeaponData[WeaponNum-1].Strength;
-		WeaponLevel = PresetEarthWeaponData[WeaponNum-1].WeaponLevel;
-		Ammo = AmmoStart =  PresetEarthWeaponData[WeaponNum-1].Ammo;
-		NextFireTime =  PresetEarthWeaponData[WeaponNum-1].NextFireTime;
-		SFX = PresetEarthWeaponData[WeaponNum-1].SFX;
-		NeedRotateOnTargeting = PresetEarthWeaponData[WeaponNum-1].NeedRotateOnTargeting;
+		Strength = StrengthStart = PresetEarthWeaponData[WeaponNum - 1].Strength;
+		WeaponLevel = PresetEarthWeaponData[WeaponNum - 1].WeaponLevel;
+		Ammo = AmmoStart =  PresetEarthWeaponData[WeaponNum - 1].Ammo;
+		NextFireTime =  PresetEarthWeaponData[WeaponNum - 1].NextFireTime;
+		SFX = PresetEarthWeaponData[WeaponNum - 1].SFX;
+		NeedRotateOnTargeting = PresetEarthWeaponData[WeaponNum - 1].NeedRotateOnTargeting;
 
-		CurrentEnergyAccumulated = EnergyUse = PresetEarthWeaponData[WeaponNum-1].EnergyUse;
-		FireLocation = PresetEarthWeaponData[WeaponNum-1].FireLocation;
+		CurrentEnergyAccumulated = EnergyUse = PresetEarthWeaponData[WeaponNum - 1].EnergyUse;
+		FireLocation = PresetEarthWeaponData[WeaponNum - 1].FireLocation;
 
-		DestroyedFireLocation = PresetEarthWeaponData[WeaponNum-1].DestrFireLocation;
+		DestroyedFireLocation = PresetEarthWeaponData[WeaponNum - 1].DestrFireLocation;
 		Fire = vw_CreateParticleSystem();
 		if (auto sharedFire = Fire.lock()) {
 			sharedFire->SetStartLocation(FireLocation);
@@ -652,85 +657,83 @@ cWeapon::cWeapon(const int WeaponNum)
 			SetWeaponFire(sharedFire, WeaponNum);
 		}
 
-		LoadObjectData(PresetEarthWeaponData[WeaponNum-1].NameVW3D, *this);
+		LoadObjectData(PresetEarthWeaponData[WeaponNum - 1].NameVW3D, *this);
 
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
-			Texture[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum-1].TextureName);
+			Texture[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum - 1].TextureName);
 			if (WeaponNum < 16)
-				TextureIllum[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum-1].TextureIllumName);
+				TextureIllum[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum - 1].TextureIllumName);
 		}
 
 	}
-	// 101-199 - это оружие пришельцев
-	else if (WeaponNum >= 101 && WeaponNum <= 199) {
-		// внутренний номер
+	// alien 101-199
+	else if ((WeaponNum >= 101) &&
+		 (WeaponNum <= 199)) {
 		int IntWeaponNum = WeaponNum - 100;
 
 		ObjectStatus = eObjectStatus::Enemy;
 
-		Strength = StrengthStart = PresetAlienWeaponData[IntWeaponNum-1].Strength;
-		WeaponLevel = PresetAlienWeaponData[IntWeaponNum-1].WeaponLevel;
-		Ammo = AmmoStart =  PresetAlienWeaponData[IntWeaponNum-1].Ammo;
-		NextFireTime =  PresetAlienWeaponData[IntWeaponNum-1].NextFireTime;
-		SFX = PresetAlienWeaponData[IntWeaponNum-1].SFX;
-		NeedRotateOnTargeting = PresetAlienWeaponData[IntWeaponNum-1].NeedRotateOnTargeting;
+		Strength = StrengthStart = PresetAlienWeaponData[IntWeaponNum - 1].Strength;
+		WeaponLevel = PresetAlienWeaponData[IntWeaponNum - 1].WeaponLevel;
+		Ammo = AmmoStart =  PresetAlienWeaponData[IntWeaponNum - 1].Ammo;
+		NextFireTime =  PresetAlienWeaponData[IntWeaponNum - 1].NextFireTime;
+		SFX = PresetAlienWeaponData[IntWeaponNum - 1].SFX;
+		NeedRotateOnTargeting = PresetAlienWeaponData[IntWeaponNum - 1].NeedRotateOnTargeting;
 
-		CurrentEnergyAccumulated = EnergyUse = PresetAlienWeaponData[IntWeaponNum-1].EnergyUse;
-		FireLocation = PresetAlienWeaponData[IntWeaponNum-1].FireLocation;
+		CurrentEnergyAccumulated = EnergyUse = PresetAlienWeaponData[IntWeaponNum - 1].EnergyUse;
+		FireLocation = PresetAlienWeaponData[IntWeaponNum - 1].FireLocation;
 
 	}
-	// 201-299 - это оружие пиратов
-	else if (WeaponNum >= 201 && WeaponNum <= 299) {
-		// внутренний номер
+	// pirate 201-299
+	else if ((WeaponNum >= 201) &&
+		 (WeaponNum <= 299)) {
 		int IntWeaponNum = WeaponNum - 200;
 
 		ObjectStatus = eObjectStatus::Enemy;
 
-		Strength = StrengthStart = PresetPirateWeaponData[IntWeaponNum-1].Strength;
-		WeaponLevel = PresetPirateWeaponData[IntWeaponNum-1].WeaponLevel;
-		Ammo = AmmoStart =  PresetPirateWeaponData[IntWeaponNum-1].Ammo;
-		NextFireTime =  PresetPirateWeaponData[IntWeaponNum-1].NextFireTime;
-		SFX = PresetPirateWeaponData[IntWeaponNum-1].SFX;
-		NeedRotateOnTargeting = PresetPirateWeaponData[IntWeaponNum-1].NeedRotateOnTargeting;
+		Strength = StrengthStart = PresetPirateWeaponData[IntWeaponNum - 1].Strength;
+		WeaponLevel = PresetPirateWeaponData[IntWeaponNum - 1].WeaponLevel;
+		Ammo = AmmoStart =  PresetPirateWeaponData[IntWeaponNum - 1].Ammo;
+		NextFireTime =  PresetPirateWeaponData[IntWeaponNum - 1].NextFireTime;
+		SFX = PresetPirateWeaponData[IntWeaponNum - 1].SFX;
+		NeedRotateOnTargeting = PresetPirateWeaponData[IntWeaponNum - 1].NeedRotateOnTargeting;
 
-		CurrentEnergyAccumulated = EnergyUse = PresetPirateWeaponData[IntWeaponNum-1].EnergyUse;
-		FireLocation = PresetPirateWeaponData[IntWeaponNum-1].FireLocation;
+		CurrentEnergyAccumulated = EnergyUse = PresetPirateWeaponData[IntWeaponNum - 1].EnergyUse;
+		FireLocation = PresetPirateWeaponData[IntWeaponNum - 1].FireLocation;
 
 		// турели пиратов
 		switch (WeaponNum) {
-		case 201: {
+		case 201:
 			WeaponTurret = true;
 			TargetHorizChunkNum = 0;
 			TargetVertChunkNum = 1;
 			TargetVertChunkMaxAngle = 89.0f;
 			TargetVertChunkMinAngle = 0.0f;
 
-			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, *this);
+			LoadObjectData(PresetPirateWeaponData[IntWeaponNum - 1].NameVW3D, *this);
 			for (unsigned int i = 0; i < Chunks.size(); i++) {
-				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
+				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum - 1].TextureName);
 				TextureIllum[i] = 0;
 			}
-		}
-		break;
+			break;
 
-		case 202: {
+		case 202:
 			WeaponTurret = true;
 			TargetHorizChunkNum = 0;
 			TargetVertChunkNum = 1;
 			TargetVertChunkMaxAngle = 89.0f;
 			TargetVertChunkMinAngle = 20.0f;
 
-			LoadObjectData(PresetPirateWeaponData[IntWeaponNum-1].NameVW3D, *this);
+			LoadObjectData(PresetPirateWeaponData[IntWeaponNum - 1].NameVW3D, *this);
 			for (unsigned int i = 0; i < Chunks.size(); i++) {
-				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum-1].TextureName);
+				Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum - 1].TextureName);
 				TextureIllum[i] = 0;
 			}
-		}
-		break;
+			break;
 		}
 
-		if (WeaponNum == 201 || WeaponNum == 202) {
-			// вычисляем данные для нахождения точки стрельбы
+		if ((WeaponNum == 201) ||
+		    (WeaponNum == 202)) {
 			if (TargetHorizChunkNum != -1) {
 				BaseBound = Chunks[TargetHorizChunkNum].Location;
 			}
@@ -753,10 +756,9 @@ cWeapon::cWeapon(const int WeaponNum)
 	}
 }
 
-
-//-----------------------------------------------------------------------------
-// Деструктор
-//-----------------------------------------------------------------------------
+/*
+ * Destructor.
+ */
 cWeapon::~cWeapon()
 {
 	if (auto sharedFire = Fire.lock()) {
@@ -771,44 +773,34 @@ cWeapon::~cWeapon()
 		sharedDestroyedSmoke->IsSuppressed = true;
 		sharedDestroyedSmoke->DestroyIfNoParticles = true;
 	}
-	// если лучевое оружие
 	if (!LaserMaser.expired()) {
 		ReleaseProjectile(LaserMaser);
-		// убираем звук выстрела
 		if (vw_IsSoundAvailable(LaserMaserSoundNum))
 			vw_StopSound(LaserMaserSoundNum, 150);
 	}
 }
 
-//-----------------------------------------------------------------------------
-// выполнение действий
-//-----------------------------------------------------------------------------
+/*
+ * Update.
+ */
 bool cWeapon::Update(float Time)
 {
-	// если лучевое оружие
 	if (auto sharedLaserMaser = LaserMaser.lock()) {
 		if (sharedLaserMaser->Lifetime <= 0.0f)
 			ReleaseProjectile(LaserMaser);
 	}
 
-	// вызываем родительскую функцию
-	// если там передали удалить - выходим
-	if (!cObject3D::Update(Time)) {
+	if (!cObject3D::Update(Time))
 		return false;
-	}
 
-	// если запущено - выключаем прорисовку эффекта выстрела (вспышка возле ствола)
 	if (LastFireTime + TimeDelta <= Time)
 		if (auto sharedFire = Fire.lock())
 			sharedFire->IsSuppressed = true;
 
-	// для землян, создание эффекта повреждения оружия
-	// если оружие только повредили...
 	if ((InternalType >= 1) &&
 	    (InternalType <= 99) &&
 	    (Strength < StrengthStart) &&
 	    DestroyedFire.expired()) {
-		// горение
 		DestroyedFire = vw_CreateParticleSystem();
 		if (auto sharedDestroyedFire = DestroyedFire.lock()) {
 			sharedDestroyedFire->ColorStart.r = 1.00f;
@@ -818,32 +810,27 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedFire->ColorEnd.g = 0.00f;
 			sharedDestroyedFire->ColorEnd.b = 0.00f;
 			sharedDestroyedFire->AlphaStart = 1.00f;
-			sharedDestroyedFire->AlphaEnd   = 0.10f;
-			sharedDestroyedFire->SizeStart  = 0.20f;
-			sharedDestroyedFire->SizeVar    = 0.10f;
-			sharedDestroyedFire->SizeEnd    = 0.10f;
-			sharedDestroyedFire->Speed      = 8.00f;
-			sharedDestroyedFire->SpeedVar   = 2.00f;
-			sharedDestroyedFire->Theta      = 5.00f;
-			sharedDestroyedFire->Life       = 0.50f*Length/3.0f;
+			sharedDestroyedFire->AlphaEnd = 0.10f;
+			sharedDestroyedFire->SizeStart = 0.20f;
+			sharedDestroyedFire->SizeVar= 0.10f;
+			sharedDestroyedFire->SizeEnd = 0.10f;
+			sharedDestroyedFire->Speed = 8.00f;
+			sharedDestroyedFire->SpeedVar = 2.00f;
+			sharedDestroyedFire->Theta = 5.00f;
+			sharedDestroyedFire->Life = 0.50f * Length / 3.0f;
 			sharedDestroyedFire->ParticlesPerSec = 70;
 			sharedDestroyedFire->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedDestroyedFire->CreationType = eParticleCreationType::Cube;
-			sharedDestroyedFire->CreationSize = sVECTOR3D{Width / 2.0f,
-								      Width / 2.0f,
-								      0.1f};
-			sharedDestroyedFire->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
+			sharedDestroyedFire->CreationSize(Width / 2.0f, Width / 2.0f, 0.1f);
+			sharedDestroyedFire->Direction(0.0f, 0.0f, -1.0f);
 			sharedDestroyedFire->SetStartLocation(DestroyedFireLocation);
 		}
 	}
 
-	// для землян, создание эффекта уничтоженного оружия
-	// проверяем тут был ли выход из строя
 	if ((InternalType >= 1) &&
 	    (InternalType <= 99) &&
 	    (Strength <= 0.0f) &&
 	    DestroyedSmoke.expired()) {
-		// дым
 		DestroyedSmoke = vw_CreateParticleSystem();
 		if (auto sharedDestroyedSmoke = DestroyedSmoke.lock()) {
 			sharedDestroyedSmoke->ColorStart.r = 1.00f;
@@ -853,32 +840,28 @@ bool cWeapon::Update(float Time)
 			sharedDestroyedSmoke->ColorEnd.g = 1.00f;
 			sharedDestroyedSmoke->ColorEnd.b = 1.00f;
 			sharedDestroyedSmoke->AlphaStart = 0.20f;
-			sharedDestroyedSmoke->AlphaEnd   = 0.00f;
-			sharedDestroyedSmoke->SizeStart  = 0.25f;
-			sharedDestroyedSmoke->SizeVar    = 0.10f;
-			sharedDestroyedSmoke->SizeEnd    = 0.00f;
-			sharedDestroyedSmoke->Speed      = 0.00f;
-			sharedDestroyedSmoke->SpeedVar   = 0.00f;
-			sharedDestroyedSmoke->Theta      = 35.00f;
-			sharedDestroyedSmoke->Life       = 2.00f*Length/3.0f;
+			sharedDestroyedSmoke->AlphaEnd = 0.00f;
+			sharedDestroyedSmoke->SizeStart = 0.25f;
+			sharedDestroyedSmoke->SizeVar = 0.10f;
+			sharedDestroyedSmoke->SizeEnd = 0.00f;
+			sharedDestroyedSmoke->Speed = 0.00f;
+			sharedDestroyedSmoke->SpeedVar = 0.00f;
+			sharedDestroyedSmoke->Theta = 35.00f;
+			sharedDestroyedSmoke->Life = 2.00f * Length / 3.0f;
 			sharedDestroyedSmoke->ParticlesPerSec = 300;
 			sharedDestroyedSmoke->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
 			sharedDestroyedSmoke->CreationType = eParticleCreationType::Point;
-			sharedDestroyedSmoke->CreationSize = sVECTOR3D{Width / 2.5f,
-								       Width / 2.5f,
-								       0.1f};
-			sharedDestroyedSmoke->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
+			sharedDestroyedSmoke->CreationSize(Width / 2.5f, Width / 2.5f, 0.1f);
+			sharedDestroyedSmoke->Direction(0.0f, 0.0f, -1.0f);
 			sharedDestroyedSmoke->SetStartLocation(DestroyedFireLocation);
 		}
 	}
 
-	// если это swarm - запуск других ракет
 	if (InternalType == 17 && SwarmNum > 0)
 		if (LastFireTime + 0.15f < Time)
 			if (Ammo > 0 || !GameUnlimitedAmmo) {
 				LastFireTime = Time;
 
-				// ум. кол-во боеприпасов, если нужно
 				if (!GameUnlimitedAmmo)
 					Ammo -= 1;
 
@@ -888,36 +871,35 @@ bool cWeapon::Update(float Time)
 
 				switch (SwarmNum) {
 				case 9:
-					FireLocation = sVECTOR3D{-0.5f, -0.5f, 2.6f};
+					FireLocation(-0.5f, -0.5f, 2.6f);
 					break;
 				case 8:
-					FireLocation = sVECTOR3D{0.5f, -0.8f, 2.6f};
+					FireLocation(0.5f, -0.8f, 2.6f);
 					break;
 				case 7:
-					FireLocation = sVECTOR3D{-0.5f, -0.8f, 2.6f};
+					FireLocation(-0.5f, -0.8f, 2.6f);
 					break;
 				case 6:
-					FireLocation = sVECTOR3D{0.5f, -0.5f, 2.6f};
+					FireLocation(0.5f, -0.5f, 2.6f);
 					break;
 				case 5:
-					FireLocation = sVECTOR3D{-0.2f, -0.95f, 2.6f};
+					FireLocation(-0.2f, -0.95f, 2.6f);
 					break;
 				case 4:
-					FireLocation = sVECTOR3D{0.2f, -0.65f, 2.6f};
+					FireLocation(0.2f, -0.65f, 2.6f);
 					break;
 				case 3:
-					FireLocation = sVECTOR3D{-0.2f, -0.3f, 2.6f};
+					FireLocation(-0.2f, -0.3f, 2.6f);
 					break;
 				case 2:
-					FireLocation = sVECTOR3D{0.2f, -0.65f, 2.6f};
+					FireLocation(0.2f, -0.65f, 2.6f);
 					break;
 				case 1:
-					FireLocation = sVECTOR3D{0.2f, -0.3f, 2.6f};
+					FireLocation(0.2f, -0.3f, 2.6f);
 					break;
 				}
 				vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
-				// создаем снаряд
 				std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(InternalType);
 				if (auto sharedProjectile = tmpProjectile.lock()) {
 					sharedProjectile->SetLocation(Location + FireLocation);
@@ -926,10 +908,10 @@ bool cWeapon::Update(float Time)
 						if (auto sharedGFX = tmpGFX.lock()) {
 							if (auto sharedFire = Fire.lock())
 								sharedGFX->Direction = sharedFire->Direction ^ -1;
-							// учитываем пенальти для визуальных эффектов
+
 							if (CurrentPenalty == 2)
 								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
-							if (CurrentPenalty == 3)
+							else if (CurrentPenalty == 3)
 								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
 							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
 							sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
@@ -937,7 +919,6 @@ bool cWeapon::Update(float Time)
 						}
 					}
 					sharedProjectile->ObjectStatus = ObjectStatus;
-					// учитываем пенальти для снаряда
 					sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 					sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
 					sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
@@ -948,26 +929,19 @@ bool cWeapon::Update(float Time)
 						PlayGameSFX(SFX, fVol, sharedProjectile->Location);
 					}
 				}
-
 				SwarmNum--;
 			}
 
-	// если это фларес - выпускаем остальные
-	// SwarmNum в этом случае используем с другой целью
 	if (InternalType == 203 && SwarmNum > 0)
 		if (LastFireTime + 0.4f < Time)
 			if (Ammo > 0 || !GameUnlimitedAmmo) {
 				LastFireTime = Time;
 
-				// ум. кол-во боеприпасов, если нужно
 				if (!GameUnlimitedAmmo)
 					Ammo -= 1;
 
-				// общий - пенальти, если не игрок
-				float CurrentPenalty = 1.0f;
+				float CurrentPenalty = 1.0f; // FIXME why we need if-else below if we use 1.0f only?
 
-
-				// создаем снаряд
 				std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(InternalType);
 				if (auto sharedProjectile = tmpProjectile.lock()) {
 					sharedProjectile->SetLocation(Location + FireLocation);
@@ -978,10 +952,10 @@ bool cWeapon::Update(float Time)
 					for (auto &tmpGFX : sharedProjectile->GraphicFX) {
 						if (auto sharedGFX = tmpGFX.lock()) {
 							sharedGFX->Direction = Orientation ^ -1;
-							// учитываем пенальти для визуальных эффектов
+
 							if (CurrentPenalty == 2)
 								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
-							if (CurrentPenalty == 3)
+							else if (CurrentPenalty == 3)
 								sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
 							sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
 							sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
@@ -989,53 +963,24 @@ bool cWeapon::Update(float Time)
 						}
 					}
 					sharedProjectile->ObjectStatus = ObjectStatus;
-					// учитываем пенальти для снаряда
 					sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 					sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
 					sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
 					sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
 
-					if (SFX != eGameSFX::none) {
-						float fVol = 1.0f;
-						PlayGameSFX(SFX, fVol, sharedProjectile->Location);
-					}
+					if (SFX != eGameSFX::none)
+						PlayGameSFX(SFX, 1.0f, sharedProjectile->Location);
 				}
-
 				SwarmNum--;
 			}
 
-
-	// для турелей
 	if (WeaponTurret) {
+		sVECTOR3D NeedAngle(TargetVertChunkNeedAngle,TargetHorizChunkNeedAngle,0);
+		GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
+					      CurrentRotationMat, NeedAngle, InternalType);
+		TargetHorizChunkNeedAngle = NeedAngle.y;
+		TargetVertChunkNeedAngle = NeedAngle.x;
 
-		// если нужно наводить на цель
-		//if (Fire != 0)
-		{
-			//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			// наводим на цель, если есть возможность
-			//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-			// находимся в начальном состоянии поворота ствола
-			sVECTOR3D NeedAngle(TargetVertChunkNeedAngle,TargetHorizChunkNeedAngle,0);
-			GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
-						      CurrentRotationMat, NeedAngle, InternalType);
-
-			// наводим на цель
-			TargetHorizChunkNeedAngle = NeedAngle.y;
-			TargetVertChunkNeedAngle = NeedAngle.x;
-		}
-		/*else
-		{
-			// устанавливаем в начальное положение
-			TargetHorizChunksNeedAngle = 0.0f;
-			TargetVertChunksNeedAngle = 0.0f;
-		}*/
-
-		// собственно повороты элементов модели на углы
-
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// поворот башни по горизонтале
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (TargetHorizChunkNum != -1)
 			if (TargetHorizChunkNeedAngle != TargetHorizChunkCurrentAngle) {
 				if (fabsf(TargetHorizChunkNeedAngle - TargetHorizChunkCurrentAngle) > 180.0f) {
@@ -1044,8 +989,6 @@ bool cWeapon::Update(float Time)
 					if (TargetHorizChunkNeedAngle - TargetHorizChunkCurrentAngle > 180.0f)
 						TargetHorizChunkCurrentAngle += 360.0f;
 				}
-
-				// находим угол, на который нужно повернуть
 				float NeedRotate = TargetHorizChunkCurrentAngle;
 
 				if (TargetHorizChunkNeedAngle > TargetHorizChunkCurrentAngle) {
@@ -1058,10 +1001,8 @@ bool cWeapon::Update(float Time)
 						NeedRotate = TargetHorizChunkNeedAngle;
 				}
 
-				// устанавливаем текущий поворот
 				TargetHorizChunkCurrentAngle = NeedRotate;
 
-				// поворачиваем все объекты
 				for (auto &tmpChunk : Chunks) {
 					sVECTOR3D tmp = tmpChunk.Location - Chunks[TargetHorizChunkNum].Location;
 
@@ -1075,13 +1016,8 @@ bool cWeapon::Update(float Time)
 				}
 			}
 
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// поворот стволов по вертикали
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (TargetVertChunkNum != -1)
 			if (TargetVertChunkNeedAngle != TargetVertChunkCurrentAngle) {
-
-				// находим угол, на который нужно повернуть
 				float NeedRotate = TargetVertChunkCurrentAngle;
 				if (TargetVertChunkNeedAngle > TargetVertChunkCurrentAngle) {
 					NeedRotate += 80.0f * TimeDelta / GameEnemyTargetingSpeedPenalty;
@@ -1097,10 +1033,8 @@ bool cWeapon::Update(float Time)
 						NeedRotate = TargetVertChunkMinAngle;
 				}
 
-				// устанавливаем текущий поворот
 				TargetVertChunkCurrentAngle = NeedRotate;
 
-				// поворачиваем все объекты
 				sVECTOR3D tmp = Chunks[TargetVertChunkNum].Location - Chunks[TargetVertChunkNum].Location; // FIXME (0,0,0)???
 
 				vw_RotatePointInv(tmp, Chunks[TargetVertChunkNum].Rotation ^ (-1.0f));
@@ -1112,7 +1046,6 @@ bool cWeapon::Update(float Time)
 				Chunks[TargetVertChunkNum].Location = tmp + Chunks[TargetVertChunkNum].Location;
 			}
 
-		// турель
 		sVECTOR3D RotationBase = Rotation;
 		sVECTOR3D BaseBoundTMP = BaseBound;
 		vw_RotatePoint(BaseBoundTMP, RotationBase);
@@ -1132,8 +1065,6 @@ bool cWeapon::Update(float Time)
 
 		FireLocation = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
-
-		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 		if ((TargetHorizChunkNum == -1) && (TargetVertChunkNum == -1))
 			RotationWeapon = sVECTOR3D{TargetVertChunkNeedAngle,
 						   TargetHorizChunkNeedAngle,
@@ -1144,20 +1075,17 @@ bool cWeapon::Update(float Time)
 		vw_RotatePoint(Orientation, RotationWeapon);
 	}
 
-	// объект в порядке - удалять не нужно
 	return true;
 }
 
-//-----------------------------------------------------------------------------
-// Установка положения
-//-----------------------------------------------------------------------------
+/*
+ * Set rotation.
+ */
 void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetRotation(NewRotation);
 
 	if (!WeaponTurret) {
-		// положение точки выстрела
 		vw_Matrix33CalcPoint(FireLocation, OldInvRotationMat);
 		vw_Matrix33CalcPoint(FireLocation, CurrentRotationMat);
 
@@ -1167,7 +1095,6 @@ void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 			sharedFire->RotateSystemByAngle(Rotation);
 		}
 	} else {
-		// турель
 		sVECTOR3D RotationBase = Rotation;
 		sVECTOR3D BaseBoundTMP = BaseBound;
 		vw_RotatePoint(BaseBoundTMP, RotationBase);
@@ -1187,7 +1114,6 @@ void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 
 		FireLocation = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
-		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 		if ((TargetHorizChunkNum == -1) && (TargetVertChunkNum == -1))
 			RotationWeapon = sVECTOR3D{TargetVertChunkNeedAngle,
 						   TargetHorizChunkNeedAngle,
@@ -1198,7 +1124,6 @@ void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 		vw_RotatePoint(Orientation, RotationWeapon);
 	}
 
-
 	if (auto sharedDestroyedFire = DestroyedFire.lock()) {
 		vw_Matrix33CalcPoint(DestroyedFireLocation, OldInvRotationMat);
 		vw_Matrix33CalcPoint(DestroyedFireLocation, CurrentRotationMat);
@@ -1206,12 +1131,10 @@ void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 		sharedDestroyedFire->SetStartLocation(Location + DestroyedFireLocation);
 		sharedDestroyedFire->RotateSystemByAngle(Rotation);
 	}
-	// тут DestroyedFireLocation не считаем, т.к. все равно всегда создаем DestroyedFire
 	if (auto sharedDestroyedSmoke = DestroyedSmoke.lock()) {
 		sharedDestroyedSmoke->MoveSystemLocation(Location + DestroyedFireLocation);
 		sharedDestroyedSmoke->RotateSystemByAngle(Rotation);
 	}
-	// если лучевое оружие
 	if (auto sharedLaserMaser = LaserMaser.lock()) {
 		vw_Matrix33CalcPoint(sharedLaserMaser->ProjectileCenter, OldInvRotationMat);
 		vw_Matrix33CalcPoint(sharedLaserMaser->ProjectileCenter, CurrentRotationMat);
@@ -1220,15 +1143,13 @@ void cWeapon::SetRotation(const sVECTOR3D &NewRotation)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Установка положения
-//-----------------------------------------------------------------------------
+/*
+ * Set location.
+ */
 void cWeapon::SetLocation(const sVECTOR3D &NewLocation)
 {
-	// вызываем родительскую функцию
 	cObject3D::SetLocation(NewLocation);
 
-	// положение утечки
 	if (auto sharedFire = Fire.lock()) {
 		sharedFire->MoveSystem(NewLocation + FireLocation);
 		sharedFire->SetStartLocation(NewLocation + FireLocation);
@@ -1240,101 +1161,77 @@ void cWeapon::SetLocation(const sVECTOR3D &NewLocation)
 	if (auto sharedDestroyedSmoke = DestroyedSmoke.lock())
 		sharedDestroyedSmoke->MoveSystemLocation(NewLocation + DestroyedFireLocation);
 
-	// если лучевое оружие
 	if (auto sharedLaserMaser = LaserMaser.lock())
 		sharedLaserMaser->SetLocation(Location + FireLocation + sharedLaserMaser->ProjectileCenter);
 
-	// звук... для мазеров-лазеров нужно учитывать перемещение
-	if (vw_IsSoundAvailable(LaserMaserSoundNum))  // уже играем, нужно изменить данные
+	if (vw_IsSoundAvailable(LaserMaserSoundNum))
 		vw_SetSoundLocation(LaserMaserSoundNum, Location.x, Location.y, Location.z);
 }
 
-//-----------------------------------------------------------------------------
-// Выстрел
-//-----------------------------------------------------------------------------
+/*
+ * Fire.
+ */
 bool cWeapon::WeaponFire(float Time)
 {
-	// если оружие не установлено - нам тут делать нечего
 	if (InternalType == 0)
 		return false;
-
 
 	float CurrentPenalty{1.0f};
 	if (ObjectStatus == eObjectStatus::Enemy)
 		CurrentPenalty = static_cast<float>(GameEnemyWeaponPenalty);
 
+	if (InternalType == 203) // flares
+		CurrentPenalty = 1.0f;
 
-	// если фларес - тоже ничего не надо
-	if (InternalType == 203) CurrentPenalty = 1.0f;
-
-
-	// проверяем по времени, можем стрелять или нет
-	// делаем ее тут, чтобы "правильно" озвучивать проблемы стрельбы
-	if (Time < LastFireTime + NextFireTime*CurrentPenalty) return false;
-	// запоминаем время стрельбы
+	if (Time < LastFireTime + NextFireTime * CurrentPenalty)
+		return false;
 	LastFireTime = Time;
 
-
-	// для оружия землян, делаем небольшие проверки...
-	if (InternalType >= 1 && InternalType <= 99) {
-
-		// для поврежденного оружия проверяем... может быть осечка в стрельбе
-		bool Misfire = false;
+	if ((InternalType >= 1) &&
+	    (InternalType <= 99)) {
+		bool Misfire{false};
 		if (Strength < StrengthStart)
-			if (Strength/StrengthStart > vw_fRand()) {
+			if (Strength/StrengthStart > vw_fRand())
 				Misfire = true;
-			}
 
-
-		// если оружие уничтожено или уже нечем стрелять - нам тут делать нечего
-		if (Strength <= 0.0f || Ammo == 0 || Misfire) {
-			// перед тем как уйти, ставим проигрывание звука "проблема с оружием"
-
+		if ((Strength <= 0.0f) ||
+		    (Ammo == 0) ||
+		    Misfire) {
 			float fVol = 1.0f;
 
 			switch (InternalType) {
-			// Kinetic
-			case 1:
-			case 2:
-			case 3:
-			case 4:
+			case 1: // Kinetic1
+			case 2: // Kinetic2
+			case 3: // Kinetic3
+			case 4: // Kinetic4
 				PlayGameSFX(eGameSFX::WeaponMalfunction_Kinetic, fVol, Location);
 				break;
 
-			// Ion
-			case 5:
-			case 6:
-			case 7:
-			// Plasma
-			case 8:
-			case 9:
-			case 10:
+			case 5: // Ion1
+			case 6: // Ion2
+			case 7: // Ion3
+			case 8: // Plasma1
+			case 9: // Plasma2
+			case 10: // Plasma3
 				PlayGameSFX(eGameSFX::WeaponMalfunction_Particle, fVol, Location);
 				break;
 
-			// Maser
-			case 11:
-			case 12:
-			// Laser
-			case 14:
+			case 11: // Maser1
+			case 12: // Maser2
+			case 14: // Laser
 				PlayGameSFX(eGameSFX::WeaponMalfunction_Beam, fVol, Location);
-
 				break;
-			// Antimatter
-			case 13:
-			// Gauss
-			case 15:
+
+			case 13: // Antimatter
+
+			case 15: // Gauss
 				PlayGameSFX(eGameSFX::WeaponMalfunction_Energy, fVol, Location);
 				break;
 
-			// ракета
-			case 16:
-			// рой
-			case 17:
-			// торпеда
-			case 18:
-			// бомба
-			case 19:
+			case 16: // missiles
+			case 17: // swarm
+			case 18: // torpedo
+			case 19: // bomb
 				PlayGameSFX(eGameSFX::WeaponMalfunction_Launcher, fVol, Location);
 				break;
 			}
@@ -1342,8 +1239,6 @@ bool cWeapon::WeaponFire(float Time)
 			return false;
 		}
 
-
-		// только для игрока! проверяем заряд энергии для выстрела
 		if (ObjectStatus == eObjectStatus::Player) {
 			if (CurrentEnergyAccumulated < EnergyUse)
 				return false;
@@ -1351,22 +1246,18 @@ bool cWeapon::WeaponFire(float Time)
 				CurrentEnergyAccumulated = 0.0f;
 		}
 
-		// ум. кол-во боеприпасов, если нужно
 		if (!GameUnlimitedAmmo)
 			Ammo -= 1;
 
-
-		// делаем вспышку возле ствола для всего оружия землят (только землян), если это не ракетная установка
-		if (InternalType < 16)
+		if (InternalType < 16) {
 			if (auto sharedFire = Fire.lock())
 				sharedFire->IsSuppressed = false;
+		}
 
 	}
 
-
 	sVECTOR3D RotationWeapon = Rotation;
 	if (WeaponTurret) {
-		// турель
 		sVECTOR3D RotationBase = Rotation;
 		sVECTOR3D BaseBoundTMP = BaseBound;
 		vw_RotatePoint(BaseBoundTMP, RotationBase);
@@ -1385,23 +1276,16 @@ bool cWeapon::WeaponFire(float Time)
 
 		FireLocation = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
 
-
-		// особый случай, испускаем без вращающихся частей (антиматерия, ион)
 		if (TargetHorizChunkNum == -1 && TargetVertChunkNum == -1) {
 			RotationWeapon = sVECTOR3D{TargetVertChunkNeedAngle,
 						   TargetHorizChunkNeedAngle,
 						   0.0f} +
 					 Rotation;
 		}
-
 	}
 
-
-	// создаем снаряд
 	std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(InternalType);
 	if (auto sharedProjectile = tmpProjectile.lock()) {
-		// если лучевое оружие, немного все делаем по другому
-		// или это испускатель мин
 		if (sharedProjectile->ProjectileType == 2) {
 			if (!LaserMaser.expired())
 				ReleaseProjectile(LaserMaser);
@@ -1409,35 +1293,32 @@ bool cWeapon::WeaponFire(float Time)
 			LaserMaser = tmpProjectile;
 			vw_Matrix33CalcPoint(sharedProjectile->ProjectileCenter, CurrentRotationMat);
 			sharedProjectile->SetLocation(Location + FireLocation + sharedProjectile->ProjectileCenter);
-		} else { // если это снаряд, его нужно немного вынести, так лучше смотрится
+		} else {
 			if (sharedProjectile->ProjectileType == 0) {
-				sVECTOR3D ADDPOS(0,0,4.0f);
+				sVECTOR3D AddPos(0.0f, 0.0f, 4.0f);
 				if (WeaponTurret)
-					ADDPOS = sVECTOR3D{0.0f, 0.0f, 2.0f};
+					AddPos = sVECTOR3D{0.0f, 0.0f, 2.0f};
 
-				vw_RotatePoint(ADDPOS, RotationWeapon);
-
-				sharedProjectile->SetLocation(Location+FireLocation+ADDPOS);
-			} else // для ракет и мин все без изменения
+				vw_RotatePoint(AddPos, RotationWeapon);
+				sharedProjectile->SetLocation(Location+FireLocation + AddPos);
+			} else
 				sharedProjectile->SetLocation(Location+FireLocation);
 		}
 
-
-		// если это мина, то нужно делать немного по другому
-		if (sharedProjectile->ProjectileType == 3 || sharedProjectile->ProjectileType == 4) {
+		if ((sharedProjectile->ProjectileType == 3) ||
+		    (sharedProjectile->ProjectileType == 4)) {
 			sharedProjectile->SetRotation(RotationWeapon);
 			for (auto &tmpGFX : sharedProjectile->GraphicFX) {
 				if (auto sharedGFX = tmpGFX.lock())
 					sharedGFX->Direction = Orientation;
 			}
 			sharedProjectile->ObjectStatus = ObjectStatus;
-			// учитываем пенальти для снаряда
 			sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 			sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age;
 			sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
 			sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
 
-			// приводим к типу снаряда (0-обычный или 1-уничтожаемый)
+			// FIXME should be revised, we use -3 in order to 'convert' to proper projectile type
 			sharedProjectile->ProjectileType = sharedProjectile->ProjectileType - 3;
 		} else {
 			sharedProjectile->SetRotation(RotationWeapon);
@@ -1453,7 +1334,6 @@ bool cWeapon::WeaponFire(float Time)
 				}
 			}
 			sharedProjectile->ObjectStatus = ObjectStatus;
-			// учитываем пенальти для снаряда
 			sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 			sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
 			sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
@@ -1461,28 +1341,19 @@ bool cWeapon::WeaponFire(float Time)
 		}
 	}
 
-	// звук...
 	if (SFX != eGameSFX::none) {
 		float fVol = 1.0f;
 		LaserMaserSoundNum = PlayGameSFX(SFX, fVol, Location + FireLocation);
-		// если не надо сохранять
 		if (LaserMaser.expired())
 			LaserMaserSoundNum = 0;
 	}
 
-
-	// если это груповой выстрел:
-
-	// нужно создать еще 9 ракет
-	if (InternalType == 17)
+	if (InternalType == 17) // 9 more swarm missiles
 		SwarmNum = 9;
 
-	// нужно создать еще 4 фларес
-	if (InternalType == 203)
+	if (InternalType == 203) // 4 more flares
 		SwarmNum = 4;
 
-
-	// выстрел был
 	return true;
 }
 
