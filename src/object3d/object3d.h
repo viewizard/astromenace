@@ -198,23 +198,27 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
-// Менеджер cObject3D
-//-----------------------------------------------------------------------------
+/*
+ * object3d_manager
+ */
 
-// Удаляем все объекты в списке
-void ReleaseAllObject3D();
-// Прорисовываем все объекты
+// Draw all oblect3d.
 void DrawAllObject3D(eDrawType DrawType);
+// Update all oblect3d.
+void UpdateAllObject3D(float Time);
+// Release all oblect3d.
+void ReleaseAllObject3D();
+
+/*
+ * object3d_collision
+ */
+
 // Проверяем все объекты на столкновение
 void DetectCollisionAllObject3D();
-// Проверяем все объекты, обновляем данные
-void UpdateAllObject3D(float Time);
 
-
-//-----------------------------------------------------------------------------
-// Дополнительные функции для cObject3D
-//-----------------------------------------------------------------------------
+/*
+ * object3d_functions
+ */
 
 // Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
 bool NeedCheckCollision(const cObject3D &Object3D);

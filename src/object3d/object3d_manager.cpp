@@ -25,7 +25,9 @@
 
 *************************************************************************************/
 
-// TODO translate comments
+// TODO revise ApplyBrightness(), probably, should be moved to gfx, since this is 'post effect'
+
+// TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
 
 #include "../game.h"
 #include "../config/config.h"
@@ -43,38 +45,76 @@
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Удаляем все объекты в списке
-//-----------------------------------------------------------------------------
-void ReleaseAllObject3D()
+namespace {
+
+float DrawBuffer[16]; // RI_2f_XY | RI_2f_TEX = (2 + 2) * 4 vertices = 16
+unsigned int DrawBufferCurrentPosition{0};
+
+} // unnamed namespace
+
+/*
+ * Add data to local draw buffer.
+ */
+static inline void AddToDrawBuffer(float CoordX, float CoordY, float TextureU, float TextureV)
 {
-	ReleaseAllSpaceShips();
-	ReleaseAllGroundObjects();
-	// until code refactored and moved to STL, make sure this called after SpaceShip and GroundObject,
-	// since we release all connected to SpaceShip and GroundObject weapons in their destructors
-	ReleaseAllWeapons();
-	ReleaseAllProjectiles();
-	ReleaseAllSpaceObjects();
-	ReleaseAllExplosions();
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureU;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureV;
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовываем все объекты
-//-----------------------------------------------------------------------------
+/*
+ * Brightness.
+ */
+static void ApplyBrightness()
+{
+	if (GameConfig().Brightness == 5)
+		return;
+
+	// 'reset' buffer
+	DrawBufferCurrentPosition = 0;
+
+	// TRIANGLE_STRIP (2 triangles)
+	AddToDrawBuffer(0.0f, 0.0f, 1.0f, 0.0f);
+	AddToDrawBuffer(0.0f, GameConfig().InternalHeight, 1.0f, 1.0f);
+	AddToDrawBuffer(GameConfig().InternalWidth, 0.0f, 0.0f, 0.0f);
+	AddToDrawBuffer(GameConfig().InternalWidth, GameConfig().InternalHeight, 0.0f, 1.0f);
+
+	GLtexture TileTexture = GetPreloadedTextureAsset("menu/whitepoint.tga");
+	vw_BindTexture(0, TileTexture);
+
+	float BrightnessF = 1.0f + (GameConfig().Brightness - 5) / 5.0f;
+
+	if (BrightnessF > 1.0f) {
+		vw_SetTextureBlend(true, eTextureBlendFactor::DST_COLOR, eTextureBlendFactor::ONE);
+		vw_SetColor(BrightnessF - 1.0f, BrightnessF - 1.0f, BrightnessF - 1.0f, 1.0f);
+	} else {
+		vw_SetTextureBlend(true, eTextureBlendFactor::ZERO, eTextureBlendFactor::SRC_COLOR);
+		vw_SetColor(BrightnessF, BrightnessF, BrightnessF, 1.0f);
+	}
+
+	vw_Start2DMode(-1,1);
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, 4 * sizeof(DrawBuffer[0]));
+	vw_End2DMode();
+
+	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
+	vw_BindTexture(0, 0);
+}
+
+/*
+ * Draw all oblect3d.
+ */
 void DrawAllObject3D(eDrawType DrawType)
 {
-	// ставим всегда меньше или равно!
 	vw_DepthTest(true, eCompareFunc::LEQUAL);
 
 	bool ShadowMap{false};
 
 	if (GameConfig().ShadowMap > 0) {
 		switch (DrawType) {
-		// меню
 		case eDrawType::MENU:
 			ShadowMap_StartRenderToFBO(sVECTOR3D{50.0f, -5.0f, -120.0f}, 120.0f, 500.0f);
 			break;
-		// игра
 		case eDrawType::GAME:
 			ShadowMap_StartRenderToFBO(sVECTOR3D{0.0f, 0.0f, 160.0f}, 600.0f, 800.0f);
 			break;
@@ -89,7 +129,6 @@ void DrawAllObject3D(eDrawType DrawType)
 
 		ShadowMap_EndRenderToFBO();
 
-		// работаем с 3-м стейджем текстур (первые два у нас заняты)
 		ShadowMap = true;
 		ShadowMap_StartFinalRender();
 	}
@@ -103,67 +142,18 @@ void DrawAllObject3D(eDrawType DrawType)
 	if (GameConfig().ShadowMap > 0)
 		ShadowMap_EndFinalRender();
 
-	// взрывы
 	DrawAllExplosions(false);
 
-	// эффекты - самые последние в прорисовке!
 	vw_DrawAllParticleSystems();
 
-	// второй слой тайловой анимации "пыли"
 	StarSystemDrawThirdLayer(DrawType);
 
-	// эмуляция гаммы, фактически это простой пост эффект, всегда самый последний в прорисовке
-	if (GameConfig().Brightness != 5) {
-		float *buff = new float[4*4]; // RI_2f_XY | RI_1_TEX
-		int k=0;
-
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f;
-		buff[k++] = 1.0f;
-		buff[k++] = 0.0f;
-
-		buff[k++] = 0.0f;
-		buff[k++] = GameConfig().InternalHeight;
-		buff[k++] = 1.0f;
-		buff[k++] = 1.0f;
-
-		buff[k++] = GameConfig().InternalWidth;
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f;
-		buff[k++] = 0.0f;
-
-		buff[k++] = GameConfig().InternalWidth;
-		buff[k++] = GameConfig().InternalHeight;
-		buff[k++] = 0.0f;
-		buff[k++] = 1.0f;
-
-		GLtexture TileTexture = GetPreloadedTextureAsset("menu/whitepoint.tga");
-		vw_BindTexture(0, TileTexture);
-
-		float BrightnessF = 1.0f + (GameConfig().Brightness - 5) / 5.0f;
-
-		if (BrightnessF > 1.0f) {
-			vw_SetTextureBlend(true, eTextureBlendFactor::DST_COLOR, eTextureBlendFactor::ONE);
-			vw_SetColor(BrightnessF-1.0f, BrightnessF-1.0f, BrightnessF-1.0f, 1.0f);
-		} else {
-			vw_SetTextureBlend(true, eTextureBlendFactor::ZERO, eTextureBlendFactor::SRC_COLOR);
-			vw_SetColor(BrightnessF, BrightnessF, BrightnessF, 1.0f);
-		}
-
-		vw_Start2DMode(-1,1);
-		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, buff, 4 * sizeof(buff[0]));
-		vw_End2DMode();
-
-		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
-		vw_BindTexture(0, 0);
-		if (buff)
-			delete [] buff;
-	}
+	ApplyBrightness();
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем все объекты, обновляем данные
-//-----------------------------------------------------------------------------
+/*
+ * Update all oblect3d.
+ */
 void UpdateAllObject3D(float Time)
 {
 	UpdateAllSpaceShip(Time);
@@ -174,6 +164,19 @@ void UpdateAllObject3D(float Time)
 	UpdateAllProjectile(Time);
 	UpdateAllSpaceObject(Time);
 	UpdateAllExplosion(Time);
+}
+
+/*
+ * Release all oblect3d.
+ */
+void ReleaseAllObject3D()
+{
+	ReleaseAllSpaceShips();
+	ReleaseAllGroundObjects();
+	ReleaseAllWeapons();
+	ReleaseAllProjectiles();
+	ReleaseAllSpaceObjects();
+	ReleaseAllExplosions();
 }
 
 } // astromenace namespace
