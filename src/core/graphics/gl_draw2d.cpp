@@ -37,8 +37,7 @@ namespace viewizard {
 
 namespace {
 
-constexpr unsigned int DrawBufferSize{16}; // RI_2f_XYZ | RI_2f_TEX = (2 + 2) * 4 vertices = 16
-float DrawBuffer[DrawBufferSize];
+float DrawBuffer[16]; // RI_2f_XY | RI_2f_TEX = (2 + 2) * 4 vertices = 16
 unsigned int DrawBufferCurrentPosition{0};
 
 } // unnamed namespace
@@ -169,7 +168,7 @@ void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bo
 	glPushMatrix();
 	glRotatef(RotateAngle, 0, 0, 1);
 
-	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, DrawBufferSize);
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_2f_XY | RI_1_TEX, DrawBuffer, 4 * sizeof(DrawBuffer[0]));
 
 	// restore previous OpenGL states
 	glPopMatrix();
