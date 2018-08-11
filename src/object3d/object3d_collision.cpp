@@ -28,6 +28,7 @@
 // TODO translate comments
 
 #include "object3d.h"
+#include "collision_detection.h"
 #include "../config/config.h"
 #include "../assets/audio.h"
 #include "space_ship/space_ship.h"
@@ -59,13 +60,6 @@ extern float AsteroidsKillBonus;
 
 extern int CurrentMission;
 float GameCameraGetSpeed();
-
-bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum);
-bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
-				       sVECTOR3D &NewLoc, int &Object1PieceNum);
-bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
-				       int &Object1PieceNum, int &Object2PieceNum);
-bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum);
 
 // щит у игрока
 extern float ShildEnergyStatus;

@@ -30,15 +30,17 @@
 // TODO since HitBB is OBB, "collision_detection" functions should be used
 //      all code duplication should be removed
 
+// TODO change from cObject3D to sModel3D
+
 #include "object3d.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
 
-//-----------------------------------------------------------------------------
-// Проверка столкновений Sphere-Mesh
-//-----------------------------------------------------------------------------
+/*
+ * Mesh-Sphere collision detection.
+ */
 bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
 				       sVECTOR3D &NewLoc, int &Object1PieceNum)
 {
@@ -103,9 +105,9 @@ bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Проверка столкновений HitBB-HitBB
-//-----------------------------------------------------------------------------
+/*
+ * HitBB-HitBB collision detection.
+ */
 bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
 				       int &Object1PieceNum, int &Object2PieceNum)
 {
@@ -269,9 +271,9 @@ bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Проверка столкновений HitBB-OBB
-//-----------------------------------------------------------------------------
+/*
+ * HitBB-OBB collision detection.
+ */
 bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum)
 {
 	// проверяем HitBB, находим номера пересекающихся
@@ -413,9 +415,9 @@ bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Проверка столкновений геометрия больших астероидов -HitBB
-//-----------------------------------------------------------------------------
+/*
+ * HitBB-Mesh collision detection.
+ */
 bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum)
 {
 	// делаем матрицу перемещения точки, для геометрии
