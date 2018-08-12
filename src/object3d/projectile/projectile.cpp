@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// FIXME probably, for mines GetClosestTargetToMine() should be used instead of GetMissileOnTargetOrientateion()
+
 // TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
 
 // TODO remove goto statement
@@ -2434,7 +2436,7 @@ missile:
 	break;
 	// alien, energy mine 1
 	case 106: {
-		std::weak_ptr<cObject3D> tmpTarget = GetCloserTargetPosition(ObjectStatus, Location);
+		std::weak_ptr<cObject3D> tmpTarget = GetClosestTargetToMine(ObjectStatus, Location);
 
 		auto sharedTarget = tmpTarget.lock();
 		if (sharedTarget) {
@@ -2448,7 +2450,7 @@ missile:
 					SpeedTmp *= -1.0f;
 
 				sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
-				SetLocation(Location+VelocityUp);
+				SetLocation(Location + VelocityUp);
 			}
 		}
 		if (!GraphicFX.empty()) {
@@ -2525,7 +2527,7 @@ missile:
 						SpeedTmp *= -1.0f;
 
 					sVECTOR3D VelocityUp = sVECTOR3D{0.0f, SpeedTmp, 0.0f};
-					SetLocation(Location+VelocityUp);
+					SetLocation(Location + VelocityUp);
 				}
 			}
 

@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO codestyle should be fixed
+
 // TODO translate comments
 
 #include "../assets/model3d.h"
@@ -1329,39 +1331,33 @@ bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Получение положения ближайшего врага, для мин
-//-----------------------------------------------------------------------------
-std::weak_ptr<cObject3D> GetCloserTargetPosition(eObjectStatus ObjectStatus, // статус объекта, который целится
-						 const sVECTOR3D &Location) // положение точки относительно которой будем наводить
+/*
+ * Get closest target to mine.
+ */
+std::weak_ptr<cObject3D> GetClosestTargetToMine(eObjectStatus MineStatus, const sVECTOR3D &MineLocation)
 {
-	// результат
-	std::weak_ptr<cObject3D> Res{};
-	// пока ставим отрицательный, т.е. вообще ничего нет
-	float MinRatius2{-1.0f};
+	std::weak_ptr<cObject3D> ClosestTarget{};
+	float MinDistance2{-1.0f};
 
-	// перебираем только корабли...
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
-		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpShip) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
-			// получаем квадрат радиуса
-			float MinRatius2TMP = (tmpShip.Location.x - Location.x) * (tmpShip.Location.x - Location.x) +
-					      (tmpShip.Location.y - Location.y) * (tmpShip.Location.y - Location.y) +
-					      (tmpShip.Location.z - Location.z) * (tmpShip.Location.z - Location.z);
+		    (((MineStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
+		     (((MineStatus == eObjectStatus::Ally) || (MineStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
+			float tmpDistance2 = (tmpShip.Location.x - MineLocation.x) * (tmpShip.Location.x - MineLocation.x) +
+					     (tmpShip.Location.y - MineLocation.y) * (tmpShip.Location.y - MineLocation.y) +
+					     (tmpShip.Location.z - MineLocation.z) * (tmpShip.Location.z - MineLocation.z);
 
-			if (MinRatius2 < 0.0f) {
-				MinRatius2 = MinRatius2TMP;
-				Res = GetSpaceShipPtr(tmpShip);
-			} else if (MinRatius2TMP < MinRatius2) {
-				MinRatius2 = MinRatius2TMP;
-				Res = GetSpaceShipPtr(tmpShip);
+			if (MinDistance2 < 0.0f) {
+				MinDistance2 = tmpDistance2;
+				ClosestTarget = GetSpaceShipPtr(tmpShip);
+			} else if (tmpDistance2 < MinDistance2) {
+				MinDistance2 = tmpDistance2;
+				ClosestTarget = GetSpaceShipPtr(tmpShip);
 			}
 		}
 	});
 
-	return Res;
+	return ClosestTarget;
 }
 
 /*
