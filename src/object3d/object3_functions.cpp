@@ -1272,14 +1272,13 @@ static bool GetMissileTargetPosition(const cObject3D &TargetObject,
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Проверяем статус цели для ракет, жива она еще или нет, и где по отношению ракеты находится
-//-----------------------------------------------------------------------------
-bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
-			    const sVECTOR3D &Location, // положение точки относительно которой будем наводить
-			    const float (&RotationMatrix)[9]) // матрица вращения объекта
+/*
+ * Check locked by missle target.
+ */
+bool CheckMissileTarget(std::weak_ptr<cObject3D> &Target, const sVECTOR3D &MissileLocation,
+			const float (&MissileRotationMatrix)[9])
 {
-	auto sharedTarget = TargetObject.lock();
+	auto sharedTarget = Target.lock();
 	if (!sharedTarget)
 		return false;
 
@@ -1291,7 +1290,7 @@ bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, MissileLocation, MissileRotationMatrix);
 
 	ForEachGroundObject([&sharedTarget, &ObjectFound] (const cGroundObject &tmpGround, eGroundCycle &Command) {
 		if (&tmpGround == sharedTarget.get()) {
@@ -1300,7 +1299,7 @@ bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, MissileLocation, MissileRotationMatrix);
 
 	ForEachSpaceShip([&sharedTarget, &ObjectFound] (const cSpaceShip &tmpShip, eShipCycle &Command) {
 		if (&tmpShip == sharedTarget.get()) {
@@ -1309,7 +1308,7 @@ bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, MissileLocation, MissileRotationMatrix);
 
 	ForEachSpaceObject([&sharedTarget, &ObjectFound] (const cSpaceObject &tmpSpace, eSpaceCycle &Command) {
 		if (&tmpSpace == sharedTarget.get()) {
@@ -1318,7 +1317,7 @@ bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject,
 		}
 	});
 	if (ObjectFound)
-		return GetMissileTargetPosition(*sharedTarget, Location, RotationMatrix);
+		return GetMissileTargetPosition(*sharedTarget, MissileLocation, MissileRotationMatrix);
 
 	return false;
 }

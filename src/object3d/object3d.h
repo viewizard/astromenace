@@ -251,8 +251,9 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, const sVECTOR3D &CurrentObjectRotation,
 				    const float (&RotationMatrix)[9],
 				    std::weak_ptr<cObject3D> &TargetObject, sVECTOR3D &NeedAngle);
-bool GetMissileTargetStatus(std::weak_ptr<cObject3D> &TargetObject, const sVECTOR3D &Location,
-			    const float (&RotationMatrix)[9]);
+// Check locked by missle target.
+bool CheckMissileTarget(std::weak_ptr<cObject3D> &Target, const sVECTOR3D &MissileLocation,
+			const float (&MissileRotationMatrix)[9]);
 // Get closest target to mine.
 std::weak_ptr<cObject3D> GetClosestTargetToMine(eObjectStatus MineStatus, const sVECTOR3D &MineLocation);
 // Setup shaders.

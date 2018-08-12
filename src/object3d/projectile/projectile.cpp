@@ -2375,7 +2375,7 @@ missile:
 				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
 									CurrentRotationMat, NeedAngle, EffectiveRange);
 			} else {
-				if (GetMissileTargetStatus(Target, Location, CurrentRotationMat)) {
+				if (CheckMissileTarget(Target, Location, CurrentRotationMat)) {
 					if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat,
 									    Target, NeedAngle))
 						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
