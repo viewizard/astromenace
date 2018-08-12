@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 // TODO since HitBB is OBB, "collision_detection" functions should be used
 //      all code duplication should be removed
 
@@ -56,44 +54,38 @@ bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D
 					  (Object1.Location.z + Object1.HitBB[j].Location.z - Object2.Location.z) *
 					  (Object1.Location.z + Object1.HitBB[j].Location.z - Object2.Location.z);
 
-			// если очень далеко - берем следующий HitBB
-			// но сначала делаем еще одну проверку
 			if (Distance2 > Object1.HitBB[j].Radius2 + Object2.Radius * Object2.Radius) {
-				// средняя точка линии
-				sVECTOR3D mid = (Object2.Location + Object2.PrevLocation) / 2.0f;
-				// направление линии
-				sVECTOR3D dir = Object2.Location - Object2.PrevLocation;
-				// полудлина линии
-				float hl = dir.Length() / 2.0f;
-				dir.Normalize();
+				sVECTOR3D MidPoint = (Object2.Location + Object2.PrevLocation) / 2.0f;
+				sVECTOR3D Direction = Object2.Location - Object2.PrevLocation;
+				float HalfLength = Direction.Length() / 2.0f;
+				Direction.Normalize();
 
-				sVECTOR3D T = Object1.Location + Object1.HitBB[j].Location - mid;
+				sVECTOR3D T = Object1.Location + Object1.HitBB[j].Location - MidPoint;
 				float r;
 
-				// проверяем, является ли одна из осей X,Y,Z разделяющей
-				if ((fabs(T.x) > (Object1.HitBB[j].Box[0].x + hl * fabs(dir.x))) ||
-				    (fabs(T.y) > (Object1.HitBB[j].Box[0].y + hl * fabs(dir.y))) ||
-				    (fabs(T.z) > (Object1.HitBB[j].Box[0].z + hl * fabs(dir.z))))
+				// check with X, Y, Z axis
+				if ((fabs(T.x) > (Object1.HitBB[j].Box[0].x + HalfLength * fabs(Direction.x))) ||
+				    (fabs(T.y) > (Object1.HitBB[j].Box[0].y + HalfLength * fabs(Direction.y))) ||
+				    (fabs(T.z) > (Object1.HitBB[j].Box[0].z + HalfLength * fabs(Direction.z))))
 					continue;
 
-				// проверяем X ^ dir
-				r = Object1.HitBB[j].Box[0].y * fabs(dir.z) + Object1.HitBB[j].Box[0].z * fabs(dir.y);
-				if (fabs(T.y*dir.z - T.z*dir.y) > r)
+				// X ^ Direction
+				r = Object1.HitBB[j].Box[0].y * fabs(Direction.z) + Object1.HitBB[j].Box[0].z * fabs(Direction.y);
+				if (fabs(T.y * Direction.z - T.z * Direction.y) > r)
 					continue;
 
-				// проверяем Y ^ dir
-				r = Object1.HitBB[j].Box[0].x * fabs(dir.z) + Object1.HitBB[j].Box[0].z * fabs(dir.x);
-				if (fabs(T.z * dir.x - T.x * dir.z) > r)
+				// Y ^ Direction
+				r = Object1.HitBB[j].Box[0].x * fabs(Direction.z) + Object1.HitBB[j].Box[0].z * fabs(Direction.x);
+				if (fabs(T.z * Direction.x - T.x * Direction.z) > r)
 					continue;
 
-				// проверяем Z ^ dir
-				r = Object1.HitBB[j].Box[0].x * fabs(dir.y) + Object1.HitBB[j].Box[0].y * fabs(dir.x);
-				if (fabs(T.x * dir.y - T.y * dir.x) > r)
+				// Z ^ Direction
+				r = Object1.HitBB[j].Box[0].x * fabs(Direction.y) + Object1.HitBB[j].Box[0].y * fabs(Direction.x);
+				if (fabs(T.x * Direction.y - T.y * Direction.x) > r)
 					continue;
 			}
 		}
 
-		// дальше работаем с геометрией
 		if (vw_SphereMeshCollision(Object1.Location, Object1.Chunks[j],
 					   Object1.CurrentRotationMat, Object2.Radius, Object2.Location,
 					   Object2.PrevLocation, NewLoc)) {
@@ -111,24 +103,25 @@ bool CheckMeshSphereCollisionDetection(const cObject3D &Object1, const cObject3D
 bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2,
 				       int &Object1PieceNum, int &Object2PieceNum)
 {
-	// проверяем HitBB, находим номера пересекающихся
 	for (unsigned int i = 0; i < Object1.Chunks.size(); i++) {
 		for (unsigned int j = 0; j < Object2.Chunks.size(); j++) {
-
-			// находим расстояние между HitBB-ми
-			float Distance2 = (Object1.Location.x + Object1.HitBB[i].Location.x - Object2.Location.x - Object2.HitBB[j].Location.x) *
-					  (Object1.Location.x + Object1.HitBB[i].Location.x - Object2.Location.x - Object2.HitBB[j].Location.x) +
-					  (Object1.Location.y + Object1.HitBB[i].Location.y - Object2.Location.y - Object2.HitBB[j].Location.y) *
-					  (Object1.Location.y + Object1.HitBB[i].Location.y - Object2.Location.y - Object2.HitBB[j].Location.y) +
-					  (Object1.Location.z + Object1.HitBB[i].Location.z - Object2.Location.z - Object2.HitBB[j].Location.z) *
-					  (Object1.Location.z + Object1.HitBB[i].Location.z - Object2.Location.z - Object2.HitBB[j].Location.z);
+			float Distance2 = (Object1.Location.x + Object1.HitBB[i].Location.x -
+					   Object2.Location.x - Object2.HitBB[j].Location.x) *
+					  (Object1.Location.x + Object1.HitBB[i].Location.x -
+					   Object2.Location.x - Object2.HitBB[j].Location.x) +
+					  (Object1.Location.y + Object1.HitBB[i].Location.y -
+					   Object2.Location.y - Object2.HitBB[j].Location.y) *
+					  (Object1.Location.y + Object1.HitBB[i].Location.y -
+					   Object2.Location.y - Object2.HitBB[j].Location.y) +
+					  (Object1.Location.z + Object1.HitBB[i].Location.z -
+					   Object2.Location.z - Object2.HitBB[j].Location.z) *
+					  (Object1.Location.z + Object1.HitBB[i].Location.z -
+					   Object2.Location.z - Object2.HitBB[j].Location.z);
 
 			// если очень далеко - берем следующий HitBB
-			if (Distance2 > Object2.HitBB[j].Radius2 + Object1.HitBB[i].Radius2) continue;
+			if (Distance2 > Object2.HitBB[j].Radius2 + Object1.HitBB[i].Radius2)
+				continue;
 
-			// если достаточно близко - проверяем как OBB
-
-			// строим матрицу, чтобы развернуть точки
 			float TMPOldInvRotationMat[9];
 			memcpy(TMPOldInvRotationMat, Object1.CurrentRotationMat, 9 * sizeof(Object1.CurrentRotationMat[0]));
 			vw_Matrix33InverseRotate(TMPOldInvRotationMat);
@@ -151,8 +144,6 @@ bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D
 			sVECTOR3D Obj2_data(Object2.HitBB[j].Size.x / 2.0f,
 					    Object2.HitBB[j].Size.y / 2.0f,
 					    Object2.HitBB[j].Size.z / 2.0f);
-
-			//делаем 15 проверок, т.к. у нас 15 разделяющих осей
 
 			//1 (Ra)x
 			if (fabsf(vPosB.x) > (Obj1_data.x + Obj2_data.x * fabsf(XAxis.x) +
@@ -259,11 +250,8 @@ bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D
 									    Obj2_data.y * fabsf(ZAxis.x)))
 				continue;
 
-			// если тут, нашли пересекающиеся!
-
 			Object1PieceNum = i;
 			Object2PieceNum = j;
-
 			return true;
 		}
 	}
@@ -276,9 +264,7 @@ bool CheckHitBBHitBBCollisionDetection(const cObject3D &Object1, const cObject3D
  */
 bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum)
 {
-	// проверяем HitBB, находим номера пересекающихся
 	for (unsigned int i = 0; i < Object1.Chunks.size(); i++) {
-		// строим матрицу, чтобы развернуть точки
 		float TMPOldInvRotationMat[9];
 		memcpy(TMPOldInvRotationMat, Object2.CurrentRotationMat, 9 * sizeof(Object2.CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(TMPOldInvRotationMat);
@@ -299,8 +285,6 @@ bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &
 				    Object1.HitBB[i].Size.y / 2.0f,
 				    Object1.HitBB[i].Size.z / 2.0f};
 		sVECTOR3D Obj1_data{Object2.Width / 2.0f, Object2.Height / 2.0f, Object2.Length / 2.0f};
-
-		//делаем 15 проверок, т.к. у нас 15 разделяющих осей
 
 		//1 (Ra)x
 		if (fabsf(vPosB.x) > (Obj1_data.x + Obj2_data.x * fabsf(XAxis.x) +
@@ -407,7 +391,6 @@ bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &
 								    Obj2_data.y * fabsf(ZAxis.x)))
 			continue;
 
-		// если тут, нашли пересекающиеся!
 		Object1PieceNum = i;
 		return true;
 	}
@@ -420,51 +403,33 @@ bool CheckHitBBOBBCollisionDetection(const cObject3D &Object1, const cObject3D &
  */
 bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D &Object2, int &Object1PieceNum)
 {
-	// делаем матрицу перемещения точки, для геометрии
 	float TransMat[16]{
 		Object2.CurrentRotationMat[0], Object2.CurrentRotationMat[1], Object2.CurrentRotationMat[2], 0.0f,
 		Object2.CurrentRotationMat[3], Object2.CurrentRotationMat[4], Object2.CurrentRotationMat[5], 0.0f,
 		Object2.CurrentRotationMat[6], Object2.CurrentRotationMat[7], Object2.CurrentRotationMat[8], 0.0f,
 		Object2.Location.x, Object2.Location.y, Object2.Location.z, 1.0f};
 
-	// проверяем HitBB, находим номера пересекающихся
 	for (unsigned int i = 0; i < Object1.Chunks.size(); i++) {
-
-		// параметры HitBB
 		sVECTOR3D TMPMax = Object1.HitBB[i].Box[0];
 		sVECTOR3D TMPMin = Object1.HitBB[i].Box[6];
 
-		// строим матрицу, чтобы развернуть точки
 		float TMPOldInvRotationMat[9];
 		memcpy(TMPOldInvRotationMat, Object1.CurrentRotationMat, 9 * sizeof(Object1.CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(TMPOldInvRotationMat);
 
-		// перемещаем в общие координаты, теперь это как-бы крайние точки аабб
 		vw_Matrix33CalcPoint(TMPMax, TMPOldInvRotationMat);
 		vw_Matrix33CalcPoint(TMPMin, TMPOldInvRotationMat);
 
 		sVECTOR3D Center = Object1.HitBB[i].Location + Object1.Location;
 		vw_Matrix33CalcPoint(Center, TMPOldInvRotationMat);
 
-		sVECTOR3D TMPMax2;
-		sVECTOR3D TMPMin2;
-		sVECTOR3D Point1;
-		sVECTOR3D Point2;
-		sVECTOR3D Point3;
-
-		// проверяем все треугольники объекта
 		for (unsigned int j = 0; j < Object2.Chunks.size(); j++) {
-			// дальше работаем с геометрией
-
-			// находим точку локального положения объекта в моделе
 			sVECTOR3D LocalLocation(Object2.Chunks[j].Location);
 			vw_Matrix33CalcPoint(LocalLocation, Object2.CurrentRotationMat);
 
-			// делаем временную матрицу для объекта, т.к. портить основную нельзя
 			float ObjTransMat[16];
 			memcpy(ObjTransMat, TransMat, 16 * sizeof(TransMat[0]));
 
-			// если нужно - создаем матрицу, иначе - копируем ее
 			if ((Object2.Chunks[j].Rotation.x != 0.0f) ||
 			    (Object2.Chunks[j].Rotation.y != 0.0f) ||
 			    (Object2.Chunks[j].Rotation.z != 0.0f)) {
@@ -474,7 +439,6 @@ bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D 
 				vw_Matrix44CreateRotate(TransMatTMP, Object2.Chunks[j].Rotation);
 
 				vw_Matrix44Translate(TransMatTMP, LocalLocation);
-				// и умножаем на основную матрицу, со сведениями по всему объекту
 				vw_Matrix44Mult(ObjTransMat, TransMatTMP);
 			} else
 				vw_Matrix44Translate(ObjTransMat, LocalLocation);
@@ -482,46 +446,47 @@ bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D 
 			for (unsigned int k = 0; k < Object2.Chunks[j].VertexQuantity; k+=3) {
 				int j2;
 				if (Object2.Chunks[j].IndexArray)
-					j2 = Object2.Chunks[j].IndexArray.get()[Object2.Chunks[j].RangeStart + k] * Object2.Chunks[j].VertexStride;
+					j2 = Object2.Chunks[j].IndexArray.get()[Object2.Chunks[j].RangeStart + k] *
+					     Object2.Chunks[j].VertexStride;
 				else
 					j2 = (Object2.Chunks[j].RangeStart + k) * Object2.Chunks[j].VertexStride;
 
-				// находим точки триугольника
+				sVECTOR3D Point1;
 				Point1.x = Object2.Chunks[j].VertexArray.get()[j2];
 				Point1.y = Object2.Chunks[j].VertexArray.get()[j2 + 1];
 				Point1.z = Object2.Chunks[j].VertexArray.get()[j2 + 2];
 				vw_Matrix44CalcPoint(Point1, ObjTransMat);
 
 				if (Object2.Chunks[j].IndexArray)
-					j2 = Object2.Chunks[j].IndexArray.get()[Object2.Chunks[j].RangeStart + k + 1] * Object2.Chunks[j].VertexStride;
+					j2 = Object2.Chunks[j].IndexArray.get()[Object2.Chunks[j].RangeStart + k + 1] *
+					     Object2.Chunks[j].VertexStride;
 				else
 					j2 = (Object2.Chunks[j].RangeStart + k + 1) * Object2.Chunks[j].VertexStride;
 
+				sVECTOR3D Point2;
 				Point2.x = Object2.Chunks[j].VertexArray.get()[j2];
 				Point2.y = Object2.Chunks[j].VertexArray.get()[j2 + 1];
 				Point2.z = Object2.Chunks[j].VertexArray.get()[j2 + 2];
 				vw_Matrix44CalcPoint(Point2, ObjTransMat);
 
 				if (Object2.Chunks[j].IndexArray)
-					j2 = Object2.Chunks[j].IndexArray.get()[Object2.Chunks[j].RangeStart + k + 2] * Object2.Chunks[j].VertexStride;
+					j2 = Object2.Chunks[j].IndexArray.get()[Object2.Chunks[j].RangeStart + k + 2] *
+					     Object2.Chunks[j].VertexStride;
 				else
 					j2 = (Object2.Chunks[j].RangeStart + k + 2) * Object2.Chunks[j].VertexStride;
 
+				sVECTOR3D Point3;
 				Point3.x = Object2.Chunks[j].VertexArray.get()[j2];
 				Point3.y = Object2.Chunks[j].VertexArray.get()[j2 + 1];
 				Point3.z = Object2.Chunks[j].VertexArray.get()[j2 + 2];
 				vw_Matrix44CalcPoint(Point3, ObjTransMat);
 
-				// преобразуем все точки в систему первого объекта
-
 				vw_Matrix33CalcPoint(Point1, TMPOldInvRotationMat);
 				vw_Matrix33CalcPoint(Point2, TMPOldInvRotationMat);
 				vw_Matrix33CalcPoint(Point3, TMPOldInvRotationMat);
 
-				// сразу ставим номер
 				Object1PieceNum = i;
 
-				// сначала проверка по точкам...
 				if ((fabsf(Center.x - Point1.x) <= TMPMax.x) &&
 				    (fabsf(Center.y - Point1.y) <= TMPMax.y) &&
 				    (fabsf(Center.z - Point1.z) <= TMPMax.z))
@@ -535,9 +500,8 @@ bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D 
 				    (fabsf(Center.z - Point3.z) <= TMPMax.z))
 					return true;
 
-				// делаем боксы, и проверяем по ним
-
-				// делаем аабб
+				sVECTOR3D TMPMax2;
+				sVECTOR3D TMPMin2;
 				TMPMax2.x = std::max({Point1.x, Point2.x, Point3.x});
 				TMPMin2.x = std::min({Point1.x, Point2.x, Point3.x});
 
@@ -547,7 +511,9 @@ bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D 
 				TMPMax2.z = std::max({Point1.z, Point2.z, Point3.z});
 				TMPMin2.z = std::min({Point1.z, Point2.z, Point3.z});
 
-				sVECTOR3D Center2((TMPMax2.x + TMPMin2.x) / 2.0f, (TMPMax2.y + TMPMin2.y) / 2.0f, (TMPMax2.z + TMPMin2.z) / 2.0f);
+				sVECTOR3D Center2((TMPMax2.x + TMPMin2.x) / 2.0f,
+						  (TMPMax2.y + TMPMin2.y) / 2.0f,
+						  (TMPMax2.z + TMPMin2.z) / 2.0f);
 
 				TMPMax2.x = TMPMax2.x - Center2.x;
 				TMPMax2.y = TMPMax2.y - Center2.y;
@@ -561,7 +527,6 @@ bool CheckHitBBMeshCollisionDetection(const cObject3D &Object1, const cObject3D 
 					continue;
 
 				return true;
-
 			}
 		}
 	}
