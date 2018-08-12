@@ -198,8 +198,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// проверка, чтобы не считать свой корабль
 		if ((NeedCheckCollision(tmpShip)) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus)) {
 			// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
 			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat); // поворачиваем в плоскость объекта
@@ -317,8 +316,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpGround.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus)) {
 
 			sVECTOR3D tmpLocation = tmpGround.GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpGround.CurrentRotationMat); // поворачиваем в плоскость объекта
@@ -438,8 +436,7 @@ void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, // статус о�
 	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpSpace) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpSpace.ObjectStatus == eObjectStatus::Ally) || (tmpSpace.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpSpace.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus)) {
 
 			sVECTOR3D tmpLocation = tmpSpace.GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpSpace.CurrentRotationMat); // поворачиваем в плоскость объекта
@@ -593,8 +590,7 @@ void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, // стату�
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpShip) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus)) {
 
 			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat); // поворачиваем в плоскость объекта
@@ -740,8 +736,7 @@ bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, // статус �
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpShip) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus)) {
 
 			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat); // поворачиваем в плоскость объекта
@@ -913,9 +908,9 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 	// проверка по снарядам, фларес
 	ForEachProjectile([&] (const cProjectile &tmpProjectile) {
 		// только фларес
-		if ((tmpProjectile.ProjectileType == 3) && NeedCheckCollision(tmpProjectile) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpProjectile.ObjectStatus == eObjectStatus::Ally) || (tmpProjectile.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpProjectile.ObjectStatus == eObjectStatus::Enemy)))) {
+		if ((tmpProjectile.ProjectileType == 3) &&
+		    NeedCheckCollision(tmpProjectile) &&
+		    ObjectsStatusFoe(ObjectStatus, tmpProjectile.ObjectStatus)) {
 
 			// проверяем, спереди или сзади стоит противник
 			float tmp1 = A2 * tmpProjectile.Location.x + B2 * tmpProjectile.Location.y + C2 * tmpProjectile.Location.z + D2;
@@ -975,8 +970,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpGround.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus)) {
 			sVECTOR3D tmpLocation = tmpGround.GeometryCenter;
 			vw_Matrix33CalcPoint(tmpLocation, tmpGround.CurrentRotationMat); // поворачиваем в плоскость объекта
 			TargetLocation = tmpGround.Location + tmpLocation;
@@ -1044,8 +1038,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// проверка, чтобы не считать свой корабль
 		if (NeedCheckCollision(tmpShip) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus)) {
 
 			// проверяем, спереди или сзади стоит противник
 			float tmp1 = A2 * tmpShip.Location.x + B2 * tmpShip.Location.y + C2 * tmpShip.Location.z + D2;
@@ -1113,8 +1106,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStat
 	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpSpace) &&
-		    (((ObjectStatus == eObjectStatus::Enemy) && ((tmpSpace.ObjectStatus == eObjectStatus::Ally) || (tmpSpace.ObjectStatus == eObjectStatus::Player))) ||
-		     (((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpSpace.ObjectStatus == eObjectStatus::Enemy))) &&
+		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus) &&
 		    (tmpSpace.ObjectType != eObjectType::SpaceDebris)) {
 					// проверяем, спереди или сзади стоит противник
 			float tmp1 = A2 * tmpSpace.Location.x  + B2 * tmpSpace.Location.y  + C2 * tmpSpace.Location.z + D2;
@@ -1341,8 +1333,7 @@ std::weak_ptr<cObject3D> GetClosestTargetToMine(eObjectStatus MineStatus, const 
 
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		if (NeedCheckCollision(tmpShip) &&
-		    (((MineStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player))) ||
-		     (((MineStatus == eObjectStatus::Ally) || (MineStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)))) {
+		    ObjectsStatusFoe(MineStatus, tmpShip.ObjectStatus)) {
 			float tmpDistance2 = (tmpShip.Location.x - MineLocation.x) * (tmpShip.Location.x - MineLocation.x) +
 					     (tmpShip.Location.y - MineLocation.y) * (tmpShip.Location.y - MineLocation.y) +
 					     (tmpShip.Location.z - MineLocation.z) * (tmpShip.Location.z - MineLocation.z);

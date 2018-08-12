@@ -66,6 +66,12 @@ enum class eObjectStatus {
 	Player
 };
 
+inline bool ObjectsStatusFoe(eObjectStatus Object1, eObjectStatus Object2)
+{
+	return ((Object1 == eObjectStatus::Enemy) && ((Object2 == eObjectStatus::Ally) || (Object2 == eObjectStatus::Player))) ||
+	       ((Object2 == eObjectStatus::Enemy) && ((Object1 == eObjectStatus::Ally) || (Object1 == eObjectStatus::Player)));
+}
+
 enum class eObjectType {
 	none,
 	EarthFighter,

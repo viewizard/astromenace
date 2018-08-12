@@ -1092,9 +1092,7 @@ void DetectCollisionAllObject3D()
 	});
 
 	ForEachProjectilePair([] (cProjectile &FirstObject, cProjectile &SecondObject, eProjectilePairCycle &Command) {
-		if (((FirstObject.ObjectStatus == eObjectStatus::Enemy) && ((SecondObject.ObjectStatus == eObjectStatus::Ally) || (SecondObject.ObjectStatus == eObjectStatus::Player))) ||
-		    (((FirstObject.ObjectStatus == eObjectStatus::Ally) || (FirstObject.ObjectStatus == eObjectStatus::Player)) && (SecondObject.ObjectStatus == eObjectStatus::Enemy)) ||
-		    ((FirstObject.ObjectStatus != eObjectStatus::Player) && (SecondObject.ObjectStatus == eObjectStatus::Player))) {
+		if (ObjectsStatusFoe(FirstObject.ObjectStatus, SecondObject.ObjectStatus)) {
 
 			// missile/mine with missile/mine
 			if (((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) &&
@@ -1211,9 +1209,9 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceObject([&] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 		if (NeedCheckCollision(tmpSpace) &&
-		    ((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpSpace.ObjectStatus == eObjectStatus::Enemy)) ||
-		     ((ObjectStatus == eObjectStatus::Enemy) && ((tmpSpace.ObjectStatus == eObjectStatus::Ally) || (tmpSpace.ObjectStatus == eObjectStatus::Player)))) &&
-		    (&DontTouchObject != &tmpSpace) && CheckSphereSphereDestroyDetection(tmpSpace, Point, Radius, Distance2)) {
+		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus) &&
+		    (&DontTouchObject != &tmpSpace) &&
+		    CheckSphereSphereDestroyDetection(tmpSpace, Point, Radius, Distance2)) {
 			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
 			    (vw_fRand() > 0.4f))
 				return; // eSpaceCycle::Continue;
@@ -1240,9 +1238,9 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceShip([&] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
 		if (NeedCheckCollision(tmpShip) &&
-		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpShip.ObjectStatus == eObjectStatus::Enemy)) ||
-		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpShip.ObjectStatus == eObjectStatus::Ally) || (tmpShip.ObjectStatus == eObjectStatus::Player)))) &&
-		     (&DontTouchObject != &tmpShip) && CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, Distance2))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus) &&
+		    (&DontTouchObject != &tmpShip) &&
+		    CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, Distance2)) {
 
 			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
 
@@ -1288,9 +1286,9 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachGroundObject([&] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 		if (NeedCheckCollision(tmpGround) &&
-		    (((((ObjectStatus == eObjectStatus::Ally) || (ObjectStatus == eObjectStatus::Player)) && (tmpGround.ObjectStatus == eObjectStatus::Enemy)) ||
-		      ((ObjectStatus == eObjectStatus::Enemy) && ((tmpGround.ObjectStatus == eObjectStatus::Ally) || (tmpGround.ObjectStatus == eObjectStatus::Player)))) &&
-		     (&DontTouchObject != &tmpGround) && CheckSphereSphereDestroyDetection(tmpGround, Point, Radius, Distance2))) {
+		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus) &&
+		    (&DontTouchObject != &tmpGround) &&
+		    CheckSphereSphereDestroyDetection(tmpGround, Point, Radius, Distance2)) {
 			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
 
 			// отнимаем у всех по Damage
