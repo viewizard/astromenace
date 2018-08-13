@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// FIXME probably, for mines GetClosestTargetToMine() should be used instead of GetMissileOnTargetOrientateion()
+// FIXME probably, for mines GetClosestTargetToMine() should be used instead of GetMissileOnTargetOrientation()
 
 // TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
 
@@ -2372,18 +2372,18 @@ missile:
 				EffectiveRange = Lifetime * Speed;
 
 			if (Target.expired()) {
-				Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-									CurrentRotationMat, NeedAngle, EffectiveRange);
+				Target = GetMissileOnTargetOrientation(ObjectStatus, Location, Rotation,
+								       CurrentRotationMat, NeedAngle, EffectiveRange);
 			} else {
 				if (CheckMissileTarget(Target, Location, CurrentRotationMat)) {
-					if (!GetMissileOnTargetOrientateion(Location, Rotation, CurrentRotationMat,
-									    Target, NeedAngle))
-						Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-											CurrentRotationMat, NeedAngle,
-											EffectiveRange);
+					if (!GetMissileOnTargetOrientation(Location, Rotation, CurrentRotationMat,
+									   Target, NeedAngle))
+						Target = GetMissileOnTargetOrientation(ObjectStatus, Location, Rotation,
+										       CurrentRotationMat, NeedAngle,
+										       EffectiveRange);
 				} else
-					Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-										CurrentRotationMat, NeedAngle, EffectiveRange);
+					Target = GetMissileOnTargetOrientation(ObjectStatus, Location, Rotation,
+									       CurrentRotationMat, NeedAngle, EffectiveRange);
 			}
 
 			if (Rotation.y < NeedAngle.y) {
@@ -2481,8 +2481,8 @@ missile:
 		{
 			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-								CurrentRotationMat, NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientation(ObjectStatus, Location, Rotation,
+							       CurrentRotationMat, NeedAngle, 1000000);
 
 
 			// учитываем скорость поворота по вертикали
@@ -2561,8 +2561,8 @@ missile:
 		{
 			sVECTOR3D NeedAngle = Rotation;
 			// устанавливаем в Target на что наведен этот снаряд
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-								CurrentRotationMat, NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientation(ObjectStatus, Location, Rotation,
+							       CurrentRotationMat, NeedAngle, 1000000);
 
 
 			// учитываем скорость поворота по вертикали
@@ -2648,8 +2648,8 @@ missile:
 		RotationSpeed = 180.0f;
 		{
 			sVECTOR3D NeedAngle = Rotation;
-			Target = GetMissileOnTargetOrientateion(ObjectStatus, Location, Rotation,
-								CurrentRotationMat, NeedAngle, 1000000);
+			Target = GetMissileOnTargetOrientation(ObjectStatus, Location, Rotation,
+							       CurrentRotationMat, NeedAngle, 1000000);
 
 			if (Rotation.y < NeedAngle.y) {
 				float NeedAngle_y = Rotation.y + RotationSpeed * TimeDelta;

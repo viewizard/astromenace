@@ -1135,8 +1135,8 @@ bool cSpaceShip::Update(float Time)
 			FirePos = FirePos ^ (1.0f / Count);
 		}
 
-		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-						 CurrentRotationMat, NeedAngle, WeapNum);
+		GetEnemyShipOnTargetOrientation(ObjectStatus, WeaponAvLocation, Rotation,
+						CurrentRotationMat, NeedAngle, WeapNum);
 
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
@@ -1198,8 +1198,8 @@ bool cSpaceShip::Update(float Time)
 			FirePos = FirePos ^ (1.0f / Count);
 		}
 
-		GetEnemyShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-						 CurrentRotationMat, NeedAngle, WeapNum);
+		GetEnemyShipOnTargetOrientation(ObjectStatus, WeaponAvLocation, Rotation,
+						CurrentRotationMat, NeedAngle, WeapNum);
 
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
@@ -1243,9 +1243,9 @@ bool cSpaceShip::Update(float Time)
 						NeedAngle = Rotation;
 						NeedAngle.y += WeaponSlots[i].YAngle;
 
-						GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, Rotation,
-									    Length, CurrentRotationMat, NeedAngle, Width, true, true,
-									    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+						GetShipOnTargetOrientation(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, Rotation,
+									   Length, CurrentRotationMat, NeedAngle, Width, true, true,
+									   Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 
 						sVECTOR3D NeedAngleTmp = NeedAngle;
 
@@ -1325,25 +1325,25 @@ bool cSpaceShip::Update(float Time)
 
 						switch (GameTargetingSystem) {
 						case 1: // for all weapon by height only
-							GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-										    Length, CurrentRotationMat, NeedAngle, Width, false, true,
-										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							GetShipOnTargetOrientation(ObjectStatus, WeaponAvLocation, Rotation,
+										   Length, CurrentRotationMat, NeedAngle, Width, false, true,
+										   Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
 						case 2: // for all weapon by height, with correction to target center
-							GetShipOnTargetOrientateion(ObjectStatus, WeaponAvLocation, Rotation,
-										    Length, CurrentRotationMat, NeedAngle, Width, true, true,
-										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							GetShipOnTargetOrientation(ObjectStatus, WeaponAvLocation, Rotation,
+										   Length, CurrentRotationMat, NeedAngle, Width, true, true,
+										   Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
 						case 3: // for each weapon by height only
-							GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->Rotation,
-										    Length, sharedWeapon->CurrentRotationMat, NeedAngle, sharedWeapon->Width, false, true,
-										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							GetShipOnTargetOrientation(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->Rotation,
+										   Length, sharedWeapon->CurrentRotationMat, NeedAngle, sharedWeapon->Width, false, true,
+										   Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
 						case 4: // for each weapon by height, with correction to target center
-							GetShipOnTargetOrientateion(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation,
-										    sVECTOR3D{sharedWeapon->Rotation.x, 0.0f, sharedWeapon->Rotation.z} + sVECTOR3D{0.0f, WeaponSlots[i].YAngle, 0.0f},
-										    Length, sharedWeapon->CurrentRotationMat, NeedAngle, Width, false, true,
-										    Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
+							GetShipOnTargetOrientation(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation,
+										   sVECTOR3D{sharedWeapon->Rotation.x, 0.0f, sharedWeapon->Rotation.z} + sVECTOR3D{0.0f, WeaponSlots[i].YAngle, 0.0f},
+										   Length, sharedWeapon->CurrentRotationMat, NeedAngle, Width, false, true,
+										   Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
 						}
 

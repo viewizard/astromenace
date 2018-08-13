@@ -297,8 +297,8 @@ bool cGroundObject::Update(float Time)
 			FirePos = FirePos ^ (1.0f / Count);
 		}
 		sVECTOR3D NeedAngle(TargetVertChunksNeedAngle,TargetHorizChunksNeedAngle,0);
-		if (GetTurretOnTargetOrientateion(ObjectStatus, Location + FirePos, Rotation,
-						  CurrentRotationMat, NeedAngle, WeapNum)) {
+		if (GetTurretOnTargetOrientation(ObjectStatus, Location + FirePos, Rotation,
+						 CurrentRotationMat, NeedAngle, WeapNum)) {
 			TargetHorizChunksNeedAngle = NeedAngle.y;
 			TargetVertChunksNeedAngle = NeedAngle.x;
 		} else

@@ -976,8 +976,8 @@ bool cWeapon::Update(float Time)
 
 	if (WeaponTurret) {
 		sVECTOR3D NeedAngle(TargetVertChunkNeedAngle,TargetHorizChunkNeedAngle,0);
-		GetTurretOnTargetOrientateion(ObjectStatus, Location+FireLocation, Rotation,
-					      CurrentRotationMat, NeedAngle, InternalType);
+		GetTurretOnTargetOrientation(ObjectStatus, Location+FireLocation, Rotation,
+					     CurrentRotationMat, NeedAngle, InternalType);
 		TargetHorizChunkNeedAngle = NeedAngle.y;
 		TargetVertChunkNeedAngle = NeedAngle.x;
 

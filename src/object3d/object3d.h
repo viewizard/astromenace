@@ -231,26 +231,26 @@ bool NeedCheckCollision(const cObject3D &Object3D);
 // Загрузка в модель нужной геометрии
 void LoadObjectData(const std::string &FileName, cObject3D &Object3D);
 // Получение угла поворота оружия на врага
-void GetShipOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-				 const sVECTOR3D &CurrentObjectRotation,
-				 float MinDistance, const float (&RotationMatrix)[9],
-				 sVECTOR3D &NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
-				 bool NeedByWeaponOrientation, const sVECTOR3D &WeponLocation, int WeaponType);
+void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+				const sVECTOR3D &CurrentObjectRotation,
+				float MinDistance, const float (&RotationMatrix)[9],
+				sVECTOR3D &NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
+				bool NeedByWeaponOrientation, const sVECTOR3D &WeponLocation, int WeaponType);
 // Получение угла поворота оружия на врага для противника
-void GetEnemyShipOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-				      const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-				      sVECTOR3D &NeedAngle, int WeaponType);
+void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+				     const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
+				     sVECTOR3D &NeedAngle, int WeaponType);
 // Получение угла поворота турели на врага
-bool GetTurretOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-				   const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-				   sVECTOR3D &NeedAngle, int WeaponType);
+bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+				  const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
+				  sVECTOR3D &NeedAngle, int WeaponType);
 // Получение данных для наведение ракет
-std::weak_ptr<cObject3D> GetMissileOnTargetOrientateion(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 					const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
 					sVECTOR3D &NeedAngle, float MaxDistance);
-bool GetMissileOnTargetOrientateion(const sVECTOR3D &Location, const sVECTOR3D &CurrentObjectRotation,
-				    const float (&RotationMatrix)[9],
-				    std::weak_ptr<cObject3D> &TargetObject, sVECTOR3D &NeedAngle);
+bool GetMissileOnTargetOrientation(const sVECTOR3D &Location, const sVECTOR3D &CurrentObjectRotation,
+				   const float (&RotationMatrix)[9],
+				   std::weak_ptr<cObject3D> &TargetObject, sVECTOR3D &NeedAngle);
 // Check locked by missle target.
 bool CheckMissileTarget(std::weak_ptr<cObject3D> &Target, const sVECTOR3D &MissileLocation,
 			const float (&MissileRotationMatrix)[9]);
