@@ -1219,7 +1219,7 @@ bool GetMissileOnTargetOrientation(const sVECTOR3D &Location, // положен�
 
 		// находим угол между плоскостью и прямой
 		float A3, B3, C3, D3;
-		vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location+Orientation, Location + PointRight);
+		vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
 
 		float m = TargetLocation.x - Location.x;
 		float n = TargetLocation.y - Location.y;
@@ -1261,10 +1261,10 @@ static bool MissileTargetStayAhead(const cObject3D &Target,
 	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(PointRight, MissileRotationMatrix);
 
-	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(A2, B2, C2, D2, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
+	float A, B, C, D;
+	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
 
-	float tmp1 = A2 * Target.Location.x + B2 * Target.Location.y + C2 * Target.Location.z + D2;
+	float tmp1 = A * Target.Location.x + B * Target.Location.y + C * Target.Location.z + D;
 	if (tmp1 > 0.0f)
 		return true;
 
