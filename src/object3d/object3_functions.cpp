@@ -900,19 +900,12 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
 	sVECTOR3D TargetLocation = Location;
-	sVECTOR3D TargetAngle = CurrentObjectRotation;
+	NeedAngle = CurrentObjectRotation;
 	float Tdist{1000.0f * 1000.0f};
-
-	// тип, кто заблокировал... чтобы не сбить с активных
-	int TType{0};
-	bool TargetLocked{false};
-
-	float MinDistance{0.0f};
 
 	// цель
 	std::weak_ptr<cObject3D> Target{};
 
-	// проверка по снарядам, фларес
 	ForEachProjectile([&] (const cProjectile &tmpProjectile) {
 		// только фларес
 		if ((tmpProjectile.ProjectileType == 3) &&
@@ -924,12 +917,11 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 			if (tmp1 > 0.0f) {
 				float TargetDist2TMP = A2 * tmpProjectile.Location.x + B2 * tmpProjectile.Location.y + C2 * tmpProjectile.Location.z + D2;
 
-				// проверяем, чтобы объект находился не ближе чем MinDistance
-				if ((MinDistance < TargetDist2TMP) && (MaxDistance > TargetDist2TMP)) {
+				if (MaxDistance > TargetDist2TMP) {
 					// выбираем объект, так, чтобы он был наиболее длижайшим,
 					// идущим по нашему курсу...
 
-					sVECTOR3D TargetAngleTMP;
+					sVECTOR3D TargetAngleTMP{CurrentObjectRotation};
 					TargetLocation = tmpProjectile.Location;
 
 					// находим угол между плоскостью и прямой
@@ -943,7 +935,6 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					// поправки к существующим углам поворота оружия
 					float sss1 = vw_sqrtf(m * m + n * n + p * p);
 					float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-					TargetAngleTMP.x = CurrentObjectRotation.x;
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
@@ -951,20 +942,15 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
-					TargetAngleTMP.y = CurrentObjectRotation.y;
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
 							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
-					TargetAngleTMP.z = CurrentObjectRotation.z;
-
 					if (Tdist > m * m + n * n + p * p) {
-						TargetAngle = TargetAngleTMP;
+						NeedAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
-						TargetLocked = true;
-						TType = 1;
 						Target = GetProjectilePtr(tmpProjectile);
 					}
 				}
@@ -972,8 +958,13 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 		}
 	});
 
-	// проверка по наземным объектам
-	// не стрелять по "мирным" постойкам
+	// the idea of tmpDistanceFactorByObjectType is provide targeting priority, we increase factor
+	// for different types of objects, so, we need next type objects position closer than previous
+	// in order to change target, but, reset factor to 1.0f in case we lock and check same type
+	// objects (or don't have any target yet)
+	float tmpDistanceFactorByObjectType{1.0f};
+	if (!Target.expired())
+		tmpDistanceFactorByObjectType = 3.0f;
 	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
@@ -988,11 +979,10 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 
 				float TargetDist2TMP = A2 * TargetLocation.x + B2 * TargetLocation.y + C2 * TargetLocation.z + D2;
 
-				// проверяем, чтобы объект находился не ближе чем MinDistance
-				if ((MinDistance < TargetDist2TMP) && (MaxDistance > TargetDist2TMP)) {
+				if (MaxDistance > TargetDist2TMP) {
 					// выбираем объект, так, чтобы он был наиболее длижайшим,
 					// идущим по нашему курсу...
-					sVECTOR3D TargetAngleTMP;
+					sVECTOR3D TargetAngleTMP{CurrentObjectRotation};
 
 					// находим угол между плоскостью и прямой
 					float A3, B3, C3, D3;
@@ -1005,7 +995,6 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					// поправки к существующим углам поворота оружия
 					float sss1 = vw_sqrtf(m * m + n * n + p * p);
 					float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-					TargetAngleTMP.x = CurrentObjectRotation.x;
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
@@ -1013,35 +1002,25 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
-					TargetAngleTMP.y = CurrentObjectRotation.y;
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
 							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
-					TargetAngleTMP.z = CurrentObjectRotation.z;
-
-					if (TType < 2 && TargetLocked) {
-						if ((Tdist / 3.0f > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
-							TargetAngle = TargetAngleTMP;
-							Tdist = m * m + n * n + p * p;
-							TargetLocked = true;
-							TType = 2;
-							Target = GetGroundObjectPtr(tmpGround);
-						}
-					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
-						TargetAngle = TargetAngleTMP;
+					if ((Tdist / tmpDistanceFactorByObjectType > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
+						NeedAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
-						TargetLocked = true;
-						TType = 2;
 						Target = GetGroundObjectPtr(tmpGround);
+						tmpDistanceFactorByObjectType = 1.0f;
 					}
 				}
 			}
 		}
 	});
 
+	if (!Target.expired())
+		tmpDistanceFactorByObjectType = 6.0f;
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// проверка, чтобы не считать свой корабль
 		if (NeedCheckCollision(tmpShip) &&
@@ -1052,12 +1031,11 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 			if (tmp1 > 0.0f) {
 				float TargetDist2TMP = A2 * tmpShip.Location.x + B2 * tmpShip.Location.y + C2 * tmpShip.Location.z + D2;
 
-				// проверяем, чтобы объект находился не ближе чем MinDistance
-				if ((MinDistance < TargetDist2TMP) && (MaxDistance > TargetDist2TMP)) {
+				if (MaxDistance > TargetDist2TMP) {
 					// выбираем объект, так, чтобы он был наиболее длижайшим,
 					// идущим по нашему курсу...
 
-					sVECTOR3D TargetAngleTMP;
+					sVECTOR3D TargetAngleTMP{CurrentObjectRotation};
 					TargetLocation = tmpShip.Location;
 
 					// находим угол между плоскостью и прямой
@@ -1071,7 +1049,6 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					// поправки к существующим углам поворота оружия
 					float sss1 = vw_sqrtf(m * m + n * n + p * p);
 					float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-					TargetAngleTMP.x = CurrentObjectRotation.x;
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
@@ -1079,37 +1056,25 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
-					TargetAngleTMP.y = CurrentObjectRotation.y;
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
 							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
-					TargetAngleTMP.z = CurrentObjectRotation.z;
-
-					if ((TType < 3) && TargetLocked) {
-						// только если в 6 раза ближе
-						if ((Tdist / 6.0f > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
-							TargetAngle = TargetAngleTMP;
-							Tdist = m * m + n * n + p * p;
-							TargetLocked = true;
-							TType = 3;
-							Target = GetSpaceShipPtr(tmpShip);
-						}
-					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
-						TargetAngle = TargetAngleTMP;
+					if ((Tdist / tmpDistanceFactorByObjectType > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
+						NeedAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
-						TargetLocked = true;
-						TType = 3;
 						Target = GetSpaceShipPtr(tmpShip);
+						tmpDistanceFactorByObjectType = 1.0f;
 					}
 				}
 			}
 		}
 	});
 
-	// проверка по космическим объектам
+	if (!Target.expired())
+		tmpDistanceFactorByObjectType = 10.0f;
 	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpSpace) &&
@@ -1121,11 +1086,10 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 
 				float TargetDist2TMP = A2 * tmpSpace.Location.x + B2 * tmpSpace.Location.y + C2 * tmpSpace.Location.z + D2;
 
-				// проверяем, чтобы объект находился не ближе чем MinDistance
-				if ((MinDistance < TargetDist2TMP) && (MaxDistance > TargetDist2TMP)) {
+				if (MaxDistance > TargetDist2TMP) {
 					// выбираем объект, так, чтобы он был наиболее длижайшим,
 					// идущим по нашему курсу...
-					sVECTOR3D TargetAngleTMP;
+					sVECTOR3D TargetAngleTMP{CurrentObjectRotation};
 					TargetLocation = tmpSpace.Location;
 
 					// находим угол между плоскостью и прямой
@@ -1139,7 +1103,6 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					// поправки к существующим углам поворота оружия
 					float sss1 = vw_sqrtf(m * m + n * n + p * p);
 					float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-					TargetAngleTMP.x = CurrentObjectRotation.x;
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
@@ -1147,39 +1110,22 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
-					TargetAngleTMP.y = CurrentObjectRotation.y;
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
 							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
-					TargetAngleTMP.z = CurrentObjectRotation.z;
-
-					if ((TType < 4) && TargetLocked) {
-						// только если в 10 раза ближе
-						if ((Tdist / 10.0f > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
-							TargetAngle = TargetAngleTMP;
-							Tdist = m * m + n * n + p * p;
-							TargetLocked = true;
-							TType = 4;
-							Target = GetSpaceObjectPtr(tmpSpace);
-						}
-					} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
-						TargetAngle = TargetAngleTMP;
+					if ((Tdist / tmpDistanceFactorByObjectType > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x - CurrentObjectRotation.x) < 45.0f)) {
+						NeedAngle = TargetAngleTMP;
 						Tdist = m * m + n * n + p * p;
-						TargetLocked = true;
-						TType = 4;
 						Target = GetSpaceObjectPtr(tmpSpace);
+						tmpDistanceFactorByObjectType = 1.0f;
 					}
 				}
 			}
 		}
 	});
-
-	// находим направление и углы нацеливания на цель, если нужно
-	if (TargetLocked)
-		NeedAngle = TargetAngle;
 
 	return Target;
 }
