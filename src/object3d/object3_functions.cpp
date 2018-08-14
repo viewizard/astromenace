@@ -40,6 +40,13 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
+constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
+
+} // unnamed namespace
+
+
 // FIXME should be fixed, don't allow global scope interaction for local variables
 std::weak_ptr<cGLSL> GLSLShaderType1{};
 std::weak_ptr<cGLSL> GLSLShaderType2{};
@@ -283,7 +290,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 							if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
 
 						float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -292,7 +299,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
 							float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 							if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -398,7 +405,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 							if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
 
 						float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -407,7 +414,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 							if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 								float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 								if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-									TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+									TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 							}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -519,7 +526,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 							if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
 
 						float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -528,7 +535,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
 							float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 							if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -656,7 +663,7 @@ void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус
 		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 			float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
 			if ((ttt >= -1.0f) && (ttt <= 1.0f))
-				NeedAngle.x = CurrentObjectRotation.x - asinf(ttt) * 57.32f;
+				NeedAngle.x = CurrentObjectRotation.x - asinf(ttt) * RadToDeg;
 		}
 
 		NeedAngle.z = CurrentObjectRotation.z;
@@ -687,7 +694,7 @@ void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f))
-						NeedAngle.y = 180.0f - asinf(ttt) * 57.32f;
+						NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
 				}
 			} else {
 				// находим угол поворота
@@ -696,7 +703,7 @@ void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f)) {
-						NeedAngle.y = asinf(ttt) * 57.32f;
+						NeedAngle.y = asinf(ttt) * RadToDeg;
 						if (NeedAngle.y < 0.0f)
 							NeedAngle.y += 360.0f;
 					}
@@ -812,7 +819,7 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 			float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
 			if ((ttt >= -1.0f) && (ttt <= 1.0f))
-				NeedAngle.x = CurrentObjectRotation.x + asinf(ttt) * 57.32f;
+				NeedAngle.x = CurrentObjectRotation.x + asinf(ttt) * RadToDeg;
 		}
 
 		NeedAngle.z = CurrentObjectRotation.z;
@@ -843,7 +850,7 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f))
-						NeedAngle.y = 180.0f - asinf(ttt) * 57.32f;
+						NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
 				}
 			} else {
 				// находим угол поворота
@@ -852,7 +859,7 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
 					if ((ttt >= -1.0f) && (ttt <= 1.0f)) {
-						NeedAngle.y = asinf(ttt) * 57.32f;
+						NeedAngle.y = asinf(ttt) * RadToDeg;
 						if (NeedAngle.y < 0.0f)
 							NeedAngle.y += 360.0f;
 					}
@@ -940,7 +947,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -948,7 +955,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
 					TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -1002,7 +1009,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -1010,7 +1017,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
 					TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -1068,7 +1075,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -1076,7 +1083,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
 					TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -1136,7 +1143,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 						float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
 						if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 					}
 
 					float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -1144,7 +1151,7 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 					if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 						float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
 						if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 					}
 
 					TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -1177,76 +1184,69 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 	return Target;
 }
 
-//-----------------------------------------------------------------------------
-// Получаем углы поворота для ракеты наведенной на цель
-//-----------------------------------------------------------------------------
-bool GetMissileOnTargetOrientation(const sVECTOR3D &Location, // положение точки относительно которой будем наводить
-				   const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
-				   const float (&RotationMatrix)[9], // матрица вращения объекта
-				   std::weak_ptr<cObject3D> &TargetObject, // объект на который прицеливаемся
-				   sVECTOR3D &NeedAngle) // нужные углы, чтобы получить нужное направление
+/*
+ * Get missile orientation.
+ * See "Dihedral angle" (geometry) for more info about what we are doing here.
+ */
+bool GetMissileOnTargetOrientation(const sVECTOR3D &MissileLocation, const sVECTOR3D &MissileRotation,
+				   const float (&MissileRotationMatrix)[9],
+				   std::weak_ptr<cObject3D> &Target, sVECTOR3D &NeedAngle)
 {
-	auto sharedTarget = TargetObject.lock();
+	auto sharedTarget = Target.lock();
 	if (!sharedTarget)
 		return false;
 
-	// получаем точки для создания плоскости
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
-	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, MissileRotationMatrix);
 	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, MissileRotationMatrix);
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, MissileRotationMatrix);
 
-	// находим плоскость, вертикальную
+	// vertical plane (ahead/behind)
 	float A, B, C, D;
-	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointUp);
+	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
+	if ((A * sharedTarget->Location.x +
+	     B * sharedTarget->Location.y +
+	     C * sharedTarget->Location.z + D) <= 0.0f)
+		return false;
 
-	// получаем вертикальную плоскость 2 (отсечения перед-зад)
-	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
+	NeedAngle = MissileRotation;
 
-	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	sVECTOR3D TargetLocation = Location;
-	NeedAngle = CurrentObjectRotation;
+	sVECTOR3D tmpTargetGeometryCenter = sharedTarget->GeometryCenter;
+	vw_Matrix33CalcPoint(tmpTargetGeometryCenter, sharedTarget->CurrentRotationMat);
+	sVECTOR3D tmpDistance = sharedTarget->Location + tmpTargetGeometryCenter - MissileLocation;
+	float tmpLength = tmpDistance.Length();
 
-	// проверяем, спереди или сзади стоит противник
-	float tmp1 = A2 * sharedTarget->Location.x + B2 * sharedTarget->Location.y + C2 * sharedTarget->Location.z + D2;
-	if (tmp1 > 0.0f) {
-		sVECTOR3D tmpLocation = sharedTarget->GeometryCenter;
-		vw_Matrix33CalcPoint(tmpLocation, sharedTarget->CurrentRotationMat); // поворачиваем в плоскость объекта
-		TargetLocation = sharedTarget->Location + tmpLocation;
+	// missile "targeting" zone (missile targeting system's "view" zone)
+	// TODO probably, we should connect this parameter to missile type (?)
+	constexpr float TargetingZone = 1.0f; // in radians (!)
 
-		// находим угол между плоскостью и прямой
-		float A3, B3, C3, D3;
-		vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
-
-		float m = TargetLocation.x - Location.x;
-		float n = TargetLocation.y - Location.y;
-		float p = TargetLocation.z - Location.z;
-
-		// поправки к существующим углам поворота оружия
-		float sss1 = vw_sqrtf(m * m + n * n + p * p);
-		float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-		NeedAngle.x = CurrentObjectRotation.x;
-		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-			float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
-			if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-				NeedAngle.x = CurrentObjectRotation.x - asinf(sss3) * 57.32f;
-		}
-
-		float sss4 = vw_sqrtf(A * A + B * B + C * C);
-		NeedAngle.y = CurrentObjectRotation.y;
-		if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
-			float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
-			if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-				NeedAngle.y = CurrentObjectRotation.y - asinf(sss5) * 57.32f;
-		}
-
-		return true;
+	// horizontal plane (up/down)
+	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + Orientation, MissileLocation + PointRight);
+	float tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
+	NeedAngle.x = MissileRotation.x;
+	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
+		float tmpDihedralAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+					 (tmpLength * tmpNormalLength);
+		if ((tmpDihedralAngle >= -TargetingZone) &&
+		    (tmpDihedralAngle <= TargetingZone))
+			NeedAngle.x = MissileRotation.x - asinf(tmpDihedralAngle) * RadToDeg;
 	}
 
-	return false;
+	// vertical plane (left/right)
+	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + Orientation, MissileLocation + PointUp);
+	tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
+	NeedAngle.y = MissileRotation.y;
+	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
+		float tmpDihedralAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+					 (tmpLength * tmpNormalLength);
+		if ((tmpDihedralAngle >= -TargetingZone) &&
+		    (tmpDihedralAngle <= TargetingZone))
+			NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
+	}
+
+	return true;
 }
 
 /*
@@ -1264,8 +1264,9 @@ static bool MissileTargetStayAhead(const cObject3D &Target,
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
 
-	float tmp1 = A * Target.Location.x + B * Target.Location.y + C * Target.Location.z + D;
-	if (tmp1 > 0.0f)
+	if ((A * Target.Location.x +
+	     B * Target.Location.y +
+	     C * Target.Location.z + D) > 0.0f)
 		return true;
 
 	return false;
