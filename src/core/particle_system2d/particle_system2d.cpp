@@ -267,7 +267,7 @@ void cParticleSystem2D::SetupNewParticleDirection(cParticle2D &NewParticle)
 
 		// emit with deviation
 		float RandomYaw = vw_fRand0() * 3.14159f * 2.0f; // 2π = 360°
-		float RandomPitch = vw_fRand0() * Theta * 3.14159f / 180.0f; // convert Theta to radians (1° = π/180°)
+		float RandomPitch = vw_fRand0() * Theta * 3.14159f / 180.0f; // convert Theta to radians
 
 		// y
 		NewParticle.Velocity.y = Direction.y * cosf(RandomPitch);
