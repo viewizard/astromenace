@@ -38,7 +38,7 @@ namespace astromenace {
 std::weak_ptr<cObject3D>
 FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D &MissileLocation,
 			     const sVECTOR3D &MissileRotation, const float (&MissileRotationMatrix)[9],
-			     sVECTOR3D &NeedAngle, const float MaxMissileFlyDistance2);
+			     sVECTOR3D &NeedAngle, const float MaxMissileFlyDistance);
 // Correct target intercept course for missile.
 bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTOR3D &MissileRotation,
 				  const float (&MissileRotationMatrix)[9],

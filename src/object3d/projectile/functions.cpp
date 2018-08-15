@@ -49,7 +49,7 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 std::weak_ptr<cObject3D>
 FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D &MissileLocation,
 			     const sVECTOR3D &MissileRotation, const float (&MissileRotationMatrix)[9],
-			     sVECTOR3D &NeedAngle, const float MaxMissileFlyDistance2)
+			     sVECTOR3D &NeedAngle, const float MaxMissileFlyDistance)
 {
 	NeedAngle = MissileRotation;
 	float tmpDistanceToLockedTarget2{1000.0f * 1000.0f};
@@ -89,9 +89,8 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 	// check object location with current missile course, if object in missile
 	// "targeting" zone - find target intercept course for missile
 	auto CheckObjectLocation = [&] (const sVECTOR3D &TargetLocation) {
-		float tmpDistToTarget2 = A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D;
-		if ((tmpDistToTarget2 < 0.0f) ||
-		    (tmpDistToTarget2 > MaxMissileFlyDistance2))
+		float tmpCheckSideBySign = A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D;
+		if (tmpCheckSideBySign < 0.0f) // target is behind
 			return false;
 
 		sVECTOR3D tmpDistance = TargetLocation - MissileLocation;
@@ -102,8 +101,9 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 		if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType) <= tmpLength2)
 			return false;
 
-		tmpDistanceToLockedTarget2 = tmpLength2;
 		float tmpLength = vw_sqrtf(tmpLength2);
+		if (tmpLength > MaxMissileFlyDistance)
+			return false;
 
 		if ((tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
 			float tmpDihedralAngle = (A2 * tmpDistance.x + B2 * tmpDistance.y + C2 * tmpDistance.z) /
@@ -121,6 +121,7 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 				NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
 		}
 
+		tmpDistanceToLockedTarget2 = tmpLength2;
 		tmpDistanceFactorByObjectType = 1.0f;
 		return true;
 	};
