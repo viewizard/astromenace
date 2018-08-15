@@ -38,10 +38,10 @@ namespace astromenace {
 std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 					const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
 					sVECTOR3D &NeedAngle, float MaxDistance);
-// Get missile orientation.
-bool GetMissileOnTargetOrientation(const sVECTOR3D &MissileLocation, const sVECTOR3D &MissileRotation,
-				   const float (&MissileRotationMatrix)[9],
-				   std::weak_ptr<cObject3D> &Target, sVECTOR3D &NeedAngle);
+// Correct target intercept course for missile.
+bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTOR3D &MissileRotation,
+				  const float (&MissileRotationMatrix)[9],
+				  std::weak_ptr<cObject3D> &Target, sVECTOR3D &NeedAngle);
 // Check locked by missle target.
 bool CheckMissileTarget(std::weak_ptr<cObject3D> &Target, const sVECTOR3D &MissileLocation,
 			const float (&MissileRotationMatrix)[9]);

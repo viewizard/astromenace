@@ -305,12 +305,12 @@ std::weak_ptr<cObject3D> GetMissileOnTargetOrientation(eObjectStatus ObjectStatu
 }
 
 /*
- * Get missile orientation.
+ * Correct target intercept course for missile.
  * See "Dihedral angle" (geometry) for more info about what we are doing here.
  */
-bool GetMissileOnTargetOrientation(const sVECTOR3D &MissileLocation, const sVECTOR3D &MissileRotation,
-				   const float (&MissileRotationMatrix)[9],
-				   std::weak_ptr<cObject3D> &Target, sVECTOR3D &NeedAngle)
+bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTOR3D &MissileRotation,
+				  const float (&MissileRotationMatrix)[9],
+				  std::weak_ptr<cObject3D> &Target, sVECTOR3D &NeedAngle)
 {
 	auto sharedTarget = Target.lock();
 	if (!sharedTarget)
