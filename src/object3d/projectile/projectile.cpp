@@ -46,6 +46,7 @@ will not kill their speed and maneuverability and we will have nice difficulty m
 */
 
 #include "projectile.h"
+#include "functions.h"
 #include "../explosion/explosion.h"
 #include "../../assets/texture.h"
 
