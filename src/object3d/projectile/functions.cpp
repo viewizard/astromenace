@@ -89,8 +89,9 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 	// check object location with current missile course, if object in missile
 	// "targeting" zone - find target intercept course for missile
 	auto CheckObjectLocation = [&] (const sVECTOR3D &TargetLocation) {
-		float tmpCheckSideBySign = A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D;
-		if (tmpCheckSideBySign < 0.0f) // target is behind
+		if ((A * TargetLocation.x +
+		     B * TargetLocation.y +
+		     C * TargetLocation.z + D) <= 0.0f)
 			return false;
 
 		sVECTOR3D tmpDistance = TargetLocation - MissileLocation;
@@ -247,15 +248,15 @@ static bool MissileTargetStayAhead(const cObject3D &Target,
 	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(PointRight, MissileRotationMatrix);
 
+	// vertical plane (ahead/behind)
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
-
 	if ((A * Target.Location.x +
 	     B * Target.Location.y +
-	     C * Target.Location.z + D) > 0.0f)
-		return true;
+	     C * Target.Location.z + D) <= 0.0f)
+		return false;
 
-	return false;
+	return true;
 }
 
 /*
