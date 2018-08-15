@@ -30,6 +30,7 @@
 // TODO a lot of code duplication, should be fixed
 
 #include "space_ship.h"
+#include "functions.h"
 #include "../projectile/projectile.h"
 #include "../../game.h"
 #include "../../config/config.h"
