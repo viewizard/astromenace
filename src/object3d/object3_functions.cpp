@@ -41,6 +41,7 @@ std::weak_ptr<cGLSL> GLSLShaderType3{};
 /*
  * Check for "mortal" objects, that could be used for collision detection.
  */
+// TODO probably, we should use additional field with this info instead of call NeedCheckCollision() all the time
 bool NeedCheckCollision(const cObject3D &Object3D)
 {
 	// don't use 'default' case here, we need compiler's warning if anyone was missed
