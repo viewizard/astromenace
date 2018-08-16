@@ -26,6 +26,7 @@
 *************************************************************************************/
 
 #include "ground_object.h"
+#include "../weapon/functions.h" // TODO code should be revised, weapon-related code should be in 'weapon' sources only
 #include "../../script/script.h"
 #include "../../config/config.h"
 

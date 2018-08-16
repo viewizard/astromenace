@@ -230,10 +230,6 @@ void DetectCollisionAllObject3D();
 bool NeedCheckCollision(const cObject3D &Object3D);
 // Загрузка в модель нужной геометрии
 void LoadObjectData(const std::string &FileName, cObject3D &Object3D);
-// Получение угла поворота турели на врага
-bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-				  const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-				  sVECTOR3D &NeedAngle, int WeaponType);
 // Setup shaders.
 bool SetupObject3DShaders();
 

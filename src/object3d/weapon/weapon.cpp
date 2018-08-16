@@ -32,6 +32,7 @@
 // TODO codestyle should be fixed
 
 #include "weapon.h"
+#include "functions.h"
 #include "../projectile/projectile.h"
 #include "../../assets/audio.h"
 #include "../../assets/texture.h"
