@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "../assets/model3d.h"
 #include "object3d.h"
 
@@ -40,10 +38,9 @@ std::weak_ptr<cGLSL> GLSLShaderType2{};
 std::weak_ptr<cGLSL> GLSLShaderType3{};
 
 
-//-----------------------------------------------------------------------------
-// Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
-// так же используется для определения "неубиваемых" объектов
-//-----------------------------------------------------------------------------
+/*
+ * Check for "mortal" objects, that could be used for collision detection.
+ */
 bool NeedCheckCollision(const cObject3D &Object3D)
 {
 	// don't use 'default' case here, we need compiler's warning if anyone was missed
@@ -103,18 +100,16 @@ bool NeedCheckCollision(const cObject3D &Object3D)
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Загрузка в модель нужной геометрии
-//-----------------------------------------------------------------------------
+/*
+ * Load 3D model data.
+ */
 void LoadObjectData(const std::string &FileName, cObject3D &Object3D)
 {
-	// получение геометрии модели
 	std::weak_ptr<sModel3D> Model = GetPreloadedModel3DAsset(FileName);
 	auto sharedModel = Model.lock();
 	if (!sharedModel)
 		return;
 
-	// берем то, что нужно
 	Object3D.GlobalVertexArray = sharedModel->GlobalVertexArray;
 	Object3D.GlobalVertexArrayCount = sharedModel->GlobalVertexArrayCount;
 	Object3D.GlobalVBO = sharedModel->GlobalVBO;
@@ -124,12 +119,10 @@ void LoadObjectData(const std::string &FileName, cObject3D &Object3D)
 	Object3D.GlobalVAO = sharedModel->GlobalVAO;
 	Object3D.Chunks = sharedModel->Chunks;
 
-	// резервируем память для текстур
 	Object3D.Texture.resize(Object3D.Chunks.size(), 0);
 	Object3D.TextureIllum.resize(Object3D.Chunks.size(), 0);
 	Object3D.NormalMap.resize(Object3D.Chunks.size(), 0);
 
-	// metadata
 	Object3D.AABB = sharedModel->AABB;
 	Object3D.OBB = sharedModel->OBB;
 	Object3D.HitBB = sharedModel->HitBB;

@@ -226,9 +226,9 @@ void DetectCollisionAllObject3D();
  * object3d_functions
  */
 
-// Проверяем, нужно ли для данного объекта проверка коллизии и наведение на него
+// Check for "mortal" objects, that could be used for collision detection.
 bool NeedCheckCollision(const cObject3D &Object3D);
-// Загрузка в модель нужной геометрии
+// Load 3D model data.
 void LoadObjectData(const std::string &FileName, cObject3D &Object3D);
 // Setup shaders.
 bool SetupObject3DShaders();
