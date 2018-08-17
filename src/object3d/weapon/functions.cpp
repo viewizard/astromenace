@@ -53,6 +53,7 @@ float GameCameraGetSpeed();
 //-----------------------------------------------------------------------------
 // Получение угла поворота оружия на врага для турелей наземных объектов
 //-----------------------------------------------------------------------------
+// TODO no beam weapon support?
 bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
 				  const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				  const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
@@ -60,6 +61,8 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 				  sVECTOR3D &NeedAngle, // нужные углы, чтобы получить нужное направление
 				  int WeaponType) // номер оружия
 {
+	NeedAngle = CurrentObjectRotation;
+
 	// получаем точки для создания плоскости
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
 	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
@@ -78,12 +81,11 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 	bool TargetLocked{false};
 
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
-		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpShip) &&
 		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus)) {
 
 			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat); // поворачиваем в плоскость объекта
+			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat);
 			sVECTOR3D RealLocation = tmpShip.Location + tmpLocation;
 
 			// находим, за какое время снаряд долетит до объекта сейчас
@@ -143,70 +145,66 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		}
 	});
 
-	// находим направление и углы нацеливания на цель, если нужно
-	if (TargetLocked) {
-		// находим угол между плоскостью и прямой
-		float m = TargetLocation.x - Location.x;
-		float n = TargetLocation.y - Location.y;
-		float p = TargetLocation.z - Location.z;
+	if (!TargetLocked)
+		return false;
 
-		// поправки к существующим углам поворота оружия
-		float sss1 = m * m + n * n +p * p;
-		float sss2 = A * A + B * B +C * C;
-		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-			float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
-			if ((ttt >= -1.0f) && (ttt <= 1.0f))
-				NeedAngle.x = CurrentObjectRotation.x + asinf(ttt) * RadToDeg;
-		}
+	// находим угол между плоскостью и прямой
+	float m = TargetLocation.x - Location.x;
+	float n = TargetLocation.y - Location.y;
+	float p = TargetLocation.z - Location.z;
 
-		NeedAngle.z = CurrentObjectRotation.z;
+	// поправки к существующим углам поворота оружия
+	float sss1 = m * m + n * n + p * p;
+	float sss2 = A * A + B * B + C * C;
+	if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
+		float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
+		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		NeedAngle.x = asinf(ttt) * RadToDeg;
+	}
 
-		// нужно найти точку на плоскости, образованную перпендикуляром с точки TargetLocation
-		// иначе не правильно будем ориентировать
-		if (sss2 != 0.0f) {
-			float t = -(A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) / (A * A + B * B + C * C);
-			TargetLocation.x = t * A + TargetLocation.x;
-			TargetLocation.y = t * B + TargetLocation.y;
-			TargetLocation.z = t * C + TargetLocation.z;
-			m = TargetLocation.x - Location.x;
-			n = TargetLocation.y - Location.y;
-			p = TargetLocation.z - Location.z;
+	// нужно найти точку на плоскости, образованную перпендикуляром с точки TargetLocation
+	// иначе не правильно будем ориентировать
+	if (sss2 != 0.0f) {
+		float t = -(A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) / (A * A + B * B + C * C);
+		TargetLocation.x = t * A + TargetLocation.x;
+		TargetLocation.y = t * B + TargetLocation.y;
+		TargetLocation.z = t * C + TargetLocation.z;
+		m = TargetLocation.x - Location.x;
+		n = TargetLocation.y - Location.y;
+		p = TargetLocation.z - Location.z;
 
-			// находим плоскость, вертикальную
-			float A2, B2, C2, D2;
-			vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointUp, Location + PointRight);
+		// находим плоскость, вертикальную
+		float A2, B2, C2, D2;
+		vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointUp, Location + PointRight);
 
-			// смотрим в какой полуплоскости
-			float tmp1_1 = A2 * TargetLocation.x + B2 * TargetLocation.y + C2 * TargetLocation.z + D2;
-			vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + Orientation, Location + PointUp);
+		// смотрим в какой полуплоскости
+		float A3, B3, C3, D3;
+		vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointUp);
 
-			if (tmp1_1 >= 0.0f) {
-				// находим угол поворота
-				sss1 = vw_sqrtf(m * m + n * n + p * p);
-				float sss3 = vw_sqrtf(A2 * A2 + B2 * B2 + C2 * C2);
-				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
-					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
-					if ((ttt >= -1.0f) && (ttt <= 1.0f))
-						NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
-				}
-			} else {
-				// находим угол поворота
-				sss1 = vw_sqrtf(m * m + n * n + p * p);
-				float sss3 = vw_sqrtf(A2 * A2 + B2 * B2 + C2 * C2);
-				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
-					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
-					if ((ttt >= -1.0f) && (ttt <= 1.0f)) {
-						NeedAngle.y = asinf(ttt) * RadToDeg;
-						if (NeedAngle.y < 0.0f)
-							NeedAngle.y += 360.0f;
-					}
-				}
+		if ((A2 * TargetLocation.x +
+		     B2 * TargetLocation.y +
+		     C2 * TargetLocation.z + D2) >= 0.0f) {
+			sss1 = vw_sqrtf(m * m + n * n + p * p);
+			float sss3 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
+			if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
+				float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
+				vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+				NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
+			}
+		} else {
+			sss1 = vw_sqrtf(m * m + n * n + p * p);
+			float sss3 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
+			if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
+				float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
+				vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+				NeedAngle.y = asinf(ttt) * RadToDeg;
+				if (NeedAngle.y < 0.0f)
+					NeedAngle.y += 360.0f;
 			}
 		}
 	}
 
-	// передаем навелись или нет (нет врагов)
-	return TargetLocked;
+	return true;
 }
 
 } // astromenace namespace
