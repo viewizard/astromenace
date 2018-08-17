@@ -55,10 +55,6 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 	float tmpDistanceToLockedTarget2{1000.0f * 1000.0f};
 	std::weak_ptr<cObject3D> LockedTarget{};
 
-	// missile "targeting" zone (missile targeting system's "view" zone)
-	// TODO probably, we should connect this parameter to missile type (?)
-	constexpr float TargetingZone{1.0f}; // in radians (!)
-
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
 	vw_Matrix33CalcPoint(Orientation, MissileRotationMatrix);
 	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
@@ -109,17 +105,15 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 		if ((tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
 			float tmpDihedralAngle = (A2 * tmpDistance.x + B2 * tmpDistance.y + C2 * tmpDistance.z) /
 						 (tmpLength * A2B2C2D2NormalLength);
-			if ((tmpDihedralAngle >= -TargetingZone) &&
-			    (tmpDihedralAngle <= TargetingZone))
-				NeedAngle.x = MissileRotation.x - asinf(tmpDihedralAngle) * RadToDeg;
+			vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+			NeedAngle.x = MissileRotation.x - asinf(tmpDihedralAngle) * RadToDeg;
 		}
 
 		if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
 			float tmpDihedralAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
 						 (tmpLength * A3B3C3D3NormalLength);
-			if ((tmpDihedralAngle >= -TargetingZone) &&
-			    (tmpDihedralAngle <= TargetingZone))
-				NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
+			vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+			NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
 		}
 
 		tmpDistanceToLockedTarget2 = tmpLength2;
@@ -205,32 +199,24 @@ bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTO
 	sVECTOR3D tmpDistance = sharedTarget->Location + tmpTargetGeometryCenter - MissileLocation;
 	float tmpLength = tmpDistance.Length();
 
-	// missile "targeting" zone (missile targeting system's "view" zone)
-	// TODO probably, we should connect this parameter to missile type (?)
-	constexpr float TargetingZone{1.0f}; // in radians (!)
-
 	// horizontal plane (up/down)
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + Orientation, MissileLocation + PointRight);
 	float tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
-	NeedAngle.x = MissileRotation.x;
 	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
 		float tmpDihedralAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
 					 (tmpLength * tmpNormalLength);
-		if ((tmpDihedralAngle >= -TargetingZone) &&
-		    (tmpDihedralAngle <= TargetingZone))
-			NeedAngle.x = MissileRotation.x - asinf(tmpDihedralAngle) * RadToDeg;
+		vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		NeedAngle.x = MissileRotation.x - asinf(tmpDihedralAngle) * RadToDeg;
 	}
 
 	// vertical plane (left/right)
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + Orientation, MissileLocation + PointUp);
 	tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
-	NeedAngle.y = MissileRotation.y;
 	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
 		float tmpDihedralAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
 					 (tmpLength * tmpNormalLength);
-		if ((tmpDihedralAngle >= -TargetingZone) &&
-		    (tmpDihedralAngle <= TargetingZone))
-			NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
+		vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
 	}
 
 	return true;
