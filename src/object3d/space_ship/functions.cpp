@@ -184,8 +184,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						TargetAngleTMP.x = CurrentObjectRotation.x;
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
-							if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
+							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
 
 						float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -193,8 +193,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if (NeedCenterOrientation &&
 						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
 							float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
-							if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
+							vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -299,8 +299,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						TargetAngleTMP.x = CurrentObjectRotation.x;
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
-							if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
+							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
 
 						float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -308,8 +308,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if (NeedCenterOrientation)
 							if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
 								float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
-								if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-									TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
+								vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 							}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -420,8 +420,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						TargetAngleTMP.x = CurrentObjectRotation.x;
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
-							if ((sss3 >= -1.0f) && (sss3 <= 1.0f))
-								TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
+							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
 
 						float sss4 = vw_sqrtf(A * A + B * B + C * C);
@@ -429,8 +429,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if (NeedCenterOrientation &&
 						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
 							float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
-							if ((sss5 >= -1.0f) && (sss5 <= 1.0f))
-								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
+							vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -558,8 +558,8 @@ void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус
 		float sss2 = A * A + B * B + C * C;
 		if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
 			float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
-			if ((ttt >= -1.0f) && (ttt <= 1.0f))
-				NeedAngle.x = CurrentObjectRotation.x - asinf(ttt) * RadToDeg;
+			vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+			NeedAngle.x = CurrentObjectRotation.x - asinf(ttt) * RadToDeg;
 		}
 
 		NeedAngle.z = CurrentObjectRotation.z;
@@ -589,8 +589,8 @@ void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус
 				float sss3 = vw_sqrtf(A2 * A2 + B2 * B2 + C2 * C2);
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
-					if ((ttt >= -1.0f) && (ttt <= 1.0f))
-						NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
+					vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
 				}
 			} else {
 				// находим угол поворота
@@ -598,11 +598,10 @@ void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус
 				float sss3 = vw_sqrtf(A2 * A2 + B2 * B2 + C2 * C2);
 				if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
 					float ttt = (A2 * m + B2 * n + C2 * p) / (sss1 * sss3);
-					if ((ttt >= -1.0f) && (ttt <= 1.0f)) {
-						NeedAngle.y = asinf(ttt) * RadToDeg;
-						if (NeedAngle.y < 0.0f)
-							NeedAngle.y += 360.0f;
-					}
+					vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					NeedAngle.y = asinf(ttt) * RadToDeg;
+					if (NeedAngle.y < 0.0f)
+						NeedAngle.y += 360.0f;
 				}
 			}
 		}
