@@ -158,54 +158,52 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 	float p = TargetLocation.z - Location.z;
 
 	// поправки к существующим углам поворота оружия
-	float sss1 = m * m + n * n + p * p;
-	float sss2 = A * A + B * B + C * C;
-	if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-		float ttt = (A * m + B * n + C * p) / (vw_sqrtf(sss1) * vw_sqrtf(sss2));
+	float sss1 = vw_sqrtf(m * m + n * n + p * p);
+	float sss2 = vw_sqrtf(A * A + B * B + C * C);
+	if ((sss1 > 0.0f) && (sss2 > 0.0f)) {
+		float ttt = (A * m + B * n + C * p) / (sss1 * sss2);
 		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 		NeedAngle.x = asinf(ttt) * RadToDeg;
 	}
 
-	// нужно найти точку на плоскости, образованную перпендикуляром с точки TargetLocation
-	// иначе не правильно будем ориентировать
-	if (sss2 != 0.0f) {
-		float t = -(A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) / (A * A + B * B + C * C);
-		TargetLocation.x = t * A + TargetLocation.x;
-		TargetLocation.y = t * B + TargetLocation.y;
-		TargetLocation.z = t * C + TargetLocation.z;
+	// find target location point projection onto horizontal plane
+	if (sss2 > 0.0f) {
+		float tmpDistanceToPlane = fabs(A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) / sss2;
+		// reuse TargetLocation for point projection onto horizontal plane
+		TargetLocation.x = TargetLocation.x - tmpDistanceToPlane * A;
+		TargetLocation.y = TargetLocation.y - tmpDistanceToPlane * B;
+		TargetLocation.z = TargetLocation.z - tmpDistanceToPlane * C;
 		m = TargetLocation.x - Location.x;
 		n = TargetLocation.y - Location.y;
 		p = TargetLocation.z - Location.z;
+		sss1 = vw_sqrtf(m * m + n * n + p * p);
+	}
 
-		// находим плоскость, вертикальную
-		float A2, B2, C2, D2;
-		vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointUp, Location + PointRight);
+	// находим плоскость, вертикальную
+	float A2, B2, C2, D2;
+	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointUp, Location + PointRight);
 
-		// смотрим в какой полуплоскости
-		float A3, B3, C3, D3;
-		vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointUp);
+	// смотрим в какой полуплоскости
+	float A3, B3, C3, D3;
+	vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointUp);
+	float sss3 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 
-		if ((A2 * TargetLocation.x +
-		     B2 * TargetLocation.y +
-		     C2 * TargetLocation.z + D2) >= 0.0f) {
-			sss1 = vw_sqrtf(m * m + n * n + p * p);
-			float sss3 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-			if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
-				float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
-				vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-				NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
-			}
-		} else {
-			sss1 = vw_sqrtf(m * m + n * n + p * p);
-			float sss3 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-			if ((sss1 != 0.0f) && (sss3 != 0.0f)) {
-				float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
-				vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-				NeedAngle.y = asinf(ttt) * RadToDeg;
-				if (NeedAngle.y < 0.0f)
-					NeedAngle.y += 360.0f;
-			}
-		}
+	if ((sss1 == 0.0f) ||
+	    (sss3 == 0.0f))
+		return true;
+
+	if ((A2 * TargetLocation.x +
+	     B2 * TargetLocation.y +
+	     C2 * TargetLocation.z + D2) >= 0.0f) {
+		float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
+		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
+	} else {
+		float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
+		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		NeedAngle.y = asinf(ttt) * RadToDeg;
+		if (NeedAngle.y < 0.0f)
+			NeedAngle.y += 360.0f;
 	}
 
 	return true;
