@@ -54,6 +54,10 @@ float GameCameraGetSpeed();
 // Получение угла поворота оружия на врага для турелей наземных объектов
 //-----------------------------------------------------------------------------
 // TODO no beam weapon support?
+// TODO probably, we need revise all turret-related code in order to use relative angles
+//      for turret rotation, as we have in FindTargetAndInterceptCourse() for missiles
+//      so, we should use current barrel plane instead of object plane in order to calculate angles
+//      in this case, we could stay with [-1, 1] for art sine, as we have in FindTargetAndInterceptCourse()
 bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
 				  const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				  const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
