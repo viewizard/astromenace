@@ -50,14 +50,15 @@ extern sVECTOR3D GameCameraMovement;
 float GameCameraGetSpeed();
 
 
-//-----------------------------------------------------------------------------
-// Получение угла поворота оружия на врага для турелей наземных объектов
-//-----------------------------------------------------------------------------
+/*
+ * Find turret target and angle to aim target with prediction.
+ */
 // TODO no beam weapon support?
 // TODO probably, we need revise all turret-related code in order to use relative angles
 //      for turret rotation, as we have in FindTargetAndInterceptCourse() for missiles
 //      so, we should use current barrel plane instead of object plane in order to calculate angles
 //      in this case, we could stay with [-1, 1] for art sine, as we have in FindTargetAndInterceptCourse()
+// NOTE NeedAngle should count on current 3d object rotation, since this is "additional" angle for barrel
 bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
 				  const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				  const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
@@ -66,23 +67,17 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 				  int WeaponType) // номер оружия
 {
 	NeedAngle = CurrentObjectRotation;
+	sVECTOR3D TargetLocation{Location};
+	float TargetDist2{1000.0f * 1000.0f};
+	bool TargetLocked{false};
 
-	// получаем точки для создания плоскости
+	// horizontal plane (up/down)
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
 	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
 	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
-	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
-
-	// находим плоскость, горизонтальную
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointRight);
-
-	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	sVECTOR3D TargetLocation{Location};
-	float TargetDist2{1000.0f * 1000.0f};
-	bool TargetLocked{false};
 
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		if (NeedCheckCollision(tmpShip) &&
@@ -178,23 +173,25 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		p = TargetLocation.z - Location.z;
 		sss1 = vw_sqrtf(m * m + n * n + p * p);
 	}
+	if (sss1 == 0.0f)
+		return true;
 
-	// находим плоскость, вертикальную
+	// vertical plane (ahead/behind)
+	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
+	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointUp, Location + PointRight);
+	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
 
-	// смотрим в какой полуплоскости
+	// vertical plane (left/right)
 	float A3, B3, C3, D3;
 	vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointUp);
 	float sss3 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-
-	if ((sss1 == 0.0f) ||
-	    (sss3 == 0.0f))
+	if (sss3 == 0.0f)
 		return true;
 
 	if ((A2 * TargetLocation.x +
 	     B2 * TargetLocation.y +
-	     C2 * TargetLocation.z + D2) >= 0.0f) {
+	     C2 * TargetLocation.z + D2) <= 0.0f) {
 		float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
 		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 		NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;

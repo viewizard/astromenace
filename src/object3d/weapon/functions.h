@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef OBJECT3D_WEAPON_FUNCTIONS_H
 #define OBJECT3D_WEAPON_FUNCTIONS_H
 
@@ -36,7 +34,7 @@
 namespace viewizard {
 namespace astromenace {
 
-// Получение угла поворота турели на врага
+// Find turret target and angle to aim target with prediction.
 bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 				  const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
 				  sVECTOR3D &NeedAngle, int WeaponType);
