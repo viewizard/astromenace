@@ -31,6 +31,24 @@
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
+/*
+OpenGL use right-handed coordinate system, that should be used in scripts
+for object positioning too.
+
+Scene axises orientation:
+
+     ^ Y
+     |
+     |  / Z
+     | /
+<-----/
+X
+
+X = 0 at center of the scene.
+Y = 0 at player ship movement plane.
+Z = 0 at the level start, and increased during level.
+*/
+
 #include "../core/core.h"
 #include "script.h"
 #include "../config/config.h"
