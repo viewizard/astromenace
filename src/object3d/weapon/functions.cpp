@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "../object3d.h"
 #include "../space_ship/space_ship.h"
 #include "../projectile/projectile.h"
@@ -42,46 +40,31 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 } // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-// направление движения камеры
 extern sVECTOR3D GameCameraMovement;
-// скорость движения камеры
 float GameCameraGetSpeed();
 
 
 /*
- * Find turret target and angle to aim target with prediction.
+ * Find closest target location with prediction.
  */
-// FIXME should work with any object rotation (x, y, z)
-// TODO no beam weapon support?
-// TODO probably, we need revise all turret-related code in order to use relative angles
-//      for turret rotation, as we have in FindTargetAndInterceptCourse() for missiles
-//      so, we should use current barrel plane instead of object plane in order to calculate angles
-//      in this case, we could stay with [-1, 1] for art sine, as we have in FindTargetAndInterceptCourse()
-// NOTE NeedAngle should count on current 3d object rotation, since this is "additional" angle for barrel
-bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
-				  const sVECTOR3D &Location, // положение точки относительно которой будем наводить
-				  const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
-				  const float (&RotationMatrix)[9], // матрица вращения объекта
-				  sVECTOR3D &NeedAngle, // нужные углы, чтобы получить нужное направление
-				  int WeaponType) // номер оружия
+static bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
+					     int TurretWeaponType, sVECTOR3D &TargetLocation)
 {
-	NeedAngle = CurrentObjectRotation;
-	sVECTOR3D TargetLocation{Location};
 	float DistanceToLockedTarget2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		if (!NeedCheckCollision(tmpShip) ||
-		    !ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus))
+		    !ObjectsStatusFoe(TurretStatus, tmpShip.ObjectStatus))
 			return;
 
 		sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
 		vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat);
 		sVECTOR3D tmpRealLocation = tmpShip.Location + tmpLocation;
 
-		sVECTOR3D tmpRealDistance = Location - tmpRealLocation;
-		float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-		if (ObjectStatus == eObjectStatus::Enemy)
+		sVECTOR3D tmpRealDistance = TurretLocation - tmpRealLocation;
+		float ProjectileSpeed = GetProjectileSpeed(TurretWeaponType);
+		if (TurretStatus == eObjectStatus::Enemy)
 			ProjectileSpeed = ProjectileSpeed / GameEnemyWeaponPenalty;
 		float CurrentDist = tmpRealDistance.Length();
 		float ObjCurrentTime = CurrentDist / ProjectileSpeed;
@@ -93,7 +76,7 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 
 		sVECTOR3D PossibleRealLocation = tmpRealLocation + FutureLocation + CamPosInfluence;
 
-		tmpRealDistance = Location - PossibleRealLocation;
+		tmpRealDistance = TurretLocation - PossibleRealLocation;
 		float PossibleDist = tmpRealDistance.Length();
 		float PoprTime = PossibleDist / ProjectileSpeed;
 
@@ -105,9 +88,9 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 
 		tmpRealLocation = tmpRealLocation + FutureLocation + CamPosInfluence;
 
-		float tmpDistanceToTarget2 = (Location.x - tmpRealLocation.x) * (Location.x - tmpRealLocation.x) +
-					     (Location.y - tmpRealLocation.y) * (Location.y - tmpRealLocation.y) +
-					     (Location.z - tmpRealLocation.z) * (Location.z - tmpRealLocation.z);
+		float tmpDistanceToTarget2 = (TurretLocation.x - tmpRealLocation.x) * (TurretLocation.x - tmpRealLocation.x) +
+					     (TurretLocation.y - tmpRealLocation.y) * (TurretLocation.y - tmpRealLocation.y) +
+					     (TurretLocation.z - tmpRealLocation.z) * (TurretLocation.z - tmpRealLocation.z);
 
 		if (DistanceToLockedTarget2 > tmpDistanceToTarget2) {
 			TargetLocation = tmpRealLocation;
@@ -116,20 +99,40 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		}
 	});
 
-	if (!TargetLocked)
+	return TargetLocked;
+}
+
+/*
+ * Find angles to aim on target with prediction.
+ */
+// FIXME should work with any object rotation (x, y, z)
+// TODO no beam weapon support?
+// TODO probably, we need revise all turret-related code in order to use relative angles
+//      for turret rotation, as we have in FindTargetAndInterceptCourse() for missiles
+//      so, we should use current barrel plane instead of object plane in order to calculate angles
+//      in this case, we could stay with [-1, 1] for art sine, as we have in FindTargetAndInterceptCourse()
+// NOTE NeedAngle should count on current 3d object rotation, since this is "additional" angle for barrel
+bool GetTurretOnTargetOrientation(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
+				  const sVECTOR3D &TurretRotation, const float (&TurretRotationMatrix)[9],
+				  sVECTOR3D &NeedAngle, int TurretWeaponType)
+{
+	NeedAngle = TurretRotation;
+	sVECTOR3D TargetLocation{TurretLocation};
+
+	if (!FindTargetLocationWithPrediction(TurretStatus, TurretLocation, TurretWeaponType, TargetLocation))
 		return false;
 
-	sVECTOR3D tmpDistance = TargetLocation - Location;
+	sVECTOR3D tmpDistance = TargetLocation - TurretLocation;
 	float tmpLength = tmpDistance.Length();
 
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
-	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, TurretRotationMatrix);
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, TurretRotationMatrix);
 
 	// horizontal plane (up/down), note, OpenGL use right-handed coordinate system
 	float A, B, C, D;
-	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointRight);
+	vw_GetPlaneABCD(A, B, C, D, TurretLocation, TurretLocation + Orientation, TurretLocation + PointRight);
 	float ABCDNormalLength = vw_sqrtf(A * A + B * B + C * C);
 
 	if ((tmpLength > 0.0f) && (ABCDNormalLength > 0.0f)) {
@@ -149,18 +152,18 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		TargetLocation.x = TargetLocation.x - tmpDistanceToPlane * A;
 		TargetLocation.y = TargetLocation.y - tmpDistanceToPlane * B;
 		TargetLocation.z = TargetLocation.z - tmpDistanceToPlane * C;
-		tmpDistance = TargetLocation - Location;
+		tmpDistance = TargetLocation - TurretLocation;
 		tmpLength = tmpDistance.Length();
 	}
 	if (tmpLength == 0.0f)
 		return true;
 
 	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, TurretRotationMatrix);
 
 	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	float A3, B3, C3, D3;
-	vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointUp);
+	vw_GetPlaneABCD(A3, B3, C3, D3, TurretLocation, TurretLocation + Orientation, TurretLocation + PointUp);
 	float A3B3C3D3NormalLength = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 	if (A3B3C3D3NormalLength == 0.0f)
 		return true;
@@ -173,7 +176,7 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 
 	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
+	vw_GetPlaneABCD(A2, B2, C2, D2, TurretLocation, TurretLocation + PointRight, TurretLocation + PointUp);
 	if ((A2 * TargetLocation.x +
 	     B2 * TargetLocation.y +
 	     C2 * TargetLocation.z + D2) <= 0.0f)

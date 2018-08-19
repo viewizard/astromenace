@@ -34,10 +34,10 @@
 namespace viewizard {
 namespace astromenace {
 
-// Find turret target and angle to aim target with prediction.
-bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-				  const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-				  sVECTOR3D &NeedAngle, int WeaponType);
+// Find angles to aim on target with prediction.
+bool GetTurretOnTargetOrientation(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
+				  const sVECTOR3D &TurretRotation, const float (&TurretRotationMatrix)[9],
+				  sVECTOR3D &NeedAngle, int TurretWeaponType);
 
 } // astromenace namespace
 } // viewizard namespace
