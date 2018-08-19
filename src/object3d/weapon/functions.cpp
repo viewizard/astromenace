@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO codestyle should be fixed
-
 // TODO translate comments
 
 #include "../object3d.h"
@@ -53,6 +51,7 @@ float GameCameraGetSpeed();
 /*
  * Find turret target and angle to aim target with prediction.
  */
+// FIXME should work with any object rotation (x, y, z)
 // TODO no beam weapon support?
 // TODO probably, we need revise all turret-related code in order to use relative angles
 //      for turret rotation, as we have in FindTargetAndInterceptCourse() for missiles
@@ -68,140 +67,117 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 {
 	NeedAngle = CurrentObjectRotation;
 	sVECTOR3D TargetLocation{Location};
-	float TargetDist2{1000.0f * 1000.0f};
+	float DistanceToLockedTarget2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
-	// horizontal plane (up/down)
-	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
-	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
-	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
-	float A, B, C, D;
-	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointRight);
-
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
-		if (NeedCheckCollision(tmpShip) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus)) {
+		if (!NeedCheckCollision(tmpShip) ||
+		    !ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus))
+			return;
 
-			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat);
-			sVECTOR3D RealLocation = tmpShip.Location + tmpLocation;
+		sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
+		vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat);
+		sVECTOR3D tmpRealLocation = tmpShip.Location + tmpLocation;
 
-			// находим, за какое время снаряд долетит до объекта сейчас
-			sVECTOR3D TTT = Location - RealLocation;
-			float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-			if (ObjectStatus == eObjectStatus::Enemy)
-				ProjectileSpeed = ProjectileSpeed / GameEnemyWeaponPenalty;
-			float CurrentDist = TTT.Length();
-			float ObjCurrentTime = CurrentDist / ProjectileSpeed;
+		sVECTOR3D tmpRealDistance = Location - tmpRealLocation;
+		float ProjectileSpeed = GetProjectileSpeed(WeaponType);
+		if (ObjectStatus == eObjectStatus::Enemy)
+			ProjectileSpeed = ProjectileSpeed / GameEnemyWeaponPenalty;
+		float CurrentDist = tmpRealDistance.Length();
+		float ObjCurrentTime = CurrentDist / ProjectileSpeed;
 
-			// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-			sVECTOR3D FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * ObjCurrentTime);
-			// учитываем камеру...
-			sVECTOR3D CamPosTTT{0.0f,0.0f,0.0f};
-			if (tmpShip.ObjectStatus == eObjectStatus::Player)
-				CamPosTTT = GameCameraMovement ^ (GameCameraGetSpeed() * ObjCurrentTime);
+		sVECTOR3D FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * ObjCurrentTime);
+		sVECTOR3D CamPosInfluence{0.0f, 0.0f, 0.0f};
+		if (tmpShip.ObjectStatus == eObjectStatus::Player)
+			CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * ObjCurrentTime);
 
-			// находи точку по середине... это нам и надо... туда целимся...
-			sVECTOR3D PossibleRealLocation = RealLocation + FutureLocation + CamPosTTT;
+		sVECTOR3D PossibleRealLocation = tmpRealLocation + FutureLocation + CamPosInfluence;
 
-			TTT = Location - PossibleRealLocation;
-			float PossibleDist = TTT.Length();
-			float PoprTime = PossibleDist/ProjectileSpeed;
+		tmpRealDistance = Location - PossibleRealLocation;
+		float PossibleDist = tmpRealDistance.Length();
+		float PoprTime = PossibleDist / ProjectileSpeed;
 
-			FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * PoprTime);
-			// учитываем камеру...
-			CamPosTTT = sVECTOR3D{0.0f, 0.0f, 0.0f};
-			if (tmpShip.ObjectStatus == eObjectStatus::Player)
-				CamPosTTT = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
+		FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * PoprTime);
 
-			RealLocation = RealLocation + FutureLocation + CamPosTTT;
+		CamPosInfluence = sVECTOR3D{0.0f, 0.0f, 0.0f};
+		if (tmpShip.ObjectStatus == eObjectStatus::Player)
+			CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
 
-			// проверяем, если все точки выше
-			float tmp1 = A * (RealLocation.x + tmpShip.OBB.Box[0].x) + B * (RealLocation.y + tmpShip.OBB.Box[0].y) + C * (RealLocation.z + tmpShip.OBB.Box[0].z) + D;
-			float tmp2 = A * (RealLocation.x + tmpShip.OBB.Box[1].x) + B * (RealLocation.y + tmpShip.OBB.Box[1].y) + C * (RealLocation.z + tmpShip.OBB.Box[1].z) + D;
-			float tmp3 = A * (RealLocation.x + tmpShip.OBB.Box[2].x) + B * (RealLocation.y + tmpShip.OBB.Box[2].y) + C * (RealLocation.z + tmpShip.OBB.Box[2].z) + D;
-			float tmp4 = A * (RealLocation.x + tmpShip.OBB.Box[3].x) + B * (RealLocation.y + tmpShip.OBB.Box[3].y) + C * (RealLocation.z + tmpShip.OBB.Box[3].z) + D;
-			float tmp5 = A * (RealLocation.x + tmpShip.OBB.Box[4].x) + B * (RealLocation.y + tmpShip.OBB.Box[4].y) + C * (RealLocation.z + tmpShip.OBB.Box[4].z) + D;
-			float tmp6 = A * (RealLocation.x + tmpShip.OBB.Box[5].x) + B * (RealLocation.y + tmpShip.OBB.Box[5].y) + C * (RealLocation.z + tmpShip.OBB.Box[5].z) + D;
-			float tmp7 = A * (RealLocation.x + tmpShip.OBB.Box[6].x) + B * (RealLocation.y + tmpShip.OBB.Box[6].y) + C * (RealLocation.z + tmpShip.OBB.Box[6].z) + D;
-			float tmp8 = A * (RealLocation.x + tmpShip.OBB.Box[7].x) + B * (RealLocation.y + tmpShip.OBB.Box[7].y) + C * (RealLocation.z + tmpShip.OBB.Box[7].z) + D;
+		tmpRealLocation = tmpRealLocation + FutureLocation + CamPosInfluence;
 
-			if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
-			    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
-				float TargetDist2TMP = (Location.x - RealLocation.x) * (Location.x - RealLocation.x) +
-						       (Location.y - RealLocation.y) * (Location.y - RealLocation.y) +
-						       (Location.z - RealLocation.z) * (Location.z - RealLocation.z);
+		float tmpDistanceToTarget2 = (Location.x - tmpRealLocation.x) * (Location.x - tmpRealLocation.x) +
+					     (Location.y - tmpRealLocation.y) * (Location.y - tmpRealLocation.y) +
+					     (Location.z - tmpRealLocation.z) * (Location.z - tmpRealLocation.z);
 
-				// проверяем, чтобы объект находился не ближе чем MinDistance
-				if (TargetDist2 > TargetDist2TMP) {
-					// запоминаем эти данные
-					TargetLocation = RealLocation;
-					TargetDist2 = TargetDist2TMP;
-					TargetLocked = true;
-				}
-			}
+		if (DistanceToLockedTarget2 > tmpDistanceToTarget2) {
+			TargetLocation = tmpRealLocation;
+			DistanceToLockedTarget2 = tmpDistanceToTarget2;
+			TargetLocked = true;
 		}
 	});
 
 	if (!TargetLocked)
 		return false;
 
-	// находим угол между плоскостью и прямой
-	float m = TargetLocation.x - Location.x;
-	float n = TargetLocation.y - Location.y;
-	float p = TargetLocation.z - Location.z;
+	sVECTOR3D tmpDistance = TargetLocation - Location;
+	float tmpLength = tmpDistance.Length();
 
-	// поправки к существующим углам поворота оружия
-	float sss1 = vw_sqrtf(m * m + n * n + p * p);
-	float sss2 = vw_sqrtf(A * A + B * B + C * C);
-	if ((sss1 > 0.0f) && (sss2 > 0.0f)) {
-		float ttt = (A * m + B * n + C * p) / (sss1 * sss2);
-		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-		NeedAngle.x = asinf(ttt) * RadToDeg;
+	// horizontal plane (up/down), note, OpenGL use right-handed coordinate system
+	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
+	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
+	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
+	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
+	float A, B, C, D;
+	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointRight);
+	float ABCDNormalLength = vw_sqrtf(A * A + B * B + C * C);
+
+	if ((tmpLength > 0.0f) && (ABCDNormalLength > 0.0f)) {
+		// see "Angle between line and plane" (geometry) for more info about what we are doing here
+		float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+				       (tmpLength * ABCDNormalLength);
+		// with asinf(), arc sine could be computed in the interval [-1, +1] only
+		vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f);
+		NeedAngle.x = asinf(tmpSineOfAngle) * RadToDeg;
 	}
 
 	// find target location point projection onto horizontal plane
-	if (sss2 > 0.0f) {
-		float tmpDistanceToPlane = fabs(A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) / sss2;
+	if (ABCDNormalLength > 0.0f) {
+		float tmpDistanceToPlane = fabs(A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) /
+					   ABCDNormalLength;
 		// reuse TargetLocation for point projection onto horizontal plane
 		TargetLocation.x = TargetLocation.x - tmpDistanceToPlane * A;
 		TargetLocation.y = TargetLocation.y - tmpDistanceToPlane * B;
 		TargetLocation.z = TargetLocation.z - tmpDistanceToPlane * C;
-		m = TargetLocation.x - Location.x;
-		n = TargetLocation.y - Location.y;
-		p = TargetLocation.z - Location.z;
-		sss1 = vw_sqrtf(m * m + n * n + p * p);
+		tmpDistance = TargetLocation - Location;
+		tmpLength = tmpDistance.Length();
 	}
-	if (sss1 == 0.0f)
+	if (tmpLength == 0.0f)
 		return true;
 
-	// vertical plane (ahead/behind)
+	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
 	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
-	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
-
-	// vertical plane (left/right)
 	float A3, B3, C3, D3;
 	vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointUp);
-	float sss3 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
-	if (sss3 == 0.0f)
+	float A3B3C3D3NormalLength = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
+	if (A3B3C3D3NormalLength == 0.0f)
 		return true;
 
+	// see "Angle between line and plane" (geometry) for more info about what we are doing here
+	float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+			       (tmpLength * A3B3C3D3NormalLength);
+	// with asinf(), arc sine could be computed in the interval [-1, +1] only
+	vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f);
+
+	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
+	float A2, B2, C2, D2;
+	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
 	if ((A2 * TargetLocation.x +
 	     B2 * TargetLocation.y +
-	     C2 * TargetLocation.z + D2) <= 0.0f) {
-		float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
-		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-		NeedAngle.y = 180.0f - asinf(ttt) * RadToDeg;
-	} else {
-		float ttt = (A3 * m + B3 * n + C3 * p) / (sss1 * sss3);
-		vw_Clamp(ttt, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-		NeedAngle.y = asinf(ttt) * RadToDeg;
-		if (NeedAngle.y < 0.0f)
-			NeedAngle.y += 360.0f;
-	}
+	     C2 * TargetLocation.z + D2) <= 0.0f)
+		NeedAngle.y = 180.0f - asinf(tmpSineOfAngle) * RadToDeg;
+	else
+		NeedAngle.y = asinf(tmpSineOfAngle) * RadToDeg;
 
 	return true;
 }
