@@ -61,16 +61,16 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
 	vw_Matrix33CalcPoint(PointRight, MissileRotationMatrix);
 
-	// vertical plane (ahead/behind)
+	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
 
-	// horizontal plane (up/down)
+	// horizontal plane (up/down), note, OpenGL use right-handed coordinate system
 	float A2, B2, C2, D2;
 	vw_GetPlaneABCD(A2, B2, C2, D2, MissileLocation, MissileLocation + PointRight, MissileLocation + Orientation);
 	float A2B2C2D2NormalLength = vw_sqrtf(A2 * A2 + B2 * B2 + C2 * C2);
 
-	// vertical plane (left/right)
+	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	float A3, B3, C3, D3;
 	vw_GetPlaneABCD(A3, B3, C3, D3, MissileLocation, MissileLocation + PointUp, MissileLocation + Orientation);
 	float A3B3C3D3NormalLength = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
@@ -102,18 +102,20 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 			return false;
 
 		if ((tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-			// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+			// see "Angle between line and plane" (geometry) for more info about what we are doing here
 			float tmpSineOfAngle = (A2 * tmpDistance.x + B2 * tmpDistance.y + C2 * tmpDistance.z) /
 					       (tmpLength * A2B2C2D2NormalLength);
-			vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+			// with asinf(), arc sine could be computed in the interval [-1, +1] only
+			vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f);
 			NeedAngle.x = MissileRotation.x + asinf(tmpSineOfAngle) * RadToDeg;
 		}
 
 		if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-			// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+			// see "Angle between line and plane" (geometry) for more info about what we are doing here
 			float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
 					       (tmpLength * A3B3C3D3NormalLength);
-			vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+			// with asinf(), arc sine could be computed in the interval [-1, +1] only
+			vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f);
 			NeedAngle.y = MissileRotation.y + asinf(tmpSineOfAngle) * RadToDeg;
 		}
 
@@ -184,7 +186,7 @@ bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTO
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
 	vw_Matrix33CalcPoint(PointRight, MissileRotationMatrix);
 
-	// vertical plane (ahead/behind)
+	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
 	if ((A * sharedTarget->Location.x +
@@ -199,25 +201,27 @@ bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTO
 	sVECTOR3D tmpDistance = sharedTarget->Location + tmpTargetGeometryCenter - MissileLocation;
 	float tmpLength = tmpDistance.Length();
 
-	// horizontal plane (up/down)
+	// horizontal plane (up/down), note, OpenGL use right-handed coordinate system
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + Orientation);
 	float tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
 	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
-		// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+		// see "Angle between line and plane" (geometry) for more info about what we are doing here
 		float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
 				       (tmpLength * tmpNormalLength);
-		vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		// with asinf(), arc sine could be computed in the interval [-1, +1] only
+		vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f);
 		NeedAngle.x = MissileRotation.x + asinf(tmpSineOfAngle) * RadToDeg;
 	}
 
-	// vertical plane (left/right)
+	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointUp, MissileLocation + Orientation);
 	tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
 	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
-		// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+		// see "Angle between line and plane" (geometry) for more info about what we are doing here
 		float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
 				       (tmpLength * tmpNormalLength);
-		vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		// with asinf(), arc sine could be computed in the interval [-1, +1] only
+		vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f);
 		NeedAngle.y = MissileRotation.y + asinf(tmpSineOfAngle) * RadToDeg;
 	}
 
@@ -236,7 +240,7 @@ static bool MissileTargetStayAhead(const cObject3D &Target,
 	sVECTOR3D PointRight(1.0f, 0.0f, 0.0f);
 	vw_Matrix33CalcPoint(PointRight, MissileRotationMatrix);
 
-	// vertical plane (ahead/behind)
+	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + PointUp);
 	if ((A * Target.Location.x +
