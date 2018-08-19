@@ -122,11 +122,12 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 	sVECTOR3D tmpDistance = TargetLocation - Location;
 	float tmpLength = tmpDistance.Length();
 
-	// horizontal plane (up/down), note, OpenGL use right-handed coordinate system
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
 	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
 	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
+
+	// horizontal plane (up/down), note, OpenGL use right-handed coordinate system
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointRight);
 	float ABCDNormalLength = vw_sqrtf(A * A + B * B + C * C);
@@ -154,9 +155,10 @@ bool GetTurretOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 	if (tmpLength == 0.0f)
 		return true;
 
-	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
 	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
+
+	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	float A3, B3, C3, D3;
 	vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointUp);
 	float A3B3C3D3NormalLength = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);

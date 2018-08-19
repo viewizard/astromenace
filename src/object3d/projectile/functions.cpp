@@ -135,15 +135,16 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 	if (!LockedTarget.expired())
 		tmpDistanceFactorByObjectType = 3.0f;
 	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
-		if (NeedCheckCollision(tmpGround) &&
-		    ObjectsStatusFoe(MissileObjectStatus, tmpGround.ObjectStatus)) {
-			sVECTOR3D TargetLocation = tmpGround.GeometryCenter;
-			vw_Matrix33CalcPoint(TargetLocation, tmpGround.CurrentRotationMat);
-			TargetLocation += tmpGround.Location;
+		if (!NeedCheckCollision(tmpGround) ||
+		    !ObjectsStatusFoe(MissileObjectStatus, tmpGround.ObjectStatus))
+			return;
 
-			if (CheckObjectLocation(TargetLocation))
-				LockedTarget = GetGroundObjectPtr(tmpGround);
-		}
+		sVECTOR3D TargetLocation = tmpGround.GeometryCenter;
+		vw_Matrix33CalcPoint(TargetLocation, tmpGround.CurrentRotationMat);
+		TargetLocation += tmpGround.Location;
+
+		if (CheckObjectLocation(TargetLocation))
+			LockedTarget = GetGroundObjectPtr(tmpGround);
 	});
 
 	if (!LockedTarget.expired())
@@ -310,19 +311,18 @@ std::weak_ptr<cObject3D> GetClosestTargetToMine(eObjectStatus MineStatus, const 
 	float MinDistance2{-1.0f};
 
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
-		if (NeedCheckCollision(tmpShip) &&
-		    ObjectsStatusFoe(MineStatus, tmpShip.ObjectStatus)) {
-			float tmpDistance2 = (tmpShip.Location.x - MineLocation.x) * (tmpShip.Location.x - MineLocation.x) +
-					     (tmpShip.Location.y - MineLocation.y) * (tmpShip.Location.y - MineLocation.y) +
-					     (tmpShip.Location.z - MineLocation.z) * (tmpShip.Location.z - MineLocation.z);
+		if (!NeedCheckCollision(tmpShip) ||
+		    !ObjectsStatusFoe(MineStatus, tmpShip.ObjectStatus))
+			return;
 
-			if (MinDistance2 < 0.0f) {
-				MinDistance2 = tmpDistance2;
-				ClosestTarget = GetSpaceShipPtr(tmpShip);
-			} else if (tmpDistance2 < MinDistance2) {
-				MinDistance2 = tmpDistance2;
-				ClosestTarget = GetSpaceShipPtr(tmpShip);
-			}
+		float tmpDistance2 = (tmpShip.Location.x - MineLocation.x) * (tmpShip.Location.x - MineLocation.x) +
+				     (tmpShip.Location.y - MineLocation.y) * (tmpShip.Location.y - MineLocation.y) +
+				     (tmpShip.Location.z - MineLocation.z) * (tmpShip.Location.z - MineLocation.z);
+
+		if ((MinDistance2 < 0.0f) ||
+		    (tmpDistance2 < MinDistance2)) {
+			MinDistance2 = tmpDistance2;
+			ClosestTarget = GetSpaceShipPtr(tmpShip);
 		}
 	});
 
