@@ -44,7 +44,6 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 
 /*
  * Find missile target and target intercept course for missile.
- * See "Dihedral angle" (geometry) for more info about what we are doing here.
  */
 std::weak_ptr<cObject3D>
 FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D &MissileLocation,
@@ -68,12 +67,12 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 
 	// horizontal plane (up/down)
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(A2, B2, C2, D2, MissileLocation, MissileLocation + Orientation, MissileLocation + PointRight);
+	vw_GetPlaneABCD(A2, B2, C2, D2, MissileLocation, MissileLocation + PointRight, MissileLocation + Orientation);
 	float A2B2C2D2NormalLength = vw_sqrtf(A2 * A2 + B2 * B2 + C2 * C2);
 
 	// vertical plane (left/right)
 	float A3, B3, C3, D3;
-	vw_GetPlaneABCD(A3, B3, C3, D3, MissileLocation, MissileLocation + Orientation, MissileLocation + PointUp);
+	vw_GetPlaneABCD(A3, B3, C3, D3, MissileLocation, MissileLocation + PointUp, MissileLocation + Orientation);
 	float A3B3C3D3NormalLength = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 
 	// the idea of tmpDistanceFactorByObjectType is provide targeting priority, we increase factor
@@ -103,17 +102,19 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 			return false;
 
 		if ((tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-			float tmpDihedralAngle = (A2 * tmpDistance.x + B2 * tmpDistance.y + C2 * tmpDistance.z) /
-						 (tmpLength * A2B2C2D2NormalLength);
-			vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-			NeedAngle.x = MissileRotation.x - asinf(tmpDihedralAngle) * RadToDeg;
+			// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+			float tmpSineOfAngle = (A2 * tmpDistance.x + B2 * tmpDistance.y + C2 * tmpDistance.z) /
+					       (tmpLength * A2B2C2D2NormalLength);
+			vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+			NeedAngle.x = MissileRotation.x + asinf(tmpSineOfAngle) * RadToDeg;
 		}
 
 		if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-			float tmpDihedralAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
-						 (tmpLength * A3B3C3D3NormalLength);
-			vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-			NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
+			// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+			float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+					       (tmpLength * A3B3C3D3NormalLength);
+			vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+			NeedAngle.y = MissileRotation.y + asinf(tmpSineOfAngle) * RadToDeg;
 		}
 
 		tmpDistanceToLockedTarget2 = tmpLength2;
@@ -167,7 +168,6 @@ FindTargetAndInterceptCourse(eObjectStatus MissileObjectStatus, const sVECTOR3D 
 
 /*
  * Correct target intercept course for missile.
- * See "Dihedral angle" (geometry) for more info about what we are doing here.
  */
 bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTOR3D &MissileRotation,
 				  const float (&MissileRotationMatrix)[9],
@@ -200,23 +200,25 @@ bool CorrectTargetInterceptCourse(const sVECTOR3D &MissileLocation, const sVECTO
 	float tmpLength = tmpDistance.Length();
 
 	// horizontal plane (up/down)
-	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + Orientation, MissileLocation + PointRight);
+	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointRight, MissileLocation + Orientation);
 	float tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
 	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
-		float tmpDihedralAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-					 (tmpLength * tmpNormalLength);
-		vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-		NeedAngle.x = MissileRotation.x - asinf(tmpDihedralAngle) * RadToDeg;
+		// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+		float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+				       (tmpLength * tmpNormalLength);
+		vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		NeedAngle.x = MissileRotation.x + asinf(tmpSineOfAngle) * RadToDeg;
 	}
 
 	// vertical plane (left/right)
-	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + Orientation, MissileLocation + PointUp);
+	vw_GetPlaneABCD(A, B, C, D, MissileLocation, MissileLocation + PointUp, MissileLocation + Orientation);
 	tmpNormalLength = vw_sqrtf(A * A + B * B + C * C);
 	if ((tmpLength > 0.0f) && (tmpNormalLength > 0.0f)) {
-		float tmpDihedralAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-					 (tmpLength * tmpNormalLength);
-		vw_Clamp(tmpDihedralAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-		NeedAngle.y = MissileRotation.y - asinf(tmpDihedralAngle) * RadToDeg;
+		// See "Angle between line and plane" (geometry) for more info about what we are doing here.
+		float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+				       (tmpLength * tmpNormalLength);
+		vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+		NeedAngle.y = MissileRotation.y + asinf(tmpSineOfAngle) * RadToDeg;
 	}
 
 	return true;
