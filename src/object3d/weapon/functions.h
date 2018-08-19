@@ -34,10 +34,13 @@
 namespace viewizard {
 namespace astromenace {
 
+// Find closest target location with prediction.
+bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
+				      int TurretWeaponType, sVECTOR3D &TargetLocation);
 // Find angles to aim on target with prediction.
-bool GetTurretOnTargetOrientation(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
-				  const sVECTOR3D &TurretRotation, const float (&TurretRotationMatrix)[9],
-				  sVECTOR3D &NeedAngle, int TurretWeaponType);
+bool GetTurretOnTargetOrientation(const sVECTOR3D &TurretLocation, const sVECTOR3D &TurretRotation,
+				  const float (&TurretRotationMatrix)[9], sVECTOR3D TargetLocation,
+				  sVECTOR3D &NeedAngle);
 
 } // astromenace namespace
 } // viewizard namespace

@@ -47,9 +47,12 @@ float GameCameraGetSpeed();
 /*
  * Find closest target location with prediction.
  */
-static bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
-					     int TurretWeaponType, sVECTOR3D &TargetLocation)
+// TODO no beam weapon support?
+// TODO probably, we should use projectile speed directly instead of TurretWeaponType
+bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
+				      int TurretWeaponType, sVECTOR3D &TargetLocation)
 {
+	TargetLocation = TurretLocation;
 	float DistanceToLockedTarget2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
@@ -106,21 +109,16 @@ static bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const s
  * Find angles to aim on target with prediction.
  */
 // FIXME should work with any object rotation (x, y, z)
-// TODO no beam weapon support?
 // TODO probably, we need revise all turret-related code in order to use relative angles
 //      for turret rotation, as we have in FindTargetAndInterceptCourse() for missiles
 //      so, we should use current barrel plane instead of object plane in order to calculate angles
 //      in this case, we could stay with [-1, 1] for art sine, as we have in FindTargetAndInterceptCourse()
 // NOTE NeedAngle should count on current 3d object rotation, since this is "additional" angle for barrel
-bool GetTurretOnTargetOrientation(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
-				  const sVECTOR3D &TurretRotation, const float (&TurretRotationMatrix)[9],
-				  sVECTOR3D &NeedAngle, int TurretWeaponType)
+bool GetTurretOnTargetOrientation(const sVECTOR3D &TurretLocation, const sVECTOR3D &TurretRotation,
+				  const float (&TurretRotationMatrix)[9], sVECTOR3D TargetLocation,
+				  sVECTOR3D &NeedAngle)
 {
 	NeedAngle = TurretRotation;
-	sVECTOR3D TargetLocation{TurretLocation};
-
-	if (!FindTargetLocationWithPrediction(TurretStatus, TurretLocation, TurretWeaponType, TargetLocation))
-		return false;
 
 	sVECTOR3D tmpDistance = TargetLocation - TurretLocation;
 	float tmpLength = tmpDistance.Length();
