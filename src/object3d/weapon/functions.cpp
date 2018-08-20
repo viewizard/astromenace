@@ -45,56 +45,69 @@ float GameCameraGetSpeed();
 
 
 /*
- * Find closest target location with prediction.
+ * Calculate target location with prediction.
  */
 // FIXME this code should be revised
-// TODO no beam weapon support?
-// TODO probably, we should use projectile speed directly instead of TurretWeaponType
-bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
-				      int TurretWeaponType, sVECTOR3D &TargetLocation)
+void CalculateLocationWithPrediction(eObjectStatus WeaponStatus, const sVECTOR3D &WeaponLocation, int WeaponType,
+				     eObjectStatus TargetStatus, const sVECTOR3D &TargetOrientation, float TargetSpeed,
+				     sVECTOR3D &TargetLocation)
 {
-	TargetLocation = TurretLocation;
+	sVECTOR3D tmpRealDistance = WeaponLocation - TargetLocation;
+	float ProjectileSpeed = GetProjectileSpeed(WeaponType);
+	if (WeaponStatus == eObjectStatus::Enemy)
+		ProjectileSpeed = ProjectileSpeed / GameEnemyWeaponPenalty;
+	float CurrentDist = tmpRealDistance.Length();
+	float ObjCurrentTime = CurrentDist / ProjectileSpeed;
+
+	sVECTOR3D FutureLocation = TargetOrientation ^ (TargetSpeed * ObjCurrentTime);
+	sVECTOR3D CamPosInfluence{0.0f, 0.0f, 0.0f};
+	if (TargetStatus == eObjectStatus::Player)
+		CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * ObjCurrentTime);
+
+	sVECTOR3D PossibleRealLocation = TargetLocation + FutureLocation + CamPosInfluence;
+
+	tmpRealDistance = WeaponLocation - PossibleRealLocation;
+	float PossibleDist = tmpRealDistance.Length();
+	float PoprTime = PossibleDist / ProjectileSpeed;
+
+	FutureLocation = TargetOrientation ^ (TargetSpeed * PoprTime);
+
+	CamPosInfluence = sVECTOR3D{0.0f, 0.0f, 0.0f};
+	if (TargetStatus == eObjectStatus::Player)
+		CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
+
+	TargetLocation = TargetLocation + FutureLocation + CamPosInfluence;
+}
+
+/*
+ * Find closest target location with prediction.
+ */
+// TODO not all beam weapon supported (earth fighter could be equipped with beam weapon too)
+// TODO probably, we should use projectile speed directly instead of TurretWeaponType
+bool FindTargetLocationWithPrediction(eObjectStatus WeaponStatus, const sVECTOR3D &WeaponLocation,
+				      int WeaponType, sVECTOR3D &TargetLocation)
+{
+	TargetLocation = WeaponLocation;
 	float DistanceToLockedTarget2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		if (!NeedCheckCollision(tmpShip) ||
-		    !ObjectsStatusFoe(TurretStatus, tmpShip.ObjectStatus))
+		    !ObjectsStatusFoe(WeaponStatus, tmpShip.ObjectStatus))
 			return;
 
 		sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
 		vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat);
 		sVECTOR3D tmpRealLocation = tmpShip.Location + tmpLocation;
 
-		sVECTOR3D tmpRealDistance = TurretLocation - tmpRealLocation;
-		float ProjectileSpeed = GetProjectileSpeed(TurretWeaponType);
-		if (TurretStatus == eObjectStatus::Enemy)
-			ProjectileSpeed = ProjectileSpeed / GameEnemyWeaponPenalty;
-		float CurrentDist = tmpRealDistance.Length();
-		float ObjCurrentTime = CurrentDist / ProjectileSpeed;
+		if (WeaponType != 110) // alien beam weapon
+			CalculateLocationWithPrediction(WeaponStatus, WeaponLocation, WeaponType,
+							tmpShip.ObjectStatus, tmpShip.Orientation,
+							tmpShip.Speed, tmpRealLocation);
 
-		sVECTOR3D FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * ObjCurrentTime);
-		sVECTOR3D CamPosInfluence{0.0f, 0.0f, 0.0f};
-		if (tmpShip.ObjectStatus == eObjectStatus::Player)
-			CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * ObjCurrentTime);
-
-		sVECTOR3D PossibleRealLocation = tmpRealLocation + FutureLocation + CamPosInfluence;
-
-		tmpRealDistance = TurretLocation - PossibleRealLocation;
-		float PossibleDist = tmpRealDistance.Length();
-		float PoprTime = PossibleDist / ProjectileSpeed;
-
-		FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * PoprTime);
-
-		CamPosInfluence = sVECTOR3D{0.0f, 0.0f, 0.0f};
-		if (tmpShip.ObjectStatus == eObjectStatus::Player)
-			CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
-
-		tmpRealLocation = tmpRealLocation + FutureLocation + CamPosInfluence;
-
-		float tmpDistanceToTarget2 = (TurretLocation.x - tmpRealLocation.x) * (TurretLocation.x - tmpRealLocation.x) +
-					     (TurretLocation.y - tmpRealLocation.y) * (TurretLocation.y - tmpRealLocation.y) +
-					     (TurretLocation.z - tmpRealLocation.z) * (TurretLocation.z - tmpRealLocation.z);
+		float tmpDistanceToTarget2 = (WeaponLocation.x - tmpRealLocation.x) * (WeaponLocation.x - tmpRealLocation.x) +
+					     (WeaponLocation.y - tmpRealLocation.y) * (WeaponLocation.y - tmpRealLocation.y) +
+					     (WeaponLocation.z - tmpRealLocation.z) * (WeaponLocation.z - tmpRealLocation.z);
 
 		if (DistanceToLockedTarget2 > tmpDistanceToTarget2) {
 			TargetLocation = tmpRealLocation;
