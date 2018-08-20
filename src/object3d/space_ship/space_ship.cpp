@@ -1090,135 +1090,43 @@ bool cSpaceShip::Update(float Time)
 		}
 	}
 
-	// если не игрок игрок и есть режим действия - нужно "искать" противника
-	if ((ObjectStatus == eObjectStatus::Enemy) && NeedFire) {
-		sVECTOR3D NeedAngle = Rotation;
-
-		// weapons 'center' point
-		sVECTOR3D WeaponAvLocation(0.0f, 0.0f, 0.0f);
-		int UsedWeaponQunt = 0;
-		if (!WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						WeaponAvLocation = WeaponAvLocation + tmpWeaponSlot.Location + sharedWeapon->FireLocation + Location;
-						UsedWeaponQunt++;
-					}
-				}
-			}
-		}
-		WeaponAvLocation.x = WeaponAvLocation.x / UsedWeaponQunt;
-		WeaponAvLocation.y = WeaponAvLocation.y / UsedWeaponQunt;
-		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
-
-		int WeapNum{-1};
-		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
-		if (!WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						WeapNum = sharedWeapon->InternalType;
-						break;
-					}
-				}
-			}
-			if (WeapNum == -1)
-				WeapNum = 204; // by default - pirate weapon
-
-			int Count{0};
-			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						FirePos += tmpWeaponSlot.Location;
-						Count++;
-					}
-				}
-			}
-			FirePos = FirePos ^ (1.0f / Count);
-		}
-
-		sVECTOR3D tmpTargetLocation{};
-		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, tmpTargetLocation))
-			GetTurretOnTargetOrientation(WeaponAvLocation, Rotation, CurrentRotationMat,
-						     tmpTargetLocation, NeedAngle);
-
-		if (!WeaponSlots.empty()) {
-			for (auto &tmpWeaponSlot : WeaponSlots) {
-				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						NeedAngle.x = Rotation.x - NeedAngle.x;
-						NeedAngle.y = sharedWeapon->Rotation.y;
-						NeedAngle.z = sharedWeapon->Rotation.z;
-
-						sharedWeapon->SetRotation(sharedWeapon->Rotation ^ (-1));
-						sharedWeapon->SetRotation(NeedAngle);
-					}
+	if ((ObjectStatus == eObjectStatus::Enemy) && NeedFire && !WeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : WeaponSlots) {
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+				if (sharedWeapon->NeedRotateOnTargeting) {
+					sVECTOR3D tmpNeedAngle{};
+					sVECTOR3D tmpTargetLocation{};
+					sVECTOR3D tmpWeaponLocation = tmpWeaponSlot.Location +
+								      sharedWeapon->FireLocation +
+								      Location;
+					if (FindTargetLocationWithPrediction(ObjectStatus, tmpWeaponLocation,
+									     sharedWeapon->InternalType, tmpTargetLocation) &&
+					    GetTurretOnTargetOrientation(tmpWeaponLocation, Rotation, CurrentRotationMat,
+									 tmpTargetLocation, tmpNeedAngle))
+						sharedWeapon->SetRotation(sVECTOR3D{-sharedWeapon->Rotation.x - tmpNeedAngle.x,
+										    0.0f,
+										    0.0f});
 				}
 			}
 		}
 	}
-
-	if ((ObjectStatus == eObjectStatus::Enemy) && NeedBossFire) {
-		sVECTOR3D NeedAngle = Rotation;
-		// weapons 'center' point
-		sVECTOR3D WeaponAvLocation(0.0f, 0.0f, 0.0f);
-		int UsedWeaponQunt = 0;
-		if (!BossWeaponSlots.empty()) {
-			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						WeaponAvLocation = WeaponAvLocation + tmpBossWeaponSlot.Location + sharedWeapon->FireLocation + Location;
-						UsedWeaponQunt++;
-					}
-				}
-			}
-		}
-		WeaponAvLocation.x = WeaponAvLocation.x / UsedWeaponQunt;
-		WeaponAvLocation.y = WeaponAvLocation.y / UsedWeaponQunt;
-		WeaponAvLocation.z = WeaponAvLocation.z / UsedWeaponQunt;
-
-		int WeapNum{-1};
-		sVECTOR3D FirePos(0.0f, 0.0f, 0.0f);
-		if (!BossWeaponSlots.empty()) {
-			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						WeapNum = sharedWeapon->InternalType;
-						break;
-					}
-				}
-			}
-			if (WeapNum == -1)
-				WeapNum = 204; // by default - pirate weapon
-
-			int Count{0};
-			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						FirePos += tmpBossWeaponSlot.Location;
-						Count++;
-					}
-				}
-			}
-			FirePos = FirePos ^ (1.0f / Count);
-		}
-
-		sVECTOR3D tmpTargetLocation{};
-		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, tmpTargetLocation))
-			GetTurretOnTargetOrientation(WeaponAvLocation, Rotation, CurrentRotationMat,
-						     tmpTargetLocation, NeedAngle);
-
-		if (!BossWeaponSlots.empty()) {
-			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
-					if (sharedWeapon->NeedRotateOnTargeting) {
-						NeedAngle.x = Rotation.x - NeedAngle.x;
-						NeedAngle.y = sharedWeapon->Rotation.y;
-						NeedAngle.z = sharedWeapon->Rotation.z;
-
-						sharedWeapon->SetRotation(sharedWeapon->Rotation ^ -1);
-						sharedWeapon->SetRotation(NeedAngle);
-					}
+	// FIXME remove this code duplication (same as above)
+	if ((ObjectStatus == eObjectStatus::Enemy) && NeedBossFire && !BossWeaponSlots.empty()) {
+		for (auto &tmpWeaponSlot : BossWeaponSlots) {
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+				if (sharedWeapon->NeedRotateOnTargeting) {
+					sVECTOR3D tmpNeedAngle{};
+					sVECTOR3D tmpTargetLocation{};
+					sVECTOR3D tmpWeaponLocation = tmpWeaponSlot.Location +
+								      sharedWeapon->FireLocation +
+								      Location;
+					if (FindTargetLocationWithPrediction(ObjectStatus, tmpWeaponLocation,
+									     sharedWeapon->InternalType, tmpTargetLocation) &&
+					    GetTurretOnTargetOrientation(tmpWeaponLocation, Rotation, CurrentRotationMat,
+									 tmpTargetLocation, tmpNeedAngle))
+						sharedWeapon->SetRotation(sVECTOR3D{-sharedWeapon->Rotation.x - tmpNeedAngle.x,
+										    0.0f,
+										    0.0f});
 				}
 			}
 		}
