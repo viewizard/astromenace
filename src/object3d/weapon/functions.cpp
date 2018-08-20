@@ -47,6 +47,7 @@ float GameCameraGetSpeed();
 /*
  * Find closest target location with prediction.
  */
+// FIXME this code should be revised
 // TODO no beam weapon support?
 // TODO probably, we should use projectile speed directly instead of TurretWeaponType
 bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const sVECTOR3D &TurretLocation,
@@ -112,7 +113,7 @@ bool FindTargetLocationWithPrediction(eObjectStatus TurretStatus, const sVECTOR3
 // TODO probably, we need revise all turret-related code in order to use relative angles
 //      for turret rotation, as we have in FindTargetAndInterceptCourse() for missiles
 //      so, we should use current barrel plane instead of object plane in order to calculate angles
-//      in this case, we could stay with [-1, 1] for art sine, as we have in FindTargetAndInterceptCourse()
+//      in this case, we could stay with [-1, 1] for arc sine, as we have in FindTargetAndInterceptCourse()
 // NOTE NeedAngle should count on current 3d object rotation, since this is "additional" angle for barrel
 bool GetTurretOnTargetOrientation(const sVECTOR3D &TurretLocation, const sVECTOR3D &TurretRotation,
 				  const float (&TurretRotationMatrix)[9], sVECTOR3D TargetLocation,
