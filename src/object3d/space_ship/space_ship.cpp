@@ -1137,10 +1137,10 @@ bool cSpaceShip::Update(float Time)
 			FirePos = FirePos ^ (1.0f / Count);
 		}
 
-		sVECTOR3D TargetLocation{};
-		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, TargetLocation))
+		sVECTOR3D tmpTargetLocation{};
+		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, tmpTargetLocation))
 			GetTurretOnTargetOrientation(WeaponAvLocation, Rotation, CurrentRotationMat,
-						     TargetLocation, NeedAngle);
+						     tmpTargetLocation, NeedAngle);
 
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
@@ -1203,10 +1203,10 @@ bool cSpaceShip::Update(float Time)
 			FirePos = FirePos ^ (1.0f / Count);
 		}
 
-		sVECTOR3D TargetLocation{};
-		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, TargetLocation))
+		sVECTOR3D tmpTargetLocation{};
+		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, tmpTargetLocation))
 			GetTurretOnTargetOrientation(WeaponAvLocation, Rotation, CurrentRotationMat,
-						     TargetLocation, NeedAngle);
+						     tmpTargetLocation, NeedAngle);
 
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
