@@ -31,6 +31,7 @@
 
 #include "space_ship.h"
 #include "functions.h"
+#include "../weapon/functions.h"
 #include "../projectile/projectile.h"
 #include "../../game.h"
 #include "../../config/config.h"
@@ -1136,13 +1137,16 @@ bool cSpaceShip::Update(float Time)
 			FirePos = FirePos ^ (1.0f / Count);
 		}
 
-		GetEnemyShipOnTargetOrientation(ObjectStatus, WeaponAvLocation, Rotation,
-						CurrentRotationMat, NeedAngle, WeapNum);
+		sVECTOR3D TargetLocation{};
+		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, TargetLocation))
+			GetTurretOnTargetOrientation(WeaponAvLocation, Rotation, CurrentRotationMat,
+						     TargetLocation, NeedAngle);
 
 		if (!WeaponSlots.empty()) {
 			for (auto &tmpWeaponSlot : WeaponSlots) {
 				if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
+						NeedAngle.x = Rotation.x - NeedAngle.x;
 						NeedAngle.y = sharedWeapon->Rotation.y;
 						NeedAngle.z = sharedWeapon->Rotation.z;
 
@@ -1199,13 +1203,16 @@ bool cSpaceShip::Update(float Time)
 			FirePos = FirePos ^ (1.0f / Count);
 		}
 
-		GetEnemyShipOnTargetOrientation(ObjectStatus, WeaponAvLocation, Rotation,
-						CurrentRotationMat, NeedAngle, WeapNum);
+		sVECTOR3D TargetLocation{};
+		if (FindTargetLocationWithPrediction(ObjectStatus, WeaponAvLocation, WeapNum, TargetLocation))
+			GetTurretOnTargetOrientation(WeaponAvLocation, Rotation, CurrentRotationMat,
+						     TargetLocation, NeedAngle);
 
 		if (!BossWeaponSlots.empty()) {
 			for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
 				if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
 					if (sharedWeapon->NeedRotateOnTargeting) {
+						NeedAngle.x = Rotation.x - NeedAngle.x;
 						NeedAngle.y = sharedWeapon->Rotation.y;
 						NeedAngle.z = sharedWeapon->Rotation.z;
 
