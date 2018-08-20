@@ -42,10 +42,6 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Loc
 				float MinDistance, const float (&RotationMatrix)[9],
 				sVECTOR3D &NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
 				bool NeedByWeaponOrientation, const sVECTOR3D &WeponLocation, int WeaponType);
-// Получение угла поворота оружия на врага для противника
-void GetEnemyShipOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-				     const sVECTOR3D &CurrentObjectRotation, const float (&RotationMatrix)[9],
-				     sVECTOR3D &NeedAngle, int WeaponType);
 
 } // astromenace namespace
 } // viewizard namespace
