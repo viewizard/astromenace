@@ -48,9 +48,9 @@ float GameCameraGetSpeed();
  * Calculate target location with prediction.
  */
 // FIXME this code should be revised
-void CalculateLocationWithPrediction(eObjectStatus WeaponStatus, const sVECTOR3D &WeaponLocation, int WeaponType,
-				     eObjectStatus TargetStatus, const sVECTOR3D &TargetOrientation, float TargetSpeed,
-				     sVECTOR3D &TargetLocation)
+static void CalculateLocationWithPrediction(eObjectStatus WeaponStatus, const sVECTOR3D &WeaponLocation, int WeaponType,
+					    eObjectStatus TargetStatus, const sVECTOR3D &TargetOrientation, float TargetSpeed,
+					    sVECTOR3D &TargetLocation)
 {
 	sVECTOR3D tmpRealDistance = WeaponLocation - TargetLocation;
 	float ProjectileSpeed = GetProjectileSpeed(WeaponType);
@@ -158,7 +158,7 @@ bool GetTurretOnTargetOrientation(const sVECTOR3D &TurretLocation, const sVECTOR
 
 	// find target location point projection onto horizontal plane
 	if (ABCDNormalLength > 0.0f) {
-		float tmpDistanceToPlane = fabs(A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) /
+		float tmpDistanceToPlane = (A * TargetLocation.x + B * TargetLocation.y + C * TargetLocation.z + D) /
 					   ABCDNormalLength;
 		// reuse TargetLocation for point projection onto horizontal plane
 		TargetLocation.x = TargetLocation.x - tmpDistanceToPlane * A;
