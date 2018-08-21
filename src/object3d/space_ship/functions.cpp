@@ -86,7 +86,6 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 
 	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
 	sVECTOR3D TargetLocation{Location};
-	sVECTOR3D TargetAngle(0.0f, 0.0f, 0.0f);
 	float Tdist{1000.0f * 1000.0f};
 
 	// тип, кто заблокировал... чтобы не сбить с активных
@@ -200,7 +199,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
 						if ((Tdist > m * m + n * n * 5 + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
-							TargetAngle = TargetAngleTMP;
+							NeedAngle = TargetAngleTMP;
 							Tdist = m * m + n * n * 5 + p * p;
 							TargetLocked = true;
 							TType = 1;
@@ -317,13 +316,13 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if ((TType < 2) && TargetLocked) {
 							// только если в 5 раза ближе
 							if ((Tdist > m * m + n * n * 5 + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
-								TargetAngle = TargetAngleTMP;
+								NeedAngle = TargetAngleTMP;
 								Tdist = m * m + n * n + p * p;
 								TargetLocked = true;
 								TType = 2;
 							}
 						} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
-							TargetAngle = TargetAngleTMP;
+							NeedAngle = TargetAngleTMP;
 							Tdist = m * m + n * n + p * p;
 							TargetLocked = true;
 							TType = 2;
@@ -438,13 +437,13 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						if ((TType < 3) && TargetLocked) {
 							// только если в 10 раза ближе
 							if ((Tdist / 10.0f > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
-								TargetAngle = TargetAngleTMP;
+								NeedAngle = TargetAngleTMP;
 								Tdist = m * m + n * n + p * p;
 								TargetLocked = true;
 								TType = 3;
 							}
 						} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
-							TargetAngle = TargetAngleTMP;
+							NeedAngle = TargetAngleTMP;
 							Tdist = m * m + n * n + p * p;
 							TargetLocked = true;
 							TType = 3;
@@ -454,10 +453,6 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 			}
 		}
 	});
-
-	// находим направление и углы нацеливания на цель, если нужно
-	if (TargetLocked)
-		NeedAngle = TargetAngle;
 }
 
 } // astromenace namespace
