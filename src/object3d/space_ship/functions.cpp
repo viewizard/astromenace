@@ -45,11 +45,8 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 
 } // unnamed namespace
 
-
 // FIXME should be fixed, don't allow global scope interaction for local variables
-// направление движения камеры
 extern sVECTOR3D GameCameraMovement;
-// скорость движения камеры
 float GameCameraGetSpeed();
 
 
@@ -84,14 +81,14 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 	float A2, B2, C2, D2;
 	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
 
-	// для выбора - точка, куда целимся + расстояние до нее (квадрат расстояния)
-	sVECTOR3D TargetLocation{Location};
-	float Tdist{1000.0f * 1000.0f};
-
-	// тип, кто заблокировал... чтобы не сбить с активных
-	int TType{0};
-
+	float tmpDistanceToLockedTarget2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
+
+	// the idea of tmpDistanceFactorByObjectType is provide targeting priority, we increase factor
+	// for different types of objects, so, we need next type objects position closer than previous
+	// in order to change target, but, reset factor to 1.0f in case we lock and check same type
+	// objects (or don't have any target yet)
+	float tmpDistanceFactorByObjectType{1.0f};
 
 	// нам нужна только половина ширины
 	float Width2 = Width / 2.0f;
@@ -162,27 +159,25 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						// идущим по нашему курсу...
 
 						sVECTOR3D TargetAngleTMP;
-						TargetLocation = RealLocation;
+						sVECTOR3D TargetLocation = RealLocation;
 
 						// находим угол между плоскостью и прямой
 						float A3, B3, C3, D3;
 						vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
 
-						float m = TargetLocation.x - Location.x;
-						float n = TargetLocation.y - Location.y;
-						float p = TargetLocation.z - Location.z;
-						if (NeedByWeaponOrientation) {
-							m = TargetLocation.x - WeponLocation.x;
-							n = TargetLocation.y - WeponLocation.y;
-							p = TargetLocation.z - WeponLocation.z;
-						}
+						sVECTOR3D tmpDistance = TargetLocation - Location;
+						if (NeedByWeaponOrientation)
+							tmpDistance = TargetLocation - WeponLocation;
+						float tmpLength2 = tmpDistance.x * tmpDistance.x +
+								   tmpDistance.y * tmpDistance.y +
+								   tmpDistance.z * tmpDistance.z;
 
 						// поправки к существующим углам поворота оружия
-						float sss1 = vw_sqrtf(m * m + n * n + p * p);
+						float sss1 = vw_sqrtf(tmpLength2);
 						float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 						TargetAngleTMP.x = CurrentObjectRotation.x;
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
+							float sss3 = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) / (sss1 * sss2);
 							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
@@ -191,18 +186,19 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						TargetAngleTMP.y = CurrentObjectRotation.y;
 						if (NeedCenterOrientation &&
 						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
-							float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
+							float sss5 = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) / (sss1 * sss4);
 							vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
-						if ((Tdist > m * m + n * n * 5 + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
+						if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
+						    (fabsf(TargetAngleTMP.x) < 45.0f)) {
 							NeedAngle = TargetAngleTMP;
-							Tdist = m * m + n * n * 5 + p * p;
+							tmpDistanceToLockedTarget2 = tmpLength2;
 							TargetLocked = true;
-							TType = 1;
+							tmpDistanceFactorByObjectType = 1.0f;
 						}
 					}
 				}
@@ -214,6 +210,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 	// не стрелять по "мирным" постойкам
 	// !!! ВАЖНО
 	// у всех наземных объектов ноль на уровне пола...
+	if (TargetLocked)
+		tmpDistanceFactorByObjectType = 5.0f;
 	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
@@ -277,27 +275,25 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						// выбираем объект, так, чтобы он был наиболее длижайшим,
 						// идущим по нашему курсу...
 						sVECTOR3D TargetAngleTMP;
-						TargetLocation = RealLocation;
+						sVECTOR3D TargetLocation = RealLocation;
 
 						// находим угол между плоскостью и прямой
 						float A3, B3, C3, D3;
 						vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
 
-						float m = TargetLocation.x - Location.x;
-						float n = TargetLocation.y - Location.y;
-						float p = TargetLocation.z - Location.z;
-						if (NeedByWeaponOrientation) {
-							m = TargetLocation.x - WeponLocation.x;
-							n = TargetLocation.y - WeponLocation.y;
-							p = TargetLocation.z - WeponLocation.z;
-						}
+						sVECTOR3D tmpDistance = TargetLocation - Location;
+						if (NeedByWeaponOrientation)
+							tmpDistance = TargetLocation - WeponLocation;
+						float tmpLength2 = tmpDistance.x * tmpDistance.x +
+								   tmpDistance.y * tmpDistance.y +
+								   tmpDistance.z * tmpDistance.z;
 
 						// поправки к существующим углам поворота оружия
-						float sss1 = vw_sqrtf(m * m + n * n + p * p);
+						float sss1 = vw_sqrtf(tmpLength2);
 						float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 						TargetAngleTMP.x = CurrentObjectRotation.x;
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
+							float sss3 = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) / (sss1 * sss2);
 							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
@@ -306,26 +302,19 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						TargetAngleTMP.y = CurrentObjectRotation.y;
 						if (NeedCenterOrientation)
 							if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
-								float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
+								float sss5 = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) / (sss1 * sss4);
 								vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 							}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
-						if ((TType < 2) && TargetLocked) {
-							// только если в 5 раза ближе
-							if ((Tdist > m * m + n * n * 5 + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
-								NeedAngle = TargetAngleTMP;
-								Tdist = m * m + n * n + p * p;
-								TargetLocked = true;
-								TType = 2;
-							}
-						} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
+						if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
+						    (fabsf(TargetAngleTMP.x) < 45.0f)) {
 							NeedAngle = TargetAngleTMP;
-							Tdist = m * m + n * n + p * p;
+							tmpDistanceToLockedTarget2 = tmpLength2;
 							TargetLocked = true;
-							TType = 2;
+							tmpDistanceFactorByObjectType = 1.0f;
 						}
 					}
 				}
@@ -334,6 +323,8 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 	});
 
 	// проверка по космическим объектам
+	if (TargetLocked)
+		tmpDistanceFactorByObjectType = 10.0f;
 	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
 		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpSpace) &&
@@ -398,27 +389,25 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						// выбираем объект, так, чтобы он был наиболее длижайшим,
 						// идущим по нашему курсу...
 						sVECTOR3D TargetAngleTMP;
-						TargetLocation = RealLocation;
+						sVECTOR3D TargetLocation = RealLocation;
 
 						// находим угол между плоскостью и прямой
 						float A3, B3, C3, D3;
 						vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
 
-						float m = TargetLocation.x - Location.x;
-						float n = TargetLocation.y - Location.y;
-						float p = TargetLocation.z - Location.z;
-						if (NeedByWeaponOrientation) {
-							m = TargetLocation.x - WeponLocation.x;
-							n = TargetLocation.y - WeponLocation.y;
-							p = TargetLocation.z - WeponLocation.z;
-						}
+						sVECTOR3D tmpDistance = TargetLocation - Location;
+						if (NeedByWeaponOrientation)
+							tmpDistance = TargetLocation - WeponLocation;
+						float tmpLength2 = tmpDistance.x * tmpDistance.x +
+								   tmpDistance.y * tmpDistance.y +
+								   tmpDistance.z * tmpDistance.z;
 
 						// поправки к существующим углам поворота оружия
-						float sss1 = vw_sqrtf(m * m + n * n + p * p);
+						float sss1 = vw_sqrtf(tmpLength2);
 						float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 						TargetAngleTMP.x = CurrentObjectRotation.x;
 						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-							float sss3 = (A3 * m + B3 * n + C3 * p) / (sss1 * sss2);
+							float sss3 = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) / (sss1 * sss2);
 							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
 						}
@@ -427,26 +416,19 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						TargetAngleTMP.y = CurrentObjectRotation.y;
 						if (NeedCenterOrientation &&
 						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
-							float sss5 = (A * m + B * n + C * p) / (sss1 * sss4);
+							float sss5 = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) / (sss1 * sss4);
 							vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
 							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
-						if ((TType < 3) && TargetLocked) {
-							// только если в 10 раза ближе
-							if ((Tdist / 10.0f > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
-								NeedAngle = TargetAngleTMP;
-								Tdist = m * m + n * n + p * p;
-								TargetLocked = true;
-								TType = 3;
-							}
-						} else if ((Tdist > m * m + n * n + p * p) && (fabsf(TargetAngleTMP.x) < 45.0f)) {
+						if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
+						    (fabsf(TargetAngleTMP.x) < 45.0f)) {
 							NeedAngle = TargetAngleTMP;
-							Tdist = m * m + n * n + p * p;
+							tmpDistanceToLockedTarget2 = tmpLength2;
 							TargetLocked = true;
-							TType = 3;
+							tmpDistanceFactorByObjectType = 1.0f;
 						}
 					}
 				}
