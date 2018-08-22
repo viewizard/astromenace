@@ -262,6 +262,8 @@ bool CheckMissileTarget(std::weak_ptr<cObject3D> &Target, const sVECTOR3D &Missi
 	if (!sharedTarget)
 		return false;
 
+	// TODO probably, we could use ObjectType here in order to speed up
+
 	bool ObjectFound{false};
 	ForEachProjectile([&sharedTarget, &ObjectFound] (const cProjectile &tmpProjectile, eProjectileCycle &Command) {
 		if (&tmpProjectile == sharedTarget.get()) {
