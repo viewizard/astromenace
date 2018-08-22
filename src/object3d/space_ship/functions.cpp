@@ -65,7 +65,9 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 				const sVECTOR3D &WeponLocation,
 				int WeaponType) // тип орудия орудия
 {
-	// получаем точки для создания плоскости
+	float tmpDistanceToLockedTarget2{1000.0f * 1000.0f};
+	bool TargetLocked{false};
+
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
 	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
 	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
@@ -73,16 +75,19 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
 	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
 
-	// находим плоскость, вертикальную
+	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	float A, B, C, D;
 	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointUp);
+	float A2B2C2D2NormalLength = vw_sqrtf(A * A + B * B + C * C);
 
-	// получаем вертикальную плоскость 2 (отсечения перед-зад)
+	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
 	float A2, B2, C2, D2;
 	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
 
-	float tmpDistanceToLockedTarget2{1000.0f * 1000.0f};
-	bool TargetLocked{false};
+	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
+	float A3, B3, C3, D3;
+	vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
+	float A3B3C3D3NormalLength = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 
 	// the idea of tmpDistanceFactorByObjectType is provide targeting priority, we increase factor
 	// for different types of objects, so, we need next type objects position closer than previous
@@ -161,34 +166,31 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						sVECTOR3D TargetAngleTMP;
 						sVECTOR3D TargetLocation = RealLocation;
 
-						// находим угол между плоскостью и прямой
-						float A3, B3, C3, D3;
-						vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
-
 						sVECTOR3D tmpDistance = TargetLocation - Location;
 						if (NeedByWeaponOrientation)
 							tmpDistance = TargetLocation - WeponLocation;
 						float tmpLength2 = tmpDistance.x * tmpDistance.x +
 								   tmpDistance.y * tmpDistance.y +
 								   tmpDistance.z * tmpDistance.z;
+						float tmpLength = vw_sqrtf(tmpLength2);
 
-						// поправки к существующим углам поворота оружия
-						float sss1 = vw_sqrtf(tmpLength2);
-						float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 						TargetAngleTMP.x = CurrentObjectRotation.x;
-						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-							float sss3 = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) / (sss1 * sss2);
-							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
+						if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
+							// see "Angle between line and plane" (geometry) for more info about what we are doing here
+							float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+									       (tmpLength * A3B3C3D3NormalLength);
+							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
 						}
 
-						float sss4 = vw_sqrtf(A * A + B * B + C * C);
 						TargetAngleTMP.y = CurrentObjectRotation.y;
 						if (NeedCenterOrientation &&
-						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
-							float sss5 = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) / (sss1 * sss4);
-							vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
+						    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
+							// see "Angle between line and plane" (geometry) for more info about what we are doing here
+							float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+									       (tmpLength * A2B2C2D2NormalLength);
+							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
@@ -229,7 +231,7 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 			    (WeaponType != 16) && (WeaponType != 17) && (WeaponType != 18) && (WeaponType != 19)) {
 
 				// находим, за какое время снаряд долетит до объекта сейчас
-				sVECTOR3D TTT = WeponLocation-RealLocation;
+				sVECTOR3D TTT = WeponLocation - RealLocation;
 				float ProjectileSpeed = GetProjectileSpeed(WeaponType);
 				float CurrentDist = TTT.Length();
 				float ObjCurrentTime = CurrentDist / ProjectileSpeed;
@@ -277,35 +279,32 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						sVECTOR3D TargetAngleTMP;
 						sVECTOR3D TargetLocation = RealLocation;
 
-						// находим угол между плоскостью и прямой
-						float A3, B3, C3, D3;
-						vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
-
 						sVECTOR3D tmpDistance = TargetLocation - Location;
 						if (NeedByWeaponOrientation)
 							tmpDistance = TargetLocation - WeponLocation;
 						float tmpLength2 = tmpDistance.x * tmpDistance.x +
 								   tmpDistance.y * tmpDistance.y +
 								   tmpDistance.z * tmpDistance.z;
+						float tmpLength = vw_sqrtf(tmpLength2);
 
-						// поправки к существующим углам поворота оружия
-						float sss1 = vw_sqrtf(tmpLength2);
-						float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 						TargetAngleTMP.x = CurrentObjectRotation.x;
-						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-							float sss3 = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) / (sss1 * sss2);
-							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
+						if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
+							// see "Angle between line and plane" (geometry) for more info about what we are doing here
+							float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+									       (tmpLength * A3B3C3D3NormalLength);
+							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
 						}
 
-						float sss4 = vw_sqrtf(A * A + B * B + C * C);
 						TargetAngleTMP.y = CurrentObjectRotation.y;
-						if (NeedCenterOrientation)
-							if ((sss1 != 0.0f) && (sss4 != 0.0f)) {
-								float sss5 = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) / (sss1 * sss4);
-								vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-								TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
-							}
+						if (NeedCenterOrientation &&
+						    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
+							// see "Angle between line and plane" (geometry) for more info about what we are doing here
+							float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+									       (tmpLength * A2B2C2D2NormalLength);
+							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
+						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
 
@@ -391,34 +390,31 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 						sVECTOR3D TargetAngleTMP;
 						sVECTOR3D TargetLocation = RealLocation;
 
-						// находим угол между плоскостью и прямой
-						float A3, B3, C3, D3;
-						vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
-
 						sVECTOR3D tmpDistance = TargetLocation - Location;
 						if (NeedByWeaponOrientation)
 							tmpDistance = TargetLocation - WeponLocation;
 						float tmpLength2 = tmpDistance.x * tmpDistance.x +
 								   tmpDistance.y * tmpDistance.y +
 								   tmpDistance.z * tmpDistance.z;
+						float tmpLength = vw_sqrtf(tmpLength2);
 
-						// поправки к существующим углам поворота оружия
-						float sss1 = vw_sqrtf(tmpLength2);
-						float sss2 = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 						TargetAngleTMP.x = CurrentObjectRotation.x;
-						if ((sss1 != 0.0f) && (sss2 != 0.0f)) {
-							float sss3 = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) / (sss1 * sss2);
-							vw_Clamp(sss3, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(sss3) * RadToDeg;
+						if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
+							// see "Angle between line and plane" (geometry) for more info about what we are doing here
+							float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+									       (tmpLength * A3B3C3D3NormalLength);
+							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
 						}
 
-						float sss4 = vw_sqrtf(A * A + B * B + C * C);
 						TargetAngleTMP.y = CurrentObjectRotation.y;
 						if (NeedCenterOrientation &&
-						    (sss1 != 0.0f) && (sss4 != 0.0f)) {
-							float sss5 = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) / (sss1 * sss4);
-							vw_Clamp(sss5, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(sss5) * RadToDeg;
+						    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
+							// see "Angle between line and plane" (geometry) for more info about what we are doing here
+							float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+									       (tmpLength * A2B2C2D2NormalLength);
+							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
 						}
 
 						TargetAngleTMP.z = CurrentObjectRotation.z;
