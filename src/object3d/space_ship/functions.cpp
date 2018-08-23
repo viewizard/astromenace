@@ -59,7 +59,6 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 				float MinDistance, // минимальное расстояние, с которого начинаем прицеливание
 				const float (&RotationMatrix)[9], // матрица вращения объекта
 				sVECTOR3D &NeedAngle,// нужные углы, чтобы получить нужное направление
-				float Width, // ширина объекта
 				bool NeedCenterOrientation, // нужен доворот на центр
 				bool NeedByWeaponOrientation, // нужно делать доворот с учетом положения орудия
 				const sVECTOR3D &WeponLocation,

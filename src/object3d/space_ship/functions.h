@@ -40,7 +40,7 @@ namespace astromenace {
 void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 				const sVECTOR3D &CurrentObjectRotation,
 				float MinDistance, const float (&RotationMatrix)[9],
-				sVECTOR3D &NeedAngle, float ObjectWidth, bool NeedCenterOrientation,
+				sVECTOR3D &NeedAngle, bool NeedCenterOrientation,
 				bool NeedByWeaponOrientation, const sVECTOR3D &WeponLocation, int WeaponType);
 
 } // astromenace namespace
