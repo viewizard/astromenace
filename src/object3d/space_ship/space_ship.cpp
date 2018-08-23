@@ -1258,7 +1258,7 @@ bool cSpaceShip::Update(float Time)
 						case 4: // for each weapon by height, with correction to target center
 							GetShipOnTargetOrientation(ObjectStatus, Location + WeaponSlots[i].Location + sharedWeapon->FireLocation,
 										   sVECTOR3D{sharedWeapon->Rotation.x, WeaponSlots[i].YAngle, sharedWeapon->Rotation.z},
-										   Length, sharedWeapon->CurrentRotationMat, NeedAngle, false, true,
+										   Length, sharedWeapon->CurrentRotationMat, NeedAngle, true, true,
 										   Location + WeaponSlots[i].Location + sharedWeapon->FireLocation, sharedWeapon->InternalType);
 							break;
 						}
