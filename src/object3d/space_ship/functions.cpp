@@ -95,9 +95,6 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 	// objects (or don't have any target yet)
 	float tmpDistanceFactorByObjectType{1.0f};
 
-	// нам нужна только половина ширины
-	float Width2 = Width / 2.0f;
-
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		// проверка, чтобы не считать свой корабль
 		if ((NeedCheckCollision(tmpShip)) &&
@@ -127,82 +124,55 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 				RealLocation = RealLocation + FutureLocation;
 			}
 
-			// проверяем, если с одной стороны все точки - значит мимо, если нет - попали :)
-			// + учитываем тут Width
-			float tmp1 = A * (RealLocation.x + tmpShip.OBB.Box[0].x) + B * (RealLocation.y + tmpShip.OBB.Box[0].y) + C * (RealLocation.z + tmpShip.OBB.Box[0].z) + D;
-			float tmp2 = A * (RealLocation.x + tmpShip.OBB.Box[1].x) + B * (RealLocation.y + tmpShip.OBB.Box[1].y) + C * (RealLocation.z + tmpShip.OBB.Box[1].z) + D;
-			float tmp3 = A * (RealLocation.x + tmpShip.OBB.Box[2].x) + B * (RealLocation.y + tmpShip.OBB.Box[2].y) + C * (RealLocation.z + tmpShip.OBB.Box[2].z) + D;
-			float tmp4 = A * (RealLocation.x + tmpShip.OBB.Box[3].x) + B * (RealLocation.y + tmpShip.OBB.Box[3].y) + C * (RealLocation.z + tmpShip.OBB.Box[3].z) + D;
-			float tmp5 = A * (RealLocation.x + tmpShip.OBB.Box[4].x) + B * (RealLocation.y + tmpShip.OBB.Box[4].y) + C * (RealLocation.z + tmpShip.OBB.Box[4].z) + D;
-			float tmp6 = A * (RealLocation.x + tmpShip.OBB.Box[5].x) + B * (RealLocation.y + tmpShip.OBB.Box[5].y) + C * (RealLocation.z + tmpShip.OBB.Box[5].z) + D;
-			float tmp7 = A * (RealLocation.x + tmpShip.OBB.Box[6].x) + B * (RealLocation.y + tmpShip.OBB.Box[6].y) + C * (RealLocation.z + tmpShip.OBB.Box[6].z) + D;
-			float tmp8 = A * (RealLocation.x + tmpShip.OBB.Box[7].x) + B * (RealLocation.y + tmpShip.OBB.Box[7].y) + C * (RealLocation.z + tmpShip.OBB.Box[7].z) + D;
+			// ограничение на зону прицеливания, целиться только если цель находится напротив оружия
+			if ((fabs(A * RealLocation.x +
+				  B * RealLocation.y +
+				  C * RealLocation.z + D) <= tmpShip.Radius) &&
+			    // проверяем, спереди или сзади стоит противник
+			    ((A2 * RealLocation.x +
+			      B2 * RealLocation.y +
+			      C2 * RealLocation.z + D2) > MinDistance)) {
 
+				// выбираем объект, так, чтобы он был наиболее длижайшим,
+				// идущим по нашему курсу...
+				sVECTOR3D TargetAngleTMP;
+				sVECTOR3D TargetLocation = RealLocation;
 
-			if (!(((tmp1 > Width2) && (tmp2 > Width2) && (tmp3 > Width2) && (tmp4 > Width2) &&
-			       (tmp5 > Width2) && (tmp6 > Width2) && (tmp7 > Width2) && (tmp8 > Width2)) ||
-			      ((tmp1 < -Width2) && (tmp2 < -Width2) && (tmp3 < -Width2) && (tmp4 < -Width2) &&
-			       (tmp5 < -Width2) && (tmp6 < -Width2) && (tmp7 < -Width2) && (tmp8 < -Width2)))) {
-				// проверяем, спереди или сзади стоит противник
-				tmp1 = A2 * (RealLocation.x + tmpShip.OBB.Box[0].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[0].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[0].z) + D2;
-				tmp2 = A2 * (RealLocation.x + tmpShip.OBB.Box[1].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[1].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[1].z) + D2;
-				tmp3 = A2 * (RealLocation.x + tmpShip.OBB.Box[2].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[2].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[2].z) + D2;
-				tmp4 = A2 * (RealLocation.x + tmpShip.OBB.Box[3].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[3].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[3].z) + D2;
-				tmp5 = A2 * (RealLocation.x + tmpShip.OBB.Box[4].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[4].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[4].z) + D2;
-				tmp6 = A2 * (RealLocation.x + tmpShip.OBB.Box[5].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[5].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[5].z) + D2;
-				tmp7 = A2 * (RealLocation.x + tmpShip.OBB.Box[6].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[6].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[6].z) + D2;
-				tmp8 = A2 * (RealLocation.x + tmpShip.OBB.Box[7].x) + B2 * (RealLocation.y + tmpShip.OBB.Box[7].y) + C2 * (RealLocation.z + tmpShip.OBB.Box[7].z) + D2;
+				sVECTOR3D tmpDistance = TargetLocation - Location;
+				if (NeedByWeaponOrientation)
+					tmpDistance = TargetLocation - WeponLocation;
+				float tmpLength2 = tmpDistance.x * tmpDistance.x +
+						   tmpDistance.y * tmpDistance.y +
+						   tmpDistance.z * tmpDistance.z;
+				float tmpLength = vw_sqrtf(tmpLength2);
 
-				if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
-				    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
+				TargetAngleTMP.x = CurrentObjectRotation.x;
+				if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
+					// see "Angle between line and plane" (geometry) for more info about what we are doing here
+					float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+							       (tmpLength * A3B3C3D3NormalLength);
+					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
+				}
 
-					float TargetDist2TMP = A2 * RealLocation.x + B2 * RealLocation.y + C2 * RealLocation.z + D2;
+				TargetAngleTMP.y = CurrentObjectRotation.y;
+				if (NeedCenterOrientation &&
+				    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
+					// see "Angle between line and plane" (geometry) for more info about what we are doing here
+					float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+							       (tmpLength * A2B2C2D2NormalLength);
+					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
+				}
 
-					// проверяем, чтобы объект находился не ближе чем MinDistance
-					if (MinDistance < TargetDist2TMP) {
-						// выбираем объект, так, чтобы он был наиболее длижайшим,
-						// идущим по нашему курсу...
+				TargetAngleTMP.z = CurrentObjectRotation.z;
 
-						sVECTOR3D TargetAngleTMP;
-						sVECTOR3D TargetLocation = RealLocation;
-
-						sVECTOR3D tmpDistance = TargetLocation - Location;
-						if (NeedByWeaponOrientation)
-							tmpDistance = TargetLocation - WeponLocation;
-						float tmpLength2 = tmpDistance.x * tmpDistance.x +
-								   tmpDistance.y * tmpDistance.y +
-								   tmpDistance.z * tmpDistance.z;
-						float tmpLength = vw_sqrtf(tmpLength2);
-
-						TargetAngleTMP.x = CurrentObjectRotation.x;
-						if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-							// see "Angle between line and plane" (geometry) for more info about what we are doing here
-							float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
-									       (tmpLength * A3B3C3D3NormalLength);
-							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
-						}
-
-						TargetAngleTMP.y = CurrentObjectRotation.y;
-						if (NeedCenterOrientation &&
-						    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-							// see "Angle between line and plane" (geometry) for more info about what we are doing here
-							float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-									       (tmpLength * A2B2C2D2NormalLength);
-							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
-						}
-
-						TargetAngleTMP.z = CurrentObjectRotation.z;
-
-						if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
-						    (fabsf(TargetAngleTMP.x) < 45.0f)) {
-							NeedAngle = TargetAngleTMP;
-							tmpDistanceToLockedTarget2 = tmpLength2;
-							TargetLocked = true;
-							tmpDistanceFactorByObjectType = 1.0f;
-						}
-					}
+				if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
+				    (fabsf(TargetAngleTMP.x) < 45.0f)) {
+					NeedAngle = TargetAngleTMP;
+					tmpDistanceToLockedTarget2 = tmpLength2;
+					TargetLocked = true;
+					tmpDistanceFactorByObjectType = 1.0f;
 				}
 			}
 		}
@@ -243,79 +213,55 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 				RealLocation = RealLocation + FutureLocation;
 			}
 
-			// проверяем, если с одной стороны все точки - значит мимо, если нет - попали :)
-			float tmp1 = A * (tmpGround.Location.x + tmpGround.OBB.Box[0].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[0].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[0].z) + D;
-			float tmp2 = A * (tmpGround.Location.x + tmpGround.OBB.Box[1].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[1].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[1].z) + D;
-			float tmp3 = A * (tmpGround.Location.x + tmpGround.OBB.Box[2].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[2].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[2].z) + D;
-			float tmp4 = A * (tmpGround.Location.x + tmpGround.OBB.Box[3].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[3].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[3].z) + D;
-			float tmp5 = A * (tmpGround.Location.x + tmpGround.OBB.Box[4].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[4].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[4].z) + D;
-			float tmp6 = A * (tmpGround.Location.x + tmpGround.OBB.Box[5].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[5].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[5].z) + D;
-			float tmp7 = A * (tmpGround.Location.x + tmpGround.OBB.Box[6].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[6].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[6].z) + D;
-			float tmp8 = A * (tmpGround.Location.x + tmpGround.OBB.Box[7].x) + B * (tmpGround.Location.y + tmpGround.OBB.Box[7].y) + C * (tmpGround.Location.z + tmpGround.OBB.Box[7].z) + D;
+			// ограничение на зону прицеливания, целиться только если цель находится напротив оружия
+			if ((fabs(A * RealLocation.x +
+				  B * RealLocation.y +
+				  C * RealLocation.z + D) <= tmpGround.Radius) &&
+			    // проверяем, спереди или сзади стоит противник
+			    ((A2 * RealLocation.x +
+			      B2 * RealLocation.y +
+			      C2 * RealLocation.z + D2) > MinDistance)) {
 
-			if (!(((tmp1 > Width2) && (tmp2 > Width2) && (tmp3 > Width2) && (tmp4 > Width2) &&
-			       (tmp5 > Width2) && (tmp6 > Width2) && (tmp7 > Width2) && (tmp8 > Width2)) ||
-			      ((tmp1 < -Width2) && (tmp2 < -Width2) && (tmp3 < -Width2) && (tmp4 < -Width2) &&
-			       (tmp5 < -Width2) && (tmp6 < -Width2) && (tmp7 < -Width2) && (tmp8 < -Width2)))) {
-				// проверяем, спереди или сзади стоит противник
-				tmp1 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[0].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[0].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[0].z) + D2;
-				tmp2 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[1].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[1].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[1].z) + D2;
-				tmp3 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[2].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[2].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[2].z) + D2;
-				tmp4 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[3].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[3].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[3].z) + D2;
-				tmp5 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[4].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[4].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[4].z) + D2;
-				tmp6 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[5].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[5].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[5].z) + D2;
-				tmp7 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[6].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[6].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[6].z) + D2;
-				tmp8 = A2 * (tmpGround.Location.x + tmpGround.OBB.Box[7].x) + B2 * (tmpGround.Location.y + tmpGround.OBB.Box[7].y) + C2 * (tmpGround.Location.z + tmpGround.OBB.Box[7].z) + D2;
+				// выбираем объект, так, чтобы он был наиболее длижайшим,
+				// идущим по нашему курсу...
+				sVECTOR3D TargetAngleTMP;
+				sVECTOR3D TargetLocation = RealLocation;
 
-				if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
-				    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
+				sVECTOR3D tmpDistance = TargetLocation - Location;
+				if (NeedByWeaponOrientation)
+					tmpDistance = TargetLocation - WeponLocation;
+				float tmpLength2 = tmpDistance.x * tmpDistance.x +
+						   tmpDistance.y * tmpDistance.y +
+						   tmpDistance.z * tmpDistance.z;
+				float tmpLength = vw_sqrtf(tmpLength2);
 
-					float TargetDist2TMP = A2 * RealLocation.x + B2 * RealLocation.y + C2 * RealLocation.z + D2;
+				TargetAngleTMP.x = CurrentObjectRotation.x;
+				if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
+					// see "Angle between line and plane" (geometry) for more info about what we are doing here
+					float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+							       (tmpLength * A3B3C3D3NormalLength);
+					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
+				}
 
-					// проверяем, чтобы объект находился не ближе чем MinDistance
-					if (MinDistance < TargetDist2TMP) {
-						// выбираем объект, так, чтобы он был наиболее длижайшим,
-						// идущим по нашему курсу...
-						sVECTOR3D TargetAngleTMP;
-						sVECTOR3D TargetLocation = RealLocation;
+				TargetAngleTMP.y = CurrentObjectRotation.y;
+				if (NeedCenterOrientation &&
+				    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
+					// see "Angle between line and plane" (geometry) for more info about what we are doing here
+					float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+							       (tmpLength * A2B2C2D2NormalLength);
+					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
+				}
 
-						sVECTOR3D tmpDistance = TargetLocation - Location;
-						if (NeedByWeaponOrientation)
-							tmpDistance = TargetLocation - WeponLocation;
-						float tmpLength2 = tmpDistance.x * tmpDistance.x +
-								   tmpDistance.y * tmpDistance.y +
-								   tmpDistance.z * tmpDistance.z;
-						float tmpLength = vw_sqrtf(tmpLength2);
+				TargetAngleTMP.z = CurrentObjectRotation.z;
 
-						TargetAngleTMP.x = CurrentObjectRotation.x;
-						if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-							// see "Angle between line and plane" (geometry) for more info about what we are doing here
-							float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
-									       (tmpLength * A3B3C3D3NormalLength);
-							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
-						}
-
-						TargetAngleTMP.y = CurrentObjectRotation.y;
-						if (NeedCenterOrientation &&
-						    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-							// see "Angle between line and plane" (geometry) for more info about what we are doing here
-							float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-									       (tmpLength * A2B2C2D2NormalLength);
-							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
-						}
-
-						TargetAngleTMP.z = CurrentObjectRotation.z;
-
-						if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
-						    (fabsf(TargetAngleTMP.x) < 45.0f)) {
-							NeedAngle = TargetAngleTMP;
-							tmpDistanceToLockedTarget2 = tmpLength2;
-							TargetLocked = true;
-							tmpDistanceFactorByObjectType = 1.0f;
-						}
-					}
+				if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
+				    (fabsf(TargetAngleTMP.x) < 45.0f)) {
+					NeedAngle = TargetAngleTMP;
+					tmpDistanceToLockedTarget2 = tmpLength2;
+					TargetLocked = true;
+					tmpDistanceFactorByObjectType = 1.0f;
 				}
 			}
 		}
@@ -354,79 +300,55 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 				RealLocation = RealLocation + FutureLocation;
 			}
 
-			// проверяем, если с одной стороны все точки - значит мимо, если нет - попали :)
-			float tmp1 = A * (RealLocation.x + tmpSpace.OBB.Box[0].x) + B * (RealLocation.y + tmpSpace.OBB.Box[0].y) + C * (RealLocation.z + tmpSpace.OBB.Box[0].z) + D;
-			float tmp2 = A * (RealLocation.x + tmpSpace.OBB.Box[1].x) + B * (RealLocation.y + tmpSpace.OBB.Box[1].y) + C * (RealLocation.z + tmpSpace.OBB.Box[1].z) + D;
-			float tmp3 = A * (RealLocation.x + tmpSpace.OBB.Box[2].x) + B * (RealLocation.y + tmpSpace.OBB.Box[2].y) + C * (RealLocation.z + tmpSpace.OBB.Box[2].z) + D;
-			float tmp4 = A * (RealLocation.x + tmpSpace.OBB.Box[3].x) + B * (RealLocation.y + tmpSpace.OBB.Box[3].y) + C * (RealLocation.z + tmpSpace.OBB.Box[3].z) + D;
-			float tmp5 = A * (RealLocation.x + tmpSpace.OBB.Box[4].x) + B * (RealLocation.y + tmpSpace.OBB.Box[4].y) + C * (RealLocation.z + tmpSpace.OBB.Box[4].z) + D;
-			float tmp6 = A * (RealLocation.x + tmpSpace.OBB.Box[5].x) + B * (RealLocation.y + tmpSpace.OBB.Box[5].y) + C * (RealLocation.z + tmpSpace.OBB.Box[5].z) + D;
-			float tmp7 = A * (RealLocation.x + tmpSpace.OBB.Box[6].x) + B * (RealLocation.y + tmpSpace.OBB.Box[6].y) + C * (RealLocation.z + tmpSpace.OBB.Box[6].z) + D;
-			float tmp8 = A * (RealLocation.x + tmpSpace.OBB.Box[7].x) + B * (RealLocation.y + tmpSpace.OBB.Box[7].y) + C * (RealLocation.z + tmpSpace.OBB.Box[7].z) + D;
+			// ограничение на зону прицеливания, целиться только если цель находится напротив оружия
+			if ((fabs(A * RealLocation.x +
+				  B * RealLocation.y +
+				  C * RealLocation.z + D) <= tmpSpace.Radius) &&
+			    // проверяем, спереди или сзади стоит противник
+			    ((A2 * RealLocation.x +
+			      B2 * RealLocation.y +
+			      C2 * RealLocation.z + D2) > MinDistance)) {
 
-			if (!(((tmp1 > Width2) && (tmp2 > Width2) && (tmp3 > Width2) && (tmp4 > Width2) &&
-			       (tmp5 > Width2) && (tmp6 > Width2) && (tmp7 > Width2) && (tmp8 > Width2)) ||
-			      ((tmp1 < -Width2) && (tmp2 < -Width2) && (tmp3 < -Width2) && (tmp4 < -Width2) &&
-			       (tmp5 < -Width2) && (tmp6 < -Width2) && (tmp7 < -Width2) && (tmp8 < -Width2)))) {
-				// проверяем, спереди или сзади стоит противник
-				tmp1 = A2 * (RealLocation.x + tmpSpace.OBB.Box[0].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[0].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[0].z) + D2;
-				tmp2 = A2 * (RealLocation.x + tmpSpace.OBB.Box[1].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[1].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[1].z) + D2;
-				tmp3 = A2 * (RealLocation.x + tmpSpace.OBB.Box[2].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[2].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[2].z) + D2;
-				tmp4 = A2 * (RealLocation.x + tmpSpace.OBB.Box[3].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[3].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[3].z) + D2;
-				tmp5 = A2 * (RealLocation.x + tmpSpace.OBB.Box[4].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[4].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[4].z) + D2;
-				tmp6 = A2 * (RealLocation.x + tmpSpace.OBB.Box[5].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[5].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[5].z) + D2;
-				tmp7 = A2 * (RealLocation.x + tmpSpace.OBB.Box[6].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[6].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[6].z) + D2;
-				tmp8 = A2 * (RealLocation.x + tmpSpace.OBB.Box[7].x) + B2 * (RealLocation.y + tmpSpace.OBB.Box[7].y) + C2 * (RealLocation.z + tmpSpace.OBB.Box[7].z) + D2;
+				// выбираем объект, так, чтобы он был наиболее длижайшим,
+				// идущим по нашему курсу...
+				sVECTOR3D TargetAngleTMP;
+				sVECTOR3D TargetLocation = RealLocation;
 
-				if ((tmp1 > 0.0f) && (tmp2 > 0.0f) && (tmp3 > 0.0f) && (tmp4 > 0.0f) &&
-				    (tmp5 > 0.0f) && (tmp6 > 0.0f) && (tmp7 > 0.0f) && (tmp8 > 0.0f)) {
+				sVECTOR3D tmpDistance = TargetLocation - Location;
+				if (NeedByWeaponOrientation)
+					tmpDistance = TargetLocation - WeponLocation;
+				float tmpLength2 = tmpDistance.x * tmpDistance.x +
+						   tmpDistance.y * tmpDistance.y +
+						   tmpDistance.z * tmpDistance.z;
+				float tmpLength = vw_sqrtf(tmpLength2);
 
-					float TargetDist2TMP = A2 * RealLocation.x + B2 * RealLocation.y + C2 * RealLocation.z + D2;
+				TargetAngleTMP.x = CurrentObjectRotation.x;
+				if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
+					// see "Angle between line and plane" (geometry) for more info about what we are doing here
+					float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+							       (tmpLength * A3B3C3D3NormalLength);
+					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
+				}
 
-					// проверяем, чтобы объект находился не ближе чем MinDistance
-					if (MinDistance < TargetDist2TMP) {
-						// выбираем объект, так, чтобы он был наиболее длижайшим,
-						// идущим по нашему курсу...
-						sVECTOR3D TargetAngleTMP;
-						sVECTOR3D TargetLocation = RealLocation;
+				TargetAngleTMP.y = CurrentObjectRotation.y;
+				if (NeedCenterOrientation &&
+				    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
+					// see "Angle between line and plane" (geometry) for more info about what we are doing here
+					float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+							       (tmpLength * A2B2C2D2NormalLength);
+					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+					TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
+				}
 
-						sVECTOR3D tmpDistance = TargetLocation - Location;
-						if (NeedByWeaponOrientation)
-							tmpDistance = TargetLocation - WeponLocation;
-						float tmpLength2 = tmpDistance.x * tmpDistance.x +
-								   tmpDistance.y * tmpDistance.y +
-								   tmpDistance.z * tmpDistance.z;
-						float tmpLength = vw_sqrtf(tmpLength2);
+				TargetAngleTMP.z = CurrentObjectRotation.z;
 
-						TargetAngleTMP.x = CurrentObjectRotation.x;
-						if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-							// see "Angle between line and plane" (geometry) for more info about what we are doing here
-							float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
-									       (tmpLength * A3B3C3D3NormalLength);
-							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
-						}
-
-						TargetAngleTMP.y = CurrentObjectRotation.y;
-						if (NeedCenterOrientation &&
-						    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-							// see "Angle between line and plane" (geometry) for more info about what we are doing here
-							float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-									       (tmpLength * A2B2C2D2NormalLength);
-							vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-							TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
-						}
-
-						TargetAngleTMP.z = CurrentObjectRotation.z;
-
-						if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
-						    (fabsf(TargetAngleTMP.x) < 45.0f)) {
-							NeedAngle = TargetAngleTMP;
-							tmpDistanceToLockedTarget2 = tmpLength2;
-							TargetLocked = true;
-							tmpDistanceFactorByObjectType = 1.0f;
-						}
-					}
+				if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
+				    (fabsf(TargetAngleTMP.x) < 45.0f)) {
+					NeedAngle = TargetAngleTMP;
+					tmpDistanceToLockedTarget2 = tmpLength2;
+					TargetLocked = true;
+					tmpDistanceFactorByObjectType = 1.0f;
 				}
 			}
 		}
