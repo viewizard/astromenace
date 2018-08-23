@@ -45,10 +45,6 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 
 } // unnamed namespace
 
-// FIXME should be fixed, don't allow global scope interaction for local variables
-extern sVECTOR3D GameCameraMovement;
-float GameCameraGetSpeed();
-
 
 //-----------------------------------------------------------------------------
 // Получение угла поворота оружия на врага для космических кораблей
