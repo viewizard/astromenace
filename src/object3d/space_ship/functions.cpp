@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO codestyle should be fixed
-
 // TODO translate comments
 
 #include "../object3d.h"
@@ -46,9 +44,9 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 } // unnamed namespace
 
 
-//-----------------------------------------------------------------------------
-// Получение угла поворота оружия на врага для космических кораблей
-//-----------------------------------------------------------------------------
+/*
+ * Find angles to aim on target with prediction.
+ */
 void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
 				const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
@@ -90,263 +88,96 @@ void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус об
 	// objects (or don't have any target yet)
 	float tmpDistanceFactorByObjectType{1.0f};
 
-	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
-		// проверка, чтобы не считать свой корабль
-		if ((NeedCheckCollision(tmpShip)) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus)) {
-			// находим настоящую точку попадания с учетом скорости объекта и пули... если надо
-			sVECTOR3D tmpLocation = tmpShip.GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmpShip.CurrentRotationMat); // поворачиваем в плоскость объекта
-			sVECTOR3D RealLocation = tmpShip.Location + tmpLocation;
+	auto FindTargetCalculateAngles = [&] (const sVECTOR3D &TargetLocation, const sVECTOR3D &TargetOrientation,
+					      sVECTOR3D TargetGeometryCenter, const float (&TargetRotationMat)[9],
+					      const float TargetSpeed, const float TargetRadius) {
+		vw_Matrix33CalcPoint(TargetGeometryCenter, TargetRotationMat);
+		sVECTOR3D RealLocation = TargetLocation + TargetGeometryCenter;
 
-			if ((tmpShip.Speed != 0.0f) &&
-			    (WeaponType != 0) &&
-			    // это не лучевое оружие, которое бьет сразу
-			    (WeaponType != 11) && (WeaponType != 12) && (WeaponType != 14) &&
-			    // это не ракеты...
-			    (WeaponType != 16) && (WeaponType != 17) && (WeaponType != 18) && (WeaponType != 19)) {
+		if ((TargetSpeed != 0.0f) &&
+		    (WeaponType != 0) &&
+		    // not a beam
+		    (WeaponType != 11) && (WeaponType != 12) && (WeaponType != 14) &&
+		    // not a missile
+		    (WeaponType != 16) && (WeaponType != 17) && (WeaponType != 18) && (WeaponType != 19)) {
 
-				// находим, за какое время снаряд долетит до объекта сейчас
-				sVECTOR3D TTT = WeponLocation - RealLocation;
-				float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-				float CurrentDist = TTT.Length();
-				float ObjCurrentTime = CurrentDist / ProjectileSpeed;
+			sVECTOR3D TTT = WeponLocation - RealLocation;
+			float ProjectileSpeed = GetProjectileSpeed(WeaponType);
+			float CurrentDist = TTT.Length();
+			float ObjCurrentTime = CurrentDist / ProjectileSpeed;
 
-				// находим где будет объект, когда пройдет это время
-				sVECTOR3D FutureLocation = tmpShip.Orientation ^ (tmpShip.Speed * ObjCurrentTime);
+			sVECTOR3D FutureLocation = TargetOrientation ^ (TargetSpeed * ObjCurrentTime);
+			RealLocation = RealLocation + FutureLocation;
+		}
 
-				// находи точку по середине... это нам и надо... туда целимся...
-				RealLocation = RealLocation + FutureLocation;
+		// check, that target is ahead of weapon and opposite to it
+		if ((fabs(A * RealLocation.x +
+			  B * RealLocation.y +
+			  C * RealLocation.z + D) <= TargetRadius) &&
+		    ((A2 * RealLocation.x +
+		      B2 * RealLocation.y +
+		      C2 * RealLocation.z + D2) > MinDistance)) {
+
+			sVECTOR3D tmpTargetAngle = CurrentObjectRotation;
+			sVECTOR3D tmpDistance = RealLocation - Location;
+
+			if (NeedByWeaponOrientation)
+				tmpDistance = RealLocation - WeponLocation;
+			float tmpLength2 = tmpDistance.x * tmpDistance.x +
+					   tmpDistance.y * tmpDistance.y +
+					   tmpDistance.z * tmpDistance.z;
+			float tmpLength = vw_sqrtf(tmpLength2);
+
+			if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
+				// see "Angle between line and plane" (geometry) for more info about what we are doing here
+				float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
+						       (tmpLength * A3B3C3D3NormalLength);
+				vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+				tmpTargetAngle.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
 			}
 
-			// ограничение на зону прицеливания, целиться только если цель находится напротив оружия
-			if ((fabs(A * RealLocation.x +
-				  B * RealLocation.y +
-				  C * RealLocation.z + D) <= tmpShip.Radius) &&
-			    // проверяем, спереди или сзади стоит противник
-			    ((A2 * RealLocation.x +
-			      B2 * RealLocation.y +
-			      C2 * RealLocation.z + D2) > MinDistance)) {
+			if (NeedCenterOrientation &&
+			    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
+				// see "Angle between line and plane" (geometry) for more info about what we are doing here
+				float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
+						       (tmpLength * A2B2C2D2NormalLength);
+				vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
+				tmpTargetAngle.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
+			}
 
-				// выбираем объект, так, чтобы он был наиболее длижайшим,
-				// идущим по нашему курсу...
-				sVECTOR3D TargetAngleTMP;
-				sVECTOR3D TargetLocation = RealLocation;
-
-				sVECTOR3D tmpDistance = TargetLocation - Location;
-				if (NeedByWeaponOrientation)
-					tmpDistance = TargetLocation - WeponLocation;
-				float tmpLength2 = tmpDistance.x * tmpDistance.x +
-						   tmpDistance.y * tmpDistance.y +
-						   tmpDistance.z * tmpDistance.z;
-				float tmpLength = vw_sqrtf(tmpLength2);
-
-				TargetAngleTMP.x = CurrentObjectRotation.x;
-				if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-					// see "Angle between line and plane" (geometry) for more info about what we are doing here
-					float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
-							       (tmpLength * A3B3C3D3NormalLength);
-					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-					TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
-				}
-
-				TargetAngleTMP.y = CurrentObjectRotation.y;
-				if (NeedCenterOrientation &&
-				    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-					// see "Angle between line and plane" (geometry) for more info about what we are doing here
-					float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-							       (tmpLength * A2B2C2D2NormalLength);
-					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-					TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
-				}
-
-				TargetAngleTMP.z = CurrentObjectRotation.z;
-
-				if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
-				    (fabsf(TargetAngleTMP.x) < 45.0f)) {
-					NeedAngle = TargetAngleTMP;
-					tmpDistanceToLockedTarget2 = tmpLength2;
-					TargetLocked = true;
-					tmpDistanceFactorByObjectType = 1.0f;
-				}
+			if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
+			    (fabsf(tmpTargetAngle.x) < 45.0f)) {
+				NeedAngle = tmpTargetAngle;
+				tmpDistanceToLockedTarget2 = tmpLength2;
+				TargetLocked = true;
+				tmpDistanceFactorByObjectType = 1.0f;
 			}
 		}
+	};
+
+	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
+		if ((NeedCheckCollision(tmpShip)) &&
+		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus))
+			FindTargetCalculateAngles(tmpShip.Location, tmpShip.Orientation, tmpShip.GeometryCenter,
+						  tmpShip.CurrentRotationMat, tmpShip.Speed, tmpShip.Radius);
 	});
 
-	// проверка по наземным объектам
-	// не стрелять по "мирным" постойкам
-	// !!! ВАЖНО
-	// у всех наземных объектов ноль на уровне пола...
 	if (TargetLocked)
 		tmpDistanceFactorByObjectType = 5.0f;
 	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
-		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpGround) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus)) {
-
-			sVECTOR3D tmpLocation = tmpGround.GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmpGround.CurrentRotationMat); // поворачиваем в плоскость объекта
-			sVECTOR3D RealLocation = tmpGround.Location + tmpLocation;
-
-			if ((tmpGround.Speed != 0.0f) &&
-			    (WeaponType != 0) &&
-			    // это не лучевое оружие, которое бьет сразу
-			    (WeaponType != 11) && (WeaponType != 12) && (WeaponType != 14) &&
-			    // это не ракеты...
-			    (WeaponType != 16) && (WeaponType != 17) && (WeaponType != 18) && (WeaponType != 19)) {
-
-				// находим, за какое время снаряд долетит до объекта сейчас
-				sVECTOR3D TTT = WeponLocation - RealLocation;
-				float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-				float CurrentDist = TTT.Length();
-				float ObjCurrentTime = CurrentDist / ProjectileSpeed;
-
-				// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-				sVECTOR3D FutureLocation = tmpGround.Orientation ^ (tmpGround.Speed * ObjCurrentTime);
-
-				// находи точку по середине... это нам и надо... туда целимся...
-				RealLocation = RealLocation + FutureLocation;
-			}
-
-			// ограничение на зону прицеливания, целиться только если цель находится напротив оружия
-			if ((fabs(A * RealLocation.x +
-				  B * RealLocation.y +
-				  C * RealLocation.z + D) <= tmpGround.Radius) &&
-			    // проверяем, спереди или сзади стоит противник
-			    ((A2 * RealLocation.x +
-			      B2 * RealLocation.y +
-			      C2 * RealLocation.z + D2) > MinDistance)) {
-
-				// выбираем объект, так, чтобы он был наиболее длижайшим,
-				// идущим по нашему курсу...
-				sVECTOR3D TargetAngleTMP;
-				sVECTOR3D TargetLocation = RealLocation;
-
-				sVECTOR3D tmpDistance = TargetLocation - Location;
-				if (NeedByWeaponOrientation)
-					tmpDistance = TargetLocation - WeponLocation;
-				float tmpLength2 = tmpDistance.x * tmpDistance.x +
-						   tmpDistance.y * tmpDistance.y +
-						   tmpDistance.z * tmpDistance.z;
-				float tmpLength = vw_sqrtf(tmpLength2);
-
-				TargetAngleTMP.x = CurrentObjectRotation.x;
-				if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-					// see "Angle between line and plane" (geometry) for more info about what we are doing here
-					float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
-							       (tmpLength * A3B3C3D3NormalLength);
-					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-					TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
-				}
-
-				TargetAngleTMP.y = CurrentObjectRotation.y;
-				if (NeedCenterOrientation &&
-				    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-					// see "Angle between line and plane" (geometry) for more info about what we are doing here
-					float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-							       (tmpLength * A2B2C2D2NormalLength);
-					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-					TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
-				}
-
-				TargetAngleTMP.z = CurrentObjectRotation.z;
-
-				if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
-				    (fabsf(TargetAngleTMP.x) < 45.0f)) {
-					NeedAngle = TargetAngleTMP;
-					tmpDistanceToLockedTarget2 = tmpLength2;
-					TargetLocked = true;
-					tmpDistanceFactorByObjectType = 1.0f;
-				}
-			}
-		}
+		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus))
+			FindTargetCalculateAngles(tmpGround.Location, tmpGround.Orientation, tmpGround.GeometryCenter,
+						  tmpGround.CurrentRotationMat, tmpGround.Speed, tmpGround.Radius);
 	});
 
-	// проверка по космическим объектам
 	if (TargetLocked)
 		tmpDistanceFactorByObjectType = 10.0f;
 	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
-		// если по этому надо стрелять
 		if (NeedCheckCollision(tmpSpace) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus)) {
-
-			sVECTOR3D tmpLocation = tmpSpace.GeometryCenter;
-			vw_Matrix33CalcPoint(tmpLocation, tmpSpace.CurrentRotationMat); // поворачиваем в плоскость объекта
-			sVECTOR3D RealLocation = tmpSpace.Location + tmpLocation;
-
-			// если нужно проверить
-			if ((tmpSpace.Speed != 0.0f) &&
-			    (WeaponType != 0) &&
-			    // это не лучевое оружие, которое бьет сразу
-			    (WeaponType != 11) && (WeaponType != 12) && (WeaponType != 14) &&
-			    // это не ракеты...
-			    (WeaponType != 16) && (WeaponType != 17) && (WeaponType != 18) && (WeaponType != 19)) {
-
-				// находим, за какое время снаряд долетит до объекта сейчас
-				sVECTOR3D TTT = WeponLocation - RealLocation;
-				float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-				float CurrentDist = TTT.Length();
-				float ObjCurrentTime = CurrentDist / ProjectileSpeed;
-
-				// находим где будет объект, когда пройдет это время (+ сразу половину считаем!)
-				sVECTOR3D FutureLocation = tmpSpace.Orientation ^ (tmpSpace.Speed * ObjCurrentTime);
-
-				// находи точку по середине... это нам и надо... туда целимся...
-				RealLocation = RealLocation + FutureLocation;
-			}
-
-			// ограничение на зону прицеливания, целиться только если цель находится напротив оружия
-			if ((fabs(A * RealLocation.x +
-				  B * RealLocation.y +
-				  C * RealLocation.z + D) <= tmpSpace.Radius) &&
-			    // проверяем, спереди или сзади стоит противник
-			    ((A2 * RealLocation.x +
-			      B2 * RealLocation.y +
-			      C2 * RealLocation.z + D2) > MinDistance)) {
-
-				// выбираем объект, так, чтобы он был наиболее длижайшим,
-				// идущим по нашему курсу...
-				sVECTOR3D TargetAngleTMP;
-				sVECTOR3D TargetLocation = RealLocation;
-
-				sVECTOR3D tmpDistance = TargetLocation - Location;
-				if (NeedByWeaponOrientation)
-					tmpDistance = TargetLocation - WeponLocation;
-				float tmpLength2 = tmpDistance.x * tmpDistance.x +
-						   tmpDistance.y * tmpDistance.y +
-						   tmpDistance.z * tmpDistance.z;
-				float tmpLength = vw_sqrtf(tmpLength2);
-
-				TargetAngleTMP.x = CurrentObjectRotation.x;
-				if ((tmpLength > 0.0f) && (A3B3C3D3NormalLength > 0.0f)) {
-					// see "Angle between line and plane" (geometry) for more info about what we are doing here
-					float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
-							       (tmpLength * A3B3C3D3NormalLength);
-					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-					TargetAngleTMP.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
-				}
-
-				TargetAngleTMP.y = CurrentObjectRotation.y;
-				if (NeedCenterOrientation &&
-				    (tmpLength > 0.0f) && (A2B2C2D2NormalLength > 0.0f)) {
-					// see "Angle between line and plane" (geometry) for more info about what we are doing here
-					float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
-							       (tmpLength * A2B2C2D2NormalLength);
-					vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-					TargetAngleTMP.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
-				}
-
-				TargetAngleTMP.z = CurrentObjectRotation.z;
-
-				if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
-				    (fabsf(TargetAngleTMP.x) < 45.0f)) {
-					NeedAngle = TargetAngleTMP;
-					tmpDistanceToLockedTarget2 = tmpLength2;
-					TargetLocked = true;
-					tmpDistanceFactorByObjectType = 1.0f;
-				}
-			}
-		}
+		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus))
+			FindTargetCalculateAngles(tmpSpace.Location, tmpSpace.Orientation, tmpSpace.GeometryCenter,
+						  tmpSpace.CurrentRotationMat, tmpSpace.Speed, tmpSpace.Radius);
 	});
 }
 
