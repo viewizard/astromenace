@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "../object3d.h"
 #include "../space_ship/space_ship.h"
 #include "../ground_object/ground_object.h"
@@ -47,39 +45,36 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 /*
  * Find angles to aim on target with prediction.
  */
-void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
-				const sVECTOR3D &Location, // положение точки относительно которой будем наводить
-				const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
-				float MinDistance, // минимальное расстояние, с которого начинаем прицеливание
-				const float (&RotationMatrix)[9], // матрица вращения объекта
-				sVECTOR3D &NeedAngle,// нужные углы, чтобы получить нужное направление
-				bool NeedCenterOrientation, // нужен доворот на центр
-				bool NeedByWeaponOrientation, // нужно делать доворот с учетом положения орудия
-				const sVECTOR3D &WeponLocation,
-				int WeaponType) // тип орудия орудия
+void GetWeaponOnTargetOrientation(eObjectStatus WeaponStatus, const sVECTOR3D &WeaponLocation,
+				  const sVECTOR3D &TargetingComputerLocation, const sVECTOR3D &CurrentWeaponRotation,
+				  float MinTargetingDistance, const float (&CurrentWeaponRotationMatrix)[9],
+				  sVECTOR3D &NeedAngle, bool NeedCenterOrientation, int WeaponType)
 {
 	float tmpDistanceToLockedTarget2{1000.0f * 1000.0f};
 	bool TargetLocked{false};
 
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
-	vw_Matrix33CalcPoint(Orientation, RotationMatrix);
+	vw_Matrix33CalcPoint(Orientation, CurrentWeaponRotationMatrix);
 	sVECTOR3D PointUp{0.0f, 1.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointUp, RotationMatrix);
+	vw_Matrix33CalcPoint(PointUp, CurrentWeaponRotationMatrix);
 	sVECTOR3D PointRight{1.0f, 0.0f, 0.0f};
-	vw_Matrix33CalcPoint(PointRight, RotationMatrix);
+	vw_Matrix33CalcPoint(PointRight, CurrentWeaponRotationMatrix);
 
 	// vertical plane (left/right), note, OpenGL use right-handed coordinate system
 	float A, B, C, D;
-	vw_GetPlaneABCD(A, B, C, D, Location, Location + Orientation, Location + PointUp);
+	vw_GetPlaneABCD(A, B, C, D, TargetingComputerLocation,
+			TargetingComputerLocation + Orientation, TargetingComputerLocation + PointUp);
 	float A2B2C2D2NormalLength = vw_sqrtf(A * A + B * B + C * C);
 
 	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
 	float A2, B2, C2, D2;
-	vw_GetPlaneABCD(A2, B2, C2, D2, Location, Location + PointRight, Location + PointUp);
+	vw_GetPlaneABCD(A2, B2, C2, D2, TargetingComputerLocation,
+			TargetingComputerLocation + PointRight, TargetingComputerLocation + PointUp);
 
 	// vertical plane (ahead/behind), note, OpenGL use right-handed coordinate system
 	float A3, B3, C3, D3;
-	vw_GetPlaneABCD(A3, B3, C3, D3, Location, Location + Orientation, Location + PointRight);
+	vw_GetPlaneABCD(A3, B3, C3, D3, TargetingComputerLocation,
+			TargetingComputerLocation + Orientation, TargetingComputerLocation + PointRight);
 	float A3B3C3D3NormalLength = vw_sqrtf(A3 * A3 + B3 * B3 + C3 * C3);
 
 	// the idea of tmpDistanceFactorByObjectType is provide targeting priority, we increase factor
@@ -100,12 +95,9 @@ void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		    (WeaponType != 11) && (WeaponType != 12) && (WeaponType != 14) &&
 		    // not a missile
 		    (WeaponType != 16) && (WeaponType != 17) && (WeaponType != 18) && (WeaponType != 19)) {
-
-			sVECTOR3D TTT = WeponLocation - RealLocation;
 			float ProjectileSpeed = GetProjectileSpeed(WeaponType);
-			float CurrentDist = TTT.Length();
+			float CurrentDist = (RealLocation - TargetingComputerLocation).Length();
 			float ObjCurrentTime = CurrentDist / ProjectileSpeed;
-
 			sVECTOR3D FutureLocation = TargetOrientation ^ (TargetSpeed * ObjCurrentTime);
 			RealLocation = RealLocation + FutureLocation;
 		}
@@ -116,13 +108,10 @@ void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 			  C * RealLocation.z + D) <= TargetRadius) &&
 		    ((A2 * RealLocation.x +
 		      B2 * RealLocation.y +
-		      C2 * RealLocation.z + D2) > MinDistance)) {
+		      C2 * RealLocation.z + D2) > MinTargetingDistance)) {
 
-			sVECTOR3D tmpTargetAngle = CurrentObjectRotation;
-			sVECTOR3D tmpDistance = RealLocation - Location;
-
-			if (NeedByWeaponOrientation)
-				tmpDistance = RealLocation - WeponLocation;
+			sVECTOR3D tmpTargetAngle = CurrentWeaponRotation;
+			sVECTOR3D tmpDistance = RealLocation - WeaponLocation;
 			float tmpLength2 = tmpDistance.x * tmpDistance.x +
 					   tmpDistance.y * tmpDistance.y +
 					   tmpDistance.z * tmpDistance.z;
@@ -133,7 +122,7 @@ void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 				float tmpSineOfAngle = (A3 * tmpDistance.x + B3 * tmpDistance.y + C3 * tmpDistance.z) /
 						       (tmpLength * A3B3C3D3NormalLength);
 				vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-				tmpTargetAngle.x = CurrentObjectRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
+				tmpTargetAngle.x = CurrentWeaponRotation.x - asinf(tmpSineOfAngle) * RadToDeg;
 			}
 
 			if (NeedCenterOrientation &&
@@ -142,7 +131,7 @@ void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 				float tmpSineOfAngle = (A * tmpDistance.x + B * tmpDistance.y + C * tmpDistance.z) /
 						       (tmpLength * A2B2C2D2NormalLength);
 				vw_Clamp(tmpSineOfAngle, -1.0f, 1.0f); // arc sine is computed in the interval [-1, +1]
-				tmpTargetAngle.y = CurrentObjectRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
+				tmpTargetAngle.y = CurrentWeaponRotation.y - asinf(tmpSineOfAngle) * RadToDeg;
 			}
 
 			if ((tmpDistanceToLockedTarget2 / tmpDistanceFactorByObjectType > tmpLength2) &&
@@ -157,7 +146,7 @@ void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 
 	ForEachSpaceShip([&] (const cSpaceShip &tmpShip) {
 		if ((NeedCheckCollision(tmpShip)) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus))
+		    ObjectsStatusFoe(WeaponStatus, tmpShip.ObjectStatus))
 			FindTargetCalculateAngles(tmpShip.Location, tmpShip.Orientation, tmpShip.GeometryCenter,
 						  tmpShip.CurrentRotationMat, tmpShip.Speed, tmpShip.Radius);
 	});
@@ -166,7 +155,7 @@ void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		tmpDistanceFactorByObjectType = 5.0f;
 	ForEachGroundObject([&] (const cGroundObject &tmpGround) {
 		if (NeedCheckCollision(tmpGround) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus))
+		    ObjectsStatusFoe(WeaponStatus, tmpGround.ObjectStatus))
 			FindTargetCalculateAngles(tmpGround.Location, tmpGround.Orientation, tmpGround.GeometryCenter,
 						  tmpGround.CurrentRotationMat, tmpGround.Speed, tmpGround.Radius);
 	});
@@ -175,7 +164,7 @@ void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус о
 		tmpDistanceFactorByObjectType = 10.0f;
 	ForEachSpaceObject([&] (const cSpaceObject &tmpSpace) {
 		if (NeedCheckCollision(tmpSpace) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus))
+		    ObjectsStatusFoe(WeaponStatus, tmpSpace.ObjectStatus))
 			FindTargetCalculateAngles(tmpSpace.Location, tmpSpace.Orientation, tmpSpace.GeometryCenter,
 						  tmpSpace.CurrentRotationMat, tmpSpace.Speed, tmpSpace.Radius);
 	});

@@ -35,11 +35,10 @@ namespace viewizard {
 namespace astromenace {
 
 // Find angles to aim on target with prediction.
-void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
-				const sVECTOR3D &CurrentObjectRotation,
-				float MinDistance, const float (&RotationMatrix)[9],
-				sVECTOR3D &NeedAngle, bool NeedCenterOrientation,
-				bool NeedByWeaponOrientation, const sVECTOR3D &WeponLocation, int WeaponType);
+void GetWeaponOnTargetOrientation(eObjectStatus WeaponStatus, const sVECTOR3D &TargetingComputerLocation,
+				  const sVECTOR3D &WeaponLocation, const sVECTOR3D &CurrentWeaponRotation,
+				  float MinTargetingDistance, const float (&CurrentWeaponRotationMatrix)[9],
+				  sVECTOR3D &NeedAngle, bool NeedCenterOrientation, int WeaponType);
 
 } // astromenace namespace
 } // viewizard namespace
