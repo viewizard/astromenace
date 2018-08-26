@@ -35,7 +35,7 @@ namespace viewizard {
 namespace astromenace {
 
 // Find angles to aim on target with prediction.
-void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
+void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, const sVECTOR3D &Location,
 				const sVECTOR3D &CurrentObjectRotation,
 				float MinDistance, const float (&RotationMatrix)[9],
 				sVECTOR3D &NeedAngle, bool NeedCenterOrientation,

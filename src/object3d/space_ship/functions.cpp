@@ -47,7 +47,7 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 /*
  * Find angles to aim on target with prediction.
  */
-void GetShipOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
+void GetWeaponOnTargetOrientation(eObjectStatus ObjectStatus, // статус объекта, который целится
 				const sVECTOR3D &Location, // положение точки относительно которой будем наводить
 				const sVECTOR3D &CurrentObjectRotation, // текущие углы объекта
 				float MinDistance, // минимальное расстояние, с которого начинаем прицеливание
