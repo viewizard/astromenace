@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO codestyle should be fixed
+
 // TODO translate comments
 
 #include "object3d.h"

@@ -34,6 +34,8 @@
 // TODO in case DeleteAfterLeaveScene is 'enabled', also should be limited by time
 //      if object was never shown on the scene (during this time), should be deleted + warning output
 
+// TODO check 'virtual' usage here, do we really need this class functions override?
+
 #ifndef OBJECT3D_OBJECT3D_H
 #define OBJECT3D_OBJECT3D_H
 

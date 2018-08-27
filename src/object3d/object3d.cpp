@@ -25,6 +25,10 @@
 
 *************************************************************************************/
 
+// TODO remove new/delete calls all the time, move to fixed array
+
+// TODO codestyle should be fixed
+
 // TODO translate comments
 
 #include "object3d.h"
@@ -1185,41 +1189,33 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	vw_BindTexture(0, 0);
 }
 
-//-----------------------------------------------------------------------------
-// Обновление данных объектa Object3D
-//-----------------------------------------------------------------------------
+/*
+ * Update.
+ */
 bool cObject3D::Update(float Time)
 {
-	// если еще ни разу не обновляли - просто запоминаем время
 	if (TimeLastUpdate == -1.0f) {
 		TimeLastUpdate = Time;
 		return true;
 	}
 
-	// нужно удалить объект - он вышел из зоны видемости
 	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::need_delete) {
 		Lifetime = DeleteAfterLeaveSceneDelay;
 		DeleteAfterLeaveScene = eDeleteAfterLeaveScene::wait_delay;
 	}
 
-	// находим дельту по времени, и запоминаем время вызова
 	TimeDelta = Time - TimeLastUpdate;
-	// быстро вызвали еще раз... время не изменилось, или почти не изменилось
 	if (TimeDelta == 0.0f)
 		return true;
 
 	TimeLastUpdate = Time;
 
-	// проверяем, сколько объекту жить, если нужно...-1.0f  - проверка не нужна
 	if (Lifetime > -1.0f) {
-		// считаем, сколько осталось жить
 		Lifetime -= TimeDelta;
-		// если уже ничего не осталось - его нужно уничтожить
 		if (Lifetime <= 0.0f)
 			return false;
 	}
 
-	// проверка, зарядка щита если он есть
 	if ((ShieldStrengthStart > 0.0f) &&
 	    (ShieldStrength < ShieldStrengthStart)) {
 		ShieldStrength += ShieldRecharge * TimeDelta;

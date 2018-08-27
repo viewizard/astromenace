@@ -25,6 +25,10 @@
 
 *************************************************************************************/
 
+// TODO structures sTimeSheet and cMissionScript should use encapsulation (switch to class)
+
+// TODO move all sTimeSheet related stuff from 'object3d' into this 'script' sources
+
 #ifndef SCRIPT_SCRIPT_H
 #define SCRIPT_SCRIPT_H
 
