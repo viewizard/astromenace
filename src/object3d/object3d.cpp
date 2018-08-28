@@ -423,6 +423,33 @@ static void DrawBoxLines(const bounding_box &Box, const sVECTOR3D &LocalLocation
 	vw_PopMatrix();
 }
 
+/*
+ * Draw bounding boxes.
+ */
+static void DrawBoundingBoxes(const sVECTOR3D &Location, const bounding_box &AABB,
+			      const sOBB &OBB, const std::vector<sHitBB> &HitBB)
+{
+	if (NeedShowBB < 1)
+		return;
+
+	static const sRGBCOLOR Red{eRGBCOLOR::red};
+	DrawBoxLines(AABB, Location, Red);
+
+	if (NeedShowBB < 2)
+		return;
+
+	static const sRGBCOLOR Green{eRGBCOLOR::green};
+	DrawBoxLines(OBB.Box, Location + OBB.Location, Green);
+
+	if ((NeedShowBB < 3) || HitBB.empty())
+		return;
+
+	static const sRGBCOLOR Blue{eRGBCOLOR::blue};
+	for (const auto &tmpHitBB : HitBB) {
+		DrawBoxLines(tmpHitBB.Box, Location + tmpHitBB.Location, Blue);
+	}
+}
+
 //-----------------------------------------------------------------------------
 // Прорисовка объектa Object3D
 //-----------------------------------------------------------------------------
@@ -938,22 +965,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_DrawText3DUTF32(Location.x, Location.y + AABB[0].y, Location.z, ScriptLineNumberUTF32);
 #endif // NDEBUG
 
-	if (NeedShowBB >= 1) {
-		static const sRGBCOLOR Red{eRGBCOLOR::red};
-		DrawBoxLines(AABB, Location, Red);
-
-		if (NeedShowBB >= 2) {
-			static const sRGBCOLOR Green{eRGBCOLOR::green};
-			DrawBoxLines(OBB.Box, Location + OBB.Location, Green);
-
-			if ((NeedShowBB >= 3) && !HitBB.empty()) {
-				static const sRGBCOLOR Blue{eRGBCOLOR::blue};
-				for (const auto &tmpHitBB : HitBB) {
-					DrawBoxLines(tmpHitBB.Box, Location + tmpHitBB.Location, Blue);
-				}
-			}
-		}
-	}
+	DrawBoundingBoxes(Location, AABB, OBB, HitBB);
 
 	// выводим "жизнь", если нужно
 	if (!ShowStrength ||
