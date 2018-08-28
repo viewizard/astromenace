@@ -171,16 +171,6 @@ static void SetDebugInformation(cObject3D &Object, const sXMLEntry &xmlEntry, bo
 #endif // NDEBUG
 
 /*
- * cMissionScript constructor.
- */
-cMissionScript::cMissionScript()
-{
-	// отладочный режим
-	NeedShowBB = 0;
-	UndeadDebugMode = false;
-}
-
-/*
  * Load and run script.
  */
 bool cMissionScript::RunScript(const std::string &FileName, float InitTime)
@@ -331,7 +321,7 @@ bool cMissionScript::Update(float Time)
 	}
 
 	// we don't check GetRootEntry() result, since we checked it in RunScript()
-	// xml::hash() could generate error at compile-time, make sure hashes is unique
+	// constexpr_hash_djb2a() could generate error at compile-time, make sure hashes is unique
 	for (; xmlEntryIter != xmlDoc->GetRootEntry()->ChildrenList.end(); ++xmlEntryIter) {
 		sXMLEntry &xmlEntry = *xmlEntryIter;
 		switch (xmlEntry.NameHash) {
@@ -499,13 +489,10 @@ bool cMissionScript::Update(float Time)
 			break;
 
 		case constexpr_hash_djb2a("Goto"): {
-				// если есть указатель на метку
 				std::string tmpLabel{};
 				if (xmlDoc->GetEntryAttribute(xmlEntry, "label", tmpLabel)) {
-					// нужно перебрать все метки и остановится на нужной
 					// we don't check GetRootEntry() result, since we checked it in RunScript()
 					sXMLEntry *tmpCycle = xmlDoc->GetRootEntry();
-					// перебор по всем меткам
 					for (auto iter = tmpCycle->ChildrenList.begin();
 					     iter != tmpCycle->ChildrenList.end();
 					     ++iter) {
@@ -514,7 +501,6 @@ bool cMissionScript::Update(float Time)
 							std::string tmpName{};
 							if (xmlDoc->GetEntryAttribute(tmpEntry, "name", tmpName) &&
 							    (tmpLabel == tmpName)) {
-								// ставим новый указатель
 								xmlEntryIter = iter;
 								return true;
 							}
@@ -731,7 +717,7 @@ void cMissionScript::UpdateTimeLine()
 
 		int tmpType{0};
 
-		// xml::hash() could generate error at compile-time, make sure hashes is unique
+		// constexpr_hash_djb2a() could generate error at compile-time, make sure hashes is unique
 		switch (TL.NameHash) {
 		case constexpr_hash_djb2a("EarthFighter"):
 			if (xmlDoc->iGetEntryAttribute(TL, "type", tmpType)) {
