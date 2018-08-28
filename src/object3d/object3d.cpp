@@ -413,29 +413,28 @@ void DrawLine(const sVECTOR3D &Point1, const sVECTOR3D &Point2,
 	delete [] tmpDATA;
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовка сетки бокса
-//-----------------------------------------------------------------------------
-void DrawBoxLines(const bounding_box &Box, const sVECTOR3D &LocalLocation,
-		  float ColorR, float ColorG, float ColorB, float ColorA)
+/*
+ * Draw box lines.
+ */
+static void DrawBoxLines(const bounding_box &Box, const sVECTOR3D &LocalLocation, const sRGBCOLOR &Color)
 {
 	vw_PushMatrix();
 	vw_Translate(LocalLocation);
 
-	DrawLine(Box[0], Box[1], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[1], Box[2], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[2], Box[3], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[3], Box[0], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[0], Box[1], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[1], Box[2], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[2], Box[3], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[3], Box[0], Color.r, Color.g, Color.b, 1.0f);
 
-	DrawLine(Box[4], Box[5], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[5], Box[6], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[6], Box[7], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[7], Box[4], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[4], Box[5], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[5], Box[6], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[6], Box[7], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[7], Box[4], Color.r, Color.g, Color.b, 1.0f);
 
-	DrawLine(Box[0], Box[4], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[1], Box[5], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[2], Box[6], ColorR, ColorG, ColorB, ColorA);
-	DrawLine(Box[3], Box[7], ColorR, ColorG, ColorB, ColorA);
+	DrawLine(Box[0], Box[4], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[1], Box[5], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[2], Box[6], Color.r, Color.g, Color.b, 1.0f);
+	DrawLine(Box[3], Box[7], Color.r, Color.g, Color.b, 1.0f);
 
 	vw_PopMatrix();
 }
@@ -957,13 +956,13 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	if (NeedShowBB >= 1)
 		// AABB объекта
-		DrawBoxLines(AABB, Location, 1.0f, 0.0f, 0.0f, 1.0f);
+		DrawBoxLines(AABB, Location, sRGBCOLOR{eRGBCOLOR::red});
 	if (NeedShowBB >= 2)
 		// OBB объекта
-		DrawBoxLines(OBB.Box, Location + OBB.Location, 0.0f, 1.0f, 0.0f, 1.0f);
+		DrawBoxLines(OBB.Box, Location + OBB.Location, sRGBCOLOR{eRGBCOLOR::green});
 	if ((NeedShowBB >= 3) && !HitBB.empty()) {
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
-			DrawBoxLines(HitBB[i].Box, Location + HitBB[i].Location, 0.0f, 0.0f, 1.0f, 1.0f);
+			DrawBoxLines(HitBB[i].Box, Location + HitBB[i].Location, sRGBCOLOR{eRGBCOLOR::blue});
 		}
 	}
 
