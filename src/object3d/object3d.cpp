@@ -938,15 +938,20 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		vw_DrawText3DUTF32(Location.x, Location.y + AABB[0].y, Location.z, ScriptLineNumberUTF32);
 #endif // NDEBUG
 
-	if (NeedShowBB >= 1)
-		// AABB объекта
-		DrawBoxLines(AABB, Location, sRGBCOLOR{eRGBCOLOR::red});
-	if (NeedShowBB >= 2)
-		// OBB объекта
-		DrawBoxLines(OBB.Box, Location + OBB.Location, sRGBCOLOR{eRGBCOLOR::green});
-	if ((NeedShowBB >= 3) && !HitBB.empty()) {
-		for (unsigned int i = 0; i < Chunks.size(); i++) {
-			DrawBoxLines(HitBB[i].Box, Location + HitBB[i].Location, sRGBCOLOR{eRGBCOLOR::blue});
+	if (NeedShowBB >= 1) {
+		static const sRGBCOLOR Red{eRGBCOLOR::red};
+		DrawBoxLines(AABB, Location, Red);
+
+		if (NeedShowBB >= 2) {
+			static const sRGBCOLOR Green{eRGBCOLOR::green};
+			DrawBoxLines(OBB.Box, Location + OBB.Location, Green);
+
+			if ((NeedShowBB >= 3) && !HitBB.empty()) {
+				static const sRGBCOLOR Blue{eRGBCOLOR::blue};
+				for (const auto &tmpHitBB : HitBB) {
+					DrawBoxLines(tmpHitBB.Box, Location + tmpHitBB.Location, Blue);
+				}
+			}
 		}
 	}
 
