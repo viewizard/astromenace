@@ -25,7 +25,7 @@
 
 *************************************************************************************/
 
-// TODO remove new/delete calls all the time, move to fixed array
+// TODO provide more rendering optimization in DrawObjectStatus()
 
 // TODO codestyle should be fixed
 
@@ -448,6 +448,61 @@ static void DrawBoundingBoxes(const sVECTOR3D &Location, const bounding_box &AAB
 	for (const auto &tmpHitBB : HitBB) {
 		DrawBoxLines(tmpHitBB.Box, Location + tmpHitBB.Location, Blue);
 	}
+}
+
+/*
+ * Fill status draw array for line.
+ */
+static void FillStatusDrawArray(float SizeXStart, float SizeXEnd, float SizeY,
+				const sRGBCOLOR &Color, float (&DrawArray)[28])
+{
+	unsigned int DrawArrayIndex{0};
+	constexpr float Alpha{1.0f};
+
+	auto FillVertex = [&] (float X, float Y) {
+		DrawArray[DrawArrayIndex++] = X;
+		DrawArray[DrawArrayIndex++] = Y;
+		DrawArray[DrawArrayIndex++] = 0.0f; // Z
+		DrawArray[DrawArrayIndex++] = Color.r;
+		DrawArray[DrawArrayIndex++] = Color.g;
+		DrawArray[DrawArrayIndex++] = Color.b;
+		DrawArray[DrawArrayIndex++] = Alpha;
+	};
+
+	FillVertex(SizeXStart, -SizeY);
+	FillVertex(SizeXStart, SizeY);
+	FillVertex(SizeXEnd, -SizeY);
+	FillVertex(SizeXEnd, SizeY);
+}
+
+/*
+ * Draw status near 3d model in space.
+ */
+static void DrawObjectStatus(const sVECTOR3D &Location, float Width, const sRGBCOLOR &Color,
+			     float CurrentValue, float InitialValue)
+{
+	vw_PushMatrix();
+	sVECTOR3D CurrentCameraRotation;
+	vw_GetCameraRotation(&CurrentCameraRotation);
+	vw_Translate(Location);
+	vw_Rotate(-180 + CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
+	vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
+
+	// TRIANGLE_STRIP, RI_3f_XYZ | RI_4f_COLOR = 4 * (3 + 4) = 28
+	float DrawArray[28];
+
+	// background
+	float SizeX = Width / 2.5f + 0.1f;
+	FillStatusDrawArray(-SizeX, SizeX, 0.35f, sRGBCOLOR{eRGBCOLOR::black}, DrawArray);
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, DrawArray, 7 * sizeof(DrawArray[0]));
+
+	// status
+	float SizeXStart = Width / 2.5f - 0.8f * Width * CurrentValue / InitialValue;
+	float SizeXEnd = Width / 2.5f;
+	FillStatusDrawArray(SizeXStart, SizeXEnd, 0.25f, Color, DrawArray);
+	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, DrawArray, 7 * sizeof(DrawArray[0]));
+
+	vw_PopMatrix();
 }
 
 //-----------------------------------------------------------------------------
@@ -967,225 +1022,20 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	DrawBoundingBoxes(Location, AABB, OBB, HitBB);
 
-	// выводим "жизнь", если нужно
+	// TODO why we need ShowStrength if we could use StrengthStart < 0.0f for this?
 	if (!ShowStrength ||
 	    (StrengthStart <= 0.0f) ||
 	    ((Strength == StrengthStart) && (ShieldStrength == ShieldStrengthStart) && !NeedShowStrengthNow))
 		return;
 
-	// раз тут, значит показали, и нужно теперь и дальше всегда показывать, даже если щит перезарядили
+	// even if shield recharged - don't hide object's status any more
 	NeedShowStrengthNow = true;
 
-	// буфер для последовательности TRIANGLE_STRIP
-	// войдет RI_3f_XYZ | RI_4f_COLOR
-	float *tmpDATA = new float[4 * (3 + 4)];
-	int k = 0;
-
-	// рисуем заднюю часть - основу
-	float SizeX = Width / 2.5f + 0.1f;
-	float SizeY = 0.35f;
-	float ColorR = 0.0f;
-	float ColorG = 0.0f;
-	float ColorB = 0.0f;
-	float ColorA = 1.0f;
-
-	tmpDATA[k++] = -SizeX;		// X
-	tmpDATA[k++] = -SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
-
-
-	tmpDATA[k++] = -SizeX;		// X
-	tmpDATA[k++] = SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
-
-	tmpDATA[k++] = SizeX;		// X
-	tmpDATA[k++] = -SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
-
-	tmpDATA[k++] = SizeX;		// X
-	tmpDATA[k++] = SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k] = ColorA;
-
-	vw_PushMatrix();
-	sVECTOR3D CurrentCameraRotation;
-	vw_GetCameraRotation(&CurrentCameraRotation);
-	// поднимаем
-	vw_Translate(sVECTOR3D{Location.x,
-			       Location.y + AABB[0].y + SizeY * 2.0f,
-			       Location.z});
-	// поворачиваем к камере
-	vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
-	vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
-
-	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
-
-	// рисуем вывод кол-ва жизни
-	k = 0;
-	float SizeXStart = Width / 2.5f - (2.0f * Width / 2.5f) * Strength / StrengthStart;
-	float SizeXEnd = Width / 2.5f;
-	SizeY = 0.25f;
-	ColorR = 1.0f;
-	ColorG = 0.0f;
-	ColorB = 0.0f;
-	ColorA = 1.0f;
-
-	tmpDATA[k++] = SizeXStart;	// X
-	tmpDATA[k++] = -SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
-
-	tmpDATA[k++] = SizeXStart;	// X
-	tmpDATA[k++] = SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
-
-	tmpDATA[k++] = SizeXEnd;	// X
-	tmpDATA[k++] = -SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k++] = ColorA;
-
-	tmpDATA[k++] = SizeXEnd;	// X
-	tmpDATA[k++] = SizeY;		// Y
-	tmpDATA[k++] = 0.0f;		// Z
-	tmpDATA[k++] = ColorR;
-	tmpDATA[k++] = ColorG;
-	tmpDATA[k++] = ColorB;
-	tmpDATA[k] = ColorA;
-
-	vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
-
-	vw_PopMatrix();
-
-	// выводим щит, если он есть
-	if (ShieldStrengthStart > 0.0f) {
-		k = 0;
-
-		// рисуем заднюю часть - основу
-		SizeX = Width / 2.5f + 0.1f;
-		SizeY = 0.35f;
-		ColorR = 0.0f;
-		ColorG = 0.0f;
-		ColorB = 0.0f;
-		ColorA = 1.0f;
-
-		tmpDATA[k++] = -SizeX;		// X
-		tmpDATA[k++] = -SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
-
-
-		tmpDATA[k++] = -SizeX;		// X
-		tmpDATA[k++] = SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
-
-		tmpDATA[k++] = SizeX;		// X
-		tmpDATA[k++] = -SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
-
-		tmpDATA[k++] = SizeX;		// X
-		tmpDATA[k++] = SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k] = ColorA;
-
-		vw_PushMatrix();
-		// поднимаем
-		vw_Translate(sVECTOR3D{Location.x,
-				       Location.y + AABB[0].y + SizeY * 5.0f,
-				       Location.z});
-		// поворачиваем к камере
-		vw_Rotate(-180+CurrentCameraRotation.y, 0.0f, 1.0f, 0.0f);
-		vw_Rotate(-CurrentCameraRotation.x, 1.0f, 0.0f, 0.0f);
-
-		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
-
-		// рисуем вывод кол-ва жизни
-		k=0;
-		SizeXStart = Width / 2.5f - (2.0f * Width / 2.5f) * ShieldStrength / ShieldStrengthStart;
-		SizeXEnd = Width / 2.5f;
-		SizeY = 0.25f;
-		ColorR = 0.1f;
-		ColorG = 0.7f;
-		ColorB = 1.0f;
-		ColorA = 1.0f;
-
-		tmpDATA[k++] = SizeXStart;	// X
-		tmpDATA[k++] = -SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
-
-		tmpDATA[k++] = SizeXStart;	// X
-		tmpDATA[k++] = SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
-
-		tmpDATA[k++] = SizeXEnd;	// X
-		tmpDATA[k++] = -SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k++] = ColorA;
-
-		tmpDATA[k++] = SizeXEnd;	// X
-		tmpDATA[k++] = SizeY;		// Y
-		tmpDATA[k++] = 0.0f;		// Z
-		tmpDATA[k++] = ColorR;
-		tmpDATA[k++] = ColorG;
-		tmpDATA[k++] = ColorB;
-		tmpDATA[k] = ColorA;
-
-		vw_Draw3D(ePrimitiveType::TRIANGLE_STRIP, 4, RI_3f_XYZ | RI_4f_COLOR, tmpDATA, 7 * sizeof(tmpDATA[0]));
-
-		vw_PopMatrix();
-	}
-
-	delete [] tmpDATA;
-
+	DrawObjectStatus(sVECTOR3D{Location.x, Location.y + AABB[0].y + 0.7f, Location.z},
+			 Width, sRGBCOLOR{eRGBCOLOR::red}, Strength, StrengthStart);
+	if (ShieldStrengthStart > 0.0f)
+		DrawObjectStatus(sVECTOR3D{Location.x, Location.y + AABB[0].y + 1.75f, Location.z},
+				 Width, sRGBCOLOR{0.1f, 0.7f, 1.0f}, ShieldStrength, ShieldStrengthStart);
 	vw_BindTexture(0, 0);
 }
 
