@@ -33,7 +33,7 @@ namespace viewizard {
 namespace astromenace {
 
 // Create game data VFS file (convert FS to VFS).
-int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath);
+int ConvertFS2VFS(const std::string &RawDataDir, const std::string &VFSFileNamePath);
 
 } // astromenace namespace
 } // viewizard namespace

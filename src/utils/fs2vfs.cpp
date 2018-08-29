@@ -32,6 +32,8 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
 const std::string GameData[] = {
 	"lang/ru/voice/EngineMalfunction.wav",
 	"lang/ru/voice/WeaponDamaged.wav",
@@ -409,14 +411,17 @@ const std::string GameData[] = {
 	"models/normalmap/bomber_nm.tga",
 	"models/normalmap/buildings_nm.tga",
 	"lang/pl/menu/button_weaponry_in.tga",
-	"lang/pl/menu/button_weaponry_out.tga",
+	"lang/pl/menu/button_weaponry_out.tga"
 };
 constexpr unsigned GameDataCount = sizeof(GameData) / sizeof(GameData[0]);
+
+} // unnamed namespace
+
 
 /*
  * Create game data VFS file (convert FS to VFS).
  */
-int ConvertFS2VFS(const std::string RawDataDir, const std::string VFSFileNamePath)
+int ConvertFS2VFS(const std::string &RawDataDir, const std::string &VFSFileNamePath)
 {
 	return vw_CreateVFS(VFSFileNamePath, GAME_VFS_BUILD,
 			    RawDataDir, "models/models.pack",
