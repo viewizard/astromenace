@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 // TODO as soon, as cSpaceShip will be moved to STL usage with weapon (shared_ptr?),
 //      switch to eDeleteAfterLeaveScene::enabled by default and remove SetDeleteAfterLeaveScene()
 //      also explosions creation code should be corrected (remove DeleteAfterLeaveScene setup)
@@ -111,20 +109,14 @@ protected:
 	~cObject3D() = default;
 
 public:
-	// Прорисовка объектa Object3D
 	virtual void Draw(bool VertexOnlyPass, bool ShadowMap = false);
-	bool NeedCullFaces{true}; // нужно резать бэк фейсы
-	bool NeedAlphaTest{false}; // нужно включить альфа тест
-	// Обновление данных объектa Object3D
+	bool NeedCullFaces{true};
+	bool NeedAlphaTest{false};
 	virtual bool Update(float Time);
 
-	// Установка положения 1 объекта модели
 	void SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum);
-	// Установка углов поворота 1 объекта модели
 	void SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum);
-	// Установка положения модели
 	virtual void SetLocation(const sVECTOR3D &NewLocation);
-	// Установка углов поворота модели
 	virtual void SetRotation(const sVECTOR3D &NewRotation);
 
 	// in-game object's status relatively to player
@@ -139,58 +131,43 @@ public:
 	// note, Lifetime could be changed by DeleteAfterLeaveScene settings
 	float Lifetime{-1.0f};
 
-	// направление, куда ориентирован объект
 	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
-	// углы поворота объекта по трем осям на данный момент
 	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
-	// обратный угол поворота, старого
 	sVECTOR3D OldRotationInv{0.0f, 0.0f, 0.0f};
-	// положение объекта
 	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	// предыдущее положение объекта
 	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
-	// последнее время, когда проверяли-обновляли объект
 	float TimeLastUpdate{-1.0f};
-	// время между апдейтами
 	float TimeDelta{0.0f};
 
-	// текстура для объектов геометрии
 	std::vector<GLtexture> Texture{};
 	std::vector<GLtexture> TextureIllum{};
 	std::vector<GLtexture> NormalMap{};
 
-	// минимальное расстояние (квадрат) с которого надо рисовать пообъектно, если -1 всегда рисовать только пообъектно
-	float PromptDrawDist2{-1.0f};
-	int InternalLights{0}; // кол-во внутренних источников света
+	float PromptDrawDist2{-1.0f}; // LOD related
+	int InternalLights{0};
 
-	// данные материала объекта
+	// material related
 	float Diffuse[4]{1.0f, 1.0f, 1.0f, 1.0f};
 	float Specular[4]{1.0f, 1.0f, 1.0f, 1.0f};
 	float Ambient[4]{0.1f, 0.1f, 0.1f, 0.1f};
 	float Power[1]{64.0f};
 
-	// вес объекта
-	float Weight{1.0f};
-	// прочность
+	float Weight{1.0f}; // FIXME remove this one, looks like we don't use it in proper way
+
 	float Strength{0.0f};
 	float StrengthStart{0.0f};
-	// прочность щита
+
 	float ShieldStrength{0.0f};
 	float ShieldStrengthStart{0.0f};
-	float ShieldRecharge{0.0f}; // перезарядка щита в секунду
-	// показывать полосу или нет
+	float ShieldRecharge{0.0f};
+
 	bool ShowStrength{true};
-	// этот параметр устанавливается автоматически!
-	// если попали, будем всегда показывать (даже если щит перезарядился)
 	bool NeedShowStrengthNow{false};
 
-	// максимально возможное ослабление воздействий на корпус
 	float ResistanceHull{1.0f};
-	// максимально возможное ослабление воздействий на системы
 	float ResistanceSystems{1.0f};
 
-	// матрицы поворота, для оптимизации просчетов
 	float CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
 				    0.0f, 1.0f, 0.0f,
 				    0.0f, 0.0f, 1.0f};
@@ -198,10 +175,8 @@ public:
 				   0.0f, 1.0f, 0.0f,
 				   0.0f, 0.0f, 1.0f};
 
-	// debug info, line number in script file
-	std::u32string ScriptLineNumberUTF32{};
+	std::u32string ScriptLineNumberUTF32{}; // debug info, line number in script file
 
-	// данные по текущему сценарию действий объекта
 	std::list<sTimeSheet> TimeSheetList{};
 };
 
