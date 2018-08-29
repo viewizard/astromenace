@@ -39,8 +39,11 @@
 namespace viewizard {
 namespace astromenace {
 
-// show AABB >= 1, OBB >= 2, HitBB >=3
-int NeedShowBB = 0;
+namespace {
+
+eRenderBoundingBoxes BBRenderMode{eRenderBoundingBoxes::None};
+
+} // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern std::weak_ptr<cGLSL> GLSLShaderType1;
@@ -392,25 +395,33 @@ static void DrawBoxLines(const bounding_box &Box, const sVECTOR3D &LocalLocation
 static void DrawBoundingBoxes(const sVECTOR3D &Location, const bounding_box &AABB,
 			      const sOBB &OBB, const std::vector<sHitBB> &HitBB)
 {
-	if (NeedShowBB < 1)
+	if (BBRenderMode == eRenderBoundingBoxes::None)
 		return;
 
 	static const sRGBCOLOR Red{eRGBCOLOR::red};
 	DrawBoxLines(AABB, Location, Red);
 
-	if (NeedShowBB < 2)
+	if (BBRenderMode == eRenderBoundingBoxes::AABB_Only)
 		return;
 
 	static const sRGBCOLOR Green{eRGBCOLOR::green};
 	DrawBoxLines(OBB.Box, Location + OBB.Location, Green);
 
-	if ((NeedShowBB < 3) || HitBB.empty())
+	if ((BBRenderMode == eRenderBoundingBoxes::AABB_And_OBB) || HitBB.empty())
 		return;
 
 	static const sRGBCOLOR Blue{eRGBCOLOR::blue};
 	for (const auto &tmpHitBB : HitBB) {
 		DrawBoxLines(tmpHitBB.Box, Location + tmpHitBB.Location, Blue);
 	}
+}
+
+/*
+ * Set bounding boxes render mode.
+ */
+void SetObjectsBBRenderMode(eRenderBoundingBoxes Mode)
+{
+	BBRenderMode = Mode;
 }
 
 /*

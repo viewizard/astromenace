@@ -65,7 +65,6 @@ Z = 0 at the level start, and increased during level.
 namespace viewizard {
 namespace astromenace {
 
-extern int NeedShowBB;
 extern bool UndeadDebugMode;
 extern bool ShowGameTime;
 
@@ -201,7 +200,7 @@ bool cMissionScript::RunScript(const std::string &FileName, float InitTime)
 	AsterLastTime = -1.0f;
 
 	ShowLineNumber = false;
-	NeedShowBB = 0;
+	SetObjectsBBRenderMode(eRenderBoundingBoxes::None);
 	UndeadDebugMode = false;
 	ShowGameTime = false;
 
@@ -354,8 +353,12 @@ bool cMissionScript::Update(float Time)
 			ShowLineNumber = false;
 			xmlDoc->bGetEntryAttribute(xmlEntry, "showline", ShowLineNumber);
 
-			NeedShowBB = 0;
-			xmlDoc->iGetEntryAttribute(xmlEntry, "showbb", NeedShowBB);
+			{
+				int tmpBBRenderMode{0};
+				if (xmlDoc->iGetEntryAttribute(xmlEntry, "showbb", tmpBBRenderMode) &&
+				    (tmpBBRenderMode >= 0))
+					SetObjectsBBRenderMode(static_cast<eRenderBoundingBoxes>(tmpBBRenderMode));
+			}
 
 			UndeadDebugMode = false;
 			xmlDoc->bGetEntryAttribute(xmlEntry, "undead", UndeadDebugMode);

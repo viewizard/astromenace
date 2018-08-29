@@ -206,6 +206,18 @@ public:
 };
 
 
+// we need fixed integers here, since we use them in scripts
+enum class eRenderBoundingBoxes : int {
+	None = 0,
+	AABB_Only = 1,
+	AABB_And_OBB = 2,
+	All = 3 // AABB, OBB, HitBB
+};
+
+// Set bounding boxes render mode.
+void SetObjectsBBRenderMode(eRenderBoundingBoxes Mode);
+
+
 /*
  * object3d_manager
  */
