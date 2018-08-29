@@ -29,8 +29,6 @@
 
 // TODO codestyle should be fixed
 
-// TODO translate comments
-
 #include "object3d.h"
 #include "../config/config.h"
 #include "../game.h"
@@ -41,7 +39,7 @@
 namespace viewizard {
 namespace astromenace {
 
-// флаг, показывать боксы или нет (1>AABB, 2>OBB, 3>HitBB)
+// show AABB >= 1, OBB >= 2, HitBB >=3
 int NeedShowBB = 0;
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
@@ -50,14 +48,12 @@ extern std::weak_ptr<cGLSL> GLSLShaderType2;
 extern std::weak_ptr<cGLSL> GLSLShaderType3;
 
 
-//-----------------------------------------------------------------------------
-// Установка положения 1 объекта модели
-//-----------------------------------------------------------------------------
+/*
+ * Set chunk location.
+ */
 void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum)
 {
-	// пересчет HitBB
 	if (!HitBB.empty()) {
-		// делаем временную обратную матрицу модели
 		float OldInvRotationMatTmp[9];
 		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
@@ -66,7 +62,6 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 		HitBB[ChunkNum].Location -= Chunks[ChunkNum].Location - NewLocation;
 		vw_Matrix33CalcPoint(HitBB[ChunkNum].Location, CurrentRotationMat);
 
-		// нужно подкорректировать OBB и ABB
 		float MinX = 10000.0f;
 		float MaxX = -10000.0f;
 		float MinY = 10000.0f;
@@ -74,7 +69,6 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 		float MinZ = 10000.0f;
 		float MaxZ = -10000.0f;
 
-		// проверяем данные
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
 			vw_Matrix33CalcPoint(HitBB[i].Location, OldInvRotationMatTmp);
 
@@ -99,7 +93,6 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 			vw_Matrix33CalcPoint(HitBB[i].Location, CurrentRotationMat);
 		}
 
-		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
 		OBB.Box[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
 		OBB.Box[1] = sVECTOR3D{MinX, MaxY, MaxZ};
 		OBB.Box[2] = sVECTOR3D{MinX, MaxY, MinZ};
@@ -109,7 +102,6 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 		OBB.Box[6] = sVECTOR3D{MinX, MinY, MinZ};
 		OBB.Box[7] = sVECTOR3D{MaxX, MinY, MinZ};
 
-		// габариты, пересчет именно тут, т.к. нужны данные OBB
 		Width = fabsf(MaxX - MinX);
 		Height = fabsf(MaxY - MinY);
 		Length = fabsf(MaxZ - MinZ);
@@ -117,26 +109,21 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 		float Width2 = Width / 2.0f;
 		float Length2 = Length / 2.0f;
 		float Height2 = Height / 2.0f;
-		// находим радиус
 		Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 
-		// находим координаты центра OBB относительно координат модели
 		OBB.Location.x = (MaxX + MinX) / 2.0f;
 		OBB.Location.y = (MaxY + MinY) / 2.0f;
 		OBB.Location.z = (MaxZ + MinZ) / 2.0f;
 
-		// переносим данные OBB чтобы центр стал центром
 		for (int k = 0; k < 8; k++) {
 			OBB.Box[k] -= OBB.Location;
 			vw_Matrix33CalcPoint(OBB.Box[k], CurrentRotationMat);
 		}
 		vw_Matrix33CalcPoint(OBB.Location, CurrentRotationMat);
 
-		// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
 		MinX = MaxX = OBB.Box[0].x + OBB.Location.x;
 		MinY = MaxY = OBB.Box[0].y + OBB.Location.y;
 		MinZ = MaxZ = OBB.Box[0].z + OBB.Location.z;
-		// берем и проверяем
 		for (int j = 0; j < 8; j++) {
 			if (MinX > OBB.Box[j].x + OBB.Location.x)
 				MinX = OBB.Box[j].x + OBB.Location.x;
@@ -161,18 +148,15 @@ void cObject3D::SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum
 		AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 	}
 
-	// собственно меняем данные в геометрии
 	Chunks[ChunkNum].Location = NewLocation;
 }
 
-//-----------------------------------------------------------------------------
-// Установка углов поворота 1 объекта модели
-//-----------------------------------------------------------------------------
+/*
+ * Set chunk rotation.
+ */
 void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum)
 {
-	// пересчет HitBB
 	if (!HitBB.empty()) {
-		// создаем матрицу поворота объекта
 		float CurrentRotationMatTmp2[9];
 		vw_Matrix33CreateRotate(CurrentRotationMatTmp2, NewRotation);
 
@@ -180,12 +164,10 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 		vw_Matrix33CreateRotate(OldInvRotationMatTmp2, Chunks[ChunkNum].Rotation);
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp2);
 
-		// делаем временную обратную матрицу модели
 		float OldInvRotationMatTmp[9];
 		memcpy(OldInvRotationMatTmp, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
 		vw_Matrix33InverseRotate(OldInvRotationMatTmp);
 
-		// собственно меняем данные в геометрии
 		vw_Matrix33CalcPoint(HitBB[ChunkNum].Location, OldInvRotationMatTmp);
 		HitBB[ChunkNum].Location -= Chunks[ChunkNum].Location;
 		vw_Matrix33CalcPoint(HitBB[ChunkNum].Location, OldInvRotationMatTmp2);
@@ -199,7 +181,6 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 			vw_Matrix33CalcPoint(HitBB[ChunkNum].Box[j], CurrentRotationMat);
 		}
 
-		// нужно подкорректировать OBB и ABB
 		float MinX = 10000.0f;
 		float MaxX = -10000.0f;
 		float MinY = 10000.0f;
@@ -207,7 +188,6 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 		float MinZ = 10000.0f;
 		float MaxZ = -10000.0f;
 
-		// проверяем данные
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
 			vw_Matrix33CalcPoint(HitBB[i].Location, OldInvRotationMatTmp);
 
@@ -232,7 +212,6 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 			vw_Matrix33CalcPoint(HitBB[i].Location, CurrentRotationMat);
 		}
 
-		// запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
 		OBB.Box[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
 		OBB.Box[1] = sVECTOR3D{MinX, MaxY, MaxZ};
 		OBB.Box[2] = sVECTOR3D{MinX, MaxY, MinZ};
@@ -242,7 +221,6 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 		OBB.Box[6] = sVECTOR3D{MinX, MinY, MinZ};
 		OBB.Box[7] = sVECTOR3D{MaxX, MinY, MinZ};
 
-		// габариты, пересчет именно тут, т.к. нужны данные OBB
 		Width = fabsf(MaxX - MinX);
 		Height = fabsf(MaxY - MinY);
 		Length = fabsf(MaxZ - MinZ);
@@ -250,26 +228,21 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 		float Width2 = Width / 2.0f;
 		float Length2 = Length / 2.0f;
 		float Height2 = Height / 2.0f;
-		// находим радиус
 		Radius = vw_sqrtf(Width2 * Width2 + Length2 * Length2 + Height2 * Height2);
 
-		// находим координаты центра OBB относительно координат модели
 		OBB.Location.x = (MaxX + MinX) / 2.0f;
 		OBB.Location.y = (MaxY + MinY) / 2.0f;
 		OBB.Location.z = (MaxZ + MinZ) / 2.0f;
 
-		// переносим данные OBB чтобы центр стал центром
 		for (int k = 0; k < 8; k++) {
 			OBB.Box[k] -= OBB.Location;
 			vw_Matrix33CalcPoint(OBB.Box[k], CurrentRotationMat);
 		}
 		vw_Matrix33CalcPoint(OBB.Location, CurrentRotationMat);
 
-		// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
 		MinX = MaxX = OBB.Box[0].x + OBB.Location.x;
 		MinY = MaxY = OBB.Box[0].y + OBB.Location.y;
 		MinZ = MaxZ = OBB.Box[0].z + OBB.Location.z;
-		// берем и проверяем
 		for (int j = 0; j < 8; j++) {
 			if (MinX > OBB.Box[j].x + OBB.Location.x)
 				MinX = OBB.Box[j].x + OBB.Location.x;
@@ -294,40 +267,33 @@ void cObject3D::SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum
 		AABB[7] = sVECTOR3D{MaxX, MinY, MinZ};
 	}
 
-	// собственно меняем данные в геометрии
 	Chunks[ChunkNum].Rotation = NewRotation;
 }
 
-//-----------------------------------------------------------------------------
-// Установка положения модели
-//-----------------------------------------------------------------------------
+/*
+ * Set location.
+ */
 void cObject3D::SetLocation(const sVECTOR3D &NewLocation)
 {
 	PrevLocation = Location;
-	// новое положение объекта
 	Location = NewLocation;
 }
 
-//-----------------------------------------------------------------------------
-// Установка углов поворота модели
-//-----------------------------------------------------------------------------
+/*
+ * Set rotation.
+ */
 void cObject3D::SetRotation(const sVECTOR3D &NewRotation)
 {
-	// Записываем данные в Rotation
 	OldRotationInv = sVECTOR3D{-Rotation.x, -Rotation.y, -Rotation.z};
 	Rotation += NewRotation;
 
-	// сохраняем старые значения + пересчет новых
 	memcpy(OldInvRotationMat, CurrentRotationMat, 9 * sizeof(CurrentRotationMat[0]));
-	// делаем инверсную старую матрицу
 	vw_Matrix33InverseRotate(OldInvRotationMat);
 	vw_Matrix33CreateRotate(CurrentRotationMat, Rotation);
 
-	// По углам находим новые значения вектора Orientation
 	vw_Matrix33CalcPoint(Orientation, OldInvRotationMat);
 	vw_Matrix33CalcPoint(Orientation, CurrentRotationMat);
 
-	// пересчет HitBB
 	if (!HitBB.empty()) {
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
 			vw_Matrix33CalcPoint(HitBB[i].Location, OldInvRotationMat);
@@ -340,7 +306,6 @@ void cObject3D::SetRotation(const sVECTOR3D &NewRotation)
 		}
 	}
 
-	// Пересчитываем OBB, просто поворачиваем его как и модель
 	vw_Matrix33CalcPoint(OBB.Location, OldInvRotationMat);
 	vw_Matrix33CalcPoint(OBB.Location, CurrentRotationMat);
 	for (int j = 0; j < 8; j++) {
@@ -348,14 +313,12 @@ void cObject3D::SetRotation(const sVECTOR3D &NewRotation)
 		vw_Matrix33CalcPoint(OBB.Box[j], CurrentRotationMat);
 	}
 
-	// по OBB находим AABB, это не совсем AABB (он будет больше), но зато быстро
 	float MinX = 10000.0f;
 	float MaxX = -10000.0f;
 	float MinY = 10000.0f;
 	float MaxY = -10000.0f;
 	float MinZ = 10000.0f;
 	float MaxZ = -10000.0f;
-	// берем и проверяем
 	for (int j = 0; j < 8; j++) {
 		if (MinX > OBB.Box[j].x + OBB.Location.x)
 			MinX = OBB.Box[j].x + OBB.Location.x;
@@ -505,17 +468,14 @@ static void DrawObjectStatus(const sVECTOR3D &Location, float Width, const sRGBC
 	vw_PopMatrix();
 }
 
-//-----------------------------------------------------------------------------
-// Прорисовка объектa Object3D
-//-----------------------------------------------------------------------------
+/*
+ * Draw.
+ */
 void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 {
-	// если нечего рисовать - выходим
 	if (Chunks.empty())
 		return;
 
-	// если есть установка, нужно получить квадрат расстояния до камеры
-	// прорисовка модели "полностью", "одним куском" (только то что без "составных" частей - колес, стволов и т.п.)
 	bool NeedOnePieceDraw{false};
 	if (PromptDrawDist2 >= 0.0f) {
 		sVECTOR3D CurrentCameraLocation;
@@ -524,22 +484,17 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					    (Location.y - CurrentCameraLocation.y) * (Location.y - CurrentCameraLocation.y) +
 					    (Location.z - CurrentCameraLocation.z) * (Location.z - CurrentCameraLocation.z);
 
-		// получаем кол-во точечных источников, воздействующих на объект
 		int LightsCount = vw_CalculateAllPointLightsAttenuation(Location, Radius * Radius, nullptr);
 
-		// если дальше - смотрим сколько воздействует источников света
 		if (PromptDrawRealDist2 > PromptDrawDist2) {
-			// если больше заданного кол-ва
 			if (LightsCount <= GameConfig().MaxPointLights)
 				NeedOnePieceDraw = true;
 			else
 				NeedOnePieceDraw = false;
 
-			// если это двигатели - не надо переходить
 			if (InternalLights >= LightsCount)
 				NeedOnePieceDraw = true;
 		} else {
-			// находимся близко, но нужно посмотреть, если кол-во источников ниже макс, надо перейти в упращенный режим
 			if (LightsCount <= GameConfig().MaxPointLights)
 				NeedOnePieceDraw = true;
 		}
@@ -550,7 +505,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// for us 3D model could also drop the shadow on visible for us part of scene
 	if (VertexOnlyPass) {
 		vw_PushMatrix();
-		// переносим и двигаем уже по данным всей модели
+
 		vw_Translate(Location);
 		vw_Rotate(Rotation.z, 0.0f, 0.0f, 1.0f);
 		vw_Rotate(Rotation.y, 0.0f, 1.0f, 0.0f);
@@ -561,29 +516,24 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			if (!DrawVertexCount)
 				DrawVertexCount = GlobalVertexArrayCount;
 
-			// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
 			vw_Draw3D(ePrimitiveType::TRIANGLES, DrawVertexCount, RI_3f_XYZ, GlobalVertexArray.get(),
 				  Chunks[0].VertexStride * sizeof(float), GlobalVBO, 0,
 				  GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 		} else {
-			// установка текстур и подхотовка к прорисовке
 			for (auto &tmpChunk : Chunks) {
 				vw_PushMatrix();
 
-				// сдвигаем его в нужное место
 				vw_Translate(tmpChunk.Location);
-				// поворачиваем объект
 				vw_Rotate(tmpChunk.Rotation.z, 0.0f, 0.0f, 1.0f);
 				vw_Rotate(tmpChunk.Rotation.y, 0.0f, 1.0f, 0.0f);
 				vw_Rotate(tmpChunk.Rotation.x, 1.0f, 0.0f, 0.0f);
-				// если нужна дополнительная анимация геометрией
+
 				if (tmpChunk.NeedGeometryAnimation) {
 					vw_Rotate(tmpChunk.GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
 					vw_Rotate(tmpChunk.GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
 					vw_Rotate(tmpChunk.GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
 				}
 
-				// работаем только с шейдером взрывов, т.к. он меняет положение и размеры треугольников
 				if (tmpChunk.ShaderType == 2) {
 					if (auto sharedGLSL = GLSLShaderType2.lock()) {
 						vw_UseShaderProgram(sharedGLSL);
@@ -608,58 +558,46 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 
 		vw_PopMatrix();
-		// уходим вообще из прорисовки
 		return;
 	}
 
-	// оптимизация, если не в фруструме - соотв. и не видем его
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0])) {
-		// если показали а сейчас нет - установка флага
 		if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::showed)
 			DeleteAfterLeaveScene = eDeleteAfterLeaveScene::need_delete;
 
 		return;
 	}
 
-	// показываем - нужно установить флаг
 	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::enabled)
 		DeleteAfterLeaveScene = eDeleteAfterLeaveScene::showed;
-	// уже включили обратный отсчет на удаление - нужно его выключить
 	if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::wait_delay) {
 		DeleteAfterLeaveScene = eDeleteAfterLeaveScene::showed;
 		Lifetime = -1.0f;
 	}
 
-	// у модели может быть нормал меппинг только на отдельные объекты
 	GLtexture CurrentNormalMap{0};
-	// текущий шейдер, чтобы не ставить лишний раз
 	std::weak_ptr<cGLSL> CurrentGLSL{};
 	int NeedNormalMapping{0};
-	// получаем матрицу, до всех преобразований
 	float Matrix[16];
 	vw_GetMatrix(eMatrixPname::MODELVIEW, Matrix);
 
 	vw_PushMatrix();
 
-	// переносим и двигаем уже по данным всей модели
 	vw_Translate(Location);
 	vw_Rotate(Rotation.z, 0.0f, 0.0f, 1.0f);
 	vw_Rotate(Rotation.y, 0.0f, 1.0f, 0.0f);
 	vw_Rotate(Rotation.x, 1.0f, 0.0f, 0.0f);
 
-	// для корректной прорисовки на всех видеокартах атмосферы планеты ...
 	bool N1 = false;
 	for (auto &tmpChunk : Chunks) {
 		if (tmpChunk.DrawType == eModel3DDrawType::Blend)
 			N1 = true;
 	}
 
-	// если используем тени - сразу находим режим сглаживания
 	int PCFMode{0};
 	if (ShadowMap)
 		PCFMode = GameConfig().ShadowMap;
 
-	// Устанавливаем данные для поверхности объекта
 	vw_MaterialV(eMaterialParameter::DIFFUSE, Diffuse);
 	vw_MaterialV(eMaterialParameter::AMBIENT, Ambient);
 	vw_MaterialV(eMaterialParameter::SPECULAR, Specular);
@@ -667,24 +605,18 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	if (!NeedCullFaces)
 		vw_CullFace(eCullFace::NONE);
-	// для частей базы надо включить прозрачность через альфатест
 	if (NeedAlphaTest)
 		vw_SetTextureAlphaTest(true, eCompareFunc::GREATER, 0.4f);
 
-	// если надо рисовать одним проходом
 	if (NeedOnePieceDraw) {
 		vw_BindTexture(0, Texture[0]);
 
-		// включаем вторую текстуру
 		if (!TextureIllum.empty() && TextureIllum[0]) {
-			// свечение
 			vw_BindTexture(1, TextureIllum[0]);
-			// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
 			vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
 			vw_SetTextureBlendMode(eTextureCombinerName::COMBINE_RGB, eTextureCombinerOp::ADD);
 		}
 
-		// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
 		NeedNormalMapping = 0;
 		if (GameConfig().UseGLSL120 &&
 		    !NormalMap.empty() && NormalMap[0]) {
@@ -694,20 +626,17 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 
 		int LightType1, LightType2;
-		// включаем источники света
 		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, GameConfig().MaxPointLights, Matrix);
 
 		if (GameConfig().UseGLSL120 && (Chunks[0].ShaderType >= 0)) {
 			std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
-			// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
+			// FIXME we know what exactly we have, why we need shaders setup in this way?
 			if ((Chunks[0].ShaderType == 1) && ShadowMap)
 				Chunks[0].ShaderType = 3;
-			// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
 			if ((Chunks[0].ShaderType == 3) && !ShadowMap)
 				Chunks[0].ShaderType = 1;
 
-			// ставим нужный шейдер
 			switch (Chunks[0].ShaderType) {
 			case 1:
 				CurrentObject3DGLSL = GLSLShaderType1;
@@ -730,10 +659,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_UseShaderProgram(CurrentGLSL);
 			}
 
-			// данные ставим каждый раз, т.к. может что-то поменяться
 			if (auto sharedGLSL = CurrentObject3DGLSL.lock()) {
 				switch (Chunks[0].ShaderType) {
-				case 1: // только попиксельное освещение
+				case 1: // per pixel light
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -747,7 +675,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), NeedNormalMapping);
 					break;
 
-				case 2: // шейдеры взрывов
+				case 2: // explosion
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), LightType1);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType2);
@@ -755,7 +683,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), Chunks[0].ShaderData[1]);
 					break;
 
-				case 3: // шадов меп
+				case 3: // shadow map
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -780,27 +708,20 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		if (!DrawVertexCount)
 			DrawVertexCount = GlobalVertexArrayCount;
 
-		// часть данных берем из 1-го объекта, т.к. они идентичны для всей модели
 		vw_Draw3D(ePrimitiveType::TRIANGLES, DrawVertexCount, Chunks[0].VertexFormat, GlobalVertexArray.get(),
 			  Chunks[0].VertexStride * sizeof(float), GlobalVBO, 0,
 			  GlobalIndexArray.get(), GlobalIBO, GlobalVAO);
 
 		vw_DeActivateAllLights();
 	} else {
-
-		// текущая текстура, чтобы не переставлять по 10 раз одно и то же
 		GLtexture CurrentTexture{0};
 
-		// установка текстур и подхотовка к прорисовке
 		for (unsigned int i = 0; i < Chunks.size(); i++) {
-
-			// небольшая проверка для конкретной части
 			if (!HitBB.empty()) {
 				sVECTOR3D Min, Max;
 				Min.x = Max.x = HitBB[i].Box[0].x + HitBB[i].Location.x;
 				Min.y = Max.y = HitBB[i].Box[0].y + HitBB[i].Location.y;
 				Min.z = Max.z = HitBB[i].Box[0].z + HitBB[i].Location.z;
-				// берем и проверяем
 				for (int j = 0; j < 8; j++) {
 					if (Min.x > HitBB[i].Box[j].x + HitBB[i].Location.x)
 						Min.x = HitBB[i].Box[j].x + HitBB[i].Location.x;
@@ -820,12 +741,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					continue;
 			}
 
-			// работа с текстурами
 			if (CurrentTexture != Texture[i]) {
 				vw_BindTexture(0, Texture[i]);
 
-				// если есть тайловая анимация - работаем с текстурной матрицей
-				// ! исходим из того что активен всегда 0-вой стейдж текстуры т.к. у танков на траках нет илюминейшен текстуры
 				if (Chunks[i].NeedTextureAnimation) {
 					vw_MatrixMode(eMatrixMode::TEXTURE);
 					vw_LoadIdentity();
@@ -833,16 +751,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					vw_MatrixMode(eMatrixMode::MODELVIEW);
 				}
 
-				// включаем вторую текстуру
 				if ((TextureIllum.size() > static_cast<unsigned>(i)) && TextureIllum[i]) {
-					// свечение
 					vw_BindTexture(1, TextureIllum[i]);
-					// для корректной прорисовки без шейдеров, ставим правильный режим смешивания
 					vw_SetTextureEnvMode(eTextureEnvMode::COMBINE);
 					vw_SetTextureBlendMode(eTextureCombinerName::COMBINE_RGB, eTextureCombinerOp::ADD);
 				}
 
-				// если у нас работают шейдеры и есть текстура нормал меппа - ставим ее
 				NeedNormalMapping = 0;
 				if (GameConfig().UseGLSL120 &&
 				    (NormalMap.size() > static_cast<unsigned>(i))) {
@@ -850,7 +764,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						NeedNormalMapping = 1;
 						CurrentNormalMap = NormalMap[i];
 						vw_BindTexture(3, CurrentNormalMap);
-					} else if (CurrentNormalMap) { // если нет, но был установлен - нужно сделать сброс установки
+					} else if (CurrentNormalMap) {
 						vw_BindTexture(3, 0);
 						CurrentNormalMap = 0;
 					}
@@ -861,14 +775,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			vw_PushMatrix();
 
-			// сдвигаем его в нужное место
 			vw_Translate(Chunks[i].Location);
-			// поворачиваем объект
 			vw_Rotate(Chunks[i].Rotation.z, 0.0f, 0.0f, 1.0f);
 			vw_Rotate(Chunks[i].Rotation.y, 0.0f, 1.0f, 0.0f);
 			vw_Rotate(Chunks[i].Rotation.x, 1.0f, 0.0f, 0.0f);
 
-			// если нужна дополнительная анимация геометрией
 			if (Chunks[i].NeedGeometryAnimation) {
 				vw_Rotate(Chunks[i].GeometryAnimation.z, 0.0f, 0.0f, 1.0f);
 				vw_Rotate(Chunks[i].GeometryAnimation.y, 0.0f, 1.0f, 0.0f);
@@ -876,14 +787,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			}
 
 			int LightType1, LightType2;
-			// включаем источники света
 			if (!HitBB.empty())
 				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBB[i].Location, HitBB[i].Radius2, 2, GameConfig().MaxPointLights, Matrix);
 			else
 				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius * Radius, 2, GameConfig().MaxPointLights, Matrix);
 
-			// если нужно рисовать прозрачным
-			// для корректной прорисовки на всех видеокартах атмосферы планеты ...
+			// for planet's clouds
 			if (N1)
 				vw_PolygonOffset(true, 2.0f, 2.0f);
 
@@ -898,14 +807,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
 				// FIXME we know what exactly we have, why we need shaders setup in this way?
-				// небольшая корректировка, если 1-й шейдер (попиксельное освещение), но передали шадовмеп - ставим 3
 				if ((Chunks[i].ShaderType == 1) && ShadowMap)
 					Chunks[i].ShaderType = 3;
-				// и на оборот, если стоит 3-й, но шадовмепа нет - ставим 1-й, просто попиксельное освещение
 				if ((Chunks[i].ShaderType == 3) && !ShadowMap)
 					Chunks[i].ShaderType = 1;
 
-				// ставим нужный шейдер
 				switch (Chunks[i].ShaderType) {
 				case 1:
 					CurrentObject3DGLSL = GLSLShaderType1;
@@ -928,10 +834,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_UseShaderProgram(CurrentGLSL);
 				}
 
-				// данные ставим каждый раз, т.к. может что-то поменяться
 				if (auto sharedGLSL = CurrentObject3DGLSL.lock()) {
 					switch (Chunks[i].ShaderType) {
-					case 1: // только попиксельное освещение
+					case 1: // per pixel light
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -945,7 +850,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), NeedNormalMapping);
 						break;
 
-					case 2: // шейдеры взрывов
+					case 2: // explosion
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), LightType1);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType2);
@@ -953,7 +858,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), Chunks[0].ShaderData[1]);
 						break;
 
-					case 3: // шадов меп
+					case 3: // shadow map
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
@@ -986,7 +891,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 			vw_DeActivateAllLights();
 
-			// если меняли текстурную матрицу - обязательно восстанавливаем
 			if (Chunks[i].NeedTextureAnimation) {
 				vw_BindTexture(0, 0);
 				vw_MatrixMode(eMatrixMode::TEXTURE);
@@ -999,11 +903,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 		}
 	}
 
-	// останавливаем шейдер, если был запущен
 	if (GameConfig().UseGLSL120)
 		vw_StopShaderProgram();
 
-	// установка параметров текстур в исходное состояние
 	if (CurrentNormalMap)
 		vw_BindTexture(3, 0);
 	vw_BindTexture(1, 0);
