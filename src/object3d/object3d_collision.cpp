@@ -73,6 +73,23 @@ struct sDamagesData {
 };
 
 /*
+ * Setup ground object explosion.
+ */
+static void SetupGroundExplosion(cGroundObject &GroundObject, int ObjectChunkNum)
+{
+	switch (GroundObject.ObjectType) {
+	case eObjectType::PirateBuilding:
+		CreateGroundExplosion(GroundObject, 1, GroundObject.Location, ObjectChunkNum);
+		break;
+	case eObjectType::PirateVehicle:
+		CreateGroundExplosion(GroundObject, 2, GroundObject.Location, ObjectChunkNum);
+		break;
+	default:
+		break;
+	}
+}
+
+/*
  *
  */
 bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
@@ -674,17 +691,7 @@ void DetectCollisionAllObject3D()
 				if (NeedCheckCollision(tmpGround) &&
 				    (tmpGround.Strength <= 0.0f)) {
 					AddPlayerBonus(tmpGround, tmpShip.ObjectStatus);
-
-					switch (tmpGround.ObjectType) {
-					case eObjectType::PirateBuilding:
-						CreateGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum2);
-						break;
-					case eObjectType::PirateVehicle:
-						CreateGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum2);
-						break;
-					default:
-						break;
-					}
+					SetupGroundExplosion(tmpGround, ObjectPieceNum2);
 					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 				}
 
@@ -842,17 +849,7 @@ void DetectCollisionAllObject3D()
 
 					if (tmpGround.Strength <= 0.0f) {
 						AddPlayerBonus(tmpGround, tmpProjectile.ObjectStatus);
-
-						switch (tmpGround.ObjectType) {
-						case eObjectType::PirateBuilding:
-							CreateGroundExplosion(tmpGround, 1, IntercPoint, ObjectPieceNum);
-							break;
-						case eObjectType::PirateVehicle:
-							CreateGroundExplosion(tmpGround, 2, IntercPoint, ObjectPieceNum);
-							break;
-						default:
-							break;
-						}
+						SetupGroundExplosion(tmpGround, ObjectPieceNum);
 						GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 					}
 				}
@@ -932,17 +929,7 @@ void DetectCollisionAllObject3D()
 
 				if (NeedCheckCollision(tmpGround) &&
 				    (tmpGround.Strength <= 0.0f)) {
-					switch (tmpGround.ObjectType) {
-					case eObjectType::PirateBuilding:
-						CreateGroundExplosion(tmpGround, 1, tmpGround.Location, ObjectPieceNum);
-						break;
-					case eObjectType::PirateVehicle:
-						CreateGroundExplosion(tmpGround, 2, tmpGround.Location, ObjectPieceNum);
-						break;
-					default:
-						break;
-						}
-
+					SetupGroundExplosion(tmpGround, ObjectPieceNum);
 					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 					// break space cycle
 					switch (SpaceCycleCommand) {
@@ -1270,18 +1257,7 @@ void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVE
 
 			if (tmpGround.Strength <= 0.0f) {
 				AddPlayerBonus(tmpGround, ExplosionStatus);
-
-				switch (tmpGround.ObjectType) {
-				case eObjectType::PirateBuilding:
-					CreateGroundExplosion(tmpGround, 1, tmpGround.Location, -1);
-					break;
-				case eObjectType::PirateVehicle:
-					CreateGroundExplosion(tmpGround, 2, tmpGround.Location, -1);
-					break;
-				default:
-					break;
-				}
-
+				SetupGroundExplosion(tmpGround, -1);
 				GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 			}
 		}
