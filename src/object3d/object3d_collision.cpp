@@ -1188,75 +1188,52 @@ static bool CheckDistanceBetweenPoints(const sVECTOR3D &Point1, const sVECTOR3D 
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Удаление всех удаляемых объектов, если они ближе радиуса
-//-----------------------------------------------------------------------------
-void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const sVECTOR3D &Point,
-				       float Radius2, float Damage, eObjectStatus ObjectStatus)
+/*
+ * Damage all near objects by shock wave.
+ */
+void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVECTOR3D &Epicenter,
+				     float Radius2, float Damage, eObjectStatus ExplosionStatus)
 {
-	// важно!!! в этой функции не удаляем снаряды (в т.ч. разрушаемые), иначе будут проблемы с ForEachProjectilePair()
+	// FIXME
+	// we don't destroy projectiles (missiles) since we could have an issue during ForEachProjectilePair()
+	// probably, we could provide array instead of one DontTouchObject to fix this in future
 
-	// важно!!!
-	// у нас мощность ударной волны отличается от мощности детонации, и состовляет только 75%
+	// reduce shock wave damage to 75%, let bomb's/torpedo's hit damage more that shock wave
 	Damage = Damage * 0.75f;
-
 	// we need take into account distance factor for damage calculation
 	float Distance2Factor;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все cSpaceObject
-	//
-	// делаем это первым, т.к. потом тут будет куча осколков которые тоже
-	// придется взрывать
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceObject([&] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 		if (NeedCheckCollision(tmpSpace) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus) &&
+		    ObjectsStatusFoe(ExplosionStatus, tmpSpace.ObjectStatus) &&
 		    (&DontTouchObject != &tmpSpace) &&
-		    CheckDistanceBetweenPoints(tmpSpace.Location, Point, Radius2, Distance2Factor)) {
+		    CheckDistanceBetweenPoints(tmpSpace.Location, Epicenter, Radius2, Distance2Factor)) {
 			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
 			    (vw_fRand() > 0.4f))
 				return; // eSpaceCycle::Continue;
 
-			float DamageHull = Damage * (1.0f - Distance2Factor);
+			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor) / tmpSpace.ResistanceHull;
 
-			// отнимаем у всех по Damage
-			tmpSpace.Strength -= DamageHull / tmpSpace.ResistanceHull;
-
-			// если уже все... удаляем
 			if (tmpSpace.Strength <= 0.0f) {
-				// проверка, нужно начислять или нет
-				AddPlayerBonus(tmpSpace, ObjectStatus);
-
+				AddPlayerBonus(tmpSpace, ExplosionStatus);
 				CreateSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
-
 				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 			}
 		}
 	});
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверка для всех кораблей
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceShip([&] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
 		if (NeedCheckCollision(tmpShip) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus) &&
+		    ObjectsStatusFoe(ExplosionStatus, tmpShip.ObjectStatus) &&
 		    (&DontTouchObject != &tmpShip) &&
-		    CheckDistanceBetweenPoints(tmpShip.Location, Point, Radius2, Distance2Factor)) {
+		    CheckDistanceBetweenPoints(tmpShip.Location, Epicenter, Radius2, Distance2Factor)) {
 
-			float DamageHull = Damage * (1.0f - Distance2Factor);
+			tmpShip.ShieldStrength = 0.0f; // EMP with bomb/torpedo explosion should reduce shields to 0
+			tmpShip.Strength -= Damage * (1.0f - Distance2Factor) / tmpShip.ResistanceHull;
 
-			// просто убираем щит
-			tmpShip.ShieldStrength = 0.0f;
-
-			// отнимаем у всех по DamageHull
-			tmpShip.Strength -= DamageHull / tmpShip.ResistanceHull;
-
-			// если уже все... удаляем
 			if ((tmpShip.Strength <= 0.0f) &&
-			    (tmpShip.ObjectStatus != eObjectStatus::Player)) { // если не корабль игрока, его удалим сами
-				// проверка, нужно начислять или нет
-				AddPlayerBonus(tmpShip, ObjectStatus);
+			    (tmpShip.ObjectStatus != eObjectStatus::Player)) {
+				AddPlayerBonus(tmpShip, ExplosionStatus);
 
 				switch (tmpShip.ObjectType) {
 				case eObjectType::AlienFighter:
@@ -1283,23 +1260,16 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		}
 	});
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все cGroundObject
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachGroundObject([&] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 		if (NeedCheckCollision(tmpGround) &&
-		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus) &&
+		    ObjectsStatusFoe(ExplosionStatus, tmpGround.ObjectStatus) &&
 		    (&DontTouchObject != &tmpGround) &&
-		    CheckDistanceBetweenPoints(tmpGround.Location, Point, Radius2, Distance2Factor)) {
-			float DamageHull = Damage * (1.0f - Distance2Factor);
+		    CheckDistanceBetweenPoints(tmpGround.Location, Epicenter, Radius2, Distance2Factor)) {
 
-			// отнимаем у всех по Damage
-			tmpGround.Strength -= DamageHull / tmpGround.ResistanceHull;
+			tmpGround.Strength -= Damage * (1.0f - Distance2Factor) / tmpGround.ResistanceHull;
 
-			// если уже все... удаляем
 			if (tmpGround.Strength <= 0.0f) {
-				// проверка, нужно начислять или нет
-				AddPlayerBonus(tmpGround, ObjectStatus);
+				AddPlayerBonus(tmpGround, ExplosionStatus);
 
 				switch (tmpGround.ObjectType) {
 				case eObjectType::PirateBuilding:
@@ -1316,9 +1286,6 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 			}
 		}
 	});
-
-	// снаряды не учитываем, иначе - поправь указатели, чтобы при удалении
-	// следующего, не было сбоя... при обновлении указателя у первого
 }
 
 } // astromenace namespace
