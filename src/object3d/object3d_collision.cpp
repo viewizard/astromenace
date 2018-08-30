@@ -63,21 +63,18 @@ extern float AsteroidsKillBonus;
 extern int CurrentMission;
 float GameCameraGetSpeed();
 
-// щит у игрока
 extern float ShildEnergyStatus;
 extern float ShildStartHitStatus;
-// что взорвалось у игрока
 extern int PlayerDeadObjectPieceNum;
 
-
-//-----------------------------------------------------------------------------
-// Вспомогательная функция для проверки всех снарядов
-//-----------------------------------------------------------------------------
 struct sDamagesData {
 	float DamageHull;
 	float DamageSystems;
 };
 
+/*
+ *
+ */
 bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
 			       sVECTOR3D &IntercPoint, sDamagesData &DamagesData, float ObjectSpeed)
 {
@@ -1170,21 +1167,24 @@ void DetectCollisionAllObject3D()
 	});
 }
 
-//-----------------------------------------------------------------------------
-// Проверка попадания в сферу Sphere-Sphere
-//-----------------------------------------------------------------------------
-bool CheckSphereSphereDestroyDetection(const cObject3D &Object1, const sVECTOR3D &Point, float Radius, float &Distance2)
+/*
+ * Check distance between points in space.
+ * Return square of the distance factor for future calculations.
+ */
+static bool CheckDistanceBetweenPoints(const sVECTOR3D &Point1, const sVECTOR3D &Point2,
+				       float Distance2, float &Distance2Factor)
 {
-	// квадрат расстояния между объектами
-	Distance2 = (Object1.Location.x - Point.x) * (Object1.Location.x - Point.x) +
-		    (Object1.Location.y - Point.y) * (Object1.Location.y - Point.y) +
-		    (Object1.Location.z - Point.z) * (Object1.Location.z - Point.z);
+	float RealDistance2 = (Point1.x - Point2.x) * (Point1.x - Point2.x) +
+			      (Point1.y - Point2.y) * (Point1.y - Point2.y) +
+			      (Point1.z - Point2.z) * (Point1.z - Point2.z);
 
-	// если расстояние меньше или равно - значит есть столкновение по радиусам
-	if (Distance2 <= Radius * Radius)
+	if (RealDistance2 <= Distance2) {
+		Distance2Factor = RealDistance2 / Distance2;
 		return true;
+	}
 
-	// объекты очень далеко
+	// we don't need real square of the distance factor in this case
+	Distance2Factor = 1.0f;
 	return false;
 }
 
@@ -1200,8 +1200,8 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 	// у нас мощность ударной волны отличается от мощности детонации, и состовляет только 75%
 	Damage = Damage * 0.75f;
 
-	// квадрат расстояния между точкой и объектом
-	float Distance2;
+	// we need take into account distance factor for damage calculation
+	float Distance2Factor;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем все cSpaceObject
@@ -1213,12 +1213,12 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		if (NeedCheckCollision(tmpSpace) &&
 		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus) &&
 		    (&DontTouchObject != &tmpSpace) &&
-		    CheckSphereSphereDestroyDetection(tmpSpace, Point, Radius, Distance2)) {
+		    CheckDistanceBetweenPoints(tmpSpace.Location, Point, Radius * Radius, Distance2Factor)) {
 			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
 			    (vw_fRand() > 0.4f))
 				return; // eSpaceCycle::Continue;
 
-			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
+			float DamageHull = Damage * (1.0f - Distance2Factor);
 
 			// отнимаем у всех по Damage
 			tmpSpace.Strength -= DamageHull / tmpSpace.ResistanceHull;
@@ -1242,9 +1242,9 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		if (NeedCheckCollision(tmpShip) &&
 		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus) &&
 		    (&DontTouchObject != &tmpShip) &&
-		    CheckSphereSphereDestroyDetection(tmpShip, Point, Radius, Distance2)) {
+		    CheckDistanceBetweenPoints(tmpShip.Location, Point, Radius * Radius, Distance2Factor)) {
 
-			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
+			float DamageHull = Damage * (1.0f - Distance2Factor);
 
 			// просто убираем щит
 			tmpShip.ShieldStrength = 0.0f;
@@ -1290,8 +1290,8 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		if (NeedCheckCollision(tmpGround) &&
 		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus) &&
 		    (&DontTouchObject != &tmpGround) &&
-		    CheckSphereSphereDestroyDetection(tmpGround, Point, Radius, Distance2)) {
-			float DamageHull = Damage * (1.0f - Distance2 / (Radius * Radius));
+		    CheckDistanceBetweenPoints(tmpGround.Location, Point, Radius * Radius, Distance2Factor)) {
+			float DamageHull = Damage * (1.0f - Distance2Factor);
 
 			// отнимаем у всех по Damage
 			tmpGround.Strength -= DamageHull / tmpGround.ResistanceHull;
