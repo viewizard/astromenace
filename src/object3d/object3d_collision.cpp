@@ -74,6 +74,23 @@ struct sDamagesData {
 
 
 /*
+ * Setup space object explosion.
+ */
+static void SetupSpaceExplosion(cSpaceObject &SpaceObject, bool SFX = true)
+{
+	switch (SpaceObject.ObjectType) {
+	case eObjectType::SmallAsteroid:
+		CreateSpaceExplosion(SpaceObject, 1, SpaceObject.Location, SpaceObject.Speed, -1, SFX);
+		break;
+	case eObjectType::SpaceDebris:
+		CreateSpaceExplosion(SpaceObject, 32, SpaceObject.Location, SpaceObject.Speed, -1, SFX);
+		break;
+	default:
+		break;
+	}
+}
+
+/*
  * Setup space ship explosion.
  */
 static void SetupSpaceShipExplosion(cSpaceShip &SpaceShip, int ObjectChunkNum)
@@ -606,17 +623,7 @@ void DetectCollisionAllObject3D()
 				if (NeedCheckCollision(tmpSpace) &&
 				    (tmpSpace.Strength <= 0.0f)) {
 					AddPlayerBonus(tmpSpace, tmpShip.ObjectStatus);
-
-					switch (tmpSpace.ObjectType) {
-					case eObjectType::SmallAsteroid:
-						CreateSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
-						break;
-					case eObjectType::SpaceDebris:
-						CreateSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
-						break;
-					default:
-						break;
-					}
+					SetupSpaceExplosion(tmpSpace);
 					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
 
@@ -853,17 +860,7 @@ void DetectCollisionAllObject3D()
 				if (NeedCheckCollision(tmpSpace) &&
 				    (tmpSpace.Strength <= 0.0f)) {
 					AddPlayerBonus(tmpSpace, tmpGround.ObjectStatus);
-
-					switch (tmpSpace.ObjectType) {
-					case eObjectType::SmallAsteroid:
-						CreateSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
-						break;
-					case eObjectType::SpaceDebris:
-						CreateSpaceExplosion(tmpSpace, 32, tmpSpace.Location, tmpSpace.Speed, -1);
-						break;
-					default:
-						break;
-					}
+					SetupSpaceExplosion(tmpSpace);
 					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
 
@@ -901,17 +898,7 @@ void DetectCollisionAllObject3D()
 					tmpSpace.Strength -= DamagesData.DamageHull / tmpSpace.ResistanceHull;
 					if (tmpSpace.Strength <= 0.0f) {
 						AddPlayerBonus(tmpSpace, tmpProjectile.ObjectStatus);
-
-						switch (tmpSpace.ObjectType) {
-						case eObjectType::SmallAsteroid:
-							CreateSpaceExplosion(tmpSpace, 1, IntercPoint, tmpSpace.Speed, -1);
-							break;
-						case eObjectType::SpaceDebris:
-							CreateSpaceExplosion(tmpSpace, 32, IntercPoint, tmpSpace.Speed, -1);
-							break;
-						default:
-							break;
-						}
+						SetupSpaceExplosion(tmpSpace);
 						SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 					}
 				}
@@ -979,35 +966,15 @@ void DetectCollisionAllObject3D()
 				if ((NeedCheckCollision(SecondObject)) &&
 				    ((SecondObject.ObjectType == eObjectType::SmallAsteroid) ||
 				     (SecondObject.ObjectType == eObjectType::SpaceDebris))) {
-					switch (SecondObject.ObjectType) {
-					case eObjectType::SmallAsteroid:
-						CreateSpaceExplosion(SecondObject, 1, SecondObject.Location, SecondObject.Speed, -1);
-						break;
-					case eObjectType::SpaceDebris:
-						CreateSpaceExplosion(SecondObject, 32, SecondObject.Location, SecondObject.Speed, -1);
-						break;
-					default:
-						break;
-					}
+					SetupSpaceExplosion(SecondObject);
 					SFXplayed = true;
-
 					Command = eSpacePairCycle::DeleteSecondObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(FirstObject) &&
 				    ((FirstObject.ObjectType == eObjectType::SmallAsteroid) ||
 				     (FirstObject.ObjectType == eObjectType::SpaceDebris))) {
-					switch (FirstObject.ObjectType) {
-					case eObjectType::SmallAsteroid:
-						CreateSpaceExplosion(FirstObject, 1, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
-						break;
-					case eObjectType::SpaceDebris:
-						CreateSpaceExplosion(FirstObject, 32, FirstObject.Location, FirstObject.Speed, -1, !SFXplayed);
-						break;
-					default:
-						break;
-					}
-
+					SetupSpaceExplosion(FirstObject, !SFXplayed);
 					if (Command == eSpacePairCycle::DeleteSecondObjectAndContinue)
 						Command = eSpacePairCycle::DeleteBothObjectsAndContinue;
 					else
@@ -1143,7 +1110,7 @@ void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVE
 
 			if (tmpSpace.Strength <= 0.0f) {
 				AddPlayerBonus(tmpSpace, ExplosionStatus);
-				CreateSpaceExplosion(tmpSpace, 1, tmpSpace.Location, tmpSpace.Speed, -1);
+				SetupSpaceExplosion(tmpSpace);
 				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 			}
 		}
