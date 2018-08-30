@@ -1089,10 +1089,11 @@ void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVE
 				     float Radius2, float Damage, eObjectStatus ExplosionStatus)
 {
 	// FIXME
-	// we don't destroy projectiles (missiles) since we could have an issue during ForEachProjectilePair()
-	// probably, we could provide array instead of one DontTouchObject to fix this in future
+	// we don't destroy projectiles (missiles/bombs/torpedos) since we could have an issue with
+	// ForEachProjectile()/ForEachProjectilePair(), just make sure you don't destroy bomb/torpedo
+	// itself here, but not only DontTouchObject
 
-	// reduce shock wave damage to 75%, let bomb's/torpedo's hit damage more that shock wave
+	// reduce shock wave damage to 75%, let bomb's/torpedo's hit damage more than shock wave
 	Damage = Damage * 0.75f;
 	// we need take into account distance factor for damage calculation
 	float Distance2Factor;
