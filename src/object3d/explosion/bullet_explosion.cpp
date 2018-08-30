@@ -41,7 +41,7 @@ namespace astromenace {
 // FIXME should be fixed, use 'include' instead
 void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const sVECTOR3D &Point,
-				       float Radius, float Damage, eObjectStatus ObjectStatus);
+				       float Radius2, float Damage, eObjectStatus ObjectStatus);
 
 
 /*
@@ -461,7 +461,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Project
 	case 18:  // torpedo
 	case 209: { // pirate torpedo
 		// FIXME this act as hidden trap (objects release), should be moved to collision detection code
-		DestroyRadiusCollisionAllObject3D(*Object, Projectile.Location, 75.0f,
+		DestroyRadiusCollisionAllObject3D(*Object, Projectile.Location, 75.0f * 75.0f,
 						  Projectile.DamageHull, Projectile.ObjectStatus);
 
 		VelocityOrientation = Projectile.Orientation ^ (-1);
@@ -510,7 +510,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Project
 	case 19: // bomb
 	case 210: { // pirate bomb
 		// FIXME this act as hidden trap (objects release), should be moved to collision detection code
-		DestroyRadiusCollisionAllObject3D(*Object, Projectile.Location, 150.0f,
+		DestroyRadiusCollisionAllObject3D(*Object, Projectile.Location, 150.0f * 150.0f,
 						  Projectile.DamageHull, Projectile.ObjectStatus);
 
 		VelocityOrientation = Projectile.Orientation ^ (-1);

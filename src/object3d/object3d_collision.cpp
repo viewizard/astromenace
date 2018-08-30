@@ -1192,7 +1192,7 @@ static bool CheckDistanceBetweenPoints(const sVECTOR3D &Point1, const sVECTOR3D 
 // Удаление всех удаляемых объектов, если они ближе радиуса
 //-----------------------------------------------------------------------------
 void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const sVECTOR3D &Point,
-				       float Radius, float Damage, eObjectStatus ObjectStatus)
+				       float Radius2, float Damage, eObjectStatus ObjectStatus)
 {
 	// важно!!! в этой функции не удаляем снаряды (в т.ч. разрушаемые), иначе будут проблемы с ForEachProjectilePair()
 
@@ -1213,7 +1213,7 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		if (NeedCheckCollision(tmpSpace) &&
 		    ObjectsStatusFoe(ObjectStatus, tmpSpace.ObjectStatus) &&
 		    (&DontTouchObject != &tmpSpace) &&
-		    CheckDistanceBetweenPoints(tmpSpace.Location, Point, Radius * Radius, Distance2Factor)) {
+		    CheckDistanceBetweenPoints(tmpSpace.Location, Point, Radius2, Distance2Factor)) {
 			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
 			    (vw_fRand() > 0.4f))
 				return; // eSpaceCycle::Continue;
@@ -1242,7 +1242,7 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		if (NeedCheckCollision(tmpShip) &&
 		    ObjectsStatusFoe(ObjectStatus, tmpShip.ObjectStatus) &&
 		    (&DontTouchObject != &tmpShip) &&
-		    CheckDistanceBetweenPoints(tmpShip.Location, Point, Radius * Radius, Distance2Factor)) {
+		    CheckDistanceBetweenPoints(tmpShip.Location, Point, Radius2, Distance2Factor)) {
 
 			float DamageHull = Damage * (1.0f - Distance2Factor);
 
@@ -1290,7 +1290,7 @@ void DestroyRadiusCollisionAllObject3D(const cObject3D &DontTouchObject, const s
 		if (NeedCheckCollision(tmpGround) &&
 		    ObjectsStatusFoe(ObjectStatus, tmpGround.ObjectStatus) &&
 		    (&DontTouchObject != &tmpGround) &&
-		    CheckDistanceBetweenPoints(tmpGround.Location, Point, Radius * Radius, Distance2Factor)) {
+		    CheckDistanceBetweenPoints(tmpGround.Location, Point, Radius2, Distance2Factor)) {
 			float DamageHull = Damage * (1.0f - Distance2Factor);
 
 			// отнимаем у всех по Damage
