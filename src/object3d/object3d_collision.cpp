@@ -72,6 +72,38 @@ struct sDamagesData {
 	float DamageSystems;
 };
 
+
+/*
+ * Setup space ship explosion.
+ */
+static void SetupSpaceShipExplosion(cSpaceShip &SpaceShip, int ObjectChunkNum)
+{
+	switch (SpaceShip.ObjectType) {
+	case eObjectType::AlienFighter:
+		CreateSpaceExplosion(SpaceShip, 2, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
+		break;
+	case eObjectType::EarthFighter:
+		CreateSpaceExplosion(SpaceShip, 31, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
+		break;
+	case eObjectType::AlienMotherShip:
+		if (ObjectChunkNum == -1) // FIXME do we really need this?
+			ObjectChunkNum = 0;
+		CreateSpaceExplosion(SpaceShip, 33, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
+		break;
+	case eObjectType::PirateShip:
+		if (SpaceShip.InternalType <= 5)
+			CreateSpaceExplosion(SpaceShip, 3, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
+		else {
+			if (ObjectChunkNum == -1) // FIXME do we really need this?
+				ObjectChunkNum = 0;
+			CreateSpaceExplosion(SpaceShip, 31, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 /*
  * Setup ground object explosion.
  */
@@ -449,25 +481,7 @@ void DetectCollisionAllObject3D()
 
 					// если не корабль игрока! его удалим сами
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
-						switch (tmpShip.ObjectType) {
-						case eObjectType::AlienFighter:
-							CreateSpaceExplosion(tmpShip, 2, IntercPoint, tmpShip.Speed, ObjectPieceNum);
-							break;
-						case eObjectType::EarthFighter:
-							CreateSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip.Speed, ObjectPieceNum);
-							break;
-						case eObjectType::AlienMotherShip:
-							CreateSpaceExplosion(tmpShip, 33, IntercPoint, tmpShip.Speed, ObjectPieceNum);
-							break;
-						case eObjectType::PirateShip:
-							if (tmpShip.InternalType <= 5)
-								CreateSpaceExplosion(tmpShip, 3, IntercPoint, tmpShip.Speed, ObjectPieceNum);
-							else
-								CreateSpaceExplosion(tmpShip, 31, IntercPoint, tmpShip.Speed, ObjectPieceNum);
-							break;
-						default:
-							break;
-						}
+						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 					} else {
 						// запоминаем, что взорвалось
@@ -611,25 +625,7 @@ void DetectCollisionAllObject3D()
 				    (tmpShip.Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
-						switch (tmpShip.ObjectType) {
-						case eObjectType::AlienFighter:
-							CreateSpaceExplosion(tmpShip, 2, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
-							break;
-						case eObjectType::EarthFighter:
-							CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
-							break;
-						case eObjectType::AlienMotherShip:
-							CreateSpaceExplosion(tmpShip, 33, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
-							break;
-						case eObjectType::PirateShip:
-							if (tmpShip.InternalType <= 5)
-								CreateSpaceExplosion(tmpShip, 3, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
-							else
-								CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum);
-							break;
-						default:
-							break;
-						}
+						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 
 						// break space cycle
@@ -700,25 +696,7 @@ void DetectCollisionAllObject3D()
 				    (tmpShip.Strength <= 0.0f)) {
 					// если не корабль игрока! его удалим сами
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
-						switch (tmpShip.ObjectType) {
-						case eObjectType::AlienFighter:
-							CreateSpaceExplosion(tmpShip, 2, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
-							break;
-						case eObjectType::EarthFighter:
-							CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
-							break;
-						case eObjectType::AlienMotherShip:
-							CreateSpaceExplosion(tmpShip, 33, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
-							break;
-						case eObjectType::PirateShip:
-							if (tmpShip.InternalType <= 5)
-								CreateSpaceExplosion(tmpShip, 3, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
-							else
-								CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, ObjectPieceNum1);
-							break;
-						default:
-							break;
-						}
+						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum1);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 
 						// break ground cycle
@@ -773,26 +751,7 @@ void DetectCollisionAllObject3D()
 			    (SecondShip.Strength <= 0.0f)) {
 				// если не корабль игрока! его удалим сами
 				if (SecondShip.ObjectStatus != eObjectStatus::Player) {
-					switch (SecondShip.ObjectType) {
-					case eObjectType::AlienFighter:
-						CreateSpaceExplosion(SecondShip, 2, SecondShip.Location, SecondShip.Speed, ObjectPieceNum2);
-						break;
-					case eObjectType::EarthFighter:
-						CreateSpaceExplosion(SecondShip, 31, SecondShip.Location, SecondShip.Speed, ObjectPieceNum2);
-						break;
-					case eObjectType::AlienMotherShip:
-						CreateSpaceExplosion(SecondShip, 33, SecondShip.Location, SecondShip.Speed, ObjectPieceNum2);
-						break;
-					case eObjectType::PirateShip:
-						if (SecondShip.InternalType <= 5)
-							CreateSpaceExplosion(SecondShip, 3, SecondShip.Location, SecondShip.Speed, ObjectPieceNum2);
-						else
-							CreateSpaceExplosion(SecondShip, 31, SecondShip.Location, SecondShip.Speed, ObjectPieceNum2);
-						break;
-					default:
-						break;
-					}
-
+					SetupSpaceShipExplosion(SecondShip, ObjectPieceNum2);
 					Command = eShipPairCycle::DeleteSecondObjectAndContinue;
 				} else
 					PlayerDeadObjectPieceNum = ObjectPieceNum2; // запоминаем, что взорвалось
@@ -803,26 +762,7 @@ void DetectCollisionAllObject3D()
 			    (FirstShip.Strength <= 0.0f)) {
 				// если не корабль игрока! его удалим сами
 				if (FirstShip.ObjectStatus != eObjectStatus::Player) {
-					switch (FirstShip.ObjectType) {
-					case eObjectType::AlienFighter:
-						CreateSpaceExplosion(FirstShip, 2, FirstShip.Location, FirstShip.Speed, ObjectPieceNum1);
-						break;
-					case eObjectType::EarthFighter:
-						CreateSpaceExplosion(FirstShip, 31, FirstShip.Location, FirstShip.Speed, ObjectPieceNum1);
-						break;
-					case eObjectType::AlienMotherShip:
-						CreateSpaceExplosion(FirstShip, 33, FirstShip.Location, FirstShip.Speed, ObjectPieceNum1);
-						break;
-					case eObjectType::PirateShip:
-						if (FirstShip.InternalType <= 5)
-							CreateSpaceExplosion(FirstShip, 3, FirstShip.Location, FirstShip.Speed, ObjectPieceNum1);
-						else
-							CreateSpaceExplosion(FirstShip, 31, FirstShip.Location, FirstShip.Speed, ObjectPieceNum1);
-						break;
-					default:
-						break;
-					}
-
+					SetupSpaceShipExplosion(FirstShip, ObjectPieceNum1);
 					if (Command == eShipPairCycle::DeleteSecondObjectAndContinue)
 						Command = eShipPairCycle::DeleteBothObjectsAndContinue;
 					else
@@ -1221,27 +1161,7 @@ void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVE
 			if ((tmpShip.Strength <= 0.0f) &&
 			    (tmpShip.ObjectStatus != eObjectStatus::Player)) {
 				AddPlayerBonus(tmpShip, ExplosionStatus);
-
-				switch (tmpShip.ObjectType) {
-				case eObjectType::AlienFighter:
-					CreateSpaceExplosion(tmpShip, 2, tmpShip.Location, tmpShip.Speed, -1);
-					break;
-				case eObjectType::EarthFighter:
-					CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, -1);
-					break;
-				case eObjectType::AlienMotherShip:
-					CreateSpaceExplosion(tmpShip, 33, tmpShip.Location, tmpShip.Speed, 0);
-					break;
-				case eObjectType::PirateShip:
-					if (tmpShip.InternalType <= 5)
-						CreateSpaceExplosion(tmpShip, 3, tmpShip.Location, tmpShip.Speed, -1);
-					else
-						CreateSpaceExplosion(tmpShip, 31, tmpShip.Location, tmpShip.Speed, 0);
-					break;
-				default:
-					break;
-				}
-
+				SetupSpaceShipExplosion(tmpShip, -1);
 				ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 			}
 		}
