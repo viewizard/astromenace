@@ -73,81 +73,86 @@ struct sDamagesData {
 };
 
 
-//-----------------------------------------------------------------------------
-// Считаем, награду за збитого противника...  или штраф за збитого своего
-//-----------------------------------------------------------------------------
-void AddPlayerBonus(const cObject3D &Object, eObjectStatus KilledByObjectStatus)
+/*
+ * Calculate bonus and experience for killed enemy.
+ */
+static void AddBonusForKilledEnemy(const cObject3D &Object, eObjectStatus KilledBy)
 {
-	// убили врага
-	if ((Object.ObjectStatus == eObjectStatus::Enemy) &&
-	    (KilledByObjectStatus == eObjectStatus::Player)) {
-		// вычисляем на какое значение нужно делить, в зависимости от кол-ва раз пройденной миссии
-		float BonusDiv{1.0f};
-		for (int i = 0; i < GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]; i++) {
-			BonusDiv = BonusDiv * 2.0f;
-		}
+	if ((KilledBy != eObjectStatus::Player) ||
+	    (Object.ObjectStatus != eObjectStatus::Enemy) ||
+	    (Object.StrengthStart <= 0.0f))
+		return;
 
-		float TTTExperience{0.0f};
-		// don't use 'default' case here, we need compiler's warning if anyone was missed
-		switch (Object.ObjectType) {
-		case eObjectType::none:
-		case eObjectType::EarthFighter:
-		case eObjectType::SpaceDebris:
-		case eObjectType::ShipWeapon:
-		case eObjectType::Explosion:
-		case eObjectType::CivilianBuilding:
-		case eObjectType::BasePart:
-		case eObjectType::Planet:
-		case eObjectType::Planetoid:
-		case eObjectType::BigAsteroid:
-		case eObjectType::Projectile:
-			break;
+	// TODO probably, we should calculate "static part" on mission start only
+	float tmpBonus = Object.StrengthStart * GameEnemyArmorPenalty /
+			 (2.0f * GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]);
+	float tmpExperience = Object.StrengthStart * GameEnemyArmorPenalty * ProfileDifficulty(CurrentProfile) / 100.0f;
 
-		case eObjectType::AlienFighter:
-			AlienShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			AlienShipsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
+	switch (Object.ObjectType) {
+	case eObjectType::AlienFighter:
+		tmpBonus /= 1.8f;
+		tmpExperience /= 1.8f;
+		AlienShipsKillBonus += tmpBonus;
+		AlienShipsKillQuant++;
+		break;
 
-		case eObjectType::AlienMotherShip:
-			AlienMotherShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			AlienMotherShipsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
+	case eObjectType::AlienMotherShip:
+		tmpBonus /= 1.8f;
+		tmpExperience /= 1.8f;
+		AlienMotherShipsKillBonus += tmpBonus;
+		AlienMotherShipsKillQuant++;
+		break;
 
-		case eObjectType::PirateShip:
-			PirateShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			PirateShipsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
+	case eObjectType::PirateShip:
+		tmpBonus /= 1.8f;
+		tmpExperience /= 1.8f;
+		PirateShipsKillBonus += tmpBonus;
+		PirateShipsKillQuant++;
+		break;
 
-		case eObjectType::PirateVehicle:
-			PirateVehiclesKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			PirateVehiclesKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
+	case eObjectType::PirateVehicle:
+		tmpBonus /= 1.8f;
+		tmpExperience /= 1.8f;
+		PirateVehiclesKillBonus += tmpBonus;
+		PirateVehiclesKillQuant++;
+		break;
 
-		case eObjectType::PirateBuilding:
-			PirateBuildingsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			PirateBuildingsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
+	case eObjectType::PirateBuilding:
+		tmpBonus /= 1.8f;
+		tmpExperience /= 1.8f;
+		PirateBuildingsKillBonus += tmpBonus;
+		PirateBuildingsKillQuant++;
+		break;
 
-		case eObjectType::SmallAsteroid:
-			AsteroidsKillBonus += ((Object.StrengthStart*GameEnemyArmorPenalty)/8.0f)/BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 8.0f) / BonusDiv;
-			AsteroidsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 8.0f;
-			break;
-		}
+	case eObjectType::SmallAsteroid:
+		tmpBonus /= 8.0f;
+		tmpExperience /= 8.0f;
+		AsteroidsKillBonus += tmpBonus;
+		AsteroidsKillQuant++;
+		break;
 
-		GameExperience += TTTExperience;
+#ifndef NDEBUG
+	// don't use 'default' case here, we need compiler's warning if some type was missed
+	case eObjectType::none:
+	case eObjectType::EarthFighter:
+	case eObjectType::SpaceDebris:
+	case eObjectType::ShipWeapon:
+	case eObjectType::Explosion:
+	case eObjectType::CivilianBuilding:
+	case eObjectType::BasePart:
+	case eObjectType::Planet:
+	case eObjectType::Planetoid:
+	case eObjectType::BigAsteroid:
+	case eObjectType::Projectile:
+		return;
+#else
+	default:
+		return;
+#endif // NDEBUG
 	}
+
+	GameMoney += tmpBonus;
+	GameExperience += tmpExperience;
 }
 
 /*
@@ -265,7 +270,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor) / tmpSpace.ResistanceHull;
 
 			if (tmpSpace.Strength <= 0.0f) {
-				AddPlayerBonus(tmpSpace, ExplosionStatus);
+				AddBonusForKilledEnemy(tmpSpace, ExplosionStatus);
 				SetupSpaceExplosion(tmpSpace);
 				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 			}
@@ -283,7 +288,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 
 			if ((tmpShip.Strength <= 0.0f) &&
 			    (tmpShip.ObjectStatus != eObjectStatus::Player)) {
-				AddPlayerBonus(tmpShip, ExplosionStatus);
+				AddBonusForKilledEnemy(tmpShip, ExplosionStatus);
 				SetupSpaceShipExplosion(tmpShip, -1);
 				ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
 			}
@@ -299,7 +304,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 			tmpGround.Strength -= Damage * (1.0f - Distance2Factor) / tmpGround.ResistanceHull;
 
 			if (tmpGround.Strength <= 0.0f) {
-				AddPlayerBonus(tmpGround, ExplosionStatus);
+				AddBonusForKilledEnemy(tmpGround, ExplosionStatus);
 				SetupGroundExplosion(tmpGround, -1);
 				GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 			}
@@ -582,8 +587,7 @@ void DetectCollisionAllObject3D()
 					tmpShip.Strength = 0;
 
 				if (tmpShip.Strength <= 0.0f) {
-					AddPlayerBonus(tmpShip, tmpProjectile.ObjectStatus);
-
+					AddBonusForKilledEnemy(tmpShip, tmpProjectile.ObjectStatus);
 					// если не корабль игрока! его удалим сами
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
 						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum);
@@ -710,7 +714,7 @@ void DetectCollisionAllObject3D()
 				// если уже все... удаляем
 				if (NeedCheckCollision(tmpSpace) &&
 				    (tmpSpace.Strength <= 0.0f)) {
-					AddPlayerBonus(tmpSpace, tmpShip.ObjectStatus);
+					AddBonusForKilledEnemy(tmpSpace, tmpShip.ObjectStatus);
 					SetupSpaceExplosion(tmpSpace);
 					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
@@ -781,7 +785,7 @@ void DetectCollisionAllObject3D()
 				// если уже все... удаляем
 				if (NeedCheckCollision(tmpGround) &&
 				    (tmpGround.Strength <= 0.0f)) {
-					AddPlayerBonus(tmpGround, tmpShip.ObjectStatus);
+					AddBonusForKilledEnemy(tmpGround, tmpShip.ObjectStatus);
 					SetupGroundExplosion(tmpGround, ObjectPieceNum2);
 					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 				}
@@ -836,10 +840,10 @@ void DetectCollisionAllObject3D()
 			// проверка на бонус
 			if (NeedCheckCollision(SecondShip) &&
 			    (SecondShip.Strength <= 0.0f))
-				AddPlayerBonus(SecondShip, FirstShip.ObjectStatus);
+				AddBonusForKilledEnemy(SecondShip, FirstShip.ObjectStatus);
 			if (NeedCheckCollision(FirstShip) &&
 			    (FirstShip.Strength <= 0.0f))
-				AddPlayerBonus(FirstShip, SecondShip.ObjectStatus);
+				AddBonusForKilledEnemy(FirstShip, SecondShip.ObjectStatus);
 
 			if (NeedCheckCollision(SecondShip) &&
 				// если уже все... удаляем
@@ -883,7 +887,7 @@ void DetectCollisionAllObject3D()
 					tmpGround.Strength -= DamagesData.DamageHull / tmpGround.ResistanceHull;
 
 					if (tmpGround.Strength <= 0.0f) {
-						AddPlayerBonus(tmpGround, tmpProjectile.ObjectStatus);
+						AddBonusForKilledEnemy(tmpGround, tmpProjectile.ObjectStatus);
 						SetupGroundExplosion(tmpGround, ObjectPieceNum);
 						GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 					}
@@ -947,7 +951,7 @@ void DetectCollisionAllObject3D()
 				// если уже все... удаляем
 				if (NeedCheckCollision(tmpSpace) &&
 				    (tmpSpace.Strength <= 0.0f)) {
-					AddPlayerBonus(tmpSpace, tmpGround.ObjectStatus);
+					AddBonusForKilledEnemy(tmpSpace, tmpGround.ObjectStatus);
 					SetupSpaceExplosion(tmpSpace);
 					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
@@ -985,7 +989,7 @@ void DetectCollisionAllObject3D()
 				if (NeedCheckCollision(tmpSpace)) {
 					tmpSpace.Strength -= DamagesData.DamageHull / tmpSpace.ResistanceHull;
 					if (tmpSpace.Strength <= 0.0f) {
-						AddPlayerBonus(tmpSpace, tmpProjectile.ObjectStatus);
+						AddBonusForKilledEnemy(tmpSpace, tmpProjectile.ObjectStatus);
 						SetupSpaceExplosion(tmpSpace);
 						SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 					}

@@ -90,6 +90,7 @@ enum class eObjectType {
 	Planet,
 	Planetoid,
 	BigAsteroid
+	// if you change this enum, make sure that AddBonusForKilledEnemy() also reflect this changes
 };
 
 enum class eDeleteAfterLeaveScene {
