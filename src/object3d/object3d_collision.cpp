@@ -1103,8 +1103,9 @@ void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVE
 		    ObjectsStatusFoe(ExplosionStatus, tmpSpace.ObjectStatus) &&
 		    (&DontTouchObject != &tmpSpace) &&
 		    CheckDistanceBetweenPoints(tmpSpace.Location, Epicenter, Radius2, Distance2Factor)) {
+			// debris is a part of scene, don't let them all explode by only one shock wave
 			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
-			    (vw_fRand() > 0.4f))
+			    (vw_fRand() > 0.5f))
 				return; // eSpaceCycle::Continue;
 
 			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor) / tmpSpace.ResistanceHull;
