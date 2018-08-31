@@ -73,6 +73,83 @@ struct sDamagesData {
 };
 
 
+//-----------------------------------------------------------------------------
+// Считаем, награду за збитого противника...  или штраф за збитого своего
+//-----------------------------------------------------------------------------
+void AddPlayerBonus(const cObject3D &Object, eObjectStatus KilledByObjectStatus)
+{
+	// убили врага
+	if ((Object.ObjectStatus == eObjectStatus::Enemy) &&
+	    (KilledByObjectStatus == eObjectStatus::Player)) {
+		// вычисляем на какое значение нужно делить, в зависимости от кол-ва раз пройденной миссии
+		float BonusDiv{1.0f};
+		for (int i = 0; i < GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]; i++) {
+			BonusDiv = BonusDiv * 2.0f;
+		}
+
+		float TTTExperience{0.0f};
+		// don't use 'default' case here, we need compiler's warning if anyone was missed
+		switch (Object.ObjectType) {
+		case eObjectType::none:
+		case eObjectType::EarthFighter:
+		case eObjectType::SpaceDebris:
+		case eObjectType::ShipWeapon:
+		case eObjectType::Explosion:
+		case eObjectType::CivilianBuilding:
+		case eObjectType::BasePart:
+		case eObjectType::Planet:
+		case eObjectType::Planetoid:
+		case eObjectType::BigAsteroid:
+		case eObjectType::Projectile:
+			break;
+
+		case eObjectType::AlienFighter:
+			AlienShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			AlienShipsKillQuant += 1;
+			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			break;
+
+		case eObjectType::AlienMotherShip:
+			AlienMotherShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			AlienMotherShipsKillQuant += 1;
+			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			break;
+
+		case eObjectType::PirateShip:
+			PirateShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			PirateShipsKillQuant += 1;
+			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			break;
+
+		case eObjectType::PirateVehicle:
+			PirateVehiclesKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			PirateVehiclesKillQuant += 1;
+			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			break;
+
+		case eObjectType::PirateBuilding:
+			PirateBuildingsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
+			PirateBuildingsKillQuant += 1;
+			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
+			break;
+
+		case eObjectType::SmallAsteroid:
+			AsteroidsKillBonus += ((Object.StrengthStart*GameEnemyArmorPenalty)/8.0f)/BonusDiv;
+			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 8.0f) / BonusDiv;
+			AsteroidsKillQuant += 1;
+			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 8.0f;
+			break;
+		}
+
+		GameExperience += TTTExperience;
+	}
+}
+
 /*
  * Setup space object explosion.
  */
@@ -139,6 +216,98 @@ static void SetupGroundExplosion(cGroundObject &GroundObject, int ObjectChunkNum
 }
 
 /*
+ * Check distance between points in space.
+ * Return square of the distance factor for future calculations.
+ */
+static bool CheckDistanceBetweenPoints(const sVECTOR3D &Point1, const sVECTOR3D &Point2,
+				       float Distance2, float &Distance2Factor)
+{
+	float RealDistance2 = (Point1.x - Point2.x) * (Point1.x - Point2.x) +
+			      (Point1.y - Point2.y) * (Point1.y - Point2.y) +
+			      (Point1.z - Point2.z) * (Point1.z - Point2.z);
+
+	if (RealDistance2 <= Distance2) {
+		Distance2Factor = RealDistance2 / Distance2;
+		return true;
+	}
+
+	// we don't need real square of the distance factor in this case
+	Distance2Factor = 1.0f;
+	return false;
+}
+
+/*
+ * Damage all near objects by shock wave.
+ */
+static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVECTOR3D &Epicenter,
+					    float Radius2, float Damage, eObjectStatus ExplosionStatus)
+{
+	// FIXME
+	// we don't destroy projectiles (missiles/bombs/torpedos) since we could have an issue with
+	// ForEachProjectile()/ForEachProjectilePair(), just make sure you don't destroy bomb/torpedo
+	// itself here, but not only DontTouchObject
+
+	// reduce shock wave damage to 75%, let bomb's/torpedo's hit damage more than shock wave
+	Damage = Damage * 0.75f;
+	// we need take into account distance factor for damage calculation
+	float Distance2Factor;
+
+	ForEachSpaceObject([&] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
+		if (NeedCheckCollision(tmpSpace) &&
+		    ObjectsStatusFoe(ExplosionStatus, tmpSpace.ObjectStatus) &&
+		    (&DontTouchObject != &tmpSpace) &&
+		    CheckDistanceBetweenPoints(tmpSpace.Location, Epicenter, Radius2, Distance2Factor)) {
+			// debris is a part of scene, don't let them all explode by only one shock wave
+			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
+			    (vw_fRand() > 0.5f))
+				return; // eSpaceCycle::Continue;
+
+			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor) / tmpSpace.ResistanceHull;
+
+			if (tmpSpace.Strength <= 0.0f) {
+				AddPlayerBonus(tmpSpace, ExplosionStatus);
+				SetupSpaceExplosion(tmpSpace);
+				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
+			}
+		}
+	});
+
+	ForEachSpaceShip([&] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
+		if (NeedCheckCollision(tmpShip) &&
+		    ObjectsStatusFoe(ExplosionStatus, tmpShip.ObjectStatus) &&
+		    (&DontTouchObject != &tmpShip) &&
+		    CheckDistanceBetweenPoints(tmpShip.Location, Epicenter, Radius2, Distance2Factor)) {
+
+			tmpShip.ShieldStrength = 0.0f; // EMP with bomb/torpedo explosion should reduce shields to 0
+			tmpShip.Strength -= Damage * (1.0f - Distance2Factor) / tmpShip.ResistanceHull;
+
+			if ((tmpShip.Strength <= 0.0f) &&
+			    (tmpShip.ObjectStatus != eObjectStatus::Player)) {
+				AddPlayerBonus(tmpShip, ExplosionStatus);
+				SetupSpaceShipExplosion(tmpShip, -1);
+				ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
+			}
+		}
+	});
+
+	ForEachGroundObject([&] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
+		if (NeedCheckCollision(tmpGround) &&
+		    ObjectsStatusFoe(ExplosionStatus, tmpGround.ObjectStatus) &&
+		    (&DontTouchObject != &tmpGround) &&
+		    CheckDistanceBetweenPoints(tmpGround.Location, Epicenter, Radius2, Distance2Factor)) {
+
+			tmpGround.Strength -= Damage * (1.0f - Distance2Factor) / tmpGround.ResistanceHull;
+
+			if (tmpGround.Strength <= 0.0f) {
+				AddPlayerBonus(tmpGround, ExplosionStatus);
+				SetupGroundExplosion(tmpGround, -1);
+				GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
+			}
+		}
+	});
+}
+
+/*
  *
  */
 bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
@@ -160,8 +329,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 	    // или это не разрушаемый объект и нужно 100% проверить, чтобы не пролетало через него снарядов
 	    !NeedCheckCollision(Object)) {
 		switch (Projectile.ProjectileType) {
-		// обычные снаряды
-		case 0:
+		case 0: // projectile
 			// если игрок со щитом или дифлектором, и щит заряжен
 			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile.DamageHull * GameEnemyWeaponPenalty)) &&
 			    (Object.ObjectStatus == eObjectStatus::Player) &&
@@ -250,8 +418,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 			}
 			break;
 
-		// ракеты-торпеды-бомбы
-		case 1:
+		case 1: // projectile with 3d model
 			// если игрок со щитом или дифлектором, и щит заряжен
 			if (((ShildEnergyStatus * ShildStartHitStatus) > (Projectile.DamageHull * GameEnemyWeaponPenalty)) &&
 			    (Object.ObjectStatus == eObjectStatus::Player)) {
@@ -290,20 +457,22 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				// ставим так, т.к.на больших кораблях плохо
 				   vw_OBBOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
 						      Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat) &&
-				   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
+				   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum) &&
+				   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 
-				// если это не убиваемый объект, должны столкнуться с геометрией
-				if (!NeedCheckCollision(Object)) {
-					if (CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
-						// взрываем...
-						if (NeedCheckCollision(Object))
-							CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
-						else
-							CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, 0.0f);
-
-						return true;
-					} else
-						return false;
+				switch (Projectile.Num) {
+				case 18: // torpedo
+				case 209: // pirate torpedo
+					DamageAllNearObjectsByShockWave(Object, Projectile.Location, 75.0f * 75.0f,
+									Projectile.DamageHull, Projectile.ObjectStatus);
+					break;
+				case 19: // bomb
+				case 210: // pirate bomb
+					DamageAllNearObjectsByShockWave(Object, Projectile.Location, 150.0f * 150.0f,
+									Projectile.DamageHull, Projectile.ObjectStatus);
+					break;
+				default:
+					break;
 				}
 
 				IntercPoint = Projectile.Location;
@@ -311,19 +480,15 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				if (NeedCheckCollision(Object)) {
 					DamagesData.DamageHull = Projectile.DamageHull;
 					DamagesData.DamageSystems = Projectile.DamageSystems;
-				}
-				// взрываем...
-				if (NeedCheckCollision(Object))
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
-				else
+				} else
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, 0.0f);
 				// столкновение было
 				return true;
 			}
 			break;
 
-		// лучевое оружие
-		case 2:
+		case 2: // beam
 			if (vw_AABBAABBCollision(Object.AABB, Object.Location, Projectile.AABB, Projectile.Location) &&
 			// в данном случае именно Projectile на первом месте!!!
 			    vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
@@ -367,83 +532,6 @@ void DestroyProjectileWithExplosion(const cProjectile &Projectile, const sVECTOR
 	// никогда не "взрываются"
 	case 2:
 		break;
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Считаем, награду за збитого противника...  или штраф за збитого своего
-//-----------------------------------------------------------------------------
-void AddPlayerBonus(const cObject3D &Object, eObjectStatus KilledByObjectStatus)
-{
-	// убили врага
-	if ((Object.ObjectStatus == eObjectStatus::Enemy) &&
-	    (KilledByObjectStatus == eObjectStatus::Player)) {
-		// вычисляем на какое значение нужно делить, в зависимости от кол-ва раз пройденной миссии
-		float BonusDiv{1.0f};
-		for (int i = 0; i < GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]; i++) {
-			BonusDiv = BonusDiv * 2.0f;
-		}
-
-		float TTTExperience{0.0f};
-		// don't use 'default' case here, we need compiler's warning if anyone was missed
-		switch (Object.ObjectType) {
-		case eObjectType::none:
-		case eObjectType::EarthFighter:
-		case eObjectType::SpaceDebris:
-		case eObjectType::ShipWeapon:
-		case eObjectType::Explosion:
-		case eObjectType::CivilianBuilding:
-		case eObjectType::BasePart:
-		case eObjectType::Planet:
-		case eObjectType::Planetoid:
-		case eObjectType::BigAsteroid:
-		case eObjectType::Projectile:
-			break;
-
-		case eObjectType::AlienFighter:
-			AlienShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			AlienShipsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
-
-		case eObjectType::AlienMotherShip:
-			AlienMotherShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			AlienMotherShipsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
-
-		case eObjectType::PirateShip:
-			PirateShipsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			PirateShipsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
-
-		case eObjectType::PirateVehicle:
-			PirateVehiclesKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			PirateVehiclesKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
-
-		case eObjectType::PirateBuilding:
-			PirateBuildingsKillBonus += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 1.8f) / BonusDiv;
-			PirateBuildingsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 1.8f;
-			break;
-
-		case eObjectType::SmallAsteroid:
-			AsteroidsKillBonus += ((Object.StrengthStart*GameEnemyArmorPenalty)/8.0f)/BonusDiv;
-			GameMoney += ((Object.StrengthStart * GameEnemyArmorPenalty) / 8.0f) / BonusDiv;
-			AsteroidsKillQuant += 1;
-			TTTExperience += (Object.StrengthStart * GameEnemyArmorPenalty * (ProfileDifficulty(CurrentProfile) / 100.0f)) / 8.0f;
-			break;
-		}
-
-		GameExperience += TTTExperience;
 	}
 }
 
@@ -1056,98 +1144,6 @@ void DetectCollisionAllObject3D()
 					CreateBulletExplosion(nullptr, SecondObject, -SecondObject.Num, SecondObject.Location, SecondObject.Speed);
 					Command = eProjectilePairCycle::DeleteSecondObjectAndContinue;
 				}
-			}
-		}
-	});
-}
-
-/*
- * Check distance between points in space.
- * Return square of the distance factor for future calculations.
- */
-static bool CheckDistanceBetweenPoints(const sVECTOR3D &Point1, const sVECTOR3D &Point2,
-				       float Distance2, float &Distance2Factor)
-{
-	float RealDistance2 = (Point1.x - Point2.x) * (Point1.x - Point2.x) +
-			      (Point1.y - Point2.y) * (Point1.y - Point2.y) +
-			      (Point1.z - Point2.z) * (Point1.z - Point2.z);
-
-	if (RealDistance2 <= Distance2) {
-		Distance2Factor = RealDistance2 / Distance2;
-		return true;
-	}
-
-	// we don't need real square of the distance factor in this case
-	Distance2Factor = 1.0f;
-	return false;
-}
-
-/*
- * Damage all near objects by shock wave.
- */
-void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, const sVECTOR3D &Epicenter,
-				     float Radius2, float Damage, eObjectStatus ExplosionStatus)
-{
-	// FIXME
-	// we don't destroy projectiles (missiles/bombs/torpedos) since we could have an issue with
-	// ForEachProjectile()/ForEachProjectilePair(), just make sure you don't destroy bomb/torpedo
-	// itself here, but not only DontTouchObject
-
-	// reduce shock wave damage to 75%, let bomb's/torpedo's hit damage more than shock wave
-	Damage = Damage * 0.75f;
-	// we need take into account distance factor for damage calculation
-	float Distance2Factor;
-
-	ForEachSpaceObject([&] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
-		if (NeedCheckCollision(tmpSpace) &&
-		    ObjectsStatusFoe(ExplosionStatus, tmpSpace.ObjectStatus) &&
-		    (&DontTouchObject != &tmpSpace) &&
-		    CheckDistanceBetweenPoints(tmpSpace.Location, Epicenter, Radius2, Distance2Factor)) {
-			// debris is a part of scene, don't let them all explode by only one shock wave
-			if ((tmpSpace.ObjectType == eObjectType::SpaceDebris) &&
-			    (vw_fRand() > 0.5f))
-				return; // eSpaceCycle::Continue;
-
-			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor) / tmpSpace.ResistanceHull;
-
-			if (tmpSpace.Strength <= 0.0f) {
-				AddPlayerBonus(tmpSpace, ExplosionStatus);
-				SetupSpaceExplosion(tmpSpace);
-				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
-			}
-		}
-	});
-
-	ForEachSpaceShip([&] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
-		if (NeedCheckCollision(tmpShip) &&
-		    ObjectsStatusFoe(ExplosionStatus, tmpShip.ObjectStatus) &&
-		    (&DontTouchObject != &tmpShip) &&
-		    CheckDistanceBetweenPoints(tmpShip.Location, Epicenter, Radius2, Distance2Factor)) {
-
-			tmpShip.ShieldStrength = 0.0f; // EMP with bomb/torpedo explosion should reduce shields to 0
-			tmpShip.Strength -= Damage * (1.0f - Distance2Factor) / tmpShip.ResistanceHull;
-
-			if ((tmpShip.Strength <= 0.0f) &&
-			    (tmpShip.ObjectStatus != eObjectStatus::Player)) {
-				AddPlayerBonus(tmpShip, ExplosionStatus);
-				SetupSpaceShipExplosion(tmpShip, -1);
-				ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
-			}
-		}
-	});
-
-	ForEachGroundObject([&] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
-		if (NeedCheckCollision(tmpGround) &&
-		    ObjectsStatusFoe(ExplosionStatus, tmpGround.ObjectStatus) &&
-		    (&DontTouchObject != &tmpGround) &&
-		    CheckDistanceBetweenPoints(tmpGround.Location, Epicenter, Radius2, Distance2Factor)) {
-
-			tmpGround.Strength -= Damage * (1.0f - Distance2Factor) / tmpGround.ResistanceHull;
-
-			if (tmpGround.Strength <= 0.0f) {
-				AddPlayerBonus(tmpGround, ExplosionStatus);
-				SetupGroundExplosion(tmpGround, -1);
-				GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 			}
 		}
 	});
