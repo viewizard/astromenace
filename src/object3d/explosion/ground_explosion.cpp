@@ -43,8 +43,8 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 /*
  * Constructor.
  */
-cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
-				   int ObjectChunkNum, bool NeedExplosionSFX)
+cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType,
+				   const sVECTOR3D &ExplLocation, int ObjectChunkNum)
 {
 	TimeLastUpdate = Object.TimeLastUpdate;
 	ExplosionTypeByClass = 3;
@@ -161,8 +161,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType, const sV
 	if ((ExplType == 1) ||
 	    (ExplType == 2)) {
 		GameCameraSetExplosion(ExplLocation, 0.5f);
-		if (NeedExplosionSFX)
-			PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
+		PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
 	}
 }
 

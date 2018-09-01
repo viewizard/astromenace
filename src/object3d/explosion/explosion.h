@@ -87,13 +87,12 @@ private:
 
 class cGroundExplosion final : public cExplosion {
 	friend void CreateGroundExplosion(cGroundObject &Object, int ExplType,
-					  const sVECTOR3D &ExplLocation,
-					  int ObjectChunkNum, bool NeedExplosionSFX);
+					  const sVECTOR3D &ExplLocation, int ObjectChunkNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateGroundExplosion()
 	// allowed for cGroundExplosion creation and release setup (deleter must be provided).
-	explicit cGroundExplosion(cGroundObject &Object, int ExplType, const sVECTOR3D &ExplLocation,
-				  int ObjectChunkNum, bool NeedExplosionSFX);
+	explicit cGroundExplosion(cGroundObject &Object, int ExplType,
+				  const sVECTOR3D &ExplLocation, int ObjectChunkNum);
 	~cGroundExplosion() = default;
 };
 
@@ -116,8 +115,7 @@ void CreateBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
 			   int ExplType, const sVECTOR3D &ExplLocation, float Speed);
 // Create cGroundExplosion object.
 void CreateGroundExplosion(cGroundObject &Object, int ExplType,
-			   const sVECTOR3D &ExplLocation,
-			   int ObjectChunkNum, bool NeedExplosionSFX = true);
+			   const sVECTOR3D &ExplLocation, int ObjectChunkNum);
 // Create cSpaceExplosion object.
 void CreateSpaceExplosion(cObject3D &Object, int ExplType,
 			  const sVECTOR3D &ExplLocation, float Speed,

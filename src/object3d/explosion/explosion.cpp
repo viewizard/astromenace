@@ -60,11 +60,10 @@ void CreateBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
  * Create cGroundExplosion object.
  */
 void CreateGroundExplosion(cGroundObject &Object, int ExplType,
-			   const sVECTOR3D &ExplLocation,
-			   int ObjectChunkNum, bool NeedExplosionSFX)
+			   const sVECTOR3D &ExplLocation, int ObjectChunkNum)
 {
 	ExplosionList.emplace_front(
-		new cGroundExplosion{Object, ExplType, ExplLocation, ObjectChunkNum, NeedExplosionSFX},
+		new cGroundExplosion{Object, ExplType, ExplLocation, ObjectChunkNum},
 		[](cExplosion *p) {delete static_cast<cGroundExplosion*>(p);});
 }
 
