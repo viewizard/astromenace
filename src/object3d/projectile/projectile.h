@@ -93,8 +93,6 @@ public:
 
 	float Age{0.0f};
 
-	bool NeedDeadSound{true};
-
 	// texture illumination in mine 3d model
 	float MineIData{0.0f};
 

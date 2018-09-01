@@ -45,127 +45,125 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
 /*
  * Play sfx for bullet explosion.
  */
-void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, int ExplType)
+static void PlayBulletExplosionSFX(const sVECTOR3D &Location, int ExplType)
 {
-	if (NeedExplosionSFX) {
-		float fVol = 1.0f;
+	constexpr float Volume{1.0f};
 
-		// use same ID as for projectile creation
-		// negative value mean self-destruct
+	// use same ID as for projectile creation
+	// negative value mean self-destruct
 
-		switch (ExplType) {
-		// earth missiles
-		case -16:
-		case -17:
-		case -18:
-		case -19:
-		// pirate missiles
-		case -205:
-		case -206:
-		case -209:
-		case -210:
-		// pirate mines
-		case -214:
-		case -215:
-		case -216:
-		case -217:
-			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
-			break;
+	switch (ExplType) {
+	// earth missiles
+	case -16:
+	case -17:
+	case -18:
+	case -19:
+	// pirate missiles
+	case -205:
+	case -206:
+	case -209:
+	case -210:
+	// pirate mines
+	case -214:
+	case -215:
+	case -216:
+	case -217:
+		PlayGameSFX(eGameSFX::Explosion_Medium, Volume, Location);
+		break;
 
-		// Kinetic
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-		// pirate (turrets + Kinetic1)
-		case 201:
-		case 202:
-		case 204:
-		case 211:
-		case 212:
-			PlayGameSFX(eGameSFX::Hit_Kinetic, fVol, Location);
-			break;
+	// Kinetic
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	// pirate (turrets + Kinetic1)
+	case 201:
+	case 202:
+	case 204:
+	case 211:
+	case 212:
+		PlayGameSFX(eGameSFX::Hit_Kinetic, Volume, Location);
+		break;
 
-		// Ion
-		case 5:
-		case 6:
-		case 7:
-		// aliens (Kinetic1)
-		case 101:
-		// pirate (Ion2)
-		case 207:
-			PlayGameSFX(eGameSFX::Hit_Ion, fVol, Location);
-			break;
+	// Ion
+	case 5:
+	case 6:
+	case 7:
+	// aliens (Kinetic1)
+	case 101:
+	// pirate (Ion2)
+	case 207:
+		PlayGameSFX(eGameSFX::Hit_Ion, Volume, Location);
+		break;
 
-		// Plasma
-		case 8:
-		case 9:
-		case 10:
-		// aliens (Kinetic2, Kinetic3)
-		case 102:
-		case 103:
-		case 104:
-		case 105:
-		// aliens (Plasma3, Plasma2)
-		case 108:
-		case 109:
-		// pirate (Plasma2)
-		case 213:
-			PlayGameSFX(eGameSFX::Hit_Plasma, fVol, Location);
-			break;
+	// Plasma
+	case 8:
+	case 9:
+	case 10:
+	// aliens (Kinetic2, Kinetic3)
+	case 102:
+	case 103:
+	case 104:
+	case 105:
+	// aliens (Plasma3, Plasma2)
+	case 108:
+	case 109:
+	// pirate (Plasma2)
+	case 213:
+		PlayGameSFX(eGameSFX::Hit_Plasma, Volume, Location);
+		break;
 
-		// Antimatter
-		case 13:
-		// aliens (mine 1)
-		case 106:
-		// aliens (mine 2)
-		case 107:
-		// pirate (Antimatter)
-		case 208:
-			PlayGameSFX(eGameSFX::Hit_Antimatter, fVol, Location);
-			break;
+	// Antimatter
+	case 13:
+	// aliens (mine 1)
+	case 106:
+	// aliens (mine 2)
+	case 107:
+	// pirate (Antimatter)
+	case 208:
+		PlayGameSFX(eGameSFX::Hit_Antimatter, Volume, Location);
+		break;
 
-		// Gauss
-		case 15:
-			PlayGameSFX(eGameSFX::Hit_Gauss, fVol, Location);
-			break;
+	// Gauss
+	case 15:
+		PlayGameSFX(eGameSFX::Hit_Gauss, Volume, Location);
+		break;
 
-		// earth missile
-		case 16:
-		// pirate missile
-		case 205:
-		// pirate mines
-		case 214:
-		case 215:
-		case 216:
-		case 217:
-			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
-			break;
+	// earth missile
+	case 16:
+	// pirate missile
+	case 205:
+	// pirate mines
+	case 214:
+	case 215:
+	case 216:
+	case 217:
+		PlayGameSFX(eGameSFX::Explosion_Medium, Volume, Location);
+		break;
 
-		// earth missile swarm
-		case 17:
-		// pirate small missile
-		case 206:
-			PlayGameSFX(eGameSFX::Explosion_Medium, fVol, Location);
-			break;
+	// earth missile swarm
+	case 17:
+	// pirate small missile
+	case 206:
+		PlayGameSFX(eGameSFX::Explosion_Medium, Volume, Location);
+		break;
 
-		// earth torpedo
-		case 18:
-		// pirate torpedo
-		case 209:
-			PlayGameSFX(eGameSFX::Explosion_Big, fVol, Location, 2);
-			break;
+	// earth torpedo
+	case 18:
+	// pirate torpedo
+	case 209:
+		PlayGameSFX(eGameSFX::Explosion_Big, Volume, Location, 2);
+		break;
 
-		// earth bomb
-		case 19:
-		// pirate bomb
-		case 210:
-			PlayGameSFX(eGameSFX::Explosion_Big_Energy, fVol, Location, 2);
-			break;
+	// earth bomb
+	case 19:
+	// pirate bomb
+	case 210:
+		PlayGameSFX(eGameSFX::Explosion_Big_Energy, Volume, Location, 2);
+		break;
 
-		default:
-			break;
-		}
+	default:
+		break;
 	}
 }
 
@@ -790,7 +788,8 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Project
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
 		return;
 
-	PlayBulletExplosionSFX(Location, NeedExplosionSFX, ExplType);
+	if (NeedExplosionSFX)
+		PlayBulletExplosionSFX(Location, ExplType);
 
 	// camera shake
 	switch (ExplType) {

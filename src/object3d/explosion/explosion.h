@@ -133,8 +133,6 @@ void DrawAllExplosions(bool VertexOnlyPass);
 void ReleaseAllExplosions();
 // Setup explosion gfx.
 void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum);
-// Play sfx for bullet explosion.
-void PlayBulletExplosionSFX(const sVECTOR3D &Location, bool NeedExplosionSFX, int ExplType);
 
 } // astromenace namespace
 } // viewizard namespace
