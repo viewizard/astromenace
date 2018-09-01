@@ -377,7 +377,6 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					// здесь только так! иначе уничтожим снаряд
 					return false;
 				} else {
-					// "разбиваем" снаряд о корпус, звук тянем отдельно!
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed);
 
 					// где сейчас, там и погибли
@@ -410,12 +409,8 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				if (NeedCheckCollision(Object)) {
 					DamagesData.DamageHull = Projectile.DamageHull;
 					DamagesData.DamageSystems = Projectile.DamageSystems;
-				}
-				// "разбиваем" снаряд о корпус
-				// звук тянем отдельно!
-				if (NeedCheckCollision(Object))
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, ObjectSpeed);
-				else
+				} else
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, 0.0f);
 
 				// столкновение было
