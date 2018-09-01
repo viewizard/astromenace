@@ -171,7 +171,7 @@ static void PlayBulletExplosionSFX(const sVECTOR3D &Location, int ExplType)
  * Constructor.
  */
 cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Projectile, int ExplType,
-				   const sVECTOR3D &ExplLocation, float Speed, bool NeedExplosionSFX)
+				   const sVECTOR3D &ExplLocation, float Speed)
 {
 	TimeLastUpdate = Projectile.TimeLastUpdate;
 	ExplosionTypeByClass = 2;
@@ -788,8 +788,7 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Project
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
 		return;
 
-	if (NeedExplosionSFX)
-		PlayBulletExplosionSFX(Location, ExplType);
+	PlayBulletExplosionSFX(Location, ExplType);
 
 	// camera shake
 	switch (ExplType) {

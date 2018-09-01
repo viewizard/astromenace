@@ -49,11 +49,10 @@ std::list<std::unique_ptr<cExplosion, std::function<void (cExplosion *p)>>> Expl
  * Create cBulletExplosion object.
  */
 void CreateBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
-			   int ExplType, const sVECTOR3D &ExplLocation,
-			   float Speed, bool NeedExplosionSFX)
+			   int ExplType, const sVECTOR3D &ExplLocation, float Speed)
 {
 	ExplosionList.emplace_front(
-		new cBulletExplosion{Object, Projectile, ExplType, ExplLocation, Speed, NeedExplosionSFX},
+		new cBulletExplosion{Object, Projectile, ExplType, ExplLocation, Speed},
 		[](cExplosion *p) {delete static_cast<cBulletExplosion*>(p);});
 }
 
