@@ -158,14 +158,14 @@ static void AddBonusForKilledEnemy(const cObject3D &Object, eObjectStatus Killed
 /*
  * Setup space object explosion.
  */
-static void SetupSpaceExplosion(cSpaceObject &SpaceObject, bool SFX = true)
+static void SetupSpaceExplosion(cSpaceObject &SpaceObject)
 {
 	switch (SpaceObject.ObjectType) {
 	case eObjectType::SmallAsteroid:
-		CreateSpaceExplosion(SpaceObject, 1, SpaceObject.Location, SpaceObject.Speed, -1, SFX);
+		CreateSpaceExplosion(SpaceObject, 1, SpaceObject.Location, SpaceObject.Speed, -1);
 		break;
 	case eObjectType::SpaceDebris:
-		CreateSpaceExplosion(SpaceObject, 32, SpaceObject.Location, SpaceObject.Speed, -1, SFX);
+		CreateSpaceExplosion(SpaceObject, 32, SpaceObject.Location, SpaceObject.Speed, -1);
 		break;
 	default:
 		break;
@@ -1012,20 +1012,17 @@ void DetectCollisionAllObject3D()
 				    (!CheckHitBBMeshCollisionDetection(FirstObject, SecondObject, ObjectPieceNum)))
 						return; // eSpacePairCycle::Continue
 
-				bool SFXplayed = false;
-
 				if ((NeedCheckCollision(SecondObject)) &&
 				    ((SecondObject.ObjectType == eObjectType::SmallAsteroid) ||
 				     (SecondObject.ObjectType == eObjectType::SpaceDebris))) {
 					SetupSpaceExplosion(SecondObject);
-					SFXplayed = true;
 					Command = eSpacePairCycle::DeleteSecondObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(FirstObject) &&
 				    ((FirstObject.ObjectType == eObjectType::SmallAsteroid) ||
 				     (FirstObject.ObjectType == eObjectType::SpaceDebris))) {
-					SetupSpaceExplosion(FirstObject, !SFXplayed);
+					SetupSpaceExplosion(FirstObject);
 					if (Command == eSpacePairCycle::DeleteSecondObjectAndContinue)
 						Command = eSpacePairCycle::DeleteBothObjectsAndContinue;
 					else
