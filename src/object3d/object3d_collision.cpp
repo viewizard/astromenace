@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// FIXME we use "strength", "hull" and "armour" in the same meaning, switch to "armor"
+
 // TODO codestyle should be fixed
 
 // TODO translate comments
