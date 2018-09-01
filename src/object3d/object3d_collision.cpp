@@ -378,7 +378,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					return false;
 				} else {
 					// "разбиваем" снаряд о корпус, звук тянем отдельно!
-					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed, false);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed);
 
 					// где сейчас, там и погибли
 					IntercPoint = Projectile.Location;
@@ -414,9 +414,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				// "разбиваем" снаряд о корпус
 				// звук тянем отдельно!
 				if (NeedCheckCollision(Object))
-					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, ObjectSpeed, false);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, ObjectSpeed);
 				else
-					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, 0.0f, false);
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, 0.0f);
 
 				// столкновение было
 				return true;
@@ -519,27 +519,6 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 	return false;
 }
 
-// единая процедура для проигрывания эффекта разлета всех снарядов
-void DestroyProjectileWithExplosion(const cProjectile &Projectile, const sVECTOR3D &IntercPoint)
-{
-	switch (Projectile.ProjectileType) {
-	// обычные снаряды
-	case 0:
-		PlayBulletExplosionSFX(IntercPoint, Projectile.NeedDeadSound, Projectile.Num);
-		break;
-
-	// ракеты-торпеды-бомбы
-	// уже взорвали...
-	case 1:
-		break;
-
-	// лучевое оружие
-	// никогда не "взрываются"
-	case 2:
-		break;
-	}
-}
-
 //-----------------------------------------------------------------------------
 // Главная функция проверки столкновения
 //-----------------------------------------------------------------------------
@@ -618,12 +597,8 @@ void DetectCollisionAllObject3D()
 						tmpShip.FlareWeaponSlots.clear();
 				}
 
-				if (tmpProjectile.ProjectileType != 2) {
-					if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue)
-						tmpProjectile.NeedDeadSound = false;
-					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+				if (tmpProjectile.ProjectileType != 2)
 					ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
-				}
 
 				if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue) {
 					// break projectile cycle
@@ -666,7 +641,6 @@ void DetectCollisionAllObject3D()
 
 							// удаляем только те, которые разбились
 							if (tmpProjectile.ProjectileType != 2) {
-								DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
 								ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
 								return;
 							}
@@ -893,13 +867,8 @@ void DetectCollisionAllObject3D()
 					}
 				}
 
-				if (tmpProjectile.ProjectileType != 2) {
-					// if ground object destroyed, we should play only "explosion" sfx, without "hit" sfx
-					if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue)
-						tmpProjectile.NeedDeadSound = false;
-					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+				if (tmpProjectile.ProjectileType != 2)
 					ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
-				}
 
 				if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue) {
 					// break projectile cycle
@@ -995,13 +964,8 @@ void DetectCollisionAllObject3D()
 					}
 				}
 
-				if (tmpProjectile.ProjectileType != 2) {
-					// if space object destroyed, we should play only "explosion" sfx, without "hit" sfx
-					if (SpaceCycleCommand == eSpaceCycle::DeleteObjectAndContinue)
-						tmpProjectile.NeedDeadSound = false;
-					DestroyProjectileWithExplosion(tmpProjectile, IntercPoint);
+				if (tmpProjectile.ProjectileType != 2)
 					ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
-				}
 
 				if (SpaceCycleCommand == eSpaceCycle::DeleteObjectAndContinue) {
 					// break projectile cycle
