@@ -27,6 +27,8 @@
 
 // FIXME we use "strength", "hull" and "armour" in the same meaning, switch to "armor"
 
+// FIXME rename resistance to "Kinetic" and "EM" accordingly to damage types
+
 // TODO codestyle should be fixed
 
 // TODO translate comments
@@ -44,6 +46,15 @@
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+namespace {
+
+struct sDamage {
+	float Kinetic;
+	float EM; // electromagnetic
+};
+
+} // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern float GameMoney;
@@ -68,11 +79,6 @@ float GameCameraGetSpeed();
 extern float ShildEnergyStatus;
 extern float ShildStartHitStatus;
 extern int PlayerDeadObjectPieceNum;
-
-struct sDamagesData {
-	float DamageHull;
-	float DamageSystems;
-};
 
 
 /*
@@ -318,14 +324,12 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
  * Detect projectile collision.
  */
 bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
-			       sVECTOR3D &IntercPoint, sDamagesData &DamagesData, float ObjectSpeed)
+			       sVECTOR3D &IntercPoint, sDamage &Damage, float ObjectSpeed)
 {
 	if (!ObjectsStatusFoe(Object.ObjectStatus, Projectile.ObjectStatus) &&
 	    NeedCheckCollision(Object))
 		return false;
 
-	DamagesData.DamageHull = 0.0f;
-	DamagesData.DamageSystems = 0.0f;
 	// поправка на скорость камеры для корабля игрока
 	if (Object.ObjectStatus == eObjectStatus::Player)
 		ObjectSpeed += GameCameraGetSpeed();
@@ -391,8 +395,8 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
 
 				// столкновение не было (!!! именно так, иначе ерунда с указателем на снаряд)
-				DamagesData.DamageHull = 0.0f;
-				DamagesData.DamageSystems = 0.0f;
+				Damage.Kinetic = 0.0f;
+				Damage.EM = 0.0f;
 				return true;
 			}
 		} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
@@ -404,13 +408,14 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 			   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
 
 			if (NeedCheckCollision(Object)) {
-				DamagesData.DamageHull = Projectile.DamageHull;
-				DamagesData.DamageSystems = Projectile.DamageSystems;
+				Damage.Kinetic = Projectile.DamageHull;
+				Damage.EM = Projectile.DamageSystems;
 				CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, ObjectSpeed);
-			} else
+			} else {
+				Damage.Kinetic = 0.0f;
+				Damage.EM = 0.0f;
 				CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, 0.0f);
-
-			// столкновение было
+			}
 			return true;
 		}
 		break;
@@ -440,8 +445,8 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
 
 				// передаем, столкновение было, чтобы корректно удалить снаряд в общей процедуре
-				DamagesData.DamageHull = 0.0f;
-				DamagesData.DamageSystems = 0.0f;
+				Damage.Kinetic = 0.0f;
+				Damage.EM = 0.0f;
 				return true;
 			}
 		} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
@@ -475,12 +480,14 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 			IntercPoint = Projectile.Location;
 
 			if (NeedCheckCollision(Object)) {
-				DamagesData.DamageHull = Projectile.DamageHull;
-				DamagesData.DamageSystems = Projectile.DamageSystems;
+				Damage.Kinetic = Projectile.DamageHull;
+				Damage.EM = Projectile.DamageSystems;
 				CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
-			} else
+			} else {
+				Damage.Kinetic = 0.0f;
+				Damage.EM = 0.0f;
 				CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, 0.0f);
-			// столкновение было
+			}
 			return true;
 		}
 		break;
@@ -495,11 +502,8 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 		    CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
 			IntercPoint = Object.Location;
 
-			// находим по дельте повреждения
-			DamagesData.DamageHull = Projectile.DamageHull * Object.TimeDelta;
-			// всегда ноль
-			DamagesData.DamageSystems = 0.0f;
-			// столкновение было
+			Damage.Kinetic = Projectile.DamageHull * Object.TimeDelta;
+			Damage.EM = 0.0f;
 			return true;
 		}
 		break;
@@ -519,40 +523,38 @@ void DetectCollisionAllObject3D()
 	ForEachSpaceShip([] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
 		ForEachProjectile([&tmpShip, &ShipCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
 			sVECTOR3D IntercPoint;
-			sDamagesData DamagesData;
+			sDamage Damage;
 			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(tmpShip, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpShip.Speed)) {
-				// если на корабле есть щит, сначала его уничтожаем
-				if (tmpShip.ShieldStrength > DamagesData.DamageSystems) {
-					tmpShip.ShieldStrength -= DamagesData.DamageSystems;
-					DamagesData.DamageSystems = 0.0f;
+			if (DetectProjectileCollision(tmpShip, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpShip.Speed)) {
+				if (tmpShip.ShieldStrength >= Damage.EM) {
+					tmpShip.ShieldStrength -= Damage.EM;
+					Damage.EM = 0.0f;
 				} else {
-					// если щита мало
-					DamagesData.DamageSystems -= tmpShip.ShieldStrength;
+					Damage.EM -= tmpShip.ShieldStrength;
 					tmpShip.ShieldStrength = 0.0f;
 				}
 
-				if (tmpShip.ShieldStrength > DamagesData.DamageHull) {
-					tmpShip.ShieldStrength -= DamagesData.DamageHull;
-					DamagesData.DamageHull = 0.0f;
+				if (tmpShip.ShieldStrength >= Damage.Kinetic) {
+					tmpShip.ShieldStrength -= Damage.Kinetic;
+					Damage.Kinetic = 0.0f;
 				} else {
-					// если щита мало
-					DamagesData.DamageHull -= tmpShip.ShieldStrength;
+					Damage.Kinetic -= tmpShip.ShieldStrength;
 					tmpShip.ShieldStrength = 0.0f;
 				}
 
 				if (tmpShip.ShieldStrength < 0.0f)
 					tmpShip.ShieldStrength = 0.0f;
 
-				tmpShip.Strength -= DamagesData.DamageHull / tmpShip.ResistanceHull;
+				tmpShip.Strength -= Damage.Kinetic / tmpShip.ResistanceHull;
+				// let EM occasionally corrupt armor in some way
+				tmpShip.Strength -= Damage.EM * vw_fRand() / tmpShip.ResistanceHull;
 
-				tmpShip.Strength -= (DamagesData.DamageSystems / tmpShip.ResistanceHull) * vw_fRand();
-				// есть шанс полностью убить пришельца
-				if ((DamagesData.DamageSystems > 0.0f) &&
+				// since AlienFighter is "energy", we have a chance kill it by EM
+				if ((Damage.EM > 0.0f) &&
 				    (tmpShip.ObjectType == eObjectType::AlienFighter) &&
 				    (vw_fRand() > 0.7f))
-					tmpShip.Strength = 0;
+					tmpShip.Strength = 0.0f;
 
 				if (tmpShip.Strength <= 0.0f) {
 					AddBonusForKilledEnemy(tmpShip, tmpProjectile.ObjectStatus);
@@ -568,21 +570,21 @@ void DetectCollisionAllObject3D()
 					// если это не босс уровня (Alien MotherShip)
 					   (tmpShip.ObjectType != eObjectType::AlienMotherShip) &&
 					// если нужно, смотрим что делать с системами
-					   (DamagesData.DamageSystems > 0.0f)) {
+					   (Damage.EM > 0.0f)) {
 
 					float Rand = vw_fRand();
-					// поправка на мощьность выстрела
-					float DR = DamagesData.DamageSystems/300.0f;
+					// поправка на мощность выстрела
+					float DR = Damage.EM / 300.0f;
 
 					// выводим из строя управляемость кораблем
-					if (Rand > 0.6f-DR)
+					if (Rand > 0.6f - DR)
 						tmpShip.MaxSpeed = tmpShip.MaxSpeed / 2.0f;
 					if ((Rand > 0.3f - DR) && (Rand < 0.6f))
 						tmpShip.MaxSpeedRotate = tmpShip.MaxSpeedRotate / 2.0f;
 
 					// если есть фларес, есть шанс его вырубить
 					if (!tmpShip.FlareWeaponSlots.empty() &&
-					    (Rand > 0.5f-DR) && (Rand < 0.8f))
+					    (Rand > 0.5f - DR) && (Rand < 0.8f))
 						tmpShip.FlareWeaponSlots.clear();
 				}
 
@@ -613,15 +615,14 @@ void DetectCollisionAllObject3D()
 			    !GameUndestroyableWeapon && !tmpShip.WeaponSlots.empty()) {
 				for (auto &tmpWeaponSlot : tmpShip.WeaponSlots) {
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-						sDamagesData DamagesDataWeapon;
 						int ObjectPieceNumWeapon;
 
 						if ((sharedWeapon->Strength > 0.0f) &&
-						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, IntercPoint, DamagesDataWeapon, tmpShip.Speed)) {
+						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, IntercPoint, Damage, tmpShip.Speed)) {
 							// FIXME вот тут все очень плохо, т.к. можем убить и сам tmpShip
 
 							// просто делаем изменения в прочности... и больше ничего
-							sharedWeapon->Strength -= DamagesDataWeapon.DamageHull / sharedWeapon->ResistanceHull;
+							sharedWeapon->Strength -= Damage.Kinetic / sharedWeapon->ResistanceHull;
 							if (sharedWeapon->Strength <= 0.0f) {
 								sharedWeapon->Strength = 0.0f;
 								PlayVoicePhrase(eVoicePhrase::WeaponDestroyed, 1.0f);
@@ -842,12 +843,14 @@ void DetectCollisionAllObject3D()
 	ForEachGroundObject([] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 		ForEachProjectile([&tmpGround, &GroundCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
 			sVECTOR3D IntercPoint;
-			sDamagesData DamagesData;
+			sDamage Damage;
 			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpGround.Speed)) {
+			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpGround.Speed)) {
 				if (NeedCheckCollision(tmpGround)) {
-					tmpGround.Strength -= DamagesData.DamageHull / tmpGround.ResistanceHull;
+					tmpGround.Strength -= Damage.Kinetic / tmpGround.ResistanceHull;
+
+					// FIXME let EM occasionally corrupt armor in some way (see space ship code above)
 
 					if (tmpGround.Strength <= 0.0f) {
 						AddBonusForKilledEnemy(tmpGround, tmpProjectile.ObjectStatus);
@@ -939,13 +942,16 @@ void DetectCollisionAllObject3D()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceObject([] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 		ForEachProjectile([&tmpSpace, &SpaceCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
-			int ObjectPieceNum;
 			sVECTOR3D IntercPoint;
-			sDamagesData DamagesData;
+			sDamage Damage;
+			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(tmpSpace, ObjectPieceNum, tmpProjectile, IntercPoint, DamagesData, tmpSpace.Speed)) {
+			if (DetectProjectileCollision(tmpSpace, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpSpace.Speed)) {
 				if (NeedCheckCollision(tmpSpace)) {
-					tmpSpace.Strength -= DamagesData.DamageHull / tmpSpace.ResistanceHull;
+					tmpSpace.Strength -= Damage.Kinetic / tmpSpace.ResistanceHull;
+
+					// FIXME let EM occasionally corrupt armor in some way (see space ship code above)
+
 					if (tmpSpace.Strength <= 0.0f) {
 						AddBonusForKilledEnemy(tmpSpace, tmpProjectile.ObjectStatus);
 						SetupSpaceExplosion(tmpSpace);
