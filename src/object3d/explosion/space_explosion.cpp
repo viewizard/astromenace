@@ -47,7 +47,7 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power);
  * Constructor.
  */
 cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3D &ExplLocation,
-				 float Speed, int ObjectChunkNum, bool NeedExplosionSFX)
+				 float Speed, int ObjectChunkNum)
 {
 	TimeLastUpdate = Object.TimeLastUpdate;
 	ExplosionTypeByClass = 1;
@@ -661,24 +661,22 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 	if (!vw_BoxInFrustum(Location + AABB[6], Location + AABB[0]))
 		return;
 
-	if (NeedExplosionSFX) {
-		switch (ExplType) {
-		case 1: // astetoid
-			PlayGameSFX(eGameSFX::Explosion_Small, 1.0f, ExplLocation, 2);
-			break;
-		case 2: // alien
-			PlayGameSFX(eGameSFX::Explosion_Big, 1.0f, ExplLocation, 2);
-			break;
-		case 3: // pirate, earth
-			PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
-			break;
-		case 32: // derbis - pirate, earth
-			PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
-			break;
-		case 34: // alien mothership
-			PlayGameSFX(eGameSFX::Explosion_Big, 1.0f, ExplLocation, 2);
-			break;
-		}
+	switch (ExplType) {
+	case 1: // astetoid
+		PlayGameSFX(eGameSFX::Explosion_Small, 1.0f, ExplLocation, 2);
+		break;
+	case 2: // alien
+		PlayGameSFX(eGameSFX::Explosion_Big, 1.0f, ExplLocation, 2);
+		break;
+	case 3: // pirate, earth
+		PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
+		break;
+	case 32: // derbis - pirate, earth
+		PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
+		break;
+	case 34: // alien mothership
+		PlayGameSFX(eGameSFX::Explosion_Big, 1.0f, ExplLocation, 2);
+		break;
 	}
 
 	// camera shake

@@ -97,15 +97,13 @@ private:
 };
 
 class cSpaceExplosion final : public cExplosion {
-	friend void CreateSpaceExplosion(cObject3D &Object, int ExplType,
-					 const sVECTOR3D &ExplLocation, float Speed,
-					 int ObjectChunkNum, bool NeedExplosionSFX);
+	friend void CreateSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3D &ExplLocation,
+					 float Speed, int ObjectChunkNum);
 private:
 	// Don't allow direct new/delete usage in code, only CreateSpaceExplosion()
 	// allowed for cSpaceExplosion creation and release setup (deleter must be provided).
-	explicit cSpaceExplosion(cObject3D &Object, int ExplType,
-				 const sVECTOR3D &ExplLocation, float Speed,
-				 int ObjectChunkNum, bool NeedExplosionSFX);
+	explicit cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3D &ExplLocation,
+				 float Speed, int ObjectChunkNum);
 	~cSpaceExplosion() = default;
 };
 
@@ -117,9 +115,8 @@ void CreateBulletExplosion(const cObject3D *Object, cProjectile &Projectile,
 void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 			   const sVECTOR3D &ExplLocation, int ObjectChunkNum);
 // Create cSpaceExplosion object.
-void CreateSpaceExplosion(cObject3D &Object, int ExplType,
-			  const sVECTOR3D &ExplLocation, float Speed,
-			  int ObjectChunkNum, bool NeedExplosionSFX = true);
+void CreateSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3D &ExplLocation,
+			  float Speed, int ObjectChunkNum);
 // Update and remove (erase) expired explosions.
 void UpdateAllExplosion(float Time);
 // Draw all explosions.

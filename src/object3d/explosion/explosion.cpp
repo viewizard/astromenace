@@ -70,12 +70,11 @@ void CreateGroundExplosion(cGroundObject &Object, int ExplType,
 /*
  * Create cSpaceExplosion object.
  */
-void CreateSpaceExplosion(cObject3D &Object, int ExplType,
-			  const sVECTOR3D &ExplLocation, float Speed,
-			  int ObjectChunkNum, bool NeedExplosionSFX)
+void CreateSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3D &ExplLocation,
+			  float Speed, int ObjectChunkNum)
 {
 	ExplosionList.emplace_front(
-		new cSpaceExplosion{Object, ExplType, ExplLocation, Speed, ObjectChunkNum, NeedExplosionSFX},
+		new cSpaceExplosion{Object, ExplType, ExplLocation, Speed, ObjectChunkNum},
 		[](cExplosion *p) {delete static_cast<cSpaceExplosion*>(p);});
 }
 
