@@ -662,7 +662,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 		return;
 
 	switch (ExplType) {
-	case 1: // astetoid
+	case 1: // asteroid
 		PlayGameSFX(eGameSFX::Explosion_Small, 1.0f, ExplLocation, 2);
 		break;
 	case 2: // alien
@@ -681,7 +681,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 
 	// camera shake
 	switch (ExplType) {
-	case 1: // astetoid
+	case 1: // asteroid
 		GameCameraSetExplosion(ExplLocation, 0.2f);
 		break;
 
