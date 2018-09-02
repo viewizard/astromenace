@@ -347,9 +347,9 @@ float GetProjectileRange(int Num)
 }
 
 /*
- * Get projectile hull (main) damage.
+ * Get projectile kinetic damage.
  */
-int GetProjectileHullDamage(int Num)
+int GetProjectileDamageKinetic(const int Num)
 {
 	if ((Num >= 1) &&
 	    (Num <= 99)) {

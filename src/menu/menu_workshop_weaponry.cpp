@@ -1161,14 +1161,14 @@ void Workshop_Weaponry()
 
 
 	int k2 = 0;
-	if (GetProjectileHullDamage(WorkshopNewWeapon->InternalType) > 0.0f) {
+	if (GetProjectileDamageKinetic(WorkshopNewWeapon->InternalType) > 0.0f) {
 		vw_DrawText(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, Hull:"));
 		if ((WorkshopNewWeapon->InternalType == 11) ||
 		    (WorkshopNewWeapon->InternalType == 12) ||
 		    (WorkshopNewWeapon->InternalType == 14))
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileDamageKinetic(WorkshopNewWeapon->InternalType), vw_GetText("units/sec"));
 		else
-			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileHullDamage(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
+			vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileDamageKinetic(WorkshopNewWeapon->InternalType), vw_GetText("units/shot"));
 
 		k2=20;
 	}
