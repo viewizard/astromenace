@@ -451,59 +451,8 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 }
 
 /*
- * Get hull resistance for particular armor.
- */
-static float GetHullResistance(const int ArmourType)
-{
-	switch (ArmourType) {
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-		return 1.0f;
-
-	case 7:
-		return 4.0f;
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
-		break;
-	}
-
-	return 0.0f;
-}
-
-/*
- * Get system resistance for particular armor.
- */
-static float GetSystemsResistance(const int ArmourType)
-{
-	switch (ArmourType) {
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-		return 1.0f;
-
-	case 7:
-		return 5.0f;
-
-	default:
-		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
-		break;
-	}
-
-	return 0.0f;
-}
-
-/*
  * Get texture for particular armor.
+ * Note, we use only 4 for player ship, but all 8 could be used by script.
  */
 static GLtexture GetArmourTexture(const int ArmourType)
 {
@@ -542,6 +491,7 @@ static GLtexture GetArmourTexture(const int ArmourType)
 
 /*
  * Get illumination texture for particular armor.
+ * Note, we use only 4 for player ship, but all 8 could be used by script.
  */
 static GLtexture GetArmourIllumTexture(const int ArmourType)
 {
@@ -586,9 +536,6 @@ void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip)
 		return;
-
-	sharedSpaceShip->ResistanceHull = GetHullResistance(ArmourType);
-	sharedSpaceShip->ResistanceSystems = GetSystemsResistance(ArmourType);
 
 	for (unsigned int i = 0; i < sharedSpaceShip->Chunks.size(); i++) {
 		sharedSpaceShip->Texture[i] = GetArmourTexture(ArmourType);
