@@ -368,9 +368,9 @@ int GetProjectileDamageKinetic(const int Num)
 }
 
 /*
- * Get projectile system (internal) damage.
+ * Get projectile EM damage.
  */
-int GetProjectileSystemsDamage(int Num)
+int GetProjectileDamageEM(const int Num)
 {
 	if ((Num >= 1) &&
 	    (Num <= 99)) {

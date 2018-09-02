@@ -134,8 +134,8 @@ std::weak_ptr<cObject3D> GetProjectilePtr(const cProjectile &Object);
 float GetProjectileRange(int Num);
 // Get projectile kinetic damage.
 int GetProjectileDamageKinetic(const int Num);
-// Get projectile system (internal) damage.
-int GetProjectileSystemsDamage(int Num);
+// Get projectile EM damage.
+int GetProjectileDamageEM(const int Num);
 // Get projectile speed.
 float GetProjectileSpeed(int Num);
 
