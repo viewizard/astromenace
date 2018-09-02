@@ -111,8 +111,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 				sharedProjectile->SpeedEnd = 0.0f;
 				sharedProjectile->SpeedStart = sharedProjectile->Speed;
 				sharedProjectile->Lifetime = sharedProjectile->Age = 1.0f + vw_fRand0();
-				sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
-				sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+				sharedProjectile->Damage /= CurrentPenalty;
 			}
 		}
 	}
@@ -194,8 +193,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 				sharedProjectile->SpeedEnd = 0.0f;
 				sharedProjectile->SpeedStart = sharedProjectile->Speed;
 				sharedProjectile->Lifetime = sharedProjectile->Age = 1.5f + vw_fRand0();
-				sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
-				sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+				sharedProjectile->Damage /= CurrentPenalty;
 			}
 		}
 	}
@@ -339,8 +337,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 				sharedProjectile->SpeedEnd = 0.0f;
 				sharedProjectile->SpeedStart = sharedProjectile->Speed;
 				sharedProjectile->Lifetime = sharedProjectile->Age = 1.5f + vw_fRand0();
-				sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
-				sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+				sharedProjectile->Damage /= CurrentPenalty;
 			}
 		}
 	}

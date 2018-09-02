@@ -922,8 +922,7 @@ bool cWeapon::Update(float Time)
 					sharedProjectile->ObjectStatus = ObjectStatus;
 					sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 					sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
-					sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
-					sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+					sharedProjectile->Damage /= CurrentPenalty;
 
 					if (SFX != eGameSFX::none) {
 						float fVol = 1.0f;
@@ -966,8 +965,7 @@ bool cWeapon::Update(float Time)
 					sharedProjectile->ObjectStatus = ObjectStatus;
 					sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 					sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
-					sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
-					sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+					sharedProjectile->Damage /= CurrentPenalty;
 
 					if (SFX != eGameSFX::none)
 						PlayGameSFX(SFX, 1.0f, sharedProjectile->Location);
@@ -1318,8 +1316,7 @@ bool cWeapon::WeaponFire(float Time)
 			sharedProjectile->ObjectStatus = ObjectStatus;
 			sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 			sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age;
-			sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
-			sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+			sharedProjectile->Damage /= CurrentPenalty;
 
 			// FIXME should be revised, we use -3 in order to 'convert' to proper projectile type
 			sharedProjectile->ProjectileType = sharedProjectile->ProjectileType - 3;
@@ -1339,8 +1336,7 @@ bool cWeapon::WeaponFire(float Time)
 			sharedProjectile->ObjectStatus = ObjectStatus;
 			sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
 			sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
-			sharedProjectile->DamageHull = sharedProjectile->DamageHull / CurrentPenalty;
-			sharedProjectile->DamageSystems = sharedProjectile->DamageSystems / CurrentPenalty;
+			sharedProjectile->Damage /= CurrentPenalty;
 		}
 	}
 

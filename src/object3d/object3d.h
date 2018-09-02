@@ -101,7 +101,60 @@ enum class eDeleteAfterLeaveScene {
 	wait_delay	// will be deleted after delay
 };
 // delay before object delete, since object could back to the scene
-constexpr float DeleteAfterLeaveSceneDelay = 1.0f;
+constexpr float DeleteAfterLeaveSceneDelay{1.0f};
+
+class cDamage {
+private:
+	float Kinetic_{0.0f};
+	float EM_{0.0f}; // electromagnetic
+
+public:
+	cDamage() = default;
+	explicit cDamage(float Value) :
+		Kinetic_{Value},
+		EM_{Value}
+	{}
+	explicit cDamage(float Kinetic, float EM) :
+		Kinetic_{Kinetic},
+		EM_{EM}
+	{}
+
+	cDamage& operator = (float Value)
+	{
+		Kinetic_ = Value;
+		EM_ = Value;
+		return *this;
+	}
+
+	cDamage& operator /= (float Value)
+	{
+		Kinetic_ /= Value;
+		EM_ /= Value;
+		return *this;
+	}
+
+	cDamage& operator *= (float Value)
+	{
+		Kinetic_ *= Value;
+		EM_ *= Value;
+		return *this;
+	}
+
+	float &Kinetic()
+	{
+		return Kinetic_;
+	}
+
+	float &EM()
+	{
+		return EM_;
+	}
+
+	float Full() const
+	{
+		return Kinetic_ + EM_;
+	}
+};
 
 class cObject3D : public sModel3D {
 protected:

@@ -58,8 +58,8 @@ namespace {
 
 struct sProjectileData {
 	float Radius;
-	float DamageHull;
-	float DamageSystems;
+	float DamageKinetic;
+	float DamageEM;
 	// 0-projectile, 1-with 3d model, 2-beam, 3- flares/alien mine, 4-mine with 3d model
 	int ProjectileType;
 	float Speed;
@@ -355,14 +355,14 @@ int GetProjectileHullDamage(int Num)
 	    (Num <= 99)) {
 		// missile swarm
 		if (Num == 17)
-			return 10 * (int)PresetEarthProjectileData[Num - 1].DamageHull;
-		return (int)PresetEarthProjectileData[Num - 1].DamageHull;
+			return 10 * (int)PresetEarthProjectileData[Num - 1].DamageKinetic;
+		return (int)PresetEarthProjectileData[Num - 1].DamageKinetic;
 	} else if ((Num >= 101) &&
 		   (Num <= 199))
-		return (int)PresetAlienProjectileData[Num - 101].DamageHull;
+		return (int)PresetAlienProjectileData[Num - 101].DamageKinetic;
 	else if ((Num >= 201) &&
 		 (Num <= 299))
-		return (int)PresetPirateProjectileData[Num - 201].DamageHull;
+		return (int)PresetPirateProjectileData[Num - 201].DamageKinetic;
 
 	return 0;
 }
@@ -376,14 +376,14 @@ int GetProjectileSystemsDamage(int Num)
 	    (Num <= 99)) {
 		// missile swarm
 		if (Num == 17)
-			return 10 * (int)PresetEarthProjectileData[Num - 1].DamageSystems;
-		return (int)PresetEarthProjectileData[Num - 1].DamageSystems;
+			return 10 * (int)PresetEarthProjectileData[Num - 1].DamageEM;
+		return (int)PresetEarthProjectileData[Num - 1].DamageEM;
 	} else if ((Num >= 101) &&
 		   (Num <= 199))
-		return (int)PresetAlienProjectileData[Num - 101].DamageSystems;
+		return (int)PresetAlienProjectileData[Num - 101].DamageEM;
 	else if ((Num >= 201) &&
 		 (Num <= 299))
-		return (int)PresetPirateProjectileData[Num - 201].DamageSystems;
+		return (int)PresetPirateProjectileData[Num - 201].DamageEM;
 
 	return 0;
 }
@@ -1317,8 +1317,8 @@ cProjectile::cProjectile(const int ProjectileNum)
 	if ((Num >= 1) &&
 	    (Num <= 99)) {
 		Radius = PresetEarthProjectileData[IntNum - 1].Radius;
-		DamageHull = PresetEarthProjectileData[IntNum - 1].DamageHull;
-		DamageSystems = PresetEarthProjectileData[IntNum - 1].DamageSystems;
+		Damage.Kinetic() = PresetEarthProjectileData[IntNum - 1].DamageKinetic;
+		Damage.EM() = PresetEarthProjectileData[IntNum - 1].DamageEM;
 		ProjectileType = PresetEarthProjectileData[IntNum - 1].ProjectileType;
 		SpeedStart = SpeedEnd = Speed = PresetEarthProjectileData[IntNum - 1].Speed;
 		Age = Lifetime = PresetEarthProjectileData[IntNum - 1].Age;
@@ -1327,8 +1327,8 @@ cProjectile::cProjectile(const int ProjectileNum)
 		   (Num <= 199)) {
 		IntNum = ProjectileNum - 100;
 		Radius = PresetAlienProjectileData[IntNum - 1].Radius;
-		DamageHull = PresetAlienProjectileData[IntNum - 1].DamageHull;
-		DamageSystems = PresetAlienProjectileData[IntNum - 1].DamageSystems;
+		Damage.Kinetic() = PresetAlienProjectileData[IntNum - 1].DamageKinetic;
+		Damage.EM() = PresetAlienProjectileData[IntNum - 1].DamageEM;
 		ProjectileType = PresetAlienProjectileData[IntNum - 1].ProjectileType;
 		SpeedStart = SpeedEnd = Speed = PresetAlienProjectileData[IntNum - 1].Speed;
 		Age = Lifetime = PresetAlienProjectileData[IntNum - 1].Age;
@@ -1337,8 +1337,8 @@ cProjectile::cProjectile(const int ProjectileNum)
 		   (Num <= 299)) {
 		IntNum = ProjectileNum - 200;
 		Radius = PresetPirateProjectileData[IntNum - 1].Radius;
-		DamageHull = PresetPirateProjectileData[IntNum - 1].DamageHull;
-		DamageSystems = PresetPirateProjectileData[IntNum - 1].DamageSystems;
+		Damage.Kinetic() = PresetPirateProjectileData[IntNum - 1].DamageKinetic;
+		Damage.EM() = PresetPirateProjectileData[IntNum - 1].DamageEM;
 		ProjectileType = PresetPirateProjectileData[IntNum - 1].ProjectileType;
 		SpeedStart = SpeedEnd = Speed = PresetPirateProjectileData[IntNum - 1].Speed;
 		Age = Lifetime = PresetPirateProjectileData[IntNum - 1].Age;
@@ -2622,8 +2622,7 @@ missile:
 					Projectile->ObjectStatus = ObjectStatus;
 					Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart / CurrentPenalty;
 					Projectile->Age = Projectile->Lifetime = Projectile->Age * CurrentPenalty;
-					Projectile->DamageHull = Projectile->DamageHull / CurrentPenalty;
-					Projectile->DamageSystems = Projectile->DamageSystems / CurrentPenalty;
+					Projectile->Damage /= CurrentPenalty;
 
 					MineNextFireTime = MineReloadTime;
 				}
@@ -2704,8 +2703,7 @@ missile:
 					Projectile->ObjectStatus = ObjectStatus;
 					Projectile->SpeedStart = Projectile->SpeedEnd = Projectile->SpeedStart / CurrentPenalty;
 					Projectile->Age = Projectile->Lifetime = Projectile->Age * CurrentPenalty;
-					Projectile->DamageHull = Projectile->DamageHull / CurrentPenalty;
-					Projectile->DamageSystems = Projectile->DamageSystems / CurrentPenalty;
+					Projectile->Damage /= CurrentPenalty;
 					MineNextFireTime = MineReloadTime;
 				}
 			}

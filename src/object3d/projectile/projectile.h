@@ -71,8 +71,7 @@ public:
 
 	int Num{0}; // internal id (same as creation number ProjectileNum)
 
-	float DamageHull{0.0f};
-	float DamageSystems{0.0f};
+	cDamage Damage{0.0f};
 
 	// 0 - projectile
 	// 1 - projectile with 3d model
