@@ -103,6 +103,13 @@ enum class eDeleteAfterLeaveScene {
 // delay before object delete, since object could back to the scene
 constexpr float DeleteAfterLeaveSceneDelay{1.0f};
 
+/*
+For now we have 2 types of damage:
+Kinetic - good for armor and shield, stable damage value;
+EM (electromagnetic) - good for shield (stable damage value), have a chance to kill alien (energy creature)
+   by one hit, have a chance to damage armor (random damage value), have a chance to disable some internal system;
+*/
+// TODO probably, we also need "Explosion" damage type for shock wave, that now connected to 75% of Kinetic damage
 class cDamage {
 private:
 	float Kinetic_{0.0f};
