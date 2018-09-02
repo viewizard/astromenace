@@ -122,10 +122,7 @@ void WorkshopCreateShip(int Num)
 
 	// создаем системы (визуальные)
 	SetEarthSpaceFighterEngine(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].EngineSystem);
-	if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem == 2)
-		SetEarthSpaceFighterArmour(WorkshopFighterGame, 7);
-	else
-		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
+	SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
 
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 	sharedWorkshopFighterGame->SetLocation(sVECTOR3D{1000.0f,

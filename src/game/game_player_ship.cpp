@@ -259,12 +259,7 @@ void InitGamePlayerShip()
 
 	// создаем системы (визуальные)
 	SetEarthSpaceFighterEngine(PlayerFighter, GameEngineSystem);
-
-	if (GameAdvancedProtectionSystem == 2)
-		SetEarthSpaceFighterArmour(PlayerFighter, 7);
-	else
-		// установка защитного слоя (синяя броня), который снижает наносимые повреждения
-		SetEarthSpaceFighterArmour(PlayerFighter, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
+	SetEarthSpaceFighterArmour(PlayerFighter, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 
