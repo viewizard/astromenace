@@ -84,8 +84,6 @@ cTracked::cTracked(const int TrackedNum)
 	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetTrackedData[TrackedNum - 1].TextureFileName);
 	}
-	ResistanceHull = 1.0f;
-	ResistanceSystems = 1.0f;
 	SpeedToWheelRotarySpeedFactor = PresetTrackedData[TrackedNum - 1].SpeedToWheelRotarySpeedFactor;
 
 	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength / GameEnemyArmorPenalty;

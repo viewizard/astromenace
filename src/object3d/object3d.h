@@ -166,9 +166,6 @@ public:
 	bool ShowStrength{true};
 	bool NeedShowStrengthNow{false};
 
-	float ResistanceHull{1.0f};
-	float ResistanceSystems{1.0f};
-
 	float CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
 				    0.0f, 1.0f, 0.0f,
 				    0.0f, 0.0f, 1.0f};

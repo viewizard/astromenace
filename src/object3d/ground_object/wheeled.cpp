@@ -79,8 +79,6 @@ cWheeled::cWheeled(const int WheeledNum)
 	for (unsigned int i = 0; i < Chunks.size(); i++) {
 		Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureFileName);
 	}
-	ResistanceHull = 1.0f;
-	ResistanceSystems = 1.0f;
 	SpeedToWheelRotarySpeedFactor = PresetWheeledData[WheeledNum - 1].SpeedToWheelRotarySpeedFactor;
 
 	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength / GameEnemyArmorPenalty;

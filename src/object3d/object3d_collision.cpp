@@ -27,8 +27,6 @@
 
 // FIXME we use "strength", "hull" and "armour" in the same meaning, switch to "armor"
 
-// FIXME rename resistance to "Kinetic" and "EM" accordingly to damage types
-
 // TODO codestyle should be fixed
 
 // TODO translate comments
@@ -275,7 +273,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 			    (vw_fRand() > 0.5f))
 				return; // eSpaceCycle::Continue;
 
-			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor) / tmpSpace.ResistanceHull;
+			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor);
 
 			if (tmpSpace.Strength <= 0.0f) {
 				AddBonusForKilledEnemy(tmpSpace, ExplosionStatus);
@@ -292,7 +290,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 		    CheckDistanceBetweenPoints(tmpShip.Location, Epicenter, Radius2, Distance2Factor)) {
 
 			tmpShip.ShieldStrength = 0.0f; // EMP with bomb/torpedo explosion should reduce shields to 0
-			tmpShip.Strength -= Damage * (1.0f - Distance2Factor) / tmpShip.ResistanceHull;
+			tmpShip.Strength -= Damage * (1.0f - Distance2Factor);
 
 			if ((tmpShip.Strength <= 0.0f) &&
 			    (tmpShip.ObjectStatus != eObjectStatus::Player)) {
@@ -309,7 +307,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 		    (&DontTouchObject != &tmpGround) &&
 		    CheckDistanceBetweenPoints(tmpGround.Location, Epicenter, Radius2, Distance2Factor)) {
 
-			tmpGround.Strength -= Damage * (1.0f - Distance2Factor) / tmpGround.ResistanceHull;
+			tmpGround.Strength -= Damage * (1.0f - Distance2Factor);
 
 			if (tmpGround.Strength <= 0.0f) {
 				AddBonusForKilledEnemy(tmpGround, ExplosionStatus);
@@ -546,9 +544,9 @@ void DetectCollisionAllObject3D()
 				if (tmpShip.ShieldStrength < 0.0f)
 					tmpShip.ShieldStrength = 0.0f;
 
-				tmpShip.Strength -= Damage.Kinetic / tmpShip.ResistanceHull;
+				tmpShip.Strength -= Damage.Kinetic;
 				// let EM occasionally corrupt armor in some way
-				tmpShip.Strength -= Damage.EM * vw_fRand() / tmpShip.ResistanceHull;
+				tmpShip.Strength -= Damage.EM * vw_fRand();
 
 				// since AlienFighter is "energy", we have a chance kill it by EM
 				if ((Damage.EM > 0.0f) &&
@@ -622,7 +620,7 @@ void DetectCollisionAllObject3D()
 							// FIXME вот тут все очень плохо, т.к. можем убить и сам tmpShip
 
 							// просто делаем изменения в прочности... и больше ничего
-							sharedWeapon->Strength -= Damage.Kinetic / sharedWeapon->ResistanceHull;
+							sharedWeapon->Strength -= Damage.Kinetic;
 							if (sharedWeapon->Strength <= 0.0f) {
 								sharedWeapon->Strength = 0.0f;
 								PlayVoicePhrase(eVoicePhrase::WeaponDestroyed, 1.0f);
@@ -668,8 +666,8 @@ void DetectCollisionAllObject3D()
 						tmpShip.Strength -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
 				} else {
 					float StrTMP = tmpShip.Strength;
-					tmpShip.Strength -= tmpSpace.Strength / tmpShip.ResistanceHull;
-					tmpSpace.Strength -= StrTMP / tmpSpace.ResistanceHull;
+					tmpShip.Strength -= tmpSpace.Strength;
+					tmpSpace.Strength -= StrTMP;
 				}
 				if (!NeedCheckCollision(tmpShip))
 					tmpSpace.Strength = 0.0f;
@@ -740,8 +738,8 @@ void DetectCollisionAllObject3D()
 						tmpShip.Strength -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
 				} else {
 					float StrTMP = tmpShip.Strength;
-					tmpShip.Strength -= tmpGround.Strength / tmpShip.ResistanceHull;
-					tmpGround.Strength -= StrTMP / tmpGround.ResistanceHull;
+					tmpShip.Strength -= tmpGround.Strength;
+					tmpGround.Strength -= StrTMP;
 				}
 				if (!NeedCheckCollision(tmpShip))
 					tmpGround.Strength = 0.0f;
@@ -792,8 +790,8 @@ void DetectCollisionAllObject3D()
 		    CheckHitBBHitBBCollisionDetection(FirstShip, SecondShip, ObjectPieceNum1, ObjectPieceNum2)) {
 
 			float StrTMP = FirstShip.Strength;
-			FirstShip.Strength -= SecondShip.Strength / FirstShip.ResistanceHull;
-			SecondShip.Strength -= StrTMP / SecondShip.ResistanceHull;
+			FirstShip.Strength -= SecondShip.Strength;
+			SecondShip.Strength -= StrTMP;
 
 			// если столкновение с преградой которую не можем уничтожить
 			if (!NeedCheckCollision(SecondShip))
@@ -848,7 +846,7 @@ void DetectCollisionAllObject3D()
 
 			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpGround.Speed)) {
 				if (NeedCheckCollision(tmpGround)) {
-					tmpGround.Strength -= Damage.Kinetic / tmpGround.ResistanceHull;
+					tmpGround.Strength -= Damage.Kinetic;
 
 					// FIXME let EM occasionally corrupt armor in some way (see space ship code above)
 
@@ -902,8 +900,8 @@ void DetectCollisionAllObject3D()
 					tmpGround.Strength -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
 				else {
 					float StrTMP = tmpGround.Strength;
-					tmpGround.Strength -= tmpSpace.Strength / tmpGround.ResistanceHull;
-					tmpSpace.Strength -= StrTMP / tmpSpace.ResistanceHull;
+					tmpGround.Strength -= tmpSpace.Strength;
+					tmpSpace.Strength -= StrTMP;
 				}
 				if (!NeedCheckCollision(tmpGround))
 					tmpSpace.Strength = 0.0f;
@@ -948,7 +946,7 @@ void DetectCollisionAllObject3D()
 
 			if (DetectProjectileCollision(tmpSpace, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpSpace.Speed)) {
 				if (NeedCheckCollision(tmpSpace)) {
-					tmpSpace.Strength -= Damage.Kinetic / tmpSpace.ResistanceHull;
+					tmpSpace.Strength -= Damage.Kinetic;
 
 					// FIXME let EM occasionally corrupt armor in some way (see space ship code above)
 

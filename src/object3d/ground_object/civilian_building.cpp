@@ -84,9 +84,6 @@ cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/buildings_nm.tga");
 	}
 
-	ResistanceHull = 1.0f;
-	ResistanceSystems = 1.0f;
-
 	Strength = StrengthStart = PresetBuildingData[BuildingNum - 1].Strength / GameEnemyArmorPenalty;
 }
 

@@ -240,8 +240,6 @@ cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
 
-	ResistanceHull = 1.0f;
-	ResistanceSystems = 1.0f;
 	MaxSpeed = 40.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;

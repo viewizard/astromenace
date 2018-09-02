@@ -216,8 +216,6 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 	if (SpaceShipNum > 5) // big pirate ships
 		PromptDrawDist2 = 20000.0f;
 
-	ResistanceHull = 1.0f;
-	ResistanceSystems = 1.0f;
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;

@@ -483,8 +483,6 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 20000.0f;
 
-	ResistanceHull = 1.0f;
-	ResistanceSystems = 1.0f;
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 80.0f;

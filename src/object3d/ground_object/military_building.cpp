@@ -75,9 +75,6 @@ cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
 		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileName);
 	}
 
-	ResistanceHull = 1.0f;
-	ResistanceSystems = 1.0f;
-
 	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Strength / GameEnemyArmorPenalty;
 
 	switch (MilitaryBuildingNum) {
