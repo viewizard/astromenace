@@ -980,9 +980,6 @@ Dialogs with default type:
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ion Resistance:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", 0.0f, vw_GetText("units"));
-			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
 			if (NeedMoreEnergyDialog && (GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1))
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), vw_GetText("units per sec"));
@@ -1035,6 +1032,7 @@ Dialogs with default type:
 			if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
+				Y1 += Offset;
 				SizeI = (W-vw_TextWidth(vw_GetText("Useless with Arcade")))/2-45;
 				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetText("Useless with Arcade"));
 				Y1 += Offset;
@@ -1057,9 +1055,6 @@ Dialogs with default type:
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
-			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ion Resistance:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", 0.0f, vw_GetText("units"));
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Capacity:"));
 
@@ -1120,9 +1115,6 @@ Dialogs with default type:
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ion Resistance:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", 0.0f, vw_GetText("units"));
-			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 0.1f, vw_GetText("units per sec"));
 
@@ -1175,9 +1167,6 @@ Dialogs with default type:
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ion Resistance:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", 0.0f, vw_GetText("units"));
-			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 0.1f, vw_GetText("units per sec"));
 			Y1 += Offset;
@@ -1205,6 +1194,7 @@ Dialogs with default type:
 			if (GameConfig().Profile[CurrentProfile].WeaponTargetingMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
+				Y1 += Offset;
 				SizeI = (W-vw_TextWidth(vw_GetText("Useless with Arcade")))/2-45;
 				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetText("Useless with Arcade"));
 				Y1 += Offset;
@@ -1228,9 +1218,6 @@ Dialogs with default type:
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ion Resistance:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", 0.0f, vw_GetText("units"));
-			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
 			if (NeedMoreEnergyDialog)
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipProtectionSystemEnergyUse(DialogSystem-16), vw_GetText("units per sec"));
@@ -1245,10 +1232,10 @@ Dialogs with default type:
 			if (DialogSystem == 18) {
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, Hull:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i", 4);
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "x4");
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, System:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i", 5);
+				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "x5");
 			}
 			if (DialogSystem == 19) {
 				Y1 += Offset;
