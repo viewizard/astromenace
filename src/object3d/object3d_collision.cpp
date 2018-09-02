@@ -525,6 +525,14 @@ void DetectCollisionAllObject3D()
 			int ObjectPieceNum;
 
 			if (DetectProjectileCollision(tmpShip, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpShip.Speed)) {
+				// we don't provide any global "resistance" concept for all 3D objects,
+				// reduce damage for player ship only in case of "a-b layer" installed
+				if ((tmpShip.ObjectStatus == eObjectStatus::Player) &&
+				    (GameAdvancedProtectionSystem == 2)) {
+					Damage.Kinetic /= 4.0f;
+					Damage.EM /= 5.0f;
+				}
+
 				if (tmpShip.ShieldStrength >= Damage.EM) {
 					tmpShip.ShieldStrength -= Damage.EM;
 					Damage.EM = 0.0f;
