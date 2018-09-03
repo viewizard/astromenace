@@ -312,6 +312,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 /*
  * Detect projectile collision.
  */
+// FIXME this one should be fixed after we move to player ship's class (refactor object classes)
 bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
 			       sVECTOR3D &IntercPoint, cDamage &Damage, float ObjectSpeed)
 {
