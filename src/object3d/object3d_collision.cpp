@@ -29,8 +29,6 @@
 
 // TODO codestyle should be fixed
 
-// TODO translate comments
-
 #include "object3d.h"
 #include "collision_detection.h"
 #include "../config/config.h"
@@ -326,66 +324,55 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 
 	switch (Projectile.ProjectileType) {
 	case 0: // projectile
-		// если игрок со щитом или дифлектором, и щит заряжен
+		// player's ship with charged deflector/shield
 		if (((ShildEnergyStatus * ShildStartHitStatus) >= (Projectile.Damage.Full() * GameEnemyWeaponPenalty)) &&
-		    (Object.ObjectStatus == eObjectStatus::Player) &&
-			// у игрока есть щит, просто проверяем, если снаряд приблизился
-			// на расстояние =< радиуса - уничтожаем его
-		    vw_SphereSphereCollision(Object.Radius, Object.Location,
-					     Projectile.Radius, Projectile.Location, Projectile.PrevLocation)) {
-			// если отражатель, разворачиваем пулю...
-			if (GameAdvancedProtectionSystem == 4) {
-				Projectile.ObjectStatus = Object.ObjectStatus;
-				Projectile.SetRotation(Projectile.Rotation ^ (-1));
+		    (Object.ObjectStatus == eObjectStatus::Player)) {
+			if (vw_SphereSphereCollision(Object.Radius, Object.Location, Projectile.Radius,
+						     Projectile.Location, Projectile.PrevLocation)) {
+				// player's ship with charged deflector
+				if (GameAdvancedProtectionSystem == 4) {
+					Projectile.ObjectStatus = Object.ObjectStatus;
+					Projectile.SetRotation(Projectile.Rotation ^ (-1));
 
-				for (auto &tmpGFX : Projectile.GraphicFX) {
-					if (auto sharedGFX = tmpGFX.lock()) {
-						sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameEnemyWeaponPenalty);
-						sharedGFX->Speed = sharedGFX->Speed * GameEnemyWeaponPenalty;
-						sharedGFX->Life = sharedGFX->Life / GameEnemyWeaponPenalty;
-						sharedGFX->MagnetFactor = sharedGFX->MagnetFactor * GameEnemyWeaponPenalty * GameEnemyWeaponPenalty;
+					for (auto &tmpGFX : Projectile.GraphicFX) {
+						if (auto sharedGFX = tmpGFX.lock()) {
+							sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameEnemyWeaponPenalty);
+							sharedGFX->Speed = sharedGFX->Speed * GameEnemyWeaponPenalty;
+							sharedGFX->Life = sharedGFX->Life / GameEnemyWeaponPenalty;
+							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor * GameEnemyWeaponPenalty * GameEnemyWeaponPenalty;
+						}
 					}
+					Projectile.SpeedStart = Projectile.Speed * GameEnemyWeaponPenalty;
+					Projectile.SpeedEnd = (Projectile.Speed * GameEnemyWeaponPenalty) / 4.0f;
+					Projectile.Age = Projectile.Age / GameEnemyWeaponPenalty;
+					Projectile.Lifetime = Projectile.Lifetime / GameEnemyWeaponPenalty;
+
+					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
+					CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
+					CurrentStatus -= Projectile.Damage.EM() * 2.0f;
+					if (CurrentStatus < 0.0f)
+						CurrentStatus = 0.0f;
+					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
+
+					Projectile.Damage *= GameEnemyWeaponPenalty;
+
+					// false - is correct, we don't need destroy projectile, we just now deflect it
+					return false;
+				} else {
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed);
+					IntercPoint = Projectile.Location;
+
+					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
+					CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
+					CurrentStatus -= Projectile.Damage.EM() * 2.0f;
+					if (CurrentStatus < 0.0f)
+						CurrentStatus = 0.0f;
+					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
+
+					// 0 damage - is correct, we do all work with player's shield here now...
+					Damage = 0.0f;
+					return true;
 				}
-				Projectile.SpeedStart = Projectile.Speed * GameEnemyWeaponPenalty;
-				Projectile.SpeedEnd = (Projectile.Speed * GameEnemyWeaponPenalty) / 4.0f;
-				Projectile.Age = Projectile.Age / GameEnemyWeaponPenalty;
-				Projectile.Lifetime = Projectile.Lifetime / GameEnemyWeaponPenalty;
-
-				// корректируем данные щита
-				float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
-				// физический урон минимален
-				CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
-				// а ионный на оборот
-				CurrentStatus -= Projectile.Damage.EM() * 2.0f;
-				if (CurrentStatus < 0.0f)
-					CurrentStatus = 0.0f;
-				// и вычисляем сколько осталось в щите
-				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
-
-				Projectile.Damage *= GameEnemyWeaponPenalty;
-
-				// здесь только так! иначе уничтожим снаряд
-				return false;
-			} else {
-				CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed);
-
-				// где сейчас, там и погибли
-				IntercPoint = Projectile.Location;
-
-				// корректируем данные щита
-				float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
-				// физический урон минимален
-				CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
-				// а ионный на оборот
-				CurrentStatus -= Projectile.Damage.EM() * 2.0f;
-				if (CurrentStatus < 0.0f)
-					CurrentStatus = 0.0f;
-				// и вычисляем сколько осталось в щите
-				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
-
-				// столкновение не было (!!! именно так, иначе ерунда с указателем на снаряд)
-				Damage = 0.0f;
-				return true;
 			}
 		} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
 						    Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
@@ -407,41 +394,32 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 		break;
 
 	case 1: // projectile with 3d model
-		// если игрок со щитом или дифлектором, и щит заряжен
+		// player's ship with charged deflector/shield
 		if (((ShildEnergyStatus * ShildStartHitStatus) >= (Projectile.Damage.Full() * GameEnemyWeaponPenalty)) &&
 		    (Object.ObjectStatus == eObjectStatus::Player)) {
-			// у игрока есть щит, просто проверяем, если снаряд приблизился
-			// на расстояние =< радиуса - уничтожаем его
 			if (vw_SphereSphereCollision(Object.Radius, Object.Location,
 						     Projectile.Radius, Projectile.Location, Projectile.PrevLocation)) {
 				IntercPoint = Projectile.Location;
 
-				// "разбиваем" снаряд о корпус
 				CreateBulletExplosion(&Object, Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
 
-				// корректируем данные щита
 				float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
-				// физический урон минимален
 				CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
-				// а ионный на оборот
 				CurrentStatus -= Projectile.Damage.EM() * 2.0f;
 				if (CurrentStatus < 0.0f)
 					CurrentStatus = 0.0f;
-				// и вычисляем сколько осталось в щите
 				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
 
-				// передаем, столкновение было, чтобы корректно удалить снаряд в общей процедуре
+				// 0 damage - is correct, we do all work with player's shield here now...
 				Damage = 0.0f;
 				return true;
 			}
 		} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
 						    Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
-			   // это ракета, просто проверяем, что она близко - и взрываем
 			   vw_SphereAABBCollision(Object.AABB, Object.Location,
 						  Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
 			   vw_SphereOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
 						 Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
-			// ставим так, т.к.на больших кораблях плохо
 			   vw_OBBOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
 					      Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat) &&
 			   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum) &&
@@ -477,7 +455,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 
 	case 2: // beam
 		if (vw_AABBAABBCollision(Object.AABB, Object.Location, Projectile.AABB, Projectile.Location) &&
-		// в данном случае именно Projectile на первом месте!!!
+		// note, we use Projectile as first object in tests - this is correct in case of beam
 		    vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
 					  Object.Radius, Object.Location, Object.PrevLocation) &&
 		    vw_OBBOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
@@ -495,14 +473,11 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Главная функция проверки столкновения
-//-----------------------------------------------------------------------------
+/*
+ * Collision detection for all 3D objects.
+ */
 void DetectCollisionAllObject3D()
 {
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверка для всех кораблей
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceShip([] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
 		ForEachProjectile([&tmpShip, &ShipCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
 			sVECTOR3D IntercPoint;
@@ -549,33 +524,22 @@ void DetectCollisionAllObject3D()
 
 				if (tmpShip.Strength <= 0.0f) {
 					AddBonusForKilledEnemy(tmpShip, tmpProjectile.ObjectStatus);
-					// если не корабль игрока! его удалим сами
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
 						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
-					} else {
-						// запоминаем, что взорвалось
+					} else
 						PlayerDeadObjectPieceNum = ObjectPieceNum;
-					}
-				} else if ((tmpShip.ObjectStatus != eObjectStatus::Player) && // игроку тут ничего не делаем!.. с него хватит и щита
-					// если это не босс уровня (Alien MotherShip)
+				} else if ((tmpShip.ObjectStatus != eObjectStatus::Player) &&
 					   (tmpShip.ObjectType != eObjectType::AlienMotherShip) &&
-					// если нужно, смотрим что делать с системами
 					   (Damage.EM() > 0.0f)) {
 
 					float Rand = vw_fRand();
-					// поправка на мощность выстрела
-					float DR = Damage.EM() / 300.0f;
 
-					// выводим из строя управляемость кораблем
-					if (Rand > 0.6f - DR)
+					if (Rand > 0.7f)
 						tmpShip.MaxSpeed = tmpShip.MaxSpeed / 2.0f;
-					if ((Rand > 0.3f - DR) && (Rand < 0.6f))
+					else if (Rand > 0.5f)
 						tmpShip.MaxSpeedRotate = tmpShip.MaxSpeedRotate / 2.0f;
-
-					// если есть фларес, есть шанс его вырубить
-					if (!tmpShip.FlareWeaponSlots.empty() &&
-					    (Rand > 0.5f - DR) && (Rand < 0.8f))
+					else if ((Rand > 0.2f) && !tmpShip.FlareWeaponSlots.empty())
 						tmpShip.FlareWeaponSlots.clear();
 				}
 
@@ -599,8 +563,7 @@ void DetectCollisionAllObject3D()
 			if (ProjectileCycleCommand != eProjectileCycle::Continue)
 				return;
 
-			// проверка на попадание в оружие (только для игрока и если включено в настройках)
-			// проверять только до OBB
+			// player's ship weapons
 			if ((tmpShip.ObjectStatus == eObjectStatus::Player) &&
 			    (tmpProjectile.ObjectStatus == eObjectStatus::Enemy) &&
 			    !GameUndestroyableWeapon && !tmpShip.WeaponSlots.empty()) {
@@ -610,9 +573,9 @@ void DetectCollisionAllObject3D()
 
 						if ((sharedWeapon->Strength > 0.0f) &&
 						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, IntercPoint, Damage, tmpShip.Speed)) {
-							// FIXME вот тут все очень плохо, т.к. можем убить и сам tmpShip
+							// FIXME should be fixed, since tmpShip may be destroyed in DamageAllNearObjectsByShockWave()
 
-							// просто делаем изменения в прочности... и больше ничего
+							// note, we don't really destroy this weapon here
 							sharedWeapon->Strength -= Damage.Kinetic();
 							if (sharedWeapon->Strength <= 0.0f) {
 								sharedWeapon->Strength = 0.0f;
@@ -620,7 +583,6 @@ void DetectCollisionAllObject3D()
 							} else
 								PlayVoicePhrase(eVoicePhrase::WeaponDamaged, 1.0f);
 
-							// удаляем только те, которые разбились
 							if (tmpProjectile.ProjectileType != 2) {
 								ProjectileCycleCommand = eProjectileCycle::DeleteObjectAndContinue;
 								return;
@@ -633,8 +595,6 @@ void DetectCollisionAllObject3D()
 		if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue)
 			return;
 
-		// проверяем столкновение
-		// cSpaceObject
 		ForEachSpaceObject([&tmpShip, &ShipCycleCommand] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 			int ObjectPieceNum;
 			if (vw_SphereSphereCollision(tmpShip.Radius, tmpShip.Location,
@@ -650,9 +610,8 @@ void DetectCollisionAllObject3D()
 				    !CheckHitBBMeshCollisionDetection(tmpShip, tmpSpace, ObjectPieceNum))
 					return; // eSpaceCycle::Continue
 
-				// если столкновение с преградой которую не можем уничтожить
 				if (!NeedCheckCollision(tmpSpace)) {
-					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
+					// we just get into the immortal object here, but don't destroy ship instantly
 					if (tmpShip.ObjectStatus != eObjectStatus::Player)
 						tmpShip.Strength -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
 					else
@@ -665,8 +624,6 @@ void DetectCollisionAllObject3D()
 				if (!NeedCheckCollision(tmpShip))
 					tmpSpace.Strength = 0.0f;
 
-
-				// если уже все... удаляем
 				if (NeedCheckCollision(tmpSpace) &&
 				    (tmpSpace.Strength <= 0.0f)) {
 					AddBonusForKilledEnemy(tmpSpace, tmpShip.ObjectStatus);
@@ -675,9 +632,7 @@ void DetectCollisionAllObject3D()
 				}
 
 				if (NeedCheckCollision(tmpShip) &&
-					// если уже все... удаляем
 				    (tmpShip.Strength <= 0.0f)) {
-					// если не корабль игрока! его удалим сами
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
 						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
@@ -695,18 +650,13 @@ void DetectCollisionAllObject3D()
 						}
 
 					} else
-						PlayerDeadObjectPieceNum = ObjectPieceNum; // запоминаем, что взорвалось
+						PlayerDeadObjectPieceNum = ObjectPieceNum;
 				}
 			}
 		});
 		if (ShipCycleCommand == eShipCycle::DeleteObjectAndContinue)
 			return;
 
-		// проверяем на столкновение с наземнымы объектами
-		// 1 - радиус-радиус
-		// 2 - AABB-AABB
-		// 3 - OBB-OBB
-		// 4 - HitBB-HitBB
 		ForEachGroundObject([&tmpShip, &ShipCycleCommand] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 			int ObjectPieceNum1;
 			int ObjectPieceNum2;
@@ -722,9 +672,8 @@ void DetectCollisionAllObject3D()
 				    !CheckHitBBMeshCollisionDetection(tmpShip, tmpGround, ObjectPieceNum2))
 						return; // eGroundCycle::Continue
 
-				// если столкновение с преградой которую не можем уничтожить
 				if (!NeedCheckCollision(tmpGround)) {
-					// ум. из расчета, что полностью разрушим за 2 секунды для игрока и 0.5 секунду для остальных
+					// we just get into the immortal object here, but don't destroy ship instantly
 					if (tmpShip.ObjectStatus != eObjectStatus::Player)
 						tmpShip.Strength -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
 					else
@@ -737,7 +686,6 @@ void DetectCollisionAllObject3D()
 				if (!NeedCheckCollision(tmpShip))
 					tmpGround.Strength = 0.0f;
 
-				// если уже все... удаляем
 				if (NeedCheckCollision(tmpGround) &&
 				    (tmpGround.Strength <= 0.0f)) {
 					AddBonusForKilledEnemy(tmpGround, tmpShip.ObjectStatus);
@@ -746,9 +694,7 @@ void DetectCollisionAllObject3D()
 				}
 
 				if (NeedCheckCollision(tmpShip) &&
-					// если уже все... удаляем
 				    (tmpShip.Strength <= 0.0f)) {
-					// если не корабль игрока! его удалим сами
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
 						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum1);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
@@ -766,7 +712,7 @@ void DetectCollisionAllObject3D()
 						}
 
 					} else
-						PlayerDeadObjectPieceNum = ObjectPieceNum1; // запоминаем, что взорвалось
+						PlayerDeadObjectPieceNum = ObjectPieceNum1;
 				}
 			}
 		});
@@ -786,13 +732,11 @@ void DetectCollisionAllObject3D()
 			FirstShip.Strength -= SecondShip.Strength;
 			SecondShip.Strength -= StrTMP;
 
-			// если столкновение с преградой которую не можем уничтожить
 			if (!NeedCheckCollision(SecondShip))
 				FirstShip.Strength = 0.0f;
 			if (!NeedCheckCollision(FirstShip))
 				SecondShip.Strength = 0.0f;
 
-			// проверка на бонус
 			if (NeedCheckCollision(SecondShip) &&
 			    (SecondShip.Strength <= 0.0f))
 				AddBonusForKilledEnemy(SecondShip, FirstShip.ObjectStatus);
@@ -801,20 +745,16 @@ void DetectCollisionAllObject3D()
 				AddBonusForKilledEnemy(FirstShip, SecondShip.ObjectStatus);
 
 			if (NeedCheckCollision(SecondShip) &&
-				// если уже все... удаляем
 			    (SecondShip.Strength <= 0.0f)) {
-				// если не корабль игрока! его удалим сами
 				if (SecondShip.ObjectStatus != eObjectStatus::Player) {
 					SetupSpaceShipExplosion(SecondShip, ObjectPieceNum2);
 					Command = eShipPairCycle::DeleteSecondObjectAndContinue;
 				} else
-					PlayerDeadObjectPieceNum = ObjectPieceNum2; // запоминаем, что взорвалось
+					PlayerDeadObjectPieceNum = ObjectPieceNum2;
 			}
 
 			if (NeedCheckCollision(FirstShip) &&
-				// если уже все... удаляем
 			    (FirstShip.Strength <= 0.0f)) {
-				// если не корабль игрока! его удалим сами
 				if (FirstShip.ObjectStatus != eObjectStatus::Player) {
 					SetupSpaceShipExplosion(FirstShip, ObjectPieceNum1);
 					if (Command == eShipPairCycle::DeleteSecondObjectAndContinue)
@@ -822,15 +762,11 @@ void DetectCollisionAllObject3D()
 					else
 						Command = eShipPairCycle::DeleteFirstObjectAndContinue;
 				} else
-					PlayerDeadObjectPieceNum = ObjectPieceNum1; // запоминаем, что взорвалось
+					PlayerDeadObjectPieceNum = ObjectPieceNum1;
 			}
 		}
 	});
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все cGroundObject с
-	// cProjectile
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachGroundObject([] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 		ForEachProjectile([&tmpGround, &GroundCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
 			sVECTOR3D IntercPoint;
@@ -871,14 +807,10 @@ void DetectCollisionAllObject3D()
 		if (GroundCycleCommand == eGroundCycle::DeleteObjectAndContinue)
 			return;
 
-		// проверяем столкновение
-		// cSpaceObject
 		ForEachSpaceObject([&tmpGround, &GroundCycleCommand] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 			int ObjectPieceNum;
 
-			// не проверяем с частями базы
 			if ((tmpSpace.ObjectType != eObjectType::BasePart) &&
-				// не проверяем если оба не можем уничтожить
 			    (NeedCheckCollision(tmpGround) || NeedCheckCollision(tmpSpace)) &&
 			    vw_SphereSphereCollision(tmpGround.Radius, tmpGround.Location,
 						    tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
@@ -888,8 +820,8 @@ void DetectCollisionAllObject3D()
 						  tmpSpace.Radius, tmpSpace.Location, tmpSpace.PrevLocation) &&
 			    CheckHitBBOBBCollisionDetection(tmpGround, tmpSpace, ObjectPieceNum)) {
 
-				// если столкновение с преградой которую не можем уничтожить
 				if (!NeedCheckCollision(tmpSpace))
+					// we just get into the immortal object here, but don't destroy space object instantly
 					tmpGround.Strength -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
 				else {
 					float StrTMP = tmpGround.Strength;
@@ -899,8 +831,6 @@ void DetectCollisionAllObject3D()
 				if (!NeedCheckCollision(tmpGround))
 					tmpSpace.Strength = 0.0f;
 
-
-				// если уже все... удаляем
 				if (NeedCheckCollision(tmpSpace) &&
 				    (tmpSpace.Strength <= 0.0f)) {
 					AddBonusForKilledEnemy(tmpSpace, tmpGround.ObjectStatus);
@@ -928,9 +858,6 @@ void DetectCollisionAllObject3D()
 		});
 	});
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// проверяем все cSpaceObject
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	ForEachSpaceObject([] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 		ForEachProjectile([&tmpSpace, &SpaceCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
 			sVECTOR3D IntercPoint;
@@ -976,8 +903,8 @@ void DetectCollisionAllObject3D()
 					     SecondObject.Radius, SecondObject.Location, SecondObject.PrevLocation) &&
 		    vw_OBBOBBCollision(FirstObject.OBB.Box, FirstObject.OBB.Location, FirstObject.Location, FirstObject.CurrentRotationMat,
 				       SecondObject.OBB.Box, SecondObject.OBB.Location, SecondObject.Location, SecondObject.CurrentRotationMat)) {
-			// если попали в часть базы - просто летим в другую сторону,
-			// если это обломок корабля или модели
+
+			// in case of debris, just rebound to another direction
 			if (((FirstObject.ObjectType == eObjectType::BasePart) && (SecondObject.ObjectType == eObjectType::SpaceDebris)) ||
 			    ((FirstObject.ObjectType == eObjectType::SpaceDebris) && (SecondObject.ObjectType == eObjectType::BasePart))) {
 				if (FirstObject.ObjectType == eObjectType::SpaceDebris)
@@ -988,17 +915,15 @@ void DetectCollisionAllObject3D()
 				return; // eSpacePairCycle::Continue
 			}
 
-			// смотрим, чтобы это были не только обломки с обломками (иначе не красиво взрываются корабли)
 			if ((SecondObject.ObjectType != eObjectType::SpaceDebris) ||
 			    (FirstObject.ObjectType != eObjectType::SpaceDebris)) {
 
 				int ObjectPieceNum;
 
-				// проверка, если это столкновение с базой - надо внимательно смотреть
 				if ((FirstObject.ObjectType == eObjectType::BasePart) &&
 				    (!CheckHitBBMeshCollisionDetection(SecondObject, FirstObject, ObjectPieceNum)))
 						return; // eSpacePairCycle::Continue
-				// проверка, если это столкновение с базой - надо внимательно смотреть
+
 				if ((SecondObject.ObjectType == eObjectType::BasePart) &&
 				    (!CheckHitBBMeshCollisionDetection(FirstObject, SecondObject, ObjectPieceNum)))
 						return; // eSpacePairCycle::Continue
@@ -1025,7 +950,6 @@ void DetectCollisionAllObject3D()
 
 	ForEachProjectilePair([] (cProjectile &FirstObject, cProjectile &SecondObject, eProjectilePairCycle &Command) {
 		if (ObjectsStatusFoe(FirstObject.ObjectStatus, SecondObject.ObjectStatus)) {
-
 			// missile/mine with missile/mine
 			if (((FirstObject.ProjectileType == 1) || (FirstObject.ProjectileType == 4)) &&
 			    ((SecondObject.ProjectileType == 1) || (SecondObject.ProjectileType == 4))) {
