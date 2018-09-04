@@ -311,14 +311,13 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
  * Detect projectile collision.
  */
 // FIXME this one should be fixed after we move to player ship's class (refactor object classes)
-bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
-			       sVECTOR3D &IntercPoint, cDamage &Damage, float ObjectSpeed)
+static bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cProjectile &Projectile,
+				      cDamage &Damage, float ObjectSpeed)
 {
 	if (!ObjectsStatusFoe(Object.ObjectStatus, Projectile.ObjectStatus) &&
 	    NeedCheckCollision(Object))
 		return false;
 
-	// поправка на скорость камеры для корабля игрока
 	if (Object.ObjectStatus == eObjectStatus::Player)
 		ObjectSpeed += GameCameraGetSpeed();
 
@@ -360,7 +359,6 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					return false;
 				} else {
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed);
-					IntercPoint = Projectile.Location;
 
 					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
 					CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
@@ -374,22 +372,25 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 					return true;
 				}
 			}
-		} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
+		} else {
+			sVECTOR3D CollisionPoint;
+			if (vw_SphereSphereCollision(Object.Radius, Object.Location,
 						    Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
 			   vw_SphereAABBCollision(Object.AABB, Object.Location,
 						  Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
 			   vw_SphereOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
 						 Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
-			   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
+			   CheckMeshSphereCollisionDetection(Object, Projectile, CollisionPoint, ObjectPieceNum)) {
 
-			if (NeedCheckCollision(Object)) {
-				Damage = Projectile.Damage;
-				CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, ObjectSpeed);
-			} else {
-				Damage = 0.0f;
-				CreateBulletExplosion(&Object, Projectile, Projectile.Num, IntercPoint, 0.0f);
+				if (NeedCheckCollision(Object)) {
+					Damage = Projectile.Damage;
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, CollisionPoint, ObjectSpeed);
+				} else {
+					Damage = 0.0f;
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, CollisionPoint, 0.0f);
+				}
+				return true;
 			}
-			return true;
 		}
 		break;
 
@@ -399,7 +400,6 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 		    (Object.ObjectStatus == eObjectStatus::Player)) {
 			if (vw_SphereSphereCollision(Object.Radius, Object.Location,
 						     Projectile.Radius, Projectile.Location, Projectile.PrevLocation)) {
-				IntercPoint = Projectile.Location;
 
 				CreateBulletExplosion(&Object, Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
 
@@ -414,7 +414,9 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 				Damage = 0.0f;
 				return true;
 			}
-		} else if (vw_SphereSphereCollision(Object.Radius, Object.Location,
+		} else {
+			sVECTOR3D CollisionPoint;
+			if (vw_SphereSphereCollision(Object.Radius, Object.Location,
 						    Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
 			   vw_SphereAABBCollision(Object.AABB, Object.Location,
 						  Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
@@ -423,33 +425,32 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 			   vw_OBBOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
 					      Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat) &&
 			   CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum) &&
-			   CheckMeshSphereCollisionDetection(Object, Projectile, IntercPoint, ObjectPieceNum)) {
+			   CheckMeshSphereCollisionDetection(Object, Projectile, CollisionPoint, ObjectPieceNum)) {
 
-			switch (Projectile.Num) {
-			case 18: // torpedo
-			case 209: // pirate torpedo
-				DamageAllNearObjectsByShockWave(Object, Projectile.Location, 75.0f * 75.0f,
-								Projectile.Damage.Kinetic(), Projectile.ObjectStatus);
-				break;
-			case 19: // bomb
-			case 210: // pirate bomb
-				DamageAllNearObjectsByShockWave(Object, Projectile.Location, 150.0f * 150.0f,
-								Projectile.Damage.Kinetic(), Projectile.ObjectStatus);
-				break;
-			default:
-				break;
+				switch (Projectile.Num) {
+				case 18: // torpedo
+				case 209: // pirate torpedo
+					DamageAllNearObjectsByShockWave(Object, Projectile.Location, 75.0f * 75.0f,
+									Projectile.Damage.Kinetic(), Projectile.ObjectStatus);
+					break;
+				case 19: // bomb
+				case 210: // pirate bomb
+					DamageAllNearObjectsByShockWave(Object, Projectile.Location, 150.0f * 150.0f,
+									Projectile.Damage.Kinetic(), Projectile.ObjectStatus);
+					break;
+				default:
+					break;
+				}
+
+				if (NeedCheckCollision(Object)) {
+					Damage = Projectile.Damage;
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
+				} else {
+					Damage = 0.0f;
+					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, 0.0f);
+				}
+				return true;
 			}
-
-			IntercPoint = Projectile.Location;
-
-			if (NeedCheckCollision(Object)) {
-				Damage = Projectile.Damage;
-				CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, Projectile.Speed);
-			} else {
-				Damage = 0.0f;
-				CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, 0.0f);
-			}
-			return true;
 		}
 		break;
 
@@ -460,7 +461,6 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 			// note, we use Projectile as first object in tests - this is correct in case of beam
 			if (vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
 						  Object.Radius, Object.Location, Object.PrevLocation)) {
-				IntercPoint = Projectile.Location;
 
 				CreateBulletExplosion(&Object, Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
 
@@ -482,7 +482,6 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 		    vw_OBBOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
 				       Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat) &&
 		    CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
-			IntercPoint = Object.Location;
 
 			Damage = Projectile.Damage * Object.TimeDelta;
 			return true;
@@ -500,11 +499,10 @@ void DetectCollisionAllObject3D()
 {
 	ForEachSpaceShip([] (cSpaceShip &tmpShip, eShipCycle &ShipCycleCommand) {
 		ForEachProjectile([&tmpShip, &ShipCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
-			sVECTOR3D IntercPoint;
 			cDamage Damage;
 			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(tmpShip, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpShip.Speed)) {
+			if (DetectProjectileCollision(tmpShip, ObjectPieceNum, tmpProjectile, Damage, tmpShip.Speed)) {
 				// we don't provide any global "resistance" concept for all 3D objects,
 				// reduce damage for player ship only in case of "a-b layer" installed
 				if ((tmpShip.ObjectStatus == eObjectStatus::Player) &&
@@ -592,7 +590,7 @@ void DetectCollisionAllObject3D()
 						int ObjectPieceNumWeapon;
 
 						if ((sharedWeapon->Strength > 0.0f) &&
-						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, IntercPoint, Damage, tmpShip.Speed)) {
+						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, Damage, tmpShip.Speed)) {
 							// FIXME should be fixed, since tmpShip may be destroyed in DamageAllNearObjectsByShockWave()
 
 							// note, we don't really destroy this weapon here
@@ -789,11 +787,10 @@ void DetectCollisionAllObject3D()
 
 	ForEachGroundObject([] (cGroundObject &tmpGround, eGroundCycle &GroundCycleCommand) {
 		ForEachProjectile([&tmpGround, &GroundCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
-			sVECTOR3D IntercPoint;
 			cDamage Damage;
 			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpGround.Speed)) {
+			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, tmpProjectile, Damage, tmpGround.Speed)) {
 				if (NeedCheckCollision(tmpGround)) {
 					tmpGround.Strength -= Damage.Kinetic();
 
@@ -880,11 +877,10 @@ void DetectCollisionAllObject3D()
 
 	ForEachSpaceObject([] (cSpaceObject &tmpSpace, eSpaceCycle &SpaceCycleCommand) {
 		ForEachProjectile([&tmpSpace, &SpaceCycleCommand] (cProjectile &tmpProjectile, eProjectileCycle &ProjectileCycleCommand) {
-			sVECTOR3D IntercPoint;
 			cDamage Damage;
 			int ObjectPieceNum;
 
-			if (DetectProjectileCollision(tmpSpace, ObjectPieceNum, tmpProjectile, IntercPoint, Damage, tmpSpace.Speed)) {
+			if (DetectProjectileCollision(tmpSpace, ObjectPieceNum, tmpProjectile, Damage, tmpSpace.Speed)) {
 				if (NeedCheckCollision(tmpSpace)) {
 					tmpSpace.Strength -= Damage.Kinetic();
 
