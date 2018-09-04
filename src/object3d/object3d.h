@@ -126,6 +126,11 @@ public:
 		EM_{EM}
 	{}
 
+	friend cDamage operator * (const cDamage &Damage, float Value)
+	{
+		return cDamage{Damage.Kinetic_ * Value, Damage.EM_ * Value};
+	}
+
 	cDamage& operator = (float Value)
 	{
 		Kinetic_ = Value;
