@@ -454,8 +454,28 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 		break;
 
 	case 2: // beam
-		// FIXME we should interact with player's shield here too
-		if (vw_AABBAABBCollision(Object.AABB, Object.Location, Projectile.AABB, Projectile.Location) &&
+		// player's ship with charged deflector/shield
+		if (((ShildEnergyStatus * ShildStartHitStatus) >= (Projectile.Damage.Full() * Object.TimeDelta * GameEnemyWeaponPenalty)) &&
+		    (Object.ObjectStatus == eObjectStatus::Player)) {
+			// note, we use Projectile as first object in tests - this is correct in case of beam
+			if (vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
+						  Object.Radius, Object.Location, Object.PrevLocation)) {
+				IntercPoint = Projectile.Location;
+
+				CreateBulletExplosion(&Object, Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
+
+				float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
+				CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
+				CurrentStatus -= Projectile.Damage.EM() * 2.0f;
+				if (CurrentStatus < 0.0f)
+					CurrentStatus = 0.0f;
+				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
+
+				// 0 damage - is correct, we do all work with player's shield here now...
+				Damage = 0.0f;
+				return true;
+			}
+		} else if (vw_AABBAABBCollision(Object.AABB, Object.Location, Projectile.AABB, Projectile.Location) &&
 		// note, we use Projectile as first object in tests - this is correct in case of beam
 		    vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
 					  Object.Radius, Object.Location, Object.PrevLocation) &&
@@ -464,8 +484,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 		    CheckHitBBOBBCollisionDetection(Object, Projectile, ObjectPieceNum)) {
 			IntercPoint = Object.Location;
 
-			Damage.Kinetic() = Projectile.Damage.Kinetic() * Object.TimeDelta;
-			Damage.EM() = 0.0f;
+			Damage = Projectile.Damage * Object.TimeDelta;
 			return true;
 		}
 		break;
