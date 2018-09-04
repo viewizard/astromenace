@@ -454,6 +454,7 @@ bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceNum, cPr
 		break;
 
 	case 2: // beam
+		// FIXME we should interact with player's shield here too
 		if (vw_AABBAABBCollision(Object.AABB, Object.Location, Projectile.AABB, Projectile.Location) &&
 		// note, we use Projectile as first object in tests - this is correct in case of beam
 		    vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
