@@ -126,11 +126,6 @@ public:
 		EM_{EM}
 	{}
 
-	friend cDamage operator * (const cDamage &Damage, float Value)
-	{
-		return cDamage{Damage.Kinetic_ * Value, Damage.EM_ * Value};
-	}
-
 	cDamage& operator = (float Value)
 	{
 		Kinetic_ = Value;
@@ -152,9 +147,19 @@ public:
 		return *this;
 	}
 
+	float Kinetic() const
+	{
+		return Kinetic_;
+	}
+
 	float &Kinetic()
 	{
 		return Kinetic_;
+	}
+
+	float EM() const
+	{
+		return EM_;
 	}
 
 	float &EM()
@@ -167,6 +172,11 @@ public:
 		return Kinetic_ + EM_;
 	}
 };
+
+inline cDamage operator * (const cDamage &Damage, float Value)
+{
+	return cDamage{Damage.Kinetic() * Value, Damage.EM() * Value};
+}
 
 class cObject3D : public sModel3D {
 protected:

@@ -308,6 +308,57 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 }
 
 /*
+ * Interact with player's shield.
+ */
+static bool InteractWithPlayerShield(const cDamage &ProjectileDamage, cDamage &Damage)
+{
+	float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
+	CurrentStatus -= ProjectileDamage.Kinetic() / 5.0f;
+	CurrentStatus -= ProjectileDamage.EM() * 2.0f;
+	if (CurrentStatus < 0.0f)
+		CurrentStatus = 0.0f;
+	ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
+
+	// 0 damage - is correct, we do all work with player's shield here now...
+	Damage = 0.0f;
+	// we already absorb projectile damage by shield, but we need destroy projectile
+	return true;
+}
+
+/*
+ * Interact with player's deflector.
+ */
+static bool InteractWithPlayerDeflector(eObjectStatus ObjectStatus, cProjectile &Projectile)
+{
+	Projectile.ObjectStatus = ObjectStatus;
+	Projectile.SetRotation(Projectile.Rotation ^ (-1));
+
+	for (auto &tmpGFX : Projectile.GraphicFX) {
+		if (auto sharedGFX = tmpGFX.lock()) {
+			sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameEnemyWeaponPenalty);
+			sharedGFX->Speed = sharedGFX->Speed * GameEnemyWeaponPenalty;
+			sharedGFX->Life = sharedGFX->Life / GameEnemyWeaponPenalty;
+			sharedGFX->MagnetFactor = sharedGFX->MagnetFactor * GameEnemyWeaponPenalty * GameEnemyWeaponPenalty;
+		}
+	}
+	Projectile.SpeedStart = Projectile.Speed * GameEnemyWeaponPenalty;
+	Projectile.SpeedEnd = (Projectile.Speed * GameEnemyWeaponPenalty) / 4.0f;
+	Projectile.Age = Projectile.Age / GameEnemyWeaponPenalty;
+	Projectile.Lifetime = Projectile.Lifetime / GameEnemyWeaponPenalty;
+
+	float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
+	CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
+	CurrentStatus -= Projectile.Damage.EM() * 2.0f;
+	if (CurrentStatus < 0.0f)
+		CurrentStatus = 0.0f;
+	ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
+
+	Projectile.Damage *= GameEnemyWeaponPenalty;
+	// we don't need destroy projectile, we just now deflect it
+	return false;
+}
+
+/*
  * Detect projectile collision.
  */
 // FIXME this one should be fixed after we move to player ship's class (refactor object classes)
@@ -328,48 +379,11 @@ static bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceN
 		    (Object.ObjectStatus == eObjectStatus::Player)) {
 			if (vw_SphereSphereCollision(Object.Radius, Object.Location, Projectile.Radius,
 						     Projectile.Location, Projectile.PrevLocation)) {
-				// player's ship with charged deflector
-				if (GameAdvancedProtectionSystem == 4) {
-					Projectile.ObjectStatus = Object.ObjectStatus;
-					Projectile.SetRotation(Projectile.Rotation ^ (-1));
-
-					for (auto &tmpGFX : Projectile.GraphicFX) {
-						if (auto sharedGFX = tmpGFX.lock()) {
-							sharedGFX->ParticlesPerSec = static_cast<int>(sharedGFX->ParticlesPerSec * GameEnemyWeaponPenalty);
-							sharedGFX->Speed = sharedGFX->Speed * GameEnemyWeaponPenalty;
-							sharedGFX->Life = sharedGFX->Life / GameEnemyWeaponPenalty;
-							sharedGFX->MagnetFactor = sharedGFX->MagnetFactor * GameEnemyWeaponPenalty * GameEnemyWeaponPenalty;
-						}
-					}
-					Projectile.SpeedStart = Projectile.Speed * GameEnemyWeaponPenalty;
-					Projectile.SpeedEnd = (Projectile.Speed * GameEnemyWeaponPenalty) / 4.0f;
-					Projectile.Age = Projectile.Age / GameEnemyWeaponPenalty;
-					Projectile.Lifetime = Projectile.Lifetime / GameEnemyWeaponPenalty;
-
-					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
-					CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
-					CurrentStatus -= Projectile.Damage.EM() * 2.0f;
-					if (CurrentStatus < 0.0f)
-						CurrentStatus = 0.0f;
-					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
-
-					Projectile.Damage *= GameEnemyWeaponPenalty;
-
-					// false - is correct, we don't need destroy projectile, we just now deflect it
-					return false;
-				} else {
+				if (GameAdvancedProtectionSystem == 4) // player's ship with charged deflector
+					return InteractWithPlayerDeflector(Object.ObjectStatus, Projectile);
+				else {
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, Projectile.Location, ObjectSpeed);
-
-					float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
-					CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
-					CurrentStatus -= Projectile.Damage.EM() * 2.0f;
-					if (CurrentStatus < 0.0f)
-						CurrentStatus = 0.0f;
-					ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
-
-					// 0 damage - is correct, we do all work with player's shield here now...
-					Damage = 0.0f;
-					return true;
+					return InteractWithPlayerShield(Projectile.Damage, Damage);
 				}
 			}
 		} else {
@@ -381,7 +395,6 @@ static bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceN
 			   vw_SphereOBBCollision(Object.OBB.Box, Object.OBB.Location, Object.Location, Object.CurrentRotationMat,
 						 Projectile.Radius, Projectile.Location, Projectile.PrevLocation) &&
 			   CheckMeshSphereCollisionDetection(Object, Projectile, CollisionPoint, ObjectPieceNum)) {
-
 				if (NeedCheckCollision(Object)) {
 					Damage = Projectile.Damage;
 					CreateBulletExplosion(&Object, Projectile, Projectile.Num, CollisionPoint, ObjectSpeed);
@@ -400,19 +413,8 @@ static bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceN
 		    (Object.ObjectStatus == eObjectStatus::Player)) {
 			if (vw_SphereSphereCollision(Object.Radius, Object.Location,
 						     Projectile.Radius, Projectile.Location, Projectile.PrevLocation)) {
-
 				CreateBulletExplosion(&Object, Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
-
-				float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
-				CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
-				CurrentStatus -= Projectile.Damage.EM() * 2.0f;
-				if (CurrentStatus < 0.0f)
-					CurrentStatus = 0.0f;
-				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
-
-				// 0 damage - is correct, we do all work with player's shield here now...
-				Damage = 0.0f;
-				return true;
+				return InteractWithPlayerShield(Projectile.Damage, Damage);
 			}
 		} else {
 			sVECTOR3D CollisionPoint;
@@ -460,19 +462,8 @@ static bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceN
 		    (Object.ObjectStatus == eObjectStatus::Player)) {
 			// note, we use Projectile as first object in tests - this is correct in case of beam
 			if (vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
-						  Object.Radius, Object.Location, Object.PrevLocation)) {
-
-				float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
-				CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
-				CurrentStatus -= Projectile.Damage.EM() * 2.0f;
-				if (CurrentStatus < 0.0f)
-					CurrentStatus = 0.0f;
-				ShildEnergyStatus = CurrentStatus / ShildStartHitStatus;
-
-				// 0 damage - is correct, we do all work with player's shield here now...
-				Damage = 0.0f;
-				return true;
-			}
+						  Object.Radius, Object.Location, Object.PrevLocation))
+				return InteractWithPlayerShield(Projectile.Damage, Damage);
 		} else if (vw_AABBAABBCollision(Object.AABB, Object.Location, Projectile.AABB, Projectile.Location) &&
 		// note, we use Projectile as first object in tests - this is correct in case of beam
 		    vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
