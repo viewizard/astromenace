@@ -462,8 +462,6 @@ static bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceN
 			if (vw_SphereOBBCollision(Projectile.OBB.Box, Projectile.OBB.Location, Projectile.Location, Projectile.CurrentRotationMat,
 						  Object.Radius, Object.Location, Object.PrevLocation)) {
 
-				CreateBulletExplosion(&Object, Projectile, -Projectile.Num, Projectile.Location, ObjectSpeed);
-
 				float CurrentStatus = ShildEnergyStatus * ShildStartHitStatus;
 				CurrentStatus -= Projectile.Damage.Kinetic() / 5.0f;
 				CurrentStatus -= Projectile.Damage.EM() * 2.0f;
