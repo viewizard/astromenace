@@ -229,8 +229,6 @@ public:
 	float Ambient[4]{0.1f, 0.1f, 0.1f, 0.1f};
 	float Power[1]{64.0f};
 
-	float Weight{1.0f}; // FIXME remove this one, looks like we don't use it in proper way
-
 	float Strength{0.0f};
 	float StrengthStart{0.0f};
 

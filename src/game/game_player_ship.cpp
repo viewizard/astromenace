@@ -988,9 +988,9 @@ void GamePlayerShip()
 				}
 			}
 		} else {
-			sharedPlayerFighter->MaxSpeed = GetEnginePower(GameEngineSystem)*2.0f - sharedPlayerFighter->Weight/1000.0f;
-			sharedPlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem)*2.0f - sharedPlayerFighter->Weight/1000.0f;
-			sharedPlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem)*2.0f - sharedPlayerFighter->Weight/1000.0f;
+			sharedPlayerFighter->MaxSpeed = GetEnginePower(GameEngineSystem);
+			sharedPlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem);
+			sharedPlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem);
 			// запускаем прорисовку
 			for (auto &tmpEngine : sharedPlayerFighter->Engines) {
 				if (auto sharedEngine = tmpEngine.lock())

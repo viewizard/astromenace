@@ -41,7 +41,6 @@ namespace astromenace {
 namespace {
 
 struct sEarthSpaceFighterData {
-	float Weight;
 	float Strength;
 	unsigned int WeaponQuantity;
 	unsigned int EngineQuantity;
@@ -49,28 +48,28 @@ struct sEarthSpaceFighterData {
 };
 
 const std::vector<sEarthSpaceFighterData> PresetEarthSpaceFighterData{
-	{5000,	30,	5,	2,	"models/earthfighter/sf-01.vw3d"},
-	{8000,	40,	4,	4,	"models/earthfighter/sf-02.vw3d"},
-	{10000,	60,	3,	4,	"models/earthfighter/sf-03.vw3d"},
-	{6000,	35,	5,	2,	"models/earthfighter/sf-04.vw3d"},
-	{7000,	45,	2,	4,	"models/earthfighter/sf-05.vw3d"},
-	{6000,	50,	5,	2,	"models/earthfighter/sf-06.vw3d"},
-	{10000,	60,	5,	3,	"models/earthfighter/sf-07.vw3d"},
-	{3000,	25,	2,	4,	"models/earthfighter/sf-08.vw3d"},
-	{3000,	55,	2,	2,	"models/earthfighter/sf-09.vw3d"},
-	{6500,	55,	5,	2,	"models/earthfighter/sf-10.vw3d"},
-	{3000,	60,	3,	2,	"models/earthfighter/sf-11.vw3d"},
-	{6000,	70,	3,	2,	"models/earthfighter/sf-12.vw3d"},
-	{15000,	80,	5,	4,	"models/earthfighter/sf-13.vw3d"},
-	{7000,	65,	5,	2,	"models/earthfighter/sf-14.vw3d"},
-	{6000,	70,	3,	2,	"models/earthfighter/sf-15.vw3d"},
-	{13000,	90,	3,	4,	"models/earthfighter/sf-16.vw3d"},
-	{6500,	75,	5,	2,	"models/earthfighter/sf-17.vw3d"},
-	{17000,	110,	4,	4,	"models/earthfighter/sf-18.vw3d"},
-	{8000,	55,	3,	4,	"models/earthfighter/sf-19.vw3d"},
-	{7000,	80,	4,	4,	"models/earthfighter/sf-20.vw3d"},
-	{4000,	80,	3,	2,	"models/earthfighter/sf-21.vw3d"},
-	{1500,	100,	1,	1,	"models/earthfighter/sf-22.vw3d"}
+	{30,	5,	2,	"models/earthfighter/sf-01.vw3d"},
+	{40,	4,	4,	"models/earthfighter/sf-02.vw3d"},
+	{60,	3,	4,	"models/earthfighter/sf-03.vw3d"},
+	{35,	5,	2,	"models/earthfighter/sf-04.vw3d"},
+	{45,	2,	4,	"models/earthfighter/sf-05.vw3d"},
+	{50,	5,	2,	"models/earthfighter/sf-06.vw3d"},
+	{60,	5,	3,	"models/earthfighter/sf-07.vw3d"},
+	{25,	2,	4,	"models/earthfighter/sf-08.vw3d"},
+	{55,	2,	2,	"models/earthfighter/sf-09.vw3d"},
+	{55,	5,	2,	"models/earthfighter/sf-10.vw3d"},
+	{60,	3,	2,	"models/earthfighter/sf-11.vw3d"},
+	{70,	3,	2,	"models/earthfighter/sf-12.vw3d"},
+	{80,	5,	4,	"models/earthfighter/sf-13.vw3d"},
+	{65,	5,	2,	"models/earthfighter/sf-14.vw3d"},
+	{70,	3,	2,	"models/earthfighter/sf-15.vw3d"},
+	{90,	3,	4,	"models/earthfighter/sf-16.vw3d"},
+	{75,	5,	2,	"models/earthfighter/sf-17.vw3d"},
+	{110,	4,	4,	"models/earthfighter/sf-18.vw3d"},
+	{55,	3,	4,	"models/earthfighter/sf-19.vw3d"},
+	{80,	4,	4,	"models/earthfighter/sf-20.vw3d"},
+	{80,	3,	2,	"models/earthfighter/sf-21.vw3d"},
+	{100,	1,	1,	"models/earthfighter/sf-22.vw3d"}
 };
 
 } // unnamed namespace
@@ -83,13 +82,13 @@ float GetEnginePower(const int EngineType)
 {
 	switch (EngineType) {
 	case 1:
-		return 14.0f;
+		return 20.0f;
 	case 2:
-		return 17.0f;
+		return 25.0f;
 	case 3:
-		return 19.0f;
+		return 30.0f;
 	case 4:
-		return 22.0f;
+		return 35.0f;
 	default:
 		std::cerr << __func__ << "(): " << "wrong EngineType.\n";
 		break;
@@ -435,19 +434,9 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
 		}
 	}
 
-	sharedSpaceShip->MaxSpeed = GetEnginePower(EngineType) * sharedSpaceShip->Engines.size() -
-				    sharedSpaceShip->Weight / 1000.0f;
-	sharedSpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * sharedSpaceShip->Engines.size() -
-				      sharedSpaceShip->Weight / 1000.0f;
-	sharedSpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * sharedSpaceShip->Engines.size() -
-					  sharedSpaceShip->Weight / 1000.0f;
-
-	if (sharedSpaceShip->MaxSpeed <= 0.5f)
-		sharedSpaceShip->MaxSpeed = 0.5f;
-	if (sharedSpaceShip->MaxAcceler <= 0.5f)
-		sharedSpaceShip->MaxAcceler = 0.5f;
-	if (sharedSpaceShip->MaxSpeedRotate <= 0.5f)
-		sharedSpaceShip->MaxSpeedRotate = 0.5f;
+	sharedSpaceShip->MaxSpeed = GetEnginePower(EngineType) * sharedSpaceShip->Engines.size();
+	sharedSpaceShip->MaxAcceler = GetEngineAcceleration(EngineType) * sharedSpaceShip->Engines.size();
+	sharedSpaceShip->MaxSpeedRotate = GetEngineRotatePower(EngineType) * sharedSpaceShip->Engines.size();
 }
 
 /*
@@ -993,7 +982,6 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
 
-	Weight = PresetEarthSpaceFighterData[SpaceShipNum - 1].Weight;
 	Strength = StrengthStart =
 			PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength; // GameEnemyArmorPenalty for enemies only
 	WeaponSlots.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].WeaponQuantity);

@@ -618,7 +618,6 @@ cWeapon::cWeapon(const int WeaponNum)
 	ObjectType = eObjectType::ShipWeapon;
 
 	ShowStrength = false;
-	Weight = 500;
 
 	if (WeaponNum <= 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon object with Number " << WeaponNum << "\n";
