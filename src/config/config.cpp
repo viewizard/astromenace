@@ -97,7 +97,7 @@ static void PackWithXOR(std::string &DataXOR, int DataSize, const unsigned char 
 	for (int i = 0; i < DataSize; i++) {
 		int tmpOffset = DataSize + i * 2;
 		// XOR key, randomize for each character
-		DataXOR[i] = static_cast<char>(97 + vw_iRandNum(25));
+		DataXOR[i] = static_cast<char>(97 + vw_uRandNum(25));
 		// XOR
 		unsigned char tmpDataXOR = Data[i] ^ static_cast<unsigned char>(DataXOR[i]);
 		// store 'ten'

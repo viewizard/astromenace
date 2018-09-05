@@ -43,7 +43,7 @@ cSmallAsteroid::cSmallAsteroid()
 
 	Strength = StrengthStart = 10.0f / GameEnemyArmorPenalty;
 
-	std::string Model3DFileName{"models/space/asteroid-01" + std::to_string(vw_iRandNum(19)) + ".vw3d"};
+	std::string Model3DFileName{"models/space/asteroid-01" + std::to_string(vw_uRandNum(19)) + ".vw3d"};
 	LoadObjectData(Model3DFileName, *this);
 
 	for (unsigned int i = 0; i < Chunks.size(); i++) {

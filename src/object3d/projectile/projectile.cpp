@@ -1224,7 +1224,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		break;
 
 	case 101: // earth/pirate missile trail
-		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
+		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_uRandNum(4)]);
 		ParticleSystem->ColorStart.r = 1.00f;
 		ParticleSystem->ColorStart.g = 1.00f;
 		ParticleSystem->ColorStart.b = 1.00f;
@@ -1246,7 +1246,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
 		break;
 
 	case 102: // alien missile trail
-		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_iRandNum(4)]);
+		ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_uRandNum(4)]);
 		ParticleSystem->ColorStart.r = 0.00f;
 		ParticleSystem->ColorStart.g = 0.70f;
 		ParticleSystem->ColorStart.b = 1.00f;

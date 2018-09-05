@@ -46,7 +46,7 @@ float vw_fRand()
 }
 
 /*
- * Generate random float in range [0.0f, Max).
+ * Generate random float in range [0.0f, Max) or (Max, 0.0f] in case Max is negative.
  */
 float vw_fRandNum(float Max)
 {
@@ -54,11 +54,11 @@ float vw_fRandNum(float Max)
 }
 
 /*
- * Generate random integer in range [0, Max].
+ * Generate random unsigned integer in range [0, Max].
  */
-int vw_iRandNum(int Max)
+unsigned vw_uRandNum(unsigned Max)
 {
-	return static_cast<int>(std::floor(vw_fRand() * static_cast<float>(Max + 1)));
+	return static_cast<unsigned>(std::floor(vw_fRand() * static_cast<float>(Max + 1)));
 }
 
 } // viewizard namespace

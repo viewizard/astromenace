@@ -214,7 +214,7 @@ void LoadAllGameAssets()
 	vw_SetTextureProp(sTextureFilter{eTextureBasicFilter::BILINEAR}, 1,
 			  sTextureWrap{eTextureWrapMode::CLAMP_TO_EDGE},
 			  false, eAlphaCreateMode::GREYSC, false);
-	GLtexture Background = vw_LoadTexture("loading/loading0" + std::to_string(1 + vw_iRandNum(3)) + ".tga");
+	GLtexture Background = vw_LoadTexture("loading/loading0" + std::to_string(1 + vw_uRandNum(3)) + ".tga");
 
 	uint32_t LastDrawTick = SDL_GetTicks();
 	unsigned RealLoadedAssets{0};

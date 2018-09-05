@@ -46,7 +46,7 @@ cPlanetoid::cPlanetoid(const int PlanetoidNum)
 	// we could create random planetoid, or provide particular planetoid id
 	if ((PlanetoidNum < 1) ||
 	    (PlanetoidNum > 5))
-		InternalType = 1 + vw_iRandNum(4);
+		InternalType = 1 + vw_uRandNum(4);
 	else
 		InternalType = PlanetoidNum;
 

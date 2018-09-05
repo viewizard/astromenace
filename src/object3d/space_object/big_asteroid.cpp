@@ -46,7 +46,7 @@ cBigAsteroid::cBigAsteroid(const int AsteroidNum)
 	// we could create random asteroid, or provide particular asteroid id
 	if ((AsteroidNum < 1) ||
 	    (AsteroidNum > 5))
-		InternalType = 1 + vw_iRandNum(4);
+		InternalType = 1 + vw_uRandNum(4);
 	else
 		InternalType = AsteroidNum;
 

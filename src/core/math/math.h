@@ -206,10 +206,10 @@ inline bool vw_CheckFileExtension(const std::string &FileName, const std::string
 
 // Generate random float in range [0.0f, 1.0f).
 float vw_fRand();
-// Generate random float in range [0.0f, Max).
+// Generate random float in range [0.0f, Max) or (Max, 0.0f] in case Max is negative.
 float vw_fRandNum(float Max);
-// Generate random integer in range [0, Max].
-int vw_iRandNum(int Max);
+// Generate random unsigned integer in range [0, Max].
+unsigned vw_uRandNum(unsigned Max);
 // Generate random float in range (-1.0f, 1.0f).
 inline float vw_fRand0()
 {

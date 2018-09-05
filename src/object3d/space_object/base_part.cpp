@@ -266,7 +266,7 @@ cBasePart::cBasePart(const int BasePartNum)
 	    (BasePartNum == 2) ||
 	    (BasePartNum == 6) ||
 	    (BasePartNum == 8))
-		InternalType = BasePartNum * 10 + 1 + vw_iRandNum(4);
+		InternalType = BasePartNum * 10 + 1 + vw_uRandNum(4);
 	else
 		InternalType = BasePartNum;
 
