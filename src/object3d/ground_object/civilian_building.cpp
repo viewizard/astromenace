@@ -73,7 +73,7 @@ cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 
 	ObjectType = eObjectType::CivilianBuilding;
 	InternalType = BuildingNum;
-	ShowStrength = false;
+	ShowStatus = false;
 	PromptDrawDist2 = 100.0f;
 
 	LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileName, *this);

@@ -236,7 +236,7 @@ public:
 	float ShieldInitialStatus{0.0f};
 	float ShieldRechargeRate{0.0f};
 
-	bool ShowStrength{true};
+	bool ShowStatus{true};
 	bool NeedShowStrengthNow{false};
 
 	float CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,

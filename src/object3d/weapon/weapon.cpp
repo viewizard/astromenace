@@ -617,7 +617,7 @@ cWeapon::cWeapon(const int WeaponNum)
 	ObjectStatus = eObjectStatus::Ally;
 	ObjectType = eObjectType::ShipWeapon;
 
-	ShowStrength = false;
+	ShowStatus = false;
 
 	if (WeaponNum <= 0) {
 		std::cerr << __func__ << "(): " << "Couldn't init cWeapon object with Number " << WeaponNum << "\n";

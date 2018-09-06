@@ -354,7 +354,7 @@ void WorkshopCreateBuyShip()
 
 	sharedWorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	sharedWorkshopFighterGame->EngineDestroyType = true;
-	sharedWorkshopFighterGame->ShowStrength = false;
+	sharedWorkshopFighterGame->ShowStatus = false;
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorCurrentStatus;
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullUpgrade = 1;
 

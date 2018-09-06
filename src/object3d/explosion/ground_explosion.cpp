@@ -142,7 +142,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType,
 
 				sharedSpaceDebris->ArmorInitialStatus = sharedSpaceDebris->ArmorCurrentStatus = 1.0f;
 				sharedSpaceDebris->ObjectStatus = Object.ObjectStatus;
-				sharedSpaceDebris->ShowStrength = false;
+				sharedSpaceDebris->ShowStatus = false;
 
 				if ((ObjectChunkNum != -1) &&
 				    (ObjectChunkNum == static_cast<int>(i))) {
