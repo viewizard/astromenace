@@ -940,11 +940,11 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	    (ArmorInitialStatus <= 0.0f) ||
 	    ((ArmorCurrentStatus == ArmorInitialStatus) &&
 	     (ShieldCurrentStatus == ShieldInitialStatus) &&
-	     !NeedShowStrengthNow))
+	     !ShowStatusAllTime))
 		return;
 
 	// even if shield recharged - don't hide object's status any more
-	NeedShowStrengthNow = true;
+	ShowStatusAllTime = true;
 
 	DrawObjectStatus(sVECTOR3D{Location.x, Location.y + AABB[0].y + 0.7f, Location.z},
 			 Width, sRGBCOLOR{eRGBCOLOR::red}, ArmorCurrentStatus, ArmorInitialStatus);
