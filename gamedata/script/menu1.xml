@@ -23,8 +23,8 @@
 	<!-- Временная линия, указываем время через которое нужно выполнить и идти дальше (относительное время) -->
 	<TimeLine>
 		<!-- Создаем необходимые объекты - корабли -->
-		<EarthFighter type="2" speed="10" armour="4" posax="300" posay="10" posaz="10" anglay="-90"/>
-		<EarthFighter type="2" speed="10" armour="4" posax="335" posay="10" posaz="30" anglay="-90"/>
+		<EarthFighter type="2" speed="10" armor="4" posax="300" posay="10" posaz="10" anglay="-90"/>
+		<EarthFighter type="2" speed="10" armor="4" posax="335" posay="10" posaz="30" anglay="-90"/>
 		<!-- Создаем необходимые объекты - астероиды -->
 		<CreateAsteroid speed="25" posax="-135" posay="-20" posaz="30" anglay="90"/>
 		<CreateAsteroid speed="20" posax="-165" posay="-30" posaz="-30" anglay="90"/>
@@ -34,7 +34,7 @@
 
 	
 	<TimeLine value="5">
-		<EarthFighter type="1" speed="7.5" armour="4" posax="200" posay="-20" posaz="-30" anglay="-90"/>
+		<EarthFighter type="1" speed="7.5" armor="4" posax="200" posay="-20" posaz="-30" anglay="-90"/>
 		<CreateAsteroid speed="20" posax="-185" posay="-70" posaz="50" anglay="90"/>
 		<CreateAsteroid speed="25" posax="-165" posay="-10" posaz="-20" anglay="90"/>
 		<CreateAsteroid speed="25" posax="-135" posay="-20" posaz="33" anglay="90"/>
@@ -43,7 +43,7 @@
 	
 	
 	<TimeLine value="5">
-		<EarthFighter type="3" speed="7" armour="2" posax="250" posay="-10" posaz="0" anglay="-90"/>
+		<EarthFighter type="3" speed="7" armor="2" posax="250" posay="-10" posaz="0" anglay="-90"/>
 		<CreateAsteroid speed="30" posax="-235" posay="-40" posaz="80" anglay="90"/>
 		<CreateAsteroid speed="25" posax="-165" posay="-5" posaz="-30" anglay="90"/>
 		<CreateAsteroid speed="20" posax="-175" posay="10" posaz="120" anglay="90"/>
@@ -58,9 +58,9 @@
 	
 	
 	<TimeLine value="5">
-		<EarthFighter type="3" axis="0" speed="9" armour="0" posax="180" posay="0" posaz="-20" anglay="-90"/>
-		<EarthFighter type="1" axis="0" speed="10" armour="0" posax="300" posay="5" posaz="10" anglay="-90"/>
-		<EarthFighter type="1" axis="0" speed="10" armour="0" posax="335" posay="13" posaz="30" anglay="-90"/>
+		<EarthFighter type="3" axis="0" speed="9" posax="180" posay="0" posaz="-20" anglay="-90"/>
+		<EarthFighter type="1" axis="0" speed="10" posax="300" posay="5" posaz="10" anglay="-90"/>
+		<EarthFighter type="1" axis="0" speed="10" posax="335" posay="13" posaz="30" anglay="-90"/>
 		<CreateAsteroid axis="0" speed="20" posax="-175" posay="10" posaz="100" anglay="90"/>
 		<CreateAsteroid axis="0" speed="21" posax="-165" posay="8" posaz="-20" anglay="90"/>
 		<CreateAsteroid axis="0" speed="20" posax="-145" posay="-20" posaz="70" anglay="90"/>
@@ -77,15 +77,15 @@
 	
 	
 	<TimeLine value="3">
-		<EarthFighter type="2" speed="10" armour="0" posax="350" posay="0" posaz="30" anglay="-90"/>
+		<EarthFighter type="2" speed="10" posax="350" posay="0" posaz="30" anglay="-90"/>
 		<CreateAsteroid speed="25" posax="-145" posay="5" posaz="-40" anglay="90"/>
 	</TimeLine>		
 	
 	
 	<TimeLine value="2">
-		<EarthFighter type="4" speed="7" armour="4" posax="200" posay="-20" posaz="-30" anglay="-90"/>
-		<EarthFighter type="4" speed="7" armour="4" posax="210" posay="-20" posaz="-15" anglay="-90"/>
-		<EarthFighter type="4" speed="7" armour="4" posax="240" posay="-20" posaz="-22" anglay="-90"/>
+		<EarthFighter type="4" speed="7" armor="4" posax="200" posay="-20" posaz="-30" anglay="-90"/>
+		<EarthFighter type="4" speed="7" armor="4" posax="210" posay="-20" posaz="-15" anglay="-90"/>
+		<EarthFighter type="4" speed="7" armor="4" posax="240" posay="-20" posaz="-22" anglay="-90"/>
 		<CreateAsteroid speed="25" posax="-145" posay="-30" posaz="-30" anglay="90"/>
 		<CreateAsteroid speed="25" posax="-135" posay="-40" posaz="43" anglay="90"/>
 		<CreateAsteroid speed="20" posax="-165" posay="-50" posaz="-37" anglay="90"/>
@@ -105,7 +105,7 @@
 	
 	
 	<TimeLine value="5">
-		<EarthFighter type="3" speed="8" armour="7" posax="250" posay="-10" posaz="0" anglay="-90"/>
+		<EarthFighter type="3" speed="8" armor="7" posax="250" posay="-10" posaz="0" anglay="-90"/>
 		<CreateAsteroid speed="20" posax="-175" posay="20" posaz="90" anglay="90"/>
 	</TimeLine>		
 	

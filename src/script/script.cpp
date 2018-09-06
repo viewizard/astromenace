@@ -728,7 +728,7 @@ void cMissionScript::UpdateTimeLine()
 				LoadSpaceShipScript(SpaceShip, xmlDoc, TL, ShowLineNumber, TimeOpLag, xmlAI);
 
 				int tmpInteger{0};
-				if (xmlDoc->iGetEntryAttribute(TL, "armour", tmpInteger))
+				if (xmlDoc->iGetEntryAttribute(TL, "armor", tmpInteger))
 					SetEarthSpaceFighterArmour(SpaceShip, tmpInteger);
 
 				for (unsigned int i = 1; i <= config::MAX_WEAPONS; i++) {
