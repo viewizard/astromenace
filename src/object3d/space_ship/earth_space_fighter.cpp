@@ -443,9 +443,9 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
  * Get texture for particular armor.
  * Note, we use only 4 for player ship, but all 8 could be used by script.
  */
-static GLtexture GetArmourTexture(const int ArmourType)
+static GLtexture GetArmorTexture(const int ArmorType)
 {
-	switch (ArmourType) {
+	switch (ArmorType) {
 	case 0:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text00.vw2d");
 
@@ -471,7 +471,7 @@ static GLtexture GetArmourTexture(const int ArmourType)
 		return GetPreloadedTextureAsset("models/earthfighter/sf-text06.vw2d");
 
 	default:
-		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
+		std::cerr << __func__ << "(): " << "wrong ArmorType.\n";
 		break;
 	}
 
@@ -527,7 +527,7 @@ void SetEarthSpaceFighterArmor(std::weak_ptr<cSpaceShip> &SpaceShip, const int A
 		return;
 
 	for (unsigned int i = 0; i < sharedSpaceShip->Chunks.size(); i++) {
-		sharedSpaceShip->Texture[i] = GetArmourTexture(ArmorType);
+		sharedSpaceShip->Texture[i] = GetArmorTexture(ArmorType);
 		sharedSpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmorType);
 	}
 }
