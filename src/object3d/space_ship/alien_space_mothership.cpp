@@ -488,9 +488,9 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 	MaxSpeedRotate = 80.0f;
 	Strength = StrengthStart =
 			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
-	ShieldCurrentStatus = ShieldStrengthStart =
+	ShieldCurrentStatus = ShieldInitialStatus =
 			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
-	ShieldRecharge = ShieldStrengthStart / 15.0f;
+	ShieldRecharge = ShieldInitialStatus / 15.0f;
 
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Name, *this);
 

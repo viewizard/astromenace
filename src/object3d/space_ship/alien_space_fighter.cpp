@@ -245,9 +245,9 @@ cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 	MaxSpeedRotate = 40.0f;
 	Strength = StrengthStart =
 			PresetAlienSpaceFighterData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
-	ShieldCurrentStatus = ShieldStrengthStart =
+	ShieldCurrentStatus = ShieldInitialStatus =
 			PresetAlienSpaceFighterData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
-	ShieldRecharge = ShieldStrengthStart / 10.0f;
+	ShieldRecharge = ShieldInitialStatus / 10.0f;
 
 	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum - 1].Name, *this);
 
