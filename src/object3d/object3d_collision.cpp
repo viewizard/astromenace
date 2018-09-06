@@ -278,7 +278,7 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 		    (&DontTouchObject != &tmpShip) &&
 		    CheckDistanceBetweenPoints(tmpShip.Location, Epicenter, Radius2, Distance2Factor)) {
 
-			tmpShip.ShieldStrength = 0.0f; // EMP with bomb/torpedo explosion should reduce shields to 0
+			tmpShip.ShieldCurrentStatus = 0.0f; // EMP with bomb/torpedo explosion should reduce shields to 0
 			tmpShip.Strength -= Damage * (1.0f - Distance2Factor);
 
 			if ((tmpShip.Strength <= 0.0f) &&
@@ -500,24 +500,24 @@ void DetectCollisionAllObject3D()
 					Damage.EM() /= 5.0f;
 				}
 
-				if (tmpShip.ShieldStrength >= Damage.EM()) {
-					tmpShip.ShieldStrength -= Damage.EM();
+				if (tmpShip.ShieldCurrentStatus >= Damage.EM()) {
+					tmpShip.ShieldCurrentStatus -= Damage.EM();
 					Damage.EM() = 0.0f;
 				} else {
-					Damage.EM() -= tmpShip.ShieldStrength;
-					tmpShip.ShieldStrength = 0.0f;
+					Damage.EM() -= tmpShip.ShieldCurrentStatus;
+					tmpShip.ShieldCurrentStatus = 0.0f;
 				}
 
-				if (tmpShip.ShieldStrength >= Damage.Kinetic()) {
-					tmpShip.ShieldStrength -= Damage.Kinetic();
+				if (tmpShip.ShieldCurrentStatus >= Damage.Kinetic()) {
+					tmpShip.ShieldCurrentStatus -= Damage.Kinetic();
 					Damage.Kinetic() = 0.0f;
 				} else {
-					Damage.Kinetic() -= tmpShip.ShieldStrength;
-					tmpShip.ShieldStrength = 0.0f;
+					Damage.Kinetic() -= tmpShip.ShieldCurrentStatus;
+					tmpShip.ShieldCurrentStatus = 0.0f;
 				}
 
-				if (tmpShip.ShieldStrength < 0.0f)
-					tmpShip.ShieldStrength = 0.0f;
+				if (tmpShip.ShieldCurrentStatus < 0.0f)
+					tmpShip.ShieldCurrentStatus = 0.0f;
 
 				tmpShip.Strength -= Damage.Kinetic();
 				// let EM occasionally corrupt armor in some way

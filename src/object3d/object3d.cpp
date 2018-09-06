@@ -938,7 +938,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	// TODO why we need ShowStrength if we could use StrengthStart < 0.0f for this?
 	if (!ShowStrength ||
 	    (StrengthStart <= 0.0f) ||
-	    ((Strength == StrengthStart) && (ShieldStrength == ShieldStrengthStart) && !NeedShowStrengthNow))
+	    ((Strength == StrengthStart) && (ShieldCurrentStatus == ShieldStrengthStart) && !NeedShowStrengthNow))
 		return;
 
 	// even if shield recharged - don't hide object's status any more
@@ -948,7 +948,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			 Width, sRGBCOLOR{eRGBCOLOR::red}, Strength, StrengthStart);
 	if (ShieldStrengthStart > 0.0f)
 		DrawObjectStatus(sVECTOR3D{Location.x, Location.y + AABB[0].y + 1.75f, Location.z},
-				 Width, sRGBCOLOR{0.1f, 0.7f, 1.0f}, ShieldStrength, ShieldStrengthStart);
+				 Width, sRGBCOLOR{0.1f, 0.7f, 1.0f}, ShieldCurrentStatus, ShieldStrengthStart);
 	vw_BindTexture(0, 0);
 }
 
@@ -980,10 +980,10 @@ bool cObject3D::Update(float Time)
 	}
 
 	if ((ShieldStrengthStart > 0.0f) &&
-	    (ShieldStrength < ShieldStrengthStart)) {
-		ShieldStrength += ShieldRecharge * TimeDelta;
-		if (ShieldStrength > ShieldStrengthStart)
-			ShieldStrength = ShieldStrengthStart;
+	    (ShieldCurrentStatus < ShieldStrengthStart)) {
+		ShieldCurrentStatus += ShieldRecharge * TimeDelta;
+		if (ShieldCurrentStatus > ShieldStrengthStart)
+			ShieldCurrentStatus = ShieldStrengthStart;
 	}
 
 	// if we have TimeSheet with actions and this is not a cycled entry

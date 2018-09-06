@@ -64,7 +64,7 @@ enum class eGFX {
 struct sAlienSpaceMotherShipData {
 	unsigned int EngineQuantity;
 	float Strength;
-	float ShieldStrength;
+	float Shield;
 	std::string Name;
 	std::string Texture;
 	std::string TextureIllum;
@@ -488,8 +488,8 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 	MaxSpeedRotate = 80.0f;
 	Strength = StrengthStart =
 			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
-	ShieldStrength = ShieldStrengthStart =
-			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].ShieldStrength / GameEnemyArmorPenalty;
+	ShieldCurrentStatus = ShieldStrengthStart =
+			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
 	ShieldRecharge = ShieldStrengthStart / 15.0f;
 
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Name, *this);
