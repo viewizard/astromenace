@@ -27,7 +27,7 @@
 
 // TODO don't call GetPreloadedTextureAsset() all the time, use cached texture instead
 
-// TODO why we need Strength/StrengthStart setup for immortal object?
+// TODO why we need ArmorCurrentStatus/ArmorInitialStatus setup for immortal object?
 
 #include "ground_object.h"
 #include "../../config/config.h"

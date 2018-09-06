@@ -78,7 +78,7 @@ struct sPilotProfile {
 
 	// difficulty related settings
 	uint8_t EnemyWeaponPenalty{2};		// Enemy weapon fire penalty [1, 3]
-	uint8_t EnemyArmorPenalty{2};		// Enemy armor strength penalty [1, 4]
+	uint8_t EnemyArmorPenalty{2};		// Enemy armor penalty [1, 4]
 	uint8_t EnemyTargetingSpeedPenalty{2};	// Enemy targeting speed penalty [1, 4]
 	uint8_t UnlimitedAmmo{1};		// 0 - limited ammo, 1 - unlimited ammo
 						// note, we use "Limited Ammo" option in menu, but UnlimitedAmmo variable
@@ -96,7 +96,7 @@ struct sPilotProfile {
 	// weapon related settings
 	uint8_t Weapon[config::MAX_WEAPONS];
 	int WeaponAmmo[config::MAX_WEAPONS];
-	float WeaponSlotYAngle[config::MAX_WEAPONS];		// wealon Y angle
+	float WeaponSlotYAngle[config::MAX_WEAPONS];		// weapon Y angle
 	uint8_t WeaponControl[config::MAX_WEAPONS];		// 1 - primary fire control, 2 - secondary fire control, 3 - both
 	uint8_t WeaponAltControl[config::MAX_WEAPONS];		// 0 - disabled, 1 - keyboard, 2 - mouse, 3 - joystick
 	uint8_t WeaponAltControlData[config::MAX_WEAPONS];	// alt control data

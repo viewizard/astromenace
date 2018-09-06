@@ -935,7 +935,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	DrawBoundingBoxes(Location, AABB, OBB, HitBB);
 
-	// TODO why we need ShowStrength if we could use StrengthStart < 0.0f for this?
+	// TODO why we need ShowStatus if we could use ArmorInitialStatus < 0.0f for this?
 	if (!ShowStatus ||
 	    (ArmorInitialStatus <= 0.0f) ||
 	    ((ArmorCurrentStatus == ArmorInitialStatus) &&

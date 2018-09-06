@@ -957,7 +957,7 @@ void GetShipWeaponSlotAngle(const int ShipNum, const int SlotNum, float &Min, fl
 }
 
 /*
- * Get armor strength for particular ship.
+ * Get armor for particular ship.
  */
 float GetShipArmor(const int SpaceShipNum)
 {

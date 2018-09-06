@@ -243,7 +243,7 @@ float GetEngineAcceleration(const int EngineType);
 float GetEnginePower(const int EngineType);
 // Get rotate engine power.
 float GetEngineRotatePower(const int EngineType);
-// Get armor strength for particular ship.
+// Get armor for particular ship.
 float GetShipArmor(const int SpaceShipNum);
 
 } // astromenace namespace
