@@ -482,9 +482,9 @@ static GLtexture GetArmorTexture(const int ArmorType)
  * Get illumination texture for particular armor.
  * Note, we use only 4 for player ship, but all 8 could be used by script.
  */
-static GLtexture GetArmourIllumTexture(const int ArmourType)
+static GLtexture GetArmorIllumTexture(const int ArmorType)
 {
-	switch (ArmourType) {
+	switch (ArmorType) {
 	case 0:
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum01.vw2d");
 
@@ -510,7 +510,7 @@ static GLtexture GetArmourIllumTexture(const int ArmourType)
 		return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
 
 	default:
-		std::cerr << __func__ << "(): " << "wrong ArmourType.\n";
+		std::cerr << __func__ << "(): " << "wrong ArmorType.\n";
 		break;
 	}
 
@@ -528,7 +528,7 @@ void SetEarthSpaceFighterArmor(std::weak_ptr<cSpaceShip> &SpaceShip, const int A
 
 	for (unsigned int i = 0; i < sharedSpaceShip->Chunks.size(); i++) {
 		sharedSpaceShip->Texture[i] = GetArmorTexture(ArmorType);
-		sharedSpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmorType);
+		sharedSpaceShip->TextureIllum[i] = GetArmorIllumTexture(ArmorType);
 	}
 }
 
