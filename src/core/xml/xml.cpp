@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO (?) add attribute names hash too, provide hash-related GetEntryAttribute() versions
+
 // TODO revise ParseTagContent() in order to use main buffer with begin/end position
 //      don't create temporary buffers string
 
