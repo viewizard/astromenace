@@ -486,7 +486,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 80.0f;
-	ArmorCurrentStatus = StrengthStart =
+	ArmorCurrentStatus = ArmorInitialStatus =
 			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Armor / GameEnemyArmorPenalty;
 	ShieldCurrentStatus = ShieldInitialStatus =
 			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;

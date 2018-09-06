@@ -982,7 +982,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
 
-	ArmorCurrentStatus = StrengthStart =
+	ArmorCurrentStatus = ArmorInitialStatus =
 			PresetEarthSpaceFighterData[SpaceShipNum - 1].Armor; // GameEnemyArmorPenalty for enemies only
 	WeaponSlots.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].WeaponQuantity);
 	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum - 1].Name, *this);

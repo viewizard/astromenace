@@ -639,7 +639,7 @@ cWeapon::cWeapon(const int WeaponNum)
 	if (WeaponNum >= 1 && WeaponNum <= 99) {
 		ObjectStatus = eObjectStatus::Ally;
 
-		ArmorCurrentStatus = StrengthStart = PresetEarthWeaponData[WeaponNum - 1].Armor;
+		ArmorCurrentStatus = ArmorInitialStatus = PresetEarthWeaponData[WeaponNum - 1].Armor;
 		WeaponLevel = PresetEarthWeaponData[WeaponNum - 1].WeaponLevel;
 		Ammo = AmmoStart =  PresetEarthWeaponData[WeaponNum - 1].Ammo;
 		NextFireTime =  PresetEarthWeaponData[WeaponNum - 1].NextFireTime;
@@ -673,7 +673,7 @@ cWeapon::cWeapon(const int WeaponNum)
 
 		ObjectStatus = eObjectStatus::Enemy;
 
-		ArmorCurrentStatus = StrengthStart = PresetAlienWeaponData[IntWeaponNum - 1].Armor;
+		ArmorCurrentStatus = ArmorInitialStatus = PresetAlienWeaponData[IntWeaponNum - 1].Armor;
 		WeaponLevel = PresetAlienWeaponData[IntWeaponNum - 1].WeaponLevel;
 		Ammo = AmmoStart =  PresetAlienWeaponData[IntWeaponNum - 1].Ammo;
 		NextFireTime =  PresetAlienWeaponData[IntWeaponNum - 1].NextFireTime;
@@ -691,7 +691,7 @@ cWeapon::cWeapon(const int WeaponNum)
 
 		ObjectStatus = eObjectStatus::Enemy;
 
-		ArmorCurrentStatus = StrengthStart = PresetPirateWeaponData[IntWeaponNum - 1].Armor;
+		ArmorCurrentStatus = ArmorInitialStatus = PresetPirateWeaponData[IntWeaponNum - 1].Armor;
 		WeaponLevel = PresetPirateWeaponData[IntWeaponNum - 1].WeaponLevel;
 		Ammo = AmmoStart =  PresetPirateWeaponData[IntWeaponNum - 1].Ammo;
 		NextFireTime =  PresetPirateWeaponData[IntWeaponNum - 1].NextFireTime;
@@ -799,7 +799,7 @@ bool cWeapon::Update(float Time)
 
 	if ((InternalType >= 1) &&
 	    (InternalType <= 99) &&
-	    (ArmorCurrentStatus < StrengthStart) &&
+	    (ArmorCurrentStatus < ArmorInitialStatus) &&
 	    DestroyedFire.expired()) {
 		DestroyedFire = vw_CreateParticleSystem();
 		if (auto sharedDestroyedFire = DestroyedFire.lock()) {
@@ -1190,9 +1190,9 @@ bool cWeapon::WeaponFire(float Time)
 	if ((InternalType >= 1) &&
 	    (InternalType <= 99)) {
 		bool Misfire{false};
-		if (ArmorCurrentStatus < StrengthStart)
-			if (ArmorCurrentStatus / StrengthStart > vw_fRand())
-				Misfire = true;
+		if ((ArmorCurrentStatus < ArmorInitialStatus) &&
+		    (ArmorCurrentStatus / ArmorInitialStatus > vw_fRand()))
+			Misfire = true;
 
 		if ((ArmorCurrentStatus <= 0.0f) ||
 		    (Ammo == 0) ||

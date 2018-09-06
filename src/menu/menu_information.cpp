@@ -65,7 +65,7 @@ float		RotationSumY =0.0f;
 float		InfoObjectWidth = 0.0f;
 float		InfoObjectLength = 0.0f;
 float		InfoObjectHeight = 0.0f;
-float		InfoObjectStrength = 0.0f;
+float		InfoObjectArmor = 0.0f;
 int			InfoObjectWeaponQuantity = 0;
 int			InfoObjectEngineQuantity = 0;
 
@@ -299,7 +299,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedShip->Width;
 			InfoObjectLength = sharedShip->Length;
 			InfoObjectHeight = sharedShip->Height;
-			InfoObjectStrength = sharedShip->StrengthStart;
+			InfoObjectArmor = sharedShip->ArmorInitialStatus;
 			InfoObjectWeaponQuantity = sharedShip->WeaponSlots.size();
 			InfoObjectEngineQuantity = sharedShip->Engines.size();
 
@@ -330,7 +330,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedWeapon->Width;
 			InfoObjectLength = sharedWeapon->Length;
 			InfoObjectHeight = sharedWeapon->Height;
-			InfoObjectStrength = sharedWeapon->StrengthStart;
+			InfoObjectArmor = sharedWeapon->ArmorInitialStatus;
 
 			sharedWeapon->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 
@@ -362,7 +362,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedMine->Width;
 			InfoObjectLength = sharedMine->Length;
 			InfoObjectHeight = sharedMine->Height;
-			InfoObjectStrength = sharedMine->StrengthStart;
+			InfoObjectArmor = sharedMine->ArmorInitialStatus;
 
 			sharedMine->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
@@ -385,7 +385,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedShip->Width;
 			InfoObjectLength = sharedShip->Length;
 			InfoObjectHeight = sharedShip->Height;
-			InfoObjectStrength = sharedShip->StrengthStart;
+			InfoObjectArmor = sharedShip->ArmorInitialStatus;
 
 			for (auto &tmpEngine : sharedShip->Engines) {
 				if (auto sharedEngine = tmpEngine.lock())
@@ -412,7 +412,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedShip->Width;
 			InfoObjectLength = sharedShip->Length;
 			InfoObjectHeight = sharedShip->Height;
-			InfoObjectStrength = sharedShip->StrengthStart;
+			InfoObjectArmor = sharedShip->ArmorInitialStatus;
 
 			for (auto &tmpEngine : sharedShip->Engines) {
 				if (auto sharedEngine = tmpEngine.lock())
@@ -439,7 +439,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedShip->Width;
 			InfoObjectLength = sharedShip->Length;
 			InfoObjectHeight = sharedShip->Height;
-			InfoObjectStrength = sharedShip->StrengthStart;
+			InfoObjectArmor = sharedShip->ArmorInitialStatus;
 
 			for (auto &tmpEngine : sharedShip->Engines) {
 				if (auto sharedEngine = tmpEngine.lock())
@@ -465,7 +465,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
-			InfoObjectStrength = sharedObject->StrengthStart;
+			InfoObjectArmor = sharedObject->ArmorInitialStatus;
 
 			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
@@ -486,7 +486,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
-			InfoObjectStrength = sharedObject->StrengthStart;
+			InfoObjectArmor = sharedObject->ArmorInitialStatus;
 
 			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
@@ -516,7 +516,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
-			InfoObjectStrength = sharedObject->StrengthStart;
+			InfoObjectArmor = sharedObject->ArmorInitialStatus;
 
 			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
@@ -546,7 +546,7 @@ void CreateInfoObject()
 			InfoObjectWidth = sharedObject->Width;
 			InfoObjectLength = sharedObject->Length;
 			InfoObjectHeight = sharedObject->Height;
-			InfoObjectStrength = sharedObject->StrengthStart;
+			InfoObjectArmor = sharedObject->ArmorInitialStatus;
 
 			sharedObject->SetRotation(sVECTOR3D{0.0f, RotationSumY, 0.0f});
 		}
@@ -591,7 +591,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Ally"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp,  "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
@@ -627,7 +627,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Earth Federation"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Hull:"));
 		if ((CreateNum-InfoWeaponStart+1 == 11) |
@@ -673,7 +673,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Pirates"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Hull:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "100 %s", vw_GetText("units"));
@@ -721,7 +721,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
@@ -754,7 +754,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
@@ -786,7 +786,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
@@ -843,7 +843,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
@@ -876,7 +876,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
@@ -909,7 +909,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectStrength, vw_GetText("units"));
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectWidth, vw_GetText("units"));

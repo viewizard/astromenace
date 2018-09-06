@@ -81,7 +81,7 @@ cWheeled::cWheeled(const int WheeledNum)
 	}
 	SpeedToWheelRotarySpeedFactor = PresetWheeledData[WheeledNum - 1].SpeedToWheelRotarySpeedFactor;
 
-	ArmorCurrentStatus = StrengthStart = PresetWheeledData[WheeledNum - 1].Armor / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = ArmorInitialStatus = PresetWheeledData[WheeledNum - 1].Armor / GameEnemyArmorPenalty;
 
 	switch (WheeledNum) {
 	case 1:

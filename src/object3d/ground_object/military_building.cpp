@@ -75,7 +75,8 @@ cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
 		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileName);
 	}
 
-	ArmorCurrentStatus = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Armor / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = ArmorInitialStatus =
+			PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Armor / GameEnemyArmorPenalty;
 
 	switch (MilitaryBuildingNum) {
 	case 1:

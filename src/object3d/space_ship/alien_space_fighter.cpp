@@ -243,7 +243,7 @@ cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 	MaxSpeed = 40.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	ArmorCurrentStatus = StrengthStart =
+	ArmorCurrentStatus = ArmorInitialStatus =
 			PresetAlienSpaceFighterData[SpaceShipNum - 1].Armor / GameEnemyArmorPenalty;
 	ShieldCurrentStatus = ShieldInitialStatus =
 			PresetAlienSpaceFighterData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;

@@ -937,8 +937,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
 	// TODO why we need ShowStrength if we could use StrengthStart < 0.0f for this?
 	if (!ShowStrength ||
-	    (StrengthStart <= 0.0f) ||
-	    ((ArmorCurrentStatus == StrengthStart) &&
+	    (ArmorInitialStatus <= 0.0f) ||
+	    ((ArmorCurrentStatus == ArmorInitialStatus) &&
 	     (ShieldCurrentStatus == ShieldInitialStatus) &&
 	     !NeedShowStrengthNow))
 		return;
@@ -947,7 +947,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 	NeedShowStrengthNow = true;
 
 	DrawObjectStatus(sVECTOR3D{Location.x, Location.y + AABB[0].y + 0.7f, Location.z},
-			 Width, sRGBCOLOR{eRGBCOLOR::red}, ArmorCurrentStatus, StrengthStart);
+			 Width, sRGBCOLOR{eRGBCOLOR::red}, ArmorCurrentStatus, ArmorInitialStatus);
 	if (ShieldInitialStatus > 0.0f)
 		DrawObjectStatus(sVECTOR3D{Location.x, Location.y + AABB[0].y + 1.75f, Location.z},
 				 Width, sRGBCOLOR{0.1f, 0.7f, 1.0f}, ShieldCurrentStatus, ShieldInitialStatus);

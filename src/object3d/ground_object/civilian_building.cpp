@@ -84,7 +84,7 @@ cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/buildings_nm.tga");
 	}
 
-	ArmorCurrentStatus = StrengthStart = PresetBuildingData[BuildingNum - 1].Armor / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = ArmorInitialStatus = PresetBuildingData[BuildingNum - 1].Armor / GameEnemyArmorPenalty;
 }
 
 } // astromenace namespace

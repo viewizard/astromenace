@@ -51,7 +51,7 @@ cSmallAsteroid::cSmallAsteroid()
 	RotationSpeed.x = 100.0f + 50.0f * vw_fRand0();
 	RotationSpeed.y = 20.0f + 20.0f * vw_fRand0();
 
-	ArmorCurrentStatus = StrengthStart = Radius * 10.0f / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = ArmorInitialStatus = Radius * 10.0f / GameEnemyArmorPenalty;
 	Radius = Width / 2.0f;
 }
 

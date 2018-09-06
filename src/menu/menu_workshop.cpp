@@ -96,7 +96,7 @@ void WorkshopCreateShip(int Num)
 	sharedWorkshopFighterGame->EngineDestroyType = true;
 	sharedWorkshopFighterGame->ShowStrength = false;
 
-	sharedWorkshopFighterGame->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
+	sharedWorkshopFighterGame->ArmorInitialStatus *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 	sharedWorkshopFighterGame->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 
 

@@ -219,7 +219,7 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	ArmorCurrentStatus = StrengthStart = PresetPirateShipData[SpaceShipNum - 1].Armor / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = ArmorInitialStatus = PresetPirateShipData[SpaceShipNum - 1].Armor / GameEnemyArmorPenalty;
 	unsigned int EngineQuantity = PresetPirateShipData[SpaceShipNum - 1].EngineQuantity;
 
 	LoadObjectData(PresetPirateShipData[SpaceShipNum - 1].Name, *this);

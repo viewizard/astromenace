@@ -140,7 +140,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType,
 					}
 				}
 
-				sharedSpaceDebris->StrengthStart = sharedSpaceDebris->ArmorCurrentStatus = 1.0f;
+				sharedSpaceDebris->ArmorInitialStatus = sharedSpaceDebris->ArmorCurrentStatus = 1.0f;
 				sharedSpaceDebris->ObjectStatus = Object.ObjectStatus;
 				sharedSpaceDebris->ShowStrength = false;
 

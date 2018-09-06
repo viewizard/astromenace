@@ -242,7 +242,7 @@ void InitGamePlayerShip()
 						    [] () {return vw_fRand0() * 0.1f;});
 
 	sharedPlayerFighter->ObjectStatus = eObjectStatus::Player;
-	sharedPlayerFighter->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
+	sharedPlayerFighter->ArmorInitialStatus *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 	sharedPlayerFighter->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 	sharedPlayerFighter->ShowStrength = false;
 
@@ -408,7 +408,7 @@ void GamePlayerShip()
 	if (sharedPlayerFighter->ArmorCurrentStatus <= 0.0f) {
 		// редкий случай
 		if (UndeadDebugMode) {
-			sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->StrengthStart;
+			sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->ArmorInitialStatus;
 		} else {
 			// делаем взрыв
 			// + 10.0f движение камеры
@@ -543,11 +543,9 @@ void GamePlayerShip()
 		// Звуковое оповещение, если жизни менее 10%
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// если меньше 10% нужно бить тревогу
-		if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart / 10.0f) {
-			// если не играем, запускаем звук сирены
-			if (!vw_IsSoundAvailable(SoundLowLife))
-				SoundLowLife = PlayMenuSFX(eMenuSFX::WarningLowLife, 1.0f);
-		}
+		if ((sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f) &&
+		    !vw_IsSoundAvailable(SoundLowLife)) // если не играем, запускаем звук сирены
+			SoundLowLife = PlayMenuSFX(eMenuSFX::WarningLowLife, 1.0f);
 	}
 
 
@@ -1049,11 +1047,11 @@ void GamePlayerShip()
 		// нано роботы
 		case 1:
 			// восстанавливаем на 0.5% в секунду
-			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart) {
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus) {
 				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem) * sharedPlayerFighter->TimeDelta;
-				sharedPlayerFighter->ArmorCurrentStatus += (sharedPlayerFighter->StrengthStart / 200.0f) * sharedPlayerFighter->TimeDelta;
-				if (sharedPlayerFighter->ArmorCurrentStatus > sharedPlayerFighter->StrengthStart)
-					sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->StrengthStart;
+				sharedPlayerFighter->ArmorCurrentStatus += (sharedPlayerFighter->ArmorInitialStatus / 200.0f) * sharedPlayerFighter->TimeDelta;
+				if (sharedPlayerFighter->ArmorCurrentStatus > sharedPlayerFighter->ArmorInitialStatus)
+					sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->ArmorInitialStatus;
 			}
 			break;
 		// спец защитный слой

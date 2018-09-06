@@ -843,7 +843,7 @@ void InitGame()
 	if (GamePowerSystem == 0)
 		CurrentDrawEnergNumFull = 0.0f;
 	if (auto sharedPlayerFighter = PlayerFighter.lock())
-		CurrentDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->StrengthStart;
+		CurrentDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus;
 
 	CurrentTime = vw_GetTimeThread(0);
 	CurrentAlert2 = 1.0f;
@@ -1117,10 +1117,10 @@ void DrawGame()
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
 			sharedLifeParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLifeParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
-			sharedLifeParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
+			sharedLifeParticleSystem2D->ColorStart.g = 0.60f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
+			sharedLifeParticleSystem2D->ColorStart.b = 0.20f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
 			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart / 10.0f) {
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f) {
 				sharedLifeParticleSystem2D->AlphaStart = CurrentAlert2;
 				sharedLifeParticleSystem2D->AlphaEnd = CurrentAlert2;
 			} else { // подчинились, восстанавливаем данные
@@ -1131,10 +1131,10 @@ void DrawGame()
 
 		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
 			sharedLife2ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
-			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
+			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
+			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
 			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart/10.0f) {
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f) {
 				if (CurrentAlert2 > 0.6f) {
 					sharedLife2ParticleSystem2D->AlphaStart = CurrentAlert2;
 					sharedLife2ParticleSystem2D->AlphaEnd = CurrentAlert2;
@@ -1150,11 +1150,11 @@ void DrawGame()
 
 		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
 			sharedLife3ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
-			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
+			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
+			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
 
 			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart / 10.0f) {
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f) {
 				if (CurrentAlert2 > 0.6f) {
 					sharedLife3ParticleSystem2D->AlphaStart = CurrentAlert2;
 					sharedLife3ParticleSystem2D->AlphaEnd = CurrentAlert2;
@@ -1180,7 +1180,7 @@ void DrawGame()
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
 		NeedDrawEnergNumFull = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-		NeedDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->StrengthStart;
+		NeedDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus;
 	}
 
 

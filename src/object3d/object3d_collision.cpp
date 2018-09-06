@@ -73,13 +73,13 @@ static void AddBonusForKilledEnemy(const cObject3D &Object, eObjectStatus Killed
 {
 	if ((KilledBy != eObjectStatus::Player) ||
 	    (Object.ObjectStatus != eObjectStatus::Enemy) ||
-	    (Object.StrengthStart <= 0.0f))
+	    (Object.ArmorInitialStatus <= 0.0f))
 		return;
 
 	// TODO probably, we should calculate "static part" on mission start only
-	float tmpBonus = Object.StrengthStart * GameEnemyArmorPenalty /
+	float tmpBonus = Object.ArmorInitialStatus * GameEnemyArmorPenalty /
 			 (2.0f * GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]);
-	float tmpExperience = Object.StrengthStart * GameEnemyArmorPenalty * ProfileDifficulty(CurrentProfile) / 100.0f;
+	float tmpExperience = Object.ArmorInitialStatus * GameEnemyArmorPenalty * ProfileDifficulty(CurrentProfile) / 100.0f;
 
 	switch (Object.ObjectType) {
 	case eObjectType::AlienFighter:
@@ -618,9 +618,9 @@ void DetectCollisionAllObject3D()
 				if (!NeedCheckCollision(tmpSpace)) {
 					// we just get into the immortal object here, but don't destroy ship instantly
 					if (tmpShip.ObjectStatus != eObjectStatus::Player)
-						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.ArmorInitialStatus / 0.5f) * tmpShip.TimeDelta;
 					else
-						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.ArmorInitialStatus / 2.0f) * tmpShip.TimeDelta;
 				} else {
 					float StrTMP = tmpShip.ArmorCurrentStatus;
 					tmpShip.ArmorCurrentStatus -= tmpSpace.ArmorCurrentStatus;
@@ -680,9 +680,9 @@ void DetectCollisionAllObject3D()
 				if (!NeedCheckCollision(tmpGround)) {
 					// we just get into the immortal object here, but don't destroy ship instantly
 					if (tmpShip.ObjectStatus != eObjectStatus::Player)
-						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.ArmorInitialStatus / 0.5f) * tmpShip.TimeDelta;
 					else
-						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.ArmorInitialStatus / 2.0f) * tmpShip.TimeDelta;
 				} else {
 					float StrTMP = tmpShip.ArmorCurrentStatus;
 					tmpShip.ArmorCurrentStatus -= tmpGround.ArmorCurrentStatus;
@@ -826,7 +826,7 @@ void DetectCollisionAllObject3D()
 
 				if (!NeedCheckCollision(tmpSpace))
 					// we just get into the immortal object here, but don't destroy space object instantly
-					tmpGround.ArmorCurrentStatus -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
+					tmpGround.ArmorCurrentStatus -= (tmpGround.ArmorInitialStatus / 0.5f) * tmpGround.TimeDelta;
 				else {
 					float StrTMP = tmpGround.ArmorCurrentStatus;
 					tmpGround.ArmorCurrentStatus -= tmpSpace.ArmorCurrentStatus;

@@ -86,7 +86,7 @@ cTracked::cTracked(const int TrackedNum)
 	}
 	SpeedToWheelRotarySpeedFactor = PresetTrackedData[TrackedNum - 1].SpeedToWheelRotarySpeedFactor;
 
-	ArmorCurrentStatus = StrengthStart = PresetTrackedData[TrackedNum - 1].Armor / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = ArmorInitialStatus = PresetTrackedData[TrackedNum - 1].Armor / GameEnemyArmorPenalty;
 
 	switch (TrackedNum) {
 	case 1:

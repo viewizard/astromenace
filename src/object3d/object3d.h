@@ -230,7 +230,7 @@ public:
 	float Power[1]{64.0f};
 
 	float ArmorCurrentStatus{0.0f};
-	float StrengthStart{0.0f};
+	float ArmorInitialStatus{0.0f};
 
 	float ShieldCurrentStatus{0.0f};
 	float ShieldInitialStatus{0.0f};
