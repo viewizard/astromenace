@@ -981,7 +981,7 @@ bool cObject3D::Update(float Time)
 
 	if ((ShieldInitialStatus > 0.0f) &&
 	    (ShieldCurrentStatus < ShieldInitialStatus)) {
-		ShieldCurrentStatus += ShieldRecharge * TimeDelta;
+		ShieldCurrentStatus += ShieldRechargeRate * TimeDelta;
 		if (ShieldCurrentStatus > ShieldInitialStatus)
 			ShieldCurrentStatus = ShieldInitialStatus;
 	}

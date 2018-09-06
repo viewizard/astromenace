@@ -490,7 +490,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
 			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
 	ShieldCurrentStatus = ShieldInitialStatus =
 			PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
-	ShieldRecharge = ShieldInitialStatus / 15.0f;
+	ShieldRechargeRate = ShieldInitialStatus / 15.0f; // 15 seconds for full recharge
 
 	LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Name, *this);
 

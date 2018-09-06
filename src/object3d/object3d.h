@@ -234,7 +234,7 @@ public:
 
 	float ShieldCurrentStatus{0.0f};
 	float ShieldInitialStatus{0.0f};
-	float ShieldRecharge{0.0f};
+	float ShieldRechargeRate{0.0f};
 
 	bool ShowStrength{true};
 	bool NeedShowStrengthNow{false};

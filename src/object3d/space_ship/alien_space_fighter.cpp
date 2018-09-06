@@ -247,7 +247,7 @@ cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 			PresetAlienSpaceFighterData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
 	ShieldCurrentStatus = ShieldInitialStatus =
 			PresetAlienSpaceFighterData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
-	ShieldRecharge = ShieldInitialStatus / 10.0f;
+	ShieldRechargeRate = ShieldInitialStatus / 10.0f; // 10 seconds for full recharge
 
 	LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum - 1].Name, *this);
 
