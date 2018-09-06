@@ -231,7 +231,7 @@ int GetWorkshopShipRepairCost(int Num, std::weak_ptr<cSpaceShip> &Fighter)
 	int ShipCost = GetWorkshopShipCost(Num) * GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 	// расчет стоимости ремонта корабля
 	if (auto sharedFighter = Fighter.lock())
-		ShipCost -= (int)(ShipCost * (sharedFighter->Strength / sharedFighter->StrengthStart));
+		ShipCost -= (int)(ShipCost * (sharedFighter->ArmorCurrentStatus / sharedFighter->StrengthStart));
 	return ShipCost;
 }
 
@@ -355,7 +355,7 @@ void WorkshopCreateBuyShip()
 	sharedWorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	sharedWorkshopFighterGame->EngineDestroyType = true;
 	sharedWorkshopFighterGame->ShowStrength = false;
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->Strength;
+	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorCurrentStatus;
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullUpgrade = 1;
 
 
@@ -480,19 +480,19 @@ void RepairShip()
 	if (GameConfig().Profile[CurrentProfile].Money >= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame)) {
 		ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame);
 		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->StrengthStart;
-		sharedWorkshopFighterGame->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+		sharedWorkshopFighterGame->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 		return;
 	}
 
 
 	// вычисляем, сколько можем отремонтировать
-	float StrengtRepair = sharedWorkshopFighterGame->StrengthStart - sharedWorkshopFighterGame->Strength;
+	float StrengtRepair = sharedWorkshopFighterGame->StrengthStart - sharedWorkshopFighterGame->ArmorCurrentStatus;
 	float MoneyRepair = static_cast<float>(GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
 	// сколько можем отремонтировать
-	float CanRepair = StrengtRepair * (GameConfig().Profile[CurrentProfile].Money/MoneyRepair);
+	float CanRepair = StrengtRepair * (GameConfig().Profile[CurrentProfile].Money / MoneyRepair);
 	// ремонтируем сколько можем
-	sharedWorkshopFighterGame->Strength += CanRepair;
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->Strength;
+	sharedWorkshopFighterGame->ArmorCurrentStatus += CanRepair;
+	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorCurrentStatus;
 	// это будет стоить все имеющиеся деньги
 	ChangeGameConfig().Profile[CurrentProfile].Money = 0;
 
@@ -518,10 +518,10 @@ void UpgradeShip()
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullUpgrade++;
 
 	sharedWorkshopFighterGame->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
-	sharedWorkshopFighterGame->Strength = sharedWorkshopFighterGame->StrengthStart - OldStr +
-					      GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+	sharedWorkshopFighterGame->ArmorCurrentStatus = sharedWorkshopFighterGame->StrengthStart - OldStr +
+							GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->Strength;
+	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorCurrentStatus;
 
 
 	// вычитаем деньги за апгрейд
@@ -731,11 +731,11 @@ void Workshop_Shipyard()
 
 		// надпись Armor, красная
 		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*MenuContentTransp, "%i/%i", static_cast<int>(sharedWorkshopFighterGame->Strength), static_cast<int>(sharedWorkshopFighterGame->StrengthStart));
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*MenuContentTransp, "%i/%i", static_cast<int>(sharedWorkshopFighterGame->ArmorCurrentStatus), static_cast<int>(sharedWorkshopFighterGame->StrengthStart));
 	} else {
 		// надпись Armor, нормальная
 		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i/%i", static_cast<int>(sharedWorkshopFighterGame->Strength), static_cast<int>(sharedWorkshopFighterGame->StrengthStart));
+		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, "%i/%i", static_cast<int>(sharedWorkshopFighterGame->ArmorCurrentStatus), static_cast<int>(sharedWorkshopFighterGame->StrengthStart));
 	}
 
 	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));

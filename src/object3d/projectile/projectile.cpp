@@ -1349,7 +1349,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 	GraphicFX.resize(GraphicFXQuantity);
 
 	if (ProjectileType == 1)
-		Strength = StrengthStart = 1.0f;
+		ArmorCurrentStatus = StrengthStart = 1.0f;
 
 	switch (ProjectileNum) {
 	// Kinetic
@@ -1829,7 +1829,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 	// mine 1
 	case 214:
 		MineIData = 0.0f;
-		Strength = StrengthStart = 10.0f;
+		ArmorCurrentStatus = StrengthStart = 10.0f;
 		LoadObjectData("models/mine/mine-01.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/mine/mine1.tga");
 		TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine1i.tga");
@@ -1837,7 +1837,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 	// mine 2
 	case 215:
 		MineIData = 0.0f;
-		Strength = StrengthStart = 15.0f;
+		ArmorCurrentStatus = StrengthStart = 15.0f;
 		LoadObjectData("models/mine/mine-02.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/mine/mine2.tga");
 		TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine2i.tga");
@@ -1851,7 +1851,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 	// mine 3
 	case 216:
 		MineIData = 0.0f;
-		Strength = StrengthStart = 20.0f;
+		ArmorCurrentStatus = StrengthStart = 20.0f;
 		MineReloadTime = MineNextFireTime = 1.0f;
 		LoadObjectData("models/mine/mine-03.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/mine/mine3.tga");
@@ -1866,7 +1866,7 @@ cProjectile::cProjectile(const int ProjectileNum)
 	// mine 4
 	case 217:
 		MineIData = 0.0f;
-		Strength = StrengthStart = 40.0f;
+		ArmorCurrentStatus = StrengthStart = 40.0f;
 		MineReloadTime = MineNextFireTime = 3.0f;
 		LoadObjectData("models/mine/mine-04.vw3d", *this);
 		Texture[0] = GetPreloadedTextureAsset("models/mine/mine4.tga");

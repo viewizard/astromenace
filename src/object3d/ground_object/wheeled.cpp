@@ -34,7 +34,7 @@ namespace viewizard {
 namespace astromenace {
 
 struct sWheeledData {
-	float Strength;
+	float Armor;
 	float SpeedToWheelRotarySpeedFactor;
 	std::string Model3DFileName;
 	std::string TextureFileName;
@@ -81,7 +81,7 @@ cWheeled::cWheeled(const int WheeledNum)
 	}
 	SpeedToWheelRotarySpeedFactor = PresetWheeledData[WheeledNum - 1].SpeedToWheelRotarySpeedFactor;
 
-	Strength = StrengthStart = PresetWheeledData[WheeledNum - 1].Strength / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = StrengthStart = PresetWheeledData[WheeledNum - 1].Armor / GameEnemyArmorPenalty;
 
 	switch (WheeledNum) {
 	case 1:

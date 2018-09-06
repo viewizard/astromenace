@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// FIXME we use "strength", "hull" and "armour" in the same meaning, switch to "armor"
-
 // TODO codestyle should be fixed
 
 #include "object3d.h"
@@ -262,9 +260,9 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 			    (vw_fRand() > 0.5f))
 				return; // eSpaceCycle::Continue;
 
-			tmpSpace.Strength -= Damage * (1.0f - Distance2Factor);
+			tmpSpace.ArmorCurrentStatus -= Damage * (1.0f - Distance2Factor);
 
-			if (tmpSpace.Strength <= 0.0f) {
+			if (tmpSpace.ArmorCurrentStatus <= 0.0f) {
 				AddBonusForKilledEnemy(tmpSpace, ExplosionStatus);
 				SetupSpaceExplosion(tmpSpace);
 				SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
@@ -279,9 +277,9 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 		    CheckDistanceBetweenPoints(tmpShip.Location, Epicenter, Radius2, Distance2Factor)) {
 
 			tmpShip.ShieldCurrentStatus = 0.0f; // EMP with bomb/torpedo explosion should reduce shields to 0
-			tmpShip.Strength -= Damage * (1.0f - Distance2Factor);
+			tmpShip.ArmorCurrentStatus -= Damage * (1.0f - Distance2Factor);
 
-			if ((tmpShip.Strength <= 0.0f) &&
+			if ((tmpShip.ArmorCurrentStatus <= 0.0f) &&
 			    (tmpShip.ObjectStatus != eObjectStatus::Player)) {
 				AddBonusForKilledEnemy(tmpShip, ExplosionStatus);
 				SetupSpaceShipExplosion(tmpShip, -1);
@@ -296,9 +294,9 @@ static void DamageAllNearObjectsByShockWave(const cObject3D &DontTouchObject, co
 		    (&DontTouchObject != &tmpGround) &&
 		    CheckDistanceBetweenPoints(tmpGround.Location, Epicenter, Radius2, Distance2Factor)) {
 
-			tmpGround.Strength -= Damage * (1.0f - Distance2Factor);
+			tmpGround.ArmorCurrentStatus -= Damage * (1.0f - Distance2Factor);
 
-			if (tmpGround.Strength <= 0.0f) {
+			if (tmpGround.ArmorCurrentStatus <= 0.0f) {
 				AddBonusForKilledEnemy(tmpGround, ExplosionStatus);
 				SetupGroundExplosion(tmpGround, -1);
 				GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
@@ -519,17 +517,17 @@ void DetectCollisionAllObject3D()
 				if (tmpShip.ShieldCurrentStatus < 0.0f)
 					tmpShip.ShieldCurrentStatus = 0.0f;
 
-				tmpShip.Strength -= Damage.Kinetic();
+				tmpShip.ArmorCurrentStatus -= Damage.Kinetic();
 				// let EM occasionally corrupt armor in some way
-				tmpShip.Strength -= Damage.EM() * vw_fRand();
+				tmpShip.ArmorCurrentStatus -= Damage.EM() * vw_fRand();
 
 				// since AlienFighter is "energy", we have a chance kill it by EM
 				if ((Damage.EM() > 0.0f) &&
 				    (tmpShip.ObjectType == eObjectType::AlienFighter) &&
 				    (vw_fRand() > 0.7f))
-					tmpShip.Strength = 0.0f;
+					tmpShip.ArmorCurrentStatus = 0.0f;
 
-				if (tmpShip.Strength <= 0.0f) {
+				if (tmpShip.ArmorCurrentStatus <= 0.0f) {
 					AddBonusForKilledEnemy(tmpShip, tmpProjectile.ObjectStatus);
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
 						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum);
@@ -578,14 +576,14 @@ void DetectCollisionAllObject3D()
 					if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 						int ObjectPieceNumWeapon;
 
-						if ((sharedWeapon->Strength > 0.0f) &&
+						if ((sharedWeapon->ArmorCurrentStatus > 0.0f) &&
 						    DetectProjectileCollision(*sharedWeapon, ObjectPieceNumWeapon, tmpProjectile, Damage, tmpShip.Speed)) {
 							// FIXME should be fixed, since tmpShip may be destroyed in DamageAllNearObjectsByShockWave()
 
 							// note, we don't really destroy this weapon here
-							sharedWeapon->Strength -= Damage.Kinetic();
-							if (sharedWeapon->Strength <= 0.0f) {
-								sharedWeapon->Strength = 0.0f;
+							sharedWeapon->ArmorCurrentStatus -= Damage.Kinetic();
+							if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
+								sharedWeapon->ArmorCurrentStatus = 0.0f;
 								PlayVoicePhrase(eVoicePhrase::WeaponDestroyed, 1.0f);
 							} else
 								PlayVoicePhrase(eVoicePhrase::WeaponDamaged, 1.0f);
@@ -620,26 +618,26 @@ void DetectCollisionAllObject3D()
 				if (!NeedCheckCollision(tmpSpace)) {
 					// we just get into the immortal object here, but don't destroy ship instantly
 					if (tmpShip.ObjectStatus != eObjectStatus::Player)
-						tmpShip.Strength -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
 					else
-						tmpShip.Strength -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
 				} else {
-					float StrTMP = tmpShip.Strength;
-					tmpShip.Strength -= tmpSpace.Strength;
-					tmpSpace.Strength -= StrTMP;
+					float StrTMP = tmpShip.ArmorCurrentStatus;
+					tmpShip.ArmorCurrentStatus -= tmpSpace.ArmorCurrentStatus;
+					tmpSpace.ArmorCurrentStatus -= StrTMP;
 				}
 				if (!NeedCheckCollision(tmpShip))
-					tmpSpace.Strength = 0.0f;
+					tmpSpace.ArmorCurrentStatus = 0.0f;
 
 				if (NeedCheckCollision(tmpSpace) &&
-				    (tmpSpace.Strength <= 0.0f)) {
+				    (tmpSpace.ArmorCurrentStatus <= 0.0f)) {
 					AddBonusForKilledEnemy(tmpSpace, tmpShip.ObjectStatus);
 					SetupSpaceExplosion(tmpSpace);
 					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(tmpShip) &&
-				    (tmpShip.Strength <= 0.0f)) {
+				    (tmpShip.ArmorCurrentStatus <= 0.0f)) {
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
 						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
@@ -682,26 +680,26 @@ void DetectCollisionAllObject3D()
 				if (!NeedCheckCollision(tmpGround)) {
 					// we just get into the immortal object here, but don't destroy ship instantly
 					if (tmpShip.ObjectStatus != eObjectStatus::Player)
-						tmpShip.Strength -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 0.5f) * tmpShip.TimeDelta;
 					else
-						tmpShip.Strength -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
+						tmpShip.ArmorCurrentStatus -= (tmpShip.StrengthStart / 2.0f) * tmpShip.TimeDelta;
 				} else {
-					float StrTMP = tmpShip.Strength;
-					tmpShip.Strength -= tmpGround.Strength;
-					tmpGround.Strength -= StrTMP;
+					float StrTMP = tmpShip.ArmorCurrentStatus;
+					tmpShip.ArmorCurrentStatus -= tmpGround.ArmorCurrentStatus;
+					tmpGround.ArmorCurrentStatus -= StrTMP;
 				}
 				if (!NeedCheckCollision(tmpShip))
-					tmpGround.Strength = 0.0f;
+					tmpGround.ArmorCurrentStatus = 0.0f;
 
 				if (NeedCheckCollision(tmpGround) &&
-				    (tmpGround.Strength <= 0.0f)) {
+				    (tmpGround.ArmorCurrentStatus <= 0.0f)) {
 					AddBonusForKilledEnemy(tmpGround, tmpShip.ObjectStatus);
 					SetupGroundExplosion(tmpGround, ObjectPieceNum2);
 					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(tmpShip) &&
-				    (tmpShip.Strength <= 0.0f)) {
+				    (tmpShip.ArmorCurrentStatus <= 0.0f)) {
 					if (tmpShip.ObjectStatus != eObjectStatus::Player) {
 						SetupSpaceShipExplosion(tmpShip, ObjectPieceNum1);
 						ShipCycleCommand = eShipCycle::DeleteObjectAndContinue;
@@ -735,24 +733,24 @@ void DetectCollisionAllObject3D()
 				       SecondShip.OBB.Box, SecondShip.OBB.Location, SecondShip.Location, SecondShip.CurrentRotationMat) &&
 		    CheckHitBBHitBBCollisionDetection(FirstShip, SecondShip, ObjectPieceNum1, ObjectPieceNum2)) {
 
-			float StrTMP = FirstShip.Strength;
-			FirstShip.Strength -= SecondShip.Strength;
-			SecondShip.Strength -= StrTMP;
+			float StrTMP = FirstShip.ArmorCurrentStatus;
+			FirstShip.ArmorCurrentStatus -= SecondShip.ArmorCurrentStatus;
+			SecondShip.ArmorCurrentStatus -= StrTMP;
 
 			if (!NeedCheckCollision(SecondShip))
-				FirstShip.Strength = 0.0f;
+				FirstShip.ArmorCurrentStatus = 0.0f;
 			if (!NeedCheckCollision(FirstShip))
-				SecondShip.Strength = 0.0f;
+				SecondShip.ArmorCurrentStatus = 0.0f;
 
 			if (NeedCheckCollision(SecondShip) &&
-			    (SecondShip.Strength <= 0.0f))
+			    (SecondShip.ArmorCurrentStatus <= 0.0f))
 				AddBonusForKilledEnemy(SecondShip, FirstShip.ObjectStatus);
 			if (NeedCheckCollision(FirstShip) &&
-			    (FirstShip.Strength <= 0.0f))
+			    (FirstShip.ArmorCurrentStatus <= 0.0f))
 				AddBonusForKilledEnemy(FirstShip, SecondShip.ObjectStatus);
 
 			if (NeedCheckCollision(SecondShip) &&
-			    (SecondShip.Strength <= 0.0f)) {
+			    (SecondShip.ArmorCurrentStatus <= 0.0f)) {
 				if (SecondShip.ObjectStatus != eObjectStatus::Player) {
 					SetupSpaceShipExplosion(SecondShip, ObjectPieceNum2);
 					Command = eShipPairCycle::DeleteSecondObjectAndContinue;
@@ -761,7 +759,7 @@ void DetectCollisionAllObject3D()
 			}
 
 			if (NeedCheckCollision(FirstShip) &&
-			    (FirstShip.Strength <= 0.0f)) {
+			    (FirstShip.ArmorCurrentStatus <= 0.0f)) {
 				if (FirstShip.ObjectStatus != eObjectStatus::Player) {
 					SetupSpaceShipExplosion(FirstShip, ObjectPieceNum1);
 					if (Command == eShipPairCycle::DeleteSecondObjectAndContinue)
@@ -781,11 +779,11 @@ void DetectCollisionAllObject3D()
 
 			if (DetectProjectileCollision(tmpGround, ObjectPieceNum, tmpProjectile, Damage, tmpGround.Speed)) {
 				if (NeedCheckCollision(tmpGround)) {
-					tmpGround.Strength -= Damage.Kinetic();
+					tmpGround.ArmorCurrentStatus -= Damage.Kinetic();
 
 					// FIXME let EM occasionally corrupt armor in some way (see space ship code above)
 
-					if (tmpGround.Strength <= 0.0f) {
+					if (tmpGround.ArmorCurrentStatus <= 0.0f) {
 						AddBonusForKilledEnemy(tmpGround, tmpProjectile.ObjectStatus);
 						SetupGroundExplosion(tmpGround, ObjectPieceNum);
 						GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
@@ -828,24 +826,24 @@ void DetectCollisionAllObject3D()
 
 				if (!NeedCheckCollision(tmpSpace))
 					// we just get into the immortal object here, but don't destroy space object instantly
-					tmpGround.Strength -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
+					tmpGround.ArmorCurrentStatus -= (tmpGround.StrengthStart / 0.5f) * tmpGround.TimeDelta;
 				else {
-					float StrTMP = tmpGround.Strength;
-					tmpGround.Strength -= tmpSpace.Strength;
-					tmpSpace.Strength -= StrTMP;
+					float StrTMP = tmpGround.ArmorCurrentStatus;
+					tmpGround.ArmorCurrentStatus -= tmpSpace.ArmorCurrentStatus;
+					tmpSpace.ArmorCurrentStatus -= StrTMP;
 				}
 				if (!NeedCheckCollision(tmpGround))
-					tmpSpace.Strength = 0.0f;
+					tmpSpace.ArmorCurrentStatus = 0.0f;
 
 				if (NeedCheckCollision(tmpSpace) &&
-				    (tmpSpace.Strength <= 0.0f)) {
+				    (tmpSpace.ArmorCurrentStatus <= 0.0f)) {
 					AddBonusForKilledEnemy(tmpSpace, tmpGround.ObjectStatus);
 					SetupSpaceExplosion(tmpSpace);
 					SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;
 				}
 
 				if (NeedCheckCollision(tmpGround) &&
-				    (tmpGround.Strength <= 0.0f)) {
+				    (tmpGround.ArmorCurrentStatus <= 0.0f)) {
 					SetupGroundExplosion(tmpGround, ObjectPieceNum);
 					GroundCycleCommand = eGroundCycle::DeleteObjectAndContinue;
 					// break space cycle
@@ -871,11 +869,11 @@ void DetectCollisionAllObject3D()
 
 			if (DetectProjectileCollision(tmpSpace, ObjectPieceNum, tmpProjectile, Damage, tmpSpace.Speed)) {
 				if (NeedCheckCollision(tmpSpace)) {
-					tmpSpace.Strength -= Damage.Kinetic();
+					tmpSpace.ArmorCurrentStatus -= Damage.Kinetic();
 
 					// FIXME let EM occasionally corrupt armor in some way (see space ship code above)
 
-					if (tmpSpace.Strength <= 0.0f) {
+					if (tmpSpace.ArmorCurrentStatus <= 0.0f) {
 						AddBonusForKilledEnemy(tmpSpace, tmpProjectile.ObjectStatus);
 						SetupSpaceExplosion(tmpSpace);
 						SpaceCycleCommand = eSpaceCycle::DeleteObjectAndContinue;

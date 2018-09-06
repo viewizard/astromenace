@@ -398,7 +398,7 @@ bool cMissionScript::Update(float Time)
 		case constexpr_hash_djb2a("Music"):
 			// change music only if player's ship still alive, otherwise we are playing 'fail' theme
 			if (auto sharedPlayerFighter = PlayerFighter.lock()) {
-				if (sharedPlayerFighter->Strength > 0.0f) {
+				if (sharedPlayerFighter->ArmorCurrentStatus > 0.0f) {
 					int Theme{0};
 					if (xmlDoc->iGetEntryAttribute(xmlEntry, "theme", Theme)) {
 						if (Theme == 1)

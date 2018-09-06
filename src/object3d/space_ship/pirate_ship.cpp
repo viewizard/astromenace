@@ -48,7 +48,7 @@ enum class eEngineGFX {
 
 struct sPirateShipData {
 	unsigned int EngineQuantity;
-	float Strength;
+	float Armor;
 	std::string Name;
 	std::string TextureName;
 	std::string NormalMapName;
@@ -219,7 +219,7 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
 	MaxSpeed = 20.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	Strength = StrengthStart = PresetPirateShipData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = StrengthStart = PresetPirateShipData[SpaceShipNum - 1].Armor / GameEnemyArmorPenalty;
 	unsigned int EngineQuantity = PresetPirateShipData[SpaceShipNum - 1].EngineQuantity;
 
 	LoadObjectData(PresetPirateShipData[SpaceShipNum - 1].Name, *this);

@@ -34,7 +34,7 @@ namespace viewizard {
 namespace astromenace {
 
 struct sMilitaryBuildingData {
-	float Strength;
+	float Armor;
 	std::string Model3DFileName;
 	std::string TextureFileName;
 };
@@ -75,7 +75,7 @@ cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
 		Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileName);
 	}
 
-	Strength = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Strength / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = StrengthStart = PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Armor / GameEnemyArmorPenalty;
 
 	switch (MilitaryBuildingNum) {
 	case 1:

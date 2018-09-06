@@ -41,7 +41,7 @@ namespace astromenace {
 namespace {
 
 struct sEarthSpaceFighterData {
-	float Strength;
+	float Armor;
 	unsigned int WeaponQuantity;
 	unsigned int EngineQuantity;
 	std::string Name;
@@ -961,7 +961,7 @@ void GetShipWeaponSlotAngle(const int ShipNum, const int SlotNum, float &Min, fl
  */
 float GetShipArmor(const int SpaceShipNum)
 {
-	return PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength;
+	return PresetEarthSpaceFighterData[SpaceShipNum - 1].Armor;
 }
 
 /*
@@ -982,8 +982,8 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 	InternalType = SpaceShipNum;
 	PromptDrawDist2 = 100.0f;
 
-	Strength = StrengthStart =
-			PresetEarthSpaceFighterData[SpaceShipNum - 1].Strength; // GameEnemyArmorPenalty for enemies only
+	ArmorCurrentStatus = StrengthStart =
+			PresetEarthSpaceFighterData[SpaceShipNum - 1].Armor; // GameEnemyArmorPenalty for enemies only
 	WeaponSlots.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].WeaponQuantity);
 	LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum - 1].Name, *this);
 

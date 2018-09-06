@@ -843,7 +843,7 @@ void InitGame()
 	if (GamePowerSystem == 0)
 		CurrentDrawEnergNumFull = 0.0f;
 	if (auto sharedPlayerFighter = PlayerFighter.lock())
-		CurrentDrawLifeNumFull = sharedPlayerFighter->Strength / sharedPlayerFighter->StrengthStart;
+		CurrentDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->StrengthStart;
 
 	CurrentTime = vw_GetTimeThread(0);
 	CurrentAlert2 = 1.0f;
@@ -925,14 +925,14 @@ void ExitGameWithSave()
 
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		// состояние корпуса коробля
-		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedPlayerFighter->Strength;
+		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedPlayerFighter->ArmorCurrentStatus;
 
 		// учет состояния оружия
 		for (unsigned i = 0; i < sharedPlayerFighter->WeaponSlots.size(); i++) {
 			if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
 				if (auto sharedWeapon = sharedPlayerFighter->WeaponSlots[i].Weapon.lock()) {
 					// если оружие было уничтожено во время игры
-					if (sharedWeapon->Strength <= 0.0f) {
+					if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
 						ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
 						ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
 					} else {
@@ -1020,9 +1020,11 @@ void DrawGame()
 	// просчитываем индикацию
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	CurrentAlert2 -= TimeDelta;
-	if (CurrentAlert2 < 0.1f) CurrentAlert2 = 1.0f;
-	CurrentAlert3 -= 1.9f*TimeDelta;
-	if (CurrentAlert3 < 0.1f) CurrentAlert3 = 1.0f;
+	if (CurrentAlert2 < 0.1f)
+		CurrentAlert2 = 1.0f;
+	CurrentAlert3 -= 1.9f * TimeDelta;
+	if (CurrentAlert3 < 0.1f)
+		CurrentAlert3 = 1.0f;
 
 
 
@@ -1115,54 +1117,54 @@ void DrawGame()
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
 			sharedLifeParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLifeParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
-			sharedLifeParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
+			sharedLifeParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
+			sharedLifeParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
 			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart/10.0f) {
-				sharedLifeParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
-				sharedLifeParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart / 10.0f) {
+				sharedLifeParticleSystem2D->AlphaStart = CurrentAlert2;
+				sharedLifeParticleSystem2D->AlphaEnd = CurrentAlert2;
 			} else { // подчинились, восстанавливаем данные
-				sharedLifeParticleSystem2D->AlphaStart = 1.00f;
-				sharedLifeParticleSystem2D->AlphaEnd   = 1.00f;
+				sharedLifeParticleSystem2D->AlphaStart = 1.0f;
+				sharedLifeParticleSystem2D->AlphaEnd = 1.0f;
 			}
 		}
 
 		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
 			sharedLife2ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
-			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
+			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
+			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
 			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart/10.0f) {
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart/10.0f) {
 				if (CurrentAlert2 > 0.6f) {
-					sharedLife2ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
-					sharedLife2ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
+					sharedLife2ParticleSystem2D->AlphaStart = CurrentAlert2;
+					sharedLife2ParticleSystem2D->AlphaEnd = CurrentAlert2;
 				} else {
 					sharedLife2ParticleSystem2D->AlphaStart = 0.00f;
-					sharedLife2ParticleSystem2D->AlphaEnd   = 0.00f;
+					sharedLife2ParticleSystem2D->AlphaEnd = 0.00f;
 				}
 			} else { // подчинились, восстанавливаем данные
 				sharedLife2ParticleSystem2D->AlphaStart = 1.00f;
-				sharedLife2ParticleSystem2D->AlphaEnd   = 1.00f;
+				sharedLife2ParticleSystem2D->AlphaEnd = 1.00f;
 			}
 		}
 
 		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
 			sharedLife3ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
-			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->Strength/sharedPlayerFighter->StrengthStart);
+			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
+			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f*(sharedPlayerFighter->ArmorCurrentStatus/sharedPlayerFighter->StrengthStart);
 
 			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart/10.0f) {
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart / 10.0f) {
 				if (CurrentAlert2 > 0.6f) {
-					sharedLife3ParticleSystem2D->AlphaStart = 1.00f*CurrentAlert2;
-					sharedLife3ParticleSystem2D->AlphaEnd   = 1.00f*CurrentAlert2;
+					sharedLife3ParticleSystem2D->AlphaStart = CurrentAlert2;
+					sharedLife3ParticleSystem2D->AlphaEnd = CurrentAlert2;
 				} else {
 					sharedLife3ParticleSystem2D->AlphaStart = 0.00f;
-					sharedLife3ParticleSystem2D->AlphaEnd   = 0.00f;
+					sharedLife3ParticleSystem2D->AlphaEnd = 0.00f;
 				}
 			} else { // подчинились, восстанавливаем данные
 				sharedLife3ParticleSystem2D->AlphaStart = 1.00f;
-				sharedLife3ParticleSystem2D->AlphaEnd   = 1.00f;
+				sharedLife3ParticleSystem2D->AlphaEnd = 1.00f;
 			}
 		}
 	}
@@ -1178,7 +1180,7 @@ void DrawGame()
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
 		NeedDrawEnergNumFull = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
 		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-		NeedDrawLifeNumFull = sharedPlayerFighter->Strength / sharedPlayerFighter->StrengthStart;
+		NeedDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->StrengthStart;
 	}
 
 

@@ -49,7 +49,7 @@ enum class eGFX {
 
 struct sAlienSpaceFighterData {
 	unsigned int EngineQuantity;
-	float Strength;
+	float Armor;
 	float Shield;
 	std::string Name;
 };
@@ -243,8 +243,8 @@ cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 	MaxSpeed = 40.0f;
 	MaxAcceler = 20.0f;
 	MaxSpeedRotate = 40.0f;
-	Strength = StrengthStart =
-			PresetAlienSpaceFighterData[SpaceShipNum - 1].Strength / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = StrengthStart =
+			PresetAlienSpaceFighterData[SpaceShipNum - 1].Armor / GameEnemyArmorPenalty;
 	ShieldCurrentStatus = ShieldInitialStatus =
 			PresetAlienSpaceFighterData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
 	ShieldRechargeRate = ShieldInitialStatus / 10.0f; // 10 seconds for full recharge

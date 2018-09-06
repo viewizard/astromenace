@@ -393,7 +393,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 			sharedSpaceDebris->Speed = Speed - 2 * vw_fRand();
 			sharedSpaceDebris->RotationSpeed.x = 2.0f * vw_fRand0();
 			sharedSpaceDebris->RotationSpeed.y = 2.0f * vw_fRand0();
-			sharedSpaceDebris->StrengthStart = sharedSpaceDebris->Strength = 1.0f;
+			sharedSpaceDebris->StrengthStart = sharedSpaceDebris->ArmorCurrentStatus = 1.0f;
 			sharedSpaceDebris->ObjectStatus = Object.ObjectStatus;
 			sharedSpaceDebris->ShowStrength = false;
 

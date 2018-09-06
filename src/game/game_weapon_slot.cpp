@@ -85,7 +85,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		SrcRect(0, 0, 128, 64);
 		DstRect(Xpos+24, Ypos+12, Xpos+24+128, Ypos+64+12);
 		// пушка работает или нет?
-		if (sharedWeapon->Strength <= 0.0f) {
+		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
@@ -152,7 +152,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
 
 		// пушка работает или нет?
-		if (sharedWeapon->Strength <= 0.0f) {
+		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
@@ -208,9 +208,7 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
 
 		// пушка работает или нет?
-		if (sharedWeapon->Strength <= 0.0f) {
-
-		} else {
+		if (sharedWeapon->ArmorCurrentStatus > 0.0f) {
 			// боекомплект
 			int AmmoShow = (int)((64.0f*(sharedWeapon->AmmoStart-sharedWeapon->Ammo))/sharedWeapon->AmmoStart);
 			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
@@ -285,7 +283,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		SrcRect(0,0,128,64);
 		DstRect(Xpos+12,Ypos+12,Xpos+12+128,Ypos+64+12);
 		// пушка работает или нет?
-		if (sharedWeapon->Strength <= 0.0f) {
+		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
@@ -350,7 +348,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		SrcRect(0,0,128,64);
 		DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
 		// пушка работает или нет?
-		if (sharedWeapon->Strength <= 0.0f) {
+		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
 
 			// иконка оружия
@@ -407,7 +405,7 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
 
 		// пушка работает или нет?
-		if (sharedWeapon->Strength <= 0.0f) {
+		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
 
 		} else {
 			// боекомплект

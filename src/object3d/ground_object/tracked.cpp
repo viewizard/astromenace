@@ -34,7 +34,7 @@ namespace viewizard {
 namespace astromenace {
 
 struct sTrackedData {
-	float Strength;
+	float Armor;
 	float SpeedToWheelRotarySpeedFactor;
 	std::string Model3DFileName;
 	std::string TextureFileName;
@@ -86,7 +86,7 @@ cTracked::cTracked(const int TrackedNum)
 	}
 	SpeedToWheelRotarySpeedFactor = PresetTrackedData[TrackedNum - 1].SpeedToWheelRotarySpeedFactor;
 
-	Strength = StrengthStart = PresetTrackedData[TrackedNum - 1].Strength / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = StrengthStart = PresetTrackedData[TrackedNum - 1].Armor / GameEnemyArmorPenalty;
 
 	switch (TrackedNum) {
 	case 1:

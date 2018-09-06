@@ -41,8 +41,6 @@ cSmallAsteroid::cSmallAsteroid()
 {
 	ObjectType = eObjectType::SmallAsteroid;
 
-	Strength = StrengthStart = 10.0f / GameEnemyArmorPenalty;
-
 	std::string Model3DFileName{"models/space/asteroid-01" + std::to_string(vw_uRandNum(19)) + ".vw3d"};
 	LoadObjectData(Model3DFileName, *this);
 
@@ -53,7 +51,7 @@ cSmallAsteroid::cSmallAsteroid()
 	RotationSpeed.x = 100.0f + 50.0f * vw_fRand0();
 	RotationSpeed.y = 20.0f + 20.0f * vw_fRand0();
 
-	Strength = StrengthStart = Radius * StrengthStart;
+	ArmorCurrentStatus = StrengthStart = Radius * 10.0f / GameEnemyArmorPenalty;
 	Radius = Width / 2.0f;
 }
 

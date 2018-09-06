@@ -48,7 +48,7 @@ std::list<std::shared_ptr<cWeapon>> WeaponList{};
 struct sWeaponData {
 	eGameSFX SFX;
 	bool NeedRotateOnTargeting;
-	float Strength;
+	float Armor;
 	int WeaponLevel;
 	float EnergyUse;
 	int Ammo;
@@ -639,7 +639,7 @@ cWeapon::cWeapon(const int WeaponNum)
 	if (WeaponNum >= 1 && WeaponNum <= 99) {
 		ObjectStatus = eObjectStatus::Ally;
 
-		Strength = StrengthStart = PresetEarthWeaponData[WeaponNum - 1].Strength;
+		ArmorCurrentStatus = StrengthStart = PresetEarthWeaponData[WeaponNum - 1].Armor;
 		WeaponLevel = PresetEarthWeaponData[WeaponNum - 1].WeaponLevel;
 		Ammo = AmmoStart =  PresetEarthWeaponData[WeaponNum - 1].Ammo;
 		NextFireTime =  PresetEarthWeaponData[WeaponNum - 1].NextFireTime;
@@ -673,7 +673,7 @@ cWeapon::cWeapon(const int WeaponNum)
 
 		ObjectStatus = eObjectStatus::Enemy;
 
-		Strength = StrengthStart = PresetAlienWeaponData[IntWeaponNum - 1].Strength;
+		ArmorCurrentStatus = StrengthStart = PresetAlienWeaponData[IntWeaponNum - 1].Armor;
 		WeaponLevel = PresetAlienWeaponData[IntWeaponNum - 1].WeaponLevel;
 		Ammo = AmmoStart =  PresetAlienWeaponData[IntWeaponNum - 1].Ammo;
 		NextFireTime =  PresetAlienWeaponData[IntWeaponNum - 1].NextFireTime;
@@ -691,7 +691,7 @@ cWeapon::cWeapon(const int WeaponNum)
 
 		ObjectStatus = eObjectStatus::Enemy;
 
-		Strength = StrengthStart = PresetPirateWeaponData[IntWeaponNum - 1].Strength;
+		ArmorCurrentStatus = StrengthStart = PresetPirateWeaponData[IntWeaponNum - 1].Armor;
 		WeaponLevel = PresetPirateWeaponData[IntWeaponNum - 1].WeaponLevel;
 		Ammo = AmmoStart =  PresetPirateWeaponData[IntWeaponNum - 1].Ammo;
 		NextFireTime =  PresetPirateWeaponData[IntWeaponNum - 1].NextFireTime;
@@ -799,7 +799,7 @@ bool cWeapon::Update(float Time)
 
 	if ((InternalType >= 1) &&
 	    (InternalType <= 99) &&
-	    (Strength < StrengthStart) &&
+	    (ArmorCurrentStatus < StrengthStart) &&
 	    DestroyedFire.expired()) {
 		DestroyedFire = vw_CreateParticleSystem();
 		if (auto sharedDestroyedFire = DestroyedFire.lock()) {
@@ -829,7 +829,7 @@ bool cWeapon::Update(float Time)
 
 	if ((InternalType >= 1) &&
 	    (InternalType <= 99) &&
-	    (Strength <= 0.0f) &&
+	    (ArmorCurrentStatus <= 0.0f) &&
 	    DestroyedSmoke.expired()) {
 		DestroyedSmoke = vw_CreateParticleSystem();
 		if (auto sharedDestroyedSmoke = DestroyedSmoke.lock()) {
@@ -1190,11 +1190,11 @@ bool cWeapon::WeaponFire(float Time)
 	if ((InternalType >= 1) &&
 	    (InternalType <= 99)) {
 		bool Misfire{false};
-		if (Strength < StrengthStart)
-			if (Strength/StrengthStart > vw_fRand())
+		if (ArmorCurrentStatus < StrengthStart)
+			if (ArmorCurrentStatus / StrengthStart > vw_fRand())
 				Misfire = true;
 
-		if ((Strength <= 0.0f) ||
+		if ((ArmorCurrentStatus <= 0.0f) ||
 		    (Ammo == 0) ||
 		    Misfire) {
 			float fVol = 1.0f;

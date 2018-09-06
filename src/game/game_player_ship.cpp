@@ -243,7 +243,7 @@ void InitGamePlayerShip()
 
 	sharedPlayerFighter->ObjectStatus = eObjectStatus::Player;
 	sharedPlayerFighter->StrengthStart *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
-	sharedPlayerFighter->Strength = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+	sharedPlayerFighter->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
 	sharedPlayerFighter->ShowStrength = false;
 
 	// создаем оружие
@@ -405,10 +405,10 @@ void GamePlayerShip()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// проверяем, корабль живой еще, или сбили и нужно его удалить...
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (sharedPlayerFighter->Strength <= 0.0f) {
+	if (sharedPlayerFighter->ArmorCurrentStatus <= 0.0f) {
 		// редкий случай
 		if (UndeadDebugMode) {
-			sharedPlayerFighter->Strength = sharedPlayerFighter->StrengthStart;
+			sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->StrengthStart;
 		} else {
 			// делаем взрыв
 			// + 10.0f движение камеры
@@ -543,7 +543,7 @@ void GamePlayerShip()
 		// Звуковое оповещение, если жизни менее 10%
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// если меньше 10% нужно бить тревогу
-		if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart/10.0f) {
+		if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart / 10.0f) {
 			// если не играем, запускаем звук сирены
 			if (!vw_IsSoundAvailable(SoundLowLife))
 				SoundLowLife = PlayMenuSFX(eMenuSFX::WarningLowLife, 1.0f);
@@ -1049,10 +1049,11 @@ void GamePlayerShip()
 		// нано роботы
 		case 1:
 			// восстанавливаем на 0.5% в секунду
-			if (sharedPlayerFighter->Strength < sharedPlayerFighter->StrengthStart) {
-				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*sharedPlayerFighter->TimeDelta;
-				sharedPlayerFighter->Strength += (sharedPlayerFighter->StrengthStart/200.0f) * sharedPlayerFighter->TimeDelta;
-				if (sharedPlayerFighter->Strength > sharedPlayerFighter->StrengthStart) sharedPlayerFighter->Strength = sharedPlayerFighter->StrengthStart;
+			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->StrengthStart) {
+				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem) * sharedPlayerFighter->TimeDelta;
+				sharedPlayerFighter->ArmorCurrentStatus += (sharedPlayerFighter->StrengthStart / 200.0f) * sharedPlayerFighter->TimeDelta;
+				if (sharedPlayerFighter->ArmorCurrentStatus > sharedPlayerFighter->StrengthStart)
+					sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->StrengthStart;
 			}
 			break;
 		// спец защитный слой
@@ -1062,18 +1063,20 @@ void GamePlayerShip()
 		case 3:
 			// восстанавливаем полностью за 4 секунды
 			if (ShildEnergyStatus < 1.0f) {
-				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*sharedPlayerFighter->TimeDelta;
-				ShildEnergyStatus += 0.02f*sharedPlayerFighter->TimeDelta;
-				if (ShildEnergyStatus > 1.0f) ShildEnergyStatus = 1.0f;
+				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem) * sharedPlayerFighter->TimeDelta;
+				ShildEnergyStatus += 0.02f * sharedPlayerFighter->TimeDelta;
+				if (ShildEnergyStatus > 1.0f)
+					ShildEnergyStatus = 1.0f;
 			}
 			break;
 		// отражатель
 		case 4:
 			// восстанавливаем полностью за 2 секунды
 			if (ShildEnergyStatus < 1.0f) {
-				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem)*sharedPlayerFighter->TimeDelta;
-				ShildEnergyStatus += 0.03f*sharedPlayerFighter->TimeDelta;
-				if (ShildEnergyStatus > 1.0f) ShildEnergyStatus = 1.0f;
+				CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem) * sharedPlayerFighter->TimeDelta;
+				ShildEnergyStatus += 0.03f * sharedPlayerFighter->TimeDelta;
+				if (ShildEnergyStatus > 1.0f)
+					ShildEnergyStatus = 1.0f;
 			}
 			break;
 		}

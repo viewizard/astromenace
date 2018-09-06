@@ -40,7 +40,7 @@ namespace astromenace {
 namespace {
 
 struct sBuildingData {
-	float Strength;
+	float Armor;
 	std::string Model3DFileName;
 };
 
@@ -84,7 +84,7 @@ cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 		NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/buildings_nm.tga");
 	}
 
-	Strength = StrengthStart = PresetBuildingData[BuildingNum - 1].Strength / GameEnemyArmorPenalty;
+	ArmorCurrentStatus = StrengthStart = PresetBuildingData[BuildingNum - 1].Armor / GameEnemyArmorPenalty;
 }
 
 } // astromenace namespace
