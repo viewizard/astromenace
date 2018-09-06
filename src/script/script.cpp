@@ -729,7 +729,7 @@ void cMissionScript::UpdateTimeLine()
 
 				int tmpInteger{0};
 				if (xmlDoc->iGetEntryAttribute(TL, "armor", tmpInteger))
-					SetEarthSpaceFighterArmour(SpaceShip, tmpInteger);
+					SetEarthSpaceFighterArmor(SpaceShip, tmpInteger);
 
 				for (unsigned int i = 1; i <= config::MAX_WEAPONS; i++) {
 					if (xmlDoc->iGetEntryAttribute(TL, "weapon" + std::to_string(i), tmpInteger))

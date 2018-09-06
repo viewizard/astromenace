@@ -316,7 +316,7 @@ void SellCurrentSystem()
 		ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem+16);
 		ChangeGameConfig().Profile[CurrentProfile].AdvancedProtectionSystem = 0;
 
-		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade-1);
+		SetEarthSpaceFighterArmor(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 	}
 }
 
@@ -354,7 +354,7 @@ void BuyCurrentSystem()
 			ChangeGameConfig().Profile[CurrentProfile].Money += GetSystemCost(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16);
 		ChangeGameConfig().Profile[CurrentProfile].AdvancedProtectionSystem = CurrentSystemStockNum - 16;
 		ChangeGameConfig().Profile[CurrentProfile].Money -= GetSystemCost(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem + 16);
-		SetEarthSpaceFighterArmour(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
+		SetEarthSpaceFighterArmor(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 	}
 }
 

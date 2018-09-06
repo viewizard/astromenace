@@ -259,7 +259,7 @@ void InitGamePlayerShip()
 
 	// создаем системы (визуальные)
 	SetEarthSpaceFighterEngine(PlayerFighter, GameEngineSystem);
-	SetEarthSpaceFighterArmour(PlayerFighter, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
+	SetEarthSpaceFighterArmor(PlayerFighter, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 
 	GameEnemyArmorPenalty = TMPGameEnemyArmorPenalty;
 

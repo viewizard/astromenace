@@ -232,7 +232,7 @@ std::weak_ptr<cObject3D> GetSpaceShipPtr(const cSpaceShip &Object);
 // Setup engines.
 void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int EngineType);
 // Setup armor.
-void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmourType);
+void SetEarthSpaceFighterArmor(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmorType);
 // Setup weapon.
 bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, const int WeaponSlot, const int WeaponNum);
 // Get max and min weapon slot angle for particular ship.

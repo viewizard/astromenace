@@ -94,7 +94,7 @@ std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(const int SpaceShipNum)
 	}
 
 	// default armor
-	SetEarthSpaceFighterArmour(tmpSpaceShip, 0);
+	SetEarthSpaceFighterArmor(tmpSpaceShip, 0);
 
 	return ShipList.front();
 }

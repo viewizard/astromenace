@@ -520,15 +520,15 @@ static GLtexture GetArmourIllumTexture(const int ArmourType)
 /*
  * Setup armor.
  */
-void SetEarthSpaceFighterArmour(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmourType)
+void SetEarthSpaceFighterArmor(std::weak_ptr<cSpaceShip> &SpaceShip, const int ArmorType)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip)
 		return;
 
 	for (unsigned int i = 0; i < sharedSpaceShip->Chunks.size(); i++) {
-		sharedSpaceShip->Texture[i] = GetArmourTexture(ArmourType);
-		sharedSpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmourType);
+		sharedSpaceShip->Texture[i] = GetArmourTexture(ArmorType);
+		sharedSpaceShip->TextureIllum[i] = GetArmourIllumTexture(ArmorType);
 	}
 }
 
