@@ -89,7 +89,7 @@ struct sPilotProfile {
 	uint8_t reserved{0};
 
 	// default player's ship (first ship, without additional hull upgrades)
-	uint8_t Ship{1};
+	uint8_t ShipHull{1};
 	uint8_t ShipHullUpgrade{1};
 	float ArmorStatus{30.0f};
 

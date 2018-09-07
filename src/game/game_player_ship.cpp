@@ -228,10 +228,10 @@ void InitGamePlayerShip()
 	GameEnemyArmorPenalty = 1;
 
 	// если не создано, здесь будет ноль скорее всего
-	if (GameConfig().Profile[CurrentProfile].Ship == 0)
+	if (GameConfig().Profile[CurrentProfile].ShipHull == 0)
 		std::cerr << __func__ << "(): " << "Error, Pilot Profile not created.\n";
 
-	PlayerFighter = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
+	PlayerFighter = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].ShipHull);
 	auto sharedPlayerFighter = PlayerFighter.lock();
 	if (!sharedPlayerFighter)
 		return;

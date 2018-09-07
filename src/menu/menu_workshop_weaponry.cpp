@@ -767,7 +767,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 			float Min = 0.0f;
 			float Max = 0.0f;
-			GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].Ship, SlotNum, Min, Max);
+			GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].ShipHull, SlotNum, Min, Max);
 
 
 			if (GameConfig().Profile[CurrentProfile].TargetingSystem <= 2) {
@@ -939,7 +939,7 @@ void DrawShipWeaponsInSlots()
 		return;
 	}
 
-	switch (GameConfig().Profile[CurrentProfile].Ship) {
+	switch (GameConfig().Profile[CurrentProfile].ShipHull) {
 	case 1:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
 		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);

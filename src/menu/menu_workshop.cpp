@@ -87,7 +87,7 @@ void WorkshopCreateShip(int Num)
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
+	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].ShipHull);
 	auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
 	if (!sharedWorkshopFighterGame)
 		return;
@@ -229,7 +229,7 @@ void WorkshopCreate()
 	CurrentAlert3 = 1.0f;
 
 	// чтобы только при старте не повоторялись!
-	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].Ship)
+	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].ShipHull)
 		CurrentWorkshopNewFighter++;
 	if (CurrentWorkshopNewFighter > 22)
 		CurrentWorkshopNewFighter = 1;

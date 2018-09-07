@@ -330,14 +330,14 @@ void WorkshopCreateBuyShip()
 
 	// 3 - корпус
 	ChangeGameConfig().Profile[CurrentProfile].Money +=
-		GetWorkshopShipCost(ChangeGameConfig().Profile[CurrentProfile].Ship) *
+		GetWorkshopShipCost(ChangeGameConfig().Profile[CurrentProfile].ShipHull) *
 		GameConfig().Profile[CurrentProfile].ShipHullUpgrade -
-		GetWorkshopShipRepairCost(ChangeGameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame);
+		GetWorkshopShipRepairCost(ChangeGameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame);
 
 
 	// сейчас у нас все в "деньгах", покупаем корпус
-	ChangeGameConfig().Profile[CurrentProfile].Ship = CurrentWorkshopNewFighter;
-	ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship);
+	ChangeGameConfig().Profile[CurrentProfile].ShipHull = CurrentWorkshopNewFighter;
+	ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].ShipHull);
 
 
 
@@ -347,7 +347,7 @@ void WorkshopCreateBuyShip()
 	int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
 	GameEnemyArmorPenalty = 1;
 
-	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].Ship);
+	WorkshopFighterGame = CreateEarthSpaceFighter(GameConfig().Profile[CurrentProfile].ShipHull);
 	auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
 	if (!sharedWorkshopFighterGame)
 		return;
@@ -455,12 +455,12 @@ void BuyShip()
 
 	// переводим на другой корабль
 	CurrentWorkshopNewFighter++;
-	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].Ship)
+	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].ShipHull)
 		CurrentWorkshopNewFighter++;
 	if (CurrentWorkshopNewFighter > 22)
 		CurrentWorkshopNewFighter = 1;
 	// если это 1-й, переводим на 2-й
-	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].Ship)
+	if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].ShipHull)
 		CurrentWorkshopNewFighter++;
 	WorkshopCreateNewShip();
 }
@@ -477,8 +477,8 @@ void RepairShip()
 		return;
 
 	// смотрим, если денег достаточно для полного ремонта - делаем его
-	if (GameConfig().Profile[CurrentProfile].Money >= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame)) {
-		ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame);
+	if (GameConfig().Profile[CurrentProfile].Money >= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame)) {
+		ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame);
 		ChangeGameConfig().Profile[CurrentProfile].ArmorStatus = sharedWorkshopFighterGame->ArmorInitialStatus;
 		sharedWorkshopFighterGame->ArmorCurrentStatus = sharedWorkshopFighterGame->ArmorInitialStatus;
 		return;
@@ -487,7 +487,7 @@ void RepairShip()
 
 	// вычисляем, сколько можем отремонтировать
 	float ArmorRepair = sharedWorkshopFighterGame->ArmorInitialStatus - sharedWorkshopFighterGame->ArmorCurrentStatus;
-	float RepairCost = static_cast<float>(GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
+	float RepairCost = static_cast<float>(GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame));
 	// сколько можем отремонтировать
 	float CanRepair = ArmorRepair * (GameConfig().Profile[CurrentProfile].Money / RepairCost);
 	// ремонтируем сколько можем
@@ -525,7 +525,7 @@ void UpgradeShip()
 
 
 	// вычитаем деньги за апгрейд
-	ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship);
+	ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].ShipHull);
 
 
 	// сообщаем о новых возможностях и т.п. которые дает этот апгрейд
@@ -576,7 +576,7 @@ void Workshop_Shipyard()
 
 	// условия, при которых корабль купить можно
 	bool CanBuy = false;
-	if (GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame) +
+	if (GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame) +
 	    GameConfig().Profile[CurrentProfile].Money >= GetWorkshopShipCost(CurrentWorkshopNewFighter))
 		CanBuy = true;
 
@@ -686,7 +686,7 @@ void Workshop_Shipyard()
 	ResetFontSize();
 
 	// вывод названия корабля
-	vw_DrawText(GameConfig().InternalWidth/2+64, 56, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("%s Mk%i"), vw_GetText(GetWorkshopShipName(GameConfig().Profile[CurrentProfile].Ship)), GameConfig().Profile[CurrentProfile].ShipHullUpgrade);
+	vw_DrawText(GameConfig().InternalWidth/2+64, 56, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("%s Mk%i"), vw_GetText(GetWorkshopShipName(GameConfig().Profile[CurrentProfile].ShipHull)), GameConfig().Profile[CurrentProfile].ShipHullUpgrade);
 
 	if (DrawButton128_2(GameConfig().InternalWidth/2+315, 50, vw_GetText("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowShipInfo);
@@ -709,12 +709,12 @@ void Workshop_Shipyard()
 		CanUpgrade = true;
 
 	if (CanUpgrade) {
-		if (GameConfig().Profile[CurrentProfile].Money < GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship))
+		if (GameConfig().Profile[CurrentProfile].Money < GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].ShipHull))
 			CanUpgrade = false;
 		if (CanUpgrade)
-			vw_DrawText(GameConfig().InternalWidth/2+438-vw_TextWidth("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship));
+			vw_DrawText(GameConfig().InternalWidth/2+438-vw_TextWidth("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].ShipHull)), LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].ShipHull));
 		else
-			vw_DrawText(GameConfig().InternalWidth/2+438-vw_TextWidth("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship)), LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].Ship));
+			vw_DrawText(GameConfig().InternalWidth/2+438-vw_TextWidth("%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].ShipHull)), LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Upgrade Hull Cost"), GetWorkshopShipCost(GameConfig().Profile[CurrentProfile].ShipHull));
 
 		LinePos -= 20;
 	}
@@ -722,9 +722,9 @@ void Workshop_Shipyard()
 
 	// вывод стомости ремонта, если нужно
 	bool NeedRepair = false;
-	if (GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame) > 0) {
-		SizeI = vw_TextWidth("%s: %i", vw_GetText("Repair Hull Cost"), GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
-		vw_DrawText(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Repair Hull Cost"), GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
+	if (GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame) > 0) {
+		SizeI = vw_TextWidth("%s: %i", vw_GetText("Repair Hull Cost"), GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame));
+		vw_DrawText(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Repair Hull Cost"), GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame));
 		LinePos -= 20;
 		NeedRepair = true;
 
@@ -756,8 +756,8 @@ void Workshop_Shipyard()
 
 
 	// вывод стоимости корабля (со всеми системами)
-	SizeI = vw_TextWidth("%s: %i", vw_GetText("Ship Cost"), GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
-	vw_DrawText(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s: %i", vw_GetText("Ship Cost"), GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame));
+	SizeI = vw_TextWidth("%s: %i", vw_GetText("Ship Cost"), GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame));
+	vw_DrawText(GameConfig().InternalWidth/2+438-SizeI, LinePos, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s: %i", vw_GetText("Ship Cost"), GetWorkshopShipFullCost(GameConfig().Profile[CurrentProfile].ShipHull, WorkshopFighterGame));
 
 
 	// рамки

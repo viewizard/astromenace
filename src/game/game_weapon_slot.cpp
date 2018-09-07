@@ -455,7 +455,7 @@ void DrawGameWeaponSlots()
 	LeftDrawLevelPos = 1;
 
 
-	switch (GameConfig().Profile[CurrentProfile].Ship) {
+	switch (GameConfig().Profile[CurrentProfile].ShipHull) {
 	case 1:
 		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
 		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
