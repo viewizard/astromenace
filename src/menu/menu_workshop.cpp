@@ -97,7 +97,7 @@ void WorkshopCreateShip(int Num)
 	sharedWorkshopFighterGame->ShowStatus = false;
 
 	sharedWorkshopFighterGame->ArmorInitialStatus *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
-	sharedWorkshopFighterGame->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+	sharedWorkshopFighterGame->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ArmorStatus;
 
 
 	// создаем оружие

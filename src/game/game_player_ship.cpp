@@ -243,7 +243,7 @@ void InitGamePlayerShip()
 
 	sharedPlayerFighter->ObjectStatus = eObjectStatus::Player;
 	sharedPlayerFighter->ArmorInitialStatus *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
-	sharedPlayerFighter->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+	sharedPlayerFighter->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ArmorStatus;
 	sharedPlayerFighter->ShowStatus = false;
 
 	// создаем оружие

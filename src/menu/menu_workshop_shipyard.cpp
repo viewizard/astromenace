@@ -355,7 +355,7 @@ void WorkshopCreateBuyShip()
 	sharedWorkshopFighterGame->ObjectStatus = eObjectStatus::none;
 	sharedWorkshopFighterGame->EngineDestroyType = true;
 	sharedWorkshopFighterGame->ShowStatus = false;
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorCurrentStatus;
+	ChangeGameConfig().Profile[CurrentProfile].ArmorStatus = sharedWorkshopFighterGame->ArmorCurrentStatus;
 	ChangeGameConfig().Profile[CurrentProfile].ShipHullUpgrade = 1;
 
 
@@ -479,8 +479,8 @@ void RepairShip()
 	// смотрим, если денег достаточно для полного ремонта - делаем его
 	if (GameConfig().Profile[CurrentProfile].Money >= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame)) {
 		ChangeGameConfig().Profile[CurrentProfile].Money -= GetWorkshopShipRepairCost(GameConfig().Profile[CurrentProfile].Ship, WorkshopFighterGame);
-		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorInitialStatus;
-		sharedWorkshopFighterGame->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+		ChangeGameConfig().Profile[CurrentProfile].ArmorStatus = sharedWorkshopFighterGame->ArmorInitialStatus;
+		sharedWorkshopFighterGame->ArmorCurrentStatus = sharedWorkshopFighterGame->ArmorInitialStatus;
 		return;
 	}
 
@@ -492,7 +492,7 @@ void RepairShip()
 	float CanRepair = ArmorRepair * (GameConfig().Profile[CurrentProfile].Money / RepairCost);
 	// ремонтируем сколько можем
 	sharedWorkshopFighterGame->ArmorCurrentStatus += CanRepair;
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorCurrentStatus;
+	ChangeGameConfig().Profile[CurrentProfile].ArmorStatus = sharedWorkshopFighterGame->ArmorCurrentStatus;
 	// это будет стоить все имеющиеся деньги
 	ChangeGameConfig().Profile[CurrentProfile].Money = 0;
 
@@ -519,9 +519,9 @@ void UpgradeShip()
 
 	sharedWorkshopFighterGame->ArmorInitialStatus *= GameConfig().Profile[CurrentProfile].ShipHullUpgrade;
 	sharedWorkshopFighterGame->ArmorCurrentStatus = sharedWorkshopFighterGame->ArmorInitialStatus - OldStr +
-							GameConfig().Profile[CurrentProfile].ShipHullCurrentStrength;
+							GameConfig().Profile[CurrentProfile].ArmorStatus;
 
-	ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedWorkshopFighterGame->ArmorCurrentStatus;
+	ChangeGameConfig().Profile[CurrentProfile].ArmorStatus = sharedWorkshopFighterGame->ArmorCurrentStatus;
 
 
 	// вычитаем деньги за апгрейд

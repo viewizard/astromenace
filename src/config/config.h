@@ -91,7 +91,7 @@ struct sPilotProfile {
 	// default player's ship (first ship, without additional hull upgrades)
 	uint8_t Ship{1};
 	uint8_t ShipHullUpgrade{1};
-	float ShipHullCurrentStrength{30.0f};
+	float ArmorStatus{30.0f};
 
 	// weapon related settings
 	uint8_t Weapon[config::MAX_WEAPONS];

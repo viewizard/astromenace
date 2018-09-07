@@ -925,7 +925,7 @@ void ExitGameWithSave()
 
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		// состояние корпуса коробля
-		ChangeGameConfig().Profile[CurrentProfile].ShipHullCurrentStrength = sharedPlayerFighter->ArmorCurrentStatus;
+		ChangeGameConfig().Profile[CurrentProfile].ArmorStatus = sharedPlayerFighter->ArmorCurrentStatus;
 
 		// учет состояния оружия
 		for (unsigned i = 0; i < sharedPlayerFighter->WeaponSlots.size(); i++) {
