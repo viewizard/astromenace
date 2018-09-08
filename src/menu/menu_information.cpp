@@ -630,18 +630,18 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Hull:"));
-		if ((CreateNum-InfoWeaponStart+1 == 11) |
-		    (CreateNum-InfoWeaponStart+1 == 12) |
-		    (CreateNum-InfoWeaponStart+1 == 14))
+		if (((CreateNum - InfoWeaponStart + 1) == 11) ||
+		    ((CreateNum - InfoWeaponStart + 1) == 12) ||
+		    ((CreateNum - InfoWeaponStart + 1) == 14))
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileDamageKinetic(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileDamageKinetic(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Systems:"));
-		if ((CreateNum-InfoWeaponStart+1 == 11) |
-		    (CreateNum-InfoWeaponStart+1 == 12) |
-		    (CreateNum-InfoWeaponStart+1 == 14))
+		if (((CreateNum - InfoWeaponStart + 1) == 11) ||
+		    ((CreateNum - InfoWeaponStart + 1) == 12) ||
+		    ((CreateNum - InfoWeaponStart + 1) == 14))
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileDamageEM(CreateNum-InfoWeaponStart+1), vw_GetText("units/sec"));
 		else
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileDamageEM(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
