@@ -629,7 +629,7 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Kinetic:"));
 		if (((CreateNum - InfoWeaponStart + 1) == 11) ||
 		    ((CreateNum - InfoWeaponStart + 1) == 12) ||
 		    ((CreateNum - InfoWeaponStart + 1) == 14))
@@ -638,7 +638,7 @@ void InformationObject3DText(int ObjectNum)
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", GetProjectileDamageKinetic(CreateNum-InfoWeaponStart+1), vw_GetText("units/shot"));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, EM:"));
 		if (((CreateNum - InfoWeaponStart + 1) == 11) ||
 		    ((CreateNum - InfoWeaponStart + 1) == 12) ||
 		    ((CreateNum - InfoWeaponStart + 1) == 14))
@@ -675,10 +675,10 @@ void InformationObject3DText(int ObjectNum)
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Kinetic:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "100 %s", vw_GetText("units"));
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, EM:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "0 %s", vw_GetText("units"));
 		Y1 += Offset;
 

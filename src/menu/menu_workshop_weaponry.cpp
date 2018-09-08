@@ -1162,7 +1162,7 @@ void Workshop_Weaponry()
 
 	int k2 = 0;
 	if (GetProjectileDamageKinetic(WorkshopNewWeapon->InternalType) > 0.0f) {
-		vw_DrawText(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, Kinetic:"));
 		if ((WorkshopNewWeapon->InternalType == 11) ||
 		    (WorkshopNewWeapon->InternalType == 12) ||
 		    (WorkshopNewWeapon->InternalType == 14))
@@ -1173,7 +1173,7 @@ void Workshop_Weaponry()
 		k2=20;
 	}
 	if (GetProjectileDamageEM(WorkshopNewWeapon->InternalType) > 0.0f) {
-		vw_DrawText(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawText(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, EM:"));
 		if ((WorkshopNewWeapon->InternalType == 11) ||
 		    (WorkshopNewWeapon->InternalType == 12) ||
 		    (WorkshopNewWeapon->InternalType == 14))

@@ -916,7 +916,7 @@ Dialogs with default type:
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", DialogWeapon->Height, vw_GetText("units"));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, Hull:"));
+		vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, Kinetic:"));
 
 		if ((DialogWeapon->InternalType == 11) ||
 		    (DialogWeapon->InternalType == 12) ||
@@ -926,7 +926,7 @@ Dialogs with default type:
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", GetProjectileDamageKinetic(DialogWeapon->InternalType), vw_GetText("units/shot"));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, Systems:"));
+		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, EM:"));
 		if ((DialogWeapon->InternalType == 11) ||
 		    (DialogWeapon->InternalType == 12) ||
 		    (DialogWeapon->InternalType == 14))
