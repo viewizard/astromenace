@@ -36,6 +36,9 @@ namespace astromenace {
 
 namespace {
 
+// denote a small quantity, which will be taken to zero
+constexpr float Epsilon{0.0001f};
+
 // all ground object list
 std::list<std::shared_ptr<cGroundObject>> GroundObjectList{};
 
@@ -544,7 +547,7 @@ bool cGroundObject::Update(float Time)
 	}
 
 	if (!WheelChunkNums.empty() &&
-	    ((WheelRotarySpeed >= 0.00001f) || (WheelRotarySpeed <= -0.00001f))) {
+	    (fabs(WheelRotarySpeed) >= Epsilon)) {
 		for (auto tmpChunkNum : WheelChunkNums) {
 			Chunks[tmpChunkNum].Rotation.x += WheelRotarySpeed * TimeDelta;
 
@@ -556,7 +559,7 @@ bool cGroundObject::Update(float Time)
 	}
 
 	if ((TrackChunkNum != -1) &&
-	    ((WheelRotarySpeed >= 0.00001f) || (WheelRotarySpeed <= -0.00001f))) {
+	    (fabs(WheelRotarySpeed) >= Epsilon)) {
 		Chunks[TrackChunkNum].NeedTextureAnimation = true;
 		Chunks[TrackChunkNum].TextureAnimation.x +=
 				(WheelRotarySpeed / 500.0f) * TimeDelta * TrackRotationDirection;
