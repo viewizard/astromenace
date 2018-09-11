@@ -57,7 +57,6 @@ float CursorBlinkingLastTime{-1.0f};
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 bool DrawGameCursor = true;
-extern bool DragWeapon;
 extern int DragWeaponNum;
 
 
@@ -95,13 +94,11 @@ void CursorUpdate()
 	}
 }
 
-// вызываем прямо перед прорисовкой курсора
+/*
+ *
+ */
 static void DrawDragingWeaponIcon(int X, int Y)
 {
-	// если не тянем - соотв. и не рисуем
-	if (!DragWeapon) return;
-
-	// в х и у - положение точки курсора
 	sRECT SrcRect(0, 0, 128, 64);
 	sRECT DstRect(X - 64, Y - 32, X + 64, Y + 32);
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
@@ -115,31 +112,36 @@ void CursorDraw()
 	if (!DrawGameCursor)
 		return;
 
-	int mX, mY;
-	vw_GetMousePos(mX, mY);
-
-	// если нужно, рисуем перетягиваемое оружие
-	if (MenuStatus == eMenuStatus::WORKSHOP)
-		DrawDragingWeaponIcon(mX, mY);
+	int MouseX, MouseY;
+	vw_GetMousePos(MouseX, MouseY);
 
 	sRECT SrcRect(0, 0, 64, 64);
-	sRECT DstRect(mX-12, mY-13, mX+64-12, mY+64-13);
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+	sRECT DstRect(MouseX-12, MouseY-13, MouseX+64-12, MouseY+64-13);
+
 	switch (CursorStatus) {
 	case eCursorStatus::Undefined:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
+			  true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
 		break;
 
 	case eCursorStatus::ActionAllowed:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
+			  true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		break;
 
 	case eCursorStatus::ActionProhibited:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
+			  true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
 		break;
 
 	case eCursorStatus::DraggingItem:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 0.8f, 0.7f});
+		DrawDragingWeaponIcon(MouseX, MouseY);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
+			  true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 0.8f, 0.7f});
 		break;
 	}
 }
