@@ -29,6 +29,7 @@
 #include "../config/config.h"
 #include "../platform/platform.h"
 #include "../ui/font.h"
+#include "../ui/cursor.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../object3d/weapon/weapon.h"
@@ -416,7 +417,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 	       (DstRect.bottom >= MouseY) &&
 	       (DstRect.top<= MouseY)) || InFocusByKeyboard) && !isDialogBoxDrawing() && !DragWeapon) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/menu/button_weaponry_in.tga")), true, MenuContentTransp);
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			WeaponSetupSlot = SlotNum;
@@ -548,8 +549,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		// если не тянем и в слоте что-то есть, показываем, что можем тянуть
 		if (!DragWeapon &&
 		    !sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.expired())
-			CurrentCursorStatus = 1;
-
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 	}
 
 
@@ -1113,7 +1113,7 @@ void Workshop_Weaponry()
 	DstRect(GameConfig().InternalWidth/2-416, 100+32, GameConfig().InternalWidth/2-96, 450-32);
 	if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing())
 		if (!DragWeapon) {
-			CurrentCursorStatus = 1;
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 			if (vw_GetMouseLeftClick(false)) {
 				// звук взяли оружие
@@ -1314,11 +1314,8 @@ void Workshop_Weaponry()
 		DragWeaponAmmoStart = 0;
 	}
 
-
-
-	if (DragWeapon) CurrentCursorStatus = 3;
-
-
+	if (DragWeapon)
+		SetCursorStatus(eCursorStatus::DraggingItem);
 }
 
 } // astromenace namespace

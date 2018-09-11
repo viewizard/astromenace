@@ -32,6 +32,7 @@
 #include "../config/config.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
+#include "../ui/cursor.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
@@ -291,7 +292,7 @@ void MissionMenu()
 
 				if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing()) {
 					TMPSoundOnMissionID = i;
-					CurrentCursorStatus = 1;
+					SetCursorStatus(eCursorStatus::ActionAllowed);
 					// если только встали - нужно звуком это показать
 					if (SoundOnMissionID != i) {
 						SoundOnMissionID = i;
@@ -419,7 +420,8 @@ void MissionMenu()
 		vw_SetMouseLeftClick(false);
 	}
 	// отображаем курсором, что можно кликать на полосе прокрутки
-	if (vw_MouseOverRect(DstRect2)) CurrentCursorStatus = 1;
+	if (vw_MouseOverRect(DstRect2))
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 	// корректируем его положение ползунка согласно положению мышки
 	if (SliderUnderMouseControl) {
 		int MouseX, MouseY;

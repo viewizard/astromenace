@@ -39,6 +39,7 @@
 #include "../platform/platform.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
+#include "../ui/cursor.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
@@ -105,7 +106,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
 			if (vw_GetAudioStatus() &&
 			    vw_MouseOverRect(DstRect)) {
-				CurrentCursorStatus = 1;
+				SetCursorStatus(eCursorStatus::ActionAllowed);
 				if (vw_GetMouseLeftClick(true)) {
 					ChangeGameConfig().MusicVolume = i + 1;
 					vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
@@ -149,7 +150,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
 			if (vw_GetAudioStatus() &&
 			    vw_MouseOverRect(DstRect)) {
-				CurrentCursorStatus = 1;
+				SetCursorStatus(eCursorStatus::ActionAllowed);
 				if (vw_GetMouseLeftClick(true)) {
 					ChangeGameConfig().VoiceVolume = i + 1;
 					ChangeVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
@@ -191,7 +192,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
 			if (vw_GetAudioStatus() &&
 			    vw_MouseOverRect(DstRect)) {
-				CurrentCursorStatus = 1;
+				SetCursorStatus(eCursorStatus::ActionAllowed);
 				if (vw_GetMouseLeftClick(true)) {
 					ChangeGameConfig().SoundVolume = i + 1;
 					ChangeMenuSFXGlobalVolume(GameConfig().SoundVolume / 10.0f);
@@ -309,7 +310,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		SrcRect(0, 0, 16, 32);
 		DstRect(X1+443+16*i, Y1-4, X1+443+16+16*i, Y1+32-4);
 		if (vw_MouseOverRect(DstRect)) {
-			CurrentCursorStatus = 1;
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 			if (vw_GetMouseLeftClick(true)) {
 				ChangeGameConfig().Brightness = i + 1;
 				PlayMenuSFX(eMenuSFX::Click, 1.0f);

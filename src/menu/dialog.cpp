@@ -25,14 +25,16 @@
 
 *************************************************************************************/
 
-#include "../game.h"
+#include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"
+#include "../ui/cursor.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../main.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/projectile/projectile.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -115,7 +117,6 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 {
 	sRECT SrcRect, DstRect;
 	bool ON = false;
-	bool CanClick = false;
 
 
 	// работаем с клавиатурой
@@ -132,10 +133,8 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 	if  (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (NeedPlayDialogOnButtonSoundX != X || NeedPlayDialogOnButtonSoundY != Y) {
 			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
@@ -176,15 +175,16 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 	else
 		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
@@ -203,8 +203,6 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 {
 	sRECT SrcRect, DstRect;
 	bool ON = false;
-	bool CanClick = false;
-
 
 	// работаем с клавиатурой
 	if (Transp >= 0.99f) CurrentActiveMenuElement++;
@@ -220,10 +218,8 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 	if  (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (NeedPlayDialogOnButtonSoundX != X || NeedPlayDialogOnButtonSoundY != Y) {
 			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
@@ -263,15 +259,16 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 	else
 		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
@@ -294,7 +291,6 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 	int Size = vw_TextWidth(Text);
 
 	bool ON = false;
-	bool CanClick = false;
 
 
 	// работаем с клавиатурой
@@ -312,10 +308,8 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)  && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 	}
 
 
@@ -333,15 +327,16 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
 
 
-	if (CanClick && !DragWeapon)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			*CheckBoxStatus = !(*CheckBoxStatus);
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) && !DragWeapon &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		*CheckBoxStatus = !(*CheckBoxStatus);
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+	}
 }
 
 

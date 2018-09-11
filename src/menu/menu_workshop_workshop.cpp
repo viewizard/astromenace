@@ -28,6 +28,7 @@
 #include "../game.h"
 #include "../config/config.h"
 #include "../ui/font.h"
+#include "../ui/cursor.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../object3d/space_ship/space_ship.h"
@@ -414,7 +415,7 @@ void Workshop_Workshop()
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
 
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase();
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -453,7 +454,7 @@ void Workshop_Workshop()
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
 
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+1;
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -492,7 +493,7 @@ void Workshop_Workshop()
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
 
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+2;
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -531,7 +532,7 @@ void Workshop_Workshop()
 			NeedPlayWorkshopOnButtonSoundY = DstRect.top;
 		}
 
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = GetCurrentSustemStockNumBase()+3;
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -743,7 +744,7 @@ void Workshop_Workshop()
 		}
 
 		Current = 1.0f;
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 1;
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -811,7 +812,7 @@ void Workshop_Workshop()
 		}
 
 		Current = 1.0f;
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 5;
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -877,7 +878,7 @@ void Workshop_Workshop()
 		}
 
 		Current = 1.0f;
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			CurrentSystemStockNum = 9;
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -944,7 +945,7 @@ void Workshop_Workshop()
 		}
 
 		Current = 1.0f;
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			CurrentSystemStockNum = 13;
@@ -1015,7 +1016,7 @@ void Workshop_Workshop()
 		}
 
 		Current = 1.0f;
-		CurrentCursorStatus = 1;
+		SetCursorStatus(eCursorStatus::ActionAllowed);
 		if (vw_GetMouseLeftClick(true)) {
 			PlayMenuSFX(eMenuSFX::Click, 1.0f);
 			CurrentSystemStockNum = 17;

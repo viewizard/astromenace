@@ -30,6 +30,7 @@
 #include "../config/config.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
+#include "../ui/cursor.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
@@ -370,7 +371,7 @@ void ProfileMenu()
 			if (!isDialogBoxDrawing())
 				if (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
 					TMPSoundOnProfileID = i;
-					CurrentCursorStatus = 1;
+					SetCursorStatus(eCursorStatus::ActionAllowed);
 					// если только встали - нужно звуком это показать
 					if (SoundOnProfileID != i) {
 						SoundOnProfileID = i;

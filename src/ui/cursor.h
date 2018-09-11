@@ -32,6 +32,13 @@
 namespace viewizard {
 namespace astromenace {
 
+enum class eCursorStatus {
+	Undefined,
+	ActionAllowed,
+	ActionProhibited,
+	DraggingItem
+};
+
 //
 void CursorInit(bool ShowSystemCursor);
 //
@@ -40,6 +47,10 @@ void CursorRelease();
 void CursorUpdate();
 //
 void CursorDraw();
+// Set cursor status.
+void SetCursorStatus(eCursorStatus Status);
+// Get cursor status.
+eCursorStatus GetCursorStatus();
 
 } // astromenace namespace
 } // viewizard namespace

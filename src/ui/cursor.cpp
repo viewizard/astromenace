@@ -37,6 +37,7 @@ itself and drag object (if drag and drop are used).
 */
 
 #include "../core/core.h"
+#include "cursor.h"
 #include "../assets/texture.h"
 #include "../enum.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
@@ -47,6 +48,7 @@ namespace astromenace {
 
 namespace {
 
+eCursorStatus CursorStatus{eCursorStatus::Undefined};
 float CursorBlinking{1.0f};
 float CursorBlinkingLastTime{-1.0f};
 
@@ -54,8 +56,6 @@ float CursorBlinkingLastTime{-1.0f};
 
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-// текущий цвет 0-зеленый, 1-можно на нажимать, 2-нельзя нажимать
-int CurrentCursorStatus;
 bool DrawGameCursor = true;
 extern bool DragWeapon;
 extern int DragWeaponNum;
@@ -84,7 +84,7 @@ void CursorRelease()
  */
 void CursorUpdate()
 {
-	CurrentCursorStatus = 0;
+	SetCursorStatus(eCursorStatus::Undefined);
 	if (CursorBlinkingLastTime == -1.0f) {
 		CursorBlinkingLastTime = vw_GetTimeThread(0);
 	} else {
@@ -125,23 +125,39 @@ void CursorDraw()
 	sRECT SrcRect(0, 0, 64, 64);
 	sRECT DstRect(mX-12, mY-13, mX+64-12, mY+64-13);
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
-	switch (CurrentCursorStatus) {
-	case 0:
+	switch (CursorStatus) {
+	case eCursorStatus::Undefined:
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
 		break;
 
-	case 1:
+	case eCursorStatus::ActionAllowed:
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		break;
 
-	case 2:
+	case eCursorStatus::ActionProhibited:
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
 		break;
 
-	case 3:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
+	case eCursorStatus::DraggingItem:
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 0.8f, 0.7f});
 		break;
 	}
+}
+
+/*
+ * Set cursor status.
+ */
+void SetCursorStatus(eCursorStatus Status)
+{
+	CursorStatus = Status;
+}
+
+/*
+ * Get cursor status.
+ */
+eCursorStatus GetCursorStatus()
+{
+	return CursorStatus;
 }
 
 } // astromenace namespace

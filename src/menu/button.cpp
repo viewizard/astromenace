@@ -28,6 +28,7 @@
 #include "../core/core.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
+#include "../ui/cursor.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
@@ -59,7 +60,6 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 {
 	sRECT SrcRect, DstRect;
 	bool ON = false;
-	bool CanClick = false;
 	float IntTransp = Transp;
 
 
@@ -78,11 +78,8 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
-
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (*ButTransp == 1.0f) {
 			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
@@ -144,16 +141,16 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) ||
-		    (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
@@ -193,7 +190,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		DstRect(X+2,Y+1,X+256,Y+63);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
-				CurrentCursorStatus = 2;
+				SetCursorStatus(eCursorStatus::ActionProhibited);
 				if (vw_GetMouseLeftClick(true))
 					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
@@ -205,7 +202,6 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	bool ON = false;
-	bool CanClick = false;
 	float IntTransp = Transp;
 
 
@@ -224,10 +220,8 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (*ButTransp == 1.0f) {
 			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
@@ -289,15 +283,16 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	else
 		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
@@ -336,7 +331,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 		DstRect(X,Y,X+204,Y+35);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
-				CurrentCursorStatus = 2;
+				SetCursorStatus(eCursorStatus::ActionProhibited);
 				if (vw_GetMouseLeftClick(true))
 					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
@@ -347,7 +342,6 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 
 	bool ON = false;
-	bool CanClick = false;
 
 
 	// работаем с клавиатурой
@@ -363,10 +357,8 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
 			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
@@ -392,15 +384,16 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	else
 		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
@@ -438,7 +431,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 		DstRect(X,Y,X+132,Y+35);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
-				CurrentCursorStatus = 2;
+				SetCursorStatus(eCursorStatus::ActionProhibited);
 				if (vw_GetMouseLeftClick(true))
 					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
@@ -450,7 +443,6 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 
 	bool ON = false;
-	bool CanClick = false;
 
 
 	// работаем с клавиатурой
@@ -466,10 +458,8 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
 			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
@@ -495,16 +485,17 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	else
 		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			if (SoundClick)
-				PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		if (SoundClick)
+			PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
@@ -529,7 +520,6 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	int Size = vw_TextWidth(Text);
 
 	bool ON = false;
-	bool CanClick = false;
 
 
 	// работаем с клавиатурой
@@ -547,10 +537,8 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 	}
 
 
@@ -568,15 +556,16 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
 
 
-	if (CanClick && !DragWeapon)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			*CheckBoxStatus = !(*CheckBoxStatus);
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) && !DragWeapon &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		*CheckBoxStatus = !(*CheckBoxStatus);
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+	}
 }
 
 
@@ -600,7 +589,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
-				CurrentCursorStatus = 2;
+				SetCursorStatus(eCursorStatus::ActionProhibited);
 				if (vw_GetMouseLeftClick(true))
 					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
@@ -612,7 +601,6 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 
 	bool ON = false;
-	bool CanClick = false;
 
 
 	// работаем с клавиатурой
@@ -628,10 +616,8 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
 			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
@@ -653,15 +639,16 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, Transp);
 
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
@@ -685,7 +672,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
 			if (Transp==1.0f && !DragWeapon) {
-				CurrentCursorStatus = 2;
+				SetCursorStatus(eCursorStatus::ActionProhibited);
 				if (vw_GetMouseLeftClick(true))
 					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
 			}
@@ -697,7 +684,6 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 
 	bool ON = false;
-	bool CanClick = false;
 
 
 	// работаем с клавиатурой
@@ -713,10 +699,8 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
 		// если тухнем или появляемся - не жать
 		ON = true;
-		if (Transp==1.0f) {
-			CanClick = true;
-			CurrentCursorStatus = 1;
-		}
+		if (Transp == 1.0f)
+			SetCursorStatus(eCursorStatus::ActionAllowed);
 
 		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
 			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
@@ -738,15 +722,16 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, Transp);
 
 
-	if (CanClick)
-		if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-			if (InFocusByKeyboard) {
-				vw_SetKeyStatus(SDLK_KP_ENTER, false);
-				vw_SetKeyStatus(SDLK_RETURN, false);
-			}
-			return true;
+	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
+	    (vw_GetMouseLeftClick(true) ||
+	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+		PlayMenuSFX(eMenuSFX::Click, 1.0f);
+		if (InFocusByKeyboard) {
+			vw_SetKeyStatus(SDLK_KP_ENTER, false);
+			vw_SetKeyStatus(SDLK_RETURN, false);
 		}
+		return true;
+	}
 
 	return false;
 }
