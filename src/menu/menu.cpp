@@ -31,6 +31,7 @@
 #include "../build_config.h"
 #include "../config/config.h"
 #include "../ui/font.h"
+#include "../ui/cursor.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../script/script.h"
@@ -202,7 +203,7 @@ void InitMenu(eMenuStatus NewMenuStatus)
 	MenuBlackTransp = 1.0f;
 	NeedOnMenu = true;
 	NeedOffMenu = false;
-	DrawGameCursor = true;
+	SetShowGameCursor(true);
 }
 
 

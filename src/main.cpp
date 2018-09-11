@@ -338,7 +338,7 @@ static void Loop()
 				NeedHideGameMenu = false;
 				GameContentTransp = 1.0f;
 				vw_SetTimeThreadSpeed(1, 0.0f);
-				DrawGameCursor = true;
+				SetShowGameCursor(true);
 			}
 
 			vw_PauseTimeThreads();

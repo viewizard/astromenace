@@ -294,18 +294,20 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f) && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
 	// 20 - расстояние между текстом
 	DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)  && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)

@@ -50,7 +50,6 @@ enum class eDialogBox;
 // loop_proc.cpp
 //------------------------------------------------------------------------------------
 extern eCommand ComBuffer;
-extern bool DrawGameCursor;
 
 void Loop_Proc();
 

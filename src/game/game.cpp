@@ -31,14 +31,12 @@
 //                               ^  ^  ^ second triangle indexes
 //                      ^  ^  ^ first triangle indexes
 
-// TODO DrawGameCursor and SDL_SetWindowGrab() should be changed in the same code blocks
-//      probably we could use SDL_GetWindowGrab() instead of DrawGameCursor
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"
+#include "../ui/cursor.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../gfx/star_system.h"
@@ -641,7 +639,7 @@ void InitGame()
 	float tmpViewportWidth, tmpViewportHeight;
 	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 	SDL_WarpMouseInWindow(vw_GetSDLWindow(), tmpViewportWidth / 2, tmpViewportHeight / 2);
-	DrawGameCursor = false;
+	SetShowGameCursor(false);
 
 	LastMouseXR = 0;
 	LastMouseYR = 0;
@@ -887,7 +885,7 @@ void ExitGame()
 		GameMenu = false;
 		NeedShowGameMenu = false;
 		NeedHideGameMenu = true;
-		DrawGameCursor = false;
+		SetShowGameCursor(false);
 		// установка в последюю точку указателя
 		SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 	}
@@ -1482,7 +1480,7 @@ void DrawGame()
 		if (GameContentTransp >= 1.0f) {
 			GameContentTransp = 1.0f;
 			NeedShowGameMenu = false;
-			DrawGameCursor = true;
+			SetShowGameCursor(true);
 
 			// release mouse control
 			SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
@@ -1614,7 +1612,7 @@ void DrawGame()
 					GameMenu = false;
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;
-					DrawGameCursor = false;
+					SetShowGameCursor(false);
 					// установка в последюю точку указателя
 					SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 
@@ -1729,7 +1727,7 @@ void DrawGame()
 						vw_StopSound(SoundShowHideMenu, 150);
 					if (NeedPlaySfx)
 						SoundShowHideMenu = PlayMenuSFX(eMenuSFX::MissionHideMenu, 1.0f);
-					DrawGameCursor = false;
+					SetShowGameCursor(false);
 				}
 
 				if (GameMissionCompleteStatus && !GameMissionCompleteStatusShowDialog) // в процессе вывода результатов разрешаем только выход в основное меню (отображение диалога)

@@ -43,6 +43,8 @@ namespace astromenace {
 
 namespace {
 
+bool ShowGameCursorStatus{true};
+
 eCursorStatus CursorStatus{eCursorStatus::Undefined};
 float CursorBlinking{1.0f};
 float CursorBlinkingLastTime{0.0f};
@@ -52,10 +54,6 @@ GLtexture CursorShadow{0};
 GLtexture DraggingItemIcon{0};
 
 } // unnamed namespace
-
-
-// FIXME should be fixed, don't allow global scope interaction for local variables
-bool DrawGameCursor = true;
 
 
 /*
@@ -119,7 +117,7 @@ static void DrawDraggingItemIcon(int X, int Y)
  */
 void CursorDraw()
 {
-	if (!DrawGameCursor)
+	if (!ShowGameCursorStatus)
 		return;
 
 	int MouseX, MouseY;
@@ -174,6 +172,22 @@ eCursorStatus GetCursorStatus()
 void SetCursorDraggingItemIcon(GLtexture Icon)
 {
 	DraggingItemIcon = Icon;
+}
+
+/*
+ * Тoggle whether or not the cursor is shown.
+ */
+void SetShowGameCursor(bool Toggle)
+{
+	ShowGameCursorStatus = Toggle;
+}
+
+/*
+ * Get is cursor shown or not.
+ */
+bool GetShowGameCursor()
+{
+	return ShowGameCursorStatus;
 }
 
 } // astromenace namespace

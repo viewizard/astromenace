@@ -64,18 +64,22 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f) && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    !isDialogBoxDrawing() &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
 
 	DstRect(X+2,Y+1,X+384,Y+63);
-	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) &&
+	     !isDialogBoxDrawing() &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)
@@ -206,18 +210,22 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    !isDialogBoxDrawing() &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
 
 	DstRect(X+2,Y+1,X+256,Y+63);
-	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) &&
+	     !isDialogBoxDrawing() &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)
@@ -345,16 +353,20 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    !isDialogBoxDrawing() &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
+	     !isDialogBoxDrawing() &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)
@@ -446,16 +458,20 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    !isDialogBoxDrawing() &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
+	     !isDialogBoxDrawing() &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)
@@ -523,18 +539,22 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    !isDialogBoxDrawing() &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
 	// 20 - расстояние между текстом
 	DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) &&
+	     !isDialogBoxDrawing() &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)
@@ -604,16 +624,20 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    !isDialogBoxDrawing() &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
+	     !isDialogBoxDrawing() &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)
@@ -687,16 +711,20 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
 
 	// работаем с клавиатурой
-	if ((Transp >= 0.99f)  && !isDialogBoxDrawing() && DrawGameCursor) CurrentActiveMenuElement++;
+	if ((Transp >= 0.99f) &&
+	    !isDialogBoxDrawing() &&
+	    GetShowGameCursor())
+		CurrentActiveMenuElement++;
+
 	bool InFocusByKeyboard = false;
-	if (CurrentKeyboardSelectMenuElement > 0) {
-		if (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+	if ((CurrentKeyboardSelectMenuElement > 0) &&
+	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
 			InFocusByKeyboard = true;
-		}
-	}
 
 
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)  && !isDialogBoxDrawing() && DrawGameCursor) {
+	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
+	     !isDialogBoxDrawing() &&
+	     GetShowGameCursor()) {
 		// если тухнем или появляемся - не жать
 		ON = true;
 		if (Transp == 1.0f)
