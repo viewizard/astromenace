@@ -41,19 +41,19 @@ enum class eCursorStatus {
 	DraggingItem // should be used with SetCursorDraggingItemIcon()
 };
 
-//
+// Cursor initialization.
 void CursorInit(bool ShowSystemCursor);
-//
+// Release cursor.
 void CursorRelease();
-//
+// Update cursor.
 void CursorUpdate();
-//
+// Draw cursor.
 void CursorDraw();
 // Set cursor status.
 void SetCursorStatus(eCursorStatus Status);
 // Get cursor status.
 eCursorStatus GetCursorStatus();
-// Set cursor dragging icon.
+// Set cursor dragging item icon texture.
 void SetCursorDraggingItemIcon(GLtexture Icon);
 
 } // astromenace namespace

@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 /*
 
 Note, this code should not interact with mouse, caller should
@@ -60,7 +58,7 @@ bool DrawGameCursor = true;
 
 
 /*
- *
+ * Cursor initialization.
  */
 void CursorInit(bool ShowSystemCursor)
 {
@@ -69,7 +67,7 @@ void CursorInit(bool ShowSystemCursor)
 }
 
 /*
- *
+ * Release cursor.
  */
 void CursorRelease()
 {
@@ -78,7 +76,7 @@ void CursorRelease()
 }
 
 /*
- *
+ * Update cursor.
  */
 void CursorUpdate()
 {
@@ -113,7 +111,7 @@ static void DrawDraggingItemIcon(int X, int Y)
 }
 
 /*
- *
+ * Draw cursor.
  */
 void CursorDraw()
 {
@@ -171,7 +169,7 @@ eCursorStatus GetCursorStatus()
 }
 
 /*
- * Set cursor dragging icon.
+ * Set cursor dragging item icon texture.
  */
 void SetCursorDraggingItemIcon(GLtexture Icon)
 {
