@@ -149,7 +149,7 @@ void CursorDraw()
 		DrawDraggingItemIcon(MouseX, MouseY);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
-			  true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 0.8f, 0.7f});
+			  true, 0.80f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		break;
 	}
 }
