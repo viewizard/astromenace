@@ -47,8 +47,8 @@ namespace astromenace {
 
 namespace {
 
-float CurrentCursorFlash{1.0f};
-float CurrentCursorFlashLastTime{-1.0f};
+float CursorBlinking{1.0f};
+float CursorBlinkingLastTime{-1.0f};
 
 } // unnamed namespace
 
@@ -85,13 +85,13 @@ void CursorRelease()
 void CursorUpdate()
 {
 	CurrentCursorStatus = 0;
-	if (CurrentCursorFlashLastTime == -1.0f) {
-		CurrentCursorFlashLastTime = vw_GetTimeThread(0);
+	if (CursorBlinkingLastTime == -1.0f) {
+		CursorBlinkingLastTime = vw_GetTimeThread(0);
 	} else {
-		CurrentCursorFlash -= vw_GetTimeThread(0) - CurrentCursorFlashLastTime;
-		if (CurrentCursorFlash < 0.3f)
-			CurrentCursorFlash = 1.0f;
-		CurrentCursorFlashLastTime = vw_GetTimeThread(0);
+		CursorBlinking -= vw_GetTimeThread(0) - CursorBlinkingLastTime;
+		if (CursorBlinking < 0.3f)
+			CursorBlinking = 1.0f;
+		CursorBlinkingLastTime = vw_GetTimeThread(0);
 	}
 }
 
@@ -131,15 +131,15 @@ void CursorDraw()
 		break;
 
 	case 1:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		break;
 
 	case 2:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
 		break;
 
 	case 3:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CurrentCursorFlash, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"), true, CursorBlinking, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
 		break;
 	}
 }
