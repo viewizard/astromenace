@@ -36,11 +36,9 @@ itself and drag object (if drag and drop are used).
 
 */
 
-#include "../core/core.h"
 #include "cursor.h"
 #include "../assets/texture.h"
 #include "../enum.h"
-#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -52,12 +50,13 @@ eCursorStatus CursorStatus{eCursorStatus::Undefined};
 float CursorBlinking{1.0f};
 float CursorBlinkingLastTime{-1.0f};
 
+GLtexture DraggingItemIcon{0};
+
 } // unnamed namespace
 
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 bool DrawGameCursor = true;
-extern int DragWeaponNum;
 
 
 /*
@@ -99,6 +98,9 @@ void CursorUpdate()
  */
 static void DrawDraggingItemIcon(int X, int Y)
 {
+	if (!DraggingItemIcon)
+		return;
+
 	// we use "fixed" icon size for now
 	constexpr int IconWidth{128};
 	constexpr int IconHeight{64};
@@ -107,7 +109,7 @@ static void DrawDraggingItemIcon(int X, int Y)
 	sRECT DstRect(X - IconWidth / 2, Y - IconHeight / 2,
 		      X + IconWidth / 2, Y + IconHeight / 2);
 
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)), true);
+	vw_Draw2D(DstRect, SrcRect, DraggingItemIcon, true);
 }
 
 /*
@@ -166,6 +168,14 @@ void SetCursorStatus(eCursorStatus Status)
 eCursorStatus GetCursorStatus()
 {
 	return CursorStatus;
+}
+
+/*
+ * Set cursor dragging icon.
+ */
+void SetCursorDraggingItemIcon(GLtexture Icon)
+{
+	DraggingItemIcon = Icon;
 }
 
 } // astromenace namespace

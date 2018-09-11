@@ -1314,8 +1314,10 @@ void Workshop_Weaponry()
 		DragWeaponAmmoStart = 0;
 	}
 
-	if (DragWeapon)
+	if (DragWeapon) {
+		SetCursorDraggingItemIcon(GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)));
 		SetCursorStatus(eCursorStatus::DraggingItem);
+	}
 }
 
 } // astromenace namespace

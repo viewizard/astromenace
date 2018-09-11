@@ -28,6 +28,8 @@
 #ifndef UI_CURSOR_H
 #define UI_CURSOR_H
 
+#include "../core/core.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
@@ -36,7 +38,7 @@ enum class eCursorStatus {
 	Undefined,
 	ActionAllowed,
 	ActionProhibited,
-	DraggingItem
+	DraggingItem // should be used with SetCursorDraggingItemIcon()
 };
 
 //
@@ -51,6 +53,8 @@ void CursorDraw();
 void SetCursorStatus(eCursorStatus Status);
 // Get cursor status.
 eCursorStatus GetCursorStatus();
+// Set cursor dragging icon.
+void SetCursorDraggingItemIcon(GLtexture Icon);
 
 } // astromenace namespace
 } // viewizard namespace
