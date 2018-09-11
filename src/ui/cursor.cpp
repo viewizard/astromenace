@@ -95,13 +95,19 @@ void CursorUpdate()
 }
 
 /*
- *
+ * Draw dragging item icon.
  */
-static void DrawDragingWeaponIcon(int X, int Y)
+static void DrawDraggingItemIcon(int X, int Y)
 {
-	sRECT SrcRect(0, 0, 128, 64);
-	sRECT DstRect(X - 64, Y - 32, X + 64, Y + 32);
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)), true, MenuContentTransp);
+	// we use "fixed" icon size for now
+	constexpr int IconWidth{128};
+	constexpr int IconHeight{64};
+
+	sRECT SrcRect(0, 0, IconWidth, IconHeight);
+	sRECT DstRect(X - IconWidth / 2, Y - IconHeight / 2,
+		      X + IconWidth / 2, Y + IconHeight / 2);
+
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)), true);
 }
 
 /*
@@ -120,26 +126,26 @@ void CursorDraw()
 
 	switch (CursorStatus) {
 	case eCursorStatus::Undefined:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
 			  true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
 		break;
 
 	case eCursorStatus::ActionAllowed:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
 			  true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		break;
 
 	case eCursorStatus::ActionProhibited:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
 			  true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
 		break;
 
 	case eCursorStatus::DraggingItem:
-		DrawDragingWeaponIcon(MouseX, MouseY);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true, 1.0f);
+		DrawDraggingItemIcon(MouseX, MouseY);
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
 			  true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 0.8f, 0.7f});
 		break;
