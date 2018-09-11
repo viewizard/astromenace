@@ -488,7 +488,7 @@ RecreateWindow:
 	if (GameConfig().UseGLSL120)
 		SetupObject3DShaders(); // should be called after LoadAllGameAssets()
 
-	CursorInit(NeedShowSystemCursor);
+	CursorInit(NeedShowSystemCursor); // should be called after vw_InitTimeThread(0) and LoadAllGameAssets()
 	InitMenu(eMenuStatus::MAIN_MENU);
 
 	// Main loop.

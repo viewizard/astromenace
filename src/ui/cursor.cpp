@@ -36,7 +36,6 @@ itself and drag object (if drag and drop are used).
 
 #include "cursor.h"
 #include "../assets/texture.h"
-#include "../enum.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -46,8 +45,10 @@ namespace {
 
 eCursorStatus CursorStatus{eCursorStatus::Undefined};
 float CursorBlinking{1.0f};
-float CursorBlinkingLastTime{-1.0f};
+float CursorBlinkingLastTime{0.0f};
 
+GLtexture CursorFront{0};
+GLtexture CursorShadow{0};
 GLtexture DraggingItemIcon{0};
 
 } // unnamed namespace
@@ -59,11 +60,17 @@ bool DrawGameCursor = true;
 
 /*
  * Cursor initialization.
+ * Should be called after vw_InitTimeThread(0) and LoadAllGameAssets().
  */
 void CursorInit(bool ShowSystemCursor)
 {
 	if (!ShowSystemCursor)
 		SDL_ShowCursor(SDL_DISABLE);
+
+	CursorBlinkingLastTime = vw_GetTimeThread(0);
+
+	CursorFront = GetPreloadedTextureAsset("menu/cursor.tga");
+	CursorShadow = GetPreloadedTextureAsset("menu/cursor_shadow.tga");
 }
 
 /*
@@ -81,14 +88,11 @@ void CursorRelease()
 void CursorUpdate()
 {
 	SetCursorStatus(eCursorStatus::Undefined);
-	if (CursorBlinkingLastTime == -1.0f) {
-		CursorBlinkingLastTime = vw_GetTimeThread(0);
-	} else {
-		CursorBlinking -= vw_GetTimeThread(0) - CursorBlinkingLastTime;
-		if (CursorBlinking < 0.3f)
-			CursorBlinking = 1.0f;
-		CursorBlinkingLastTime = vw_GetTimeThread(0);
-	}
+
+	CursorBlinking -= vw_GetTimeThread(0) - CursorBlinkingLastTime;
+	if (CursorBlinking < 0.3f)
+		CursorBlinking = 1.0f;
+	CursorBlinkingLastTime = vw_GetTimeThread(0);
 }
 
 /*
@@ -126,28 +130,24 @@ void CursorDraw()
 
 	switch (CursorStatus) {
 	case eCursorStatus::Undefined:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
-			  true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+		vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
 		break;
 
 	case eCursorStatus::ActionAllowed:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
-			  true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+		vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		break;
 
 	case eCursorStatus::ActionProhibited:
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
-			  true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+		vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
 		break;
 
 	case eCursorStatus::DraggingItem:
 		DrawDraggingItemIcon(MouseX, MouseY);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor_shadow.tga"), true);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/cursor.tga"),
-			  true, 0.80f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+		vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
 		break;
 	}
 }

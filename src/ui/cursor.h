@@ -42,6 +42,7 @@ enum class eCursorStatus {
 };
 
 // Cursor initialization.
+// Should be called after vw_InitTimeThread(0) and LoadAllGameAssets().
 void CursorInit(bool ShowSystemCursor);
 // Release cursor.
 void CursorRelease();
