@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"

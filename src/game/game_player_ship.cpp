@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../game.h"
 #include "../config/config.h"
 #include "../platform/platform.h"

@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../core/core.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"

@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../game.h"
 #include "../object3d/space_ship/space_ship.h"
 

@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"

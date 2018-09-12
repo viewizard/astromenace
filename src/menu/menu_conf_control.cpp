@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 // TODO NeedCheck in CheckMouseKeybJState() should be moved to enumeration
 
 #include "../core/core.h"
