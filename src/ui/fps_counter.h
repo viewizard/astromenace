@@ -28,6 +28,9 @@
 #ifndef UI_FPSCOUNTER_H
 #define UI_FPSCOUNTER_H
 
+#include "../core/core.h"
+#include "../config/config.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
@@ -51,8 +54,24 @@ public:
 		return FPSCounter;
 	}
 
+	void CheckKeyboard(float CurrentTime)
+	{
+		if (!vw_GetKeyStatus(SDLK_F2))
+			return;
+
+		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
+		vw_SetKeyStatus(SDLK_F2, false);
+
+		LastTime = CurrentTime;
+		CurrentFPS = 0.0f;
+		CurrentFrame = 0;
+	}
+
 	void Draw()
 	{
+		if (!GameConfig().ShowFPS)
+			return;
+
 		if (GameConfig().VSync)
 			vw_DrawText(6, 5, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f,
 				    "%s %.1f (VSync - %s)", vw_GetText("fps"), CurrentFPS, vw_GetText("On"));
@@ -61,9 +80,12 @@ public:
 				    "%s %.1f", vw_GetText("fps"), CurrentFPS);
 	}
 
-	void Update()
+	void Update(float CurrentTime)
 	{
-		float CurrentTime = vw_GetTimeThread(0);
+		CheckKeyboard(CurrentTime);
+		if (!GameConfig().ShowFPS)
+			return;
+
 		float TimeDelta = CurrentTime - LastTime;
 
 		if (TimeDelta >= 1.0f) {

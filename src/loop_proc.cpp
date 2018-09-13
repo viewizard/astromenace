@@ -121,8 +121,7 @@ void Loop_Proc()
 
 
 
-	if (GameConfig().ShowFPS)
-		cFPS::GetInstance().Draw();
+	cFPS::GetInstance().Draw();
 
 
 
@@ -246,8 +245,7 @@ void Loop_Proc()
 
 
 
-	if (GameConfig().ShowFPS)
-		cFPS::GetInstance().Update();
+	cFPS::GetInstance().Update(vw_GetTimeThread(0));
 
 
 
@@ -289,11 +287,6 @@ void Loop_Proc()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// дополнительные функции, недокументированные возможности
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	if (vw_GetKeyStatus(SDLK_F2)) {
-		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
-		vw_SetKeyStatus(SDLK_F2, false);
-	}
 
 	// делаем на рабочем столе бмп скриншоты
 	if (vw_GetKeyStatus(SDLK_PRINTSCREEN) || vw_GetKeyStatus(SDLK_F12)) {
