@@ -33,6 +33,7 @@
 #include "platform/platform.h"
 #include "object3d/object3d.h"
 #include "ui/cursor.h"
+#include "ui/fps_counter.h"
 #include "gfx/star_system.h"
 #include "assets/audio.h"
 #include "assets/texture.h"
@@ -41,15 +42,6 @@
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
-
-namespace {
-
-constexpr float UPDATE_SPEED_MS{1.0f};
-float LastSecond{0.0f};
-float eFPS{0.0f};
-unsigned int eCurrentFrames{0};
-
-} // unnamed namespace
 
 // командный буфер
 eCommand ComBuffer{eCommand::DO_NOTHING};
@@ -129,17 +121,8 @@ void Loop_Proc()
 
 
 
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// вывод вспомогательной информации
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (GameConfig().ShowFPS) {
-		// фпс
-		if (GameConfig().VSync == 0)
-			vw_DrawText(6,5, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, "%s %.1f", vw_GetText("fps"), eFPS);
-		else
-			vw_DrawText(6,5, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, "%s %.1f (VSync - %s)", vw_GetText("fps"), eFPS, vw_GetText("On"));
-	}
+	if (GameConfig().ShowFPS)
+		cFPS::GetInstance().Draw();
 
 
 
@@ -263,16 +246,8 @@ void Loop_Proc()
 
 
 
-	// самым последним - просчет фпс
-	float FPSTime = vw_GetTimeThread(0);
-	if (FPSTime - LastSecond > UPDATE_SPEED_MS) {
-		eFPS = eCurrentFrames * (FPSTime - LastSecond);
-		eCurrentFrames = 0;
-		LastSecond = FPSTime;
-	} else if (FPSTime - LastSecond < 0) // game was restarted, vw_GetTimeThread() re-initialized
-		LastSecond = FPSTime;
-	++eCurrentFrames;
-
+	if (GameConfig().ShowFPS)
+		cFPS::GetInstance().Update();
 
 
 
@@ -315,7 +290,6 @@ void Loop_Proc()
 	// дополнительные функции, недокументированные возможности
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	// выключение fps и примитивов
 	if (vw_GetKeyStatus(SDLK_F2)) {
 		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 		vw_SetKeyStatus(SDLK_F2, false);
