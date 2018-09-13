@@ -54,17 +54,26 @@ public:
 		return FPSCounter;
 	}
 
+	void Switch(float CurrentTime)
+	{
+		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
+
+		if (!GameConfig().ShowFPS)
+			return;
+
+		LastTime = CurrentTime;
+		CurrentFPS = 0.0f;
+		CurrentFrame = 0;
+	}
+
 	void CheckKeyboard(float CurrentTime)
 	{
 		if (!vw_GetKeyStatus(SDLK_F2))
 			return;
 
-		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 		vw_SetKeyStatus(SDLK_F2, false);
+		Switch(CurrentTime);
 
-		LastTime = CurrentTime;
-		CurrentFPS = 0.0f;
-		CurrentFrame = 0;
 	}
 
 	void Draw()

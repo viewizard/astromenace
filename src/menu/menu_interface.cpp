@@ -33,6 +33,7 @@
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../ui/font.h"
+#include "../ui/fps_counter.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
@@ -176,9 +177,9 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	Y1 += Prir1;
 	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("FPS Counter"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !ChangeGameConfig().ShowFPS) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, ChangeGameConfig().ShowFPS)) {
-		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
-	}
+	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, ChangeGameConfig().ShowFPS))
+		cFPS::GetInstance().Switch(vw_GetTimeThread(0));
+
 	Size = vw_TextWidth(GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
 	SizeI = (170 - Size) / 2;
 	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, GameConfig().ShowFPS ? vw_GetText("On") : vw_GetText("Off"));
