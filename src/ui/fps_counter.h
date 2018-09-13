@@ -43,6 +43,7 @@ private:
 	float LastTime{0.0f};
 	float CurrentFPS{0.0f};
 	unsigned int CurrentFrame{0};
+	sRGBCOLOR TextColor{eRGBCOLOR::white};
 
 public:
 	cFPS(cFPS const&) = delete;
@@ -82,10 +83,10 @@ public:
 			return;
 
 		if (GameConfig().VSync)
-			vw_DrawText(6, 5, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f,
+			vw_DrawText(6, 5, 0, 0, 1.0f, TextColor, 0.99f,
 				    "%s %.1f (VSync - %s)", vw_GetText("fps"), CurrentFPS, vw_GetText("On"));
 		else
-			vw_DrawText(6, 5, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f,
+			vw_DrawText(6, 5, 0, 0, 1.0f, TextColor, 0.99f,
 				    "%s %.1f", vw_GetText("fps"), CurrentFPS);
 	}
 
