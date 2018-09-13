@@ -257,7 +257,7 @@ void Loop_Proc()
 
 	// если не в игре, используем и кнопки курсора
 	if ((MenuStatus != eMenuStatus::GAME) || ((MenuStatus == eMenuStatus::GAME) &&
-	    (isDialogBoxDrawing() || (GameContentTransp >= 0.99f)))) {
+						  (isDialogBoxDrawing() || (GameContentTransp >= 0.99f)))) {
 		if (vw_GetKeyStatus(SDLK_RIGHT) || vw_GetKeyStatus(SDLK_DOWN)) {
 			CurrentKeyboardSelectMenuElement++;
 			vw_SetKeyStatus(SDLK_RIGHT, false);
@@ -277,7 +277,8 @@ void Loop_Proc()
 		if (CurrentActiveMenuElement > 0) {
 			if (CurrentKeyboardSelectMenuElement > CurrentActiveMenuElement)
 				CurrentKeyboardSelectMenuElement = 1;
-		} else CurrentKeyboardSelectMenuElement = 0;
+		} else
+			CurrentKeyboardSelectMenuElement = 0;
 	}
 	CurrentActiveMenuElement = 0;
 
@@ -301,7 +302,7 @@ void Loop_Proc()
 
 	// управление скоростью игры, только в самой игре!
 	if ((MenuStatus == eMenuStatus::GAME) &&
-	    (GameContentTransp<=0.0f) &&
+	    (GameContentTransp <= 0.0f) &&
 	    !GameMissionCompleteStatus) {
 		if (vw_GetKeyStatus(SDLK_F5)) {
 			ChangeGameConfig().GameSpeed -= 0.1f;
