@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO translate comments
+
 #include "core/core.h"
 #include "enum.h"
 #include "config/config.h"
@@ -40,14 +42,17 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
+constexpr float UPDATE_SPEED_MS{1.0f};
+float LastSecond{0.0f};
+float eFPS{0.0f};
+unsigned int eCurrentFrames{0};
+
+} // unnamed namespace
+
 // командный буфер
 eCommand ComBuffer{eCommand::DO_NOTHING};
-
-// для просчета фпс
-float LastSecond;
-#define UPDATE_SPEED_MS 1.0f
-float eFPS = 0;
-unsigned int eCurrentFrames = 0;
 
 extern float CurrentGameSpeedShowTime;
 
