@@ -25,11 +25,12 @@
 
 *************************************************************************************/
 
+// TODO move to SDL_GetTicks() usage
+
 #ifndef UI_FPSCOUNTER_H
 #define UI_FPSCOUNTER_H
 
 #include "../core/core.h"
-#include "../config/config.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -55,58 +56,10 @@ public:
 		return FPSCounter;
 	}
 
-	void Switch(float CurrentTime)
-	{
-		ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
-
-		if (!GameConfig().ShowFPS)
-			return;
-
-		LastTime = CurrentTime;
-		CurrentFPS = 0.0f;
-		CurrentFrame = 0;
-	}
-
-	void CheckKeyboard(float CurrentTime)
-	{
-		if (!vw_GetKeyStatus(SDLK_F2))
-			return;
-
-		vw_SetKeyStatus(SDLK_F2, false);
-		Switch(CurrentTime);
-
-	}
-
-	void Draw()
-	{
-		if (!GameConfig().ShowFPS)
-			return;
-
-		if (GameConfig().VSync)
-			vw_DrawText(6, 5, 0, 0, 1.0f, TextColor, 0.99f,
-				    "%s %.1f (VSync - %s)", vw_GetText("fps"), CurrentFPS, vw_GetText("On"));
-		else
-			vw_DrawText(6, 5, 0, 0, 1.0f, TextColor, 0.99f,
-				    "%s %.1f", vw_GetText("fps"), CurrentFPS);
-	}
-
-	void Update(float CurrentTime)
-	{
-		CheckKeyboard(CurrentTime);
-		if (!GameConfig().ShowFPS)
-			return;
-
-		float TimeDelta = CurrentTime - LastTime;
-
-		if (TimeDelta >= 1.0f) {
-			CurrentFPS = CurrentFrame * TimeDelta;
-			CurrentFrame = 0;
-			LastTime = CurrentTime;
-		} else if (TimeDelta < 0) // game was restarted, vw_GetTimeThread() re-initialized
-			LastTime = CurrentTime;
-
-		CurrentFrame++;
-	}
+	void Switch(float CurrentTime);
+	void CheckKeyboard(float CurrentTime);
+	void Draw();
+	void Update(float CurrentTime);
 };
 
 } // astromenace namespace
