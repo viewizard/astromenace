@@ -35,14 +35,14 @@ namespace astromenace {
 /*
  * Switch fps counter show/hide status.
  */
-void cFPS::Switch(float CurrentTime)
+void cFPS::Switch()
 {
 	ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 
 	if (!GameConfig().ShowFPS)
 		return;
 
-	LastTime = CurrentTime;
+	LastTick = SDL_GetTicks();
 	CurrentFPS = 0.0f;
 	CurrentFrame = 0;
 }
@@ -50,13 +50,13 @@ void cFPS::Switch(float CurrentTime)
 /*
  * Check keyboard.
  */
-void cFPS::CheckKeyboard(float CurrentTime)
+void cFPS::CheckKeyboard()
 {
 	if (!vw_GetKeyStatus(SDLK_F2))
 		return;
 
 	vw_SetKeyStatus(SDLK_F2, false);
-	Switch(CurrentTime);
+	Switch();
 
 }
 
@@ -80,20 +80,27 @@ void cFPS::Draw()
 /*
  * Update fps counter.
  */
-void cFPS::Update(float CurrentTime)
+void cFPS::Update()
 {
-	CheckKeyboard(CurrentTime);
+	CheckKeyboard();
 	if (!GameConfig().ShowFPS)
 		return;
 
-	float TimeDelta = CurrentTime - LastTime;
+	uint32_t CurrentTick = SDL_GetTicks();
+	if (LastTick > CurrentTick) { // game was restarted, or SDL was re-inited
+			LastTick = CurrentTick;
+			CurrentFPS = 0.0f;
+			CurrentFrame = 0;
+	} else {
+		uint32_t TicksDelta = CurrentTick - LastTick;
+		constexpr uint32_t TicksInSecond{1000};
 
-	if (TimeDelta >= 1.0f) {
-		CurrentFPS = CurrentFrame * TimeDelta;
-		CurrentFrame = 0;
-		LastTime = CurrentTime;
-	} else if (TimeDelta < 0) // game was restarted, vw_GetTimeThread() re-initialized
-		LastTime = CurrentTime;
+		if (TicksDelta >= TicksInSecond) {
+			CurrentFPS = static_cast<float>(CurrentFrame * TicksInSecond) / TicksDelta;
+			CurrentFrame = 0;
+			LastTick = CurrentTick;
+		}
+	}
 
 	CurrentFrame++;
 }

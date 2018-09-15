@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO move to SDL_GetTicks() usage
-
 #ifndef UI_FPSCOUNTER_H
 #define UI_FPSCOUNTER_H
 
@@ -41,9 +39,9 @@ private:
 	cFPS() = default;
 	~cFPS() = default;
 
-	float LastTime{0.0f};
+	uint32_t LastTick{0};
 	float CurrentFPS{0.0f};
-	unsigned int CurrentFrame{0};
+	uint32_t CurrentFrame{0};
 	sRGBCOLOR TextColor{eRGBCOLOR::white};
 
 public:
@@ -56,10 +54,10 @@ public:
 		return FPSCounter;
 	}
 
-	void Switch(float CurrentTime);
-	void CheckKeyboard(float CurrentTime);
+	void Switch();
+	void CheckKeyboard();
 	void Draw();
-	void Update(float CurrentTime);
+	void Update();
 };
 
 } // astromenace namespace

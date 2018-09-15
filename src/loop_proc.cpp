@@ -245,7 +245,7 @@ void Loop_Proc()
 
 
 
-	cFPS::GetInstance().Update(vw_GetTimeThread(0));
+	cFPS::GetInstance().Update();
 
 
 
