@@ -357,8 +357,8 @@ extern bool GameMissionCompleteStatus;
 
 void InitGame();
 void DrawGame();
-void ExitGame();
-void ExitGameWithSave();
+void ExitGame(eCommand Command);
+void ExitGameWithSave(eCommand Command);
 void SetGameMissionComplete();
 
 

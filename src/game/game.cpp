@@ -56,6 +56,8 @@ namespace {
 
 std::unique_ptr<cMissionScript> MissionScript{};
 
+eCommand GameExitCommand{eCommand::DO_NOTHING};
+
 } // unnamed namespace
 
 
@@ -874,11 +876,9 @@ void InitGame()
 //------------------------------------------------------------------------------------
 // Завершаем игру
 //------------------------------------------------------------------------------------
-eCommand NewComBuffer;
-void ExitGame()
+void ExitGame(eCommand Command)
 {
-	NewComBuffer = ComBuffer;
-	ComBuffer = eCommand::DO_NOTHING; // пока сбрасываем в ноль, чтобы не переключилось до затухания
+	GameExitCommand = Command;
 	NeedOffGame = true;
 	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 
@@ -909,7 +909,7 @@ void RealExitGame()
 //------------------------------------------------------------------------------------
 // Завершаем игру, нужно сохранить параметры
 //------------------------------------------------------------------------------------
-void ExitGameWithSave()
+void ExitGameWithSave(eCommand Command)
 {
 	// данные по деньгам и опыту
 	ChangeGameConfig().Profile[CurrentProfile].Money = static_cast<int>(GameMoney);
@@ -954,7 +954,7 @@ void ExitGameWithSave()
 	if (CurrentMission > (AllMission - 1)) {
 		CurrentMission = -1;
 		// это была последняя миссия, показываем список авторов
-		ComBuffer = eCommand::SWITCH_FROM_GAME_TO_CREDITS;
+		Command = eCommand::SWITCH_FROM_GAME_TO_CREDITS;
 	}
 
 	vw_ResetWheelStatus();
@@ -975,7 +975,7 @@ void ExitGameWithSave()
 
 	ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
 
-	ExitGame();
+	ExitGame(Command);
 }
 
 
@@ -1583,12 +1583,8 @@ void DrawGame()
 			int X = GameConfig().InternalWidth / 2 - 192;
 			Y = 545;
 			// продолжение игры
-			if (DrawButton384(X,Y, vw_GetText("NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
-				// переходим к выбору уровня
-				ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU;
-				ExitGameWithSave(); // после установки ComBuffer, т.к. можем переключить на Credits
-			}
-
+			if (DrawButton384(X,Y, vw_GetText("NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime))
+				ExitGameWithSave(eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU);
 		} else {
 			switch (GameMenuStatus) {
 			// основное меню игры
@@ -1634,10 +1630,9 @@ void DrawGame()
 				Y = Y+Prir;
 				if (DrawButton384(X,Y, vw_GetText("RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
 					// если убили, выводить диалог не нужно
-					if (PlayerFighter.expired()) {
-						ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
-						ExitGame();
-					} else
+					if (PlayerFighter.expired())
+						ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
+					else
 						SetCurrentDialogBox(eDialogBox::RestartLevelNoSave);
 				}
 
@@ -1645,10 +1640,9 @@ void DrawGame()
 				Y = Y+Prir;
 				if (DrawButton384(X,Y, vw_GetText("QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 					// если убили, выводить диалог не нужно
-					if (PlayerFighter.expired()) {
-						ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
-						ExitGame();
-					} else
+					if (PlayerFighter.expired())
+						ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
+					else
 						SetCurrentDialogBox(eDialogBox::QuiToMenuNoSave);
 				}
 
@@ -1739,9 +1733,7 @@ void DrawGame()
 			}
 		} else {
 			if (vw_GetKeyStatus(SDLK_ESCAPE)) {
-				ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
-				ExitGame();
-
+				ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
 				vw_SetKeyStatus(SDLK_ESCAPE, false);
 			}
 		}
@@ -1772,7 +1764,7 @@ void DrawGame()
 
 			// выходим из игры
 			RealExitGame();
-			ComBuffer = NewComBuffer;
+			ComBuffer = GameExitCommand;
 		}
 
 		SrcRect(0, 0, 2, 2);

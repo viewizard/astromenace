@@ -258,10 +258,8 @@ void GameDrawMissionFailed()
 		MissionFailedLifeTime -= TimeDelta;
 
 	// все, время вышло... нужно сделать сброс и загрузить меню
-	if (MissionFailedLifeTime <= 0.0f) {
-		ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU;
-		ExitGame();
-	}
+	if (MissionFailedLifeTime <= 0.0f)
+		ExitGame(eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU);
 
 	sRECT SrcRect, DstRect;
 
@@ -277,17 +275,13 @@ void GameDrawMissionFailed()
 	int Y = 180+270;
 
 	int X = GameConfig().InternalWidth / 2 - 230;
-	if (DrawButton200_2(X,Y, vw_GetText("QUIT"), 1.0f, false)) {
-		ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
-		ExitGame();
-	}
+	if (DrawButton200_2(X,Y, vw_GetText("QUIT"), 1.0f, false))
+		ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
 
 
 	X = GameConfig().InternalWidth / 2 + 30;
-	if (DrawButton200_2(X,Y, vw_GetText("RESTART"), 1.0f, false)) {
-		ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
-		ExitGame();
-	}
+	if (DrawButton200_2(X,Y, vw_GetText("RESTART"), 1.0f, false))
+		ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
 
 }
 

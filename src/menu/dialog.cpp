@@ -708,8 +708,7 @@ Dialogs with default type:
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			ComBuffer = eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU;
-			ExitGame();
+			ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
 			CloseDialog();
 		}
 		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
@@ -738,8 +737,7 @@ Dialogs with default type:
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
-			ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
-			ExitGame();
+			ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
 			CloseDialog();
 		}
 		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
