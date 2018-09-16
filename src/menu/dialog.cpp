@@ -1527,7 +1527,7 @@ Dialogs with default type:
 		// кнопки
 		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) {
 			CloseDialog();
-			ComBuffer = eCommand::SWITCH_TO_WORKSHOP;
+			SetComBuffer(eCommand::SWITCH_TO_WORKSHOP);
 			CurrentWorkshop = 3;
 			WorkshopCreate();
 		}

@@ -42,9 +42,13 @@
 namespace viewizard {
 namespace astromenace {
 
-// командный буфер
+namespace {
+
 eCommand ComBuffer{eCommand::DO_NOTHING};
 
+} // unnamed namespace
+
+// FIXME should be fixed, don't allow global scope interaction for local variables
 extern float CurrentGameSpeedShowTime;
 
 
@@ -165,6 +169,14 @@ static void ProceedCommand()
 	}
 
 	ComBuffer = eCommand::DO_NOTHING;
+}
+
+/*
+ * Set command buffer.
+ */
+void SetComBuffer(eCommand Command)
+{
+	ComBuffer = Command;
 }
 
 /*

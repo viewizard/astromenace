@@ -1288,7 +1288,7 @@ void InformationMenu()
 	Y = Y + Prir;
 	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		DestroyInfoObject();
-		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
+		SetComBuffer(eCommand::SWITCH_TO_MAIN_MENU);
 	}
 
 }

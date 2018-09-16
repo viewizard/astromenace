@@ -1764,7 +1764,7 @@ void DrawGame()
 
 			// выходим из игры
 			RealExitGame();
-			ComBuffer = GameExitCommand;
+			SetComBuffer(GameExitCommand);
 		}
 
 		SrcRect(0, 0, 2, 2);

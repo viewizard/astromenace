@@ -357,7 +357,7 @@ void WorkshopMenu()
 	int X = GameConfig().InternalWidth / 2 - 482;
 	int Y = 180+100*5;
 	if (DrawButton128_2(X,Y, vw_GetText("BACK"), MenuContentTransp, false)) {
-		ComBuffer = eCommand::SWITCH_TO_MISSION;
+		SetComBuffer(eCommand::SWITCH_TO_MISSION);
 		CanDrawWorkshop = false;
 		// ничего не тянем... только включили меню
 		DragWeaponNum = 0;

@@ -49,8 +49,7 @@ enum class eDialogBox;
 //------------------------------------------------------------------------------------
 // loop_proc.cpp
 //------------------------------------------------------------------------------------
-extern eCommand ComBuffer;
-
+void SetComBuffer(eCommand Command);
 void Loop_Proc();
 
 

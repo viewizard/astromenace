@@ -593,7 +593,7 @@ void DrawMenu()
 			LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
 			// переход на игру
 			WorkshopDestroyData();
-			ComBuffer = eCommand::SWITCH_FROM_MENU_TO_GAME;
+			SetComBuffer(eCommand::SWITCH_FROM_MENU_TO_GAME);
 		}
 
 		vw_Start2DMode(-1,1);
@@ -631,9 +631,9 @@ void MainMenu()
 	if (DrawButton384(X,Y, vw_GetText("START GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		// если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
 		if (CurrentProfile < 0)
-			ComBuffer = eCommand::SWITCH_TO_PROFILE;
+			SetComBuffer(eCommand::SWITCH_TO_PROFILE);
 		else
-			ComBuffer = eCommand::SWITCH_TO_MISSION;
+			SetComBuffer(eCommand::SWITCH_TO_MISSION);
 	}
 
 
@@ -642,19 +642,19 @@ void MainMenu()
 
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, vw_GetText("TOP SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime))
-		ComBuffer = eCommand::SWITCH_TO_TOP_SCORES;
+		SetComBuffer(eCommand::SWITCH_TO_TOP_SCORES);
 
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, vw_GetText("OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime))
-		ComBuffer = eCommand::SWITCH_TO_OPTIONS;
+		SetComBuffer(eCommand::SWITCH_TO_OPTIONS);
 
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, vw_GetText("INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime))
-		ComBuffer = eCommand::SWITCH_TO_INFORMATION;
+		SetComBuffer(eCommand::SWITCH_TO_INFORMATION);
 
 	Y = Y+Prir;
 	if (DrawButton384(X,Y, vw_GetText("CREDITS"), MenuContentTransp, &Button5Transp, &LastButton5UpdateTime)) {
-		ComBuffer = eCommand::SWITCH_TO_CREDITS;
+		SetComBuffer(eCommand::SWITCH_TO_CREDITS);
 		PlayMusicTheme(eMusicTheme::CREDITS, 2000, 2000);
 	}
 

@@ -403,7 +403,7 @@ void ProfileMenu()
 							ChangeGameConfig().LastProfile = CurrentProfile;
 							// если другой - нужно сбросить миссию...
 							CurrentMission = GameConfig().Profile[CurrentProfile].LastMission;
-							ComBuffer = eCommand::SWITCH_TO_MISSION;
+							SetComBuffer(eCommand::SWITCH_TO_MISSION);
 						}
 
 
@@ -413,7 +413,7 @@ void ProfileMenu()
 					} else {
 						// переход по 2-му клику
 						if (vw_GetMouseLeftDoubleClick(true)) {
-							ComBuffer = eCommand::SWITCH_TO_MISSION;
+							SetComBuffer(eCommand::SWITCH_TO_MISSION);
 						}
 					}
 				}
@@ -465,20 +465,20 @@ void ProfileMenu()
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("Difficulty"), MenuContentTransp, Off))
-		ComBuffer = eCommand::SWITCH_TO_DIFFICULTY;
+		SetComBuffer(eCommand::SWITCH_TO_DIFFICULTY);
 
 
 
 	int X = GameConfig().InternalWidth / 2 - 284;
 	int Y = 165+100*5;
 	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
-		ComBuffer = eCommand::SWITCH_TO_MAIN_MENU;
+		SetComBuffer(eCommand::SWITCH_TO_MAIN_MENU);
 
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = GameConfig().InternalWidth / 2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("MISSION LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
-		ComBuffer = eCommand::SWITCH_TO_MISSION;
+		SetComBuffer(eCommand::SWITCH_TO_MISSION);
 
 }
 
