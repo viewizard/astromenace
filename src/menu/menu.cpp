@@ -40,6 +40,7 @@
 #include "../object3d/object3d.h"
 #include "../gfx/star_system.h"
 #include "../gfx/shadow_map.h"
+#include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)

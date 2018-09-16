@@ -28,10 +28,10 @@
 // TODO translate comments
 
 #include "../core/core.h"
-#include "../enum.h"
 #include "../config/config.h"
 #include "../assets/texture.h"
 #include "../ui/cursor.h"
+#include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)

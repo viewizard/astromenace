@@ -65,27 +65,6 @@ enum class eGameMenuStatus {
 	CONFCONTROL
 };
 
-// commands, that should be executed after rendering cycle
-enum class eCommand {
-	DO_NOTHING,
-	SWITCH_TO_MAIN_MENU,
-	SWITCH_TO_TOP_SCORES,
-	SWITCH_TO_INTERFACE,
-	SWITCH_TO_OPTIONS,
-	SWITCH_TO_CONFCONTROL,
-	SWITCH_TO_OPTIONS_ADVANCED,
-	SWITCH_TO_INFORMATION,
-	SWITCH_TO_CREDITS,
-	SWITCH_TO_PROFILE,
-	SWITCH_TO_DIFFICULTY,
-	SWITCH_TO_MISSION,
-	SWITCH_TO_WORKSHOP,
-	SWITCH_FROM_MENU_TO_GAME, // also used for mission restart
-	SWITCH_FROM_GAME_TO_MISSION_MENU,
-	SWITCH_FROM_GAME_TO_MAIN_MENU,
-	SWITCH_FROM_GAME_TO_CREDITS
-};
-
 enum class eDialogBox {
 	None,
 	QuitFromGame,			// quit from menu, exit from the game

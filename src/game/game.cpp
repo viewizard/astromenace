@@ -45,6 +45,7 @@
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"
 #include "../object3d/space_ship/space_ship.h"
+#include "../command.h"
 #include <stdarg.h> // va_start
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
