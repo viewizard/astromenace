@@ -31,7 +31,6 @@
 
 #include "core/core.h"
 #include "config/config.h"
-#include "enum.h"
 #include "build_config.h"
 #include "ui/font.h"
 #include "ui/cursor.h"

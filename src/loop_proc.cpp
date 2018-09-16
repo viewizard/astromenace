@@ -28,7 +28,6 @@
 // TODO translate comments
 
 #include "core/core.h"
-#include "enum.h"
 #include "config/config.h"
 #include "platform/platform.h"
 #include "object3d/object3d.h"
