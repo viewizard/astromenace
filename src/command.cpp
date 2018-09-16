@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "command.h"
 #include "config/config.h"
 #include "object3d/object3d.h"
@@ -120,11 +118,11 @@ void cCommand::Proceed()
 		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
 		// FIXME code duplication, see SetMenu()
 		vw_ResetWheelStatus();
-		// ставим нужный лист миссий
+		// mission list
 		StartMission = 0;
 		EndMission = 4;
 		if (CurrentMission != -1)
-			if (CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
+			if (CurrentMission > 2) { // should be centered
 				StartMission = CurrentMission - 2;
 				EndMission = CurrentMission + 2;
 
