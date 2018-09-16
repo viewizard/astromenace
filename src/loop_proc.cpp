@@ -49,31 +49,134 @@ eCommand ComBuffer{eCommand::DO_NOTHING};
 extern float CurrentGameSpeedShowTime;
 
 
-//------------------------------------------------------------------------------------
-// зацикленная процедура работы программы...
-//------------------------------------------------------------------------------------
+/*
+ * Prepare to switch status.
+ */
+static void PrepareToSwitchStatus() {
+	SaveXMLConfigFile();
+	ReleaseAllObject3D();
+	vw_ReleaseAllParticleSystems();
+	vw_ReleaseAllLights();
+	StarSystemRelease();
+	vw_StopAllSoundsIfAllowed();
+}
+
+/*
+ * Proceed command from buffer.
+ */
+static void ProceedCommand()
+{
+	if (ComBuffer == eCommand::DO_NOTHING)
+		return;
+
+	switch (ComBuffer) {
+	case eCommand::SWITCH_TO_MAIN_MENU:
+		SetMenu(eMenuStatus::MAIN_MENU);
+		break;
+
+	case eCommand::SWITCH_TO_TOP_SCORES:
+		SetMenu(eMenuStatus::TOP_SCORES);
+		break;
+
+	case eCommand::SWITCH_TO_INTERFACE:
+		SetMenu(eMenuStatus::INTERFACE);
+		break;
+
+	case eCommand::SWITCH_TO_OPTIONS:
+		SetMenu(eMenuStatus::OPTIONS);
+		break;
+
+	case eCommand::SWITCH_TO_OPTIONS_ADVANCED:
+		SetMenu(eMenuStatus::OPTIONS_ADVANCED);
+		break;
+
+	case eCommand::SWITCH_TO_INFORMATION:
+		SetMenu(eMenuStatus::INFORMATION);
+		break;
+
+	case eCommand::SWITCH_TO_CREDITS:
+		SetMenu(eMenuStatus::CREDITS);
+		break;
+
+	case eCommand::SWITCH_TO_CONFCONTROL:
+		SetMenu(eMenuStatus::CONFCONTROL);
+		break;
+
+	case eCommand::SWITCH_TO_PROFILE:
+		SetMenu(eMenuStatus::PROFILE);
+		break;
+
+	case eCommand::SWITCH_TO_DIFFICULTY:
+		SetMenu(eMenuStatus::DIFFICULTY);
+		break;
+
+	case eCommand::SWITCH_TO_MISSION:
+		SetMenu(eMenuStatus::MISSION);
+		break;
+
+	case eCommand::SWITCH_TO_WORKSHOP:
+		SetMenu(eMenuStatus::WORKSHOP);
+		break;
+
+	case eCommand::SWITCH_FROM_MENU_TO_GAME: // also used for mission restart
+		PrepareToSwitchStatus();
+		InitGame();
+		PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
+		PlayVoicePhrase(eVoicePhrase::PrepareForAction, 1.0f);
+		break;
+
+	case eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU:
+		PrepareToSwitchStatus();
+		InitMenu(eMenuStatus::MISSION);
+		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
+		// FIXME code duplication, see SetMenu()
+		vw_ResetWheelStatus();
+		// ставим нужный лист миссий
+		StartMission = 0;
+		EndMission = 4;
+		if (CurrentMission != -1)
+			if (CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
+				StartMission = CurrentMission - 2;
+				EndMission = CurrentMission + 2;
+
+				if (CurrentMission >= AllMission - 2) {
+					StartMission = AllMission - 5;
+					EndMission = AllMission - 1;
+				}
+			}
+		break;
+
+	case eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU:
+		PrepareToSwitchStatus();
+		InitMenu(eMenuStatus::MAIN_MENU);
+		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
+		break;
+
+	case eCommand::SWITCH_FROM_GAME_TO_CREDITS:
+		PrepareToSwitchStatus();
+		InitMenu(eMenuStatus::CREDITS);
+		PlayMusicTheme(eMusicTheme::CREDITS, 2000, 2000);
+		// FIXME code duplication, see SetMenu()
+		InitCreditsMenu(vw_GetTimeThread(0));
+		break;
+
+	default:
+		std::cerr << __func__ << "(): " << "ComBuffer = " << static_cast<int>(ComBuffer) << " ... error!\n";
+		break;
+	}
+
+	ComBuffer = eCommand::DO_NOTHING;
+}
+
+/*
+ * Main loop.
+ */
 void Loop_Proc()
 {
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// работа с курсором
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	CursorUpdate();
 
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// начало прорисовки
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_BeginRendering(RI_COLOR_BUFFER | RI_DEPTH_BUFFER);
 
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// рисуем то, что нужно
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	switch (MenuStatus) {
 	case eMenuStatus::MAIN_MENU:
 	case eMenuStatus::TOP_SCORES:
@@ -95,159 +198,23 @@ void Loop_Proc()
 		break;
 	}
 
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// переходим в 2д режим
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_Start2DMode(-1,1);
 
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// вывод всех диалогов
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	DrawDialogBox();
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// рисуем курсор
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	CursorDraw();
-
-
-
-
 	cFPS::GetInstance().Draw();
 
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// завершение прорисовки
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_End2DMode();
 	vw_EndRendering();
 
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// выход по нажатию на Esc
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	if (vw_GetKeyStatus(SDLK_ESCAPE)) {
 		SetCurrentDialogBox(eDialogBox::QuitFromGame);
 		vw_SetKeyStatus(SDLK_ESCAPE, false);
 	}
 
-
-	auto PrepareToSwitchStatus = [] () {
-		SaveXMLConfigFile();
-		ReleaseAllObject3D();
-		vw_ReleaseAllParticleSystems();
-		vw_ReleaseAllLights();
-		StarSystemRelease();
-		vw_StopAllSoundsIfAllowed();
-	};
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// выполняем то, что есть в буфере команд, если там что-то есть
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (ComBuffer != eCommand::DO_NOTHING) {
-
-		switch (ComBuffer) {
-		case eCommand::SWITCH_TO_MAIN_MENU:
-			SetMenu(eMenuStatus::MAIN_MENU);
-			break;
-		case eCommand::SWITCH_TO_TOP_SCORES:
-			SetMenu(eMenuStatus::TOP_SCORES);
-			break;
-		case eCommand::SWITCH_TO_INTERFACE:
-			SetMenu(eMenuStatus::INTERFACE);
-			break;
-		case eCommand::SWITCH_TO_OPTIONS:
-			SetMenu(eMenuStatus::OPTIONS);
-			break;
-		case eCommand::SWITCH_TO_OPTIONS_ADVANCED:
-			SetMenu(eMenuStatus::OPTIONS_ADVANCED);
-			break;
-		case eCommand::SWITCH_TO_INFORMATION:
-			SetMenu(eMenuStatus::INFORMATION);
-			break;
-		case eCommand::SWITCH_TO_CREDITS:
-			SetMenu(eMenuStatus::CREDITS);
-			break;
-		case eCommand::SWITCH_TO_CONFCONTROL:
-			SetMenu(eMenuStatus::CONFCONTROL);
-			break;
-		case eCommand::SWITCH_TO_PROFILE:
-			SetMenu(eMenuStatus::PROFILE);
-			break;
-		case eCommand::SWITCH_TO_DIFFICULTY:
-			SetMenu(eMenuStatus::DIFFICULTY);
-			break;
-		case eCommand::SWITCH_TO_MISSION:
-			SetMenu(eMenuStatus::MISSION);
-			break;
-		case eCommand::SWITCH_TO_WORKSHOP:
-			SetMenu(eMenuStatus::WORKSHOP);
-			break;
-		case eCommand::SWITCH_FROM_MENU_TO_GAME: // also used for mission restart
-			PrepareToSwitchStatus();
-			InitGame();
-			PlayMusicTheme(eMusicTheme::GAME, 2000, 2000);
-			PlayVoicePhrase(eVoicePhrase::PrepareForAction, 1.0f);
-			break;
-		case eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU:
-			PrepareToSwitchStatus();
-			InitMenu(eMenuStatus::MISSION);
-			PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
-			// FIXME code duplication, see SetMenu()
-			vw_ResetWheelStatus();
-			// ставим нужный лист миссий
-			StartMission = 0;
-			EndMission = 4;
-			if (CurrentMission != -1)
-				if (CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
-					StartMission = CurrentMission-2;
-					EndMission = CurrentMission+2;
-
-					if (CurrentMission >= AllMission-2) {
-						StartMission = AllMission-5;
-						EndMission = AllMission-1;
-					}
-				}
-			break;
-		case eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU:
-			PrepareToSwitchStatus();
-			InitMenu(eMenuStatus::MAIN_MENU);
-			PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
-			break;
-		case eCommand::SWITCH_FROM_GAME_TO_CREDITS:
-			PrepareToSwitchStatus();
-			InitMenu(eMenuStatus::CREDITS);
-			PlayMusicTheme(eMusicTheme::CREDITS, 2000, 2000);
-			// FIXME code duplication, see SetMenu()
-			InitCreditsMenu(vw_GetTimeThread(0));
-			break;
-
-		default:
-			std::cerr << __func__ << "(): " << "ComBuffer = " << (int)ComBuffer << " ... error!\n";
-			break;
-
-		}
-
-		ComBuffer = eCommand::DO_NOTHING;
-	}
-
-
-
+	ProceedCommand();
 
 	cFPS::GetInstance().Update();
-
-
 
 	// после обхода всех активных элементов меню, надо подкорректировать состояние выбора через клавиатуру (если оно было)
 	if (vw_GetKeyStatus(SDLK_TAB)) {
@@ -281,13 +248,6 @@ void Loop_Proc()
 			CurrentKeyboardSelectMenuElement = 0;
 	}
 	CurrentActiveMenuElement = 0;
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// дополнительные функции, недокументированные возможности
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// делаем на рабочем столе бмп скриншоты
 	if (vw_GetKeyStatus(SDLK_PRINTSCREEN) || vw_GetKeyStatus(SDLK_F12)) {
@@ -349,9 +309,7 @@ void Loop_Proc()
 				ChangeGameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode = 1;
 			vw_SetKeyStatus(SDLK_F10, false);
 		}
-
 	}
-
 }
 
 } // astromenace namespace
