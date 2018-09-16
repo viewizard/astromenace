@@ -28,11 +28,11 @@
 #ifndef GFX_STARSYSTEM_H
 #define GFX_STARSYSTEM_H
 
-#include "../enum.h"
-
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+enum class eDrawType;
 
 // Star system initialization.
 void StarSystemInit(int Num, sVECTOR3D SetBaseRotation);
