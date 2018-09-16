@@ -34,7 +34,7 @@
 namespace viewizard {
 namespace astromenace {
 
-// commands, that should be executed after rendering cycle
+// commands, that should be proceeded after rendering cycle
 enum class eCommand {
 	DO_NOTHING,
 	SWITCH_TO_MAIN_MENU,
@@ -55,10 +55,26 @@ enum class eCommand {
 	SWITCH_FROM_GAME_TO_CREDITS
 };
 
-// Proceed command from buffer.
-void ProceedCommand();
-// Set command buffer.
-void SetComBuffer(eCommand Command);
+class cCommand {
+private:
+	cCommand() = default;
+	~cCommand() = default;
+
+	eCommand Command_{eCommand::DO_NOTHING};
+
+public:
+	cCommand(cCommand const&) = delete;
+	void operator = (cCommand const&) = delete;
+
+	static cCommand &GetInstance()
+	{
+		static cCommand Object;
+		return Object;
+	}
+
+	void Proceed();
+	void Set(eCommand Command);
+};
 
 } // astromenace namespace
 } // viewizard namespace

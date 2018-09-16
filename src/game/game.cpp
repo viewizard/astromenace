@@ -1765,7 +1765,7 @@ void DrawGame()
 
 			// выходим из игры
 			RealExitGame();
-			SetComBuffer(GameExitCommand);
+			cCommand::GetInstance().Set(GameExitCommand);
 		}
 
 		SrcRect(0, 0, 2, 2);

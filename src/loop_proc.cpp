@@ -88,7 +88,7 @@ void Loop_Proc()
 		vw_SetKeyStatus(SDLK_ESCAPE, false);
 	}
 
-	ProceedCommand();
+	cCommand::GetInstance().Proceed();
 
 	cFPS::GetInstance().Update();
 

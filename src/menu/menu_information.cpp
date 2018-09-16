@@ -1290,7 +1290,7 @@ void InformationMenu()
 	Y = Y + Prir;
 	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		DestroyInfoObject();
-		SetComBuffer(eCommand::SWITCH_TO_MAIN_MENU);
+		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 	}
 
 }

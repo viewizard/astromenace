@@ -351,7 +351,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
 			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
 		} else
-			SetComBuffer(eCommand::SWITCH_TO_OPTIONS_ADVANCED);
+			cCommand::GetInstance().Set(eCommand::SWITCH_TO_OPTIONS_ADVANCED);
 	}
 
 
@@ -361,7 +361,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			SetOptionsMenu(eMenuStatus::INTERFACE);
 			GameMenuStatus = eGameMenuStatus::INTERFACE;
 		} else
-			SetComBuffer(eCommand::SWITCH_TO_INTERFACE);
+			cCommand::GetInstance().Set(eCommand::SWITCH_TO_INTERFACE);
 	}
 
 
@@ -371,7 +371,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
 			GameMenuStatus = eGameMenuStatus::CONFCONTROL;
 		} else
-			SetComBuffer(eCommand::SWITCH_TO_CONFCONTROL);
+			cCommand::GetInstance().Set(eCommand::SWITCH_TO_CONFCONTROL);
 	}
 
 
@@ -391,7 +391,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
 			if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
-				SetComBuffer(eCommand::SWITCH_TO_MAIN_MENU);
+				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 	} else {
 		X = GameConfig().InternalWidth / 2 - 256 - 38;
@@ -401,7 +401,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
 			if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
-				SetComBuffer(eCommand::SWITCH_TO_MAIN_MENU);
+				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 		X = GameConfig().InternalWidth / 2 + 38;
 		if (DrawButton256(X,Y, vw_GetText("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {

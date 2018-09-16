@@ -236,7 +236,7 @@ void MissionMenu()
 		vw_DrawText(X1+Size, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
 
 	if (DrawButton200_2(X1+616-72, 212, vw_GetText("Change Profile"), MenuContentTransp, false)) {
-		SetComBuffer(eCommand::SWITCH_TO_PROFILE);
+		cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
 	}
 
 
@@ -336,12 +336,12 @@ void MissionMenu()
 							if (GameConfig().NeedShowHint[5]) {
 								SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);
 							} else {
-								SetComBuffer(eCommand::SWITCH_TO_WORKSHOP);
+								cCommand::GetInstance().Set(eCommand::SWITCH_TO_WORKSHOP);
 								CurrentWorkshop = 3;
 								WorkshopCreate();
 							}
 						} else {
-							SetComBuffer(eCommand::SWITCH_TO_WORKSHOP);
+							cCommand::GetInstance().Set(eCommand::SWITCH_TO_WORKSHOP);
 							CurrentWorkshop = 3;
 							WorkshopCreate();
 						}
@@ -452,7 +452,7 @@ void MissionMenu()
 	int X = GameConfig().InternalWidth / 2 - 284;
 	int Y = 165 + 100 * 5;
 	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
-		SetComBuffer(eCommand::SWITCH_TO_MAIN_MENU);
+		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 
 	X = GameConfig().InternalWidth / 2 + 28;
 	if (DrawButton256(X,Y, vw_GetText("NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
@@ -461,12 +461,12 @@ void MissionMenu()
 			if (GameConfig().NeedShowHint[5]) {
 				SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);
 			} else {
-				SetComBuffer(eCommand::SWITCH_TO_WORKSHOP);
+				cCommand::GetInstance().Set(eCommand::SWITCH_TO_WORKSHOP);
 				CurrentWorkshop = 3;
 				WorkshopCreate();
 			}
 		} else {
-			SetComBuffer(eCommand::SWITCH_TO_WORKSHOP);
+			cCommand::GetInstance().Set(eCommand::SWITCH_TO_WORKSHOP);
 			CurrentWorkshop = 3;
 			WorkshopCreate();
 		}

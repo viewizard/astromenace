@@ -38,13 +38,6 @@
 namespace viewizard {
 namespace astromenace {
 
-namespace {
-
-eCommand ComBuffer{eCommand::DO_NOTHING};
-
-} // unnamed namespace
-
-
 /*
  * Prepare to switch status.
  */
@@ -58,14 +51,14 @@ static void PrepareToSwitchStatus() {
 }
 
 /*
- * Proceed command from buffer.
+ * Proceed command.
  */
-void ProceedCommand()
+void cCommand::Proceed()
 {
-	if (ComBuffer == eCommand::DO_NOTHING)
+	if (Command_ == eCommand::DO_NOTHING)
 		return;
 
-	switch (ComBuffer) {
+	switch (Command_) {
 	case eCommand::SWITCH_TO_MAIN_MENU:
 		SetMenu(eMenuStatus::MAIN_MENU);
 		break;
@@ -157,19 +150,19 @@ void ProceedCommand()
 		break;
 
 	default:
-		std::cerr << __func__ << "(): " << "ComBuffer = " << static_cast<int>(ComBuffer) << " ... error!\n";
+		std::cerr << __func__ << "(): " << "ComBuffer = " << static_cast<int>(Command_) << " ... error!\n";
 		break;
 	}
 
-	ComBuffer = eCommand::DO_NOTHING;
+	Command_ = eCommand::DO_NOTHING;
 }
 
 /*
- * Set command buffer.
+ * Set command.
  */
-void SetComBuffer(eCommand Command)
+void cCommand::Set(eCommand Command)
 {
-	ComBuffer = Command;
+	Command_ = Command;
 }
 
 } // astromenace namespace

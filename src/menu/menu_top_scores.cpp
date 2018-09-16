@@ -135,7 +135,7 @@ void TopScoresMenu()
 	int X = (GameConfig().InternalWidth - 384) / 2;
 	int Y = 165 + 100 * 5;
 	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
-		SetComBuffer(eCommand::SWITCH_TO_MAIN_MENU);
+		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 }
 
 } // astromenace namespace
