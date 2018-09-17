@@ -44,8 +44,6 @@ void vw_PauseTimeThreads();
 void vw_ResumeTimeThreads();
 // Set time thread speed for particular thread.
 void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed = 1.0f);
-// Get time thread speed for particular thread.
-float vw_GetTimeThreadSpeed(int TimeThread);
 
 } // viewizard namespace
 

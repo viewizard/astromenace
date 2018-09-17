@@ -169,17 +169,4 @@ void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 	TimeThreadsMap[TimeThread].Speed = NewSpeed;
 }
 
-/*
- * Get time thread speed for particular thread.
- */
-float vw_GetTimeThreadSpeed(int TimeThread)
-{
-	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
-		std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
-		return 0.0f;
-	}
-
-	return TimeThreadsMap[TimeThread].Speed;
-}
-
 } // viewizard namespace
