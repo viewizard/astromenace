@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO move to SDL_GetTicks() usage
+
 // TODO add support for SDL_INIT_HAPTIC (force feedback)
 
 // NOTE SDL2 also provide SDL_INIT_GAMECONTROLLER now

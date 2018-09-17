@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO move to SDL_GetTicks() usage
+
 /*
 
 Note, this code should not interact with mouse, caller should
