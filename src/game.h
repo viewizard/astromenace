@@ -38,10 +38,8 @@ struct sVECTOR3D;
 
 namespace astromenace {
 
-class cSpaceStars;
 class cSpaceShip;
 enum class eCommand;
-enum class eMusicTheme;
 enum class eMenuStatus;
 enum class eGameMenuStatus;
 enum class eDialogBox;
