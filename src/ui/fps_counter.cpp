@@ -42,9 +42,9 @@ void cFPS::Switch()
 	if (!GameConfig().ShowFPS)
 		return;
 
-	LastTick = SDL_GetTicks();
-	CurrentFPS = 0.0f;
-	CurrentFrame = 0;
+	LastTick_ = SDL_GetTicks();
+	CurrentFPS_ = 0.0f;
+	CurrentFrame_ = 0;
 }
 
 /*
@@ -70,11 +70,11 @@ void cFPS::Draw()
 		return;
 
 	if (GameConfig().VSync)
-		vw_DrawText(6, 5, 0, 0, 1.0f, TextColor, 0.99f,
-			    "%s %.1f (VSync - %s)", vw_GetText("fps"), CurrentFPS, vw_GetText("On"));
+		vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 0.99f,
+			    "%s %.1f (VSync - %s)", vw_GetText("fps"), CurrentFPS_, vw_GetText("On"));
 	else
-		vw_DrawText(6, 5, 0, 0, 1.0f, TextColor, 0.99f,
-			    "%s %.1f", vw_GetText("fps"), CurrentFPS);
+		vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 0.99f,
+			    "%s %.1f", vw_GetText("fps"), CurrentFPS_);
 }
 
 /*
@@ -87,22 +87,22 @@ void cFPS::Update()
 		return;
 
 	uint32_t CurrentTick = SDL_GetTicks();
-	if (LastTick > CurrentTick) { // game was restarted, or SDL was re-inited
-			LastTick = CurrentTick;
-			CurrentFPS = 0.0f;
-			CurrentFrame = 0;
+	if (LastTick_ > CurrentTick) { // game was restarted, or SDL was re-inited
+			LastTick_ = CurrentTick;
+			CurrentFPS_ = 0.0f;
+			CurrentFrame_ = 0;
 	} else {
-		uint32_t TicksDelta = CurrentTick - LastTick;
+		uint32_t TicksDelta = CurrentTick - LastTick_;
 		constexpr uint32_t TicksInSecond{1000};
 
 		if (TicksDelta >= TicksInSecond) {
-			CurrentFPS = static_cast<float>(CurrentFrame * TicksInSecond) / TicksDelta;
-			CurrentFrame = 0;
-			LastTick = CurrentTick;
+			CurrentFPS_ = static_cast<float>(CurrentFrame_ * TicksInSecond) / TicksDelta;
+			CurrentFrame_ = 0;
+			LastTick_ = CurrentTick;
 		}
 	}
 
-	CurrentFrame++;
+	CurrentFrame_++;
 }
 
 } // astromenace namespace

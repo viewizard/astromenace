@@ -39,10 +39,10 @@ private:
 	cFPS() = default;
 	~cFPS() = default;
 
-	uint32_t LastTick{0};
-	float CurrentFPS{0.0f};
-	uint32_t CurrentFrame{0};
-	sRGBCOLOR TextColor{eRGBCOLOR::white};
+	uint32_t LastTick_{0};
+	float CurrentFPS_{0.0f};
+	uint32_t CurrentFrame_{0};
+	sRGBCOLOR TextColor_{eRGBCOLOR::white};
 
 public:
 	cFPS(cFPS const&) = delete;
