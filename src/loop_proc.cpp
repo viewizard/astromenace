@@ -87,7 +87,7 @@ void Loop_Proc()
 	}
 
 	cCommand::GetInstance().Proceed();
-	cGameSpeed::GetInstance().CheckKeyboard();
+	cGameSpeed::GetInstance().Update();
 	cFPS::GetInstance().Update();
 
 	// после обхода всех активных элементов меню, надо подкорректировать состояние выбора через клавиатуру (если оно было)

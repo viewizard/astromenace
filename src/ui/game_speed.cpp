@@ -66,6 +66,7 @@ void cGameSpeed::SetSpeed(float Speed)
 	SetThreadSpeed(Speed);
 
 	RemainingDrawTime_ = 2.0f;
+	LastUpdateTick_ = SDL_GetTicks();
 }
 
 /*
@@ -93,10 +94,28 @@ void cGameSpeed::CheckKeyboard()
 }
 
 /*
+ * Update game speed status.
+ */
+void cGameSpeed::Update()
+{
+	CheckKeyboard();
+
+	if (RemainingDrawTime_ <= 0.0f)
+		return;
+
+	uint32_t CurrentTick = SDL_GetTicks();
+	if (LastUpdateTick_ < CurrentTick) {
+		constexpr uint32_t TicksInSecond{1000};
+		RemainingDrawTime_ -= static_cast<float>(CurrentTick - LastUpdateTick_) / TicksInSecond;
+	}
+	LastUpdateTick_ = CurrentTick;
+}
+
+/*
  * Draw current game speed.
  * Note, caller should setup 2D mode rendering first.
  */
-void cGameSpeed::Draw(float TimeDelta)
+void cGameSpeed::Draw()
 {
 	if (RemainingDrawTime_ <= 0.0f)
 		return;
@@ -110,8 +129,6 @@ void cGameSpeed::Draw(float TimeDelta)
 		    "%s x%1.1f", vw_GetText("Game Speed:"), GameConfig().GameSpeed);
 
 	ResetFontSize();
-
-	RemainingDrawTime_ -= TimeDelta;
 }
 
 } // astromenace namespace

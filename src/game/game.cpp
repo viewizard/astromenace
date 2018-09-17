@@ -1423,7 +1423,7 @@ void DrawGame()
 
 
 
-	cGameSpeed::GetInstance().Draw(TimeDelta);
+	cGameSpeed::GetInstance().Draw();
 
 
 

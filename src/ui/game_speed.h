@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO move to SDL_GetTicks() usage for notification timer
-
 // TODO change sources, use GameTimeThread instead of 'magic' number "1"
 
 #ifndef UI_GAMESPEED_H
@@ -46,7 +44,10 @@ private:
 	cGameSpeed() = default;
 	~cGameSpeed() = default;
 
+	void CheckKeyboard();
+
 	float RemainingDrawTime_{0.0f};
+	uint32_t LastUpdateTick_{0};
 
 public:
 	cGameSpeed(cGameSpeed const&) = delete;
@@ -61,8 +62,8 @@ public:
 	void InitGameSpeed();
 	void SetThreadSpeed(float Speed);
 	void SetSpeed(float Speed);
-	void CheckKeyboard();
-	void Draw(float TimeDelta);
+	void Draw();
+	void Update();
 };
 
 } // astromenace namespace
