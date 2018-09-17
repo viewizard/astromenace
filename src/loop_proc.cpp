@@ -32,6 +32,7 @@
 #include "platform/platform.h"
 #include "ui/cursor.h"
 #include "ui/fps_counter.h"
+#include "ui/game_speed.h"
 #include "gfx/star_system.h"
 #include "command.h"
 #include "enum.h"
@@ -40,10 +41,6 @@
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
-
-// FIXME should be fixed, don't allow global scope interaction for local variables
-extern float CurrentGameSpeedShowTime;
-
 
 /*
  * Main loop.
@@ -90,7 +87,7 @@ void Loop_Proc()
 	}
 
 	cCommand::GetInstance().Proceed();
-
+	cGameSpeed::GetInstance().CheckKeyboard();
 	cFPS::GetInstance().Update();
 
 	// после обхода всех активных элементов меню, надо подкорректировать состояние выбора через клавиатуру (если оно было)
@@ -135,34 +132,6 @@ void Loop_Proc()
 		vw_Screenshot(GameConfig().Width, GameConfig().Height, GetDesktopPath() + std::string{tmpBuffer.data()});
 		vw_SetKeyStatus(SDLK_PRINTSCREEN, false);
 		vw_SetKeyStatus(SDLK_F12, false);
-	}
-
-	// управление скоростью игры, только в самой игре!
-	if ((MenuStatus == eMenuStatus::GAME) &&
-	    (GameContentTransp <= 0.0f) &&
-	    !GameMissionCompleteStatus) {
-		if (vw_GetKeyStatus(SDLK_F5)) {
-			ChangeGameConfig().GameSpeed -= 0.1f;
-			if (GameConfig().GameSpeed < 0.1f)
-				ChangeGameConfig().GameSpeed = 0.1f;
-			CurrentGameSpeedShowTime = 2.0f;
-			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
-			vw_SetKeyStatus(SDLK_F5, false);
-		}
-		if (vw_GetKeyStatus(SDLK_F6)) {
-			ChangeGameConfig().GameSpeed = 1.5f;
-			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
-			CurrentGameSpeedShowTime = 2.0f;
-			vw_SetKeyStatus(SDLK_F6, false);
-		}
-		if (vw_GetKeyStatus(SDLK_F7)) {
-			ChangeGameConfig().GameSpeed += 0.1f;
-			if (GameConfig().GameSpeed > 3.0f)
-				ChangeGameConfig().GameSpeed = 3.0f;
-			CurrentGameSpeedShowTime = 2.0f;
-			vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
-			vw_SetKeyStatus(SDLK_F7, false);
-		}
 	}
 
 	if (MenuStatus == eMenuStatus::GAME) {

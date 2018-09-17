@@ -34,6 +34,7 @@
 #include "build_config.h"
 #include "ui/font.h"
 #include "ui/cursor.h"
+#include "ui/game_speed.h"
 #include "assets/audio.h"
 #include "gfx/shadow_map.h"
 #include "platform/platform.h"
@@ -336,7 +337,7 @@ static void Loop()
 				NeedShowGameMenu = true;
 				NeedHideGameMenu = false;
 				GameContentTransp = 1.0f;
-				vw_SetTimeThreadSpeed(1, 0.0f);
+				cGameSpeed::GetInstance().SetThreadSpeed(0.0f);
 				SetShowGameCursor(true);
 			}
 

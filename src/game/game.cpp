@@ -37,8 +37,8 @@
 
 #include "../core/core.h"
 #include "../config/config.h"
-#include "../ui/font.h"
 #include "../ui/cursor.h"
+#include "../ui/game_speed.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../gfx/star_system.h"
@@ -166,12 +166,6 @@ extern std::weak_ptr<cParticleSystem> Shild2;
 
 // для звука открытия-закрытия меню в игре
 unsigned int SoundShowHideMenu{0};
-
-
-// для отображения скорости
-float CurrentGameSpeed = 0.0f;
-// время, которое показываем скорость
-float CurrentGameSpeedShowTime = 0.0f;
 
 
 float LastGameOnOffUpdateTime = 0.0f;
@@ -655,8 +649,8 @@ void InitGame()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// инициализация счета времени (всегда первым)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_InitTimeThread(1);
-	vw_SetTimeThreadSpeed(1, GameConfig().GameSpeed);
+	cGameSpeed::GetInstance().InitGameSpeed();
+
 
 
 
@@ -858,7 +852,6 @@ void InitGame()
 	GameMissionCompleteStatusShowDialog = false;
 
 	SoundShowHideMenu = 0;
-	CurrentGameSpeedShowTime = 2.0f;
 
 	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 	GameBlackTransp = 1.0f;
@@ -1430,24 +1423,7 @@ void DrawGame()
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Скорость игры, если была изменена
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (GameContentTransp <= 0.0f)
-		CurrentGameSpeed = GameConfig().GameSpeed;
-	if (CurrentGameSpeedShowTime > 0.0f) {
-		float GameSpeedShowTransp = CurrentGameSpeedShowTime;
-		if (GameSpeedShowTransp > 1.0f)
-			GameSpeedShowTransp = 1.0f;
-
-		vw_SetFontSize(20);
-		int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidth("%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed)) / 2;
-		vw_DrawText(TmpFontSize, 80, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameSpeedShowTransp, "%s x%1.1f", vw_GetText("Game Speed:"), CurrentGameSpeed);
-		ResetFontSize();
-
-		CurrentGameSpeedShowTime -= TimeDelta;
-		if (CurrentGameSpeedShowTime < 0.0f) CurrentGameSpeedShowTime = 0.0f;
-	}
+	cGameSpeed::GetInstance().Draw(TimeDelta);
 
 
 
@@ -1491,7 +1467,7 @@ void DrawGame()
 		}
 		// плавно возвращаем игре сокрость
 		if (GameContentTransp != 0.0f)
-			vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp) * GameConfig().GameSpeed);
+			cGameSpeed::GetInstance().SetThreadSpeed((1.0f - GameContentTransp) * GameConfig().GameSpeed);
 	}
 	// делаем полавное угасание меню
 	if (NeedHideGameMenu) {
@@ -1506,7 +1482,7 @@ void DrawGame()
 			SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
 		}
 		// останавливаем игру
-		vw_SetTimeThreadSpeed(1, (1.0f - GameContentTransp) * GameConfig().GameSpeed);
+		cGameSpeed::GetInstance().SetThreadSpeed((1.0f - GameContentTransp) * GameConfig().GameSpeed);
 	}
 	LastGameUpdateTime = vw_GetTimeThread(0);
 
