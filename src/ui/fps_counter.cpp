@@ -57,7 +57,6 @@ void cFPS::CheckKeyboard()
 
 	vw_SetKeyStatus(SDLK_F2, false);
 	Switch();
-
 }
 
 /*
@@ -83,14 +82,15 @@ void cFPS::Draw()
 void cFPS::Update()
 {
 	CheckKeyboard();
+
 	if (!GameConfig().ShowFPS)
 		return;
 
 	uint32_t CurrentTick = SDL_GetTicks();
 	if (LastTick_ > CurrentTick) { // game was restarted, or SDL was re-inited
-			LastTick_ = CurrentTick;
-			CurrentFPS_ = 0.0f;
-			CurrentFrame_ = 0;
+		LastTick_ = CurrentTick;
+		CurrentFPS_ = 0.0f;
+		CurrentFrame_ = 0;
 	} else {
 		uint32_t TicksDelta = CurrentTick - LastTick_;
 		constexpr uint32_t TicksInSecond{1000};

@@ -39,6 +39,8 @@ private:
 	cFPS() = default;
 	~cFPS() = default;
 
+	void CheckKeyboard();
+
 	uint32_t LastTick_{0};
 	float CurrentFPS_{0.0f};
 	uint32_t CurrentFrame_{0};
@@ -55,7 +57,6 @@ public:
 	}
 
 	void Switch();
-	void CheckKeyboard();
 	void Draw();
 	void Update();
 };
