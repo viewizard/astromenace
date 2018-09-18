@@ -19,7 +19,7 @@
 	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
 
 
-	Website: https://www.viewizard.com/
+	Website: https://viewizard.com/
 	Project: https://github.com/viewizard/astromenace
 	E-mail: viewizard@viewizard.com
 
@@ -98,7 +98,7 @@ const std::vector<std::string> CreditsArray{
 	"",
 	" ", /* this is correct, we need not empty line for white text color in next line */
 	"Copyright © 2007-2018, Viewizard",
-	"www.viewizard.com"
+	"https://viewizard.com"
 };
 
 float CurrentTextPos{0.0f};
@@ -166,7 +166,7 @@ void CreditsMenu()
 	X = GameConfig().InternalWidth / 2 + 38;
 	if (DrawButton256(X,Y, vw_GetText("DONATE"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
 	{
-		vw_OpenWebsiteURL("https://www.viewizard.com/donate.html");
+		vw_OpenWebsiteURL("https://viewizard.com/donate.html");
 	}
 }
 

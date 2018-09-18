@@ -22,7 +22,7 @@ The game provides a wide variety of armaments and weapon upgrades for dischargin
   <img src="./share/preview2.png" alt="preview"/>
 </p>
 
-More information and screenshots could be found at [AstroMenace website](https://www.viewizard.com/).
+More information and screenshots could be found at [AstroMenace website](https://viewizard.com/).
 
 ## Installation
 
