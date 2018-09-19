@@ -35,6 +35,13 @@
 namespace viewizard {
 namespace astromenace {
 
+constexpr float DefaultSpeed{1.5f}; // FIXME should be the same as sGameConfig::GameSpeed default value
+constexpr float SpeedChangeStep{0.1f};
+constexpr float MinSpeed{0.1f};
+constexpr float MaxSpeed{3.0f};
+constexpr float ShowNotificationSeconds{2.0f};
+
+
 /*
  * Init/re-init time thread and setup game speed.
  */
@@ -57,12 +64,12 @@ void cGameSpeed::SetThreadSpeed(float Speed)
  */
 void cGameSpeed::SetSpeed(float Speed)
 {
-	vw_Clamp(Speed, 0.1f, 3.0f);
+	vw_Clamp(Speed, MinSpeed, MaxSpeed);
 
 	ChangeGameConfig().GameSpeed = Speed;
 	SetThreadSpeed(Speed);
 
-	RemainingDrawTime_ = 2.0f;
+	RemainingDrawTime_ = ShowNotificationSeconds;
 	LastUpdateTick_ = SDL_GetTicks();
 }
 
@@ -77,15 +84,15 @@ void cGameSpeed::CheckKeyboard()
 		return;
 
 	if (vw_GetKeyStatus(SDLK_F5)) {
-		SetSpeed(GameConfig().GameSpeed - 0.1f);
+		SetSpeed(GameConfig().GameSpeed - SpeedChangeStep);
 		vw_SetKeyStatus(SDLK_F5, false);
 	}
 	if (vw_GetKeyStatus(SDLK_F6)) {
-		SetSpeed(1.5f);
+		SetSpeed(DefaultSpeed);
 		vw_SetKeyStatus(SDLK_F6, false);
 	}
 	if (vw_GetKeyStatus(SDLK_F7)) {
-		SetSpeed(GameConfig().GameSpeed + 0.1f);
+		SetSpeed(GameConfig().GameSpeed + SpeedChangeStep);
 		vw_SetKeyStatus(SDLK_F7, false);
 	}
 }
@@ -102,7 +109,7 @@ void cGameSpeed::Update()
 
 	uint32_t CurrentTick = SDL_GetTicks();
 	if (LastUpdateTick_ < CurrentTick) {
-		constexpr uint32_t TicksInSecond{1000};
+		constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
 		RemainingDrawTime_ -= static_cast<float>(CurrentTick - LastUpdateTick_) / TicksInSecond;
 	}
 	LastUpdateTick_ = CurrentTick;

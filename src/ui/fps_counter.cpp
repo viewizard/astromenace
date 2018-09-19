@@ -93,7 +93,7 @@ void cFPS::Update()
 		CurrentFrame_ = 0;
 	} else {
 		uint32_t TicksDelta = CurrentTick - LastTick_;
-		constexpr uint32_t TicksInSecond{1000};
+		constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
 
 		if (TicksDelta >= TicksInSecond) {
 			CurrentFPS_ = static_cast<float>(CurrentFrame_ * TicksInSecond) / TicksDelta;
