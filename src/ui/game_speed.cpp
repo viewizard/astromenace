@@ -57,10 +57,7 @@ void cGameSpeed::SetThreadSpeed(float Speed)
  */
 void cGameSpeed::SetSpeed(float Speed)
 {
-	if (Speed < 0.1f)
-		Speed = 0.1f;
-	else if(Speed > 3.0f)
-		Speed = 3.0f;
+	vw_Clamp(Speed, 0.1f, 3.0f);
 
 	ChangeGameConfig().GameSpeed = Speed;
 	SetThreadSpeed(Speed);
