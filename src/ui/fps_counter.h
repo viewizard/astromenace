@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO this is temporary code, should be revised to be a part of new 'menu' window class hierarchy instead of singleton
+
 #ifndef UI_FPSCOUNTER_H
 #define UI_FPSCOUNTER_H
 

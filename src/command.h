@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// TODO this is temporary code, should be removed on 'menu' code refactoring, since
+//      we should separate "draw" and "action", so we should remove combuffer at all
+
 #ifndef COMMAND_H
 #define COMMAND_H
 

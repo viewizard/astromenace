@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// TODO this is temporary code, should be revised to be a part of new 'menu' window class hierarchy instead of singleton
+
 // TODO change sources, use GameTimeThread instead of 'magic' number "1"
 
 #ifndef UI_GAMESPEED_H
