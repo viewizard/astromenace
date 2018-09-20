@@ -115,7 +115,7 @@ struct sPilotProfile {
 	uint8_t SecondaryWeaponFireMode{2};	// 1 - shoot a volley, 2 - shoot a burst
 
 	int OpenLevelNum{0};	// allowed missions
-	int LastMission{0};	// current chosen mission
+	int LastMission{0};	// last chosen mission
 
 	int ByMissionExperience[config::MAX_MISSIONS];	// experience for each mission
 	int MissionReplayCount[config::MAX_MISSIONS];	// how many times mission was replayed

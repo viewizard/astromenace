@@ -64,22 +64,16 @@ void GameSetMissionTitleData(float ShowTime, int Num)
 	LastMissionFailedUpdateTime = vw_GetTimeThread(0);
 }
 
-
-
-
 //------------------------------------------------------------------------------------
 // считаем, сколько в ширину займет прорисовка номера
 //------------------------------------------------------------------------------------
-int CheckMissionTitleNum(const char *Num)
+static int CheckMissionTitleNum(const char *Num)
 {
 	sRECT SrcRect;
-	int XSum = 0;
+	int tmpWidth{0};
 
-	// считаем
-	for (size_t i=0; i<strlen(Num); i++) {
-		char Char = Num[i];
-
-		switch (Char) {
+	for (size_t i = 0; i < strlen(Num); i++) {
+		switch (Num[i]) {
 		case '1':
 			SrcRect(15, 1, 48, 63);
 			break;
@@ -112,31 +106,24 @@ int CheckMissionTitleNum(const char *Num)
 			break;
 		}
 
-		XSum += SrcRect.right - SrcRect.left;
+		tmpWidth += SrcRect.right - SrcRect.left;
 	}
 
-	return XSum;
+	return tmpWidth;
 }
-
-
 
 //------------------------------------------------------------------------------------
 // прорисовка номера
 //------------------------------------------------------------------------------------
-void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
+static void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 {
-	// здесь X - крайняя левая(!!!) точка
-	// Y - крайняя верхняя точка (т.е. как и везде)
+	// note, we use left-top as starting point (upper left is origin)
 
 	sRECT SrcRect, DstRect;
 	int XStart = X;
 
-
-	// рисуем
-	for (size_t i=0; i<strlen(Num); i++) {
-		char Char = Num[i];
-
-		switch (Char) {
+	for (size_t i = 0; i < strlen(Num); i++) {
+		switch (Num[i]) {
 		case '1':
 			SrcRect(15,1,48,63);
 			break;
@@ -169,64 +156,47 @@ void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 			break;
 		}
 
-
-		DstRect(XStart,Y,XStart+(SrcRect.right - SrcRect.left),Y+(SrcRect.bottom - SrcRect.top));
+		DstRect(XStart, Y, XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top));
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/nums.tga"), true, Transp);
 		XStart += SrcRect.right - SrcRect.left;
 	}
-
 }
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // прорисовка номера миссии
 //------------------------------------------------------------------------------------
 void GameDrawMissionTitle()
 {
-	// нам тут делать нечего
-	if (MissionTitleLifeTime <= 0.0f) return;
+	if (MissionTitleLifeTime <= 0.0f)
+		return;
 
 	float TimeDelta = vw_GetTimeThread(0) - LastMissionTitleUpdateTime;
 	LastMissionTitleUpdateTime = vw_GetTimeThread(0);
-
 	MissionTitleLifeTime -= TimeDelta;
 
-
 	sRECT SrcRect, DstRect;
-
 	std::string buffer{std::to_string(MissionTitleNum)};
 
 	// вывод надписи Mission
 
-	// считаем сколько в ширину надпись всего... 30 - пробел между надписью и номером
-	int TotalW = 226+20+CheckMissionTitleNum(buffer.c_str());
+	// считаем сколько в ширину надпись всего... 20 - пробел между надписью и номером
+	int TotalW = 226 + 20 + CheckMissionTitleNum(buffer.c_str());
 	// находим откуда начинать рисовать
 	int XStart = (GameConfig().InternalWidth - TotalW) / 2;
 
-	SrcRect(0,0,226,64);
-	DstRect(XStart,352,XStart+226,352+64);
+	SrcRect(0, 0, 226, 64);
+	DstRect(XStart, 352, XStart + 226, 352 + 64);
 
+	// вывод номера миссии
 	if (MissionTitleLifeTime >= 1.0f) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")), true);
-		// вывод номера миссии
-		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), 1.0f);
+		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, buffer.c_str(), 1.0f);
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")),
 			  true, MissionTitleLifeTime);
-		// вывод номера миссии
-		DrawMissionTitleNum(XStart+226+20, 352+1, buffer.c_str(), MissionTitleLifeTime);
+		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, buffer.c_str(), MissionTitleLifeTime);
 	}
-
-
 }
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // установка времени отображения ShowTime миссия провалена
@@ -243,14 +213,13 @@ void GameSetMissionFailedData(float ShowTime)
 	SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
 }
 
-
 //------------------------------------------------------------------------------------
 // прорисовка миссия провалена
 //------------------------------------------------------------------------------------
 void GameDrawMissionFailed()
 {
-	// нам тут делать нечего
-	if (MissionFailedLifeTime <= 0.0f) return;
+	if (MissionFailedLifeTime <= 0.0f)
+		return;
 
 	float TimeDelta = vw_GetTimeThread(0) - LastMissionFailedUpdateTime;
 	LastMissionFailedUpdateTime = vw_GetTimeThread(0);
@@ -268,23 +237,16 @@ void GameDrawMissionFailed()
 	// вывод надписи Mission
 	SrcRect(0,0,512,84);
 	DstRect(GameConfig().InternalWidth / 2 - 256, 342, GameConfig().InternalWidth / 2 + 256, 342 + 84);
-
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/missionfailed.tga")), true);
 
-
-	// выводим кнопки...
-
-	int Y = 180+270;
-
+	int Y = 180 + 270;
 	int X = GameConfig().InternalWidth / 2 - 230;
 	if (DrawButton200_2(X,Y, vw_GetText("QUIT"), 1.0f, false))
 		ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
 
-
 	X = GameConfig().InternalWidth / 2 + 30;
 	if (DrawButton200_2(X,Y, vw_GetText("RESTART"), 1.0f, false))
 		ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
-
 }
 
 } // astromenace namespace
