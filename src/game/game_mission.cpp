@@ -38,14 +38,16 @@
 namespace viewizard {
 namespace astromenace {
 
-float MissionTitleLifeTime = 0.0f;
-float LastMissionTitleUpdateTime = 0.0f;
-int MissionTitleNum = 0;
+namespace {
 
-float MissionFailedLifeTime = 0.0f;
-float LastMissionFailedUpdateTime = 0.0f;
+float MissionTitleLifeTime{0.0f};
+float LastMissionTitleUpdateTime{0.0f};
+int MissionTitleNum{0};
 
-extern float CurrentAlert3;
+float MissionFailedLifeTime{0.0f};
+float LastMissionFailedUpdateTime{0.0f};
+
+} // unnamed namespace
 
 
 //------------------------------------------------------------------------------------
