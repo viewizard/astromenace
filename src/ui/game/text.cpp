@@ -27,9 +27,6 @@
 
 // TODO translate comments
 
-// FIXME we should call GetPreloadedTextureAsset() here for MissionNumberTexture
-//       on changed game language in game menu
-
 #include "../../core/core.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"
@@ -50,6 +47,7 @@ GLtexture MissionNumberTexture{0};
 
 float MissionFailedLifeTime{0.0f};
 float MissionFailedLastUpdateTime{0.0f};
+GLtexture MissionFailedTexture{0};
 
 } // unnamed namespace
 
@@ -60,6 +58,9 @@ float MissionFailedLastUpdateTime{0.0f};
 void SetupMissionNumberText(float NotificationTime, int Number)
 {
 	MissionNumberLifeTime = NotificationTime;
+	if (MissionNumberLifeTime <= 0.0f)
+		return;
+
 	MissionNumberLastUpdateTime = vw_GetTimeThread(0);
 	MissionNumber = Number;
 	MissionNumberTexture = GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga"));
@@ -159,40 +160,41 @@ void DrawMissionNumberText()
 void SetupMissionFailedText(float NotificationTime)
 {
 	MissionFailedLifeTime = NotificationTime;
+	if (MissionFailedLifeTime <= 0.0f)
+		return;
+
 	MissionFailedLastUpdateTime = vw_GetTimeThread(0);
+	MissionFailedTexture = GetPreloadedTextureAsset(vw_GetText("lang/en/game/missionfailed.tga"));
 
 	SetShowGameCursor(true);
 	vw_GetMouseLeftClick(true);
 	SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE); // release mouse control
 }
 
-//------------------------------------------------------------------------------------
-// прорисовка миссия провалена
-//------------------------------------------------------------------------------------
-void GameDrawMissionFailed()
+/*
+ * Draw mission failed text.
+ */
+void DrawMissionFailedText()
 {
 	if (MissionFailedLifeTime <= 0.0f)
 		return;
 
-	float TimeDelta = vw_GetTimeThread(0) - MissionFailedLastUpdateTime;
-	MissionFailedLastUpdateTime = vw_GetTimeThread(0);
+	float CurrentTime = vw_GetTimeThread(0);
+	MissionFailedLifeTime -= CurrentTime - MissionFailedLastUpdateTime;
+	MissionFailedLastUpdateTime = CurrentTime;
 
-	// считаем только если не отображается меню
-	if (GameContentTransp <= 0.0f)
-		MissionFailedLifeTime -= TimeDelta;
+	sRECT SrcRect{0, 0, 512, 84}; // "Mission failed" image-related rectangle
+	sRECT DstRect{static_cast<int>(GameConfig().InternalWidth - SrcRect.right) / 2, 342,
+		      static_cast<int>(GameConfig().InternalWidth + SrcRect.right) / 2, 342 + SrcRect.bottom};
+	vw_Draw2D(DstRect, SrcRect, MissionFailedTexture, true);
 
-	// все, время вышло... нужно сделать сброс и загрузить меню
+	// FIXME all code below should be moved out from rendering block,
+	//       "action" code should be separated
+
 	if (MissionFailedLifeTime <= 0.0f)
 		ExitGame(eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU);
 
-	sRECT SrcRect, DstRect;
-
-	// вывод надписи Mission
-	SrcRect(0,0,512,84);
-	DstRect(GameConfig().InternalWidth / 2 - 256, 342, GameConfig().InternalWidth / 2 + 256, 342 + 84);
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/missionfailed.tga")), true);
-
-	int Y = 180 + 270;
+	constexpr int Y{180 + 270};
 	int X = GameConfig().InternalWidth / 2 - 230;
 	if (DrawButton200_2(X,Y, vw_GetText("QUIT"), 1.0f, false))
 		ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);

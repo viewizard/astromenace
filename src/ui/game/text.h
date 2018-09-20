@@ -38,8 +38,8 @@ void SetupMissionNumberText(float NotificationTime, int Number);
 void DrawMissionNumberText();
 // Setup mission failed text.
 void SetupMissionFailedText(float NotificationTime);
-//
-void GameDrawMissionFailed();
+// Draw mission failed text.
+void DrawMissionFailedText();
 
 } // astromenace namespace
 } // viewizard namespace

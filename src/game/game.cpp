@@ -679,6 +679,7 @@ void InitGame()
 
 
 	SetupMissionNumberText(3.0f, CurrentMission + 1);
+	SetupMissionFailedText(0.0f); // reset previous status on game restart after fail
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1436,13 +1437,7 @@ void DrawGame()
 
 
 	DrawMissionNumberText();
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Выводим... миссия провалена... там же выходим
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	GameDrawMissionFailed();
+	DrawMissionFailedText();
 
 
 
