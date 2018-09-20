@@ -385,15 +385,6 @@ void DrawDialogBox();
 
 
 
-//------------------------------------------------------------------------------------
-// Game_Mission.cpp
-//------------------------------------------------------------------------------------
-void GameSetMissionTitleData(float ShowTime, int Num);
-void GameDrawMissionTitle();
-void GameSetMissionFailedData(float ShowTime);
-void GameDrawMissionFailed();
-
-
 
 
 

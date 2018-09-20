@@ -39,6 +39,7 @@
 #include "../config/config.h"
 #include "../ui/cursor.h"
 #include "../ui/game_speed.h"
+#include "../ui/game/text.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../gfx/star_system.h"

@@ -31,6 +31,7 @@
 #include "../config/config.h"
 #include "../platform/platform.h"
 #include "../ui/font.h"
+#include "../ui/game/text.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../object3d/explosion/explosion.h"
