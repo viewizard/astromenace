@@ -218,10 +218,10 @@ static void GetGameNumFontData(char Char, sRECT &SrcRect)
 		SrcRect(214,4,227,25);
 		break;
 
-	case 'E':
+	case 'E': // star, experience symbol
 		SrcRect(47,4,66,25);
 		break;
-	case 'S':
+	case 'S': // second $ symbol, not in use
 		SrcRect(4,4,21,25);
 		break;
 	case '$':
@@ -1698,11 +1698,6 @@ void DrawGame()
 				if (GameMissionCompleteStatus && !GameMissionCompleteStatusShowDialog) // в процессе вывода результатов разрешаем только выход в основное меню (отображение диалога)
 					SetCurrentDialogBox(eDialogBox::QuiToMenuNoSave);
 				GameMissionCompleteStatusShowDialog = false;
-				vw_SetKeyStatus(SDLK_ESCAPE, false);
-			}
-		} else {
-			if (vw_GetKeyStatus(SDLK_ESCAPE)) {
-				ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
 				vw_SetKeyStatus(SDLK_ESCAPE, false);
 			}
 		}

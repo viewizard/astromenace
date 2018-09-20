@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #include "../../core/core.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"
@@ -174,6 +172,7 @@ void SetupMissionFailedText(float NotificationTime)
 /*
  * Draw mission failed text.
  */
+// FIXME this should be reorganized into "mission fail menu" instead of just "text"
 void DrawMissionFailedText()
 {
 	if (MissionFailedLifeTime <= 0.0f)
@@ -193,6 +192,12 @@ void DrawMissionFailedText()
 
 	if (MissionFailedLifeTime <= 0.0f)
 		ExitGame(eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU);
+
+	if (!isDialogBoxDrawing() &&
+	    vw_GetKeyStatus(SDLK_ESCAPE)) {
+		ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
+		vw_SetKeyStatus(SDLK_ESCAPE, false);
+	}
 
 	constexpr int Y{180 + 270};
 	int X = GameConfig().InternalWidth / 2 - 230;
