@@ -27,8 +27,6 @@
 
 // TODO should be separated for explosion with geometry and without (see InternalExplosionType)
 
-// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
-
 #include "explosion.h"
 #include "../projectile/projectile.h"
 #include "../../config/config.h"

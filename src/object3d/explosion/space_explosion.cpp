@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
-
 // TODO codestyle should be fixed
 
 #include "explosion.h"
