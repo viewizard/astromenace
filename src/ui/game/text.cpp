@@ -27,6 +27,9 @@
 
 // TODO translate comments
 
+// FIXME we should call GetPreloadedTextureAsset() here for MissionNumberTexture
+//       on changed game language in game menu
+
 #include "../../core/core.h"
 #include "../../config/config.h"
 #include "../../assets/texture.h"
@@ -43,6 +46,7 @@ namespace {
 float MissionNumberLifeTime{0.0f};
 float MissionNumberLastUpdateTime{0.0f};
 int MissionNumber{0};
+GLtexture MissionNumberTexture{0};
 
 float MissionFailedLifeTime{0.0f};
 float LastMissionFailedUpdateTime{0.0f};
@@ -58,6 +62,7 @@ void SetupMissionNumberText(float NotificationTime, int Number)
 	MissionNumberLifeTime = NotificationTime;
 	MissionNumberLastUpdateTime = vw_GetTimeThread(0);
 	MissionNumber = Number;
+	MissionNumberTexture = GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga"));
 }
 
 /*
@@ -106,55 +111,46 @@ static int CalculateNumberStringWidth(const std::string &NumberString)
 	return tmpWidth;
 }
 
-//------------------------------------------------------------------------------------
-// прорисовка номера
-//------------------------------------------------------------------------------------
-static void DrawMissionTitleNum(int X, int Y, const std::string &NumberString, float Transp)
+/*
+ * Draw number string.
+ */
+static void DrawNumberString(int X, int Y, const std::string &NumberString, float Transp)
 {
 	// note, we use left-top as starting point (upper left is origin)
 	int XStart = X;
 	for (const auto &Symbol : NumberString) {
 		sRECT SrcRect = GetNumberOnImageRect(Symbol);
-		sRECT DstRect{XStart, Y, XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top)};
+		sRECT DstRect{XStart, Y,
+			      XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top)};
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/nums.tga"), true, Transp);
 		XStart += SrcRect.right - SrcRect.left;
 	}
 }
 
-//------------------------------------------------------------------------------------
-// прорисовка номера миссии
-//------------------------------------------------------------------------------------
-void GameDrawMissionTitle()
+/*
+ * Draw mission number text.
+ */
+void DrawMissionNumberText()
 {
 	if (MissionNumberLifeTime <= 0.0f)
 		return;
 
-	float TimeDelta = vw_GetTimeThread(0) - MissionNumberLastUpdateTime;
-	MissionNumberLastUpdateTime = vw_GetTimeThread(0);
-	MissionNumberLifeTime -= TimeDelta;
+	float CurrentTime = vw_GetTimeThread(0);
+	MissionNumberLifeTime -= CurrentTime - MissionNumberLastUpdateTime;
+	MissionNumberLastUpdateTime = CurrentTime;
 
-	sRECT SrcRect, DstRect;
+	sRECT SrcRect{0, 0, 226, 64}; // "Mission" image-related rectangle
 	std::string NumberString{std::to_string(MissionNumber)};
+	constexpr int tmpSpace{20};
+	int tmpWidth = SrcRect.right + tmpSpace + CalculateNumberStringWidth(NumberString);
 
-	// вывод надписи Mission
+	int XStart = (GameConfig().InternalWidth - tmpWidth) / 2;
+	constexpr int YStart{352};
+	sRECT DstRect{XStart, YStart, XStart + SrcRect.right, YStart + SrcRect.bottom};
 
-	// считаем сколько в ширину надпись всего... 20 - пробел между надписью и номером
-	int TotalW = 226 + 20 + CalculateNumberStringWidth(NumberString);
-	// находим откуда начинать рисовать
-	int XStart = (GameConfig().InternalWidth - TotalW) / 2;
-
-	SrcRect(0, 0, 226, 64);
-	DstRect(XStart, 352, XStart + 226, 352 + 64);
-
-	// вывод номера миссии
-	if (MissionNumberLifeTime >= 1.0f) {
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")), true);
-		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, NumberString, 1.0f);
-	} else {
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")),
-			  true, MissionNumberLifeTime);
-		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, NumberString, MissionNumberLifeTime);
-	}
+	float tmpTransp = (MissionNumberLifeTime > 1.0f) ? 1.0f : MissionNumberLifeTime;
+	vw_Draw2D(DstRect, SrcRect, MissionNumberTexture, true, tmpTransp);
+	DrawNumberString(XStart + SrcRect.right + tmpSpace, YStart, NumberString, tmpTransp);
 }
 
 //------------------------------------------------------------------------------------
