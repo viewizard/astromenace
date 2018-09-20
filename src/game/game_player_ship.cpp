@@ -423,8 +423,7 @@ void GamePlayerShip()
 			// удаляем и уходим отсюда
 			ReleaseSpaceShip(PlayerFighter);
 
-			// 20 секунд просто проигрываем музыку...
-			GameSetMissionFailedData(20);
+			SetupMissionFailedText(20.0f);
 
 			return;
 		}

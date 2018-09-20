@@ -36,8 +36,8 @@ namespace astromenace {
 void SetupMissionNumberText(float NotificationTime, int Number);
 // Draw mission number text.
 void DrawMissionNumberText();
-//
-void GameSetMissionFailedData(float ShowTime);
+// Setup mission failed text.
+void SetupMissionFailedText(float NotificationTime);
 //
 void GameDrawMissionFailed();
 

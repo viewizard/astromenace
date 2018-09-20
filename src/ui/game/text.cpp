@@ -49,7 +49,7 @@ int MissionNumber{0};
 GLtexture MissionNumberTexture{0};
 
 float MissionFailedLifeTime{0.0f};
-float LastMissionFailedUpdateTime{0.0f};
+float MissionFailedLastUpdateTime{0.0f};
 
 } // unnamed namespace
 
@@ -153,19 +153,17 @@ void DrawMissionNumberText()
 	DrawNumberString(XStart + SrcRect.right + tmpSpace, YStart, NumberString, tmpTransp);
 }
 
-//------------------------------------------------------------------------------------
-// установка времени отображения ShowTime миссия провалена
-//------------------------------------------------------------------------------------
-void GameSetMissionFailedData(float ShowTime)
+/*
+ * Setup mission failed text.
+ */
+void SetupMissionFailedText(float NotificationTime)
 {
-	MissionFailedLifeTime = ShowTime;
-	LastMissionFailedUpdateTime = vw_GetTimeThread(0);
-	// выводим курсор
+	MissionFailedLifeTime = NotificationTime;
+	MissionFailedLastUpdateTime = vw_GetTimeThread(0);
+
 	SetShowGameCursor(true);
-	// сброс кнопки мышки, чтобы случайно не нажали
 	vw_GetMouseLeftClick(true);
-	// release mouse control
-	SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
+	SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE); // release mouse control
 }
 
 //------------------------------------------------------------------------------------
@@ -176,8 +174,8 @@ void GameDrawMissionFailed()
 	if (MissionFailedLifeTime <= 0.0f)
 		return;
 
-	float TimeDelta = vw_GetTimeThread(0) - LastMissionFailedUpdateTime;
-	LastMissionFailedUpdateTime = vw_GetTimeThread(0);
+	float TimeDelta = vw_GetTimeThread(0) - MissionFailedLastUpdateTime;
+	MissionFailedLastUpdateTime = vw_GetTimeThread(0);
 
 	// считаем только если не отображается меню
 	if (GameContentTransp <= 0.0f)
