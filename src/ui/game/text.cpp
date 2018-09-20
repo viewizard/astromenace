@@ -60,48 +60,46 @@ void SetupMissionNumberText(float NotificationTime, int Number)
 	MissionNumber = Number;
 }
 
+/*
+ * Get image-related rectangle for particular number.
+ */
+static sRECT GetNumberOnImageRect(const char Number)
+{
+	switch (Number) {
+	case '1':
+		return sRECT{15, 1, 48, 63};
+	case '2':
+		return sRECT{48, 1, 86, 63};
+	case '3':
+		return sRECT{86, 1, 124, 63};
+	case '4':
+		return sRECT{124, 1, 160, 63};
+	case '5':
+		return sRECT{161, 1, 200, 63};
+	case '6':
+		return sRECT{200, 1, 238, 63};
+	case '7':
+		return sRECT{239, 1, 275, 63};
+	case '8':
+		return sRECT{276, 1, 315, 63};
+	case '9':
+		return sRECT{319, 1, 385, 63};
+	case '0':
+		return sRECT{360, 1, 399, 63};
+	}
+
+	return sRECT{0, 0, 0, 0};
+}
+
 //------------------------------------------------------------------------------------
 // считаем, сколько в ширину займет прорисовка номера
 //------------------------------------------------------------------------------------
 static int CheckMissionTitleNum(const char *Num)
 {
-	sRECT SrcRect;
 	int tmpWidth{0};
 
 	for (size_t i = 0; i < strlen(Num); i++) {
-		switch (Num[i]) {
-		case '1':
-			SrcRect(15, 1, 48, 63);
-			break;
-		case '2':
-			SrcRect(48, 1, 86, 63);
-			break;
-		case '3':
-			SrcRect(86, 1, 124, 63);
-			break;
-		case '4':
-			SrcRect(124, 1, 160, 63);
-			break;
-		case '5':
-			SrcRect(161, 1, 200, 63);
-			break;
-		case '6':
-			SrcRect(200, 1, 238, 63);
-			break;
-		case '7':
-			SrcRect(239, 1, 275, 63);
-			break;
-		case '8':
-			SrcRect(276, 1, 315, 63);
-			break;
-		case '9':
-			SrcRect(319, 1, 385, 63);
-			break;
-		case '0':
-			SrcRect(360, 1, 399, 63);
-			break;
-		}
-
+		sRECT SrcRect = GetNumberOnImageRect(Num[i]);
 		tmpWidth += SrcRect.right - SrcRect.left;
 	}
 
@@ -114,45 +112,10 @@ static int CheckMissionTitleNum(const char *Num)
 static void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 {
 	// note, we use left-top as starting point (upper left is origin)
-
-	sRECT SrcRect, DstRect;
 	int XStart = X;
-
 	for (size_t i = 0; i < strlen(Num); i++) {
-		switch (Num[i]) {
-		case '1':
-			SrcRect(15,1,48,63);
-			break;
-		case '2':
-			SrcRect(48,1,86,63);
-			break;
-		case '3':
-			SrcRect(86,1,124,63);
-			break;
-		case '4':
-			SrcRect(124,1,160,63);
-			break;
-		case '5':
-			SrcRect(161,1,200,63);
-			break;
-		case '6':
-			SrcRect(200,1,238,63);
-			break;
-		case '7':
-			SrcRect(239,1,275,63);
-			break;
-		case '8':
-			SrcRect(276,1,315,63);
-			break;
-		case '9':
-			SrcRect(319,1,355,63);
-			break;
-		case '0':
-			SrcRect(360,1,399,63);
-			break;
-		}
-
-		DstRect(XStart, Y, XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top));
+		sRECT SrcRect = GetNumberOnImageRect(Num[i]);
+		sRECT DstRect{XStart, Y, XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top)};
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/nums.tga"), true, Transp);
 		XStart += SrcRect.right - SrcRect.left;
 	}
