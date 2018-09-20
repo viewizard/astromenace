@@ -61,11 +61,11 @@ void SetupMissionNumberText(float NotificationTime, int Number)
 }
 
 /*
- * Get image-related rectangle for particular number.
+ * Get image-related rectangle for particular number's symbol.
  */
-static sRECT GetNumberOnImageRect(const char Number)
+static sRECT GetNumberOnImageRect(const char Symbol)
 {
-	switch (Number) {
+	switch (Symbol) {
 	case '1':
 		return sRECT{15, 1, 48, 63};
 	case '2':
@@ -91,15 +91,15 @@ static sRECT GetNumberOnImageRect(const char Number)
 	return sRECT{0, 0, 0, 0};
 }
 
-//------------------------------------------------------------------------------------
-// считаем, сколько в ширину займет прорисовка номера
-//------------------------------------------------------------------------------------
-static int CheckMissionTitleNum(const char *Num)
+/*
+ * Calculate number string width.
+ */
+static int CalculateNumberStringWidth(const std::string &NumberString)
 {
 	int tmpWidth{0};
 
-	for (size_t i = 0; i < strlen(Num); i++) {
-		sRECT SrcRect = GetNumberOnImageRect(Num[i]);
+	for (const auto &Symbol : NumberString) {
+		sRECT SrcRect = GetNumberOnImageRect(Symbol);
 		tmpWidth += SrcRect.right - SrcRect.left;
 	}
 
@@ -109,12 +109,12 @@ static int CheckMissionTitleNum(const char *Num)
 //------------------------------------------------------------------------------------
 // прорисовка номера
 //------------------------------------------------------------------------------------
-static void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
+static void DrawMissionTitleNum(int X, int Y, const std::string &NumberString, float Transp)
 {
 	// note, we use left-top as starting point (upper left is origin)
 	int XStart = X;
-	for (size_t i = 0; i < strlen(Num); i++) {
-		sRECT SrcRect = GetNumberOnImageRect(Num[i]);
+	for (const auto &Symbol : NumberString) {
+		sRECT SrcRect = GetNumberOnImageRect(Symbol);
 		sRECT DstRect{XStart, Y, XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top)};
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/nums.tga"), true, Transp);
 		XStart += SrcRect.right - SrcRect.left;
@@ -134,12 +134,12 @@ void GameDrawMissionTitle()
 	MissionNumberLifeTime -= TimeDelta;
 
 	sRECT SrcRect, DstRect;
-	std::string buffer{std::to_string(MissionNumber)};
+	std::string NumberString{std::to_string(MissionNumber)};
 
 	// вывод надписи Mission
 
 	// считаем сколько в ширину надпись всего... 20 - пробел между надписью и номером
-	int TotalW = 226 + 20 + CheckMissionTitleNum(buffer.c_str());
+	int TotalW = 226 + 20 + CalculateNumberStringWidth(NumberString);
 	// находим откуда начинать рисовать
 	int XStart = (GameConfig().InternalWidth - TotalW) / 2;
 
@@ -149,11 +149,11 @@ void GameDrawMissionTitle()
 	// вывод номера миссии
 	if (MissionNumberLifeTime >= 1.0f) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")), true);
-		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, buffer.c_str(), 1.0f);
+		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, NumberString, 1.0f);
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")),
 			  true, MissionNumberLifeTime);
-		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, buffer.c_str(), MissionNumberLifeTime);
+		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, NumberString, MissionNumberLifeTime);
 	}
 }
 
