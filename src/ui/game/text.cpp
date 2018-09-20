@@ -40,9 +40,9 @@ namespace astromenace {
 
 namespace {
 
-float MissionTitleLifeTime{0.0f};
-float LastMissionTitleUpdateTime{0.0f};
-int MissionTitleNum{0};
+float MissionNumberLifeTime{0.0f};
+float MissionNumberLastUpdateTime{0.0f};
+int MissionNumber{0};
 
 float MissionFailedLifeTime{0.0f};
 float LastMissionFailedUpdateTime{0.0f};
@@ -50,18 +50,14 @@ float LastMissionFailedUpdateTime{0.0f};
 } // unnamed namespace
 
 
-//------------------------------------------------------------------------------------
-// установка времени отображения ShowTime миссии номер Num
-//------------------------------------------------------------------------------------
-void GameSetMissionTitleData(float ShowTime, int Num)
+/*
+ * Setup mission number text.
+ */
+void SetupMissionNumberText(float NotificationTime, int Number)
 {
-	MissionTitleLifeTime = ShowTime;
-	LastMissionTitleUpdateTime = vw_GetTimeThread(0);
-	MissionTitleNum = Num;
-
-	// пока ничего не показываем
-	MissionFailedLifeTime = 0.0f;
-	LastMissionFailedUpdateTime = vw_GetTimeThread(0);
+	MissionNumberLifeTime = NotificationTime;
+	MissionNumberLastUpdateTime = vw_GetTimeThread(0);
+	MissionNumber = Number;
 }
 
 //------------------------------------------------------------------------------------
@@ -167,15 +163,15 @@ static void DrawMissionTitleNum(int X, int Y, const char *Num, float Transp)
 //------------------------------------------------------------------------------------
 void GameDrawMissionTitle()
 {
-	if (MissionTitleLifeTime <= 0.0f)
+	if (MissionNumberLifeTime <= 0.0f)
 		return;
 
-	float TimeDelta = vw_GetTimeThread(0) - LastMissionTitleUpdateTime;
-	LastMissionTitleUpdateTime = vw_GetTimeThread(0);
-	MissionTitleLifeTime -= TimeDelta;
+	float TimeDelta = vw_GetTimeThread(0) - MissionNumberLastUpdateTime;
+	MissionNumberLastUpdateTime = vw_GetTimeThread(0);
+	MissionNumberLifeTime -= TimeDelta;
 
 	sRECT SrcRect, DstRect;
-	std::string buffer{std::to_string(MissionTitleNum)};
+	std::string buffer{std::to_string(MissionNumber)};
 
 	// вывод надписи Mission
 
@@ -188,13 +184,13 @@ void GameDrawMissionTitle()
 	DstRect(XStart, 352, XStart + 226, 352 + 64);
 
 	// вывод номера миссии
-	if (MissionTitleLifeTime >= 1.0f) {
+	if (MissionNumberLifeTime >= 1.0f) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")), true);
 		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, buffer.c_str(), 1.0f);
 	} else {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga")),
-			  true, MissionTitleLifeTime);
-		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, buffer.c_str(), MissionTitleLifeTime);
+			  true, MissionNumberLifeTime);
+		DrawMissionTitleNum(XStart + 226 + 20, 352 + 1, buffer.c_str(), MissionNumberLifeTime);
 	}
 }
 

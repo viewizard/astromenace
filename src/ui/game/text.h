@@ -32,8 +32,8 @@
 namespace viewizard {
 namespace astromenace {
 
-//
-void GameSetMissionTitleData(float ShowTime, int Num);
+// Setup mission number text.
+void SetupMissionNumberText(float NotificationTime, int Number);
 //
 void GameDrawMissionTitle();
 //

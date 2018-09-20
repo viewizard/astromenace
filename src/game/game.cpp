@@ -678,8 +678,7 @@ void InitGame()
 		MissionScript.reset();
 
 
-	// выводим номер миссии 3 секунды
-	GameSetMissionTitleData(3, CurrentMission+1);
+	SetupMissionNumberText(3.0f, CurrentMission + 1);
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
