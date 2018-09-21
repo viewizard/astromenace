@@ -47,8 +47,9 @@
 #include "../script/script.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../command.h"
-#include <stdarg.h> // va_start
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -1738,7 +1739,13 @@ void DrawGame()
 
 
 
-	if (ShowGameTime) vw_DrawText(6,45, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, "%s %.2f", "mission time:", GameTime);
+	if (ShowGameTime) {
+		// FIXME should be calculated 1 time per 100 milliseconds only (!),
+		//       so we should have no more than 10 calculations per second
+		std::ostringstream tmpStream;
+		tmpStream << "mission time: " << std::fixed << std::setprecision(1) << GameTime;
+		vw_DrawText(6,45, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 1.0f, tmpStream.str().c_str());
+	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
