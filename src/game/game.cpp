@@ -1519,35 +1519,103 @@ void DrawGame()
 
 			WScale = -210;
 
+			// FIXME ostringstream is not so fast, move all string initialization into setup,
+			//       all ostringstream-related code should be called only one time in dialog init
+			std::ostringstream tmpStream;
+
+			tmpStream << std::fixed << std::setw(4) << std::setfill('0') << AlienShipsKillQuant;
+			std::string AlienShipsKillQuantString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::fixed << std::setw(6) << std::setprecision(0) << std::setfill('0') << AlienShipsKillBonus;
+			std::string AlienShipsKillBonusString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
+			tmpStream << std::fixed << std::setw(4) << std::setfill('0') << AlienMotherShipsKillQuant;
+			std::string AlienMotherShipsKillQuantString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::fixed << std::setw(6) << std::setprecision(0) << std::setfill('0') << AlienMotherShipsKillBonus;
+			std::string AlienMotherShipsKillBonusString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
+			tmpStream << std::fixed << std::setw(4) << std::setfill('0') << PirateShipsKillQuant;
+			std::string PirateShipsKillQuantString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::fixed << std::setw(6) << std::setprecision(0) << std::setfill('0') << PirateShipsKillBonus;
+			std::string PirateShipsKillBonusString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
+			tmpStream << std::fixed << std::setw(4) << std::setfill('0') << PirateVehiclesKillQuant;
+			std::string PirateVehiclesKillQuantString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::fixed << std::setw(6) << std::setprecision(0) << std::setfill('0') << PirateVehiclesKillBonus;
+			std::string PirateVehiclesKillBonusString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
+			tmpStream << std::fixed << std::setw(4) << std::setfill('0') << PirateBuildingsKillQuant;
+			std::string PirateBuildingsKillQuantString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::fixed << std::setw(6) << std::setprecision(0) << std::setfill('0') << PirateBuildingsKillBonus;
+			std::string PirateBuildingsKillBonusString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
+			tmpStream << std::fixed << std::setw(4) << std::setfill('0') << AsteroidsKillQuant;
+			std::string AsteroidsKillQuantString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::fixed << std::setw(6) << std::setprecision(0) << std::setfill('0') << AsteroidsKillBonus;
+			std::string AsteroidsKillBonusString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
+			tmpStream << std::fixed << std::setw(4) << std::setfill('0') << AlienShipsKillQuant +
+				     AlienMotherShipsKillQuant + PirateShipsKillQuant + PirateVehiclesKillQuant +
+				     PirateBuildingsKillQuant + AsteroidsKillQuant;
+			std::string SummaryQuantString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::fixed << std::setw(6) << std::setprecision(0) << std::setfill('0') << GameMoney - GameConfig().Profile[CurrentProfile].Money;
+			std::string SummaryBonusString{tmpStream.str()};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  vw_GetText("Alien Spaceships"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AlienShipsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)AlienShipsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, AlienShipsKillQuantString.c_str());
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, AlienShipsKillBonusString.c_str());
 			Y += Prir;
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Alien Motherships"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AlienMotherShipsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)AlienMotherShipsKillQuant);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, AlienMotherShipsKillQuantString.c_str());
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, AlienMotherShipsKillBonusString.c_str());
 			Y += Prir;
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Pirate Spaceships"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", PirateShipsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)PirateShipsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, PirateShipsKillQuantString.c_str());
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, PirateShipsKillBonusString.c_str());
 			Y += Prir;
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Pirate Vehicles"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", PirateVehiclesKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)PirateVehiclesKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, PirateVehiclesKillQuantString.c_str());
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, PirateVehiclesKillBonusString.c_str());
 			Y += Prir;
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Pirate Buildings"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", PirateBuildingsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)PirateBuildingsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, PirateBuildingsKillQuantString.c_str());
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, PirateBuildingsKillBonusString.c_str());
 			Y += Prir;
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, vw_GetText("Asteroids"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AsteroidsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)AsteroidsKillBonus);
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, AsteroidsKillQuantString.c_str());
+			vw_DrawText(GameConfig().InternalWidth / 2 + 126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, AsteroidsKillBonusString.c_str());
 
 			Y += (int)(Prir*1.5);
 			vw_DrawText(GameConfig().InternalWidth / 2 - 256+38, Y, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, GameContentTransp, vw_GetText("Total"));
-			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%04i", AlienShipsKillQuant+AlienMotherShipsKillQuant+
-					       PirateShipsKillQuant+PirateVehiclesKillQuant+PirateBuildingsKillQuant+AsteroidsKillQuant);
-			vw_DrawText(GameConfig().InternalWidth / 2+126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp,  "%06i", (int)(GameMoney - GameConfig().Profile[CurrentProfile].Money * 1.0f));
+			vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, SummaryQuantString.c_str());
+			vw_DrawText(GameConfig().InternalWidth / 2+126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, SummaryBonusString.c_str());
 
 			// выводим кнопки меню
 			int X = GameConfig().InternalWidth / 2 - 192;
