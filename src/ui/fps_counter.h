@@ -38,13 +38,17 @@ namespace astromenace {
 
 class cFPS {
 private:
-	cFPS() = default;
+	cFPS()
+	{
+		ClearDrawString();
+	}
 	~cFPS() = default;
 
 	void CheckKeyboard();
+	void ClearDrawString();
 
-	uint32_t LastTick_{0};
-	float CurrentFPS_{0.0f};
+	uint32_t LastTick_{SDL_GetTicks()};
+	std::string DrawString_{};
 	uint32_t CurrentFrame_{0};
 	sRGBCOLOR TextColor_{eRGBCOLOR::white};
 
@@ -59,6 +63,7 @@ public:
 	}
 
 	void Switch();
+	void Reset();
 	void Draw();
 	void Update();
 };

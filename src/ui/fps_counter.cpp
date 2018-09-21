@@ -27,10 +27,30 @@
 
 #include "fps_counter.h"
 #include "../config/config.h"
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+/*
+ * Clear DrawString_, if appropriate FPS not calculated yet.
+ */
+void cFPS::ClearDrawString()
+{
+	DrawString_ = vw_GetText("fps") + std::string{" ..."};
+}
+
+/*
+ * Reset fps counter.
+ */
+void cFPS::Reset()
+{
+	LastTick_ = SDL_GetTicks();
+	CurrentFrame_ = 0;
+	ClearDrawString();
+}
 
 /*
  * Switch fps counter show/hide status.
@@ -39,12 +59,8 @@ void cFPS::Switch()
 {
 	ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 
-	if (!GameConfig().ShowFPS)
-		return;
-
-	LastTick_ = SDL_GetTicks();
-	CurrentFPS_ = 0.0f;
-	CurrentFrame_ = 0;
+	if (GameConfig().ShowFPS)
+		Reset();
 }
 
 /*
@@ -68,12 +84,7 @@ void cFPS::Draw()
 	if (!GameConfig().ShowFPS)
 		return;
 
-	if (GameConfig().VSync)
-		vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 0.99f,
-			    "%s %.1f (VSync - %s)", vw_GetText("fps"), CurrentFPS_, vw_GetText("On"));
-	else
-		vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 0.99f,
-			    "%s %.1f", vw_GetText("fps"), CurrentFPS_);
+	vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 1.0f, DrawString_.c_str());
 }
 
 /*
@@ -87,20 +98,25 @@ void cFPS::Update()
 		return;
 
 	uint32_t CurrentTick = SDL_GetTicks();
-	if (LastTick_ > CurrentTick) { // game was restarted, or SDL was re-inited
-		LastTick_ = CurrentTick;
-		CurrentFPS_ = 0.0f;
-		CurrentFrame_ = 0;
-	} else {
+	if (LastTick_ < CurrentTick) {
 		uint32_t TicksDelta = CurrentTick - LastTick_;
 		constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
 
 		if (TicksDelta >= TicksInSecond) {
-			CurrentFPS_ = static_cast<float>(CurrentFrame_ * TicksInSecond) / TicksDelta;
+			std::ostringstream tmpStream;
+			tmpStream << vw_GetText("fps") << " "
+				  << std::fixed << std::setprecision(1)
+				  << static_cast<float>(CurrentFrame_ * TicksInSecond) / TicksDelta;
+			if (GameConfig().VSync)
+				tmpStream << " (VSync - " << vw_GetText("On") << ")";
+
+			DrawString_ = tmpStream.str();
 			CurrentFrame_ = 0;
 			LastTick_ = CurrentTick;
 		}
-	}
+	} else if (LastTick_ > CurrentTick) // game was restarted, or SDL was re-inited
+		Reset();
+	// if LastTick_ == CurrentTick - do nothing
 
 	CurrentFrame_++;
 }

@@ -40,6 +40,7 @@
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../ui/cursor.h"
+#include "../ui/fps_counter.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
@@ -410,8 +411,10 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 					std::cerr << __func__ << "(): " << "SDL_GL_SetSwapInterval() failed: "
 						  << SDL_GetError() << "\n";
 					Options_VSync = GameConfig().VSync;
-				} else
+				} else {
 					ChangeGameConfig().VSync = Options_VSync;
+					cFPS::GetInstance().Reset();
+				}
 			}
 			// should be before size changes, since we could fallback to previous size
 			if (GameConfig().Fullscreen != Options_Fullscreen) {
