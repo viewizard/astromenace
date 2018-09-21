@@ -52,6 +52,7 @@ Z = 0 at the level start, and increased during level.
 #include "../core/core.h"
 #include "script.h"
 #include "../config/config.h"
+#include "../ui/game/stopwatch.h"
 #include "../assets/audio.h"
 #include "../gfx/star_system.h"
 #include "../object3d/object3d.h"
@@ -66,7 +67,6 @@ namespace viewizard {
 namespace astromenace {
 
 extern bool UndeadDebugMode;
-extern bool ShowGameTime;
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern sVECTOR3D GamePoint;
@@ -202,7 +202,6 @@ bool cMissionScript::RunScript(const std::string &FileName, float InitTime)
 	ShowLineNumber = false;
 	SetObjectsBBRenderMode(eRenderBoundingBoxes::None);
 	UndeadDebugMode = false;
-	ShowGameTime = false;
 
 	xmlDoc.reset(new cXMLDocument(FileName, true));
 
@@ -349,7 +348,7 @@ bool cMissionScript::Update(float Time)
 			}
 			break;
 
-		case constexpr_hash_djb2a("Debug"):
+		case constexpr_hash_djb2a("Debug"): {
 			ShowLineNumber = false;
 			xmlDoc->bGetEntryAttribute(xmlEntry, "showline", ShowLineNumber);
 
@@ -363,8 +362,10 @@ bool cMissionScript::Update(float Time)
 			UndeadDebugMode = false;
 			xmlDoc->bGetEntryAttribute(xmlEntry, "undead", UndeadDebugMode);
 
-			ShowGameTime = false;
-			xmlDoc->bGetEntryAttribute(xmlEntry, "time", ShowGameTime);
+			bool tmpStopwatchStatus{false};
+			xmlDoc->bGetEntryAttribute(xmlEntry, "time", tmpStopwatchStatus);
+			cStopwatch::GetInstance().Reset(tmpStopwatchStatus);
+		}
 			break;
 
 		case constexpr_hash_djb2a("StarSystem"): {

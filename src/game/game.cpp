@@ -40,6 +40,7 @@
 #include "../ui/cursor.h"
 #include "../ui/game_speed.h"
 #include "../ui/game/text.h"
+#include "../ui/game/stopwatch.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../gfx/star_system.h"
@@ -175,11 +176,6 @@ float GameBlackTransp = 0.0f;
 bool NeedOnGame = false;
 bool NeedOffGame = false;
 
-
-// показывать время игры при скорости 1.5
-bool ShowGameTime;
-float GameTime;
-float LastGameTime;
 
 
 //------------------------------------------------------------------------------------
@@ -648,11 +644,8 @@ void InitGame()
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// инициализация счета времени (всегда первым)
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	cGameSpeed::GetInstance().InitGameSpeed();
-
+	cStopwatch::GetInstance().Reset(false); // should be after cGameSpeed init
 
 
 
@@ -858,9 +851,6 @@ void InitGame()
 	LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 	GameBlackTransp = 1.0f;
 	NeedOnGame = true;
-
-	GameTime = 0.0f;
-	LastGameTime = vw_GetTimeThread(0);
 }
 
 
@@ -1004,12 +994,6 @@ void DrawGame()
 
 	float TimeDelta = vw_GetTimeThread(0) - CurrentTime;
 	CurrentTime = vw_GetTimeThread(0);
-
-
-	// если не в меню - считаем время
-	if (GameContentTransp == 0.0f) GameTime += vw_GetTimeThread(0) - LastGameTime;
-	LastGameTime = vw_GetTimeThread(0);
-
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1807,13 +1791,8 @@ void DrawGame()
 
 
 
-	if (ShowGameTime) {
-		// FIXME should be calculated 1 time per 100 milliseconds only (!),
-		//       so we should have no more than 10 calculations per second
-		std::ostringstream tmpStream;
-		tmpStream << "mission time: " << std::fixed << std::setprecision(1) << GameTime;
-		vw_DrawText(6,45, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 1.0f, tmpStream.str().c_str());
-	}
+	cStopwatch::GetInstance().Update();
+	cStopwatch::GetInstance().Draw();
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
