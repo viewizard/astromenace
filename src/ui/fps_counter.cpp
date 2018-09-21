@@ -103,6 +103,7 @@ void cFPS::Update()
 		constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
 
 		if (TicksDelta >= TicksInSecond) {
+			// ostringstream is not so fast, but we use it one time per second
 			std::ostringstream tmpStream;
 			tmpStream << vw_GetText("fps") << " "
 				  << std::fixed << std::setprecision(1)
