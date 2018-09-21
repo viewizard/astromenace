@@ -57,8 +57,8 @@ public:
 
 	static cGameSpeed &GetInstance()
 	{
-		static cGameSpeed Object;
-		return Object;
+		static cGameSpeed Instance;
+		return Instance;
 	}
 
 	void InitGameSpeed();

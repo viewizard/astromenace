@@ -58,8 +58,8 @@ public:
 
 	static cFPS &GetInstance()
 	{
-		static cFPS FPSCounter;
-		return FPSCounter;
+		static cFPS Instance;
+		return Instance;
 	}
 
 	void Switch();

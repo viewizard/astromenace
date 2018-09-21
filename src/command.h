@@ -71,8 +71,8 @@ public:
 
 	static cCommand &GetInstance()
 	{
-		static cCommand Object;
-		return Object;
+		static cCommand Instance;
+		return Instance;
 	}
 
 	void Proceed();
