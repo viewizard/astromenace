@@ -40,7 +40,7 @@ namespace {
 
 float MissionNumberLifeTime{0.0f};
 float MissionNumberLastUpdateTime{0.0f};
-int MissionNumber{0};
+std::string MissionNumberString{};
 GLtexture MissionNumberTexture{0};
 
 float MissionFailedLifeTime{0.0f};
@@ -60,7 +60,7 @@ void SetupMissionNumberText(float NotificationTime, int Number)
 		return;
 
 	MissionNumberLastUpdateTime = vw_GetTimeThread(0);
-	MissionNumber = Number;
+	MissionNumberString = std::to_string(Number);
 	MissionNumberTexture = GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga"));
 }
 
@@ -98,11 +98,11 @@ static sRECT GetNumberOnImageRect(const char Symbol)
 /*
  * Calculate number string width.
  */
-static int CalculateNumberStringWidth(const std::string &NumberString)
+static int CalculateNumberStringWidth()
 {
 	int tmpWidth{0};
 
-	for (const auto &Symbol : NumberString) {
+	for (const auto &Symbol : MissionNumberString) {
 		sRECT SrcRect = GetNumberOnImageRect(Symbol);
 		tmpWidth += SrcRect.right - SrcRect.left;
 	}
@@ -113,11 +113,11 @@ static int CalculateNumberStringWidth(const std::string &NumberString)
 /*
  * Draw number string.
  */
-static void DrawNumberString(int X, int Y, const std::string &NumberString, float Transp)
+static void DrawNumberString(int X, int Y, float Transp)
 {
 	// note, we use left-top as starting point (upper left is origin)
 	int XStart = X;
-	for (const auto &Symbol : NumberString) {
+	for (const auto &Symbol : MissionNumberString) {
 		sRECT SrcRect = GetNumberOnImageRect(Symbol);
 		sRECT DstRect{XStart, Y,
 			      XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top)};
@@ -138,18 +138,20 @@ void DrawMissionNumberText()
 	MissionNumberLifeTime -= CurrentTime - MissionNumberLastUpdateTime;
 	MissionNumberLastUpdateTime = CurrentTime;
 
+	// FIXME SrcRect/DstRect/XStart/YStart should be calculated one time during setup
+
 	sRECT SrcRect{0, 0, 226, 64}; // "Mission" image-related rectangle
-	std::string NumberString{std::to_string(MissionNumber)};
 	constexpr int tmpSpace{20};
-	int tmpWidth = SrcRect.right + tmpSpace + CalculateNumberStringWidth(NumberString);
+	int tmpWidth = (SrcRect.right - SrcRect.left) + tmpSpace + CalculateNumberStringWidth();
 
 	int XStart = (GameConfig().InternalWidth - tmpWidth) / 2;
 	constexpr int YStart{352};
-	sRECT DstRect{XStart, YStart, XStart + SrcRect.right, YStart + SrcRect.bottom};
+	sRECT DstRect{XStart, YStart,
+		      XStart + (SrcRect.right - SrcRect.left), YStart + (SrcRect.bottom - SrcRect.top)};
 
 	float tmpTransp = (MissionNumberLifeTime > 1.0f) ? 1.0f : MissionNumberLifeTime;
 	vw_Draw2D(DstRect, SrcRect, MissionNumberTexture, true, tmpTransp);
-	DrawNumberString(XStart + SrcRect.right + tmpSpace, YStart, NumberString, tmpTransp);
+	DrawNumberString(XStart + (SrcRect.right - SrcRect.left) + tmpSpace, YStart, tmpTransp);
 }
 
 /*
@@ -182,9 +184,13 @@ void DrawMissionFailedText()
 	MissionFailedLifeTime -= CurrentTime - MissionFailedLastUpdateTime;
 	MissionFailedLastUpdateTime = CurrentTime;
 
+	// FIXME SrcRect/DstRect should be calculated one time during setup
+
 	sRECT SrcRect{0, 0, 512, 84}; // "Mission failed" image-related rectangle
-	sRECT DstRect{static_cast<int>(GameConfig().InternalWidth - SrcRect.right) / 2, 342,
-		      static_cast<int>(GameConfig().InternalWidth + SrcRect.right) / 2, 342 + SrcRect.bottom};
+	sRECT DstRect{static_cast<int>(GameConfig().InternalWidth - (SrcRect.right - SrcRect.left)) / 2,
+		      342,
+		      static_cast<int>(GameConfig().InternalWidth + (SrcRect.right - SrcRect.left)) / 2,
+		      342 + (SrcRect.bottom - SrcRect.top)};
 	vw_Draw2D(DstRect, SrcRect, MissionFailedTexture, true);
 
 	// FIXME all code below should be moved out from rendering block,
