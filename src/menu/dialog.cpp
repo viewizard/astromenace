@@ -929,65 +929,114 @@ Dialogs with default type:
 		int X1 = X+45;
 
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
-		if (DialogWeapon->InternalType<16)
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Weapon, Cannon"));
+		if (DialogWeapon->InternalType < 16)
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Weapon, Cannon"));
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Weapon, Launcher"));
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Weapon, Launcher"));
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText(GetWeaponGroupTitle(DialogWeapon->InternalType)));
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText(GetWeaponGroupTitle(DialogWeapon->InternalType)));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", (int)DialogWeapon->ArmorInitialStatus, vw_GetText("units"));
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0)
+			  << DialogWeapon->ArmorInitialStatus << " " << vw_GetText("units");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp,  "%2.1f %s", DialogWeapon->Width, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << DialogWeapon->Width << " " << vw_GetText("units");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", DialogWeapon->Length, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << DialogWeapon->Length << " " << vw_GetText("units");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", DialogWeapon->Height, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << DialogWeapon->Height << " " << vw_GetText("units");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, Kinetic:"));
-
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(0)
+			  << GetProjectileDamageKinetic(DialogWeapon->InternalType) << " ";
 		if ((DialogWeapon->InternalType == 11) ||
 		    (DialogWeapon->InternalType == 12) ||
 		    (DialogWeapon->InternalType == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", GetProjectileDamageKinetic(DialogWeapon->InternalType), vw_GetText("units/sec"));
+			tmpStream << vw_GetText("units/sec");
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", GetProjectileDamageKinetic(DialogWeapon->InternalType), vw_GetText("units/shot"));
+			tmpStream << vw_GetText("units/shot");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, EM:"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(0)
+			  << GetProjectileDamageEM(DialogWeapon->InternalType) << " ";
 		if ((DialogWeapon->InternalType == 11) ||
 		    (DialogWeapon->InternalType == 12) ||
 		    (DialogWeapon->InternalType == 14))
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", GetProjectileDamageEM(DialogWeapon->InternalType), vw_GetText("units/sec"));
+			tmpStream << vw_GetText("units/sec");
 		else
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", GetProjectileDamageEM(DialogWeapon->InternalType), vw_GetText("units/shot"));
+			tmpStream << vw_GetText("units/shot");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", DialogWeapon->EnergyUse, vw_GetText("units per shot"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << DialogWeapon->EnergyUse << " " << vw_GetText("units per shot");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ammo:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", DialogWeapon->AmmoStart, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(0)
+			  << DialogWeapon->AmmoStart << " " << vw_GetText("units");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Reload:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", DialogWeapon->NextFireTime, vw_GetText("seconds"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << DialogWeapon->NextFireTime << " " << vw_GetText("seconds");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Range:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetProjectileRange(DialogWeapon->InternalType), vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << GetProjectileRange(DialogWeapon->InternalType) << " " << vw_GetText("units");
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
 		// закрываем...
-		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) CloseDialog();
+		if (vw_GetMouseLeftClick(true) ||
+		    vw_GetMouseRightClick(true))
+			CloseDialog();
 	}
 	break;
 
