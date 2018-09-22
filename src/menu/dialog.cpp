@@ -1053,65 +1053,94 @@ Dialogs with default type:
 		int Size2 = 130;
 		int X1 = X+45;
 
+		sRGBCOLOR tmpColor{eRGBCOLOR::white};
+		float tmpTransp{DialogContentTransp};
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(1);
+
 		switch (DialogSystem) {
 		case 1:
 		case 2:
 		case 3:
 		case 4:
-
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Spaceship Engine"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
-			if (NeedMoreEnergyDialog && (GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1))
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), vw_GetText("units per sec"));
-			else {
-				if (GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) {
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), vw_GetText("units per sec"));
-				} else if (GameConfig().Profile[CurrentProfile].EngineSystem == 0)
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetShipEngineSystemEnergyUse(DialogSystem), vw_GetText("units per sec"));
-				else {
-					if (GetShipEngineSystemEnergyUse(DialogSystem) < GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem))
-						vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units per sec"));
-					else
-						vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%3.1f (%3.1f) %s", GetShipEngineSystemEnergyUse(DialogSystem), GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units per sec"));
-				}
+			if (NeedMoreEnergyDialog &&
+			    (GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1)) {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::red};
+				tmpTransp = DialogContentTransp * CurrentAlert3;
+				tmpStream << GetShipEngineSystemEnergyUse(DialogSystem) << " ";
+			} else if ((GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) ||
+				 (GameConfig().Profile[CurrentProfile].EngineSystem == 0)) {
+				tmpStream << GetShipEngineSystemEnergyUse(DialogSystem) << " ";
+			} else if (GetShipEngineSystemEnergyUse(DialogSystem) < GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem)) {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::green};
+				tmpStream << GetShipEngineSystemEnergyUse(DialogSystem) << " ("
+					  << GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
+			} else {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
+				tmpStream << GetShipEngineSystemEnergyUse(DialogSystem) << " ("
+					  << GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
 			}
+			tmpStream << vw_GetText("units per sec");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Engine Power:"));
-			if (GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) {
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), vw_GetText("units"));
-			} else if (GameConfig().Profile[CurrentProfile].EngineSystem == 0)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetEnginePower(DialogSystem), vw_GetText("units"));
-			else {
-				if (GetEnginePower(DialogSystem) > GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem))
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
-				else
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%3.1f (%3.1f) %s", GetEnginePower(DialogSystem), GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
+			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
+			tmpTransp = DialogContentTransp;
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if ((GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) ||
+			    (GameConfig().Profile[CurrentProfile].EngineSystem == 0)) {
+				tmpStream << GetEnginePower(DialogSystem) << " ";
+			} else if (GetEnginePower(DialogSystem) > GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem)) {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::green};
+				tmpStream << GetEnginePower(DialogSystem) << " ("
+					  << GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
+			} else {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
+				tmpStream << GetEnginePower(DialogSystem) << " ("
+					  << GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
 			}
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Acceleration:"));
-			if (GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) {
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), vw_GetText("units"));
-			} else if (GameConfig().Profile[CurrentProfile].EngineSystem == 0)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetEngineAcceleration(DialogSystem), vw_GetText("units"));
-			else {
-				if (GetEngineAcceleration(DialogSystem) > GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem))
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
-				else
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%3.1f (%3.1f) %s", GetEngineAcceleration(DialogSystem), GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem), vw_GetText("units"));
+			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
+			tmpTransp = DialogContentTransp;
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if ((GameConfig().Profile[CurrentProfile].EngineSystem == DialogSystem) ||
+			    (GameConfig().Profile[CurrentProfile].EngineSystem == 0)) {
+				tmpStream << GetEngineAcceleration(DialogSystem) << " ";
+			} else if (GetEngineAcceleration(DialogSystem) > GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem)) {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::green};
+				tmpStream << GetEngineAcceleration(DialogSystem) << " ("
+					  << GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
+			} else {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
+				tmpStream << GetEngineAcceleration(DialogSystem) << " ("
+					  << GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
 			}
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
 
