@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// FIXME ostringstream is not so fast, move all string initialization into setup,
+//       all ostringstream-related code should be called only one time in dialog init
+
 // TODO translate comments
 
 #include "../core/core.h"
@@ -38,6 +41,8 @@
 #include "../object3d/projectile/projectile.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -772,105 +777,141 @@ Dialogs with default type:
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
 
 			Y1 += Offset;
-			if (sharedWorkshopFighterGame == sharedDialogSpaceShip) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Width:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", sharedDialogSpaceShip->Width, vw_GetText("units"));
-			} else {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Width:"));
+			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Width:"));
+			sRGBCOLOR tmpColor{eRGBCOLOR::white};
+			std::ostringstream tmpStream;
+			tmpStream << std::fixed << std::setprecision(1);
+			if (sharedDialogSpaceShip->Width == sharedWorkshopFighterGame->Width)
+				tmpStream << sharedDialogSpaceShip->Width << " ";
+			else {
 				if (sharedDialogSpaceShip->Width > sharedWorkshopFighterGame->Width)
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%2.1f (%2.1f) %s", sharedDialogSpaceShip->Width, sharedWorkshopFighterGame->Width, vw_GetText("units"));
+					tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 				else
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%2.1f (%2.1f) %s", sharedDialogSpaceShip->Width, sharedWorkshopFighterGame->Width, vw_GetText("units"));
+					tmpColor = sRGBCOLOR{eRGBCOLOR::green};
+
+				tmpStream << sharedDialogSpaceShip->Width << " (" << sharedWorkshopFighterGame->Width << ") ";
 			}
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
-			if (sharedWorkshopFighterGame == sharedDialogSpaceShip) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", sharedDialogSpaceShip->Length, vw_GetText("units"));
-			} else {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
+			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
+			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if (sharedDialogSpaceShip->Length == sharedWorkshopFighterGame->Length)
+				tmpStream << sharedDialogSpaceShip->Length << " ";
+			else {
 				if (sharedDialogSpaceShip->Length > sharedWorkshopFighterGame->Length)
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%2.1f (%2.1f) %s", sharedDialogSpaceShip->Length, sharedWorkshopFighterGame->Length, vw_GetText("units"));
+					tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 				else
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%2.1f (%2.1f) %s", sharedDialogSpaceShip->Length, sharedWorkshopFighterGame->Length, vw_GetText("units"));
-			}
+					tmpColor = sRGBCOLOR{eRGBCOLOR::green};
 
+				tmpStream << sharedDialogSpaceShip->Length << " (" << sharedWorkshopFighterGame->Length << ") ";
+			}
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
-			if (sharedWorkshopFighterGame == sharedDialogSpaceShip) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%2.1f %s", sharedDialogSpaceShip->Height, vw_GetText("units"));
-			} else {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
+			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
+			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if (sharedDialogSpaceShip->Height == sharedWorkshopFighterGame->Height)
+				tmpStream << sharedDialogSpaceShip->Height << " ";
+			else {
 				if (sharedDialogSpaceShip->Height > sharedWorkshopFighterGame->Height)
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%2.1f (%2.1f) %s", sharedDialogSpaceShip->Height, sharedWorkshopFighterGame->Height, vw_GetText("units"));
+					tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 				else
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%2.1f (%2.1f) %s", sharedDialogSpaceShip->Height, sharedWorkshopFighterGame->Height, vw_GetText("units"));
+					tmpColor = sRGBCOLOR{eRGBCOLOR::green};
+
+				tmpStream << sharedDialogSpaceShip->Height << " (" << sharedWorkshopFighterGame->Height << ") ";
 			}
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Engines:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", sharedDialogSpaceShip->Engines.size(), vw_GetText("units"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << sharedDialogSpaceShip->Engines.size() << " " << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
-			if (sharedWorkshopFighterGame == sharedDialogSpaceShip) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Armor:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", (int)GetShipArmor(sharedDialogSpaceShip->InternalType), vw_GetText("units"));
-				Y1 += Offset;
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*2), vw_GetText("units"));
-				Y1 += Offset;
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*3), vw_GetText("units"));
-				Y1 += Offset;
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*4), vw_GetText("units"));
+			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Armor:"));
+			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::setprecision(0);
+			if (GetShipArmor(sharedDialogSpaceShip->InternalType) == GetShipArmor(sharedWorkshopFighterGame->InternalType))
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) << " ";
+			else {
+				if (GetShipArmor(sharedDialogSpaceShip->InternalType) < GetShipArmor(sharedWorkshopFighterGame->InternalType))
+					tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
+				else
+					tmpColor = sRGBCOLOR{eRGBCOLOR::green};
 
-			} else {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Armor:"));
-				if (GetShipArmor(sharedDialogSpaceShip->InternalType) < GetShipArmor(sharedWorkshopFighterGame->InternalType)) {
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(sharedDialogSpaceShip->InternalType), (int)GetShipArmor(sharedDialogSpaceShip->InternalType), vw_GetText("units"));
-					Y1 += Offset;
-					vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*2), (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*2), vw_GetText("units"));
-					Y1 += Offset;
-					vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*3), (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*3), vw_GetText("units"));
-					Y1 += Offset;
-					vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*4), (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*4), vw_GetText("units"));
-				} else {
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%i (%i) %s", (int)GetShipArmor(sharedDialogSpaceShip->InternalType), (int)GetShipArmor(sharedDialogSpaceShip->InternalType), vw_GetText("units"));
-					Y1 += Offset;
-					vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*2), (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*2), vw_GetText("units"));
-					Y1 += Offset;
-					vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*3), (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*3), vw_GetText("units"));
-					Y1 += Offset;
-					vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
-					vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%i (%i) %s", (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*4), (int)(GetShipArmor(sharedDialogSpaceShip->InternalType)*4), vw_GetText("units"));
-				}
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) << ") ";
 			}
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
 
+			// FIXME for "Upgrade"s are only difference with "Armor" is multiplier, remove code duplication here
+
+			Y1 += Offset;
+			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if (GetShipArmor(sharedDialogSpaceShip->InternalType) == GetShipArmor(sharedWorkshopFighterGame->InternalType))
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 2 << " ";
+			else
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 2 << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) * 2 << ") ";
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+
+			Y1 += Offset;
+			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if (GetShipArmor(sharedDialogSpaceShip->InternalType) == GetShipArmor(sharedWorkshopFighterGame->InternalType))
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 3 << " ";
+			else
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 3 << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) * 3 << ") ";
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+
+			Y1 += Offset;
+			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if (GetShipArmor(sharedDialogSpaceShip->InternalType) == GetShipArmor(sharedWorkshopFighterGame->InternalType))
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 4 << " ";
+			else
+				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 4 << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) * 4 << ") ";
+			tmpStream << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Weapon Slots:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", sharedDialogSpaceShip->WeaponSlots.size(), vw_GetText("units"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << sharedDialogSpaceShip->WeaponSlots.size() << " " << vw_GetText("units");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Slot Levels:"));
-			int SSS = 0;
-			if (sharedDialogSpaceShip->WeaponSlots.size()>0) {
-				vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i", sharedDialogSpaceShip->WeaponSlots[0].Type);
-				SSS += vw_TextWidth("%i", sharedDialogSpaceShip->WeaponSlots[0].Type);
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if (!sharedDialogSpaceShip->WeaponSlots.empty())
+				tmpStream << sharedDialogSpaceShip->WeaponSlots[0].Type;
+			for (unsigned i = 1; i < sharedDialogSpaceShip->WeaponSlots.size(); i++) {
+				tmpStream << "/" << sharedDialogSpaceShip->WeaponSlots[i].Type;
 			}
-			for (unsigned i=1; i<sharedDialogSpaceShip->WeaponSlots.size(); i++) {
-				vw_DrawText(X1+Size+SSS, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "/%i", sharedDialogSpaceShip->WeaponSlots[i].Type);
-				SSS += vw_TextWidth("/%i", sharedDialogSpaceShip->WeaponSlots[i].Type);
-			}
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
-			// закрываем...
-			if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) CloseDialog();
+			if (vw_GetMouseLeftClick(true) ||
+			    vw_GetMouseRightClick(true))
+				CloseDialog();
 		}
 	}
 	break;
