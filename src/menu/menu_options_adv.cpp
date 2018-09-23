@@ -37,6 +37,8 @@
 #include "../main.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -170,9 +172,12 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			Options_TexturesAnisotropyLevel = vw_DevCaps().MaxAnisotropyLevel;
 	}
 	if (Options_TexturesAnisotropyLevel > 1) {
-		Size = vw_TextWidth("x%i", Options_TexturesAnisotropyLevel);
-		SizeI = (170-Size)/2;
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, "x%i", Options_TexturesAnisotropyLevel);
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0)
+			  << "x" << Options_TexturesAnisotropyLevel;
+		Size = vw_TextWidth(tmpStream.str().c_str());
+		SizeI = (170 - Size) / 2;
+		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, tmpStream.str().c_str());
 	} else {
 		if (vw_DevCaps().MaxAnisotropyLevel > 1) {
 			Size = vw_TextWidth(vw_GetText("Off"));
@@ -260,15 +265,16 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Off"));
 		}
 	} else {
-		if ((Options_MSAA == Options_CSAA) || (Options_CSAA == 0)) {
-			Size = vw_TextWidth("%ix MS",Options_MSAA);
-			SizeI = (170-Size)/2;//Off, 2x, 4x ...
-			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, "%ix MS", Options_MSAA);
-		} else {
-			Size = vw_TextWidth("%ix CS/%ix MS",Options_CSAA,Options_MSAA);
-			SizeI = (170-Size)/2;//Off, 2x, 4x ...
-			vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, "%ix CS/%ix MS",Options_CSAA,Options_MSAA);
-		}
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0);
+		if ((Options_MSAA == Options_CSAA) ||
+		    (Options_CSAA == 0))
+			tmpStream << Options_MSAA << "x MS";
+		else
+			tmpStream << Options_CSAA << "x CS/" << Options_MSAA << "x MS";
+		Size = vw_TextWidth(tmpStream.str().c_str());
+		SizeI = (170 - Size) / 2; // Off, 2x, 4x ...
+		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, tmpStream.str().c_str());
 	}
 
 
