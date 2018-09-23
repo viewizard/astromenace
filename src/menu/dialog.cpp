@@ -1305,37 +1305,51 @@ Dialogs with default type:
 		case 14:
 		case 15:
 		case 16:
-
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Targeting System"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 0.1f, vw_GetText("units per sec"));
+			tmpStream << 0.1f << " " << vw_GetText("units per sec");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Orientation Speed:"));
-			if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem == (DialogSystem - 12)) {
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), vw_GetText("deg per sec"));
-			} else if (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem == 0)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 40.0f*(DialogSystem-12), vw_GetText("deg per sec"));
-			else {
-				if (DialogSystem-12 > GameConfig().Profile[CurrentProfile].TargetingMechanicSystem)
-					vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f * (DialogSystem - 12), 40.0f * GameConfig().Profile[CurrentProfile].TargetingMechanicSystem, vw_GetText("deg per sec"));
-				else
-					vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, "%3.1f (%3.1f) %s", 40.0f * (DialogSystem - 12), 40.0f * GameConfig().Profile[CurrentProfile].TargetingMechanicSystem, vw_GetText("deg per sec"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::setprecision(0);
+			if ((GameConfig().Profile[CurrentProfile].TargetingMechanicSystem == (DialogSystem - 12)) ||
+			    (GameConfig().Profile[CurrentProfile].TargetingMechanicSystem == 0)) {
+				tmpStream << 40.0f * (DialogSystem - 12) << " ";
+			} else if ((DialogSystem - 12) > GameConfig().Profile[CurrentProfile].TargetingMechanicSystem) {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::green};
+				tmpStream << 40.0f * (DialogSystem - 12) << " ("
+					  << 40.0f * GameConfig().Profile[CurrentProfile].TargetingMechanicSystem << ") ";
+			} else {
+				tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
+				tmpStream << 40.0f * (DialogSystem - 12) << " ("
+					  << 40.0f * GameConfig().Profile[CurrentProfile].TargetingMechanicSystem << ") ";
 			}
+			tmpStream << vw_GetText("deg per sec");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Optical Computer"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Weapon Orientation"));
 
