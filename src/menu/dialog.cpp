@@ -1370,69 +1370,87 @@ Dialogs with default type:
 		case 18:
 		case 19:
 		case 20:
-
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Advanced System"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
-			if (NeedMoreEnergyDialog)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*DialogContentTransp, "%3.1f %s", GetShipProtectionSystemEnergyUse(DialogSystem-16), vw_GetText("units per sec"));
-			else
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", GetShipProtectionSystemEnergyUse(DialogSystem-16), vw_GetText("units per sec"));
-
-			if (DialogSystem == 17) {
-				Y1 += Offset;
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Hull Repair Rate:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%0.1f%% %s", 0.5f, vw_GetText("per sec"));
+			if (NeedMoreEnergyDialog) {
+				tmpTransp = DialogContentTransp * CurrentAlert3;
+				tmpColor = sRGBCOLOR{eRGBCOLOR::red};
 			}
-			if (DialogSystem == 18) {
-				Y1 += Offset;
+			tmpStream << GetShipProtectionSystemEnergyUse(DialogSystem - 16) << " " << vw_GetText("units per sec");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+
+			tmpTransp = DialogContentTransp;
+			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+
+			Y1 += Offset;
+			if (DialogSystem == 17) {
+				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Hull Repair Rate:"));
+				tmpStream << 0.5f << "% " << vw_GetText("per sec");
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			} else if (DialogSystem == 18) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, Hull:"));
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "x4");
+
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, System:"));
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "x5");
-			}
-			if (DialogSystem == 19) {
-				Y1 += Offset;
+			} else if (DialogSystem == 19) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Shield Power:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 100.0f, vw_GetText("units"));
+				tmpStream << 100.0f << " " << vw_GetText("units");
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i%% %s", 2, vw_GetText("per sec"));
-			}
-			if (DialogSystem == 20) {
-				Y1 += Offset;
+				tmpStream.clear();
+				tmpStream.str(std::string{});
+				tmpStream << 2 << "% " << vw_GetText("per sec");
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			} else if (DialogSystem == 20) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Shield Power:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 150.0f, vw_GetText("units"));
+				tmpStream << 150.0f << " " << vw_GetText("units");
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i%% %s", 3, vw_GetText("per sec"));
+				tmpStream.clear();
+				tmpStream.str(std::string{});
+				tmpStream << 3 << "% " << vw_GetText("per sec");
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 			}
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Hull Resistance"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Systems Resistance"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("SpaceShip Vitality"));
 
 			break;
 		}
 
-
-		// закрываем...
-		if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true))
+		if (vw_GetMouseLeftClick(true) ||
+		    vw_GetMouseRightClick(true))
 			CloseDialog();
 	}
 	break;
