@@ -1170,6 +1170,8 @@ void InformationObject3DText(int ObjectNum)
 
 	Y1 = 130;
 
+	std::ostringstream tmpStream;
+	tmpStream << std::fixed << std::setprecision(0);
 
 
 	switch (ObjectNum) {
@@ -1183,43 +1185,63 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset+Offset+5;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Marauder"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		tmpStream << vw_GetText("Kinetic") << ", " << vw_GetText("Propelled");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << 10 << " - " << 100 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoPirateShipStart+4:
 		Y1 += Offset+Offset+5;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Warder"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		tmpStream << vw_GetText("Kinetic") << ", " << vw_GetText("Propelled");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << 10 << " - " << 200 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoPirateShipStart+5:
 		Y1 += Offset+Offset+5;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Raider"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		tmpStream << vw_GetText("Kinetic") << ", " << vw_GetText("Propelled");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << 10 << " - " << 300 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoPirateShipStart+6:
 	case InfoPirateShipStart+7:
 		Y1 += Offset+Offset+5;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Missile Carrier"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		tmpStream << vw_GetText("Kinetic") << ", " << vw_GetText("Propelled");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 500, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << 10 << " - " << 500 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoPirateShipStart+8:
 	case InfoPirateShipStart+9:
 		Y1 += Offset+Offset+5;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Battle Freighter"));
 		Y1 += Offset*7;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s, %s", vw_GetText("Kinetic"), vw_GetText("Propelled"));
+		tmpStream << vw_GetText("Kinetic") << ", " << vw_GetText("Propelled");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 300, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << 10 << " - " << 300 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoPirateShipStart+10:
 	case InfoPirateShipStart+11:
@@ -1229,7 +1251,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 50, 300, vw_GetText("units"));
+		tmpStream << 50 << " - " << 300 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoPirateShipStart+13:
 	case InfoPirateShipStart+14:
@@ -1238,7 +1261,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 50, 200, vw_GetText("units"));
+		tmpStream << 50 << " - " << 200 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 
 
@@ -1253,7 +1277,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 30, vw_GetText("units"));
+		tmpStream << 10 << " - " << 30 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoMilitaryBuildingStart+3:
 		Y1 += Offset+Offset+5;
@@ -1261,7 +1286,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		tmpStream << 10 << " - " << 50 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoMilitaryBuildingStart+1:
 	case InfoMilitaryBuildingStart+6:
@@ -1270,7 +1296,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		tmpStream << 10 << " - " << 100 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoMilitaryBuildingStart+2:
 		Y1 += Offset+Offset+5;
@@ -1278,7 +1305,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		tmpStream << 10 << " - " << 200 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoMilitaryBuildingStart+4:
 		Y1 += Offset+Offset+5;
@@ -1286,7 +1314,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		tmpStream << 10 << " - " << 100 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 
 
@@ -1297,7 +1326,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
+		tmpStream << 10 << " - " << 40 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoWheeledStart+1:
 		Y1 += Offset+Offset+5;
@@ -1305,7 +1335,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		tmpStream << 10 << " - " << 100 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoWheeledStart+2:
 		Y1 += Offset+Offset+5;
@@ -1313,7 +1344,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
+		tmpStream << 10 << " - " << 40 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoWheeledStart+3:
 		Y1 += Offset+Offset+5;
@@ -1321,7 +1353,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Ion"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		tmpStream << 10 << " - " << 50 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoWheeledStart+4:
 		Y1 += Offset+Offset+5;
@@ -1329,7 +1362,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Antimatter"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		tmpStream << 10 << " - " << 100 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoWheeledStart+5:
 	case InfoWheeledStart+6:
@@ -1338,7 +1372,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 40, vw_GetText("units"));
+		tmpStream << 10 << " - " << 40 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoWheeledStart+7:
 		Y1 += Offset+Offset+5;
@@ -1346,7 +1381,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
+		tmpStream << 10 << " - " << 400 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 
 
@@ -1361,7 +1397,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		tmpStream << 10 << " - " << 50 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoTrackedStart+2:
 		Y1 += Offset+Offset+5;
@@ -1369,7 +1406,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Plasma"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 100, vw_GetText("units"));
+		tmpStream << 10 << " - " << 100 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoTrackedStart+3:
 	case InfoTrackedStart+4:
@@ -1379,7 +1417,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Antimatter"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 200, vw_GetText("units"));
+		tmpStream << 10 << " - " << 200 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoTrackedStart+9:
 		Y1 += Offset+Offset+5;
@@ -1387,7 +1426,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Kinetic"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 50, vw_GetText("units"));
+		tmpStream << 10 << " - " << 50 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoTrackedStart+10:
 	case InfoTrackedStart+11:
@@ -1397,7 +1437,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Propelled"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i - %i %s", 10, 400, vw_GetText("units"));
+		tmpStream << 10 << " - " << 400 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 	case InfoTrackedStart+13:
 		Y1 += Offset+Offset+5;
@@ -1405,7 +1446,8 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset*7;
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Non-combatant"));
 		Y1 += Offset;
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", 0, vw_GetText("units"));
+		tmpStream << 0 << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 		break;
 
 
