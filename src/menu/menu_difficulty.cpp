@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// FIXME ostringstream is not so fast, move all string initialization into setup,
+//       all ostringstream-related code should be called only one time in init
+
 // TODO translate comments
 
 #include "../core/core.h"

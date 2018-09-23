@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// FIXME ostringstream is not so fast, move all string initialization into setup,
+//       all ostringstream-related code should be called only one time in init
+
 // TODO translate comments
 
 #include "../core/core.h"
@@ -660,9 +663,11 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Developer:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Earth Federation"));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Damage, Kinetic:"));
 		if (((CreateNum - InfoWeaponStart + 1) == 11) ||
@@ -684,16 +689,18 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Energy Use:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%3.1f %s", InfoObjectEnergyUse, vw_GetText("units per shot"));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Ammo:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", InfoObjectAmmo, vw_GetText("units"));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Reload:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%3.1f %s", InfoObjectReload, vw_GetText("seconds"));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Range:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%3.1f %s", InfoObjectRange, vw_GetText("units"));
-
 	}
 	// мины
 	if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {

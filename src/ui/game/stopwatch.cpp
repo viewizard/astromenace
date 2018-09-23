@@ -76,6 +76,7 @@ void cStopwatch::Update()
 
 	LastTick_ = CurrentTick;
 
+	// ostringstream is not so fast, but we use it one time per 100 milliseconds
 	std::ostringstream tmpStream;
 	tmpStream << "mission time: " << std::fixed << std::setprecision(1)
 		  << vw_GetTimeThread(GameTimeThread) - InitialTime_;

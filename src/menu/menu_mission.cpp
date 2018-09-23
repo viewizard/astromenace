@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// FIXME ostringstream is not so fast, move all string initialization into setup,
+//       all ostringstream-related code should be called only one time in init
+
 // TODO translate comments
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)

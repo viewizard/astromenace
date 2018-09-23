@@ -356,7 +356,7 @@ void ProfileMenu()
 			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i", GameConfig().Profile[i].Experience);
 			Size = vw_TextWidth("%i%%", ProfileDifficulty(i));
 			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i%%", ProfileDifficulty(i));
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i%%", ProfileDifficulty(i)); // FIXME change to single %, after vw_DrawText() revise (variadic args)
 
 
 			// работаем с клавиатурой
