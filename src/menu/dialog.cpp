@@ -1242,46 +1242,60 @@ Dialogs with default type:
 
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Optical Computer"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
 			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%3.1f %s", 0.1f, vw_GetText("units per sec"));
+			tmpStream << 0.1f << " " << vw_GetText("units per sec");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Target Tracing:"));
-			if (DialogSystem == 9)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", 1, vw_GetText("object(s)"));
-			if (DialogSystem == 10)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", 1, vw_GetText("object(s)"));
-			if (DialogSystem == 11)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", 6, vw_GetText("object(s)"));
-			if (DialogSystem == 12)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "%i %s", 6, vw_GetText("object(s)"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << std::setprecision(0);
+			if ((DialogSystem == 9) ||
+			    (DialogSystem == 10)) {
+				tmpStream << 1 << " ";
+			} else if ((DialogSystem == 11) ||
+				   (DialogSystem == 12)) {
+				tmpStream << 6 << " ";
+			}
+			tmpStream << vw_GetText("object(s)");
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Auto Adjustment:"));
-			if (DialogSystem == 9)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("No"));
-			if (DialogSystem == 10)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Yes"));
-			if (DialogSystem == 11)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("No"));
-			if (DialogSystem == 12)
-				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Yes"));
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			if ((DialogSystem == 9) ||
+			    (DialogSystem == 11)) {
+				tmpStream << vw_GetText("No");
+			} else if ((DialogSystem == 10) ||
+				   (DialogSystem == 12)) {
+				tmpStream << vw_GetText("Yes");
+			}
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Weapon Fire Range"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Weapon Orientation"));
+
 			Y1 += Offset;
 			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Targeting System"));
 
