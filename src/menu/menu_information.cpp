@@ -595,24 +595,53 @@ void InformationObject3DText(int ObjectNum)
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Status:"));
 		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Ally"));
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Armor:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", (int)InfoObjectArmor, vw_GetText("units"));
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0)
+			  << InfoObjectArmor << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Width:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp,  "%2.1f %s", InfoObjectWidth, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << InfoObjectWidth << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Length:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectLength, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << InfoObjectLength << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Height:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%2.1f %s", InfoObjectHeight, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(1)
+			  << InfoObjectHeight << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s:", vw_GetText("Weapons"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", InfoObjectWeaponQuantity, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(0)
+			  << InfoObjectWeaponQuantity << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Engines:"));
-		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i %s", InfoObjectEngineQuantity, vw_GetText("units"));
+		tmpStream.clear();
+		tmpStream.str(std::string{});
+		tmpStream << std::setprecision(0)
+			  << InfoObjectEngineQuantity << " " << vw_GetText("units");
+		vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 	}
 	// оружие для кораблей землян
 	if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
