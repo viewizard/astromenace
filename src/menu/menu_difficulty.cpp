@@ -32,6 +32,8 @@
 #include "../assets/texture.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -87,9 +89,12 @@ void DifficultyMenu()
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty);
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0)
+			  << "x" << static_cast<int>(GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty);
+		Size = vw_TextWidth(tmpStream.str().c_str());
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty);
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 	}
 
 
@@ -120,9 +125,12 @@ void DifficultyMenu()
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].EnemyArmorPenalty);
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0)
+			  << "x" << static_cast<int>(GameConfig().Profile[CurrentProfile].EnemyArmorPenalty);
+		Size = vw_TextWidth(tmpStream.str().c_str());
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].EnemyArmorPenalty);
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 	}
 
 
@@ -153,9 +161,12 @@ void DifficultyMenu()
 		SizeI = (110-Size)/2;
 		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("None"));
 	} else {
-		Size = vw_TextWidth("x%i", GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty);
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0)
+			  << "x" << static_cast<int>(GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty);
+		Size = vw_TextWidth(tmpStream.str().c_str());
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "x%i", GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty);
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 	}
 
 
@@ -252,9 +263,13 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	Size = vw_TextWidth("%s: %i%%", vw_GetText("Current Profile Difficulty"), ProfileDifficulty(CurrentProfile));
+	std::ostringstream tmpStream;
+	tmpStream << std::fixed << std::setprecision(0)
+		  << vw_GetText("Current Profile Difficulty")
+		  << ": " << ProfileDifficulty(CurrentProfile) << "%%"; // FIXME change to single %, after vw_DrawText() revise (variadic args)
+	Size = vw_TextWidth(tmpStream.str().c_str());
 	SizeI = (GameConfig().InternalWidth - Size) / 2;
-	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s: %i%%", vw_GetText("Current Profile Difficulty"), ProfileDifficulty(CurrentProfile));
+	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, tmpStream.str().c_str());
 
 
 	int X = GameConfig().InternalWidth / 2 - 192;
