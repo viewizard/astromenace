@@ -38,6 +38,8 @@
 #include "../object3d/ground_object/ground_object.h"
 #include "../object3d/projectile/projectile.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -1204,9 +1206,11 @@ void InformationMenu()
 
 
 	// выводим кол-во и текущую страницу
-	int Size = vw_TextWidth(vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
+	std::ostringstream tmpStream;
+	tmpStream << CreateNum << "/" << InfoEnd;
+	int Size = vw_TextWidth(tmpStream.str().c_str());
 	int SizeI = (GameConfig().InternalWidth - Size) / 2;
-	vw_DrawText(SizeI, 50+30*16+15, 0, 0, 1.0f, sRGBCOLOR{0.5f, 0.5f, 0.5f}, 0.6f * MenuContentTransp, vw_GetText("Page %i of %i"), CreateNum, InfoEnd);
+	vw_DrawText(SizeI, 50+30*16+15, 0, 0, 1.0f, sRGBCOLOR{0.5f, 0.5f, 0.5f}, 0.6f * MenuContentTransp, tmpStream.str().c_str());
 
 
 //	DrawFont(760.0f, 660.0f, 0, 0, 1, 0.2f*MenuContentTransp, "PgUp - Previous Page");
