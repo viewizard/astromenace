@@ -1686,9 +1686,13 @@ Dialogs with default type:
 
 		int k=30;
 
-		SizeI = vw_TextWidth(vw_GetText("You have already completed this mission. Your previous best"));
-		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You have already completed this mission. Your previous best"));
-		vw_DrawText(X+25, Y+80+k*1, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("result is %i points of experience."), GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission]);
+		vw_DrawText(X+25, Y+80+k*0, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You have already completed this mission."));
+
+		std::ostringstream tmpStream;
+		tmpStream << std::fixed << std::setprecision(0)
+			  << vw_GetText("Your previous best result:") << " "
+			  << GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission];
+		vw_DrawText(X+25, Y+80+k*1, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
 
 		SizeI = vw_TextWidth(vw_GetText("You can replay this mission as many times as you like, but you"));
 		vw_DrawText(X+25, Y+100+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You can replay this mission as many times as you like, but you"));
