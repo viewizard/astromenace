@@ -37,6 +37,8 @@
 #include "../ui/cursor.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -227,7 +229,9 @@ void MissionMenu()
 
 	// выводим текущий профиль пилота
 	int Size = vw_TextWidth("%s: ", vw_GetText("Pilot Profile"));
-	vw_DrawText(X1, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, MenuContentTransp, "%s: ", vw_GetText("Pilot Profile"));
+	std::ostringstream tmpStream;
+	tmpStream << vw_GetText("Pilot Profile") << ": ";
+	vw_DrawText(X1, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, MenuContentTransp, tmpStream.str().c_str());
 
 	if ((Size + vw_TextWidth(GameConfig().Profile[CurrentProfile].Name)) > 500) {
 		vw_DrawText(X1+Size, 208+12, 0, 500-Size, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
