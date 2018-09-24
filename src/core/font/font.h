@@ -56,11 +56,11 @@ int vw_DrawTextUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 // Draw 3D text with current font.
 int vw_DrawText3DUTF32(float X, float Y, float Z, const std::u32string &Text);
 
-// Get string size with current font size with variadic arguments.
-int vw_TextWidth(const char *Text, ...);
-// Draw text with current font with variadic arguments.
+// Get string size with current font size.
+int vw_TextWidth(const char *Text);
+// Draw text with current font.
 int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
-		const sRGBCOLOR &Color, float Transp, const char *Text, ...);
+		const sRGBCOLOR &Color, float Transp, const char *Text);
 
 } // viewizard namespace
 

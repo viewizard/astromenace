@@ -28,8 +28,6 @@
 // TODO move to std::string, probably, we need move directly to std::u32string (utf32)
 //      for all text rendering and text input (profile names)
 
-// TODO remove va_start, use variadic templates instead (?)
-
 // TODO provide static vw_DrawText(), dynamic realization we have now,
 //      static should create array with text blocks as key and VBO/VAO/IBO (and other data)
 //      as value for fast rendering.
@@ -49,7 +47,6 @@
 #include "../vfs/vfs.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <stdarg.h> // va_start
 
 namespace viewizard {
 
@@ -512,25 +509,16 @@ static void DrawBufferOnTextEnd(GLtexture CurrentTexture)
 }
 
 /*
- * vw_DrawTextUTF32 wrapper with variadic arguments and conversion into utf32.
+ * vw_DrawTextUTF32 wrapper with conversion into utf32.
  */
 int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
-		const sRGBCOLOR &Color, float Transp, const char *Text, ...)
+		const sRGBCOLOR &Color, float Transp, const char *Text)
 {
 	if (!Text)
 		return ERR_PARAMETERS;
-	// get string with variadic arguments
-	// allocate buffer
-	va_list ap;
-	va_start(ap, Text);
-	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, Text, ap));
-	va_end(ap);
-	// get data into buffer
-	va_start(ap, Text);
-	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
-	va_end(ap);
+
 	// convert from utf8 into utf32
-	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
+	const std::u32string UTF32String{ConvertUTF8.from_bytes(Text)};
 
 	return vw_DrawTextUTF32(X, Y, StrictWidth, ExpandWidth, FontScale, Color, Transp, UTF32String);
 }
@@ -687,25 +675,15 @@ int vw_DrawTextUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 }
 
 /*
- * vw_TextWidthUTF32 wrapper with variadic arguments and conversion into utf32.
+ * vw_TextWidthUTF32 wrapper with conversion into utf32.
  */
-int vw_TextWidth(const char *Text, ...)
+int vw_TextWidth(const char *Text)
 {
 	if (!Text)
 		return ERR_PARAMETERS;
 
-	// get string with variadic arguments
-	// allocate buffer
-	va_list ap;
-	va_start(ap, Text);
-	std::vector<char> buffer(1 + std::vsnprintf(nullptr, 0, Text, ap));
-	va_end(ap);
-	// get data into buffer
-	va_start(ap, Text);
-	std::vsnprintf(buffer.data(), buffer.size(), Text, ap);
-	va_end(ap);
 	// convert from utf8 into utf32
-	const std::u32string UTF32String{ConvertUTF8.from_bytes(buffer.data())};
+	const std::u32string UTF32String{ConvertUTF8.from_bytes(Text)};
 
 	return vw_TextWidthUTF32(UTF32String);
 }

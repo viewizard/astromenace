@@ -182,9 +182,7 @@ void ProfileInputText()
 {
 
 	if (!vw_GetCurrentUnicodeChar().empty()) {// если тут не ноль, а юникод - значит нажали
-		if ((vw_TextWidthUTF32(NewProfileName) < 540) &&
-		    // FIXME fix this, when all text will be moved to UTF32 with separate (without variadic support) text draw function
-		    (vw_GetCurrentUnicodeChar()[0] != 0x25)) { // символ % печатать не даем, т.к. работаем с variadic аргументами через общую функцию печати
+		if (vw_TextWidthUTF32(NewProfileName) < 540) {
 			NewProfileName += vw_GetCurrentUnicodeChar();
 
 			if (vw_IsSoundAvailable(SoundTaping))
@@ -374,7 +372,7 @@ void ProfileMenu()
 
 			tmpStream.clear();
 			tmpStream.str(std::string{});
-			tmpStream << ProfileDifficulty(i) << "%%"; // FIXME change to single %, after vw_DrawText() revise (variadic args)
+			tmpStream << ProfileDifficulty(i) << "%";
 			Size = vw_TextWidth(tmpStream.str().c_str());
 			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
 			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());

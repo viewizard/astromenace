@@ -1398,7 +1398,7 @@ Dialogs with default type:
 			Y1 += Offset;
 			if (DialogSystem == 17) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Hull Repair Rate:"));
-				tmpStream << 0.5f << "%% " << vw_GetText("per sec"); // FIXME change to single %, after vw_DrawText() revise (variadic args)
+				tmpStream << 0.5f << "% " << vw_GetText("per sec");
 				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 			} else if (DialogSystem == 18) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, Hull:"));
@@ -1416,7 +1416,7 @@ Dialogs with default type:
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
 				tmpStream.clear();
 				tmpStream.str(std::string{});
-				tmpStream << 2 << "%% " << vw_GetText("per sec"); // FIXME change to single %, after vw_DrawText() revise (variadic args)
+				tmpStream << 2 << "% " << vw_GetText("per sec");
 				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 			} else if (DialogSystem == 20) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Shield Power:"));
@@ -1427,7 +1427,7 @@ Dialogs with default type:
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
 				tmpStream.clear();
 				tmpStream.str(std::string{});
-				tmpStream << 3 << "%% " << vw_GetText("per sec"); // FIXME change to single %, after vw_DrawText() revise (variadic args)
+				tmpStream << 3 << "% " << vw_GetText("per sec");
 				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 			}
 

@@ -269,7 +269,7 @@ void DifficultyMenu()
 	std::ostringstream tmpStream;
 	tmpStream << std::fixed << std::setprecision(0)
 		  << vw_GetText("Current Profile Difficulty")
-		  << ": " << ProfileDifficulty(CurrentProfile) << "%%"; // FIXME change to single %, after vw_DrawText() revise (variadic args)
+		  << ": " << ProfileDifficulty(CurrentProfile) << "%";
 	Size = vw_TextWidth(tmpStream.str().c_str());
 	SizeI = (GameConfig().InternalWidth - Size) / 2;
 	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, tmpStream.str().c_str());
