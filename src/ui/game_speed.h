@@ -50,6 +50,7 @@ private:
 
 	float RemainingDrawTime_{0.0f};
 	uint32_t LastUpdateTick_{0};
+	std::string DrawString_{};
 
 public:
 	cGameSpeed(cGameSpeed const&) = delete;

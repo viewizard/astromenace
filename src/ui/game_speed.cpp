@@ -30,6 +30,8 @@
 #include "../config/config.h"
 #include "../enum.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -71,6 +73,11 @@ void cGameSpeed::SetSpeed(float Speed)
 
 	RemainingDrawTime_ = ShowNotificationSeconds;
 	LastUpdateTick_ = SDL_GetTicks();
+
+	std::ostringstream tmpStream;
+	tmpStream << std::fixed << std::setprecision(1)
+		  << vw_GetText("Game Speed:") << " " << Speed;
+	DrawString_ = tmpStream.str();
 }
 
 /*
@@ -126,11 +133,9 @@ void cGameSpeed::Draw()
 
 	vw_SetFontSize(20);
 
-	int tmpTextSize = GameConfig().InternalWidth -
-			  vw_TextWidth("%s x%1.1f", vw_GetText("Game Speed:"), GameConfig().GameSpeed);
-	vw_DrawText(tmpTextSize / 2, 80, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white},
-		    (RemainingDrawTime_ > 1.0f) ? 1.0f : RemainingDrawTime_,
-		    "%s x%1.1f", vw_GetText("Game Speed:"), GameConfig().GameSpeed);
+	int tmpTextPositionX = (GameConfig().InternalWidth - vw_TextWidth(DrawString_.c_str())) / 2;
+	vw_DrawText(tmpTextPositionX, 80, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white},
+		    (RemainingDrawTime_ > 1.0f) ? 1.0f : RemainingDrawTime_, DrawString_.c_str());
 
 	ResetFontSize();
 }
