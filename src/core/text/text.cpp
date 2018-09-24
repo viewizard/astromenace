@@ -105,7 +105,7 @@ static void CreateTextTableUTF32()
 {
 	for (unsigned int i = 0; i < TextTable.size(); i++) {
 		for (const auto tmpData : TextTable[i]) {
-			TextTableUTF32[i][tmpData.first] = ConvertUTF8.from_bytes(tmpData.second.c_str());
+			TextTableUTF32[i][tmpData.first] = ConvertUTF8.from_bytes(tmpData.second);
 		}
 	}
 	// unconditional rehash, at this line we have not rehashed map
