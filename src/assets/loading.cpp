@@ -138,9 +138,9 @@ static void DrawLoadProgress(unsigned int Current, unsigned int AllDrawLoading, 
 	vw_Draw2D(DstRect, SrcRect, Background, false, 1.0f, 0.0f);
 
 	// "LOADING" text
-	vw_DrawText(GameConfig().InternalWidth / 2 - vw_TextWidth(vw_GetText("LOADING")) / 2,
-		    GameConfig().InternalHeight - 16/*progress bar width*/ - 16/*font size*/ - CenterdPositionY,
-		    0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 1.0f, vw_GetText("LOADING"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth / 2 - vw_TextWidthUTF32(vw_GetTextUTF32("LOADING")) / 2,
+			 GameConfig().InternalHeight - 16/*progress bar width*/ - 16/*font size*/ - CenterdPositionY,
+			 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 1.0f, vw_GetTextUTF32("LOADING"));
 
 	// progress bar border
 	SrcRect(0, 0, 256, 16);
