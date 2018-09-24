@@ -45,7 +45,7 @@ void cStopwatch::Reset(bool Enable)
 
 	LastTick_ = SDL_GetTicks();
 	InitialTime_ = vw_GetTimeThread(GameTimeThread);
-	DrawString_.clear();
+	DrawStringUTF32_.clear();
 }
 
 /*
@@ -57,7 +57,7 @@ void cStopwatch::Draw()
 	if (!Enabled_)
 		return;
 
-	vw_DrawText(6,45, 0, 0, 1.0f, TextColor_, 1.0f, DrawString_);
+	vw_DrawTextUTF32(6,45, 0, 0, 1.0f, TextColor_, 1.0f, DrawStringUTF32_);
 }
 
 /*
@@ -80,7 +80,7 @@ void cStopwatch::Update()
 	std::ostringstream tmpStream;
 	tmpStream << "mission time: " << std::fixed << std::setprecision(1)
 		  << vw_GetTimeThread(GameTimeThread) - InitialTime_;
-	DrawString_ = tmpStream.str();
+	DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
 }
 
 } // astromenace namespace

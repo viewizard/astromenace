@@ -39,7 +39,7 @@ namespace astromenace {
  */
 void cFPS::ClearDrawString()
 {
-	DrawString_ = vw_GetText("fps") + std::string{" ..."};
+	DrawStringUTF32_ = ConvertUTF8.from_bytes(vw_GetText("fps") + std::string{" ..."});
 }
 
 /*
@@ -84,7 +84,7 @@ void cFPS::Draw()
 	if (!GameConfig().ShowFPS)
 		return;
 
-	vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 1.0f, DrawString_);
+	vw_DrawTextUTF32(6, 5, 0, 0, 1.0f, TextColor_, 1.0f, DrawStringUTF32_);
 }
 
 /*
@@ -111,7 +111,7 @@ void cFPS::Update()
 			if (GameConfig().VSync)
 				tmpStream << " (VSync - " << vw_GetText("On") << ")";
 
-			DrawString_ = tmpStream.str();
+			DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
 			CurrentFrame_ = 0;
 			LastTick_ = CurrentTick;
 		}

@@ -44,7 +44,7 @@ private:
 	bool Enabled_{false};
 	uint32_t LastTick_{0};
 	float InitialTime_{0.0f};
-	std::string DrawString_{};
+	std::u32string DrawStringUTF32_{};
 	sRGBCOLOR TextColor_{eRGBCOLOR::white};
 
 public:
