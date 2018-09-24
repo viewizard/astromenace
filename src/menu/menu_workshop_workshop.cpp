@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// FIXME ostringstream is not so fast, move all string initialization into setup,
+//       all ostringstream-related code should be called only one time in init
+
 // TODO translate comments
 
 #include "../game.h"
@@ -34,6 +37,8 @@
 #include "../assets/audio.h"
 #include "../assets/texture.h"
 #include "../object3d/space_ship/space_ship.h"
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -1071,12 +1076,21 @@ void Workshop_Workshop()
 	vw_DrawText(GameConfig().InternalWidth/2-250, 430, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Selected System"));
 	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth(vw_GetText("Installed System")), 430, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("Installed System"));
 
-	if (CanBuy)
-		vw_DrawText(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
-	else
-		vw_DrawText(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Cost"), GetSystemCost(CurrentSystemStockNum));
+	float tmpTransp{MenuContentTransp};
+	tmpColor = sRGBCOLOR{eRGBCOLOR::white};
+	std::ostringstream tmpStream;
+	tmpStream << std::fixed << std::setprecision(0)
+		  << vw_GetText("Cost") << ": " << GetSystemCost(CurrentSystemStockNum);
+	if (!CanBuy) {
+		tmpTransp = MenuContentTransp * CurrentAlert3;
+		tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
+	}
+	vw_DrawText(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
 
-	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth("%s: %i", vw_GetText("Cost"), Cost), 485, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%s: %i", vw_GetText("Cost"), Cost);
+	tmpStream.clear();
+	tmpStream.str(std::string{});
+	tmpStream << vw_GetText("Cost") << ": " << Cost;
+	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth(tmpStream.str().c_str()), 485, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 
 
 	if (DrawButton128_2(GameConfig().InternalWidth/2-250,580-55, vw_GetText("Info"), MenuContentTransp, false)) {
@@ -1118,11 +1132,20 @@ void Workshop_Workshop()
 
 	// вывод информации
 	vw_SetFontSize(20);
-	int SizeI = (GameConfig().InternalWidth-vw_TextWidth("%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money)) / 2;
-	if (CanBuy)
-		vw_DrawText(SizeI, 630, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
-	else
-		vw_DrawText(SizeI, 630, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3*MenuContentTransp, "%s: %i", vw_GetText("Money"), GameConfig().Profile[CurrentProfile].Money);
+
+	tmpTransp = MenuContentTransp;
+	tmpColor = sRGBCOLOR{eRGBCOLOR::yellow};
+	tmpStream.clear();
+	tmpStream.str(std::string{});
+	tmpStream << vw_GetText("Money") << ": "
+		  << GameConfig().Profile[CurrentProfile].Money;
+	int SizeI = (GameConfig().InternalWidth - vw_TextWidth(tmpStream.str().c_str())) / 2;
+	if (!CanBuy) {
+		tmpTransp = MenuContentTransp * CurrentAlert3;
+		tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
+	}
+	vw_DrawText(SizeI, 630, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+
 	ResetFontSize();
 }
 
