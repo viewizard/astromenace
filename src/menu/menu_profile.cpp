@@ -25,6 +25,9 @@
 
 *************************************************************************************/
 
+// FIXME ostringstream is not so fast, move all string initialization into setup,
+//       all ostringstream-related code should be called only one time in init
+
 // TODO translate comments
 
 #include "../core/core.h"
@@ -35,6 +38,8 @@
 #include "../ui/cursor.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -337,9 +342,14 @@ void ProfileMenu()
 
 	int TMPSoundOnProfileID = -1;
 	int TmpY = Y1-230+8;
+	std::ostringstream tmpStream;
+	tmpStream << std::fixed << std::setprecision(0);
 	for (int i = 0; i < 5; i++) {
 		if (GameConfig().Profile[i].Used) {
-			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i.",i+1);
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << i + 1 << ".";
+			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 
 			if (vw_TextWidth(GameConfig().Profile[i].Name) > 300) {
 				vw_DrawText(X1+50, TmpY, 0, 300, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[i].Name);
@@ -348,15 +358,26 @@ void ProfileMenu()
 				vw_DrawText(X1+50, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[i].Name);
 
 
-			Size = vw_TextWidth("%i", GameConfig().Profile[i].Money);
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << GameConfig().Profile[i].Money;
+			Size = vw_TextWidth(tmpStream.str().c_str());
 			SizeI = GameConfig().InternalWidth/2+2 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i", GameConfig().Profile[i].Money);
-			Size = vw_TextWidth("%i", GameConfig().Profile[i].Experience);
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << GameConfig().Profile[i].Experience;
+			Size = vw_TextWidth(tmpStream.str().c_str());
 			SizeI = GameConfig().InternalWidth/2+132 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i", GameConfig().Profile[i].Experience);
-			Size = vw_TextWidth("%i%%", ProfileDifficulty(i));
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << ProfileDifficulty(i) << "%%"; // FIXME change to single %, after vw_DrawText() revise (variadic args)
+			Size = vw_TextWidth(tmpStream.str().c_str());
 			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, "%i%%", ProfileDifficulty(i)); // FIXME change to single %, after vw_DrawText() revise (variadic args)
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
 
 
 			// работаем с клавиатурой
@@ -420,7 +441,10 @@ void ProfileMenu()
 
 		} else {
 			float transp = 0.3f;
-			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, "%i.",i+1);
+			tmpStream.clear();
+			tmpStream.str(std::string{});
+			tmpStream << i + 1 << ".";
+			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, tmpStream.str().c_str());
 			vw_DrawText(X1+50, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, vw_GetText("empty"));
 		}
 
