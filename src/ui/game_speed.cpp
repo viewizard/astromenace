@@ -133,9 +133,9 @@ void cGameSpeed::Draw()
 
 	vw_SetFontSize(20);
 
-	int tmpTextPositionX = (GameConfig().InternalWidth - vw_TextWidth(DrawString_.c_str())) / 2;
+	int tmpTextPositionX = (GameConfig().InternalWidth - vw_TextWidth(DrawString_)) / 2;
 	vw_DrawText(tmpTextPositionX, 80, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white},
-		    (RemainingDrawTime_ > 1.0f) ? 1.0f : RemainingDrawTime_, DrawString_.c_str());
+		    (RemainingDrawTime_ > 1.0f) ? 1.0f : RemainingDrawTime_, DrawString_);
 
 	ResetFontSize();
 }

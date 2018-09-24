@@ -128,8 +128,8 @@ void TopScoresMenu()
 	for (auto &tmpTopScore : TopScoresList) {
 		Y1 += Prir1;
 
-		vw_DrawTextUTF32(X1, Y1, 0, 530, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpTopScore.NameUTF32.c_str());
-		vw_DrawTextUTF32(X1 + 650, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpTopScore.ScoreUTF32.c_str());
+		vw_DrawTextUTF32(X1, Y1, 0, 530, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpTopScore.NameUTF32);
+		vw_DrawTextUTF32(X1 + 650, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpTopScore.ScoreUTF32);
 	}
 
 	int X = (GameConfig().InternalWidth - 384) / 2;

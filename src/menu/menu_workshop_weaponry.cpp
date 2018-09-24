@@ -620,13 +620,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << vw_GetText("level") << " " << sharedWorkshopFighterGame->WeaponSlots[SlotNum].Type;
-		Size = vw_TextWidth(tmpStream.str().c_str());
+		Size = vw_TextWidth(tmpStream.str());
 		WScale = 0;
 		if (Size > 88) {
 			Size = 88;
 			WScale = -88;
 		}
-		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-32, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7*MenuContentTransp, tmpStream.str().c_str());
+		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-32, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7*MenuContentTransp, tmpStream.str());
 	}
 
 }
@@ -663,7 +663,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << sharedWeapon->Ammo << "/" << sharedWeapon->AmmoStart;
-		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth(tmpStream.str().c_str());
+		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth(tmpStream.str());
 
 
 		// если все нормально - белым... иначе подмаргиваем
@@ -673,7 +673,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 			tmpTransp = MenuContentTransp *CurrentAlert3;
 			tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 		}
-		vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+		vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 
 		// стоимость перезарядки
@@ -689,12 +689,12 @@ void ShipSlotSetupWeapon(int SlotNum)
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << ReloadCost;
-		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth(tmpStream.str().c_str());
+		Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth(tmpStream.str());
 		if (ReloadCost != 0) {
 			tmpTransp = MenuContentTransp * CurrentAlert3;
 			tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 		}
-		vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+		vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 
 		// кнопка перезарядить оружие
@@ -788,7 +788,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 			tmpStream.str(std::string{});
 			tmpStream << vw_GetText("Weapon Angle:") << " "
 				  << GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
-			vw_DrawText(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+			vw_DrawText(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 			Ypos += 40;
 
 			float Min = 0.0f;
@@ -1185,7 +1185,7 @@ void Workshop_Weaponry()
 	std::ostringstream tmpStream;
 	tmpStream << std::fixed << std::setprecision(0)
 		  << vw_GetText("Weapon Type") << ": ";
-	vw_DrawText(GameConfig().InternalWidth/2-438, 110, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+	vw_DrawText(GameConfig().InternalWidth/2-438, 110, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 	vw_DrawText(GameConfig().InternalWidth/2-438+175, 110, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
 
 
@@ -1201,7 +1201,7 @@ void Workshop_Weaponry()
 			tmpStream << vw_GetText("units/sec");
 		else
 			tmpStream << vw_GetText("units/shot");
-		vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+		vw_DrawText(GameConfig().InternalWidth/2-438+175, 130, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 		k2=20;
 	}
@@ -1216,7 +1216,7 @@ void Workshop_Weaponry()
 			tmpStream << vw_GetText("units/sec");
 		else
 			tmpStream << vw_GetText("units/shot");
-		vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+		vw_DrawText(GameConfig().InternalWidth/2-438+175, 130+k2, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 	}
 
@@ -1232,7 +1232,7 @@ void Workshop_Weaponry()
 		tmpTransp = MenuContentTransp * CurrentAlert3;
 		tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 	}
-	vw_DrawText(GameConfig().InternalWidth/2-438, 400, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+	vw_DrawText(GameConfig().InternalWidth/2-438, 400, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 	// вывод стоимости
 	tmpTransp = MenuContentTransp;
@@ -1244,7 +1244,7 @@ void Workshop_Weaponry()
 		tmpTransp = MenuContentTransp * CurrentAlert3;
 		tmpColor = sRGBCOLOR{eRGBCOLOR::red};
 	}
-	vw_DrawText(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+	vw_DrawText(GameConfig().InternalWidth/2-438, 420, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 
 
@@ -1348,12 +1348,12 @@ void Workshop_Weaponry()
 	tmpStream.str(std::string{});
 	tmpStream << vw_GetText("Money") << ": "
 		  << GameConfig().Profile[CurrentProfile].Money;
-	int SizeI = (GameConfig().InternalWidth - vw_TextWidth(tmpStream.str().c_str())) / 2;
+	int SizeI = (GameConfig().InternalWidth - vw_TextWidth(tmpStream.str())) / 2;
 	if (GameConfig().Profile[CurrentProfile].Money < GetWeaponBaseCost(CurrentWorkshopNewWeapon)) {
 		tmpTransp = MenuContentTransp * CurrentAlert3;
 		tmpColor = sRGBCOLOR{eRGBCOLOR::red};
 	}
-	vw_DrawText(SizeI, 630, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+	vw_DrawText(SizeI, 630, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 	ResetFontSize();
 

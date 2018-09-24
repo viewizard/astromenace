@@ -84,7 +84,7 @@ void cFPS::Draw()
 	if (!GameConfig().ShowFPS)
 		return;
 
-	vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 1.0f, DrawString_.c_str());
+	vw_DrawText(6, 5, 0, 0, 1.0f, TextColor_, 1.0f, DrawString_);
 }
 
 /*

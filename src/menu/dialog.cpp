@@ -792,7 +792,7 @@ Dialogs with default type:
 				tmpStream << sharedDialogSpaceShip->Width << " (" << sharedWorkshopFighterGame->Width << ") ";
 			}
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
@@ -810,7 +810,7 @@ Dialogs with default type:
 				tmpStream << sharedDialogSpaceShip->Length << " (" << sharedWorkshopFighterGame->Length << ") ";
 			}
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
@@ -828,14 +828,14 @@ Dialogs with default type:
 				tmpStream << sharedDialogSpaceShip->Height << " (" << sharedWorkshopFighterGame->Height << ") ";
 			}
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Engines:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << sharedDialogSpaceShip->Engines.size() << " " << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Armor:"));
@@ -854,7 +854,7 @@ Dialogs with default type:
 				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) << ") ";
 			}
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			// FIXME for "Upgrade"s are only difference with "Armor" is multiplier, remove code duplication here
 
@@ -867,7 +867,7 @@ Dialogs with default type:
 			else
 				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 2 << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) * 2 << ") ";
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
@@ -878,7 +878,7 @@ Dialogs with default type:
 			else
 				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 3 << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) * 3 << ") ";
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
@@ -889,14 +889,14 @@ Dialogs with default type:
 			else
 				tmpStream << GetShipArmor(sharedDialogSpaceShip->InternalType) * 4 << " (" << GetShipArmor(sharedWorkshopFighterGame->InternalType) * 4 << ") ";
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Weapon Slots:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << sharedDialogSpaceShip->WeaponSlots.size() << " " << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Slot Levels:"));
@@ -907,7 +907,7 @@ Dialogs with default type:
 			for (unsigned i = 1; i < sharedDialogSpaceShip->WeaponSlots.size(); i++) {
 				tmpStream << "/" << sharedDialogSpaceShip->WeaponSlots[i].Type;
 			}
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 			if (vw_GetMouseLeftClick(true) ||
 			    vw_GetMouseRightClick(true))
@@ -947,7 +947,7 @@ Dialogs with default type:
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << DialogWeapon->ArmorInitialStatus << " " << vw_GetText("units");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Width:"));
@@ -955,7 +955,7 @@ Dialogs with default type:
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
 			  << DialogWeapon->Width << " " << vw_GetText("units");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
@@ -963,7 +963,7 @@ Dialogs with default type:
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
 			  << DialogWeapon->Length << " " << vw_GetText("units");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
@@ -971,7 +971,7 @@ Dialogs with default type:
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
 			  << DialogWeapon->Height << " " << vw_GetText("units");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, Kinetic:"));
@@ -985,7 +985,7 @@ Dialogs with default type:
 			tmpStream << vw_GetText("units/sec");
 		else
 			tmpStream << vw_GetText("units/shot");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, EM:"));
@@ -999,7 +999,7 @@ Dialogs with default type:
 			tmpStream << vw_GetText("units/sec");
 		else
 			tmpStream << vw_GetText("units/shot");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
@@ -1007,7 +1007,7 @@ Dialogs with default type:
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
 			  << DialogWeapon->EnergyUse << " " << vw_GetText("units per shot");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ammo:"));
@@ -1015,7 +1015,7 @@ Dialogs with default type:
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(0)
 			  << DialogWeapon->AmmoStart << " " << vw_GetText("units");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Reload:"));
@@ -1023,7 +1023,7 @@ Dialogs with default type:
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
 			  << DialogWeapon->NextFireTime << " " << vw_GetText("seconds");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
 		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Range:"));
@@ -1031,7 +1031,7 @@ Dialogs with default type:
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
 			  << GetProjectileRange(DialogWeapon->InternalType) << " " << vw_GetText("units");
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		// закрываем...
 		if (vw_GetMouseLeftClick(true) ||
@@ -1094,7 +1094,7 @@ Dialogs with default type:
 					  << GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
 			}
 			tmpStream << vw_GetText("units per sec");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Engine Power:"));
@@ -1115,7 +1115,7 @@ Dialogs with default type:
 					  << GetEnginePower(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
 			}
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Acceleration:"));
@@ -1136,7 +1136,7 @@ Dialogs with default type:
 					  << GetEngineAcceleration(GameConfig().Profile[CurrentProfile].EngineSystem) << ") ";
 			}
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
@@ -1188,7 +1188,7 @@ Dialogs with default type:
 					  << GetShipMaxEnergy(GameConfig().Profile[CurrentProfile].PowerSystem) << ") ";
 			}
 			tmpStream << vw_GetText("units");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
@@ -1213,7 +1213,7 @@ Dialogs with default type:
 					  << GetShipRechargeEnergy(GameConfig().Profile[CurrentProfile].PowerSystem) << ") ";
 			}
 			tmpStream << vw_GetText("units per sec");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
@@ -1254,7 +1254,7 @@ Dialogs with default type:
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
 			tmpStream << 0.1f << " " << vw_GetText("units per sec");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Target Tracing:"));
@@ -1269,7 +1269,7 @@ Dialogs with default type:
 				tmpStream << 6 << " ";
 			}
 			tmpStream << vw_GetText("object(s)");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Auto Adjustment:"));
@@ -1282,7 +1282,7 @@ Dialogs with default type:
 				   (DialogSystem == 12)) {
 				tmpStream << vw_GetText("Yes");
 			}
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
@@ -1319,7 +1319,7 @@ Dialogs with default type:
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
 			tmpStream << 0.1f << " " << vw_GetText("units per sec");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Orientation Speed:"));
@@ -1339,7 +1339,7 @@ Dialogs with default type:
 					  << 40.0f * GameConfig().Profile[CurrentProfile].TargetingMechanicSystem << ") ";
 			}
 			tmpStream << vw_GetText("deg per sec");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
 			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
@@ -1388,7 +1388,7 @@ Dialogs with default type:
 				tmpColor = sRGBCOLOR{eRGBCOLOR::red};
 			}
 			tmpStream << GetShipProtectionSystemEnergyUse(DialogSystem - 16) << " " << vw_GetText("units per sec");
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			tmpTransp = DialogContentTransp;
 			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
@@ -1399,7 +1399,7 @@ Dialogs with default type:
 			if (DialogSystem == 17) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Hull Repair Rate:"));
 				tmpStream << 0.5f << "% " << vw_GetText("per sec");
-				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 			} else if (DialogSystem == 18) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, Hull:"));
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "x4");
@@ -1410,25 +1410,25 @@ Dialogs with default type:
 			} else if (DialogSystem == 19) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Shield Power:"));
 				tmpStream << 100.0f << " " << vw_GetText("units");
-				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
 				tmpStream.clear();
 				tmpStream.str(std::string{});
 				tmpStream << 2 << "% " << vw_GetText("per sec");
-				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 			} else if (DialogSystem == 20) {
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Shield Power:"));
 				tmpStream << 150.0f << " " << vw_GetText("units");
-				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 				Y1 += Offset;
 				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
 				tmpStream.clear();
 				tmpStream.str(std::string{});
 				tmpStream << 3 << "% " << vw_GetText("per sec");
-				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 			}
 
 			Y1 += Offset;
@@ -1692,7 +1692,7 @@ Dialogs with default type:
 		tmpStream << std::fixed << std::setprecision(0)
 			  << vw_GetText("Your previous best result:") << " "
 			  << GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission];
-		vw_DrawText(X+25, Y+80+k*1, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X+25, Y+80+k*1, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		SizeI = vw_TextWidth(vw_GetText("You can replay this mission as many times as you like, but you"));
 		vw_DrawText(X+25, Y+100+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You can replay this mission as many times as you like, but you"));

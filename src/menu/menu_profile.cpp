@@ -347,7 +347,7 @@ void ProfileMenu()
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << i + 1 << ".";
-			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 			if (vw_TextWidth(GameConfig().Profile[i].Name) > 300) {
 				vw_DrawText(X1+50, TmpY, 0, 300, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[i].Name);
@@ -359,23 +359,23 @@ void ProfileMenu()
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << GameConfig().Profile[i].Money;
-			Size = vw_TextWidth(tmpStream.str().c_str());
+			Size = vw_TextWidth(tmpStream.str());
 			SizeI = GameConfig().InternalWidth/2+2 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << GameConfig().Profile[i].Experience;
-			Size = vw_TextWidth(tmpStream.str().c_str());
+			Size = vw_TextWidth(tmpStream.str());
 			SizeI = GameConfig().InternalWidth/2+132 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << ProfileDifficulty(i) << "%";
-			Size = vw_TextWidth(tmpStream.str().c_str());
+			Size = vw_TextWidth(tmpStream.str());
 			SizeI = GameConfig().InternalWidth/2+262 + (130 - Size)/2;
-			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+			vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 
 			// работаем с клавиатурой
@@ -442,7 +442,7 @@ void ProfileMenu()
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << i + 1 << ".";
-			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, tmpStream.str().c_str());
+			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, tmpStream.str());
 			vw_DrawText(X1+50, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, vw_GetText("empty"));
 		}
 

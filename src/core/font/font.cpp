@@ -512,11 +512,8 @@ static void DrawBufferOnTextEnd(GLtexture CurrentTexture)
  * vw_DrawTextUTF32 wrapper with conversion into utf32.
  */
 int vw_DrawText(int X, int Y, float StrictWidth, float ExpandWidth, float FontScale,
-		const sRGBCOLOR &Color, float Transp, const char *Text)
+		const sRGBCOLOR &Color, float Transp, const std::string &Text)
 {
-	if (!Text)
-		return ERR_PARAMETERS;
-
 	// convert from utf8 into utf32
 	const std::u32string UTF32String{ConvertUTF8.from_bytes(Text)};
 
@@ -677,11 +674,8 @@ int vw_DrawTextUTF32(int X, int Y, float StrictWidth, float ExpandWidth, float F
 /*
  * vw_TextWidthUTF32 wrapper with conversion into utf32.
  */
-int vw_TextWidth(const char *Text)
+int vw_TextWidth(const std::string &Text)
 {
-	if (!Text)
-		return ERR_PARAMETERS;
-
 	// convert from utf8 into utf32
 	const std::u32string UTF32String{ConvertUTF8.from_bytes(Text)};
 

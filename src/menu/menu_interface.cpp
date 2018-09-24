@@ -144,13 +144,13 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		GenerateFonts();
 	}
 	int Scale = 0;
-	Size = vw_TextWidth(GetFontMetadata(GameConfig().FontNumber).FontTitle.c_str());
+	Size = vw_TextWidth(GetFontMetadata(GameConfig().FontNumber).FontTitle);
 	if (Size > 170) {
 		Scale = -170;
 		Size = 170;
 	}
 	SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, Scale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, GetFontMetadata(GameConfig().FontNumber).FontTitle.c_str());
+	vw_DrawText(X1+438+SizeI, Y1, Scale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, GetFontMetadata(GameConfig().FontNumber).FontTitle);
 
 
 

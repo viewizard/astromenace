@@ -57,7 +57,7 @@ void cStopwatch::Draw()
 	if (!Enabled_)
 		return;
 
-	vw_DrawText(6,45, 0, 0, 1.0f, TextColor_, 1.0f, DrawString_.c_str());
+	vw_DrawText(6,45, 0, 0, 1.0f, TextColor_, 1.0f, DrawString_);
 }
 
 /*

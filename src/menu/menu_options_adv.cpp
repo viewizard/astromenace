@@ -178,9 +178,9 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << "x" << Options_TexturesAnisotropyLevel;
-		Size = vw_TextWidth(tmpStream.str().c_str());
+		Size = vw_TextWidth(tmpStream.str());
 		SizeI = (170 - Size) / 2;
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, tmpStream.str());
 	} else {
 		if (vw_DevCaps().MaxAnisotropyLevel > 1) {
 			Size = vw_TextWidth(vw_GetText("Off"));
@@ -275,9 +275,9 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 			tmpStream << Options_MSAA << "x MS";
 		else
 			tmpStream << Options_CSAA << "x CS/" << Options_MSAA << "x MS";
-		Size = vw_TextWidth(tmpStream.str().c_str());
+		Size = vw_TextWidth(tmpStream.str());
 		SizeI = (170 - Size) / 2; // Off, 2x, 4x ...
-		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, tmpStream.str());
 	}
 
 

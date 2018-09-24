@@ -266,9 +266,9 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 	}
 
 	std::string VideoModeTitle{std::to_string(Options_Width) + "x" + std::to_string(Options_Height)};
-	Size = vw_TextWidth(VideoModeTitle.c_str());
+	Size = vw_TextWidth(VideoModeTitle);
 	SizeI = (170-Size)/2;
-	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, VideoModeTitle.c_str());
+	vw_DrawText(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, VideoModeTitle);
 
 
 

@@ -95,9 +95,9 @@ void DifficultyMenu()
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << "x" << static_cast<int>(GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty);
-		Size = vw_TextWidth(tmpStream.str().c_str());
+		Size = vw_TextWidth(tmpStream.str());
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 	}
 
 
@@ -131,9 +131,9 @@ void DifficultyMenu()
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << "x" << static_cast<int>(GameConfig().Profile[CurrentProfile].EnemyArmorPenalty);
-		Size = vw_TextWidth(tmpStream.str().c_str());
+		Size = vw_TextWidth(tmpStream.str());
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 	}
 
 
@@ -167,9 +167,9 @@ void DifficultyMenu()
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << "x" << static_cast<int>(GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty);
-		Size = vw_TextWidth(tmpStream.str().c_str());
+		Size = vw_TextWidth(tmpStream.str());
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 	}
 
 
@@ -270,9 +270,9 @@ void DifficultyMenu()
 	tmpStream << std::fixed << std::setprecision(0)
 		  << vw_GetText("Current Profile Difficulty")
 		  << ": " << ProfileDifficulty(CurrentProfile) << "%";
-	Size = vw_TextWidth(tmpStream.str().c_str());
+	Size = vw_TextWidth(tmpStream.str());
 	SizeI = (GameConfig().InternalWidth - Size) / 2;
-	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, tmpStream.str().c_str());
+	vw_DrawText(SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, tmpStream.str());
 
 
 	int X = GameConfig().InternalWidth / 2 - 192;

@@ -1085,12 +1085,12 @@ void Workshop_Workshop()
 		tmpTransp = MenuContentTransp * CurrentAlert3;
 		tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 	}
-	vw_DrawText(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+	vw_DrawText(GameConfig().InternalWidth/2-250, 485, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 	tmpStream.clear();
 	tmpStream.str(std::string{});
 	tmpStream << vw_GetText("Cost") << ": " << Cost;
-	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth(tmpStream.str().c_str()), 485, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str().c_str());
+	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth(tmpStream.str()), 485, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 
 	if (DrawButton128_2(GameConfig().InternalWidth/2-250,580-55, vw_GetText("Info"), MenuContentTransp, false)) {
@@ -1139,12 +1139,12 @@ void Workshop_Workshop()
 	tmpStream.str(std::string{});
 	tmpStream << vw_GetText("Money") << ": "
 		  << GameConfig().Profile[CurrentProfile].Money;
-	int SizeI = (GameConfig().InternalWidth - vw_TextWidth(tmpStream.str().c_str())) / 2;
+	int SizeI = (GameConfig().InternalWidth - vw_TextWidth(tmpStream.str())) / 2;
 	if (!CanBuy) {
 		tmpTransp = MenuContentTransp * CurrentAlert3;
 		tmpColor = sRGBCOLOR{eRGBCOLOR::orange};
 	}
-	vw_DrawText(SizeI, 630, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str().c_str());
+	vw_DrawText(SizeI, 630, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 	ResetFontSize();
 }
