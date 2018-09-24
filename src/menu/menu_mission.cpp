@@ -231,9 +231,9 @@ void MissionMenu()
 
 
 	// выводим текущий профиль пилота
-	int Size = vw_TextWidth("%s: ", vw_GetText("Pilot Profile"));
 	std::ostringstream tmpStream;
 	tmpStream << vw_GetText("Pilot Profile") << ": ";
+	int Size = vw_TextWidth(tmpStream.str().c_str());
 	vw_DrawText(X1, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, MenuContentTransp, tmpStream.str().c_str());
 
 	if ((Size + vw_TextWidth(GameConfig().Profile[CurrentProfile].Name)) > 500) {
