@@ -73,7 +73,7 @@ int Options_VSync;
 
 
 
-void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2)
+void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1, float &ButtonTransp2, float &LastButtonUpdateTime2)
 {
 
 	sRECT SrcRect, DstRect;
@@ -388,24 +388,24 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		X = (GameConfig().InternalWidth - 384) / 2;
 		Y = Y + Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 	} else {
 		X = GameConfig().InternalWidth / 2 - 256 - 38;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton256(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 		X = GameConfig().InternalWidth / 2 + 38;
-		if (DrawButton256(X,Y, vw_GetTextUTF32("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
+		if (DrawButton256(X,Y, vw_GetTextUTF32("APPLY"), ContentTransp, &ButtonTransp2, &LastButtonUpdateTime2)) {
 			if (GameConfig().VSync != Options_VSync) {
 				if (SDL_GL_SetSwapInterval(Options_VSync) == -1) {
 					std::cerr << __func__ << "(): " << "SDL_GL_SetSwapInterval() failed: "

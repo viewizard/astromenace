@@ -94,7 +94,7 @@ const char *ButtonTexturesQuality[3] = {
 
 
 
-void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2)
+void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1, float &ButtonTransp2, float &LastButtonUpdateTime2)
 {
 	sRECT SrcRect{0, 0, 2, 2};
 	sRECT DstRect{0, 0, static_cast<int>(GameConfig().InternalWidth), 768};
@@ -391,24 +391,24 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		X = (GameConfig().InternalWidth - 384) / 2;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 	} else {
 		X = GameConfig().InternalWidth / 2 - 256 - 38;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton256(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 		X = GameConfig().InternalWidth / 2 + 38;
-		if (DrawButton256(X,Y, vw_GetTextUTF32("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
+		if (DrawButton256(X,Y, vw_GetTextUTF32("APPLY"), ContentTransp, &ButtonTransp2, &LastButtonUpdateTime2)) {
 			if ((GameConfig().MSAA != Options_MSAA) ||
 			    (GameConfig().CSAA != Options_CSAA)) {
 				ChangeGameConfig().MSAA = Options_MSAA;

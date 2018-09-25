@@ -169,7 +169,7 @@ extern int Options_Height;
 extern int Options_Fullscreen;
 extern int Options_VSync;
 
-void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);
+void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1, float &ButtonTransp2, float &LastButtonUpdateTime2);
 
 
 
@@ -185,7 +185,7 @@ extern int NeedCheck;
 extern int ButQuant;
 extern float But[10];
 
-void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
+void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1);
 void CheckMouseKeybJState();
 
 
@@ -199,7 +199,7 @@ void CheckMouseKeybJState();
 //------------------------------------------------------------------------------------
 // Menu_Interface.cpp
 //------------------------------------------------------------------------------------
-void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1);
+void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1);
 
 
 
@@ -216,7 +216,7 @@ extern int Options_MSAA;
 extern int Options_CSAA;
 extern int Options_ShadowMap;
 
-void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1, float *ButtonTransp2, float *LastButtonUpdateTime2);
+void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1, float &ButtonTransp2, float &LastButtonUpdateTime2);
 void SaveOptionsAdvMenuTmpData();
 
 

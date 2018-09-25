@@ -499,13 +499,13 @@ void DrawMenu()
 		TopScoresMenu();
 		break;
 	case eMenuStatus::INTERFACE:
-		InterfaceMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime);
+		InterfaceMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime);
 		break;
 	case eMenuStatus::OPTIONS:
-		OptionsMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime);
+		OptionsMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime, Button11Transp, LastButton11UpdateTime);
 		break;
 	case eMenuStatus::OPTIONS_ADVANCED:
-		OptionsAdvMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime, &Button11Transp, &LastButton11UpdateTime);
+		OptionsAdvMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime, Button11Transp, LastButton11UpdateTime);
 		break;
 	case eMenuStatus::INFORMATION:
 		InformationMenu();
@@ -514,7 +514,7 @@ void DrawMenu()
 		CreditsMenu();
 		break;
 	case eMenuStatus::CONFCONTROL:
-		ConfControlMenu(MenuContentTransp, &Button10Transp, &LastButton10UpdateTime);
+		ConfControlMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime);
 		break;
 	case eMenuStatus::PROFILE:
 		ProfileMenu();

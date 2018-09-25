@@ -232,7 +232,7 @@ void CheckKeysBeforeExit()
 
 
 
-void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpdateTime1)
+void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1)
 {
 	// проверяем, нужно ли вытягивать что-то или нет...
 	CheckMouseKeybJState();
@@ -537,12 +537,12 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	X = (GameConfig().InternalWidth - 384) / 2;
 	Y = Y+Prir;
 	if (MenuStatus == eMenuStatus::GAME) {
-		if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
+		if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1)) {
 			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 			CheckKeysBeforeExit();
 		}
 	} else {
-		if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
+		if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, &ButtonTransp1, &LastButtonUpdateTime1)) {
 			cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 			CheckKeysBeforeExit();
 		}

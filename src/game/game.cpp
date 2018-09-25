@@ -1673,19 +1673,19 @@ void DrawGame()
 
 			// основное меню настроек
 			case eGameMenuStatus::OPTIONS:
-				OptionsMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime);
+				OptionsMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime, GameButton2Transp, LastGameButton2UpdateTime);
 				break;
 			// меню продвинутых настроек
 			case eGameMenuStatus::OPTIONS_ADVANCED:
-				OptionsAdvMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime, &GameButton2Transp, &LastGameButton2UpdateTime);
+				OptionsAdvMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime, GameButton2Transp, LastGameButton2UpdateTime);
 				break;
 			// меню настройки интерфейса
 			case eGameMenuStatus::INTERFACE:
-				InterfaceMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime);
+				InterfaceMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime);
 				break;
 			// меню настройки управления
 			case eGameMenuStatus::CONFCONTROL:
-				ConfControlMenu(GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime);
+				ConfControlMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime);
 				break;
 
 
