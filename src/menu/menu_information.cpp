@@ -1567,7 +1567,7 @@ void InformationMenu()
 
 	X = (GameConfig().InternalWidth - 384) / 2;
 	Y = Y + Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
+	if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, Button1Transp, LastButton1UpdateTime)) {
 		DestroyInfoObject();
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 	}

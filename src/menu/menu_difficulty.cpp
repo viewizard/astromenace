@@ -277,7 +277,7 @@ void DifficultyMenu()
 
 	int X = GameConfig().InternalWidth / 2 - 192;
 	int Y = 175+95*5;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("BACK"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
+	if (DrawButton384(X,Y, vw_GetTextUTF32("BACK"), MenuContentTransp, Button1Transp, LastButton1UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
 }
 

@@ -629,7 +629,7 @@ void MainMenu()
 	int X = (GameConfig().InternalWidth - 384) / 2;
 	int Y = 165;
 
-	if (DrawButton384(X,Y, vw_GetTextUTF32("START GAME"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
+	if (DrawButton384(X,Y, vw_GetTextUTF32("START GAME"), MenuContentTransp, Button1Transp, LastButton1UpdateTime)) {
 		// если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
 		if (CurrentProfile < 0)
 			cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
@@ -642,25 +642,25 @@ void MainMenu()
 
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("TOP SCORES"), MenuContentTransp, &Button2Transp, &LastButton2UpdateTime))
+	if (DrawButton384(X,Y, vw_GetTextUTF32("TOP SCORES"), MenuContentTransp, Button2Transp, LastButton2UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_TOP_SCORES);
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("OPTIONS"), MenuContentTransp, &Button3Transp, &LastButton3UpdateTime))
+	if (DrawButton384(X,Y, vw_GetTextUTF32("OPTIONS"), MenuContentTransp, Button3Transp, LastButton3UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_OPTIONS);
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("INFORMATION"), MenuContentTransp, &Button4Transp, &LastButton4UpdateTime))
+	if (DrawButton384(X,Y, vw_GetTextUTF32("INFORMATION"), MenuContentTransp, Button4Transp, LastButton4UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_INFORMATION);
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("CREDITS"), MenuContentTransp, &Button5Transp, &LastButton5UpdateTime)) {
+	if (DrawButton384(X,Y, vw_GetTextUTF32("CREDITS"), MenuContentTransp, Button5Transp, LastButton5UpdateTime)) {
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_CREDITS);
 		PlayMusicTheme(eMusicTheme::CREDITS, 2000, 2000);
 	}
 
 	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("QUIT"), MenuContentTransp, &Button6Transp, &LastButton6UpdateTime))
+	if (DrawButton384(X,Y, vw_GetTextUTF32("QUIT"), MenuContentTransp, Button6Transp, LastButton6UpdateTime))
 		SetCurrentDialogBox(eDialogBox::QuitFromGame);
 
 }

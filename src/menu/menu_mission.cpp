@@ -458,11 +458,11 @@ void MissionMenu()
 
 	int X = GameConfig().InternalWidth / 2 - 284;
 	int Y = 165 + 100 * 5;
-	if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, Button10Transp, LastButton10UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 
 	X = GameConfig().InternalWidth / 2 + 28;
-	if (DrawButton256(X,Y, vw_GetTextUTF32("NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
+	if (DrawButton256(X,Y, vw_GetTextUTF32("NEXT"), MenuContentTransp, Button11Transp, LastButton11UpdateTime, !(CurrentMission >= 0))) {
 		// если уже играли в эту миссию
 		if (GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
 			if (GameConfig().NeedShowHint[5]) {

@@ -493,13 +493,13 @@ void ProfileMenu()
 
 	int X = GameConfig().InternalWidth / 2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, Button10Transp, LastButton10UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = GameConfig().InternalWidth / 2 + 28;
-	if (DrawButton256(X,Y, vw_GetTextUTF32("MISSION LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("MISSION LIST"), MenuContentTransp, Button11Transp, LastButton11UpdateTime, Off))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
 
 }

@@ -58,7 +58,7 @@ int NeedPlayOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 // прорисовка кнопки 384
 //------------------------------------------------------------------------------------
-bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float *ButTransp, float *Update)
+bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float &ButTransp, float &Update)
 {
 	sRECT SrcRect, DstRect;
 	bool ON = false;
@@ -87,25 +87,27 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
 		if (Transp == 1.0f)
 			SetCursorStatus(eCursorStatus::ActionAllowed);
 
-		if (*ButTransp == 1.0f) {
+		if (ButTransp == 1.0f) {
 			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
-			*Update = vw_GetTimeThread(0);
-			*ButTransp = 0.99f;
+			Update = vw_GetTimeThread(0);
+			ButTransp = 0.99f;
 		}
 
-		(*ButTransp) -= 3.0f*(vw_GetTimeThread(0) - (*Update));
-		if (*ButTransp < 0.60f) *ButTransp = 0.60f;
-		*Update = vw_GetTimeThread(0);
+		ButTransp -= 3.0f*(vw_GetTimeThread(0) - Update);
+		if (ButTransp < 0.60f)
+			ButTransp = 0.60f;
+		Update = vw_GetTimeThread(0);
 
-		IntTransp = (*ButTransp) * Transp;
+		IntTransp = ButTransp * Transp;
 	} else {
-		if (*ButTransp < 1.0f) {
-			(*ButTransp) += 3.0f*(vw_GetTimeThread(0) - (*Update));
-			if (*ButTransp > 1.0f) *ButTransp =1.0f;
-			*Update = vw_GetTimeThread(0);
+		if (ButTransp < 1.0f) {
+			ButTransp += 3.0f*(vw_GetTimeThread(0) - Update);
+			if (ButTransp > 1.0f)
+				ButTransp =1.0f;
+			Update = vw_GetTimeThread(0);
 		}
 
-		IntTransp = (*ButTransp) * Transp;
+		IntTransp = ButTransp * Transp;
 	}
 
 
@@ -173,7 +175,7 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 256
 //------------------------------------------------------------------------------------
-bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float *ButTransp, float *Update, bool Off)
+bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float &ButTransp, float &Update, bool Off)
 {
 	sRECT SrcRect, DstRect;
 
@@ -233,25 +235,27 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
 		if (Transp == 1.0f)
 			SetCursorStatus(eCursorStatus::ActionAllowed);
 
-		if (*ButTransp == 1.0f) {
+		if (ButTransp == 1.0f) {
 			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
-			*Update = vw_GetTimeThread(0);
-			*ButTransp = 0.98f;
+			Update = vw_GetTimeThread(0);
+			ButTransp = 0.98f;
 		}
 
-		(*ButTransp) -= 3.0f*(vw_GetTimeThread(0) - (*Update));
-		if (*ButTransp < 0.60f) *ButTransp = 0.60f;
-		*Update = vw_GetTimeThread(0);
+		ButTransp -= 3.0f*(vw_GetTimeThread(0) - Update);
+		if (ButTransp < 0.60f)
+			ButTransp = 0.60f;
+		Update = vw_GetTimeThread(0);
 
-		IntTransp = (*ButTransp) * Transp;
+		IntTransp = ButTransp * Transp;
 	} else {
-		if (*ButTransp < 1.0f) {
-			(*ButTransp) += 3.0f*(vw_GetTimeThread(0) - (*Update));
-			if (*ButTransp > 1.0f) *ButTransp =1.0f;
-			*Update = vw_GetTimeThread(0);
+		if (ButTransp < 1.0f) {
+			ButTransp += 3.0f*(vw_GetTimeThread(0) - Update);
+			if (ButTransp > 1.0f)
+				ButTransp =1.0f;
+			Update = vw_GetTimeThread(0);
 		}
 
-		IntTransp = (*ButTransp) * Transp;
+		IntTransp = ButTransp * Transp;
 	}
 
 
