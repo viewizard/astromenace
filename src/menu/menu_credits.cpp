@@ -158,13 +158,13 @@ void CreditsMenu()
 
 	int X = GameConfig().InternalWidth / 2 - 256 - 38;
 	int Y = 165 + 100 * 5;
-	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 	{
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
 	}
 	X = GameConfig().InternalWidth / 2 + 38;
-	if (DrawButton256(X,Y, vw_GetText("DONATE"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("DONATE"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime))
 	{
 		vw_OpenWebsiteURL("https://viewizard.com/donate.html");
 	}

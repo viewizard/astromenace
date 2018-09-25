@@ -279,7 +279,7 @@ void ProfileMenu()
 	bool Off = false;
 	if (NewProfileName.empty())
 		Off = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Create"), MenuContentTransp, Off)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Create"), MenuContentTransp, Off)) {
 		NewRecord();
 	}
 
@@ -472,34 +472,34 @@ void ProfileMenu()
 	// кнопка создания дубликата
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+6, Y1-6, vw_GetText("Duplicate"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X1+6, Y1-6, vw_GetTextUTF32("Duplicate"), MenuContentTransp, Off)) {
 		DuplicateRecord();
 	}
 
 	// кнопка удаления записи
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton128_2(X1+240, Y1-6, vw_GetText("Delete"), MenuContentTransp, Off))
+	if (DrawButton128_2(X1+240, Y1-6, vw_GetTextUTF32("Delete"), MenuContentTransp, Off))
 		SetCurrentDialogBox(eDialogBox::DeleteProfile);
 
 
 	// кнопка установки сложности
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
-	if (DrawButton200_2(X1+544, Y1-6, vw_GetText("Difficulty"), MenuContentTransp, Off))
+	if (DrawButton200_2(X1+544, Y1-6, vw_GetTextUTF32("Difficulty"), MenuContentTransp, Off))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_DIFFICULTY);
 
 
 
 	int X = GameConfig().InternalWidth / 2 - 284;
 	int Y = 165+100*5;
-	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 
 	Off = true;
 	if (CurrentProfile >= 0) Off = false;
 	X = GameConfig().InternalWidth / 2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("MISSION LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("MISSION LIST"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, Off))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
 
 }

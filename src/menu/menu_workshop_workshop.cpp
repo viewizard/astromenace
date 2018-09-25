@@ -1093,12 +1093,12 @@ void Workshop_Workshop()
 	vw_DrawText(GameConfig().InternalWidth/2+250-vw_TextWidth(tmpStream.str()), 485, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2-250,580-55, vw_GetText("Info"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-250,580-55, vw_GetTextUTF32("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowSystemsInfo);
 		DialogSystem = CurrentSystemStockNum;
 	}
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2+250-128, 580-55, vw_GetText("Info"), MenuContentTransp, !CanSell)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2+250-128, 580-55, vw_GetTextUTF32("Info"), MenuContentTransp, !CanSell)) {
 		SetCurrentDialogBox(eDialogBox::ShowSystemsInfo);
 
 		NeedMoreEnergyDialog = NeedMoreEnergy;
@@ -1116,7 +1116,7 @@ void Workshop_Workshop()
 	}
 
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2-250, 50+580-55, vw_GetText("Buy"), MenuContentTransp, !CanBuy)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-250, 50+580-55, vw_GetTextUTF32("Buy"), MenuContentTransp, !CanBuy)) {
 		BuyCurrentSystem();
 	}
 	// покупка, если 2 раза кликнули на иконку текущей системы
@@ -1126,7 +1126,7 @@ void Workshop_Workshop()
 
 
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2+250-128, 50+580-55, vw_GetText("Sell"), MenuContentTransp, !CanSell))
+	if (DrawButton128_2(GameConfig().InternalWidth/2+250-128, 50+580-55, vw_GetTextUTF32("Sell"), MenuContentTransp, !CanSell))
 		SellCurrentSystem();
 
 

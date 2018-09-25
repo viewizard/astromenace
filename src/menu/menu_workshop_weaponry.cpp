@@ -699,7 +699,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 		// кнопка перезарядить оружие
 		Ypos += 40;
-		if (DrawButton200_2(GameConfig().InternalWidth / 2 + 155, Ypos, vw_GetText("Reload"), MenuContentTransp, (ReloadCost == 0) || GameConfig().Profile[CurrentProfile].Money<ReloadCost)) {
+		if (DrawButton200_2(GameConfig().InternalWidth / 2 + 155, Ypos, vw_GetTextUTF32("Reload"), MenuContentTransp, (ReloadCost == 0) || GameConfig().Profile[CurrentProfile].Money<ReloadCost)) {
 			sharedWeapon->Ammo = sharedWeapon->AmmoStart;
 			ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = sharedWeapon->Ammo;
 			ChangeGameConfig().Profile[CurrentProfile].Money -= ReloadCost;
@@ -721,14 +721,14 @@ void ShipSlotSetupWeapon(int SlotNum)
 			Status1 = true;
 		Xpos = GameConfig().InternalWidth/2+55+54 + 16;
 		Ypos += 30;
-		DrawCheckBox(Xpos,Ypos, &Status1, vw_GetText("Primary Attack"), MenuContentTransp);
+		DrawCheckBox(Xpos,Ypos, Status1, vw_GetTextUTF32("Primary Attack"), MenuContentTransp);
 		// вкл-выкл вторичного управления
 		if ((GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 2) ||
 		    (GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 3))
 			Status2 = true;
 		Xpos = GameConfig().InternalWidth/2+55+54 + 16;
 		Ypos += 40;
-		DrawCheckBox(Xpos,Ypos, &Status2, vw_GetText("Secondary Attack"), MenuContentTransp);
+		DrawCheckBox(Xpos,Ypos, Status2, vw_GetTextUTF32("Secondary Attack"), MenuContentTransp);
 		// получаем данны обратно
 		ChangeGameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] = 0;
 		if (Status1)
@@ -770,7 +770,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 			Transp = But[1];
 			Off = true;
 		}
-		if (DrawButton200_2(GameConfig().InternalWidth / 2+155, Ypos, TextTmp.c_str(), Transp * MenuContentTransp, Off)) {
+		if (DrawButton200_2(GameConfig().InternalWidth / 2+155, Ypos, ConvertUTF8.from_bytes(TextTmp.c_str()), Transp * MenuContentTransp, Off)) {
 			NeedCheck = 100;
 			vw_ResetMouseButtons();
 			NewWeaponControlType = 0;
@@ -801,7 +801,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 				vw_DrawTextUTF32(Xpos, Ypos+5, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetTextUTF32("ful with optical computer"));
 				vw_DrawTextUTF32(Xpos, Ypos+25, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetTextUTF32("system Neo or Supra only."));
 			} else {
-				if (DrawButton128_2(GameConfig().InternalWidth/2+118, Ypos, vw_GetText("Left"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] <= Min)) {
+				if (DrawButton128_2(GameConfig().InternalWidth/2+118, Ypos, vw_GetTextUTF32("Left"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] <= Min)) {
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] -= 5.0f;
 					sharedWorkshopFighterGame->WeaponSlots[SlotNum].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 
@@ -810,7 +810,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 					NeedAngle.y += sharedWorkshopFighterGame->WeaponSlots[SlotNum].YAngle;
 					sharedWeapon->SetRotation(NeedAngle);
 				}
-				if (DrawButton128_2(GameConfig().InternalWidth/2+266, Ypos, vw_GetText("Right"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] >= Max)) {
+				if (DrawButton128_2(GameConfig().InternalWidth/2+266, Ypos, vw_GetTextUTF32("Right"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] >= Max)) {
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] += 5.0f;
 					sharedWorkshopFighterGame->WeaponSlots[SlotNum].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
 
@@ -937,7 +937,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 
 	//кнопка закрыть
-	if (DrawButton200_2(GameConfig().InternalWidth / 2 + 155, 533, vw_GetText("Close"), MenuContentTransp, false)) {
+	if (DrawButton200_2(GameConfig().InternalWidth / 2 + 155, 533, vw_GetTextUTF32("Close"), MenuContentTransp, false)) {
 		WeaponSetupSlot = -1;
 		NeedCheck = 0;
 	}
@@ -1177,7 +1177,7 @@ void Workshop_Weaponry()
 
 	// вывод названия
 	vw_DrawTextUTF32(GameConfig().InternalWidth/2-438, 50+6, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32(GetWeaponName(CurrentWorkshopNewWeapon)));
-	if (DrawButton128_2(GameConfig().InternalWidth/2-197, 50, vw_GetText("Info"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-197, 50, vw_GetTextUTF32("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowWeaponsInfo);
 		DialogWeapon = WorkshopNewWeapon;
 	}
@@ -1280,13 +1280,13 @@ void Workshop_Weaponry()
 	}
 
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2-395,482, vw_GetText("Prev"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-395,482, vw_GetTextUTF32("Prev"), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon--;
 		if (CurrentWorkshopNewWeapon < 1)
 			CurrentWorkshopNewWeapon = 19;
 		WorkshopCreateNewWeapon();
 	}
-	if (DrawButton128_2(GameConfig().InternalWidth/2-247,482, vw_GetText("Next"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-247,482, vw_GetTextUTF32("Next"), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon++;
 		if (CurrentWorkshopNewWeapon > 19)
 			CurrentWorkshopNewWeapon = 1;
@@ -1294,11 +1294,11 @@ void Workshop_Weaponry()
 	}
 
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2-395,533, vw_GetText(GetWeaponGroupTitle(PrevWeaponGroup())), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-395,533, vw_GetTextUTF32(GetWeaponGroupTitle(PrevWeaponGroup())), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon = PrevWeaponGroup();
 		WorkshopCreateNewWeapon();
 	}
-	if (DrawButton128_2(GameConfig().InternalWidth/2-247,533, vw_GetText(GetWeaponGroupTitle(NextWeaponGroup())), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-247,533, vw_GetTextUTF32(GetWeaponGroupTitle(NextWeaponGroup())), MenuContentTransp, false)) {
 		CurrentWorkshopNewWeapon = NextWeaponGroup();
 		WorkshopCreateNewWeapon();
 	}
@@ -1321,7 +1321,7 @@ void Workshop_Weaponry()
 									  sharedWeapon->Ammo,
 									  sharedWeapon->AmmoStart);
 			}
-			std::string ButtonName{std::string(vw_GetText("Reload All")) + ": " + std::to_string(ReloadCost)};
+			std::u32string ButtonName = ConvertUTF8.from_bytes(std::string(vw_GetText("Reload All")) + ": " + std::to_string(ReloadCost));
 
 			if (DrawButton200_2(GameConfig().InternalWidth/2+153, 50, ButtonName.c_str(), MenuContentTransp, (ReloadCost == 0) || (GameConfig().Profile[CurrentProfile].Money < ReloadCost))) {
 				for (unsigned i = 0; i < sharedWorkshopFighterGame->WeaponSlots.size(); i++) {

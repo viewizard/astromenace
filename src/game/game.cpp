@@ -1605,7 +1605,7 @@ void DrawGame()
 			int X = GameConfig().InternalWidth / 2 - 192;
 			Y = 545;
 			// продолжение игры
-			if (DrawButton384(X,Y, vw_GetText("NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("NEXT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime))
 				ExitGameWithSave(eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU);
 		} else {
 			switch (GameMenuStatus) {
@@ -1628,7 +1628,7 @@ void DrawGame()
 				int Prir = 100;
 
 				// продолжаем игру
-				if (DrawButton384(X,Y, vw_GetText("RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetTextUTF32("RESUME"), GameContentTransp, &GameButton1Transp, &LastGameButton1UpdateTime)) {
 					GameMenu = false;
 					NeedShowGameMenu = false;
 					NeedHideGameMenu = true;
@@ -1643,14 +1643,14 @@ void DrawGame()
 
 				// выход в настройки
 				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetTextUTF32("OPTIONS"), GameContentTransp, &GameButton2Transp, &LastGameButton2UpdateTime)) {
 					SetOptionsMenu(eMenuStatus::OPTIONS);
 					GameMenuStatus = eGameMenuStatus::OPTIONS;
 				}
 
 				// прерываем игру
 				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetTextUTF32("RESTART"), GameContentTransp, &GameButton3Transp, &LastGameButton3UpdateTime)) {
 					// если убили, выводить диалог не нужно
 					if (PlayerFighter.expired())
 						ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
@@ -1660,7 +1660,7 @@ void DrawGame()
 
 				// выход из игры
 				Y = Y+Prir;
-				if (DrawButton384(X,Y, vw_GetText("QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
+				if (DrawButton384(X,Y, vw_GetTextUTF32("QUIT"), GameContentTransp, &GameButton4Transp, &LastGameButton4UpdateTime)) {
 					// если убили, выводить диалог не нужно
 					if (PlayerFighter.expired())
 						ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);

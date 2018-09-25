@@ -258,12 +258,12 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Joystick DeadZone"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, GameConfig().JoystickDeadZone == 0)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Decrease"), ContentTransp, GameConfig().JoystickDeadZone == 0)) {
 		ChangeGameConfig().JoystickDeadZone--;
 		if (GameConfig().JoystickDeadZone < 0)
 			ChangeGameConfig().JoystickDeadZone = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, GameConfig().JoystickDeadZone == 10)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Increase"), ContentTransp, GameConfig().JoystickDeadZone == 10)) {
 		ChangeGameConfig().JoystickDeadZone++;
 		if (GameConfig().JoystickDeadZone > 10)
 			ChangeGameConfig().JoystickDeadZone = 10;
@@ -290,12 +290,12 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Control Sensitivity"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, GameConfig().ControlSensivity == 1)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Decrease"), ContentTransp, GameConfig().ControlSensivity == 1)) {
 		ChangeGameConfig().ControlSensivity--;
 		if (GameConfig().ControlSensivity < 1)
 			ChangeGameConfig().ControlSensivity = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, GameConfig().ControlSensivity == 10)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Increase"), ContentTransp, GameConfig().ControlSensivity == 10)) {
 		ChangeGameConfig().ControlSensivity++;
 		if (GameConfig().ControlSensivity > 10)
 			ChangeGameConfig().ControlSensivity = 10;
@@ -350,7 +350,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+300, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+300, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 7;
 			vw_ResetMouseButtons();
@@ -364,7 +364,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 5;
 
@@ -376,7 +376,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ButtonName.c_str(), Transp*ContentTransp, !isJoystickAvailable() || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 9;
 			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
@@ -396,7 +396,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+300, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+300, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 8;
 			vw_ResetMouseButtons();
@@ -410,7 +410,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 6;
 
@@ -422,7 +422,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ButtonName.c_str(), Transp*ContentTransp, !isJoystickAvailable() || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 10;
 			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
@@ -443,7 +443,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) NeedCheck = 1;
 
 	Y1 += Prir1;
@@ -456,7 +456,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 2;
 
@@ -470,7 +470,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 3;
 
@@ -484,7 +484,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ButtonName.c_str(), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 4;
 
@@ -500,7 +500,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	X = GameConfig().InternalWidth / 2 - 366;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Advanced"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
 			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
@@ -511,7 +511,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	X = GameConfig().InternalWidth / 2 - 100;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Video & Audio"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Video & Audio"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS);
 			GameMenuStatus = eGameMenuStatus::OPTIONS;
@@ -522,7 +522,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	X = GameConfig().InternalWidth / 2 + 166;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Interface"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
 			GameMenuStatus = eGameMenuStatus::INTERFACE;
@@ -537,12 +537,12 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 	X = (GameConfig().InternalWidth - 384) / 2;
 	Y = Y+Prir;
 	if (MenuStatus == eMenuStatus::GAME) {
-		if (DrawButton384(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
+		if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
 			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 			CheckKeysBeforeExit();
 		}
 	} else {
-		if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
+		if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1)) {
 			cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 			CheckKeysBeforeExit();
 		}

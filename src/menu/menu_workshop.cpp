@@ -358,7 +358,7 @@ void WorkshopMenu()
 
 	int X = GameConfig().InternalWidth / 2 - 482;
 	int Y = 180+100*5;
-	if (DrawButton128_2(X,Y, vw_GetText("BACK"), MenuContentTransp, false)) {
+	if (DrawButton128_2(X,Y, vw_GetTextUTF32("BACK"), MenuContentTransp, false)) {
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
 		CanDrawWorkshop = false;
 		// ничего не тянем... только включили меню
@@ -374,7 +374,7 @@ void WorkshopMenu()
 	bool Off = false;
 	if (CurrentWorkshop == 1)
 		Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("Shipyard"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X,Y, vw_GetTextUTF32("Shipyard"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 1;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -394,7 +394,7 @@ void WorkshopMenu()
 	Off = false;
 	if (CurrentWorkshop == 2)
 		Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("Workshop"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X,Y, vw_GetTextUTF32("Workshop"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 2;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -413,7 +413,7 @@ void WorkshopMenu()
 	Off = false;
 	if (CurrentWorkshop == 3)
 		Off = true;
-	if (DrawButton200_2(X,Y, vw_GetText("Weaponry"), MenuContentTransp, Off)) {
+	if (DrawButton200_2(X,Y, vw_GetTextUTF32("Weaponry"), MenuContentTransp, Off)) {
 		CurrentWorkshop = 3;
 		// используем разные повороты объектов, нужно пересоздать объект
 		WorkshopCreateShip(CurrentWorkshop);
@@ -431,7 +431,7 @@ void WorkshopMenu()
 
 
 	X = GameConfig().InternalWidth / 2 + 354;
-	if (DrawButton128_2(X,Y, vw_GetText("START"), MenuContentTransp, false)) {
+	if (DrawButton128_2(X,Y, vw_GetTextUTF32("START"), MenuContentTransp, false)) {
 		if (GameConfig().NeedShowHint[4])
 			SetCurrentDialogBox(eDialogBox::ShortkeyTipsAndTricks);
 		else {

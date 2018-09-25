@@ -116,14 +116,14 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// качество визуальных эффектов
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, ContentTransp, vw_GetTextUTF32("Visual Effects Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, GameConfig().VisualEffectsQuality == 2)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().VisualEffectsQuality == 2)) {
 		ChangeGameConfig().VisualEffectsQuality++;
 		if (GameConfig().VisualEffectsQuality > 2)
 			ChangeGameConfig().VisualEffectsQuality = 0;
 
 		vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality+1.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, GameConfig().VisualEffectsQuality == 0)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, GameConfig().VisualEffectsQuality == 0)) {
 		ChangeGameConfig().VisualEffectsQuality--;
 		if (GameConfig().VisualEffectsQuality < 0)
 			ChangeGameConfig().VisualEffectsQuality = 2;
@@ -143,12 +143,12 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// Максимальное кол-во источников света на 1 объекта
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, ContentTransp, vw_GetTextUTF32("Point Lights per Object"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, GameConfig().MaxPointLights == 0)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().MaxPointLights == 0)) {
 		ChangeGameConfig().MaxPointLights--;
 		if (GameConfig().MaxPointLights < 0)
 			ChangeGameConfig().MaxPointLights = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, GameConfig().MaxPointLights == 6)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, GameConfig().MaxPointLights == 6)) {
 		ChangeGameConfig().MaxPointLights++;
 		if (GameConfig().MaxPointLights > 6)
 			ChangeGameConfig().MaxPointLights = 6;
@@ -164,12 +164,12 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// анизотропия
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, ContentTransp, vw_GetTextUTF32("Anisotropy Level"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, (Options_TexturesAnisotropyLevel == 1) || !vw_DevCaps().MaxAnisotropyLevel)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, (Options_TexturesAnisotropyLevel == 1) || !vw_DevCaps().MaxAnisotropyLevel)) {
 		Options_TexturesAnisotropyLevel >>= 1;
 		if (Options_TexturesAnisotropyLevel < 1)
 			Options_TexturesAnisotropyLevel = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, (Options_TexturesAnisotropyLevel == vw_DevCaps().MaxAnisotropyLevel) || !vw_DevCaps().MaxAnisotropyLevel)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, (Options_TexturesAnisotropyLevel == vw_DevCaps().MaxAnisotropyLevel) || !vw_DevCaps().MaxAnisotropyLevel)) {
 		Options_TexturesAnisotropyLevel <<= 1;
 		if (Options_TexturesAnisotropyLevel > vw_DevCaps().MaxAnisotropyLevel)
 			Options_TexturesAnisotropyLevel = vw_DevCaps().MaxAnisotropyLevel;
@@ -199,7 +199,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	//Options_MultiSampleType
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("Multisample Antialiasing"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, (Options_MSAA == 0) || vw_DevCaps().MultisampleCoverageModes.empty())) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, (Options_MSAA == 0) || vw_DevCaps().MultisampleCoverageModes.empty())) {
 		// находим текущий режим
 		int CurrentMode = 0;
 		if (Options_MSAA == 0) CurrentMode = -1;
@@ -230,7 +230,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	if (!vw_DevCaps().MultisampleCoverageModes.empty())
 		TestStateButton = (vw_DevCaps().MultisampleCoverageModes.back().ColorSamples == Options_MSAA) &&
 				(vw_DevCaps().MultisampleCoverageModes.back().CoverageSamples == Options_CSAA);
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, TestStateButton || vw_DevCaps().MultisampleCoverageModes.empty())) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, TestStateButton || vw_DevCaps().MultisampleCoverageModes.empty())) {
 		// находим текущий режим
 		int CurrentMode = 0;
 		if (Options_MSAA == 0) CurrentMode = -1;
@@ -286,8 +286,8 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, ContentTransp, vw_GetTextUTF32("OpenGL Shading Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || !Options_UseGLSL120) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || Options_UseGLSL120)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Off"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || !Options_UseGLSL120) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("On"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || Options_UseGLSL120)) {
 		Options_UseGLSL120 = !Options_UseGLSL120;
 		// если выключены шейдеры - выключаем и тени
 		if (!Options_UseGLSL120)
@@ -312,12 +312,12 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	// качество теней
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, ContentTransp, vw_GetTextUTF32("Shadow Quality"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, (Options_ShadowMap == 0) || !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported ||
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, (Options_ShadowMap == 0) || !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported ||
 			    !vw_DevCaps().OpenGL_3_0_supported || !Options_UseGLSL120 || (vw_DevCaps().FramebufferObjectDepthSize < 24))) {
 		Options_ShadowMap--;
 		if (Options_ShadowMap < 0) Options_ShadowMap = 0;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, (Options_ShadowMap == 1) || !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported ||
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, (Options_ShadowMap == 1) || !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported ||
 			    !vw_DevCaps().OpenGL_3_0_supported || !Options_UseGLSL120 || (vw_DevCaps().FramebufferObjectDepthSize < 24))) {
 		Options_ShadowMap++;
 		if (Options_ShadowMap > 1) Options_ShadowMap = 1;
@@ -350,7 +350,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	int Y = 165+Prir*4;
 
 	X = GameConfig().InternalWidth / 2 - 366;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Interface"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
 			GameMenuStatus = eGameMenuStatus::INTERFACE;
@@ -359,7 +359,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	}
 
 	X = GameConfig().InternalWidth / 2 - 100;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Video & Audio"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Video & Audio"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS);
 			GameMenuStatus = eGameMenuStatus::OPTIONS;
@@ -368,7 +368,7 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 	}
 
 	X = GameConfig().InternalWidth / 2 + 166;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Config Controls"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Config Controls"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
 			GameMenuStatus = eGameMenuStatus::CONFCONTROL;
@@ -391,24 +391,24 @@ void OptionsAdvMenu(float ContentTransp, float *ButtonTransp1, float *LastButton
 		X = (GameConfig().InternalWidth - 384) / 2;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton384(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 	} else {
 		X = GameConfig().InternalWidth / 2 - 256 - 38;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton256(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 		X = GameConfig().InternalWidth / 2 + 38;
-		if (DrawButton256(X,Y, vw_GetText("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
+		if (DrawButton256(X,Y, vw_GetTextUTF32("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
 			if ((GameConfig().MSAA != Options_MSAA) ||
 			    (GameConfig().CSAA != Options_CSAA)) {
 				ChangeGameConfig().MSAA = Options_MSAA;

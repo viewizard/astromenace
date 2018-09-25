@@ -242,7 +242,7 @@ void MissionMenu()
 	} else
 		vw_DrawText(X1+Size, 208+12, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, GameConfig().Profile[CurrentProfile].Name);
 
-	if (DrawButton200_2(X1+616-72, 212, vw_GetText("Change Profile"), MenuContentTransp, false)) {
+	if (DrawButton200_2(X1+616-72, 212, vw_GetTextUTF32("Change Profile"), MenuContentTransp, false)) {
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
 	}
 
@@ -458,11 +458,11 @@ void MissionMenu()
 
 	int X = GameConfig().InternalWidth / 2 - 284;
 	int Y = 165 + 100 * 5;
-	if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
+	if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, &Button10Transp, &LastButton10UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 
 	X = GameConfig().InternalWidth / 2 + 28;
-	if (DrawButton256(X,Y, vw_GetText("NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
+	if (DrawButton256(X,Y, vw_GetTextUTF32("NEXT"), MenuContentTransp, &Button11Transp, &LastButton11UpdateTime, !(CurrentMission >= 0))) {
 		// если уже играли в эту миссию
 		if (GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
 			if (GameConfig().NeedShowHint[5]) {

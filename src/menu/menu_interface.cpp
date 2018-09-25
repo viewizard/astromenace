@@ -69,7 +69,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 
 	// выбор языка меню
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Menu Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, false)) {
 		if (GameConfig().MenuLanguage == 0)
 			ChangeGameConfig().MenuLanguage = vw_GetLanguageListCount() - 1;
 		else
@@ -80,7 +80,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_ReleaseAllFontChars();
 		GenerateFonts();
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, false)) {
 		if (GameConfig().MenuLanguage >= (vw_GetLanguageListCount() - 1))
 			ChangeGameConfig().MenuLanguage = 0;
 		else
@@ -103,14 +103,14 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// выбор языка голосовых сообщений
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Voice Language"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, false)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, false)) {
 		if (GameConfig().VoiceLanguage == 0)
 			ChangeGameConfig().VoiceLanguage = vw_GetLanguageListCount() - 1;
 		else
 			ChangeGameConfig().VoiceLanguage--;
 		ReloadVoiceAssets();
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, false)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, false)) {
 		if (GameConfig().VoiceLanguage >= (vw_GetLanguageListCount() - 1))
 			ChangeGameConfig().VoiceLanguage = 0;
 		else
@@ -127,7 +127,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// выбор шрифта
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Menu Font"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, GameConfig().FontNumber <= 0)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().FontNumber <= 0)) {
 		ChangeGameConfig().FontNumber--;
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
@@ -135,7 +135,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		vw_InitFont(GetFontMetadata(GameConfig().FontNumber).FontFileName);
 		GenerateFonts();
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, (GameConfig().FontNumber + 1) >= GetFontQuantity())) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, (GameConfig().FontNumber + 1) >= GetFontQuantity())) {
 		ChangeGameConfig().FontNumber++;
 
 		// reinitialize fonts and regenerate textures (no need in vw_ShutdownFont() call)
@@ -164,7 +164,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 		if (!GameConfig().NeedShowHint[i])
 			NeedReset = true;
 	}
-	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_GetText("Reset"), ContentTransp, !NeedReset))
+	if (DrawButton128_2((int)X1+458, (int)Y1-6, vw_GetTextUTF32("Reset"), ContentTransp, !NeedReset))
 		if (NeedCheck == 0) {
 			for (int i = 0; i < 10; i++) {
 				ChangeGameConfig().NeedShowHint[i] = true;
@@ -177,8 +177,8 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// вкл-выкл отображения счетчика фпс
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("FPS Counter"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !ChangeGameConfig().ShowFPS) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, ChangeGameConfig().ShowFPS))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Off"), ContentTransp, !ChangeGameConfig().ShowFPS) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("On"), ContentTransp, ChangeGameConfig().ShowFPS))
 		cFPS::GetInstance().Switch();
 
 	Size = vw_TextWidthUTF32(GameConfig().ShowFPS ? vw_GetTextUTF32("On") : vw_GetTextUTF32("Off"));
@@ -191,12 +191,12 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	// вид панелей с оружием в игре
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Weapon Panels View"));
-	if (DrawButton128_2(X1 + 300, Y1 - 6, vw_GetText("Prev"), ContentTransp, GameConfig().GameWeaponInfoType==1)) {
+	if (DrawButton128_2(X1 + 300, Y1 - 6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().GameWeaponInfoType==1)) {
 		ChangeGameConfig().GameWeaponInfoType--;
 		if (GameConfig().GameWeaponInfoType < 1)
 			ChangeGameConfig().GameWeaponInfoType = 1;
 	}
-	if (DrawButton128_2(X1 + 616, Y1 - 6, vw_GetText("Next"), ContentTransp, GameConfig().GameWeaponInfoType==4)) {
+	if (DrawButton128_2(X1 + 616, Y1 - 6, vw_GetTextUTF32("Next"), ContentTransp, GameConfig().GameWeaponInfoType==4)) {
 		ChangeGameConfig().GameWeaponInfoType++;
 		if (GameConfig().GameWeaponInfoType > 4)
 			ChangeGameConfig().GameWeaponInfoType = 4;
@@ -225,7 +225,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 
 
 	X = GameConfig().InternalWidth/2 - 366;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Advanced"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
 			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
@@ -234,7 +234,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	}
 
 	X = GameConfig().InternalWidth/2 - 100;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Video & Audio"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Video & Audio"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS);
 			GameMenuStatus = eGameMenuStatus::OPTIONS;
@@ -243,7 +243,7 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	}
 
 	X = GameConfig().InternalWidth/2 + 166;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Config Controls"), ContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Config Controls"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
 			GameMenuStatus = eGameMenuStatus::CONFCONTROL;
@@ -259,10 +259,10 @@ void InterfaceMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonU
 	X = (GameConfig().InternalWidth - 384) / 2;
 	Y = Y+Prir;
 	if (MenuStatus == eMenuStatus::GAME) {
-		if (DrawButton384(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+		if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 			GameMenuStatus = eGameMenuStatus::GAME_MENU;
 	} else {
-		if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+		if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 			cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 	}
 }

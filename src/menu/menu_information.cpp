@@ -1521,14 +1521,14 @@ void InformationMenu()
 	int Prir = 100;
 	int X = GameConfig().InternalWidth / 2 - 432;
 	int Y = 165+Prir*4;
-	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoPrevGroup()-1]), MenuContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32(InfoGroupNames[GetInfoPrevGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoPrevGroup());
 		CreateInfoObject();
 	}
 
 
 	X = GameConfig().InternalWidth / 2 - 209;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Page Up"), MenuContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Page Up"), MenuContentTransp, false)) {
 		CreateNum--;
 		if (CreateNum < 1)
 			CreateNum = InfoEnd;
@@ -1543,7 +1543,7 @@ void InformationMenu()
 	}
 
 	X = GameConfig().InternalWidth / 2 + 9;
-	if (DrawButton200_2(X,Y+28, vw_GetText("Page Down"), MenuContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32("Page Down"), MenuContentTransp, false)) {
 		CreateNum++;
 		if (CreateNum > InfoEnd)
 			CreateNum = 1;
@@ -1559,7 +1559,7 @@ void InformationMenu()
 
 
 	X = GameConfig().InternalWidth / 2 + 432 - 200;
-	if (DrawButton200_2(X,Y+28, vw_GetText(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false)) {
+	if (DrawButton200_2(X,Y+28, vw_GetTextUTF32(InfoGroupNames[GetInfoNextGroup()-1]), MenuContentTransp, false)) {
 		CreateNum = GetInfoSwitchToGroup(GetInfoNextGroup());
 		CreateInfoObject();
 	}
@@ -1567,7 +1567,7 @@ void InformationMenu()
 
 	X = (GameConfig().InternalWidth - 384) / 2;
 	Y = Y + Prir;
-	if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
+	if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime)) {
 		DestroyInfoObject();
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 	}

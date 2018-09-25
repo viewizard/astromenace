@@ -72,7 +72,7 @@ void DifficultyMenu()
 	bool ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 1)
 		ButOff = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty--;
 		if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty = 1;
@@ -81,7 +81,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 3)
 		ButOff = true;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetTextUTF32("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty++;
 		if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty > 3)
 				ChangeGameConfig().Profile[CurrentProfile].EnemyWeaponPenalty = 3;
@@ -108,7 +108,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty == 1)
 		ButOff = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty--;
 		if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty = 1;
@@ -117,7 +117,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty == 4)
 		ButOff = true;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetTextUTF32("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty++;
 		if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty > 4)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyArmorPenalty = 4;
@@ -144,7 +144,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 1)
 		ButOff = true;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty--;
 		if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty < 1)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty = 1;
@@ -153,7 +153,7 @@ void DifficultyMenu()
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 4)
 		ButOff = true;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetTextUTF32("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty++;
 		if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty > 4)
 			ChangeGameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty = 4;
@@ -179,12 +179,12 @@ void DifficultyMenu()
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Limited Ammo"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetTextUTF32("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
@@ -200,12 +200,12 @@ void DifficultyMenu()
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Destroyable Weapon"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetTextUTF32("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
@@ -220,12 +220,12 @@ void DifficultyMenu()
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Targeting Mode"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetTextUTF32("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
@@ -244,12 +244,12 @@ void DifficultyMenu()
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("SpaceShip Control Mode"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode;
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 0;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	ButOff = ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode;
-	if (DrawButton128_2(X1+360, Y1-6, vw_GetText("Easier"), MenuContentTransp, ButOff)) {
+	if (DrawButton128_2(X1+360, Y1-6, vw_GetTextUTF32("Easier"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
@@ -277,7 +277,7 @@ void DifficultyMenu()
 
 	int X = GameConfig().InternalWidth / 2 - 192;
 	int Y = 175+95*5;
-	if (DrawButton384(X,Y, vw_GetText("BACK"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
+	if (DrawButton384(X,Y, vw_GetTextUTF32("BACK"), MenuContentTransp, &Button1Transp, &LastButton1UpdateTime))
 		cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
 }
 

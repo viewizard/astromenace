@@ -87,13 +87,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Music Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().MusicVolume == 0))) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().MusicVolume == 0))) {
 		ChangeGameConfig().MusicVolume--;
 		if (GameConfig().MusicVolume < 0)
 			ChangeGameConfig().MusicVolume = 0;
 		vw_SetMusicGlobalVolume(GameConfig().MusicVolume / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().MusicVolume == 10))) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().MusicVolume == 10))) {
 		ChangeGameConfig().MusicVolume++;
 		if (GameConfig().MusicVolume > 10)
 			ChangeGameConfig().MusicVolume = 10;
@@ -129,14 +129,14 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Voice Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 0), false)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 0), false)) {
 		ChangeGameConfig().VoiceVolume--;
 		if (GameConfig().VoiceVolume < 0)
 			ChangeGameConfig().VoiceVolume = 0;
 		ChangeVoiceGlobalVolume(GameConfig().VoiceVolume / 10.0f);
 		PlayVoicePhrase(eVoicePhrase::Attention, 1.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 10), false)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().VoiceVolume == 10), false)) {
 		ChangeGameConfig().VoiceVolume++;
 		if (GameConfig().VoiceVolume > 10)
 			ChangeGameConfig().VoiceVolume = 10;
@@ -173,13 +173,13 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Sound Effects Volume"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().SoundVolume == 0))) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Decrease"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().SoundVolume == 0))) {
 		ChangeGameConfig().SoundVolume--;
 		if (GameConfig().SoundVolume < 0)
 			ChangeGameConfig().SoundVolume = 0;
 		ChangeMenuSFXGlobalVolume(GameConfig().SoundVolume / 10.0f);
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().SoundVolume == 10))) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Increase"), ContentTransp, !vw_GetAudioStatus() || (GameConfig().SoundVolume == 10))) {
 		ChangeGameConfig().SoundVolume++;
 		if (GameConfig().SoundVolume > 10)
 			ChangeGameConfig().SoundVolume = 10;
@@ -212,8 +212,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Full Screen"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, DetectWindowSizeArray().empty() || !Options_Fullscreen) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, DetectFullscreenSize().empty() || Options_Fullscreen)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Off"), ContentTransp, DetectWindowSizeArray().empty() || !Options_Fullscreen) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("On"), ContentTransp, DetectFullscreenSize().empty() || Options_Fullscreen)) {
 		Options_Fullscreen = !Options_Fullscreen;
 		if (Options_Fullscreen) {
 			Options_Width = DetectFullscreenSize().back().Width;
@@ -238,7 +238,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Window Size"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Prev"), ContentTransp, DetectWindowSizeArray().empty() || Options_Fullscreen)) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, DetectWindowSizeArray().empty() || Options_Fullscreen)) {
 		auto iter = std::find(DetectWindowSizeArray().cbegin(),
 				      DetectWindowSizeArray().cend(),
 				      sViewSize{Options_Width, Options_Height});
@@ -251,7 +251,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		Options_Width = iter->Width;
 		Options_Height = iter->Height;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Next"), ContentTransp, DetectWindowSizeArray().empty() || Options_Fullscreen)) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, DetectWindowSizeArray().empty() || Options_Fullscreen)) {
 		auto iter = std::find(DetectWindowSizeArray().cbegin(),
 				      DetectWindowSizeArray().cend(),
 				      sViewSize{Options_Width, Options_Height});
@@ -278,8 +278,8 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Sync to VBlank"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Off"), ContentTransp, !Options_VSync) ||
-	    DrawButton128_2(X1+616, Y1-6, vw_GetText("On"), ContentTransp, Options_VSync))
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Off"), ContentTransp, !Options_VSync) ||
+	    DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("On"), ContentTransp, Options_VSync))
 		if (NeedCheck == 0) {
 			if (Options_VSync == 1)
 				Options_VSync = 0;
@@ -298,12 +298,12 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Brightness"));
-	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, (GameConfig().Brightness <= 1))) {
+	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Decrease"), ContentTransp, (GameConfig().Brightness <= 1))) {
 		ChangeGameConfig().Brightness--;
 		if (GameConfig().Brightness <= 1)
 			ChangeGameConfig().Brightness = 1;
 	}
-	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Increase"), ContentTransp, (GameConfig().Brightness >= 10))) {
+	if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Increase"), ContentTransp, (GameConfig().Brightness >= 10))) {
 		ChangeGameConfig().Brightness++;
 		if (GameConfig().Brightness >= 10)
 			ChangeGameConfig().Brightness = 10;
@@ -347,7 +347,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	X = GameConfig().InternalWidth / 2 - 366;
-	if (DrawButton200_2(X, Y+28, vw_GetText("Advanced"), ContentTransp, false)) {
+	if (DrawButton200_2(X, Y+28, vw_GetTextUTF32("Advanced"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::OPTIONS_ADVANCED);
 			GameMenuStatus = eGameMenuStatus::OPTIONS_ADVANCED;
@@ -357,7 +357,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	X = GameConfig().InternalWidth / 2 - 100;
-	if (DrawButton200_2(X, Y+28, vw_GetText("Interface"), ContentTransp, false)) {
+	if (DrawButton200_2(X, Y+28, vw_GetTextUTF32("Interface"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::INTERFACE);
 			GameMenuStatus = eGameMenuStatus::INTERFACE;
@@ -367,7 +367,7 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 
 
 	X = GameConfig().InternalWidth / 2 + 166;
-	if (DrawButton200_2(X, Y+28, vw_GetText("Config Controls"), ContentTransp, false)) {
+	if (DrawButton200_2(X, Y+28, vw_GetTextUTF32("Config Controls"), ContentTransp, false)) {
 		if (MenuStatus == eMenuStatus::GAME) {
 			SetOptionsMenu(eMenuStatus::CONFCONTROL);
 			GameMenuStatus = eGameMenuStatus::CONFCONTROL;
@@ -388,24 +388,24 @@ void OptionsMenu(float ContentTransp, float *ButtonTransp1, float *LastButtonUpd
 		X = (GameConfig().InternalWidth - 384) / 2;
 		Y = Y + Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton384(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton384(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 	} else {
 		X = GameConfig().InternalWidth / 2 - 256 - 38;
 		Y = Y+Prir;
 		if (MenuStatus == eMenuStatus::GAME) {
-			if (DrawButton256(X,Y, vw_GetText("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("GAME MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				GameMenuStatus = eGameMenuStatus::GAME_MENU;
 		} else {
-			if (DrawButton256(X,Y, vw_GetText("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
+			if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), ContentTransp, ButtonTransp1, LastButtonUpdateTime1))
 				cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
 		}
 		X = GameConfig().InternalWidth / 2 + 38;
-		if (DrawButton256(X,Y, vw_GetText("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
+		if (DrawButton256(X,Y, vw_GetTextUTF32("APPLY"), ContentTransp, ButtonTransp2, LastButtonUpdateTime2)) {
 			if (GameConfig().VSync != Options_VSync) {
 				if (SDL_GL_SetSwapInterval(Options_VSync) == -1) {
 					std::cerr << __func__ << "(): " << "SDL_GL_SetSwapInterval() failed: "

@@ -58,7 +58,7 @@ int NeedPlayOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 // прорисовка кнопки 384
 //------------------------------------------------------------------------------------
-bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update)
+bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float *ButTransp, float *Update)
 {
 	sRECT SrcRect, DstRect;
 	bool ON = false;
@@ -127,7 +127,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -141,9 +141,9 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 
 
@@ -173,7 +173,7 @@ bool DrawButton384(int X, int Y, const char *Text, float Transp, float *ButTrans
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 256
 //------------------------------------------------------------------------------------
-bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTransp, float *Update, bool Off)
+bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float *ButTransp, float *Update, bool Off)
 {
 	sRECT SrcRect, DstRect;
 
@@ -189,9 +189,9 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_off.tga"), true, Transp);
 
 
-		int Size = vw_TextWidth(Text);
+		int Size = vw_TextWidthUTF32(Text);
 		int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-		vw_DrawText(SizeI, Y+21, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+21, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X+2,Y+1,X+256,Y+63);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
@@ -276,7 +276,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -289,9 +289,9 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
 	    (vw_GetMouseLeftClick(true) ||
@@ -314,7 +314,7 @@ bool DrawButton256(int X, int Y, const char *Text, float Transp, float *ButTrans
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 200
 //------------------------------------------------------------------------------------
-bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
+bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, bool Off)
 {
 	sRECT SrcRect, DstRect, MouseRect;
 	SrcRect(2,2,230-2,64-2);
@@ -322,7 +322,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	MouseRect(X,Y,X+204,Y+35);
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -336,7 +336,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 	if (Off || DragWeapon) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_off.tga"), true, Transp);
 
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X,Y,X+204,Y+35);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
@@ -394,9 +394,9 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
 	    (vw_GetMouseLeftClick(true) ||
@@ -416,7 +416,7 @@ bool DrawButton200_2(int X, int Y, const char *Text, float Transp, bool Off)
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 128
 //------------------------------------------------------------------------------------
-bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, bool SoundClick)
+bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, bool Off, bool SoundClick)
 {
 	sRECT SrcRect, DstRect, MouseRect;
 	SrcRect(2,2,158-2,64-2);
@@ -424,7 +424,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	MouseRect(X,Y,X+132,Y+35);
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
@@ -440,7 +440,7 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 	if (Off || DragWeapon) {
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_off.tga"), true, Transp);
 
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
 		DstRect(X,Y,X+132,Y+35);
 		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
@@ -499,9 +499,9 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
 	    (vw_GetMouseLeftClick(true) ||
@@ -530,12 +530,12 @@ bool DrawButton128_2(int X, int Y, const char *Text, float Transp, bool Off, boo
 //------------------------------------------------------------------------------------
 // прорисовка чекбокса
 //------------------------------------------------------------------------------------
-void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp)
+void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text, float Transp)
 {
 	sRECT SrcRect, DstRect;
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 
 	bool ON = false;
 
@@ -569,19 +569,19 @@ void DrawCheckBox(int X, int Y, bool *CheckBoxStatus, const char *Text, float Tr
 	SrcRect(0,0,40,38);
 	DstRect(X,Y,X+40,Y+38);
 	if (!ON || DragWeapon)
-		vw_DrawText(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 	else
-		vw_DrawText(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
+		vw_DrawTextUTF32(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
 
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
-	if (*CheckBoxStatus)
+	if (CheckBoxStatus)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
 
 
 	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) && !DragWeapon &&
 	    (vw_GetMouseLeftClick(true) ||
 	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		*CheckBoxStatus = !(*CheckBoxStatus);
+		CheckBoxStatus = !CheckBoxStatus;
 		PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		if (InFocusByKeyboard) {
 			vw_SetKeyStatus(SDLK_KP_ENTER, false);

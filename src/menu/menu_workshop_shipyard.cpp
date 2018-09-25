@@ -599,7 +599,7 @@ void Workshop_Shipyard()
 	tmpStream << std::fixed << std::setprecision(0)
 		  << vw_GetText(GetWorkshopShipName(CurrentWorkshopNewFighter)) << " Mk" << 1;
 	vw_DrawText(GameConfig().InternalWidth/2-448, 50+6, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, tmpStream.str());
-	if (DrawButton128_2(GameConfig().InternalWidth/2-197,50, vw_GetText("Info"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-197,50, vw_GetTextUTF32("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowShipInfo);
 		DialogSpaceShip = WorkshopNewFighter;
 	}
@@ -678,19 +678,19 @@ void Workshop_Shipyard()
 		vw_ResetWheelStatus();
 	}
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2-395, 482, vw_GetText("Prev"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-395, 482, vw_GetTextUTF32("Prev"), MenuContentTransp, false)) {
 		CurrentWorkshopNewFighter--;
 		if (CurrentWorkshopNewFighter < 1)
 			CurrentWorkshopNewFighter = 22;
 		WorkshopCreateNewShip();
 	}
-	if (DrawButton128_2(GameConfig().InternalWidth/2-247, 482, vw_GetText("Next"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2-247, 482, vw_GetTextUTF32("Next"), MenuContentTransp, false)) {
 		CurrentWorkshopNewFighter++;
 		if (CurrentWorkshopNewFighter > 22)
 			CurrentWorkshopNewFighter = 1;
 		WorkshopCreateNewShip();
 	}
-	if (DrawButton200_2(GameConfig().InternalWidth/2-357, 533, vw_GetText("Buy Ship"), MenuContentTransp, !CanBuy))
+	if (DrawButton200_2(GameConfig().InternalWidth/2-357, 533, vw_GetTextUTF32("Buy Ship"), MenuContentTransp, !CanBuy))
 		BuyShip();
 
 
@@ -712,7 +712,7 @@ void Workshop_Shipyard()
 		  << " Mk" << static_cast<int>(GameConfig().Profile[CurrentProfile].ShipHullUpgrade);
 	vw_DrawText(GameConfig().InternalWidth/2+64, 56, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, tmpStream.str());
 
-	if (DrawButton128_2(GameConfig().InternalWidth/2+315, 50, vw_GetText("Info"), MenuContentTransp, false)) {
+	if (DrawButton128_2(GameConfig().InternalWidth/2+315, 50, vw_GetTextUTF32("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowShipInfo);
 		DialogSpaceShip = WorkshopFighterGame;
 	}
@@ -820,10 +820,10 @@ void Workshop_Shipyard()
 
 
 
-	if (DrawButton200_2(GameConfig().InternalWidth/2+153, 482, vw_GetText("Repair Hull"), MenuContentTransp, !NeedRepair))
+	if (DrawButton200_2(GameConfig().InternalWidth/2+153, 482, vw_GetTextUTF32("Repair Hull"), MenuContentTransp, !NeedRepair))
 		RepairShip();
 
-	if (DrawButton200_2(GameConfig().InternalWidth/2+153, 533, vw_GetText("Upgrade Hull"), MenuContentTransp, !CanUpgrade))
+	if (DrawButton200_2(GameConfig().InternalWidth/2+153, 533, vw_GetTextUTF32("Upgrade Hull"), MenuContentTransp, !CanUpgrade))
 		UpgradeShip();
 
 
