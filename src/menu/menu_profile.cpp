@@ -266,7 +266,7 @@ void ProfileMenu()
 	int Prir1 = 24;
 
 	// надпись
-	vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetText("New Pilot Profile"));
+	vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetTextUTF32("New Pilot Profile"));
 
 
 	Y1 += 30;
@@ -299,33 +299,33 @@ void ProfileMenu()
 
 	// список для выбора записи
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetText("Pilot Profiles"));
-	int Size = vw_TextWidth(vw_GetText("Money"));
+	vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetTextUTF32("Pilot Profiles"));
+	int Size = vw_TextWidthUTF32(vw_GetTextUTF32("Money"));
 	float WScale = 0;
 	if (Size > 70) {
 		Size = 70;
 		WScale = -70;
 	}
 	int SizeI = GameConfig().InternalWidth / 2 + 2 + (130 - Size) / 2;
-	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetText("Money"));
+	vw_DrawTextUTF32(SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetTextUTF32("Money"));
 
-	Size = vw_TextWidth(vw_GetText("Exp"));
+	Size = vw_TextWidthUTF32(vw_GetTextUTF32("Exp"));
 	WScale = 0;
 	if (Size > 100) {
 		Size = 100;
 		WScale = -100;
 	}
 	SizeI = GameConfig().InternalWidth / 2 + 132 + (130 - Size) / 2;
-	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetText("Exp"));
+	vw_DrawTextUTF32(SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetTextUTF32("Exp"));
 
-	Size = vw_TextWidth(vw_GetText("Difficulty"));
+	Size = vw_TextWidthUTF32(vw_GetTextUTF32("Difficulty"));
 	WScale = 0;
 	if (Size > 100) {
 		Size = 100;
 		WScale = -100;
 	}
 	SizeI = GameConfig().InternalWidth / 2 + 262 + (130 - Size) / 2;
-	vw_DrawText(SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetText("Difficulty"));
+	vw_DrawTextUTF32(SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetTextUTF32("Difficulty"));
 
 
 	Y1 += 30;
@@ -443,7 +443,7 @@ void ProfileMenu()
 			tmpStream.str(std::string{});
 			tmpStream << i + 1 << ".";
 			vw_DrawText(X1+10, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, tmpStream.str());
-			vw_DrawText(X1+50, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, vw_GetText("empty"));
+			vw_DrawTextUTF32(X1+50, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, transp*MenuContentTransp, vw_GetTextUTF32("empty"));
 		}
 
 		TmpY += 46;

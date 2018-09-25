@@ -542,8 +542,8 @@ void DrawMenu()
 	vw_SetFontSize(10);
 
 	// Version
-	int VSize = vw_TextWidth(vw_GetText("Version"));
-	vw_DrawText(6, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, vw_GetText("Version"));
+	int VSize = vw_TextWidthUTF32(vw_GetTextUTF32("Version"));
+	vw_DrawTextUTF32(6, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, vw_GetTextUTF32("Version"));
 	vw_DrawText(16 + VSize, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, GAME_VERSION);
 	// Copyright
 	int CSize = vw_TextWidth("Copyright © 2007-2018, Viewizard");

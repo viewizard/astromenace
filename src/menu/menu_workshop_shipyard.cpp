@@ -590,7 +590,7 @@ void Workshop_Shipyard()
 
 	// на новом корабле
 	vw_SetFontSize(24);
-	vw_DrawText(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Ship Stock"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Ship Stock"));
 	ResetFontSize();
 
 
@@ -609,24 +609,24 @@ void Workshop_Shipyard()
 		return;
 
 	// находим смещение, чтобы было красиво
-	int SmSizeI = vw_TextWidth(vw_GetText("Armor:"));
-	int SmSizeI2 = vw_TextWidth(vw_GetText("Weapon Slots:"));
-	int SmSizeI3 = vw_TextWidth(vw_GetText("Slot Levels:"));
+	int SmSizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Armor:"));
+	int SmSizeI2 = vw_TextWidthUTF32(vw_GetTextUTF32("Weapon Slots:"));
+	int SmSizeI3 = vw_TextWidthUTF32(vw_GetTextUTF32("Slot Levels:"));
 	SmSizeI = std::max({SmSizeI, SmSizeI2, SmSizeI3});
 
-	vw_DrawText(GameConfig().InternalWidth/2-440, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2-440, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetTextUTF32("Armor:"));
 	tmpStream.clear();
 	tmpStream.str(std::string{});
 	tmpStream << sharedWorkshopNewFighter->ArmorInitialStatus;
 	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, tmpStream.str());
 
-	vw_DrawText(GameConfig().InternalWidth/2-440, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2-440, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetTextUTF32("Weapon Slots:"));
 	tmpStream.clear();
 	tmpStream.str(std::string{});
 	tmpStream << sharedWorkshopNewFighter->WeaponSlots.size();
 	vw_DrawText(GameConfig().InternalWidth/2-440+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, tmpStream.str());
 
-	vw_DrawText(GameConfig().InternalWidth/2-440, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2-440, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetTextUTF32("Slot Levels:"));
 	tmpStream.clear();
 	tmpStream.str(std::string{});
 	if (!sharedWorkshopNewFighter->WeaponSlots.empty())
@@ -702,7 +702,7 @@ void Workshop_Shipyard()
 
 	// на корабле игрока
 	vw_SetFontSize(24);
-	vw_DrawText(GameConfig().InternalWidth/2+445-vw_TextWidth(vw_GetText("Player Ship")), 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Player Ship"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2+445-vw_TextWidthUTF32(vw_GetTextUTF32("Player Ship")), 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Player Ship"));
 	ResetFontSize();
 
 	// вывод названия корабля
@@ -764,7 +764,7 @@ void Workshop_Shipyard()
 		NeedRepair = true;
 
 		// надпись Armor, красная
-		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawTextUTF32(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetTextUTF32("Armor:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << static_cast<int>(sharedWorkshopFighterGame->ArmorCurrentStatus) << "/"
@@ -772,7 +772,7 @@ void Workshop_Shipyard()
 		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3*MenuContentTransp, tmpStream.str());
 	} else {
 		// надпись Armor, нормальная
-		vw_DrawText(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Armor:"));
+		vw_DrawTextUTF32(GameConfig().InternalWidth/2+74, 110, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetTextUTF32("Armor:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << static_cast<int>(sharedWorkshopFighterGame->ArmorCurrentStatus) << "/"
@@ -780,14 +780,14 @@ void Workshop_Shipyard()
 		vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 110, 0, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, tmpStream.str());
 	}
 
-	vw_DrawText(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Weapon Slots:"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2+74, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetTextUTF32("Weapon Slots:"));
 	tmpStream.clear();
 	tmpStream.str(std::string{});
 	tmpStream << sharedWorkshopFighterGame->WeaponSlots.size();
 	vw_DrawText(GameConfig().InternalWidth/2+74+14+SmSizeI, 130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, tmpStream.str());
 
 
-	vw_DrawText(GameConfig().InternalWidth/2+74, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetText("Slot Levels:"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2+74, 150, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*MenuContentTransp, vw_GetTextUTF32("Slot Levels:"));
 	tmpStream.clear();
 	tmpStream.str(std::string{});
 	if (!sharedWorkshopFighterGame->WeaponSlots.empty())

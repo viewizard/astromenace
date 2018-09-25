@@ -550,24 +550,24 @@ Dialogs with default type:
 	switch (CurrentDialogBox) {
 	case eDialogBox::QuitFromGame: // хотим выйти или нет?
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("QUIT")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("QUIT"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("QUIT")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("QUIT"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to quit?"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to quit?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to quit?"));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to quit?"));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Note: all game data will be saved."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Note: all game data will be saved."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: all game data will be saved."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all game data will be saved."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: all game data will be saved."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all game data will be saved."));
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
@@ -579,24 +579,24 @@ Dialogs with default type:
 
 	case eDialogBox::ProfileCreationError: // в профайле все занято, не можем создать новую запись.
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("ERROR")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("ERROR"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("ERROR")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("ERROR"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Cannot create a Pilot Profile."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Cannot create a Pilot Profile."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Cannot create a Pilot Profile."));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Cannot create a Pilot Profile."));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Cannot create a Pilot Profile."));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Cannot create a Pilot Profile."));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Tip: you should clear one line first."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tip: you should clear one line first."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Tip: you should clear one line first."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Tip: you should clear one line first."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Tip: you should clear one line first."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Tip: you should clear one line first."));
 
 		// кнопки
 		if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) CloseDialog();
@@ -604,24 +604,24 @@ Dialogs with default type:
 
 	case eDialogBox::DeleteProfile: // удаление профайла - запрос
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("DELETE")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("DELETE"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("DELETE")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("DELETE"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to delete the Profile?"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to delete the Profile?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to delete the Profile?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to delete the Profile?"));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to delete the Profile?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to delete the Profile?"));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Note: all Pilot Profile data will be lost."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Note: all Pilot Profile data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: all Pilot Profile data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all Pilot Profile data will be lost."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: all Pilot Profile data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all Pilot Profile data will be lost."));
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
@@ -637,24 +637,24 @@ Dialogs with default type:
 
 	case eDialogBox::RepairShip: // не полный ремонт (не достаточно денег)
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("REPAIR")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("REPAIR"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("REPAIR")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("REPAIR"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Not enough money for a full hull repair."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Not enough money for a full hull repair."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Not enough money for a full hull repair."));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Not enough money for a full hull repair."));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Not enough money for a full hull repair."));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Not enough money for a full hull repair."));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Note: Repair has been limited by money."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Note: Repair has been limited by money."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: Repair has been limited by money."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: Repair has been limited by money."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: Repair has been limited by money."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: Repair has been limited by money."));
 
 		// кнопки
 		if (DrawDialogButton128(X+192,Y+ButtonOffset, vw_GetText("OK"), DialogContentTransp)) CloseDialog();
@@ -663,24 +663,24 @@ Dialogs with default type:
 
 	case eDialogBox::QuitNoSave: // хотим выйти или нет?, с предупреждением, что не все сохраним
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("QUIT")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("QUIT"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("QUIT")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("QUIT"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to quit?"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to quit?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to quit?"));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to quit?"));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
@@ -692,25 +692,25 @@ Dialogs with default type:
 	case eDialogBox::QuiToMenuNoSave: // хотим выйти или нет?, с предупреждением, что не все сохраним
 		// выход из игры в меню (основное)
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("QUIT")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("QUIT"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("QUIT")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("QUIT"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to quit?"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to quit?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to quit?"));
 		} else
 
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to quit?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to quit?"));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
@@ -722,24 +722,24 @@ Dialogs with default type:
 
 	case eDialogBox::RestartLevelNoSave: // хотим рестарт игры?, с предупреждением, что не все сохраним
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("RESTART")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("RESTART"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("RESTART")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("RESTART"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to restart the game?"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to restart the game?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to restart the game?"));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to restart the game?"));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
@@ -758,8 +758,8 @@ Dialogs with default type:
 		auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
 		if (sharedDialogSpaceShip && sharedWorkshopFighterGame) {
 			// название диалога
-			SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWorkshopShipName(sharedDialogSpaceShip->InternalType))))/2;
-			vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText(GetWorkshopShipName(sharedDialogSpaceShip->InternalType)));
+			SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32(GetWorkshopShipName(sharedDialogSpaceShip->InternalType))))/2;
+			vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32(GetWorkshopShipName(sharedDialogSpaceShip->InternalType)));
 			// текст диалога
 			int Y1 = Y+80;
 			int Offset = 31;
@@ -767,17 +767,17 @@ Dialogs with default type:
 			float WScale = -200;
 			int X1 = X+45;
 
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Space Ship"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Object Class:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Space Ship"));
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ship Type:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText(GetShipGroupTitle(sharedDialogSpaceShip->InternalType)));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Ship Type:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32(GetShipGroupTitle(sharedDialogSpaceShip->InternalType)));
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Developer:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Earth Federation"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Width:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Width:"));
 			sRGBCOLOR tmpColor{eRGBCOLOR::white};
 			std::ostringstream tmpStream;
 			tmpStream << std::fixed << std::setprecision(1);
@@ -795,7 +795,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Length:"));
 			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
 			tmpStream.clear();
 			tmpStream.str(std::string{});
@@ -813,7 +813,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Height:"));
 			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
 			tmpStream.clear();
 			tmpStream.str(std::string{});
@@ -831,14 +831,14 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Engines:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Engines:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << sharedDialogSpaceShip->Engines.size() << " " << vw_GetText("units");
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Armor:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Armor:"));
 			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
 			tmpStream.clear();
 			tmpStream.str(std::string{});
@@ -859,7 +859,7 @@ Dialogs with default type:
 			// FIXME for "Upgrade"s are only difference with "Armor" is multiplier, remove code duplication here
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk2:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Upgrade Mk2:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			if (GetShipArmor(sharedDialogSpaceShip->InternalType) == GetShipArmor(sharedWorkshopFighterGame->InternalType))
@@ -870,7 +870,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk3:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Upgrade Mk3:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			if (GetShipArmor(sharedDialogSpaceShip->InternalType) == GetShipArmor(sharedWorkshopFighterGame->InternalType))
@@ -881,7 +881,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Upgrade Mk4:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Upgrade Mk4:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			if (GetShipArmor(sharedDialogSpaceShip->InternalType) == GetShipArmor(sharedWorkshopFighterGame->InternalType))
@@ -892,14 +892,14 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Weapon Slots:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Weapon Slots:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << sharedDialogSpaceShip->WeaponSlots.size() << " " << vw_GetText("units");
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Slot Levels:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Slot Levels:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			if (!sharedDialogSpaceShip->WeaponSlots.empty())
@@ -919,8 +919,8 @@ Dialogs with default type:
 	// вывод данных по оружию
 	case eDialogBox::ShowWeaponsInfo: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetWeaponName(DialogWeapon->InternalType))))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText(GetWeaponName(DialogWeapon->InternalType)));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32(GetWeaponName(DialogWeapon->InternalType))))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32(GetWeaponName(DialogWeapon->InternalType)));
 		// текст диалога
 		int Y1 = Y+80;
 		int Offset = 31;
@@ -928,29 +928,29 @@ Dialogs with default type:
 		float WScale = -200;
 		int X1 = X+45;
 
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Object Class:"));
 		if (DialogWeapon->InternalType < 16)
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Weapon, Cannon"));
+			vw_DrawTextUTF32(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Weapon, Cannon"));
 		else
-			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Weapon, Launcher"));
+			vw_DrawTextUTF32(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Weapon, Launcher"));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText(GetWeaponGroupTitle(DialogWeapon->InternalType)));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Type:"));
+		vw_DrawTextUTF32(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32(GetWeaponGroupTitle(DialogWeapon->InternalType)));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Developer:"));
+		vw_DrawTextUTF32(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Earth Federation"));
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Armor:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Armor:"));
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << DialogWeapon->ArmorInitialStatus << " " << vw_GetText("units");
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Width:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Width:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
@@ -958,7 +958,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Length:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Length:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
@@ -966,7 +966,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Height:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Height:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
@@ -974,7 +974,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, Kinetic:"));
+		vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Damage, Kinetic:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(0)
@@ -988,7 +988,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Damage, EM:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Damage, EM:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(0)
@@ -1002,7 +1002,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Energy Use:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
@@ -1010,7 +1010,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Ammo:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Ammo:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(0)
@@ -1018,7 +1018,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Reload:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Reload:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
@@ -1026,7 +1026,7 @@ Dialogs with default type:
 		vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
 		Y1 += Offset;
-		vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Range:"));
+		vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Range:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << std::setprecision(1)
@@ -1043,8 +1043,8 @@ Dialogs with default type:
 	// вывод данных по системам
 	case eDialogBox::ShowSystemsInfo: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText(GetSystemName(DialogSystem))))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText(GetSystemName(DialogSystem)));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32(GetSystemName(DialogSystem))))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32(GetSystemName(DialogSystem)));
 		// текст диалога
 		int Y1 = Y+80;
 		int Offset = 31;
@@ -1063,19 +1063,19 @@ Dialogs with default type:
 		case 2:
 		case 3:
 		case 4:
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Object Class:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Spaceship Engine"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Type:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Spaceship Engine"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Developer:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Earth Federation"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Energy Use:"));
 			if (NeedMoreEnergyDialog &&
 			    (GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1)) {
 				tmpColor = sRGBCOLOR{eRGBCOLOR::red};
@@ -1097,7 +1097,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Engine Power:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Engine Power:"));
 			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
 			tmpTransp = DialogContentTransp;
 			tmpStream.clear();
@@ -1118,7 +1118,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Acceleration:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Acceleration:"));
 			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
 			tmpTransp = DialogContentTransp;
 			tmpStream.clear();
@@ -1139,20 +1139,20 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+			vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Relations/Dependencies:"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetTextUTF32("Power Source"));
 
 			if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
 				Y1 += Offset;
-				SizeI = (W-vw_TextWidth(vw_GetText("Useless with Arcade")))/2-45;
-				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetText("Useless with Arcade"));
+				SizeI = (W-vw_TextWidthUTF32(vw_GetTextUTF32("Useless with Arcade")))/2-45;
+				vw_DrawTextUTF32(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetTextUTF32("Useless with Arcade"));
 				Y1 += Offset;
-				SizeI = (W-vw_TextWidth(vw_GetText("SpaceShip Control Mode.")))/2-45;
-				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetText("SpaceShip Control Mode."));
+				SizeI = (W-vw_TextWidthUTF32(vw_GetTextUTF32("SpaceShip Control Mode.")))/2-45;
+				vw_DrawTextUTF32(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetTextUTF32("SpaceShip Control Mode."));
 			}
 
 			break;
@@ -1161,19 +1161,19 @@ Dialogs with default type:
 		case 6:
 		case 7:
 		case 8:
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Object Class:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Power Source"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Type:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Power Source"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Developer:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Earth Federation"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Capacity:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Energy Capacity:"));
 
 			if ((GameConfig().Profile[CurrentProfile].PowerSystem == DialogSystem - 4) ||
 			    (GameConfig().Profile[CurrentProfile].PowerSystem == 0)) {
@@ -1191,7 +1191,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Recharge Rate:"));
 			tmpColor = sRGBCOLOR{eRGBCOLOR::white};
 			tmpTransp = DialogContentTransp;
 			tmpStream.clear();
@@ -1216,22 +1216,22 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+			vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Relations/Dependencies:"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Weapon Recharge Rate"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Weapon Recharge Rate"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Spaceship Engine"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Spaceship Engine"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Optical Computer"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Optical Computer"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Targeting System"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Targeting System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Advanced System"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Advanced System"));
 
 			break;
 
@@ -1240,24 +1240,24 @@ Dialogs with default type:
 		case 11:
 		case 12:
 
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Object Class:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Optical Computer"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Type:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Optical Computer"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Developer:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Earth Federation"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Energy Use:"));
 			tmpStream << 0.1f << " " << vw_GetText("units per sec");
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Target Tracing:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Target Tracing:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << std::setprecision(0);
@@ -1272,7 +1272,7 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Auto Adjustment:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Auto Adjustment:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			if ((DialogSystem == 9) ||
@@ -1285,19 +1285,19 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+			vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Relations/Dependencies:"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetTextUTF32("Power Source"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Weapon Fire Range"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetTextUTF32("Weapon Fire Range"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Weapon Orientation"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Weapon Orientation"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Targeting System"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Targeting System"));
 
 			break;
 
@@ -1305,24 +1305,24 @@ Dialogs with default type:
 		case 14:
 		case 15:
 		case 16:
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Object Class:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Targeting System"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Type:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Targeting System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Developer:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Earth Federation"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Energy Use:"));
 			tmpStream << 0.1f << " " << vw_GetText("units per sec");
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Orientation Speed:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Orientation Speed:"));
 			tmpStream.clear();
 			tmpStream.str(std::string{});
 			tmpStream << std::setprecision(0);
@@ -1342,26 +1342,26 @@ Dialogs with default type:
 			vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+			vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Relations/Dependencies:"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetTextUTF32("Power Source"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Optical Computer"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetTextUTF32("Optical Computer"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Weapon Orientation"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Weapon Orientation"));
 
 			if (GameConfig().Profile[CurrentProfile].WeaponTargetingMode == 1) {
 				Y1 += Offset;
 				Y1 += Offset;
 				Y1 += Offset;
-				SizeI = (W-vw_TextWidth(vw_GetText("Useless with Arcade")))/2-45;
-				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetText("Useless with Arcade"));
+				SizeI = (W-vw_TextWidthUTF32(vw_GetTextUTF32("Useless with Arcade")))/2-45;
+				vw_DrawTextUTF32(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetTextUTF32("Useless with Arcade"));
 				Y1 += Offset;
-				SizeI = (W-vw_TextWidth(vw_GetText("Weapon Targeting Mode.")))/2-45;
-				vw_DrawText(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetText("Weapon Targeting Mode."));
+				SizeI = (W-vw_TextWidthUTF32(vw_GetTextUTF32("Weapon Targeting Mode.")))/2-45;
+				vw_DrawTextUTF32(X1+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, DialogContentTransp, vw_GetTextUTF32("Weapon Targeting Mode."));
 			}
 
 			break;
@@ -1370,19 +1370,19 @@ Dialogs with default type:
 		case 18:
 		case 19:
 		case 20:
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Object Class:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("System"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Object Class:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Type:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Advanced System"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Type:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Advanced System"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Developer:"));
-			vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Earth Federation"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Developer:"));
+			vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Earth Federation"));
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Energy Use:"));
+			vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Energy Use:"));
 			if (NeedMoreEnergyDialog) {
 				tmpTransp = DialogContentTransp * CurrentAlert3;
 				tmpColor = sRGBCOLOR{eRGBCOLOR::red};
@@ -1397,34 +1397,34 @@ Dialogs with default type:
 
 			Y1 += Offset;
 			if (DialogSystem == 17) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Hull Repair Rate:"));
+				vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Hull Repair Rate:"));
 				tmpStream << 0.5f << "% " << vw_GetText("per sec");
 				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 			} else if (DialogSystem == 18) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, Hull:"));
+				vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Resistance, Hull:"));
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "x4");
 
 				Y1 += Offset;
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Resistance, System:"));
+				vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Resistance, System:"));
 				vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, "x5");
 			} else if (DialogSystem == 19) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Shield Power:"));
+				vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Shield Power:"));
 				tmpStream << 100.0f << " " << vw_GetText("units");
 				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 				Y1 += Offset;
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
+				vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Recharge Rate:"));
 				tmpStream.clear();
 				tmpStream.str(std::string{});
 				tmpStream << 2 << "% " << vw_GetText("per sec");
 				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 			} else if (DialogSystem == 20) {
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Shield Power:"));
+				vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Shield Power:"));
 				tmpStream << 150.0f << " " << vw_GetText("units");
 				vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 				Y1 += Offset;
-				vw_DrawText(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Recharge Rate:"));
+				vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Recharge Rate:"));
 				tmpStream.clear();
 				tmpStream.str(std::string{});
 				tmpStream << 3 << "% " << vw_GetText("per sec");
@@ -1432,19 +1432,19 @@ Dialogs with default type:
 			}
 
 			Y1 += Offset;
-			vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Relations/Dependencies:"));
+			vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Relations/Dependencies:"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetText("Power Source"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, DialogContentTransp, vw_GetTextUTF32("Power Source"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Hull Resistance"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Hull Resistance"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("Systems Resistance"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("Systems Resistance"));
 
 			Y1 += Offset;
-			vw_DrawText(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetText("SpaceShip Vitality"));
+			vw_DrawTextUTF32(X1+Size2, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, DialogContentTransp, vw_GetTextUTF32("SpaceShip Vitality"));
 
 			break;
 		}
@@ -1458,32 +1458,32 @@ Dialogs with default type:
 
 	case eDialogBox::ProfileTipsAndTricks: { // подсказки на меню профилей
 		// название диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
 		// текст диалога
 
-		SizeI = vw_TextWidth(vw_GetText("It is possible to create five Pilot Profiles in the game in"));
-		vw_DrawText(X+25, Y+ 80, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("It is possible to create five Pilot Profiles in the game in"));
-		SizeI = vw_TextWidth(vw_GetText("order to store personal data. You can set an individual"));
-		vw_DrawText(X+25, Y+115, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("order to store personal data. You can set an individual"));
-		SizeI = vw_TextWidth(vw_GetText("difficulty level for each profile or delete the current"));
-		vw_DrawText(X+25, Y+150, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("difficulty level for each profile or delete the current"));
-		vw_DrawText(X+25, Y+185, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("profile to free space for a new profile."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("It is possible to create five Pilot Profiles in the game in"));
+		vw_DrawTextUTF32(X+25, Y+ 80, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("It is possible to create five Pilot Profiles in the game in"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("order to store personal data. You can set an individual"));
+		vw_DrawTextUTF32(X+25, Y+115, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("order to store personal data. You can set an individual"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("difficulty level for each profile or delete the current"));
+		vw_DrawTextUTF32(X+25, Y+150, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("difficulty level for each profile or delete the current"));
+		vw_DrawTextUTF32(X+25, Y+185, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("profile to free space for a new profile."));
 
-		SizeI = vw_TextWidth(vw_GetText("Note that the current difficulty level is displayed in percent"));
-		vw_DrawText(X+25, Y+240, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Note that the current difficulty level is displayed in percent"));
-		SizeI = vw_TextWidth(vw_GetText("for each profile. This value influences the increase of"));
-		vw_DrawText(X+25, Y+275, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("for each profile. This value influences the increase of"));
-		SizeI = vw_TextWidth(vw_GetText("experience. For instance, if you bring down an enemy ship, you"));
-		vw_DrawText(X+25, Y+310, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("experience. For instance, if you bring down an enemy ship, you"));
-		SizeI = vw_TextWidth(vw_GetText("will get 100 money units and only 65 experience units if the"));
-		vw_DrawText(X+25, Y+345, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("will get 100 money units and only 65 experience units if the"));
-		vw_DrawText(X+25, Y+380, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("difficulty percent is set to 65 for you."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Note that the current difficulty level is displayed in percent"));
+		vw_DrawTextUTF32(X+25, Y+240, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Note that the current difficulty level is displayed in percent"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("for each profile. This value influences the increase of"));
+		vw_DrawTextUTF32(X+25, Y+275, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("for each profile. This value influences the increase of"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("experience. For instance, if you bring down an enemy ship, you"));
+		vw_DrawTextUTF32(X+25, Y+310, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("experience. For instance, if you bring down an enemy ship, you"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("will get 100 money units and only 65 experience units if the"));
+		vw_DrawTextUTF32(X+25, Y+345, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("will get 100 money units and only 65 experience units if the"));
+		vw_DrawTextUTF32(X+25, Y+380, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("difficulty percent is set to 65 for you."));
 
-		SizeI = vw_TextWidth(vw_GetText("Note: you can change your difficulty level before each"));
-		vw_DrawText(X+25, Y+435, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: you can change your difficulty level before each"));
-		vw_DrawText(X+25, Y+470, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("new mission."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Note: you can change your difficulty level before each"));
+		vw_DrawTextUTF32(X+25, Y+435, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: you can change your difficulty level before each"));
+		vw_DrawTextUTF32(X+25, Y+470, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("new mission."));
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[0];
@@ -1496,34 +1496,34 @@ Dialogs with default type:
 	}
 	case eDialogBox::ShipyardTipsAndTricks: { // подсказки на меню шипъярд
 		// название диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
 		// текст диалога
 
 		int k=28;
-		SizeI = vw_TextWidth(vw_GetText("There are more than 20 spaceships with unique characteristics"));
-		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("There are more than 20 spaceships with unique characteristics"));
-		SizeI = vw_TextWidth(vw_GetText("available in the game. You can use the right part of the screen"));
-		vw_DrawText(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("available in the game. You can use the right part of the screen"));
-		SizeI = vw_TextWidth(vw_GetText("to see your current spaceship, its characteristics and cost and"));
-		vw_DrawText(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("to see your current spaceship, its characteristics and cost and"));
-		vw_DrawText(X+25, Y+80+k*3, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("also to perform basic operations, such as repair."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("There are more than 20 spaceships with unique characteristics"));
+		vw_DrawTextUTF32(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("There are more than 20 spaceships with unique characteristics"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("available in the game. You can use the right part of the screen"));
+		vw_DrawTextUTF32(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("available in the game. You can use the right part of the screen"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("to see your current spaceship, its characteristics and cost and"));
+		vw_DrawTextUTF32(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("to see your current spaceship, its characteristics and cost and"));
+		vw_DrawTextUTF32(X+25, Y+80+k*3, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("also to perform basic operations, such as repair."));
 
-		SizeI = vw_TextWidth(vw_GetText("The left part of the screen contains Ship Stock where you can see"));
-		vw_DrawText(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("The left part of the screen contains Ship Stock where you can see"));
-		SizeI = vw_TextWidth(vw_GetText("all available spaceships and their characteristics. Do not"));
-		vw_DrawText(X+25, Y+100+k*5, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("all available spaceships and their characteristics. Do not"));
-		SizeI = vw_TextWidth(vw_GetText("forget that each ship has its dimensions and, which is more"));
-		vw_DrawText(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("forget that each ship has its dimensions and, which is more"));
-		vw_DrawText(X+25, Y+100+k*7, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("important, different weapon mounts."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("The left part of the screen contains Ship Stock where you can see"));
+		vw_DrawTextUTF32(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("The left part of the screen contains Ship Stock where you can see"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("all available spaceships and their characteristics. Do not"));
+		vw_DrawTextUTF32(X+25, Y+100+k*5, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("all available spaceships and their characteristics. Do not"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("forget that each ship has its dimensions and, which is more"));
+		vw_DrawTextUTF32(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("forget that each ship has its dimensions and, which is more"));
+		vw_DrawTextUTF32(X+25, Y+100+k*7, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("important, different weapon mounts."));
 
-		vw_DrawText(X+25, Y+120+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("The basic shipbuilding concept is as follows:"));
-		vw_DrawText(X+25, Y+120+k*9, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Scout - light, small and maneuverable ships with weak weapons."));
-		vw_DrawText(X+25, Y+120+k*10, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Interceptor - fast ships with light weapons."));
-		vw_DrawText(X+25, Y+120+k*11, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Fighter - main type of ships with light and semi-heavy weapons."));
-		vw_DrawText(X+25, Y+120+k*12, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Bomber - heavy destroyers with mostly heavy attack weapons."));
-		vw_DrawText(X+25, Y+120+k*13, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Attack Ship - heavy, large and heavily armed ships."));
+		vw_DrawTextUTF32(X+25, Y+120+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("The basic shipbuilding concept is as follows:"));
+		vw_DrawTextUTF32(X+25, Y+120+k*9, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Scout - light, small and maneuverable ships with weak weapons."));
+		vw_DrawTextUTF32(X+25, Y+120+k*10, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Interceptor - fast ships with light weapons."));
+		vw_DrawTextUTF32(X+25, Y+120+k*11, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Fighter - main type of ships with light and semi-heavy weapons."));
+		vw_DrawTextUTF32(X+25, Y+120+k*12, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Bomber - heavy destroyers with mostly heavy attack weapons."));
+		vw_DrawTextUTF32(X+25, Y+120+k*13, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Attack Ship - heavy, large and heavily armed ships."));
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[1];
@@ -1536,39 +1536,39 @@ Dialogs with default type:
 	}
 	case eDialogBox::SystemsTipsAndTricks: { // подсказки на меню системы
 		// название диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
 		// текст диалога
 
 		int k=25;
-		SizeI = vw_TextWidth(vw_GetText("A set of systems is installed on the ship you operate. All systems"));
-		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("A set of systems is installed on the ship you operate. All systems"));
-		SizeI = vw_TextWidth(vw_GetText("are connected with each other and with ship weapons in one way or"));
-		vw_DrawText(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("are connected with each other and with ship weapons in one way or"));
-		vw_DrawText(X+25, Y+80+k*2, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("another and play important role in the game."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("A set of systems is installed on the ship you operate. All systems"));
+		vw_DrawTextUTF32(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("A set of systems is installed on the ship you operate. All systems"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("are connected with each other and with ship weapons in one way or"));
+		vw_DrawTextUTF32(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("are connected with each other and with ship weapons in one way or"));
+		vw_DrawTextUTF32(X+25, Y+80+k*2, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("another and play important role in the game."));
 
-		SizeI = vw_TextWidth(vw_GetText("You should carefully take into account the peculiarities of each"));
-		vw_DrawText(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You should carefully take into account the peculiarities of each"));
-		SizeI = vw_TextWidth(vw_GetText("system and match their characteristics to each other to get"));
-		vw_DrawText(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("system and match their characteristics to each other to get"));
-		vw_DrawText(X+25, Y+100+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("a well balanced warship that can complete combat tasks."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("You should carefully take into account the peculiarities of each"));
+		vw_DrawTextUTF32(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("You should carefully take into account the peculiarities of each"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("system and match their characteristics to each other to get"));
+		vw_DrawTextUTF32(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("system and match their characteristics to each other to get"));
+		vw_DrawTextUTF32(X+25, Y+100+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("a well balanced warship that can complete combat tasks."));
 
-		SizeI = vw_TextWidth(vw_GetText("Engine - ship engine system. Pay attention to how this system consumes"));
-		vw_DrawText(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Engine - ship engine system. Pay attention to how this system consumes"));
-		vw_DrawText(X+40, Y+120+k*7, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("energy. Otherwise you run the risk of being unable to move."));
-		SizeI = vw_TextWidth(vw_GetText("energy. Otherwise you run the risk of being unable to move."));
-		vw_DrawText(X+25, Y+120+k*8, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Power - ship energy source. Pay attention to the main two characte-"));
-		vw_DrawText(X+40, Y+120+k*9, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("ristics of this system - Recharge Rate and Capacity."));
-		SizeI = vw_TextWidth(vw_GetText("O.T.C. - Optical Target Computer. As you can see from its name,"));
-		vw_DrawText(X+25, Y+120+k*10, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("O.T.C. - Optical Target Computer. As you can see from its name,"));
-		vw_DrawText(X+40, Y+120+k*11, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("this system is responsible for optical targeting."));
-		SizeI = vw_TextWidth(vw_GetText("Targeting - Weapon targeting system. It depends on this system how"));
-		vw_DrawText(X+25, Y+120+k*12, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Targeting - Weapon targeting system. It depends on this system how"));
-		vw_DrawText(X+40, Y+120+k*13, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("fast a weapon will aim and how accurate the shot will be."));
-		SizeI = vw_TextWidth(vw_GetText("Advanced - The most advanced, but yet untested systems for"));
-		vw_DrawText(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Advanced - The most advanced, but yet untested systems for"));
-		vw_DrawText(X+40, Y+120+k*15, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("enhancing ship invulnerability."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Engine - ship engine system. Pay attention to how this system consumes"));
+		vw_DrawTextUTF32(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Engine - ship engine system. Pay attention to how this system consumes"));
+		vw_DrawTextUTF32(X+40, Y+120+k*7, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("energy. Otherwise you run the risk of being unable to move."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("energy. Otherwise you run the risk of being unable to move."));
+		vw_DrawTextUTF32(X+25, Y+120+k*8, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Power - ship energy source. Pay attention to the main two characte-"));
+		vw_DrawTextUTF32(X+40, Y+120+k*9, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("ristics of this system - Recharge Rate and Capacity."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("O.T.C. - Optical Target Computer. As you can see from its name,"));
+		vw_DrawTextUTF32(X+25, Y+120+k*10, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("O.T.C. - Optical Target Computer. As you can see from its name,"));
+		vw_DrawTextUTF32(X+40, Y+120+k*11, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("this system is responsible for optical targeting."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Targeting - Weapon targeting system. It depends on this system how"));
+		vw_DrawTextUTF32(X+25, Y+120+k*12, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Targeting - Weapon targeting system. It depends on this system how"));
+		vw_DrawTextUTF32(X+40, Y+120+k*13, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("fast a weapon will aim and how accurate the shot will be."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Advanced - The most advanced, but yet untested systems for"));
+		vw_DrawTextUTF32(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Advanced - The most advanced, but yet untested systems for"));
+		vw_DrawTextUTF32(X+40, Y+120+k*15, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("enhancing ship invulnerability."));
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[2];
@@ -1581,40 +1581,40 @@ Dialogs with default type:
 	}
 	case eDialogBox::WeaponryTipsAndTricks: { // подсказки на меню оружейная
 		// название диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
 		// текст диалога
 
 		int k=25;
-		SizeI = vw_TextWidth(vw_GetText("You can use this section to buy, sell and set up the weapons on"));
-		vw_DrawText(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You can use this section to buy, sell and set up the weapons on"));
-		SizeI = vw_TextWidth(vw_GetText("your ship. To buy a weapon, just drag its icon from Weapon Stock"));
-		vw_DrawText(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("your ship. To buy a weapon, just drag its icon from Weapon Stock"));
-		SizeI = vw_TextWidth(vw_GetText("to a weapon slot on your ship. Note that each weapon has its"));
-		vw_DrawText(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("to a weapon slot on your ship. Note that each weapon has its"));
-		SizeI = vw_TextWidth(vw_GetText("own level (from 1 to 5), you should see that the slot level is"));
-		vw_DrawText(X+25, Y+80+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("own level (from 1 to 5), you should see that the slot level is"));
-		SizeI = vw_TextWidth(vw_GetText("not less than the weapon level. To sell a weapon, perform"));
-		vw_DrawText(X+25, Y+80+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("not less than the weapon level. To sell a weapon, perform"));
-		vw_DrawText(X+25, Y+80+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("the reverse operation."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("You can use this section to buy, sell and set up the weapons on"));
+		vw_DrawTextUTF32(X+25, Y+80+k*0, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("You can use this section to buy, sell and set up the weapons on"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("your ship. To buy a weapon, just drag its icon from Weapon Stock"));
+		vw_DrawTextUTF32(X+25, Y+80+k*1, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("your ship. To buy a weapon, just drag its icon from Weapon Stock"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("to a weapon slot on your ship. Note that each weapon has its"));
+		vw_DrawTextUTF32(X+25, Y+80+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("to a weapon slot on your ship. Note that each weapon has its"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("own level (from 1 to 5), you should see that the slot level is"));
+		vw_DrawTextUTF32(X+25, Y+80+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("own level (from 1 to 5), you should see that the slot level is"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("not less than the weapon level. To sell a weapon, perform"));
+		vw_DrawTextUTF32(X+25, Y+80+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("not less than the weapon level. To sell a weapon, perform"));
+		vw_DrawTextUTF32(X+25, Y+80+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("the reverse operation."));
 
-		SizeI = vw_TextWidth(vw_GetText("The weapon is set up and recharged with the Setup button"));
-		vw_DrawText(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("The weapon is set up and recharged with the Setup button"));
-		vw_DrawText(X+25, Y+100+k*7, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("in the right part of the weapon slot panel."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("The weapon is set up and recharged with the Setup button"));
+		vw_DrawTextUTF32(X+25, Y+100+k*6, SizeI > 716 ? -716 : 716, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("The weapon is set up and recharged with the Setup button"));
+		vw_DrawTextUTF32(X+25, Y+100+k*7, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("in the right part of the weapon slot panel."));
 
-		vw_DrawText(X+25, Y+120+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Main types of weapons by their projectiles:"));
-		SizeI = vw_TextWidth(vw_GetText("Projectile - small projectiles based on bullets or energy beams."));
-		vw_DrawText(X+25, Y+120+k*9, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Projectile - small projectiles based on bullets or energy beams."));
-		vw_DrawText(X+40, Y+120+k*10, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("It is the main and most widespread weapon in the game."));
-		SizeI = vw_TextWidth(vw_GetText("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
-		vw_DrawText(X+25, Y+120+k*11, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
-		SizeI = vw_TextWidth(vw_GetText("The disadvantages of these weapons include the low speed"));
-		vw_DrawText(X+40, Y+120+k*12, SizeI > 701 ? -701 : 701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("The disadvantages of these weapons include the low speed"));
-		vw_DrawText(X+40, Y+120+k*13, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("of the projectile and the possibility of bringing it down."));
-		SizeI = vw_TextWidth(vw_GetText("Beam - Lasers and Masers. Short-range highly energy-"));
-		vw_DrawText(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Beam - Lasers and Masers. Short-range highly energy-"));
-		vw_DrawText(X+40, Y+120+k*15, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("consuming weapons."));
+		vw_DrawTextUTF32(X+25, Y+120+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Main types of weapons by their projectiles:"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Projectile - small projectiles based on bullets or energy beams."));
+		vw_DrawTextUTF32(X+25, Y+120+k*9, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Projectile - small projectiles based on bullets or energy beams."));
+		vw_DrawTextUTF32(X+40, Y+120+k*10, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("It is the main and most widespread weapon in the game."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
+		vw_DrawTextUTF32(X+25, Y+120+k*11, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Self-propelled projectile - missiles, torpedoes and nuclear bombs."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("The disadvantages of these weapons include the low speed"));
+		vw_DrawTextUTF32(X+40, Y+120+k*12, SizeI > 701 ? -701 : 701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("The disadvantages of these weapons include the low speed"));
+		vw_DrawTextUTF32(X+40, Y+120+k*13, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("of the projectile and the possibility of bringing it down."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Beam - Lasers and Masers. Short-range highly energy-"));
+		vw_DrawTextUTF32(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Beam - Lasers and Masers. Short-range highly energy-"));
+		vw_DrawTextUTF32(X+40, Y+120+k*15, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("consuming weapons."));
 
 
 
@@ -1630,31 +1630,31 @@ Dialogs with default type:
 
 	case eDialogBox::ShortkeyTipsAndTricks: { // подсказки на горячие клавиши в игре
 		// название диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
 		// текст диалога
 
 		int k=23;
 
-		SizeI = (W-vw_TextWidth(vw_GetText("GAME KEYBOARD SHORTCUTS")))/2;
-		vw_DrawText(X+SizeI, Y+80+k*0, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("GAME KEYBOARD SHORTCUTS"));
+		SizeI = (W-vw_TextWidthUTF32(vw_GetTextUTF32("GAME KEYBOARD SHORTCUTS")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+80+k*0, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("GAME KEYBOARD SHORTCUTS"));
 
-		vw_DrawText(X+25, Y+100+k*1, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F2 - toggle show/hide game FPS counter."));
+		vw_DrawTextUTF32(X+25, Y+100+k*1, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F2 - toggle show/hide game FPS counter."));
 
-		vw_DrawText(X+25, Y+120+k*2, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F5 - decrease game speed."));
-		vw_DrawText(X+25, Y+120+k*3, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F6 - reset game speed to normal."));
-		vw_DrawText(X+25, Y+120+k*4, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F7 - increase game speed."));
-		vw_DrawText(X+25, Y+120+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: do not increase game speed, if you have low FPS."));
+		vw_DrawTextUTF32(X+25, Y+120+k*2, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F5 - decrease game speed."));
+		vw_DrawTextUTF32(X+25, Y+120+k*3, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F6 - reset game speed to normal."));
+		vw_DrawTextUTF32(X+25, Y+120+k*4, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F7 - increase game speed."));
+		vw_DrawTextUTF32(X+25, Y+120+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: do not increase game speed, if you have low FPS."));
 
-		vw_DrawText(X+25, Y+140+k*6, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F8 - change weapon panels view."));
-		vw_DrawText(X+25, Y+140+k*7, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F9 - change Primary weapon group fire mode."));
-		vw_DrawText(X+25, Y+140+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F10 - change Secondary weapon group fire mode."));
+		vw_DrawTextUTF32(X+25, Y+140+k*6, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F8 - change weapon panels view."));
+		vw_DrawTextUTF32(X+25, Y+140+k*7, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F9 - change Primary weapon group fire mode."));
+		vw_DrawTextUTF32(X+25, Y+140+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F10 - change Secondary weapon group fire mode."));
 
-		vw_DrawText(X+25, Y+160+k*9, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("F12 - capture screenshot. (File will be saved on your Desktop.)"));
+		vw_DrawTextUTF32(X+25, Y+160+k*9, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("F12 - capture screenshot. (File will be saved on your Desktop.)"));
 
-		vw_DrawText(X+25, Y+180+k*10, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Esc - show/hide game menu. (Pause.)"));
-		vw_DrawText(X+25, Y+180+k*11, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: all changes will be saved in the game configuration file."));
+		vw_DrawTextUTF32(X+25, Y+180+k*10, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Esc - show/hide game menu. (Pause.)"));
+		vw_DrawTextUTF32(X+25, Y+180+k*11, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all changes will be saved in the game configuration file."));
 
 
 
@@ -1679,14 +1679,14 @@ Dialogs with default type:
 
 	case eDialogBox::StartMissionSecondTime: { // подсказка, если пытаемся по второму разу пройти миссию
 		// название диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Tips and hints"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
 		SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("Tips and hints"));
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
 		// текст диалога
 
 		int k=30;
 
-		vw_DrawText(X+25, Y+80+k*0, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You have already completed this mission."));
+		vw_DrawTextUTF32(X+25, Y+80+k*0, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("You have already completed this mission."));
 
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
@@ -1694,19 +1694,19 @@ Dialogs with default type:
 			  << GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission];
 		vw_DrawText(X+25, Y+80+k*1, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
-		SizeI = vw_TextWidth(vw_GetText("You can replay this mission as many times as you like, but you"));
-		vw_DrawText(X+25, Y+100+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("You can replay this mission as many times as you like, but you"));
-		SizeI = vw_TextWidth(vw_GetText("should take into account that only the best result you"));
-		vw_DrawText(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("should take into account that only the best result you"));
-		SizeI = vw_TextWidth(vw_GetText("number of experience points."));
-		vw_DrawText(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("achieve in this mission will be used to calculate the total"));
-		vw_DrawText(X+25, Y+100+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("number of experience points."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("You can replay this mission as many times as you like, but you"));
+		vw_DrawTextUTF32(X+25, Y+100+k*2, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("You can replay this mission as many times as you like, but you"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("should take into account that only the best result you"));
+		vw_DrawTextUTF32(X+25, Y+100+k*3, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("should take into account that only the best result you"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("number of experience points."));
+		vw_DrawTextUTF32(X+25, Y+100+k*4, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("achieve in this mission will be used to calculate the total"));
+		vw_DrawTextUTF32(X+25, Y+100+k*5, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("number of experience points."));
 
-		SizeI = vw_TextWidth(vw_GetText("Note that each time you complete the mission again,"));
-		vw_DrawText(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("Note that each time you complete the mission again,"));
-		SizeI = vw_TextWidth(vw_GetText("the amount of money you get when you destroy the enemy"));
-		vw_DrawText(X+25, Y+120+k*7, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("the amount of money you get when you destroy the enemy"));
-		vw_DrawText(X+25, Y+120+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("in this mission is reduced two times."));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("Note that each time you complete the mission again,"));
+		vw_DrawTextUTF32(X+25, Y+120+k*6, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("Note that each time you complete the mission again,"));
+		SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("the amount of money you get when you destroy the enemy"));
+		vw_DrawTextUTF32(X+25, Y+120+k*7, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("the amount of money you get when you destroy the enemy"));
+		vw_DrawTextUTF32(X+25, Y+120+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("in this mission is reduced two times."));
 
 
 		// чекбокс
@@ -1727,8 +1727,8 @@ Dialogs with default type:
 	// спрашиваем какой язык при первом старте игры
 	case eDialogBox::ChoseLanguage: {
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("Language")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("Language"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("Language")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Language"));
 
 
 		if (DrawDialogButton128(X+34, Y+ButtonOffset-73, "<<<", DialogContentTransp)) {
@@ -1756,12 +1756,12 @@ Dialogs with default type:
 
 		vw_SetFontSize(24);
 		int Size;
-		Size = vw_TextWidth(vw_GetText("English", GameConfig().MenuLanguage));
+		Size = vw_TextWidthUTF32(vw_GetTextUTF32("English", GameConfig().MenuLanguage));
 		SizeI = (170-Size)/2;
 		if (Size > 170)
-			vw_DrawText(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("English", GameConfig().MenuLanguage));
+			vw_DrawTextUTF32(X+138+34, Y+ButtonOffset-71, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("English", GameConfig().MenuLanguage));
 		else
-			vw_DrawText(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetText("English", GameConfig().MenuLanguage));
+			vw_DrawTextUTF32(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("English", GameConfig().MenuLanguage));
 		ResetFontSize();
 
 		if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetText("OK"), DialogContentTransp)) {
@@ -1774,24 +1774,24 @@ Dialogs with default type:
 
 	case eDialogBox::RestartOnAdvOptChanged: // при изменении продвинутых настроек в самой игре, с предупреждением, что не все сохраним
 		// название диалога
-		SizeI = 17 + (WTitle-vw_TextWidth(vw_GetText("RESTART")))/2;
-		vw_DrawText(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetText("RESTART"));
+		SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("RESTART")))/2;
+		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("RESTART"));
 		// текст диалога
-		SizeI1 = vw_TextWidth(vw_GetText("Are you sure you want to restart the game?"));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to restart the game?"));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to restart the game?"));
 		} else
-			vw_DrawText(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetText("Are you sure you want to restart the game?"));
+			vw_DrawTextUTF32(X+SizeI, Y+100, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, DialogContentTransp, vw_GetTextUTF32("Are you sure you want to restart the game?"));
 
-		SizeI1 = vw_TextWidth(vw_GetText("Note: the current game data will be lost."));
+		SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Note: the current game data will be lost."));
 		SizeI = (W-SizeI1)/2;
 		if (SizeI1 > 470) {
 			SizeI = (W - 470)/2;
-			vw_DrawText(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, -470, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 		} else
-			vw_DrawText(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetText("Note: the current game data will be lost."));
+			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
 		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {

@@ -609,13 +609,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 		DstRect(X,Y,X+128,Y+64);
 
-		int Size = vw_TextWidth(vw_GetText("EMPTY"));
+		int Size = vw_TextWidthUTF32(vw_GetTextUTF32("EMPTY"));
 		float WScale = 0;
 		if (Size > 88) {
 			Size = 88;
 			WScale = -88;
 		}
-		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-53, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7*MenuContentTransp, vw_GetText("EMPTY"));
+		vw_DrawTextUTF32(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-53, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7*MenuContentTransp, vw_GetTextUTF32("EMPTY"));
 
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
@@ -659,7 +659,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 		Ypos += 33;
 		// выводим боекомплект   текущий/полный
 		Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
-		vw_DrawText(Xpos, Ypos, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon Ammo:"));
+		vw_DrawTextUTF32(Xpos, Ypos, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Ammo:"));
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
 			  << sharedWeapon->Ammo << "/" << sharedWeapon->AmmoStart;
@@ -679,7 +679,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 		// стоимость перезарядки
 		Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
 		Ypos += 30;
-		vw_DrawText(Xpos, Ypos, -230, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon Reload Cost:"));
+		vw_DrawTextUTF32(Xpos, Ypos, -230, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Reload Cost:"));
 		// находим стоимость перезарядки
 		int ReloadCost = GetWeaponReloadCost(sharedWeapon->InternalType,
 						     sharedWeapon->Ammo,
@@ -714,7 +714,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 		Xpos = GameConfig().InternalWidth/2+55+34 + 16;
 		Ypos += 60;
-		vw_DrawText(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon Fire Control:"));
+		vw_DrawTextUTF32(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Fire Control:"));
 		// вкл-выкл первичного управления
 		if ((GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 1) ||
 		    (GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 3))
@@ -739,7 +739,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 		// получение альтернативного управления
 		Xpos = GameConfig().InternalWidth/2+55+34 + 16;
 		Ypos += 40;
-		vw_DrawText(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Alternative Fire Control:"));
+		vw_DrawTextUTF32(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Alternative Fire Control:"));
 
 		Ypos += 40;
 
@@ -797,9 +797,9 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 
 			if (GameConfig().Profile[CurrentProfile].TargetingSystem <= 2) {
-				vw_DrawText(Xpos, Ypos-15, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetText("Custom Weapon Angle is use-"));
-				vw_DrawText(Xpos, Ypos+5, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetText("ful with optical computer"));
-				vw_DrawText(Xpos, Ypos+25, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetText("system Neo or Supra only."));
+				vw_DrawTextUTF32(Xpos, Ypos-15, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetTextUTF32("Custom Weapon Angle is use-"));
+				vw_DrawTextUTF32(Xpos, Ypos+5, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetTextUTF32("ful with optical computer"));
+				vw_DrawTextUTF32(Xpos, Ypos+25, 300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, 1.0f, vw_GetTextUTF32("system Neo or Supra only."));
 			} else {
 				if (DrawButton128_2(GameConfig().InternalWidth/2+118, Ypos, vw_GetText("Left"), MenuContentTransp, GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] <= Min)) {
 					ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum] -= 5.0f;
@@ -829,13 +829,13 @@ void ShipSlotSetupWeapon(int SlotNum)
 		DstRect(Xpos,Ypos,Xpos+256,Ypos+256);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_empty_icon.tga"), true, MenuContentTransp);
 
-		int Size = vw_TextWidth(vw_GetText("Empty Weapon Slot"));
+		int Size = vw_TextWidthUTF32(vw_GetTextUTF32("Empty Weapon Slot"));
 		float WScale = 0;
 		if (Size > 228) {
 			Size = 228;
 			WScale = -228;
 		}
-		vw_DrawText(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-40, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Empty Weapon Slot"));
+		vw_DrawTextUTF32(DstRect.left+(DstRect.right-DstRect.left-Size)/2, DstRect.bottom-40, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Empty Weapon Slot"));
 	}
 
 
@@ -1176,7 +1176,7 @@ void Workshop_Weaponry()
 
 
 	// вывод названия
-	vw_DrawText(GameConfig().InternalWidth/2-438, 50+6, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText(GetWeaponName(CurrentWorkshopNewWeapon)));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2-438, 50+6, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32(GetWeaponName(CurrentWorkshopNewWeapon)));
 	if (DrawButton128_2(GameConfig().InternalWidth/2-197, 50, vw_GetText("Info"), MenuContentTransp, false)) {
 		SetCurrentDialogBox(eDialogBox::ShowWeaponsInfo);
 		DialogWeapon = WorkshopNewWeapon;
@@ -1186,12 +1186,12 @@ void Workshop_Weaponry()
 	tmpStream << std::fixed << std::setprecision(0)
 		  << vw_GetText("Weapon Type") << ": ";
 	vw_DrawText(GameConfig().InternalWidth/2-438, 110, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
-	vw_DrawText(GameConfig().InternalWidth/2-438+175, 110, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2-438+175, 110, -184, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32(GetWeaponGroupTitle(CurrentWorkshopNewWeapon)));
 
 
 	int k2 = 0;
 	if (GetProjectileDamageKinetic(WorkshopNewWeapon->InternalType) > 0.0f) {
-		vw_DrawText(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, Kinetic:"));
+		vw_DrawTextUTF32(GameConfig().InternalWidth/2-438, 130, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Damage, Kinetic:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << GetProjectileDamageKinetic(WorkshopNewWeapon->InternalType) << " ";
@@ -1206,7 +1206,7 @@ void Workshop_Weaponry()
 		k2=20;
 	}
 	if (GetProjectileDamageEM(WorkshopNewWeapon->InternalType) > 0.0f) {
-		vw_DrawText(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Damage, EM:"));
+		vw_DrawTextUTF32(GameConfig().InternalWidth/2-438, 130+k2, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Damage, EM:"));
 		tmpStream.clear();
 		tmpStream.str(std::string{});
 		tmpStream << GetProjectileDamageEM(WorkshopNewWeapon->InternalType) << " ";
@@ -1304,7 +1304,7 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
-	vw_DrawText(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon Stock"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Stock"));
 	ResetFontSize();
 
 	DrawShipWeaponsInSlots();
@@ -1336,7 +1336,7 @@ void Workshop_Weaponry()
 	}
 
 	vw_SetFontSize(24);
-	vw_DrawText(GameConfig().InternalWidth/2+445-vw_TextWidth(vw_GetText("Installed Weapons")), 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Installed Weapons"));
+	vw_DrawTextUTF32(GameConfig().InternalWidth/2+445-vw_TextWidthUTF32(vw_GetTextUTF32("Installed Weapons")), 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Installed Weapons"));
 	ResetFontSize();
 
 	// вывод информации

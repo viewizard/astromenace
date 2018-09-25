@@ -68,7 +68,7 @@ void DifficultyMenu()
 
 
 
-	vw_DrawText(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy Weapon Penalty"));
+	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Enemy Weapon Penalty"));
 	bool ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 1)
 		ButOff = true;
@@ -88,9 +88,9 @@ void DifficultyMenu()
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	if (GameConfig().Profile[CurrentProfile].EnemyWeaponPenalty == 1) {
-		Size = vw_TextWidth(vw_GetText("None"));
+		Size = vw_TextWidthUTF32(vw_GetTextUTF32("None"));
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("None"));
+		vw_DrawTextUTF32(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("None"));
 	} else {
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
@@ -104,7 +104,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy Armor Penalty"));
+	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Enemy Armor Penalty"));
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty == 1)
 		ButOff = true;
@@ -124,9 +124,9 @@ void DifficultyMenu()
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	if (GameConfig().Profile[CurrentProfile].EnemyArmorPenalty == 1) {
-		Size = vw_TextWidth(vw_GetText("None"));
+		Size = vw_TextWidthUTF32(vw_GetTextUTF32("None"));
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("None"));
+		vw_DrawTextUTF32(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("None"));
 	} else {
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
@@ -140,7 +140,7 @@ void DifficultyMenu()
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Enemy Targeting Penalty"));
+	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Enemy Targeting Penalty"));
 	ButOff = false;
 	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 1)
 		ButOff = true;
@@ -160,9 +160,9 @@ void DifficultyMenu()
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
 	if (GameConfig().Profile[CurrentProfile].EnemyTargetingSpeedPenalty == 1) {
-		Size = vw_TextWidth(vw_GetText("None"));
+		Size = vw_TextWidthUTF32(vw_GetTextUTF32("None"));
 		SizeI = (110-Size)/2;
-		vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("None"));
+		vw_DrawTextUTF32(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("None"));
 	} else {
 		std::ostringstream tmpStream;
 		tmpStream << std::fixed << std::setprecision(0)
@@ -177,7 +177,7 @@ void DifficultyMenu()
 
 	// note, we use "Limited Ammo" option in menu, but UnlimitedAmmo variable
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Limited Ammo"));
+	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Limited Ammo"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo;
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo = 0;
@@ -188,17 +188,17 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].UnlimitedAmmo = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-	Size = vw_TextWidth(vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UnlimitedAmmo]));
+	Size = vw_TextWidthUTF32(vw_GetTextUTF32(OnOff[GameConfig().Profile[CurrentProfile].UnlimitedAmmo]));
 	SizeI = (110-Size)/2;
 	// OnOff[] = 0 - on (limited ammo), 1 - off (unlimited ammo)
-	vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UnlimitedAmmo]));
+	vw_DrawTextUTF32(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32(OnOff[GameConfig().Profile[CurrentProfile].UnlimitedAmmo]));
 
 
 
 
 	// note, we use "Destroyable Weapon" option in menu, but UndestroyableWeapon variable
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Destroyable Weapon"));
+	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Destroyable Weapon"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon;
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon = 0;
@@ -209,16 +209,16 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].UndestroyableWeapon = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-	Size = vw_TextWidth(vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UndestroyableWeapon]));
+	Size = vw_TextWidthUTF32(vw_GetTextUTF32(OnOff[GameConfig().Profile[CurrentProfile].UndestroyableWeapon]));
 	SizeI = (110-Size)/2;
 	// OnOff[] = 0 - on (destroyable weapon), 1 - off (undestroyable weapon)
-	vw_DrawText(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(OnOff[GameConfig().Profile[CurrentProfile].UndestroyableWeapon]));
+	vw_DrawTextUTF32(X1+498+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32(OnOff[GameConfig().Profile[CurrentProfile].UndestroyableWeapon]));
 
 
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("Weapon Targeting Mode"));
+	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Targeting Mode"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode;
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 0;
@@ -229,20 +229,20 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].WeaponTargetingMode = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-	Size = vw_TextWidth(vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].WeaponTargetingMode]));
+	Size = vw_TextWidthUTF32(vw_GetTextUTF32(ArcadeSim[GameConfig().Profile[CurrentProfile].WeaponTargetingMode]));
 	float WScale = 0;
 	if (Size > 110) {
 		Size = 110;
 		WScale = -110;
 	}
 	SizeI = (110 - Size) / 2;
-	vw_DrawText(X1+498+SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].WeaponTargetingMode]));
+	vw_DrawTextUTF32(X1+498+SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32(ArcadeSim[GameConfig().Profile[CurrentProfile].WeaponTargetingMode]));
 
 
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText("SpaceShip Control Mode"));
+	vw_DrawTextUTF32(X1, Y1, -340, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("SpaceShip Control Mode"));
 	ButOff = !ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode;
 	if (DrawButton128_2(X1+616, Y1-6, vw_GetText("Harder"), MenuContentTransp, ButOff)) {
 		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 0;
@@ -253,14 +253,14 @@ void DifficultyMenu()
 		ChangeGameConfig().Profile[CurrentProfile].SpaceShipControlMode = 1;
 		ProfileDifficulty(CurrentProfile, eDifficultyAction::Update);
 	}
-	Size = vw_TextWidth(vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].SpaceShipControlMode]));
+	Size = vw_TextWidthUTF32(vw_GetTextUTF32(ArcadeSim[GameConfig().Profile[CurrentProfile].SpaceShipControlMode]));
 	WScale = 0;
 	if (Size > 110) {
 		Size = 110;
 		WScale = -110;
 	}
 	SizeI = (110 - Size) / 2;
-	vw_DrawText(X1+498+SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetText(ArcadeSim[GameConfig().Profile[CurrentProfile].SpaceShipControlMode]));
+	vw_DrawTextUTF32(X1+498+SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32(ArcadeSim[GameConfig().Profile[CurrentProfile].SpaceShipControlMode]));
 
 
 

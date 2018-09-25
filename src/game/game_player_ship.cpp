@@ -459,8 +459,8 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidth(vw_GetText("Missile Detected"))) / 2;
-			vw_DrawText(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3, vw_GetText("Missile Detected"));
+			int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidthUTF32(vw_GetTextUTF32("Missile Detected"))) / 2;
+			vw_DrawTextUTF32(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3, vw_GetTextUTF32("Missile Detected"));
 			ResetFontSize();
 			WarningMessagesCount++;
 		} else {
@@ -469,8 +469,8 @@ void GamePlayerShip()
 			} else if (VoiceMissileDetectedStatus) {
 				// визуальный вывод - выводим постоянно
 				vw_SetFontSize(24);
-				int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidth(vw_GetText("Missile Detected"))) / 2;
-				vw_DrawText(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3, vw_GetText("Missile Detected"));
+				int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidthUTF32(vw_GetTextUTF32("Missile Detected"))) / 2;
+				vw_DrawTextUTF32(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3, vw_GetTextUTF32("Missile Detected"));
 				ResetFontSize();
 				WarningMessagesCount++;
 			}
@@ -515,8 +515,8 @@ void GamePlayerShip()
 
 			// визуальный вывод - выводим постоянно
 			vw_SetFontSize(24);
-			int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidth(vw_GetText("Collision Course Detected"))) / 2;
-			vw_DrawText(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3, vw_GetText("Collision Course Detected"));
+			int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidthUTF32(vw_GetTextUTF32("Collision Course Detected"))) / 2;
+			vw_DrawTextUTF32(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3, vw_GetTextUTF32("Collision Course Detected"));
 			ResetFontSize();
 			WarningMessagesCount++;
 		}

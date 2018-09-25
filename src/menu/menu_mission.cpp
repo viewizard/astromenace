@@ -283,8 +283,8 @@ void MissionMenu()
 				DstRect(X1+2,Y1+2,X1+62,Y1+62);
 
 				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, 0.3f*MenuContentTransp);
-				vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, 0.3f*MenuContentTransp, vw_GetText(MissionList[i].Title));
-				vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, 0.3f*MenuContentTransp, vw_GetText(MissionList[i].Descr));
+				vw_DrawTextUTF32(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, 0.3f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Title));
+				vw_DrawTextUTF32(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, 0.3f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Descr));
 			}
 
 
@@ -315,8 +315,8 @@ void MissionMenu()
 					SrcRect(0,0,64,64);
 					DstRect(X1,Y1,X1+64,Y1+64);
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, MenuContentTransp);
-					vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, MenuContentTransp, vw_GetText(MissionList[i].Title));
-					vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, MenuContentTransp, vw_GetText(MissionList[i].Descr));
+					vw_DrawTextUTF32(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, MenuContentTransp, vw_GetTextUTF32(MissionList[i].Title));
+					vw_DrawTextUTF32(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, MenuContentTransp, vw_GetTextUTF32(MissionList[i].Descr));
 
 
 					if (CurrentMission != i) {
@@ -358,8 +358,8 @@ void MissionMenu()
 					SrcRect(0,0,64,64);
 					DstRect(X1+2,Y1+2,X1+62,Y1+62);
 					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, 0.8f*MenuContentTransp);
-					vw_DrawText(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, 0.8f*MenuContentTransp, vw_GetText(MissionList[i].Title));
-					vw_DrawText(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, 0.8f*MenuContentTransp, vw_GetText(MissionList[i].Descr));
+					vw_DrawTextUTF32(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, 0.8f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Title));
+					vw_DrawTextUTF32(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, 0.8f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Descr));
 				}
 			}
 

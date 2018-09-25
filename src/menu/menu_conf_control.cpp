@@ -257,7 +257,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Joystick DeadZone"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Joystick DeadZone"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, GameConfig().JoystickDeadZone == 0)) {
 		ChangeGameConfig().JoystickDeadZone--;
 		if (GameConfig().JoystickDeadZone < 0)
@@ -289,7 +289,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Control Sensitivity"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Control Sensitivity"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetText("Decrease"), ContentTransp, GameConfig().ControlSensivity == 1)) {
 		ChangeGameConfig().ControlSensivity--;
 		if (GameConfig().ControlSensivity < 1)
@@ -329,19 +329,19 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	int SizeI1 = vw_TextWidth(vw_GetText("MOUSE"));
+	int SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("MOUSE"));
 	int SizeI = SizeI1 > 130 ? -15 : (100-SizeI1)/2;
-	vw_DrawText(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetText("MOUSE"));
-	SizeI1 = vw_TextWidth(vw_GetText("KEYBOARD"));
+	vw_DrawTextUTF32(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("MOUSE"));
+	SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("KEYBOARD"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
-	vw_DrawText(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetText("KEYBOARD"));
-	SizeI1 = vw_TextWidth(vw_GetText("JOYSTICK"));
+	vw_DrawTextUTF32(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("KEYBOARD"));
+	SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("JOYSTICK"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
-	vw_DrawText(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetText("JOYSTICK"));
+	vw_DrawTextUTF32(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("JOYSTICK"));
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Primary Attack"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Primary Attack"));
 	float Transp = 1.0f;
 	bool Off = false;
 	std::string ButtonName = MouseButtonName(GameConfig().MousePrimary);
@@ -387,7 +387,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Secondary Attack"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Secondary Attack"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = MouseButtonName(GameConfig().MouseSecondary);
@@ -434,7 +434,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Move Forward"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Move Forward"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName(GameConfig().KeyBoardUp);
@@ -447,7 +447,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 		if (NeedCheck == 0) NeedCheck = 1;
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Move Backward"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Move Backward"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName(GameConfig().KeyBoardDown);
@@ -461,7 +461,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 			NeedCheck = 2;
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Move Left"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Move Left"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName(GameConfig().KeyBoardLeft);
@@ -475,7 +475,7 @@ void ConfControlMenu(float ContentTransp, float *ButtonTransp1, float *LastButto
 			NeedCheck = 3;
 
 	Y1 += Prir1;
-	vw_DrawText(X1, Y1, -280, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetText("Move Right"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0,1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Move Right"));
 	Transp = 1.0f;
 	Off = false;
 	ButtonName = SDL_GetKeyName(GameConfig().KeyBoardRight);

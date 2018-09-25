@@ -120,8 +120,8 @@ void TopScoresMenu()
 	int Y1 = 165;
 	int Prir1 = 42;
 
-	vw_DrawText(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("NAME"));
-	vw_DrawText(X1 + 650, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetText("SCORE"));
+	vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("NAME"));
+	vw_DrawTextUTF32(X1 + 650, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("SCORE"));
 
 	Y1 += 10;
 
