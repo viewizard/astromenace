@@ -138,13 +138,13 @@ static bool VideoConfig(bool FirstStart)
  */
 static bool CheckOpenGLCapabilities(bool FirstStart)
 {
-	// hardware must support multtextures (OpenGL 1.3)
+	// hardware must support multitextures (OpenGL 1.3)
 	if (!vw_DevCaps().OpenGL_1_3_supported) {
-		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware. Fatal error.\n";
+		std::cerr << __func__ << "(): " << "The Multi Textures feature not supported by hardware\n";
 #ifdef WIN32
 		MessageBox(nullptr,
 			   "OpenGL 1.3 required. Please, install the newest video drivers from your video card vendor.",
-			   "Render system - Fatal Error",
+			   "AstroMenace",
 			   MB_OK | MB_APPLMODAL | MB_ICONERROR);
 #endif // WIN32
 		return false;
