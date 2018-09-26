@@ -121,7 +121,7 @@ void InitDialogBoxes()
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 200
 //------------------------------------------------------------------------------------
-bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
+static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float Transp)
 {
 	sRECT SrcRect, DstRect;
 	bool ON = false;
@@ -168,7 +168,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
 	if (Size > 176) {
@@ -179,9 +179,9 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
 	    (vw_GetMouseLeftClick(true) ||
@@ -207,7 +207,7 @@ bool DrawDialogButton200(int X, int Y, const char *Text, float Transp)
 //------------------------------------------------------------------------------------
 // прорисовка кнопки - 128
 //------------------------------------------------------------------------------------
-bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
+static bool DrawDialogButton128(int X, int Y, const std::u32string &Text, float Transp)
 {
 	sRECT SrcRect, DstRect;
 	bool ON = false;
@@ -252,7 +252,7 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
 	float WScale = 0;
 	if (Size > 108) {
@@ -263,9 +263,9 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 	// рисуем текст
 	if (!ON)
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 	else
-		vw_DrawText(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 
 	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
 	    (vw_GetMouseLeftClick(true) ||
@@ -291,12 +291,12 @@ bool DrawDialogButton128(int X, int Y, const char *Text, float Transp)
 //------------------------------------------------------------------------------------
 // прорисовка чекбокса
 //------------------------------------------------------------------------------------
-void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float Transp)
+static void DrawCheckBox_2(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text, float Transp)
 {
 	sRECT SrcRect, DstRect;
 
 	// получаем длину текста
-	int Size = vw_TextWidth(Text);
+	int Size = vw_TextWidthUTF32(Text);
 
 	bool ON = false;
 
@@ -328,19 +328,19 @@ void DrawCheckBox_2(int X, int Y, bool *CheckBoxStatus, const char *Text, float 
 	SrcRect(0,0,40,38);
 	DstRect(X,Y,X+40,Y+38);
 	if (!ON || DragWeapon)
-		vw_DrawText(X+40+16, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+		vw_DrawTextUTF32(X+40+16, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
 	else
-		vw_DrawText(X+40+16, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
+		vw_DrawTextUTF32(X+40+16, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
 
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
-	if (*CheckBoxStatus)
+	if (CheckBoxStatus)
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
 
 
 	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) && !DragWeapon &&
 	    (vw_GetMouseLeftClick(true) ||
 	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		*CheckBoxStatus = !(*CheckBoxStatus);
+		CheckBoxStatus = !CheckBoxStatus;
 		PlayMenuSFX(eMenuSFX::Click, 1.0f);
 		if (InFocusByKeyboard) {
 			vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -570,11 +570,11 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all game data will be saved."));
 
 		// кнопки
-		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
 			QuitFromMainLoop();
 			CloseDialog();
 		}
-		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetTextUTF32("NO"), DialogContentTransp)) CloseDialog();
 		break;
 
 	case eDialogBox::ProfileCreationError: // в профайле все занято, не можем создать новую запись.
@@ -599,7 +599,7 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Tip: you should clear one line first."));
 
 		// кнопки
-		if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) CloseDialog();
 		break;
 
 	case eDialogBox::DeleteProfile: // удаление профайла - запрос
@@ -624,13 +624,13 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all Pilot Profile data will be lost."));
 
 		// кнопки
-		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
 			DeleteRecord();
 			if (CurrentProfile != -1)
 				CurrentMission = GameConfig().Profile[CurrentProfile].LastMission;
 			CloseDialog();
 		}
-		if (DrawDialogButton128(X+256+34,Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp))
+		if (DrawDialogButton128(X+256+34,Y+ButtonOffset, vw_GetTextUTF32("NO"), DialogContentTransp))
 			CloseDialog();
 		break;
 
@@ -657,7 +657,7 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: Repair has been limited by money."));
 
 		// кнопки
-		if (DrawDialogButton128(X+192,Y+ButtonOffset, vw_GetText("OK"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton128(X+192,Y+ButtonOffset, vw_GetTextUTF32("OK"), DialogContentTransp)) CloseDialog();
 		break;
 
 
@@ -683,11 +683,11 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
-		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
 			QuitFromMainLoop();
 			CloseDialog();
 		}
-		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetTextUTF32("NO"), DialogContentTransp)) CloseDialog();
 		break;
 	case eDialogBox::QuiToMenuNoSave: // хотим выйти или нет?, с предупреждением, что не все сохраним
 		// выход из игры в меню (основное)
@@ -713,11 +713,12 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
-		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
 			ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
 			CloseDialog();
 		}
-		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetTextUTF32("NO"), DialogContentTransp))
+			CloseDialog();
 		break;
 
 	case eDialogBox::RestartLevelNoSave: // хотим рестарт игры?, с предупреждением, что не все сохраним
@@ -742,11 +743,12 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
-		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
 			ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
 			CloseDialog();
 		}
-		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetTextUTF32("NO"), DialogContentTransp))
+			CloseDialog();
 		break;
 
 
@@ -1487,10 +1489,10 @@ Dialogs with default type:
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[0];
-		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
+		DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
 		ChangeGameConfig().NeedShowHint[0] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp))
 			CloseDialog();
 		break;
 	}
@@ -1527,10 +1529,10 @@ Dialogs with default type:
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[1];
-		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
+		DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
 		ChangeGameConfig().NeedShowHint[1] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp))
 			CloseDialog();
 		break;
 	}
@@ -1572,10 +1574,10 @@ Dialogs with default type:
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[2];
-		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
+		DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
 		ChangeGameConfig().NeedShowHint[2] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp))
 			CloseDialog();
 		break;
 	}
@@ -1620,10 +1622,10 @@ Dialogs with default type:
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[3];
-		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
+		DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
 		ChangeGameConfig().NeedShowHint[3] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp))
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp))
 			CloseDialog();
 		break;
 	}
@@ -1660,10 +1662,10 @@ Dialogs with default type:
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[4];
-		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
+		DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
 		ChangeGameConfig().NeedShowHint[4] = !ttt;
 		// кнопки
-		if (DrawDialogButton128(X+512+90, Y+ButtonOffset, vw_GetText("START"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+512+90, Y+ButtonOffset, vw_GetTextUTF32("START"), DialogContentTransp)) {
 			// ничего не тянем... только включили меню
 			DragWeaponNum = 0;
 			DragWeaponLevel = 0;
@@ -1711,10 +1713,10 @@ Dialogs with default type:
 
 		// чекбокс
 		bool ttt = !GameConfig().NeedShowHint[5];
-		DrawCheckBox_2(X+36, Y+ButtonOffset, &ttt, vw_GetText("Do not show this tip again."), DialogContentTransp);
+		DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
 		ChangeGameConfig().NeedShowHint[5] = !ttt;
 		// кнопки
-		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetText("CLOSE"), DialogContentTransp)) {
+		if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) {
 			CloseDialog();
 			cCommand::GetInstance().Set(eCommand::SWITCH_TO_WORKSHOP);
 			CurrentWorkshop = 3;
@@ -1731,7 +1733,7 @@ Dialogs with default type:
 		vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Language"));
 
 
-		if (DrawDialogButton128(X+34, Y+ButtonOffset-73, "<<<", DialogContentTransp)) {
+		if (DrawDialogButton128(X+34, Y+ButtonOffset-73, ConvertUTF8.from_bytes("<<<"), DialogContentTransp)) {
 			if (GameConfig().MenuLanguage == 0)
 				ChangeGameConfig().MenuLanguage = vw_GetLanguageListCount() - 1;
 			else
@@ -1742,7 +1744,7 @@ Dialogs with default type:
 			vw_ReleaseAllFontChars();
 			GenerateFonts();
 		}
-		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, ">>>", DialogContentTransp)) {
+		if (DrawDialogButton128(X+316+34, Y+ButtonOffset-73, ConvertUTF8.from_bytes(">>>"), DialogContentTransp)) {
 			if (GameConfig().MenuLanguage >= (vw_GetLanguageListCount() - 1))
 				ChangeGameConfig().MenuLanguage = 0;
 			else
@@ -1764,7 +1766,7 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+138+34+SizeI, Y+ButtonOffset-71, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("English", GameConfig().MenuLanguage));
 		ResetFontSize();
 
-		if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetText("OK"), DialogContentTransp)) {
+		if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetTextUTF32("OK"), DialogContentTransp)) {
 			// первоначально, язык голоса ставим такой же, как и язык меню
 			ChangeGameConfig().VoiceLanguage = GameConfig().MenuLanguage;
 			CloseDialog();
@@ -1794,12 +1796,12 @@ Dialogs with default type:
 			vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
 
 		// кнопки
-		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetText("YES"), DialogContentTransp)) {
+		if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
 			CloseDialog();
 			RecreateGameWindow();
 			SaveOptionsAdvMenuTmpData();
 		}
-		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetText("NO"), DialogContentTransp)) CloseDialog();
+		if (DrawDialogButton128(X+256+34, Y+ButtonOffset, vw_GetTextUTF32("NO"), DialogContentTransp)) CloseDialog();
 		break;
 
 	default:
