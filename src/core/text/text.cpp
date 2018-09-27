@@ -226,17 +226,14 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 /*
  * Get UTF8 text for particular language.
  */
-const char *vw_GetText(const std::string &ItemID, unsigned int Language)
+const std::string &vw_GetText(const std::string &ItemID, unsigned int Language)
 {
-	if (ItemID.empty())
-		return nullptr;
-
 	if (Language > vw_GetLanguageListCount())
 		Language = CurrentLanguage;
 
 	auto tmpText = TextTable[Language].find(ItemID);
 	if (tmpText != TextTable[Language].end())
-		return tmpText->second.c_str();
+		return tmpText->second;
 
 	// ItemID should be added to TextTable for key and all languages, and
 	// we should return pointer to this new entry, but not ItemID
@@ -248,7 +245,7 @@ const char *vw_GetText(const std::string &ItemID, unsigned int Language)
 
 	std::cout << "Added to text table for all languages: \"" << ItemID << "\"\n";
 
-	return TextTable[Language][ItemID].c_str();
+	return TextTable[Language][ItemID];
 }
 
 /*
@@ -256,11 +253,6 @@ const char *vw_GetText(const std::string &ItemID, unsigned int Language)
  */
 const std::u32string &vw_GetTextUTF32(const std::string &ItemID, unsigned int Language)
 {
-	static const std::u32string TextTableUTF32Error{ConvertUTF8.from_bytes("Error")};
-
-	if (ItemID.empty())
-		return TextTableUTF32Error;
-
 	if (Language > vw_GetLanguageListCount())
 		Language = CurrentLanguage;
 

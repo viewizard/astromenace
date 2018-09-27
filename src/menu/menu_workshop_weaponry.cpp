@@ -760,7 +760,8 @@ void ShipSlotSetupWeapon(int SlotNum)
 				if (GameConfig().Profile[CurrentProfile].WeaponAltControl[SlotNum] == 3)
 					TextTmp = JoystickButtonName(GameConfig().Profile[CurrentProfile].WeaponAltControlData[SlotNum]);
 
-			} else TextTmp = (char*)vw_GetText("Click to setup");
+			} else
+				TextTmp = vw_GetText("Click to setup");
 		}
 
 		// собственно сама кнопка
@@ -770,7 +771,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 			Transp = But[1];
 			Off = true;
 		}
-		if (DrawButton200_2(GameConfig().InternalWidth / 2+155, Ypos, ConvertUTF8.from_bytes(TextTmp.c_str()), Transp * MenuContentTransp, Off)) {
+		if (DrawButton200_2(GameConfig().InternalWidth / 2+155, Ypos, ConvertUTF8.from_bytes(TextTmp), Transp * MenuContentTransp, Off)) {
 			NeedCheck = 100;
 			vw_ResetMouseButtons();
 			NewWeaponControlType = 0;
@@ -1323,7 +1324,7 @@ void Workshop_Weaponry()
 			}
 			std::u32string ButtonName = ConvertUTF8.from_bytes(std::string(vw_GetText("Reload All")) + ": " + std::to_string(ReloadCost));
 
-			if (DrawButton200_2(GameConfig().InternalWidth/2+153, 50, ButtonName.c_str(), MenuContentTransp, (ReloadCost == 0) || (GameConfig().Profile[CurrentProfile].Money < ReloadCost))) {
+			if (DrawButton200_2(GameConfig().InternalWidth/2+153, 50, ButtonName, MenuContentTransp, (ReloadCost == 0) || (GameConfig().Profile[CurrentProfile].Money < ReloadCost))) {
 				for (unsigned i = 0; i < sharedWorkshopFighterGame->WeaponSlots.size(); i++) {
 					if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
 						sharedWeapon->Ammo = sharedWeapon->AmmoStart;

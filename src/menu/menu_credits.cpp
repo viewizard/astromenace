@@ -144,11 +144,11 @@ void CreditsMenu()
 		vw_Clamp(tmpTransp, 0.0f, 1.0f);
 
 		if (!CreditsArray[i].empty()) {
-			const char *tmpText = vw_GetText(CreditsArray[i].c_str());
-			int CenteredX = (GameConfig().InternalWidth - vw_TextWidth(tmpText)) / 2;
-			vw_DrawText(CenteredX, TextY, 0, 0, 1.0f,
-				    sRGBCOLOR{tmpColor}, tmpTransp * MenuContentTransp,
-				    tmpText);
+			const std::u32string &tmpText = vw_GetTextUTF32(CreditsArray[i]);
+			int CenteredX = (GameConfig().InternalWidth - vw_TextWidthUTF32(tmpText)) / 2;
+			vw_DrawTextUTF32(CenteredX, TextY, 0, 0, 1.0f,
+					 sRGBCOLOR{tmpColor}, tmpTransp * MenuContentTransp,
+					 tmpText);
 		}
 		TextY += Offset;
 
