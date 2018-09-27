@@ -638,7 +638,7 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar);
 void vw_End2DMode();
 // Draw transparent. Origin is upper left corner.
 void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bool Alpha, float Transp = 1.0f,
-	       float RotateAngle = 0.0f, const sRGBCOLOR &Color = sRGBCOLOR{1.0f, 1.0f, 1.0f});
+	       float RotateAngle = 0.0f, const sRGBCOLOR &Color = sRGBCOLOR{eRGBCOLOR::white});
 
 /*
  * misc

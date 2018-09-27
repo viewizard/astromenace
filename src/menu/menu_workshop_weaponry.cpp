@@ -587,13 +587,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 			}
 
 			if (NeedAlert)
-				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
 			else
-				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
 		} else
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{1.0f, 0.0f, 0.0f});
+			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
 	} else
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::orange});
 
 
 

@@ -136,7 +136,7 @@ void CursorDraw()
 
 	case eCursorStatus::ActionAllowed:
 		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
-		vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
 		break;
 
 	case eCursorStatus::ActionProhibited:
@@ -147,7 +147,7 @@ void CursorDraw()
 	case eCursorStatus::DraggingItem:
 		DrawDraggingItemIcon(MouseX, MouseY);
 		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
-		vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{0.0f, 1.0f, 0.0f});
+		vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
 		break;
 	}
 }
