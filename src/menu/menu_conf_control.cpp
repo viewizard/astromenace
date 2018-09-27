@@ -350,7 +350,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+300, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+300, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 7;
 			vw_ResetMouseButtons();
@@ -364,7 +364,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 5;
 
@@ -376,7 +376,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, !isJoystickAvailable() || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 9;
 			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
@@ -396,7 +396,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+300, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+300, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 8;
 			vw_ResetMouseButtons();
@@ -410,7 +410,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 6;
 
@@ -422,7 +422,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+616, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, !isJoystickAvailable() || Off))
+	if (DrawButton128_2(X1+616, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, !isJoystickAvailable() || Off))
 		if (NeedCheck == 0) {
 			NeedCheck = 10;
 			for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
@@ -443,7 +443,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0) NeedCheck = 1;
 
 	Y1 += Prir1;
@@ -456,7 +456,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 2;
 
@@ -470,7 +470,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 3;
 
@@ -484,7 +484,7 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 		Off = true;
 		ButtonName = "?";
 	};
-	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName.c_str()), Transp*ContentTransp, Off))
+	if (DrawButton128_2(X1+458, Y1-6, ConvertUTF8.from_bytes(ButtonName), Transp*ContentTransp, Off))
 		if (NeedCheck == 0)
 			NeedCheck = 4;
 
