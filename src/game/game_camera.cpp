@@ -34,36 +34,28 @@
 namespace viewizard {
 namespace astromenace {
 
-sVECTOR3D GamePoint(0.0f, 0.0f, 0.0f);
-sVECTOR3D GameCameraMovement(0.0f, 0.0f, 1.0f);
+namespace {
+
+float GameCameraLastUpdate{0.0f};
+float GameCameraSpeed{10.0f};
+// camera shake on explosion related vaiables
+float GameCameraDeviation{0.0f};
+float GameCameraDeviationTime{0.0f};
+float GameCameraNeedDeviation{0.0f};
+float GameCameraDeviationPower{0.0f};
+float GameCameraNeedStartDeviation{0.0f};
+float GameCameraDeviationAge{0.0f};
+
+} // unnamed namespace
+
+// FIXME should be fixed, don't allow global scope interaction for local variables
+sVECTOR3D GamePoint{0.0f, 0.0f, 0.0f};
+sVECTOR3D GameCameraMovement{0.0f, 0.0f, 1.0f};
 
 
-//-----------------------------------------------------------------------------
-// локальные/защищенные переменные
-//-----------------------------------------------------------------------------
-
-// время последнего обновления камеры
-float		GameCameraLastUpdate = 0.0f;
-// скорость движения камеры
-float		GameCameraSpeed = 10.0f;
-// угол поворота камеры над плоскостью с точкой GamePoint
-float		GameCameraAngle = 0.0f;
-// расстояние от точки GamePoint до положения камеры
-float		GameCameraDistance = 0.0f;
-// болтание камеры при взрывах
-float	GameCameraDeviation = 0.0f;
-float 	GameCameraDeviationTime = 0.0f;
-float 	GameCameraNeedDeviation = 0.0f;
-float 	GameCameraDeviationPower = 0.0f;
-float   GameCameraNeedStartDeviation = 0.0f;
-float   GameCameraDeviationAge = 0.0f;
-
-
-
-
-
-
-
+/*
+ *
+ */
 void ResetGameCamera()
 {
 	GamePoint = sVECTOR3D{0.0f, 0.0f, 0.0f};
@@ -78,7 +70,6 @@ void ResetGameCamera()
 	vw_SetCameraDeviation(sVECTOR3D{0.0f, 0.0f, 0.0f});
 }
 
-
 //-----------------------------------------------------------------------------
 // инициализация переменных камеры для игры
 //-----------------------------------------------------------------------------
@@ -88,16 +79,10 @@ void InitGameCamera()
 	GameCameraLastUpdate = vw_GetTimeThread(1);
 }
 
-
-
-
-
-
-
 //-----------------------------------------------------------------------------
 // установка взрыва
 //-----------------------------------------------------------------------------
-void GameCameraSetExplosion(sVECTOR3D Location, float Power)
+void GameCameraSetExplosion(const sVECTOR3D &Location, float Power)
 {
 	// если корабля нет, нам тут делать нечего
 	auto sharedPlayerFighter = PlayerFighter.lock();
@@ -111,34 +96,23 @@ void GameCameraSetExplosion(sVECTOR3D Location, float Power)
 		      (sharedPlayerFighter->Location.y - Location.y) * (sharedPlayerFighter->Location.y - Location.y) +
 		      (sharedPlayerFighter->Location.z - Location.z) * (sharedPlayerFighter->Location.z - Location.z);
 
-
 	// слишком далеко
-	if (dist2 > 10000.0f) return;
+	if (dist2 > 10000.0f)
+		return;
 	// или очень близко
 	if (dist2 <= sharedPlayerFighter->Radius * sharedPlayerFighter->Radius)
 		dist2 = sharedPlayerFighter->Radius * sharedPlayerFighter->Radius;
 
-
 	// время болтанки
-	GameCameraDeviationAge = GameCameraDeviationTime = (10000.0f - dist2)/10000.0f;
+	GameCameraDeviationAge = GameCameraDeviationTime = (10000.0f - dist2) / 10000.0f;
 
-	if (Power>1.0f) // очень большой взрыв
-		GameCameraDeviationAge = GameCameraDeviationTime = GameCameraDeviationTime*3.0f;
+	if (Power > 1.0f) // очень большой взрыв
+		GameCameraDeviationAge = GameCameraDeviationTime = GameCameraDeviationTime * 3.0f;
 
-	GameCameraDeviationPower = Power*(10000.0f- dist2)/40000.0f;
+	GameCameraDeviationPower = Power * (10000.0f- dist2) / 40000.0f;
 
-
-	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_fRand0();
-
+	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
 }
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // обновление камеры в игре, учитываем (полет, поворот и т.д.)
@@ -148,7 +122,7 @@ void GameCameraUpdate(float Time)
 	float TimeDelta = Time - GameCameraLastUpdate;
 	GameCameraLastUpdate = Time;
 
-	sVECTOR3D TmpNeedPos = GameCameraMovement^(GameCameraSpeed*TimeDelta);
+	sVECTOR3D TmpNeedPos = GameCameraMovement ^ (GameCameraSpeed * TimeDelta);
 
 	// обновляем данные камеры (+ устанавливаем флаг, чтобы обновить фруструм)
 	vw_IncCameraLocation(TmpNeedPos);
@@ -156,86 +130,76 @@ void GameCameraUpdate(float Time)
 	// обновляем точку под камерой (минимальную)
 	GamePoint += TmpNeedPos;
 
-
 	GameCameraDeviationTime -= TimeDelta;
-	if (GameCameraDeviationTime < 0.0f) GameCameraDeviationTime = 0.0f;
+	if (GameCameraDeviationTime < 0.0f)
+		GameCameraDeviationTime = 0.0f;
 
-
-	if ((GameCameraDeviationAge != GameCameraDeviationTime) && (GameCameraDeviationAge != 0.0f))
-		GameCameraNeedDeviation = GameCameraNeedStartDeviation -  GameCameraNeedStartDeviation/((GameCameraDeviationAge-GameCameraDeviationTime)/GameCameraDeviationAge);
+	if ((GameCameraDeviationAge != GameCameraDeviationTime) &&
+	    (GameCameraDeviationAge != 0.0f)) {
+		GameCameraNeedDeviation = GameCameraNeedStartDeviation - GameCameraNeedStartDeviation /
+					  ((GameCameraDeviationAge - GameCameraDeviationTime) / GameCameraDeviationAge);
+	}
 
 	// просчет девиации камеры
 	if (GameCameraDeviationTime > 0.0f) {
 		float Sign = 1.0f;
 		// нужно двигать
-		if (GameCameraNeedDeviation < 0.0f) Sign = -1.0f;
+		if (GameCameraNeedDeviation < 0.0f)
+			Sign = -1.0f;
 		if (Sign == 1.0f) {
-			if (GameCameraNeedDeviation < GameCameraDeviation) Sign = -1.0f;
+			if (GameCameraNeedDeviation < GameCameraDeviation)
+				Sign = -1.0f;
 		} else {
-			if (GameCameraNeedDeviation > GameCameraDeviation) Sign = 1.0f;
+			if (GameCameraNeedDeviation > GameCameraDeviation)
+				Sign = 1.0f;
 		}
 
-
-		float CurrentDeviation = Sign*5.0f*TimeDelta;
+		float CurrentDeviation = Sign * 5.0f * TimeDelta;
 
 		if (Sign == 1.0f) {
 			if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
 				GameCameraDeviation = GameCameraNeedDeviation;
-				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_fRand0();
-			} else GameCameraDeviation += CurrentDeviation;
+				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
+			} else
+				GameCameraDeviation += CurrentDeviation;
 		} else {
 			if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
 				GameCameraDeviation = GameCameraNeedDeviation;
-				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower*vw_fRand0();
-			} else GameCameraDeviation += CurrentDeviation;
+				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
+			} else
+				GameCameraDeviation += CurrentDeviation;
 		}
-	} else // нужно остановить ровно, уже не надо болтать
-		if (GameCameraDeviation != 0.0f) {
-			GameCameraNeedStartDeviation = GameCameraNeedDeviation = 0.0f;
-			float Sign = 1.0f;
-			if (GameCameraNeedDeviation < GameCameraDeviation) Sign = -1.0f;
-			if (GameCameraNeedDeviation > GameCameraDeviation) Sign = 1.0f;
+	} else if (GameCameraDeviation != 0.0f) { // нужно остановить ровно, уже не надо болтать
+		GameCameraNeedStartDeviation = GameCameraNeedDeviation = 0.0f;
+		float Sign = 1.0f;
+		if (GameCameraNeedDeviation < GameCameraDeviation)
+			Sign = -1.0f;
+		if (GameCameraNeedDeviation > GameCameraDeviation)
+			Sign = 1.0f;
 
-			float CurrentDeviation = Sign*5.0f*TimeDelta;
+		float CurrentDeviation = Sign * 5.0f * TimeDelta;
 
-			if (Sign == 1.0f) {
-				if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
-					GameCameraDeviation = GameCameraNeedDeviation;
-				} else GameCameraDeviation += CurrentDeviation;
-			} else {
-				if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
-					GameCameraDeviation = GameCameraNeedDeviation;
-				} else GameCameraDeviation += CurrentDeviation;
-			}
+		if (Sign == 1.0f) {
+			if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
+				GameCameraDeviation = GameCameraNeedDeviation;
+			} else
+				GameCameraDeviation += CurrentDeviation;
+		} else {
+			if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
+				GameCameraDeviation = GameCameraNeedDeviation;
+			} else
+				GameCameraDeviation += CurrentDeviation;
 		}
-
+	}
 
 	vw_SetCameraDeviation(sVECTOR3D{GameCameraDeviation, GameCameraDeviation / (-2.0f), 0.0f});
-
-
-	// если поворачиваем
-	/*
-	GameCameraMovement - меняем угол
-
-
-	GamePoint - делаем учет
-	!!! - учесть поворот в скрипте!!!void SetRotation(cObject3D *Object, TiXmlElement *Element)
-	*/
-
 
 	// делаем действия над кораблем игрока, если он есть
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		// нужно сместить корабль на расстояние
 		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + TmpNeedPos);
 	}
-
 }
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------
 // передача параметров
@@ -244,6 +208,10 @@ float GameCameraGetDeviation()
 {
 	return GameCameraDeviation;
 }
+
+/*
+ *
+ */
 float GameCameraGetSpeed()
 {
 	return GameCameraSpeed;

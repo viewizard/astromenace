@@ -31,14 +31,11 @@
 #include "../projectile/projectile.h"
 #include "../../config/config.h"
 #include "../../assets/audio.h"
+#include "../../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
-
-// FIXME should be fixed, use 'include' instead
-void GameCameraSetExplosion(sVECTOR3D Location, float Power);
-
 
 /*
  * Play sfx for bullet explosion.

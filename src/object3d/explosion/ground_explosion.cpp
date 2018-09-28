@@ -31,14 +31,11 @@
 #include "../../assets/audio.h"
 #include "../../object3d/space_object/space_object.h"
 #include "../../object3d/ground_object/ground_object.h"
+#include "../../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
-
-// FIXME should be fixed, use 'include' instead
-void GameCameraSetExplosion(sVECTOR3D Location, float Power);
-
 
 /*
  * Constructor.

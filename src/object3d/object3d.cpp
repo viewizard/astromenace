@@ -31,9 +31,9 @@
 
 #include "object3d.h"
 #include "../config/config.h"
-#include "../game.h"
 #include "../gfx/shadow_map.h"
 #include "../script/script.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

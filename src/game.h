@@ -63,7 +63,7 @@ void InitGameCamera();
 void ResetGameCamera();
 float GameCameraGetDeviation();
 float GameCameraGetSpeed();
-void GameCameraSetExplosion(sVECTOR3D Location, float Power);
+void GameCameraSetExplosion(const sVECTOR3D &Location, float Power);
 
 
 
