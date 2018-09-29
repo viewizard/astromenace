@@ -109,7 +109,7 @@ void GameCameraSetExplosion(const sVECTOR3D &Location, float Power)
 	if (Power > 1.0f) // очень большой взрыв
 		GameCameraDeviationAge = GameCameraDeviationTime = GameCameraDeviationTime * 3.0f;
 
-	GameCameraDeviationPower = Power * (10000.0f- dist2) / 40000.0f;
+	GameCameraDeviationPower = Power * (10000.0f - dist2) / 20000.0f;
 
 	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
 }
@@ -127,6 +127,10 @@ void GameCameraUpdate(float Time)
 	// обновляем данные камеры (+ устанавливаем флаг, чтобы обновить фруструм)
 	vw_IncCameraLocation(TmpNeedPos);
 
+	// делаем действия над кораблем игрока, если он есть
+	if (auto sharedPlayerFighter = PlayerFighter.lock())
+		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + TmpNeedPos);
+
 	// обновляем точку под камерой (минимальную)
 	GamePoint += TmpNeedPos;
 
@@ -134,71 +138,30 @@ void GameCameraUpdate(float Time)
 	if (GameCameraDeviationTime < 0.0f)
 		GameCameraDeviationTime = 0.0f;
 
-	if ((GameCameraDeviationAge != GameCameraDeviationTime) &&
-	    (GameCameraDeviationAge != 0.0f)) {
-		GameCameraNeedDeviation = GameCameraNeedStartDeviation - GameCameraNeedStartDeviation /
-					  ((GameCameraDeviationAge - GameCameraDeviationTime) / GameCameraDeviationAge);
+	bool tmpNeedStopDeviation{false};
+	if ((GameCameraDeviationTime <= 0.0f) && (GameCameraDeviation != 0.0f)) {
+		tmpNeedStopDeviation = true;
+		GameCameraNeedStartDeviation = GameCameraNeedDeviation = 0.0f;
 	}
 
-	// просчет девиации камеры
-	if (GameCameraDeviationTime > 0.0f) {
-		float Sign = 1.0f;
-		// нужно двигать
-		if (GameCameraNeedDeviation < 0.0f)
-			Sign = -1.0f;
-		if (Sign == 1.0f) {
-			if (GameCameraNeedDeviation < GameCameraDeviation)
-				Sign = -1.0f;
-		} else {
-			if (GameCameraNeedDeviation > GameCameraDeviation)
-				Sign = 1.0f;
-		}
-
-		float CurrentDeviation = Sign * 5.0f * TimeDelta;
-
-		if (Sign == 1.0f) {
-			if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
-				GameCameraDeviation = GameCameraNeedDeviation;
-				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
-			} else
-				GameCameraDeviation += CurrentDeviation;
-		} else {
-			if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
-				GameCameraDeviation = GameCameraNeedDeviation;
-				GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
-			} else
-				GameCameraDeviation += CurrentDeviation;
-		}
-	} else if (GameCameraDeviation != 0.0f) { // нужно остановить ровно, уже не надо болтать
-		GameCameraNeedStartDeviation = GameCameraNeedDeviation = 0.0f;
-		float Sign = 1.0f;
+	if ((GameCameraDeviationTime > 0.0f) || tmpNeedStopDeviation) {
+		float Sign{1.0f};
 		if (GameCameraNeedDeviation < GameCameraDeviation)
 			Sign = -1.0f;
-		if (GameCameraNeedDeviation > GameCameraDeviation)
-			Sign = 1.0f;
 
 		float CurrentDeviation = Sign * 5.0f * TimeDelta;
 
-		if (Sign == 1.0f) {
-			if (GameCameraNeedDeviation <= GameCameraDeviation+CurrentDeviation) {
-				GameCameraDeviation = GameCameraNeedDeviation;
-			} else
-				GameCameraDeviation += CurrentDeviation;
+		if (((Sign > 0.0f) && (GameCameraNeedDeviation <= GameCameraDeviation + CurrentDeviation)) ||
+		    ((Sign < 0.0f) && (GameCameraNeedDeviation >= GameCameraDeviation + CurrentDeviation))) {
+			GameCameraDeviation = GameCameraNeedDeviation;
+			GameCameraDeviationPower *= GameCameraDeviationTime / GameCameraDeviationAge;
+			GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
 		} else {
-			if (GameCameraNeedDeviation >= GameCameraDeviation+CurrentDeviation) {
-				GameCameraDeviation = GameCameraNeedDeviation;
-			} else
-				GameCameraDeviation += CurrentDeviation;
+			GameCameraDeviation += CurrentDeviation;
 		}
 	}
 
-	vw_SetCameraDeviation(sVECTOR3D{GameCameraDeviation, GameCameraDeviation / (-2.0f), 0.0f});
-
-	// делаем действия над кораблем игрока, если он есть
-	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
-		// нужно сместить корабль на расстояние
-		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + TmpNeedPos);
-	}
+	vw_SetCameraDeviation(sVECTOR3D{GameCameraDeviation * 2.0f, GameCameraDeviation, 0.0f});
 }
 
 //-----------------------------------------------------------------------------
