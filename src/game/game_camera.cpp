@@ -122,17 +122,17 @@ void GameCameraUpdate(float Time)
 	float TimeDelta = Time - GameCameraLastUpdate;
 	GameCameraLastUpdate = Time;
 
-	sVECTOR3D TmpNeedPos = GameCameraMovement ^ (GameCameraSpeed * TimeDelta);
+	sVECTOR3D tmpNeedPos = GameCameraMovement ^ (GameCameraSpeed * TimeDelta);
 
 	// обновляем данные камеры (+ устанавливаем флаг, чтобы обновить фруструм)
-	vw_IncCameraLocation(TmpNeedPos);
+	vw_IncCameraLocation(tmpNeedPos);
 
 	// делаем действия над кораблем игрока, если он есть
 	if (auto sharedPlayerFighter = PlayerFighter.lock())
-		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + TmpNeedPos);
+		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + tmpNeedPos);
 
 	// обновляем точку под камерой (минимальную)
-	GamePoint += TmpNeedPos;
+	GamePoint += tmpNeedPos;
 
 	GameCameraDeviationTime -= TimeDelta;
 	if (GameCameraDeviationTime < 0.0f)
@@ -149,15 +149,15 @@ void GameCameraUpdate(float Time)
 		if (GameCameraNeedDeviation < GameCameraDeviation)
 			Sign = -1.0f;
 
-		float CurrentDeviation = Sign * 5.0f * TimeDelta;
+		float tmpIncrement = Sign * 5.0f * TimeDelta;
 
-		if (((Sign > 0.0f) && (GameCameraNeedDeviation <= GameCameraDeviation + CurrentDeviation)) ||
-		    ((Sign < 0.0f) && (GameCameraNeedDeviation >= GameCameraDeviation + CurrentDeviation))) {
+		if (((Sign > 0.0f) && (GameCameraNeedDeviation <= GameCameraDeviation + tmpIncrement)) ||
+		    ((Sign < 0.0f) && (GameCameraNeedDeviation >= GameCameraDeviation + tmpIncrement))) {
 			GameCameraDeviation = GameCameraNeedDeviation;
 			GameCameraDeviationPower *= GameCameraDeviationTime / GameCameraDeviationAge;
 			GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
 		} else {
-			GameCameraDeviation += CurrentDeviation;
+			GameCameraDeviation += tmpIncrement;
 		}
 	}
 
