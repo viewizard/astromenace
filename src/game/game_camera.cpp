@@ -27,6 +27,30 @@
 
 // TODO translate comments
 
+/*
+
+OpenGL use right-handed coordinate system. Scene axises orientation:
+
+     ^ Y
+     |
+     |  / Z
+     | /
+<-----/
+X
+
+  ^ Y
+  |     camera location (see core/camera)
+  |    /
+  |   *    ----> GameCameraMovement vector
+  |   | \
+  |   |  \ - camera frustum (see core/camera)
+  |   |   \
+--|---*----\----------------> Z
+  |    \
+  |     GamePoint
+
+*/
+
 #include "../game.h"
 #include "../object3d/space_ship/space_ship.h"
 
