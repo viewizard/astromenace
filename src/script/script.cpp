@@ -105,7 +105,7 @@ static void SetLocation(cObject3D &Object, const sXMLEntry &xmlEntry,
 
 	// camera-related coordinates
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
-	PosWithLag = GetCameraMovementDirection() ^ (-GameCameraGetSpeed() * TimeOpLag);
+	PosWithLag = GetCameraMovementDirection() ^ (-GetCameraSpeed() * TimeOpLag);
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
 		tmpPosition.x += GetCameraCoveredDistance().x + PosWithLag.x;
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpPosition.y))

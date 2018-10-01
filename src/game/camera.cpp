@@ -80,7 +80,7 @@ float GameCameraDeviationAge{0.0f};
  */
 void ResetGameCamera()
 {
-	CameraCoveredDistance = sVECTOR3D{0.0f, 0.0f, 0.0f};
+	CameraCoveredDistance(0.0f, 0.0f, 0.0f);
 	GameCameraLastUpdate = 0.0f;
 
 	GameCameraDeviation = 0.0f;
@@ -194,9 +194,9 @@ float GameCameraGetDeviation()
 }
 
 /*
- *
+ * Get camera speed.
  */
-float GameCameraGetSpeed()
+float GetCameraSpeed()
 {
 	return GameCameraSpeed;
 }

@@ -368,7 +368,7 @@ static bool DetectProjectileCollision(const cObject3D &Object, int &ObjectPieceN
 		return false;
 
 	if (Object.ObjectStatus == eObjectStatus::Player)
-		ObjectSpeed += GameCameraGetSpeed();
+		ObjectSpeed += GetCameraSpeed();
 
 	switch (Projectile.ProjectileType) {
 	case 0: // projectile

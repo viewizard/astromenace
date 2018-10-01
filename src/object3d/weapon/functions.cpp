@@ -59,7 +59,7 @@ static void CalculateLocationWithPrediction(eObjectStatus WeaponStatus, const sV
 	sVECTOR3D FutureLocation = TargetOrientation ^ (TargetSpeed * ObjCurrentTime);
 	sVECTOR3D CamPosInfluence{0.0f, 0.0f, 0.0f};
 	if (TargetStatus == eObjectStatus::Player)
-		CamPosInfluence = GetCameraMovementDirection() ^ (GameCameraGetSpeed() * ObjCurrentTime);
+		CamPosInfluence = GetCameraMovementDirection() ^ (GetCameraSpeed() * ObjCurrentTime);
 
 	sVECTOR3D PossibleRealLocation = TargetLocation + FutureLocation + CamPosInfluence;
 
@@ -71,7 +71,7 @@ static void CalculateLocationWithPrediction(eObjectStatus WeaponStatus, const sV
 
 	CamPosInfluence = sVECTOR3D{0.0f, 0.0f, 0.0f};
 	if (TargetStatus == eObjectStatus::Player)
-		CamPosInfluence = GetCameraMovementDirection() ^ (GameCameraGetSpeed() * PoprTime);
+		CamPosInfluence = GetCameraMovementDirection() ^ (GetCameraSpeed() * PoprTime);
 
 	TargetLocation = TargetLocation + FutureLocation + CamPosInfluence;
 }
