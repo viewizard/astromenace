@@ -674,18 +674,18 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 	// camera shake
 	switch (ExplType) {
 	case 1: // asteroid
-		GameCameraSetExplosion(ExplLocation, 0.2f);
+		SetupCameraShake(ExplLocation, 0.2f);
 		break;
 
 	case 2: // alien
-		GameCameraSetExplosion(ExplLocation, 0.5f);
+		SetupCameraShake(ExplLocation, 0.5f);
 		break;
 	case 3: // pirate, earth
 	case 32: // derbis - pirate, earth
-		GameCameraSetExplosion(ExplLocation, 0.5f);
+		SetupCameraShake(ExplLocation, 0.5f);
 		break;
 	case 34: // alien mothership
-		GameCameraSetExplosion(ExplLocation, 0.5f);
+		SetupCameraShake(ExplLocation, 0.5f);
 		break;
 	}
 

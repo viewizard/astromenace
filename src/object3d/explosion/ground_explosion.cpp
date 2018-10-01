@@ -157,7 +157,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType,
 
 	if ((ExplType == 1) ||
 	    (ExplType == 2)) {
-		GameCameraSetExplosion(ExplLocation, 0.5f);
+		SetupCameraShake(ExplLocation, 0.5f);
 		PlayGameSFX(eGameSFX::Explosion_Big_Energy, 1.0f, ExplLocation, 2);
 	}
 }

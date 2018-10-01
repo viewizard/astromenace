@@ -38,8 +38,8 @@ namespace astromenace {
 void InitGameCamera();
 //
 void ResetGameCamera();
-//
-void GameCameraSetExplosion(const sVECTOR3D &Location, float Power);
+// Setup camera shake.
+void SetupCameraShake(const sVECTOR3D &Location, float Power);
 // Update camera.
 void CameraUpdate(float Time);
 // Get camera shake.

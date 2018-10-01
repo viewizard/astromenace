@@ -789,11 +789,11 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Project
 	switch (ExplType) {
 	case 18: // torpedo
 	case 209: // pirate torpedo
-		GameCameraSetExplosion(ExplLocation, 0.5f);
+		SetupCameraShake(ExplLocation, 0.5f);
 		break;
 	case 19: // bomb
 	case 210: // pirate bomb
-		GameCameraSetExplosion(ExplLocation, 1.5f);
+		SetupCameraShake(ExplLocation, 1.5f);
 		break;
 	}
 }

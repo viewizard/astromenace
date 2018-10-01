@@ -60,6 +60,8 @@ namespace astromenace {
 
 namespace {
 
+constexpr float MaxInfluenceDistance2{100.0f * 100.0f};
+
 float CameraLastUpdate{0.0f};
 float CameraSpeed{10.0f};
 sVECTOR3D CameraCoveredDistance{0.0f, 0.0f, 0.0f};
@@ -99,35 +101,30 @@ void InitGameCamera()
 	CameraLastUpdate = vw_GetTimeThread(1);
 }
 
-//-----------------------------------------------------------------------------
-// установка взрыва
-//-----------------------------------------------------------------------------
-void GameCameraSetExplosion(const sVECTOR3D &Location, float Power)
+/*
+ * Setup camera shake.
+ */
+void SetupCameraShake(const sVECTOR3D &Location, float Power)
 {
-	// если корабля нет, нам тут делать нечего
 	auto sharedPlayerFighter = PlayerFighter.lock();
 	if (!sharedPlayerFighter)
 		return;
 
-	// вычисляем по дистанции время болтанки....
-	// чуствительность начинается со 100 едениц (10000 в квадрате)
+	float tmpDist2 = (sharedPlayerFighter->Location.x - Location.x) * (sharedPlayerFighter->Location.x - Location.x) +
+			 (sharedPlayerFighter->Location.y - Location.y) * (sharedPlayerFighter->Location.y - Location.y) +
+			 (sharedPlayerFighter->Location.z - Location.z) * (sharedPlayerFighter->Location.z - Location.z);
 
-	float dist2 = (sharedPlayerFighter->Location.x - Location.x) * (sharedPlayerFighter->Location.x - Location.x) +
-		      (sharedPlayerFighter->Location.y - Location.y) * (sharedPlayerFighter->Location.y - Location.y) +
-		      (sharedPlayerFighter->Location.z - Location.z) * (sharedPlayerFighter->Location.z - Location.z);
-
-	// слишком далеко
-	if (dist2 > 10000.0f)
+	if (tmpDist2 > MaxInfluenceDistance2)
 		return;
-	// или очень близко
-	if (dist2 <= sharedPlayerFighter->Radius * sharedPlayerFighter->Radius)
-		dist2 = sharedPlayerFighter->Radius * sharedPlayerFighter->Radius;
 
-	CameraShakeInitialTime = CameraShakeTimeLeft = (10000.0f - dist2) / 10000.0f;
+	if (tmpDist2 <= sharedPlayerFighter->Radius * sharedPlayerFighter->Radius)
+		tmpDist2 = sharedPlayerFighter->Radius * sharedPlayerFighter->Radius;
+
+	CameraShakeInitialTime = CameraShakeTimeLeft = (MaxInfluenceDistance2 - tmpDist2) / MaxInfluenceDistance2;
 	if (Power > 1.0f) // huge explosion
 		CameraShakeInitialTime = CameraShakeTimeLeft = CameraShakeTimeLeft * 3.0f;
 
-	CameraShakePower = Power * (10000.0f - dist2) / 20000.0f;
+	CameraShakePower = Power * (MaxInfluenceDistance2 - tmpDist2) / (MaxInfluenceDistance2 * 2);
 
 	CameraNeedShake = CameraShakePower * vw_fRand0();
 }
