@@ -42,8 +42,8 @@ void InitGameCamera();
 void ResetGameCamera();
 //
 void GameCameraSetExplosion(const sVECTOR3D &Location, float Power);
-//
-float GameCameraGetDeviation();
+// Get camera shake.
+float GetCameraShake();
 // Get camera speed.
 float GetCameraSpeed();
 // Get camera covered distance.

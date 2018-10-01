@@ -181,10 +181,10 @@ void GameCameraUpdate(float Time)
 	vw_SetCameraDeviation(sVECTOR3D{CameraCurrentShake * 2.0f, CameraCurrentShake, 0.0f});
 }
 
-//-----------------------------------------------------------------------------
-// передача параметров
-//-----------------------------------------------------------------------------
-float GameCameraGetDeviation()
+/*
+ * Get camera shake.
+ */
+float GetCameraShake()
 {
 	return CameraCurrentShake;
 }

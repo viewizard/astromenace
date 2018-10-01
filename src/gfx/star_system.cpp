@@ -290,8 +290,8 @@ void StarSystemDraw(eDrawType DrawType)
 		if (tmpSpace.ObjectType == eObjectType::Planet) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
-				vw_Translate(sVECTOR3D{CurrentCameraLocation.x * 0.90f - GameCameraGetDeviation() * 4.0f,
-						       GameCameraGetDeviation() * 2.0f,
+				vw_Translate(sVECTOR3D{CurrentCameraLocation.x * 0.90f - GetCameraShake() * 4.0f,
+						       GetCameraShake() * 2.0f,
 						       0.0f});
 			}
 			tmpSpace.Draw(false);
@@ -307,8 +307,8 @@ void StarSystemDraw(eDrawType DrawType)
 		if (tmpSpace.ObjectType == eObjectType::Planetoid) {
 			if (DrawType == eDrawType::GAME) {
 				vw_PushMatrix();
-				vw_Translate(sVECTOR3D{CurrentCameraLocation.x * 0.70f - GameCameraGetDeviation() * 4.0f,
-						       GameCameraGetDeviation() * 2.0f,
+				vw_Translate(sVECTOR3D{CurrentCameraLocation.x * 0.70f - GetCameraShake() * 4.0f,
+						       GetCameraShake() * 2.0f,
 						       0.0f});
 			}
 			tmpSpace.Draw(false);
@@ -334,8 +334,8 @@ void StarSystemDraw(eDrawType DrawType)
 		width_2 = length_2 = 175.0f;
 		heigh_2 = 0.0f;
 
-		x = GetCameraCoveredDistance().x + GameCameraGetDeviation() + CurrentCameraLocation.x * 0.8f;
-		y = GetCameraCoveredDistance().y - GameCameraGetDeviation() * 0.5f;
+		x = GetCameraCoveredDistance().x + GetCameraShake() + CurrentCameraLocation.x * 0.8f;
+		y = GetCameraCoveredDistance().y - GetCameraShake() * 0.5f;
 		z = GetCameraCoveredDistance().z + 25.0f;
 
 		StartTransparentLayer1 = StarsTileStartTransparentLayer1;
@@ -445,8 +445,8 @@ void StarSystemDrawThirdLayer(eDrawType DrawType)
 		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
-		x = GetCameraCoveredDistance().x + GameCameraGetDeviation() * 2.0f + CurrentCameraLocation.x * 0.5f;
-		y = GetCameraCoveredDistance().y - GameCameraGetDeviation();
+		x = GetCameraCoveredDistance().x + GetCameraShake() * 2.0f + CurrentCameraLocation.x * 0.5f;
+		y = GetCameraCoveredDistance().y - GetCameraShake();
 		z = GetCameraCoveredDistance().z + 25.0f;
 
 		StartTransparentLayer2 = StarsTileStartTransparentLayer2;
