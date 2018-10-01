@@ -60,17 +60,16 @@ namespace astromenace {
 
 namespace {
 
-float GameCameraLastUpdate{0.0f};
-float GameCameraSpeed{10.0f};
+float CameraLastUpdate{0.0f};
+float CameraSpeed{10.0f};
 sVECTOR3D CameraCoveredDistance{0.0f, 0.0f, 0.0f};
 sVECTOR3D CameraMovementDirection{0.0f, 0.0f, 1.0f};
 // camera shake on explosion related vaiables
-float GameCameraDeviation{0.0f};
-float GameCameraDeviationTime{0.0f};
-float GameCameraNeedDeviation{0.0f};
-float GameCameraDeviationPower{0.0f};
-float GameCameraNeedStartDeviation{0.0f};
-float GameCameraDeviationAge{0.0f};
+float CameraCurrentShake{0.0f};
+float CameraNeedShake{0.0f};
+float CameraShakeTimeLeft{0.0f};
+float CameraShakeInitialTime{0.0f};
+float CameraShakePower{0.0f};
 
 } // unnamed namespace
 
@@ -81,14 +80,13 @@ float GameCameraDeviationAge{0.0f};
 void ResetGameCamera()
 {
 	CameraCoveredDistance(0.0f, 0.0f, 0.0f);
-	GameCameraLastUpdate = 0.0f;
+	CameraLastUpdate = 0.0f;
 
-	GameCameraDeviation = 0.0f;
-	GameCameraDeviationTime = 0.0f;
-	GameCameraNeedDeviation = 0.0f;
-	GameCameraDeviationPower = 0.0f;
-	GameCameraNeedStartDeviation = 0.0f;
-	GameCameraDeviationAge = 0.0f;
+	CameraCurrentShake = 0.0f;
+	CameraNeedShake = 0.0f;
+	CameraShakeTimeLeft = 0.0f;
+	CameraShakeInitialTime = 0.0f;
+	CameraShakePower = 0.0f;
 	vw_SetCameraDeviation(sVECTOR3D{0.0f, 0.0f, 0.0f});
 }
 
@@ -98,7 +96,7 @@ void ResetGameCamera()
 void InitGameCamera()
 {
 	ResetGameCamera();
-	GameCameraLastUpdate = vw_GetTimeThread(1);
+	CameraLastUpdate = vw_GetTimeThread(1);
 }
 
 //-----------------------------------------------------------------------------
@@ -125,15 +123,13 @@ void GameCameraSetExplosion(const sVECTOR3D &Location, float Power)
 	if (dist2 <= sharedPlayerFighter->Radius * sharedPlayerFighter->Radius)
 		dist2 = sharedPlayerFighter->Radius * sharedPlayerFighter->Radius;
 
-	// время болтанки
-	GameCameraDeviationAge = GameCameraDeviationTime = (10000.0f - dist2) / 10000.0f;
+	CameraShakeInitialTime = CameraShakeTimeLeft = (10000.0f - dist2) / 10000.0f;
+	if (Power > 1.0f) // huge explosion
+		CameraShakeInitialTime = CameraShakeTimeLeft = CameraShakeTimeLeft * 3.0f;
 
-	if (Power > 1.0f) // очень большой взрыв
-		GameCameraDeviationAge = GameCameraDeviationTime = GameCameraDeviationTime * 3.0f;
+	CameraShakePower = Power * (10000.0f - dist2) / 20000.0f;
 
-	GameCameraDeviationPower = Power * (10000.0f - dist2) / 20000.0f;
-
-	GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
+	CameraNeedShake = CameraShakePower * vw_fRand0();
 }
 
 //-----------------------------------------------------------------------------
@@ -141,10 +137,10 @@ void GameCameraSetExplosion(const sVECTOR3D &Location, float Power)
 //-----------------------------------------------------------------------------
 void GameCameraUpdate(float Time)
 {
-	float TimeDelta = Time - GameCameraLastUpdate;
-	GameCameraLastUpdate = Time;
+	float TimeDelta = Time - CameraLastUpdate;
+	CameraLastUpdate = Time;
 
-	sVECTOR3D tmpNeedPos = CameraMovementDirection ^ (GameCameraSpeed * TimeDelta);
+	sVECTOR3D tmpNeedPos = CameraMovementDirection ^ (CameraSpeed * TimeDelta);
 
 	// обновляем данные камеры (+ устанавливаем флаг, чтобы обновить фруструм)
 	vw_IncCameraLocation(tmpNeedPos);
@@ -155,34 +151,34 @@ void GameCameraUpdate(float Time)
 
 	CameraCoveredDistance += tmpNeedPos;
 
-	GameCameraDeviationTime -= TimeDelta;
-	if (GameCameraDeviationTime < 0.0f)
-		GameCameraDeviationTime = 0.0f;
+	CameraShakeTimeLeft -= TimeDelta;
+	if (CameraShakeTimeLeft < 0.0f)
+		CameraShakeTimeLeft = 0.0f;
 
 	bool tmpNeedStopDeviation{false};
-	if ((GameCameraDeviationTime <= 0.0f) && (GameCameraDeviation != 0.0f)) {
+	if ((CameraShakeTimeLeft <= 0.0f) && (CameraCurrentShake != 0.0f)) {
 		tmpNeedStopDeviation = true;
-		GameCameraNeedStartDeviation = GameCameraNeedDeviation = 0.0f;
+		CameraNeedShake = 0.0f;
 	}
 
-	if ((GameCameraDeviationTime > 0.0f) || tmpNeedStopDeviation) {
+	if ((CameraShakeTimeLeft > 0.0f) || tmpNeedStopDeviation) {
 		float Sign{1.0f};
-		if (GameCameraNeedDeviation < GameCameraDeviation)
+		if (CameraNeedShake < CameraCurrentShake)
 			Sign = -1.0f;
 
 		float tmpIncrement = Sign * 5.0f * TimeDelta;
 
-		if (((Sign > 0.0f) && (GameCameraNeedDeviation <= GameCameraDeviation + tmpIncrement)) ||
-		    ((Sign < 0.0f) && (GameCameraNeedDeviation >= GameCameraDeviation + tmpIncrement))) {
-			GameCameraDeviation = GameCameraNeedDeviation;
-			GameCameraDeviationPower *= GameCameraDeviationTime / GameCameraDeviationAge;
-			GameCameraNeedStartDeviation = GameCameraNeedDeviation = GameCameraDeviationPower * vw_fRand0();
+		if (((Sign > 0.0f) && (CameraNeedShake <= CameraCurrentShake + tmpIncrement)) ||
+		    ((Sign < 0.0f) && (CameraNeedShake >= CameraCurrentShake + tmpIncrement))) {
+			CameraCurrentShake = CameraNeedShake;
+			CameraShakePower *= CameraShakeTimeLeft / CameraShakeInitialTime;
+			CameraNeedShake = CameraShakePower * vw_fRand0();
 		} else {
-			GameCameraDeviation += tmpIncrement;
+			CameraCurrentShake += tmpIncrement;
 		}
 	}
 
-	vw_SetCameraDeviation(sVECTOR3D{GameCameraDeviation * 2.0f, GameCameraDeviation, 0.0f});
+	vw_SetCameraDeviation(sVECTOR3D{CameraCurrentShake * 2.0f, CameraCurrentShake, 0.0f});
 }
 
 //-----------------------------------------------------------------------------
@@ -190,7 +186,7 @@ void GameCameraUpdate(float Time)
 //-----------------------------------------------------------------------------
 float GameCameraGetDeviation()
 {
-	return GameCameraDeviation;
+	return CameraCurrentShake;
 }
 
 /*
@@ -198,7 +194,7 @@ float GameCameraGetDeviation()
  */
 float GetCameraSpeed()
 {
-	return GameCameraSpeed;
+	return CameraSpeed;
 }
 
 /*
