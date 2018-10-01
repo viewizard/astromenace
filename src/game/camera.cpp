@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// FIXME camera code should not include player's ship manipulations code...
+
 /*
 
 OpenGL use right-handed coordinate system. Scene axises orientation:
@@ -49,8 +51,9 @@ X
 
 */
 
-#include "../game.h"
+#include "../core/core.h"
 #include "../object3d/space_ship/space_ship.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -128,22 +131,10 @@ void SetupCameraShake(const sVECTOR3D &Location, float Power)
 }
 
 /*
- * Update camera.
+ * Update camera shake.
  */
-void CameraUpdate(float Time)
+static void UpdateCameraShake(float TimeDelta)
 {
-	float TimeDelta = Time - CameraLastUpdate;
-	CameraLastUpdate = Time;
-
-	sVECTOR3D tmpNeedPos = CameraMovementDirection ^ (CameraSpeed * TimeDelta);
-
-	vw_IncCameraLocation(tmpNeedPos);
-
-	if (auto sharedPlayerFighter = PlayerFighter.lock())
-		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + tmpNeedPos);
-
-	CameraCoveredDistance += tmpNeedPos;
-
 	CameraShakeTimeLeft -= TimeDelta;
 	if (CameraShakeTimeLeft < 0.0f)
 		CameraShakeTimeLeft = 0.0f;
@@ -172,6 +163,24 @@ void CameraUpdate(float Time)
 	}
 
 	vw_SetCameraDeviation(sVECTOR3D{CameraCurrentShake * 2.0f, CameraCurrentShake, 0.0f});
+}
+
+/*
+ * Update camera.
+ */
+void CameraUpdate(float Time)
+{
+	float TimeDelta = Time - CameraLastUpdate;
+	CameraLastUpdate = Time;
+
+	sVECTOR3D tmpDistance = CameraMovementDirection ^ (CameraSpeed * TimeDelta);
+	CameraCoveredDistance += tmpDistance;
+	vw_IncCameraLocation(tmpDistance);
+
+	if (auto sharedPlayerFighter = PlayerFighter.lock())
+		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + tmpDistance);
+
+	UpdateCameraShake(TimeDelta);
 }
 
 /*
