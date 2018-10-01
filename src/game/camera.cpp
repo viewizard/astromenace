@@ -41,7 +41,7 @@ X
   ^ Y
   |     camera location (see core/camera)
   |    /
-  |   *    ----> GameCameraMovement vector
+  |   *    ----> CameraMovementDirection vector
   |   | \
   |   |  \ - camera frustum (see core/camera)
   |   |   \
@@ -63,6 +63,7 @@ namespace {
 float GameCameraLastUpdate{0.0f};
 float GameCameraSpeed{10.0f};
 sVECTOR3D CameraCoveredDistance{0.0f, 0.0f, 0.0f};
+sVECTOR3D CameraMovementDirection{0.0f, 0.0f, 1.0f};
 // camera shake on explosion related vaiables
 float GameCameraDeviation{0.0f};
 float GameCameraDeviationTime{0.0f};
@@ -72,9 +73,6 @@ float GameCameraNeedStartDeviation{0.0f};
 float GameCameraDeviationAge{0.0f};
 
 } // unnamed namespace
-
-// FIXME should be fixed, don't allow global scope interaction for local variables
-sVECTOR3D GameCameraMovement{0.0f, 0.0f, 1.0f};
 
 
 /*
@@ -146,7 +144,7 @@ void GameCameraUpdate(float Time)
 	float TimeDelta = Time - GameCameraLastUpdate;
 	GameCameraLastUpdate = Time;
 
-	sVECTOR3D tmpNeedPos = GameCameraMovement ^ (GameCameraSpeed * TimeDelta);
+	sVECTOR3D tmpNeedPos = CameraMovementDirection ^ (GameCameraSpeed * TimeDelta);
 
 	// обновляем данные камеры (+ устанавливаем флаг, чтобы обновить фруструм)
 	vw_IncCameraLocation(tmpNeedPos);
@@ -209,6 +207,14 @@ float GameCameraGetSpeed()
 const sVECTOR3D &GetCameraCoveredDistance()
 {
 	return CameraCoveredDistance;
+}
+
+/*
+ * Get camera movement direction.
+ */
+const sVECTOR3D &GetCameraMovementDirection()
+{
+	return CameraMovementDirection;
 }
 
 } // astromenace namespace

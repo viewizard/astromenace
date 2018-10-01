@@ -48,6 +48,8 @@ float GameCameraGetSpeed();
 void GameCameraSetExplosion(const sVECTOR3D &Location, float Power);
 // Get camera covered distance.
 const sVECTOR3D &GetCameraCoveredDistance();
+// Get camera movement direction.
+const sVECTOR3D &GetCameraMovementDirection();
 
 } // astromenace namespace
 } // viewizard namespace

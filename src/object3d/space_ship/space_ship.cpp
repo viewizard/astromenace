@@ -36,6 +36,7 @@
 #include "../../game.h"
 #include "../../config/config.h"
 #include "../../script/script.h"
+#include "../../game/camera.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -1035,16 +1036,16 @@ bool cSpaceShip::Update(float Time)
 	}
 
 	if (fabs(SpeedByCamFB) > 0.01f) {
-		sVECTOR3D tmp = GameCameraMovement ^ (SpeedByCamFB * TimeDelta);
+		sVECTOR3D tmp = GetCameraMovementDirection() ^ (SpeedByCamFB * TimeDelta);
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamLR) > 0.01f) {
-		sVECTOR3D tmp = GameCameraMovement ^ (SpeedByCamLR * TimeDelta);
+		sVECTOR3D tmp = GetCameraMovementDirection() ^ (SpeedByCamLR * TimeDelta);
 		vw_RotatePoint(tmp, sVECTOR3D{0.0, -90.0f ,0.0f});
 		Velocity += tmp;
 	}
 	if (fabs(SpeedByCamUD) > 0.01f) {
-		sVECTOR3D tmp = GameCameraMovement ^ (SpeedByCamUD * TimeDelta);
+		sVECTOR3D tmp = GetCameraMovementDirection() ^ (SpeedByCamUD * TimeDelta);
 		vw_RotatePoint(tmp, sVECTOR3D{90.0f, 0.0f, 0.0f});
 		Velocity += tmp;
 	}

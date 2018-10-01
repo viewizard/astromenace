@@ -40,9 +40,6 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 
 } // unnamed namespace
 
-// FIXME should be fixed, don't allow global scope interaction for local variables
-extern sVECTOR3D GameCameraMovement;
-
 
 /*
  * Calculate target location with prediction.
@@ -62,7 +59,7 @@ static void CalculateLocationWithPrediction(eObjectStatus WeaponStatus, const sV
 	sVECTOR3D FutureLocation = TargetOrientation ^ (TargetSpeed * ObjCurrentTime);
 	sVECTOR3D CamPosInfluence{0.0f, 0.0f, 0.0f};
 	if (TargetStatus == eObjectStatus::Player)
-		CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * ObjCurrentTime);
+		CamPosInfluence = GetCameraMovementDirection() ^ (GameCameraGetSpeed() * ObjCurrentTime);
 
 	sVECTOR3D PossibleRealLocation = TargetLocation + FutureLocation + CamPosInfluence;
 
@@ -74,7 +71,7 @@ static void CalculateLocationWithPrediction(eObjectStatus WeaponStatus, const sV
 
 	CamPosInfluence = sVECTOR3D{0.0f, 0.0f, 0.0f};
 	if (TargetStatus == eObjectStatus::Player)
-		CamPosInfluence = GameCameraMovement ^ (GameCameraGetSpeed() * PoprTime);
+		CamPosInfluence = GetCameraMovementDirection() ^ (GameCameraGetSpeed() * PoprTime);
 
 	TargetLocation = TargetLocation + FutureLocation + CamPosInfluence;
 }
