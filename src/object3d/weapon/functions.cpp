@@ -28,6 +28,7 @@
 #include "../object3d.h"
 #include "../space_ship/space_ship.h"
 #include "../projectile/projectile.h"
+#include "../../game/camera.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -41,7 +42,6 @@ constexpr float RadToDeg = 180.0f / 3.14159f; // convert radian to degree
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern sVECTOR3D GameCameraMovement;
-float GameCameraGetSpeed();
 
 
 /*

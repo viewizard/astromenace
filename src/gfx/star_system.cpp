@@ -42,6 +42,7 @@ In order to show movement and more 'live' space, star system render "space dust"
 #include "../assets/texture.h"
 #include "../object3d/space_object/space_object.h"
 #include "skybox.h"
+#include "../game/camera.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -75,11 +76,6 @@ float VertexArray[36]; // 4 * 9 = 4 vertices * (RI_3f_XYZ | RI_4f_COLOR | RI_1_T
 unsigned int VertexArrayPosition{0};
 
 } // unnamed namespace
-
-// FIXME should be fixed, don't allow global scope interaction for local variables
-extern sVECTOR3D GamePoint;
-// FIXME should be fixed, use 'include' instead
-float GameCameraGetDeviation();
 
 
 /*
@@ -327,9 +323,9 @@ void StarSystemDraw(eDrawType DrawType)
 	float width_2{0.0f};
 	float heigh_2{110.0f};
 	float length_2{110.0f};
-	float x{GamePoint.x};
-	float y{GamePoint.y};
-	float z{GamePoint.z};
+	float x{GetCameraCoveredDistance().x};
+	float y{GetCameraCoveredDistance().y};
+	float z{GetCameraCoveredDistance().z};
 	float StartTransparentLayer1{0.7f};
 	float EndTransparentLayer1{0.7f};
 	sRGBCOLOR Color{1.0f, 1.0f, 1.0f};
@@ -338,9 +334,9 @@ void StarSystemDraw(eDrawType DrawType)
 		width_2 = length_2 = 175.0f;
 		heigh_2 = 0.0f;
 
-		x = GamePoint.x + GameCameraGetDeviation() + CurrentCameraLocation.x * 0.8f;
-		y = GamePoint.y - GameCameraGetDeviation() * 0.5f;
-		z = GamePoint.z + 25.0f;
+		x = GetCameraCoveredDistance().x + GameCameraGetDeviation() + CurrentCameraLocation.x * 0.8f;
+		y = GetCameraCoveredDistance().y - GameCameraGetDeviation() * 0.5f;
+		z = GetCameraCoveredDistance().z + 25.0f;
 
 		StartTransparentLayer1 = StarsTileStartTransparentLayer1;
 		EndTransparentLayer1 = StarsTileEndTransparentLayer1;
@@ -418,7 +414,7 @@ void StarSystemDraw(eDrawType DrawType)
 	if (DrawType == eDrawType::GAME) {
 		if (auto sharedSpace = psSpace.lock()) {
 			sharedSpace->SetStartLocation(sharedSpace->GetLocation());
-			sharedSpace->MoveSystemLocation(InGameInitialLocation + GamePoint);
+			sharedSpace->MoveSystemLocation(InGameInitialLocation + GetCameraCoveredDistance());
 		}
 	}
 }
@@ -435,9 +431,9 @@ void StarSystemDrawThirdLayer(eDrawType DrawType)
 	float width_2{0.0f};
 	float heigh_2{110.0f};
 	float length_2{110.0f};
-	float x{GamePoint.x};
-	float y{GamePoint.y};
-	float z{GamePoint.z};
+	float x{GetCameraCoveredDistance().x};
+	float y{GetCameraCoveredDistance().y};
+	float z{GetCameraCoveredDistance().z};
 	float StartTransparentLayer2{0.9f};
 	float EndTransparentLayer2{0.7f};
 	sRGBCOLOR Color{1.0f, 1.0f, 1.0f};
@@ -449,9 +445,9 @@ void StarSystemDrawThirdLayer(eDrawType DrawType)
 		sVECTOR3D CurrentCameraLocation;
 		vw_GetCameraLocation(&CurrentCameraLocation);
 
-		x = GamePoint.x+GameCameraGetDeviation() * 2.0f + CurrentCameraLocation.x * 0.5f;
-		y = GamePoint.y-GameCameraGetDeviation();
-		z = GamePoint.z+25.0f;
+		x = GetCameraCoveredDistance().x + GameCameraGetDeviation() * 2.0f + CurrentCameraLocation.x * 0.5f;
+		y = GetCameraCoveredDistance().y - GameCameraGetDeviation();
+		z = GetCameraCoveredDistance().z + 25.0f;
 
 		StartTransparentLayer2 = StarsTileStartTransparentLayer2;
 		EndTransparentLayer2 = StarsTileEndTransparentLayer2;

@@ -28,7 +28,7 @@
 #include "space_object.h"
 #include "../explosion/explosion.h"
 #include "../../assets/texture.h"
-#include "../../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "../../game/camera.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -251,7 +251,7 @@ std::weak_ptr<cObject3D> GetSpaceObjectPtr(const cSpaceObject &Object)
 cSpaceObject::cSpaceObject()
 {
 	ObjectStatus = eObjectStatus::Enemy;
-	LastCameraPoint = GamePoint;
+	LastCameraPoint = GetCameraCoveredDistance();
 }
 
 /*
@@ -321,12 +321,12 @@ bool cSpaceObject::Update(float Time)
 	if ((ObjectType == eObjectType::Planet) ||
 	    (ObjectType == eObjectType::Planetoid) ||
 	    (ObjectType == eObjectType::BigAsteroid)) {
-		sVECTOR3D Temp = GamePoint - LastCameraPoint;
+		sVECTOR3D Temp = GetCameraCoveredDistance() - LastCameraPoint;
 
 		sVECTOR3D OrientTTT = Temp ^ (-1);
 		OrientTTT.Normalize();
 		SetLocation(Location + (OrientTTT ^ (Speed * TimeDelta)) + Temp);
-		LastCameraPoint = GamePoint;
+		LastCameraPoint = GetCameraCoveredDistance();
 
 		if (ObjectType == eObjectType::Planet) {
 			switch (InternalType) {

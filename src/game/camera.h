@@ -46,6 +46,8 @@ float GameCameraGetDeviation();
 float GameCameraGetSpeed();
 //
 void GameCameraSetExplosion(const sVECTOR3D &Location, float Power);
+// Get camera covered distance.
+const sVECTOR3D &GetCameraCoveredDistance();
 
 } // astromenace namespace
 } // viewizard namespace

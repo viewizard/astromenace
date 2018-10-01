@@ -346,7 +346,6 @@ void SetGameMissionComplete();
 //------------------------------------------------------------------------------------
 // game_camera.cpp
 //------------------------------------------------------------------------------------
-extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
 
 

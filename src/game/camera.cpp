@@ -45,9 +45,9 @@ X
   |   | \
   |   |  \ - camera frustum (see core/camera)
   |   |   \
---|---*----\----------------> Z
-  |    \
-  |     GamePoint
+--|---|----\----------------> Z
+  |
+  |
 
 */
 
@@ -62,6 +62,7 @@ namespace {
 
 float GameCameraLastUpdate{0.0f};
 float GameCameraSpeed{10.0f};
+sVECTOR3D CameraCoveredDistance{0.0f, 0.0f, 0.0f};
 // camera shake on explosion related vaiables
 float GameCameraDeviation{0.0f};
 float GameCameraDeviationTime{0.0f};
@@ -73,7 +74,6 @@ float GameCameraDeviationAge{0.0f};
 } // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-sVECTOR3D GamePoint{0.0f, 0.0f, 0.0f};
 sVECTOR3D GameCameraMovement{0.0f, 0.0f, 1.0f};
 
 
@@ -82,7 +82,7 @@ sVECTOR3D GameCameraMovement{0.0f, 0.0f, 1.0f};
  */
 void ResetGameCamera()
 {
-	GamePoint = sVECTOR3D{0.0f, 0.0f, 0.0f};
+	CameraCoveredDistance = sVECTOR3D{0.0f, 0.0f, 0.0f};
 	GameCameraLastUpdate = 0.0f;
 
 	GameCameraDeviation = 0.0f;
@@ -155,8 +155,7 @@ void GameCameraUpdate(float Time)
 	if (auto sharedPlayerFighter = PlayerFighter.lock())
 		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + tmpNeedPos);
 
-	// обновляем точку под камерой (минимальную)
-	GamePoint += tmpNeedPos;
+	CameraCoveredDistance += tmpNeedPos;
 
 	GameCameraDeviationTime -= TimeDelta;
 	if (GameCameraDeviationTime < 0.0f)
@@ -202,6 +201,14 @@ float GameCameraGetDeviation()
 float GameCameraGetSpeed()
 {
 	return GameCameraSpeed;
+}
+
+/*
+ * Get camera covered distance.
+ */
+const sVECTOR3D &GetCameraCoveredDistance()
+{
+	return CameraCoveredDistance;
 }
 
 } // astromenace namespace

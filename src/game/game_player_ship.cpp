@@ -34,6 +34,7 @@
 #include "../ui/game/text.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
+#include "../game/camera.h"
 #include "../object3d/explosion/explosion.h"
 #include "../object3d/space_object/space_object.h"
 #include "../object3d/ground_object/ground_object.h"
@@ -628,8 +629,7 @@ void GamePlayerShip()
 							     0.0f,
 							     (46.0f-sharedPlayerFighter->Length/2.0f)*MoveFB};
 
-		// учет положение камеры
-		PlayerFighterEndLocation += GamePoint;
+		PlayerFighterEndLocation += GetCameraCoveredDistance();
 
 		// если есть двигатель
 		if (GameEngineSystem != 0) {

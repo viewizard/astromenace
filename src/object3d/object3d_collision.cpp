@@ -31,6 +31,7 @@
 #include "collision_detection.h"
 #include "../config/config.h"
 #include "../assets/audio.h"
+#include "../game/camera.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"
 #include "projectile/projectile.h"
@@ -59,7 +60,6 @@ extern int AsteroidsKillQuant;
 extern float AsteroidsKillBonus;
 
 extern int CurrentMission;
-float GameCameraGetSpeed();
 
 extern float ShildEnergyStatus;
 extern float ShildStartHitStatus;

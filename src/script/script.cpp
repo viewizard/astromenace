@@ -55,6 +55,7 @@ Z = 0 at the level start, and increased during level.
 #include "../ui/game/stopwatch.h"
 #include "../assets/audio.h"
 #include "../gfx/star_system.h"
+#include "../game/camera.h"
 #include "../object3d/object3d.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/ground_object/ground_object.h"
@@ -69,11 +70,9 @@ namespace astromenace {
 extern bool UndeadDebugMode;
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-extern sVECTOR3D GamePoint;
 extern sVECTOR3D GameCameraMovement;
 extern std::weak_ptr<cSpaceShip> PlayerFighter;
 // FIXME should be fixed, use 'include' instead
-float GameCameraGetSpeed();
 void SetGameMissionComplete();
 
 
@@ -109,11 +108,11 @@ static void SetLocation(cObject3D &Object, const sXMLEntry &xmlEntry,
 	sVECTOR3D PosWithLag(0.0f,0.0f,0.0f);
 	PosWithLag = GameCameraMovement ^ (-GameCameraGetSpeed() * TimeOpLag);
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posx", tmpPosition.x))
-		tmpPosition.x += GamePoint.x + PosWithLag.x;
+		tmpPosition.x += GetCameraCoveredDistance().x + PosWithLag.x;
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posy", tmpPosition.y))
-		tmpPosition.y += GamePoint.y + PosWithLag.y;
+		tmpPosition.y += GetCameraCoveredDistance().y + PosWithLag.y;
 	if (xmlDoc->fGetEntryAttribute(xmlEntry, "posz", tmpPosition.z))
-		tmpPosition.z += GamePoint.z + PosWithLag.z;
+		tmpPosition.z += GetCameraCoveredDistance().z + PosWithLag.z;
 
 	Object.SetLocation(tmpPosition);
 }
@@ -259,12 +258,12 @@ bool cMissionScript::Update(float Time)
 					sharedCreateAsteroid->SetLocation(sVECTOR3D{AsterXPos + AsterW * vw_fRand0(),
 										    AsterYPos * 2 + AsterH * vw_fRand(),
 										    AsterZPos + 20.0f} +
-									  GamePoint);
+									  GetCameraCoveredDistance());
 				else
 					sharedCreateAsteroid->SetLocation(sVECTOR3D{AsterXPos + AsterW * vw_fRand0(),
 										    AsterYPos * 2 + AsterH * vw_fRand(),
 										    AsterZPos} +
-									  GamePoint);
+									  GetCameraCoveredDistance());
 			}
 			NeedGenerInt--;
 		}
