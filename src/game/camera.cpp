@@ -132,20 +132,18 @@ void GameCameraSetExplosion(const sVECTOR3D &Location, float Power)
 	CameraNeedShake = CameraShakePower * vw_fRand0();
 }
 
-//-----------------------------------------------------------------------------
-// обновление камеры в игре, учитываем (полет, поворот и т.д.)
-//-----------------------------------------------------------------------------
-void GameCameraUpdate(float Time)
+/*
+ * Update camera.
+ */
+void CameraUpdate(float Time)
 {
 	float TimeDelta = Time - CameraLastUpdate;
 	CameraLastUpdate = Time;
 
 	sVECTOR3D tmpNeedPos = CameraMovementDirection ^ (CameraSpeed * TimeDelta);
 
-	// обновляем данные камеры (+ устанавливаем флаг, чтобы обновить фруструм)
 	vw_IncCameraLocation(tmpNeedPos);
 
-	// делаем действия над кораблем игрока, если он есть
 	if (auto sharedPlayerFighter = PlayerFighter.lock())
 		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + tmpNeedPos);
 

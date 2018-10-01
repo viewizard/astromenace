@@ -35,13 +35,13 @@ namespace viewizard {
 namespace astromenace {
 
 //
-void GameCameraUpdate(float Time);
-//
 void InitGameCamera();
 //
 void ResetGameCamera();
 //
 void GameCameraSetExplosion(const sVECTOR3D &Location, float Power);
+// Update camera.
+void CameraUpdate(float Time);
 // Get camera shake.
 float GetCameraShake();
 // Get camera speed.
