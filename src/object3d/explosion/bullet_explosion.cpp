@@ -31,7 +31,7 @@
 #include "../projectile/projectile.h"
 #include "../../config/config.h"
 #include "../../assets/audio.h"
-#include "../../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "../../game/camera.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

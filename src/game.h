@@ -55,22 +55,6 @@ void Loop_Proc();
 
 
 
-//------------------------------------------------------------------------------------
-// Camera.cpp, GameCamera.cpp, CameraMath.cpp
-//------------------------------------------------------------------------------------
-void GameCameraUpdate(float Time);
-void InitGameCamera();
-void ResetGameCamera();
-float GameCameraGetDeviation();
-float GameCameraGetSpeed();
-void GameCameraSetExplosion(const sVECTOR3D &Location, float Power);
-
-
-
-
-
-
-
 
 
 
