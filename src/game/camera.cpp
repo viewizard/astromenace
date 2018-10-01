@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 /*
 
 OpenGL use right-handed coordinate system. Scene axises orientation:
@@ -77,9 +75,9 @@ float CameraShakePower{0.0f};
 
 
 /*
- *
+ * Reset camera status.
  */
-void ResetGameCamera()
+void ResetCamera()
 {
 	CameraCoveredDistance(0.0f, 0.0f, 0.0f);
 	CameraLastUpdate = 0.0f;
@@ -92,12 +90,12 @@ void ResetGameCamera()
 	vw_SetCameraDeviation(sVECTOR3D{0.0f, 0.0f, 0.0f});
 }
 
-//-----------------------------------------------------------------------------
-// инициализация переменных камеры для игры
-//-----------------------------------------------------------------------------
-void InitGameCamera()
+/*
+ * Initialize camera.
+ */
+void InitCamera()
 {
-	ResetGameCamera();
+	ResetCamera();
 	CameraLastUpdate = vw_GetTimeThread(1);
 }
 

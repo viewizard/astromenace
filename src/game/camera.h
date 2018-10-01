@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO translate comments
-
 #ifndef GAME_CAMERA_H
 #define GAME_CAMERA_H
 
@@ -34,10 +32,10 @@
 namespace viewizard {
 namespace astromenace {
 
-//
-void InitGameCamera();
-//
-void ResetGameCamera();
+// Initialize camera.
+void InitCamera();
+// Reset camera status.
+void ResetCamera();
 // Setup camera shake.
 void SetupCameraShake(const sVECTOR3D &Location, float Power);
 // Update camera.

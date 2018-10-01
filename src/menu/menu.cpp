@@ -162,7 +162,7 @@ void InitMenu(eMenuStatus NewMenuStatus)
 
 	// since we use scripts with background animation in the same way as
 	// games levels do, we should reset game camera first
-	ResetGameCamera();
+	ResetCamera();
 
 	StarSystemInitByType(eDrawType::MENU); // should be before RunScript()
 
