@@ -27,7 +27,7 @@
 
 // TODO translate comments
 
-#include "../game.h"
+#include "../core/core.h"
 #include "../config/config.h"
 #include "../platform/platform.h"
 #include "../ui/font.h"
@@ -40,6 +40,7 @@
 #include "../object3d/ground_object/ground_object.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/projectile/projectile.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

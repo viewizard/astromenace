@@ -27,28 +27,27 @@
 
 // TODO translate comments
 
-#include "../game.h"
+// NOTE should be tested with in-game resolution changes
+
+#include "../core/core.h"
 #include "../config/config.h"
 #include "../assets/texture.h"
 #include "../object3d/space_ship/space_ship.h"
+#include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
 
-// работа с морганием вывода
+// FIXME should be fixed, don't allow global scope interaction for local variables
 extern float CurrentAlert2;
 extern float CurrentAlert3;
-
-extern std::weak_ptr<cSpaceShip> PlayerFighter;
-int RightDrawLevelPos = 1;
-int LeftDrawLevelPos = 1;
 
 
 //------------------------------------------------------------------------------------
 // Прорисовка левого слота
 //------------------------------------------------------------------------------------
-void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
+static void DrawGameWeaponLeftSlot(int WeaponNum, int &DrawLevelPos)
 {
 	auto sharedPlayerFighter = PlayerFighter.lock();
 	if (!sharedPlayerFighter)
@@ -231,22 +230,13 @@ void DrawGameWeaponLeftSlot(int WeaponNum, int DrawLevelPos)
 		}
 	}
 
-
-
-	// этот уровень уже занят, переходим к следующему для нового оружия
-	RightDrawLevelPos++;
+	DrawLevelPos++;
 }
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Прорисовка правого слота
 //------------------------------------------------------------------------------------
-void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
+static void DrawGameWeaponRightSlot(int WeaponNum, int &DrawLevelPos)
 {
 	auto sharedPlayerFighter = PlayerFighter.lock();
 	if (!sharedPlayerFighter)
@@ -430,32 +420,19 @@ void DrawGameWeaponRightSlot(int WeaponNum, int DrawLevelPos)
 		}
 	}
 
-	// этот уровень уже занят, переходим к следующему для нового оружия
-	LeftDrawLevelPos++;
+	DrawLevelPos++;
 }
-
-
-
-
-
-
-
-
-
 
 //------------------------------------------------------------------------------------
 // Прорисовка состояния всего оружия корабля игрока
 //------------------------------------------------------------------------------------
 void DrawGameWeaponSlots()
 {
-	// если корабля нет - нам тут делать нечего
 	if (PlayerFighter.expired())
 		return;
 
-	// сбрасываем в первоначальное состояние счетчики уровня
-	RightDrawLevelPos = 1;
-	LeftDrawLevelPos = 1;
-
+	int RightDrawLevelPos{1};
+	int LeftDrawLevelPos{1};
 
 	switch (GameConfig().Profile[CurrentProfile].ShipHull) {
 	case 1:
@@ -586,8 +563,6 @@ void DrawGameWeaponSlots()
 		std::cerr << __func__ << "(): " << "wrong Ship.\n";
 		break;
 	}
-
-
 }
 
 } // astromenace namespace
