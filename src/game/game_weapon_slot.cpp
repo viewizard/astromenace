@@ -47,16 +47,9 @@ extern float CurrentAlert3;
 //------------------------------------------------------------------------------------
 // Прорисовка левого слота
 //------------------------------------------------------------------------------------
-static void DrawGameWeaponLeftSlot(int WeaponNum, int &DrawLevelPos)
+static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFighter,
+				   std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
-	auto sharedPlayerFighter = PlayerFighter.lock();
-	if (!sharedPlayerFighter)
-		return;
-
-	auto sharedWeapon = sharedPlayerFighter->WeaponSlots[WeaponNum].Weapon.lock();
-	if (!sharedWeapon)
-		return;
-
 	sRECT SrcRect, DstRect;
 
 	int Xpos = 0;
@@ -236,16 +229,9 @@ static void DrawGameWeaponLeftSlot(int WeaponNum, int &DrawLevelPos)
 //------------------------------------------------------------------------------------
 // Прорисовка правого слота
 //------------------------------------------------------------------------------------
-static void DrawGameWeaponRightSlot(int WeaponNum, int &DrawLevelPos)
+static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFighter,
+				    std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
-	auto sharedPlayerFighter = PlayerFighter.lock();
-	if (!sharedPlayerFighter)
-		return;
-
-	auto sharedWeapon = sharedPlayerFighter->WeaponSlots[WeaponNum].Weapon.lock();
-	if (!sharedWeapon)
-		return;
-
 	sRECT SrcRect, DstRect;
 
 	int Xpos = GameConfig().InternalWidth - 152;
@@ -428,140 +414,31 @@ static void DrawGameWeaponRightSlot(int WeaponNum, int &DrawLevelPos)
 //------------------------------------------------------------------------------------
 void DrawGameWeaponSlots()
 {
-	if (PlayerFighter.expired())
+	auto sharedPlayerFighter = PlayerFighter.lock();
+	if (!sharedPlayerFighter)
 		return;
+
+	// FIXME move this calculation to the "weapon slots" init, should be called one time only
+	float tmpInvMatrix[9];
+	memcpy(tmpInvMatrix,
+	       sharedPlayerFighter->CurrentRotationMat,
+	       9 * sizeof(sharedPlayerFighter->CurrentRotationMat[0]));
+	vw_Matrix33InverseRotate(tmpInvMatrix);
 
 	int RightDrawLevelPos{1};
 	int LeftDrawLevelPos{1};
+	for (auto &tmpWeaponSlot : sharedPlayerFighter->WeaponSlots) {
+		if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+			// revert back rotation + ship shaking effect, since we need initial weapon location
+			// FIXME move this calculation to the "weapon slots" init, should be called one time only
+			sVECTOR3D tmpWeaponLocation = sharedWeapon->Location - sharedPlayerFighter->Location;
+			vw_Matrix33CalcPoint(tmpWeaponLocation, tmpInvMatrix);
 
-	switch (GameConfig().Profile[CurrentProfile].ShipHull) {
-	case 1:
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(4, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 2:
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 3:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(1, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(2, LeftDrawLevelPos);
-		break;
-	case 4:
-		DrawGameWeaponLeftSlot(4, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 5:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 6:
-		DrawGameWeaponLeftSlot(4, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 7:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(1, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(2, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(3, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(4, LeftDrawLevelPos);
-		break;
-	case 8:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 9:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 10:
-		DrawGameWeaponLeftSlot(4, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 11:
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 12:
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 13:
-		DrawGameWeaponLeftSlot(3, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(4, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(1, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(2, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		break;
-	case 14:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(4, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		break;
-	case 15:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(1, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(2, LeftDrawLevelPos);
-		break;
-	case 16:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(1, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(2, LeftDrawLevelPos);
-		break;
-	case 17:
-		DrawGameWeaponLeftSlot(4, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		break;
-	case 18:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		break;
-	case 19:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(1, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(2, LeftDrawLevelPos);
-		break;
-	case 20:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(3, LeftDrawLevelPos);
-		break;
-	case 21:
-		DrawGameWeaponLeftSlot(2, RightDrawLevelPos);
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		DrawGameWeaponRightSlot(1, LeftDrawLevelPos);
-		break;
-	case 22:
-		DrawGameWeaponLeftSlot(0, RightDrawLevelPos);
-		break;
-	default:
-		std::cerr << __func__ << "(): " << "wrong Ship.\n";
-		break;
+			if (tmpWeaponLocation.x > -0.01f) // denote a small quantity, which will be taken to zero
+				DrawGameWeaponLeftSlot(sharedPlayerFighter, sharedWeapon, LeftDrawLevelPos);
+			else
+				DrawGameWeaponRightSlot(sharedPlayerFighter, sharedWeapon, RightDrawLevelPos);
+		}
 	}
 }
 
