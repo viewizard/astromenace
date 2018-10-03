@@ -437,10 +437,10 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 	}
 
 	for (unsigned int i = 0; i < Engines.size(); i++) {
-		if (auto sharedEngine = Engines[i].lock()) {
-			vw_Matrix33CalcPoint(EnginesLocation[i], OldInvRotationMat);
-			vw_Matrix33CalcPoint(EnginesLocation[i], CurrentRotationMat);
+		vw_Matrix33CalcPoint(EnginesLocation[i], OldInvRotationMat);
+		vw_Matrix33CalcPoint(EnginesLocation[i], CurrentRotationMat);
 
+		if (auto sharedEngine = Engines[i].lock()) {
 			if (sharedEngine->SpeedOnCreation == -1.0f) {
 				sharedEngine->MoveSystem(EnginesLocation[i] + Location);
 				sharedEngine->SetStartLocation(EnginesLocation[i] + Location);
@@ -453,10 +453,10 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 	}
 	if (!EnginesLeft.empty()) {
 		for (unsigned int i = 0; i < EnginesLeft.size(); i++) {
-			if (auto sharedEngineLeft = EnginesLeft[i].lock()) {
-				vw_Matrix33CalcPoint(EnginesLeftLocation[i], OldInvRotationMat);
-				vw_Matrix33CalcPoint(EnginesLeftLocation[i], CurrentRotationMat);
+			vw_Matrix33CalcPoint(EnginesLeftLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(EnginesLeftLocation[i], CurrentRotationMat);
 
+			if (auto sharedEngineLeft = EnginesLeft[i].lock()) {
 				sharedEngineLeft->MoveSystemLocation(EnginesLeftLocation[i] + Location);
 				sharedEngineLeft->SetStartLocation(EnginesLeftLocation[i] + Location);
 				sharedEngineLeft->RotateSystemByAngle(Rotation);
@@ -465,10 +465,10 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 	}
 	if (!EnginesRight.empty()) {
 		for (unsigned int i = 0; i < EnginesRight.size(); i++) {
-			if (auto sharedEngineRight = EnginesRight[i].lock()) {
-				vw_Matrix33CalcPoint(EnginesRightLocation[i], OldInvRotationMat);
-				vw_Matrix33CalcPoint(EnginesRightLocation[i], CurrentRotationMat);
+			vw_Matrix33CalcPoint(EnginesRightLocation[i], OldInvRotationMat);
+			vw_Matrix33CalcPoint(EnginesRightLocation[i], CurrentRotationMat);
 
+			if (auto sharedEngineRight = EnginesRight[i].lock()) {
 				sharedEngineRight->MoveSystemLocation(EnginesRightLocation[i] + Location);
 				sharedEngineRight->SetStartLocation(EnginesRightLocation[i] + Location);
 				sharedEngineRight->RotateSystemByAngle(Rotation);
