@@ -1268,6 +1268,21 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
 		EnginesRightLocation[0] = sVECTOR3D{-1.9f, -0.3f, 2.6f};
 		break;
 	}
+
+	// make sure, that we have all weapon slots properly sorted, since for player's ship we
+	// need this in weaponry menu and HUD
+	auto comparison = [] (const sShipWeaponSlot &A, const sShipWeaponSlot &B) {
+		if (A.Location.z == B.Location.z) {
+			// for pair, we should have fixed order of weapon slots by X
+			if (std::fabs(A.Location.x) == std::fabs(B.Location.x))
+				return A.Location.x > B.Location.x;
+			// closest to center by X weapon slots should be first
+			return std::fabs(A.Location.x) < std::fabs(B.Location.x);
+		}
+
+		return A.Location.z > B.Location.z;
+	};
+	std::sort(WeaponSlots.begin(), WeaponSlots.end(), comparison);
 }
 
 } // astromenace namespace
