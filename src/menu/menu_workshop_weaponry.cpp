@@ -966,19 +966,21 @@ void DrawShipWeaponsInSlots()
 		return;
 	}
 
+	// FIXME this code should be revised into some kind of algorithm, instead of hardcoded "switch" structure
+
 	switch (GameConfig().Profile[CurrentProfile].ShipHull) {
 	case 1:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+256-64, 330);
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 330);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 2:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 130);
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 3:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
@@ -986,22 +988,22 @@ void DrawShipWeaponsInSlots()
 		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 4:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 5:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 330);
 		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 330);
 		break;
 	case 6:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 7:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
@@ -1019,35 +1021,35 @@ void DrawShipWeaponsInSlots()
 		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 330);
 		break;
 	case 10:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+256-64, 130);
-		break;
-	case 11:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 130);
-		break;
-	case 12:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 130);
-		break;
-	case 13:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 530);
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
 		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
 		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 130);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
+		break;
+	case 11:
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
+		break;
+	case 12:
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 530);
+		break;
+	case 13:
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 330);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 14:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
 		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+256-64, 330);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 330);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 15:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
@@ -1060,11 +1062,11 @@ void DrawShipWeaponsInSlots()
 		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 17:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
+		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 18:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
@@ -1084,15 +1086,14 @@ void DrawShipWeaponsInSlots()
 		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 21:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
+		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
+		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
 		break;
 	case 22:
 		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 330);
 		break;
 	}
-
 }
 
 
