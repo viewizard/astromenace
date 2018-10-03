@@ -428,13 +428,13 @@ void DrawGameWeaponSlots()
 	int RightDrawLevelPos{1};
 	int LeftDrawLevelPos{1};
 	for (auto &tmpWeaponSlot : sharedPlayerFighter->WeaponSlots) {
-		if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-			// revert back rotation + ship shaking effect, since we need initial weapon location
-			// FIXME move this calculation to the "weapon slots" init, should be called one time only
-			sVECTOR3D tmpWeaponLocation = sharedWeapon->Location - sharedPlayerFighter->Location;
-			vw_Matrix33CalcPoint(tmpWeaponLocation, tmpInvMatrix);
+		// revert back rotation + ship shaking effect, since we need initial weapon slot location
+		// FIXME move this calculation to the "weapon slots" init, should be called one time only
+		sVECTOR3D tmpInitialLocation = tmpWeaponSlot.Location;
+		vw_Matrix33CalcPoint(tmpInitialLocation, tmpInvMatrix);
 
-			if (tmpWeaponLocation.x > -0.01f) // denote a small quantity, which will be taken to zero
+		if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
+			if (tmpInitialLocation.x > -0.01f) // denote a small quantity, which will be taken to zero
 				DrawGameWeaponLeftSlot(sharedPlayerFighter, sharedWeapon, LeftDrawLevelPos);
 			else
 				DrawGameWeaponRightSlot(sharedPlayerFighter, sharedWeapon, RightDrawLevelPos);
