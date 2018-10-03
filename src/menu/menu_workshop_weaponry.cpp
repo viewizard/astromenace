@@ -960,21 +960,21 @@ void ShipSlotSetupWeapon(int SlotNum)
 /*
  * Draw weapon slots.
  */
-static void DrawWeaponSlots(std::weak_ptr<cSpaceShip> &Fighter)
+static void DrawWeaponSlots(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
-	auto sharedFighter = Fighter.lock();
-	if (!sharedFighter ||
-	    sharedFighter->WeaponSlots.empty())
+	auto sharedSpaceShip = SpaceShip.lock();
+	if (!sharedSpaceShip ||
+	    sharedSpaceShip->WeaponSlots.empty())
 		return;
 
 	// FIXME move this calculation to the "weapon slots" init, should be called one time only
 	float tmpInvMatrix[9];
 	memcpy(tmpInvMatrix,
-	       sharedFighter->CurrentRotationMat,
-	       9 * sizeof(sharedFighter->CurrentRotationMat[0]));
+	       sharedSpaceShip->CurrentRotationMat,
+	       9 * sizeof(sharedSpaceShip->CurrentRotationMat[0]));
 	vw_Matrix33InverseRotate(tmpInvMatrix);
 
-	sVECTOR3D tmpInitialLocation = sharedFighter->WeaponSlots[0].Location;
+	sVECTOR3D tmpInitialLocation = sharedSpaceShip->WeaponSlots[0].Location;
 	vw_Matrix33CalcPoint(tmpInitialLocation, tmpInvMatrix);
 	float tmpLastX{tmpInitialLocation.x};
 	float tmpLastZ{tmpInitialLocation.z};
@@ -984,10 +984,10 @@ static void DrawWeaponSlots(std::weak_ptr<cSpaceShip> &Fighter)
 	// note, we already have properly sorted weapon slots array here, so, all we need:
 	// 1) check for Z
 	// 2) in case Z is the same, check for X (since slots may have same Z, but different abx(x))
-	for (unsigned i = 1; i < sharedFighter->WeaponSlots.size(); i++) {
+	for (unsigned i = 1; i < sharedSpaceShip->WeaponSlots.size(); i++) {
 		// revert back rotation + ship shaking effect, since we need initial weapon slot location
 		// FIXME move this calculation to the "weapon slots" init, should be called one time only
-		tmpInitialLocation = sharedFighter->WeaponSlots[i].Location;
+		tmpInitialLocation = sharedSpaceShip->WeaponSlots[i].Location;
 		vw_Matrix33CalcPoint(tmpInitialLocation, tmpInvMatrix);
 
 		if (std::fabs(tmpInitialLocation.z - tmpLastZ) > Epsilon) {
