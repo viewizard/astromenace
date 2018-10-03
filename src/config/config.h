@@ -134,15 +134,15 @@ struct sPilotProfile {
 		}
 
 		// default weapons for default ship
-		Weapon[2] = 1;
-		WeaponAmmo[2] = 3000;
-		WeaponControl[2] = 1;
-		Weapon[3] = 1;
-		WeaponAmmo[3] = 3000;
-		WeaponControl[3] = 1;
-		Weapon[4] = 16;
-		WeaponAmmo[4] = 200;
-		WeaponControl[4] = 2;
+		Weapon[0] = 1;
+		WeaponAmmo[0] = 3000;
+		WeaponControl[0] = 1;
+		Weapon[1] = 1;
+		WeaponAmmo[1] = 3000;
+		WeaponControl[1] = 1;
+		Weapon[2] = 16;
+		WeaponAmmo[2] = 200;
+		WeaponControl[2] = 2;
 
 		for (unsigned i = 0; i < config::MAX_MISSIONS; i++) {
 			ByMissionExperience[i] = 0;
