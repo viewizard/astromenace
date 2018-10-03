@@ -66,6 +66,10 @@ struct sShipWeaponSlot {
 		Weapon{_Weapon},
 		Location{_Location}
 	{}
+	sShipWeaponSlot(int _Type, const sVECTOR3D &_Location) :
+		Location{_Location},
+		Type{_Type}
+	{}
 	~sShipWeaponSlot()
 	{
 		ReleaseWeaponLazy(Weapon);
