@@ -47,7 +47,7 @@ extern float CurrentAlert3;
 //------------------------------------------------------------------------------------
 // Прорисовка левого слота
 //------------------------------------------------------------------------------------
-static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFighter,
+static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 				   std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
 	sRECT SrcRect, DstRect;
@@ -111,7 +111,7 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFigh
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(56.0f - (56.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -177,7 +177,7 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFigh
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -213,7 +213,7 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFigh
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -229,7 +229,7 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFigh
 //------------------------------------------------------------------------------------
 // Прорисовка правого слота
 //------------------------------------------------------------------------------------
-static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFighter,
+static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 				    std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
 	sRECT SrcRect, DstRect;
@@ -292,7 +292,7 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFig
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(56.0f - (56.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 56;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -357,7 +357,7 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFig
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -396,7 +396,7 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFig
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedPlayerFighter->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
+			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
 			// особый случай, рой ракет
 			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
 			if (ReloadShow<0) ReloadShow = 0;
@@ -412,22 +412,22 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedPlayerFig
 //------------------------------------------------------------------------------------
 // Прорисовка состояния всего оружия корабля игрока
 //------------------------------------------------------------------------------------
-void DrawGameWeaponSlots()
+void DrawGameWeaponSlots(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
-	auto sharedPlayerFighter = PlayerFighter.lock();
-	if (!sharedPlayerFighter)
+	auto sharedSpaceShip = SpaceShip.lock();
+	if (!sharedSpaceShip)
 		return;
 
 	// FIXME move this calculation to the "weapon slots" init, should be called one time only
 	float tmpInvMatrix[9];
 	memcpy(tmpInvMatrix,
-	       sharedPlayerFighter->CurrentRotationMat,
-	       9 * sizeof(sharedPlayerFighter->CurrentRotationMat[0]));
+	       sharedSpaceShip->CurrentRotationMat,
+	       9 * sizeof(sharedSpaceShip->CurrentRotationMat[0]));
 	vw_Matrix33InverseRotate(tmpInvMatrix);
 
 	int RightDrawLevelPos{1};
 	int LeftDrawLevelPos{1};
-	for (auto &tmpWeaponSlot : sharedPlayerFighter->WeaponSlots) {
+	for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 		// revert back rotation + ship shaking effect, since we need initial weapon slot location
 		// FIXME move this calculation to the "weapon slots" init, should be called one time only
 		sVECTOR3D tmpInitialLocation = tmpWeaponSlot.Location;
@@ -435,9 +435,9 @@ void DrawGameWeaponSlots()
 
 		if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 			if (tmpInitialLocation.x > -0.01f) // denote a small quantity, which will be taken to zero
-				DrawGameWeaponLeftSlot(sharedPlayerFighter, sharedWeapon, LeftDrawLevelPos);
+				DrawGameWeaponLeftSlot(sharedSpaceShip, sharedWeapon, LeftDrawLevelPos);
 			else
-				DrawGameWeaponRightSlot(sharedPlayerFighter, sharedWeapon, RightDrawLevelPos);
+				DrawGameWeaponRightSlot(sharedSpaceShip, sharedWeapon, RightDrawLevelPos);
 		}
 	}
 }

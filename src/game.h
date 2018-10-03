@@ -369,7 +369,7 @@ void DrawDialogBox();
 //------------------------------------------------------------------------------------
 // Game_WeaponSlot.cpp
 //------------------------------------------------------------------------------------
-void DrawGameWeaponSlots();
+void DrawGameWeaponSlots(std::weak_ptr<cSpaceShip> &SpaceShip);
 
 
 
