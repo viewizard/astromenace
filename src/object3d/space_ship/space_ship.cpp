@@ -402,10 +402,10 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
-			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-				vw_Matrix33CalcPoint(tmpWeaponSlot.Location, OldInvRotationMat);
-				vw_Matrix33CalcPoint(tmpWeaponSlot.Location, CurrentRotationMat);
+			vw_Matrix33CalcPoint(tmpWeaponSlot.Location, OldInvRotationMat);
+			vw_Matrix33CalcPoint(tmpWeaponSlot.Location, CurrentRotationMat);
 
+			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 				sharedWeapon->SetRotation(NewRotation);
 				sharedWeapon->SetLocation(Location + tmpWeaponSlot.Location);
 			}
@@ -414,10 +414,10 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 
 	if (!BossWeaponSlots.empty()) {
 		for (auto &tmpBossWeaponSlot : BossWeaponSlots) {
-			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
-				vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, OldInvRotationMat);
-				vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, CurrentRotationMat);
+			vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, OldInvRotationMat);
+			vw_Matrix33CalcPoint(tmpBossWeaponSlot.Location, CurrentRotationMat);
 
+			if (auto sharedWeapon = tmpBossWeaponSlot.Weapon.lock()) {
 				sharedWeapon->SetRotation(NewRotation);
 				sharedWeapon->SetLocation(Location + tmpBossWeaponSlot.Location);
 			}
@@ -426,10 +426,10 @@ void cSpaceShip::SetRotation(const sVECTOR3D &NewRotation)
 
 	if (!FlareWeaponSlots.empty()) {
 		for (auto &tmpFlareWeaponSlot : FlareWeaponSlots) {
-			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock()) {
-				vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, OldInvRotationMat);
-				vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, CurrentRotationMat);
+			vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, OldInvRotationMat);
+			vw_Matrix33CalcPoint(tmpFlareWeaponSlot.Location, CurrentRotationMat);
 
+			if (auto sharedWeapon = tmpFlareWeaponSlot.Weapon.lock()) {
 				sharedWeapon->SetRotation(NewRotation);
 				sharedWeapon->SetLocation(Location + tmpFlareWeaponSlot.Location);
 			}

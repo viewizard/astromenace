@@ -234,12 +234,11 @@ void cGroundObject::SetRotation(const sVECTOR3D &NewRotation)
 
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
+			sVECTOR3D WeaponBoundTMP{tmpWeaponSlot.Bound};
+			vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
+			tmpWeaponSlot.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
+
 			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-				sVECTOR3D WeaponBoundTMP{tmpWeaponSlot.Bound};
-				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
-
-				tmpWeaponSlot.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
-
 				if (TargetHorizChunkNums.empty() &&
 				    TargetVertChunkNums.empty() &&
 				    !DoNotCalculateRotation)
@@ -409,12 +408,11 @@ bool cGroundObject::Update(float Time)
 
 	if (!WeaponSlots.empty()) {
 		for (auto &tmpWeaponSlot : WeaponSlots) {
+			sVECTOR3D WeaponBoundTMP = tmpWeaponSlot.Bound;
+			vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
+			tmpWeaponSlot.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
+
 			if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
-				sVECTOR3D WeaponBoundTMP = tmpWeaponSlot.Bound;
-				vw_RotatePoint(WeaponBoundTMP, RotationWeapon);
-
-				tmpWeaponSlot.Location = BaseBoundTMP + MiddleBoundTMP + WeaponBoundTMP;
-
 				if (TargetHorizChunkNums.empty() &&
 				    TargetVertChunkNums.empty() &&
 				    !DoNotCalculateRotation)
