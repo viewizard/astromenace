@@ -37,11 +37,11 @@
 	<TimeLine>
 
 		<!--2 ally cover ships /-->
-		<EarthFighter type="1" speed="13" weapon3="1" weapon4="1" posx="40" posy="-10" posz="-40">
+		<EarthFighter type="1" speed="13" weapon1="1" weapon2="1" posx="40" posy="-10" posz="-40">
 			<TimeSheet time="8" speed="13"/>
 			<TimeSheet time="-1" aimode="1001"/>
 		</EarthFighter>
-		<EarthFighter type="1" speed="15" weapon3="1" weapon4="1" posx="-40" posy="-10" posz="-30">
+		<EarthFighter type="1" speed="15" weapon1="1" weapon2="1" posx="-40" posy="-10" posz="-30">
 			<TimeSheet time="7.7" speed="15"/>
 			<TimeSheet time="-1" aimode="1001"/>
 		</EarthFighter>
