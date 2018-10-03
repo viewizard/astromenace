@@ -311,53 +311,13 @@ const char *GetWeaponName(int Num)
 
 
 
-const char *GetWeaponIconName(int Num)
+std::string GetWeaponIconName(int Num)
 {
-	switch (Num) {
-	case 1:
-		return "menu/weapon1_icon.tga";
-	case 2:
-		return "menu/weapon2_icon.tga";
-	case 3:
-		return "menu/weapon3_icon.tga";
-	case 4:
-		return "menu/weapon4_icon.tga";
-	case 5:
-		return "menu/weapon5_icon.tga";
-	case 6:
-		return "menu/weapon6_icon.tga";
-	case 7:
-		return "menu/weapon7_icon.tga";
-	case 8:
-		return "menu/weapon8_icon.tga";
-	case 9:
-		return "menu/weapon9_icon.tga";
-	case 10:
-		return "menu/weapon10_icon.tga";
-	case 11:
-		return "menu/weapon11_icon.tga";
-	case 12:
-		return "menu/weapon12_icon.tga";
-	case 13:
-		return "menu/weapon13_icon.tga";
-	case 14:
-		return "menu/weapon14_icon.tga";
-	case 15:
-		return "menu/weapon15_icon.tga";
-	case 16:
-		return "menu/weapon16_icon.tga";
-	case 17:
-		return "menu/weapon17_icon.tga";
-	case 18:
-		return "menu/weapon18_icon.tga";
-	case 19:
-		return "menu/weapon19_icon.tga";
-
-	default:
+	if ((Num < 1) ||
+	    (Num > 19))
 		std::cerr << __func__ << "(): " << "wrong Num.\n";
-		break;
-	}
-	return nullptr;
+
+	return "menu/weapon" + std::to_string(Num) + "_icon.tga";
 }
 
 

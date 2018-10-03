@@ -299,7 +299,7 @@ extern unsigned int VoiceAmmoOut;
 void WorkshopMenu();
 void WorkshopCreate();
 void WorkshopDestroyData();
-const char *GetWeaponIconName(int Num);
+std::string GetWeaponIconName(int Num);
 
 
 
