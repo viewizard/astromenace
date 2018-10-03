@@ -957,142 +957,71 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 
 
-
-void DrawShipWeaponsInSlots()
+/*
+ * Draw weapon slots.
+ */
+static void DrawWeaponSlots(std::weak_ptr<cSpaceShip> &Fighter)
 {
-	// если нужно - выводим настройку нужного оружия
-	if (WeaponSetupSlot != -1) {
-		ShipSlotSetupWeapon(WeaponSetupSlot);
+	auto sharedFighter = Fighter.lock();
+	if (!sharedFighter ||
+	    sharedFighter->WeaponSlots.empty())
 		return;
+
+	// FIXME move this calculation to the "weapon slots" init, should be called one time only
+	float tmpInvMatrix[9];
+	memcpy(tmpInvMatrix,
+	       sharedFighter->CurrentRotationMat,
+	       9 * sizeof(sharedFighter->CurrentRotationMat[0]));
+	vw_Matrix33InverseRotate(tmpInvMatrix);
+
+	sVECTOR3D tmpInitialLocation = sharedFighter->WeaponSlots[0].Location;
+	vw_Matrix33CalcPoint(tmpInitialLocation, tmpInvMatrix);
+	float tmpLastX{tmpInitialLocation.x};
+	float tmpLastZ{tmpInitialLocation.z};
+	std::vector<std::vector<int>> Lines{{0}}; // lines with weapon slots indexes
+	constexpr float Epsilon{0.01f}; // denote a small quantity, which will be taken to zero
+
+	// note, we already have properly sorted weapon slots array here, so, all we need:
+	// 1) check for Z
+	// 2) in case Z is the same, check for X (since slots may have same Z, but different abx(x))
+	for (unsigned i = 1; i < sharedFighter->WeaponSlots.size(); i++) {
+		// revert back rotation + ship shaking effect, since we need initial weapon slot location
+		// FIXME move this calculation to the "weapon slots" init, should be called one time only
+		tmpInitialLocation = sharedFighter->WeaponSlots[i].Location;
+		vw_Matrix33CalcPoint(tmpInitialLocation, tmpInvMatrix);
+
+		if (std::fabs(tmpInitialLocation.z - tmpLastZ) > Epsilon) {
+			tmpLastX = tmpInitialLocation.x;
+			tmpLastZ = tmpInitialLocation.z;
+			Lines.emplace_back();
+		// in case of weapon slots pair, that located symmetrically, (tmpInitialLocation.x + tmpLastX) should be zero
+		} else if (std::fabs(tmpInitialLocation.x + tmpLastX) > Epsilon) {
+			tmpLastX = tmpInitialLocation.x;
+			tmpLastZ = tmpInitialLocation.z;
+			Lines.emplace_back();
+		}
+
+		Lines.back().emplace_back(i);
 	}
 
-	// FIXME this code should be revised into some kind of algorithm, instead of hardcoded "switch" structure
+	// FIXME hardcoded up to 3 lines only, max 2 slots per line
 
-	switch (GameConfig().Profile[CurrentProfile].ShipHull) {
-	case 1:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 2:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 3:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 4:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 5:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 330);
-		break;
-	case 6:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 7:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 8:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 330);
-		break;
-	case 9:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 330);
-		break;
-	case 10:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 11:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 12:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 530);
-		break;
-	case 13:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 14:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+256-64, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 15:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 16:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 17:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 330);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 330);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(4, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 18:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 19:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 20:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+50, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+512-128-50, 130);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(3, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 21:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 130);
-		ShipSlotWeapon(1, GameConfig().InternalWidth/2+50, 530);
-		ShipSlotWeapon(2, GameConfig().InternalWidth/2+512-128-50, 530);
-		break;
-	case 22:
-		ShipSlotWeapon(0, GameConfig().InternalWidth/2+256-64, 330);
-		break;
+	int tmpStartY{130};
+	int tmpOffsetY{200};
+	if (Lines.size() == 1)
+		tmpStartY = 330;
+	else if (Lines.size() == 2)
+		tmpOffsetY = 400;
+
+	for (unsigned i = 0; i < Lines.size(); i++) {
+		int tmpStartX{static_cast<int>(GameConfig().InternalWidth / 2) + 50};
+		int tmpOffsetX{512 - 128 - 100};
+		if (Lines[i].size() == 1)
+			tmpStartX = GameConfig().InternalWidth / 2 + 256 - 64;
+
+		for (unsigned j = 0; j < Lines[i].size(); j++) {
+			ShipSlotWeapon(Lines[i][j], tmpStartX + tmpOffsetX * j, tmpStartY + tmpOffsetY * i);
+		}
 	}
 }
 
@@ -1309,7 +1238,10 @@ void Workshop_Weaponry()
 	vw_DrawTextUTF32(GameConfig().InternalWidth/2-445, 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Stock"));
 	ResetFontSize();
 
-	DrawShipWeaponsInSlots();
+	if (WeaponSetupSlot == -1)
+		DrawWeaponSlots(WorkshopFighterGame);
+	else
+		ShipSlotSetupWeapon(WeaponSetupSlot);
 
 
 	// кнопка "перезарядить все" оружие
