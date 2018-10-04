@@ -62,6 +62,23 @@ static int WeaponAmmoProgress(std::shared_ptr<cWeapon> &sharedWeapon, int BarHei
 }
 
 /*
+ * Calculate weapon reload progress.
+ */
+static int WeaponReloadProgress(std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate, int BarHeight)
+{
+	int Reload = BarHeight -
+		     static_cast<int>((BarHeight * (TimeLastUpdate - sharedWeapon->LastFireTime)) / sharedWeapon->NextFireTime);
+
+	if ((sharedWeapon->InternalType == 17) && // swarm
+	    (sharedWeapon->SwarmNum) > 0)
+		Reload = 64;
+	else if (Reload < 0)
+		Reload = 0;
+
+	return Reload;
+}
+
+/*
  * Draw slim weapon slot.
  */
 static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
@@ -170,10 +187,8 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
-			// особый случай, рой ракет
-			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 56;
-			if (ReloadShow<0) ReloadShow = 0;
+			int ReloadShow = WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, 56);
+
 			SrcRect(0,ReloadShow,8,56);
 			DstRect(Xpos+12,Ypos+16+ReloadShow,Xpos+12+8,Ypos+56+16);
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_energy.tga"), true, 1.0f);
@@ -234,26 +249,17 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
-			// особый случай, рой ракет
-			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
-			if (ReloadShow<0) ReloadShow = 0;
+			int ReloadShow = WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight);
+
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
 		}
 	}
 	if (GameConfig().GameWeaponInfoType == 3) {
-		int ReloadShow = (int)(64.0f - (64.0f * (sharedSpaceShip->TimeLastUpdate - sharedWeapon->LastFireTime)) / sharedWeapon->NextFireTime);
-		if ((sharedWeapon->InternalType == 17) && // swarm
-		    (sharedWeapon->SwarmNum) > 0)
-			ReloadShow = 64;
-		else if (ReloadShow < 0)
-			ReloadShow = 0;
-
 		DrawSlimWeaponSlot(Xpos, Ypos, 0, 0,
 				   WeaponAmmoProgress(sharedWeapon, ProgressBarHeight),
-				   ReloadShow,
+				   WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight),
 				   (sharedWeapon->ArmorCurrentStatus <= 0.0f));
 	}
 
@@ -324,10 +330,8 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(56.0f - (56.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
-			// особый случай, рой ракет
-			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 56;
-			if (ReloadShow<0) ReloadShow = 0;
+			int ReloadShow = WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, 56);
+
 			SrcRect(0,ReloadShow,8,56);
 			DstRect(Xpos+144,Ypos+16+ReloadShow,Xpos+144+8,Ypos+56+16);
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_energy.tga"), true, 1.0f);
@@ -387,10 +391,8 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
-			// особый случай, рой ракет
-			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
-			if (ReloadShow<0) ReloadShow = 0;
+			int ReloadShow = WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight);
+
 			SrcRect(0,ReloadShow,8,64);
 			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
@@ -399,16 +401,9 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 	if (GameConfig().GameWeaponInfoType == 3) {
 		Xpos = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
 
-		int ReloadShow = (int)(64.0f - (64.0f * (sharedSpaceShip->TimeLastUpdate - sharedWeapon->LastFireTime)) / sharedWeapon->NextFireTime);
-		if ((sharedWeapon->InternalType == 17) && // swarm
-		    (sharedWeapon->SwarmNum) > 0)
-			ReloadShow = 64;
-		else if (ReloadShow < 0)
-			ReloadShow = 0;
-
 		DrawSlimWeaponSlot(Xpos, Ypos, ProgressBarWidth + SlimSeparator, -(ProgressBarWidth + SlimSeparator),
 				   WeaponAmmoProgress(sharedWeapon, ProgressBarHeight),
-				   ReloadShow,
+				   WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight),
 				   (sharedWeapon->ArmorCurrentStatus <= 0.0f));
 	}
 
