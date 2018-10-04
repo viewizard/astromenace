@@ -55,6 +55,14 @@ extern float CurrentAlert3;
 
 /*
  * Calculate weapon ammo progress.
+ *            -  |---|  -
+ *            |  |   |  |
+ *            |  |   |  |- should be calculated by this function
+ *            |  |   |  |
+ * BarHeight -|  |---|  -
+ *            |  |---|
+ *            |  |---|
+ *            -  |---|
  */
 static int WeaponAmmoProgress(std::shared_ptr<cWeapon> &sharedWeapon, int BarHeight)
 {
@@ -63,6 +71,14 @@ static int WeaponAmmoProgress(std::shared_ptr<cWeapon> &sharedWeapon, int BarHei
 
 /*
  * Calculate weapon reload progress.
+ *            -  |---|  -
+ *            |  |   |  |
+ *            |  |   |  |- should be calculated by this function
+ *            |  |   |  |
+ * BarHeight -|  |---|  -
+ *            |  |---|
+ *            |  |---|
+ *            -  |---|
  */
 static int WeaponReloadProgress(std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate, int BarHeight)
 {
