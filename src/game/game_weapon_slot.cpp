@@ -43,13 +43,13 @@ namespace {
 
 constexpr int ProgressBarWidth{8};
 constexpr int ProgressBarHeight{64};
+
 constexpr int SlimBorder{2};
 constexpr int SlimSeparator{2};
 
 } // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-extern float CurrentAlert2;
 extern float CurrentAlert3;
 
 
@@ -108,15 +108,15 @@ static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 	GLtexture tmpBlackPoint = GetPreloadedTextureAsset("menu/blackpoint.tga");
 	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.2f);
 
-	DstRect(X + SlimBorder,
+	DstRect(X + SlimBorder + AmmoOffsetX,
 		Y + SlimBorder,
-		X + SlimBorder + ProgressBarWidth,
+		X + SlimBorder + AmmoOffsetX + ProgressBarWidth,
 		Y + SlimBorder + ProgressBarHeight);
 	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
 
-	DstRect(X + ProgressBarWidth + SlimSeparator + SlimBorder,
+	DstRect(X + SlimBorder + ReloadOffsetX,
 		Y + SlimBorder,
-		X + ProgressBarWidth + SlimSeparator + SlimBorder + ProgressBarWidth,
+		X + SlimBorder + ReloadOffsetX + ProgressBarWidth,
 		Y + SlimBorder + ProgressBarHeight);
 	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
 
@@ -131,9 +131,9 @@ static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
 	SrcRect(0, ReloadProgressBar, ProgressBarWidth, ProgressBarHeight);
-	DstRect(X + ProgressBarWidth + SlimSeparator + SlimBorder + ReloadOffsetX,
+	DstRect(X + SlimBorder + ReloadOffsetX,
 		Y + SlimBorder + ReloadProgressBar,
-		X + ProgressBarWidth + SlimSeparator + SlimBorder + ReloadOffsetX + ProgressBarWidth,
+		X + SlimBorder + ReloadOffsetX + ProgressBarWidth,
 		Y + SlimBorder + ProgressBarHeight);
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
 }
@@ -273,7 +273,7 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 		}
 	}
 	if (GameConfig().GameWeaponInfoType == 3) {
-		DrawSlimWeaponSlot(Xpos, Ypos, 0, 0,
+		DrawSlimWeaponSlot(Xpos, Ypos, 0, ProgressBarWidth + SlimSeparator,
 				   WeaponAmmoProgress(sharedWeapon, ProgressBarHeight),
 				   WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight),
 				   (sharedWeapon->ArmorCurrentStatus <= 0.0f));
@@ -417,7 +417,7 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 	if (GameConfig().GameWeaponInfoType == 3) {
 		Xpos = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
 
-		DrawSlimWeaponSlot(Xpos, Ypos, ProgressBarWidth + SlimSeparator, -(ProgressBarWidth + SlimSeparator),
+		DrawSlimWeaponSlot(Xpos, Ypos, ProgressBarWidth + SlimSeparator, 0,
 				   WeaponAmmoProgress(sharedWeapon, ProgressBarHeight),
 				   WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight),
 				   (sharedWeapon->ArmorCurrentStatus <= 0.0f));
