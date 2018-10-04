@@ -43,9 +43,14 @@ namespace {
 
 constexpr int ProgressBarWidth{8};
 constexpr int ProgressBarHeight{64};
+constexpr int WeaponIconWidth{128};
+constexpr int WeaponIconHeight{64};
 
 constexpr int SlimBorder{2};
 constexpr int SlimSeparator{2};
+
+constexpr int FlatBorder{2};
+constexpr int FlatSeparator{2};
 
 } // unnamed namespace
 
@@ -138,6 +143,74 @@ static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
 }
 
+/*
+ * Draw flat weapon slot.
+ */
+static void DrawFlatWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX, int IconOffsetX,
+			       std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
+{
+	sRECT SrcRect(0, 0, 2, 2);
+	sRECT DstRect(X,
+		      Y,
+		      X + FlatBorder * 2 + FlatSeparator * 2 + ProgressBarWidth * 2 + WeaponIconWidth,
+		      Y + FlatBorder * 2 + WeaponIconHeight);
+	GLtexture tmpBlackPoint = GetPreloadedTextureAsset("menu/blackpoint.tga");
+	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.2f);
+
+	DstRect(X + FlatBorder + AmmoOffsetX,
+		Y + FlatBorder,
+		X + FlatBorder + AmmoOffsetX + ProgressBarWidth,
+		Y + FlatBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
+
+	DstRect(X + FlatBorder + ReloadOffsetX,
+		Y + FlatBorder,
+		X + FlatBorder + ReloadOffsetX + ProgressBarWidth,
+		Y + FlatBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
+
+	DstRect(X + FlatBorder + IconOffsetX,
+		Y + FlatBorder,
+		X + FlatBorder + IconOffsetX + WeaponIconWidth,
+		Y + FlatBorder + WeaponIconHeight);
+	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
+
+	SrcRect(0, 0, WeaponIconWidth, WeaponIconHeight);
+	GLtexture tmpWeaponStatus = GetPreloadedTextureAsset("menu/weapon_on_icon.tga");
+
+	bool WeaponDestroyed = (sharedWeapon->ArmorCurrentStatus <= 0.0f);
+	if (WeaponDestroyed) {
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
+		return;
+	}
+
+	if (sharedWeapon->CurrentEnergyAccumulated < sharedWeapon->EnergyUse)
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
+	else if (sharedWeapon->Ammo == 0)
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
+	else
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, 1.0f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
+
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
+
+	int AmmoProgressBar = WeaponAmmoProgress(sharedWeapon, ProgressBarHeight);
+	SrcRect(0, AmmoProgressBar, ProgressBarWidth, ProgressBarHeight);
+	DstRect(X + FlatBorder + AmmoOffsetX,
+		Y + FlatBorder + AmmoProgressBar,
+		X + FlatBorder + AmmoOffsetX + ProgressBarWidth,
+		Y + FlatBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
+
+	int ReloadProgressBar = WeaponReloadProgress(sharedWeapon, TimeLastUpdate, ProgressBarHeight);
+	SrcRect(0, ReloadProgressBar, ProgressBarWidth, ProgressBarHeight);
+	DstRect(X + FlatBorder + ReloadOffsetX,
+		Y + FlatBorder + ReloadProgressBar,
+		X + FlatBorder + ReloadOffsetX + ProgressBarWidth,
+		Y + FlatBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
+}
+
 //------------------------------------------------------------------------------------
 // Прорисовка левого слота
 //------------------------------------------------------------------------------------
@@ -211,66 +284,11 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 		}
 	}
 	if (GameConfig().GameWeaponInfoType == 2) {
-		// выводим подложку меню - общую
-		SrcRect(0,0,2,2);
-		DstRect(Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f);
-
-		// выводим подложку меню - под иконку
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+23,Ypos+1,Xpos+23+128,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
-
-		// выводим подложку меню - под боекомплект
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+1,Ypos+1,Xpos+8+3,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
-
-		// выводим подложку меню - под перезарядка
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+12,Ypos+1,Xpos+12+8+2,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
-
-		// подложка-состояния
-		SrcRect(0,0,128,64);
-		DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
-
-		// пушка работает или нет?
-		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
-
-			// иконка оружия
-			SrcRect(0,0,128,64);
-			DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
-		} else {
-			if (sharedWeapon->CurrentEnergyAccumulated < sharedWeapon->EnergyUse)
-				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
-			else {
-				if (sharedWeapon->Ammo == 0)
-					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
-				else
-					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
-			}
-			// иконка оружия
-			SrcRect(0,0,128,64);
-			DstRect(Xpos+23,Ypos+2,Xpos+23+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
-
-			// боекомплект
-			int AmmoShow = WeaponAmmoProgress(sharedWeapon, ProgressBarHeight);
-
-			SrcRect(0, AmmoShow, 8, 64);
-			DstRect(Xpos+2, Ypos+2+AmmoShow, Xpos+8+2, Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
-
-			// перезарядка
-			int ReloadShow = WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight);
-
-			SrcRect(0,ReloadShow,8,64);
-			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
-		}
+		DrawFlatWeaponSlot(Xpos, Ypos,
+				   0,
+				   ProgressBarWidth + FlatSeparator,
+				   (ProgressBarWidth + FlatSeparator) * 2,
+				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
 	if (GameConfig().GameWeaponInfoType == 3) {
 		DrawSlimWeaponSlot(Xpos, Ypos, 0, ProgressBarWidth + SlimSeparator,
@@ -354,65 +372,11 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 		}
 	}
 	if (GameConfig().GameWeaponInfoType == 2) {
-		// выводим подложку меню - общую
-		SrcRect(0,0,2,2);
-		DstRect(Xpos,Ypos,Xpos+128+18+6,Ypos+64+4);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f);
-
-		// выводим подложку меню - под иконку
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+1,Ypos+1,Xpos+1+128,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
-
-		// выводим подложку меню - под боекомплект
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+13+128,Ypos+1,Xpos+13+8+2+128,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
-
-		// выводим подложку меню - под перезарядка
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+2+128,Ypos+1,Xpos+8+4+128,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
-
-		// подложка-состояния
-		SrcRect(0,0,128,64);
-		DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
-		// пушка работает или нет?
-		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
-
-			// иконка оружия
-			SrcRect(0,0,128,64);
-			DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
-		} else {
-			if (sharedWeapon->CurrentEnergyAccumulated < sharedWeapon->EnergyUse)
-				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
-			else {
-				if (sharedWeapon->Ammo == 0)
-					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
-				else
-					vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, 1.0f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
-			}
-			// иконка оружия
-			SrcRect(0,0,128,64);
-			DstRect(Xpos+1,Ypos+2,Xpos+1+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
-
-			// боекомплект
-			int AmmoShow = WeaponAmmoProgress(sharedWeapon, ProgressBarHeight);
-
-			SrcRect(0,AmmoShow,8,64);
-			DstRect(Xpos+12+2+128,Ypos+2+AmmoShow,Xpos+12+8+2+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
-
-			// перезарядка
-			int ReloadShow = WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight);
-
-			SrcRect(0,ReloadShow,8,64);
-			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
-		}
+		DrawFlatWeaponSlot(Xpos, Ypos,
+				   WeaponIconWidth + ProgressBarWidth + FlatSeparator * 2,
+				   WeaponIconWidth +  FlatSeparator,
+				   0,
+				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
 	if (GameConfig().GameWeaponInfoType == 3) {
 		Xpos = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
