@@ -220,28 +220,15 @@ static void DrawFlatWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 				   std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
-	sRECT SrcRect, DstRect;
-
 	int Xpos = 0;
-	int Ypos = 150;
-	switch (DrawLevelPos) {
-	case 1:
-		Ypos = 80;
-		break;
-	case 2:
-		Ypos = 150;
-		break;
-	case 3:
-		Ypos = 220;
-		break;
-	}
+	int Ypos = 10 + DrawLevelPos * 70;
 
 	if (GameConfig().GameWeaponInfoType == 1) {
 		Ypos += DrawLevelPos * 15 - 25;
 
 		// выводим подложку меню - общую
-		SrcRect(0, 0, 164, 88);
-		DstRect(Xpos, Ypos, Xpos+164, Ypos+88);
+		sRECT SrcRect(0, 0, 164, 88);
+		sRECT DstRect(Xpos, Ypos, Xpos+164, Ypos+88);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_panel_left.tga"), true, 1.0f);
 
 
@@ -285,15 +272,13 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 			DstRect(Xpos+12,Ypos+16+ReloadShow,Xpos+12+8,Ypos+56+16);
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_energy.tga"), true, 1.0f);
 		}
-	}
-	if (GameConfig().GameWeaponInfoType == 2) {
+	} else if (GameConfig().GameWeaponInfoType == 2) {
 		DrawFlatWeaponSlot(Xpos, Ypos,
 				   0,
 				   ProgressBarWidth + FlatSeparator,
 				   (ProgressBarWidth + FlatSeparator) * 2,
 				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
-	}
-	if (GameConfig().GameWeaponInfoType == 3) {
+	} else if (GameConfig().GameWeaponInfoType == 3) {
 		DrawSlimWeaponSlot(Xpos, Ypos, 0, ProgressBarWidth + SlimSeparator,
 				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
@@ -307,29 +292,15 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 				    std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
-	sRECT SrcRect, DstRect;
-
-	int Xpos = GameConfig().InternalWidth - 152;
-	int Ypos = 80;
-	switch (DrawLevelPos) {
-	case 1:
-		Ypos = 80;
-		break;
-	case 2:
-		Ypos = 150;
-		break;
-	case 3:
-		Ypos = 220;
-		break;
-	}
+	int Ypos = 10 + DrawLevelPos * 70;
 
 	if (GameConfig().GameWeaponInfoType == 1) {
-		Ypos += DrawLevelPos*15 - 25;
-		Xpos = GameConfig().InternalWidth - 164;
+		int Xpos = GameConfig().InternalWidth - 164;
+		Ypos += DrawLevelPos * 15 - 25;
 
 		// выводим подложку меню - общую
-		SrcRect(0,0,164,88);
-		DstRect(Xpos,Ypos,Xpos+164,Ypos+88);
+		sRECT SrcRect(0,0,164,88);
+		sRECT DstRect(Xpos,Ypos,Xpos+164,Ypos+88);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_panel_right.tga"), true, 1.0f);
 
 		// подложка-состояния
@@ -371,17 +342,15 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 			DstRect(Xpos+144,Ypos+16+ReloadShow,Xpos+144+8,Ypos+56+16);
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_energy.tga"), true, 1.0f);
 		}
-	}
-	if (GameConfig().GameWeaponInfoType == 2) {
+	} else if (GameConfig().GameWeaponInfoType == 2) {
+		int Xpos = GameConfig().InternalWidth - (WeaponIconWidth + (ProgressBarWidth + SlimSeparator + SlimBorder) * 2);
 		DrawFlatWeaponSlot(Xpos, Ypos,
 				   WeaponIconWidth + ProgressBarWidth + FlatSeparator * 2,
 				   WeaponIconWidth +  FlatSeparator,
 				   0,
 				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
-	}
-	if (GameConfig().GameWeaponInfoType == 3) {
-		Xpos = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
-
+	} else if (GameConfig().GameWeaponInfoType == 3) {
+		int Xpos = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
 		DrawSlimWeaponSlot(Xpos, Ypos, ProgressBarWidth + SlimSeparator, 0,
 				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
