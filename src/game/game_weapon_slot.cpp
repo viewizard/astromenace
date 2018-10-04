@@ -39,10 +39,63 @@
 namespace viewizard {
 namespace astromenace {
 
+namespace {
+
+constexpr int ProgressBarWidth{8};
+constexpr int ProgressBarHeight{64};
+constexpr int SlimBorder{2};
+constexpr int SlimSeparator{2};
+
+} // unnamed namespace
+
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
+
+/*
+ * Draw slim weapon slot.
+ */
+static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
+			       int AmmoProgressBar, int ReloadProgressBar, bool WeaponDestroyed)
+{
+	sRECT SrcRect(0, 0, 2, 2);
+	sRECT DstRect(X,
+		      Y,
+		      X + SlimBorder * 2 + SlimSeparator + ProgressBarWidth * 2,
+		      Y + SlimBorder * 2 + ProgressBarHeight);
+	GLtexture tmpBlackPoint = GetPreloadedTextureAsset("menu/blackpoint.tga");
+	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.2f);
+
+	DstRect(X + SlimBorder,
+		Y + SlimBorder,
+		X + SlimBorder + ProgressBarWidth,
+		Y + SlimBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
+
+	DstRect(X + ProgressBarWidth + SlimSeparator + SlimBorder,
+		Y + SlimBorder,
+		X + ProgressBarWidth + SlimSeparator + SlimBorder + ProgressBarWidth,
+		Y + SlimBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
+
+	if (WeaponDestroyed)
+		return;
+
+	SrcRect(0, AmmoProgressBar, ProgressBarWidth, ProgressBarHeight);
+	DstRect(X + SlimBorder + AmmoOffsetX,
+		Y + SlimBorder + AmmoProgressBar,
+		X + SlimBorder + AmmoOffsetX + ProgressBarWidth,
+		Y + SlimBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
+
+	SrcRect(0, ReloadProgressBar, ProgressBarWidth, ProgressBarHeight);
+	DstRect(X + ProgressBarWidth + SlimSeparator + SlimBorder + ReloadOffsetX,
+		Y + SlimBorder + ReloadProgressBar,
+		X + ProgressBarWidth + SlimSeparator + SlimBorder + ReloadOffsetX + ProgressBarWidth,
+		Y + SlimBorder + ProgressBarHeight);
+	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
+}
 
 //------------------------------------------------------------------------------------
 // Прорисовка левого слота
@@ -187,40 +240,16 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 		}
 	}
 	if (GameConfig().GameWeaponInfoType == 3) {
-		// выводим подложку меню - общую
-		SrcRect(0,0,2,2);
-		DstRect(Xpos,Ypos,Xpos+18+5,Ypos+64+4);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f);
+		int AmmoShow = (64 * (sharedWeapon->AmmoStart - sharedWeapon->Ammo)) / sharedWeapon->AmmoStart;
 
-		// выводим подложку меню - под боекомплект
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+1,Ypos+1,Xpos+8+3,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
-		// выводим подложку меню - под перезарядка
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+12,Ypos+1,Xpos+12+8+2,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
+		int ReloadShow = (int)(64.0f - (64.0f * (sharedSpaceShip->TimeLastUpdate - sharedWeapon->LastFireTime)) / sharedWeapon->NextFireTime);
+		if ((sharedWeapon->InternalType == 17) && // swarm
+		    (sharedWeapon->SwarmNum) > 0)
+			ReloadShow = 64;
+		else if (ReloadShow < 0)
+			ReloadShow = 0;
 
-		// пушка работает или нет?
-		if (sharedWeapon->ArmorCurrentStatus > 0.0f) {
-			// боекомплект
-			int AmmoShow = (int)((64.0f*(sharedWeapon->AmmoStart-sharedWeapon->Ammo))/sharedWeapon->AmmoStart);
-			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
-			if (AmmoShow < 0) AmmoShow = 0;
-
-			SrcRect(0,AmmoShow,8,64);
-			DstRect(Xpos+2,Ypos+2+AmmoShow,Xpos+8+2,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
-
-			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
-			// особый случай, рой ракет
-			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
-			if (ReloadShow<0) ReloadShow = 0;
-			SrcRect(0,ReloadShow,8,64);
-			DstRect(Xpos+12+1,Ypos+2+ReloadShow,Xpos+12+8+1,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
-		}
+		DrawSlimWeaponSlot(Xpos, Ypos, 0, 0, AmmoShow, ReloadShow, (sharedWeapon->ArmorCurrentStatus <= 0.0f));
 	}
 
 	DrawLevelPos++;
@@ -367,51 +396,27 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 		}
 	}
 	if (GameConfig().GameWeaponInfoType == 3) {
-		// выводим подложку меню - общую
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+128+1,Ypos,Xpos+128+18+6,Ypos+64+4);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f);
+		Xpos = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
 
-		// выводим подложку меню - под боекомплект
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+13+128,Ypos+1,Xpos+13+8+2+128,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
+		int AmmoShow = (64 * (sharedWeapon->AmmoStart - sharedWeapon->Ammo)) / sharedWeapon->AmmoStart;
 
-		// выводим подложку меню - под перезарядка
-		SrcRect(0,0,2,2);
-		DstRect(Xpos+2+128,Ypos+1,Xpos+8+4+128,Ypos+64+3);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f);
+		int ReloadShow = (int)(64.0f - (64.0f * (sharedSpaceShip->TimeLastUpdate - sharedWeapon->LastFireTime)) / sharedWeapon->NextFireTime);
+		if ((sharedWeapon->InternalType == 17) && // swarm
+		    (sharedWeapon->SwarmNum) > 0)
+			ReloadShow = 64;
+		else if (ReloadShow < 0)
+			ReloadShow = 0;
 
-		// пушка работает или нет?
-		if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
-
-		} else {
-			// боекомплект
-			int AmmoShow = (int)((64.0f*(sharedWeapon->AmmoStart-sharedWeapon->Ammo))/sharedWeapon->AmmoStart);
-			// если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
-			if (AmmoShow < 0) AmmoShow = 0;
-
-			SrcRect(0,AmmoShow,8,64);
-			DstRect(Xpos+12+2+128,Ypos+2+AmmoShow,Xpos+12+8+2+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
-
-			// перезарядка
-			int ReloadShow = (int)(64.0f - (64.0f*(sharedSpaceShip->TimeLastUpdate-sharedWeapon->LastFireTime))/sharedWeapon->NextFireTime);
-			// особый случай, рой ракет
-			if (sharedWeapon->InternalType == 17 && sharedWeapon->SwarmNum > 0) ReloadShow = 64;
-			if (ReloadShow<0) ReloadShow = 0;
-			SrcRect(0,ReloadShow,8,64);
-			DstRect(Xpos+3+128,Ypos+2+ReloadShow,Xpos+8+3+128,Ypos+64+2);
-			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
-		}
+		DrawSlimWeaponSlot(Xpos, Ypos, ProgressBarWidth + SlimSeparator, -(ProgressBarWidth + SlimSeparator),
+				   AmmoShow, ReloadShow, (sharedWeapon->ArmorCurrentStatus <= 0.0f));
 	}
 
 	DrawLevelPos++;
 }
 
-//------------------------------------------------------------------------------------
-// Прорисовка состояния всего оружия корабля игрока
-//------------------------------------------------------------------------------------
+/*
+ * Draw weapon slots in-game (HUD).
+ */
 void DrawGameWeaponSlots(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
