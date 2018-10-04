@@ -103,7 +103,7 @@ static int WeaponReloadProgress(std::shared_ptr<cWeapon> &sharedWeapon, float Ti
  * Draw slim weapon slot.
  */
 static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
-			       int AmmoProgressBar, int ReloadProgressBar, bool WeaponDestroyed)
+			       std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
 {
 	sRECT SrcRect(0, 0, 2, 2);
 	sRECT DstRect(X,
@@ -125,9 +125,11 @@ static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 		Y + SlimBorder + ProgressBarHeight);
 	vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
 
+	bool WeaponDestroyed = (sharedWeapon->ArmorCurrentStatus <= 0.0f);
 	if (WeaponDestroyed)
 		return;
 
+	int AmmoProgressBar = WeaponAmmoProgress(sharedWeapon, ProgressBarHeight);
 	SrcRect(0, AmmoProgressBar, ProgressBarWidth, ProgressBarHeight);
 	DstRect(X + SlimBorder + AmmoOffsetX,
 		Y + SlimBorder + AmmoProgressBar,
@@ -135,6 +137,7 @@ static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 		Y + SlimBorder + ProgressBarHeight);
 	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
 
+	int ReloadProgressBar = WeaponReloadProgress(sharedWeapon, TimeLastUpdate, ProgressBarHeight);
 	SrcRect(0, ReloadProgressBar, ProgressBarWidth, ProgressBarHeight);
 	DstRect(X + SlimBorder + ReloadOffsetX,
 		Y + SlimBorder + ReloadProgressBar,
@@ -292,9 +295,7 @@ static void DrawGameWeaponLeftSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 	}
 	if (GameConfig().GameWeaponInfoType == 3) {
 		DrawSlimWeaponSlot(Xpos, Ypos, 0, ProgressBarWidth + SlimSeparator,
-				   WeaponAmmoProgress(sharedWeapon, ProgressBarHeight),
-				   WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight),
-				   (sharedWeapon->ArmorCurrentStatus <= 0.0f));
+				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
 
 	DrawLevelPos++;
@@ -382,9 +383,7 @@ static void DrawGameWeaponRightSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip
 		Xpos = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
 
 		DrawSlimWeaponSlot(Xpos, Ypos, ProgressBarWidth + SlimSeparator, 0,
-				   WeaponAmmoProgress(sharedWeapon, ProgressBarHeight),
-				   WeaponReloadProgress(sharedWeapon, sharedSpaceShip->TimeLastUpdate, ProgressBarHeight),
-				   (sharedWeapon->ArmorCurrentStatus <= 0.0f));
+				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
 
 	DrawLevelPos++;
