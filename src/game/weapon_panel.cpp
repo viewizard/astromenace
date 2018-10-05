@@ -27,8 +27,6 @@
 
 // TODO use internal variable instead of CurrentAlert3
 
-// TODO switch to enumeration for GameWeaponInfoType
-
 // NOTE should be tested with in-game resolution changes
 
 #include "../core/core.h"
@@ -281,25 +279,32 @@ static void DrawFullWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
 static void DrawLeftWeaponPanel(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 				std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
-	if (GameConfig().GameWeaponInfoType == 1) {
-		int tmpX = 0;
-		int tmpY = 70 + DrawLevelPos * 85;
-		DrawFullWeaponPanel(tmpX, tmpY, 2, 12, 24,
+	switch (GameConfig().WeaponPanelView) {
+	case eWeaponPanelView::full:
+		DrawFullWeaponPanel(0, 70 + DrawLevelPos * 85,
+				    2, 12, 24,
 				    GetPreloadedTextureAsset("game/weapon_panel_left.tga"),
 				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
-	} else if (GameConfig().GameWeaponInfoType == 2) {
-		int tmpX = 0;
-		int tmpY = 80 + DrawLevelPos * 70;
-		DrawFlatWeaponPanel(tmpX, tmpY,
+		break;
+
+	case eWeaponPanelView::flat:
+		DrawFlatWeaponPanel(0,
+				    80 + DrawLevelPos * 70,
 				    0,
 				    ProgressBarWidth + FlatSeparator,
 				    (ProgressBarWidth + FlatSeparator) * 2,
 				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
-	} else if (GameConfig().GameWeaponInfoType == 3) {
-		int tmpX = 0;
-		int tmpY = 80 + DrawLevelPos * 70;
-		DrawSlimWeaponPanel(tmpX, tmpY, 0, ProgressBarWidth + SlimSeparator,
+		break;
+
+	case eWeaponPanelView::slim:
+		DrawSlimWeaponPanel(0,
+				    80 + DrawLevelPos * 70,
+				    0, ProgressBarWidth + SlimSeparator,
 				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		break;
+
+	case eWeaponPanelView::hide: // suppress warnings, we should never have this case here
+		break;
 	}
 
 	DrawLevelPos++;
@@ -311,25 +316,35 @@ static void DrawLeftWeaponPanel(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 static void DrawRightWeaponPanel(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 				 std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
-	if (GameConfig().GameWeaponInfoType == 1) {
-		int tmpX = GameConfig().InternalWidth - 164;
-		int tmpY = 70 + DrawLevelPos * 85;
-		DrawFullWeaponPanel(tmpX, tmpY, 154, 144, 12,
+	switch (GameConfig().WeaponPanelView) {
+	case eWeaponPanelView::full:
+		DrawFullWeaponPanel(GameConfig().InternalWidth - 164,
+				    70 + DrawLevelPos * 85,
+				    154, 144, 12,
 				    GetPreloadedTextureAsset("game/weapon_panel_right.tga"),
 				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
-	} else if (GameConfig().GameWeaponInfoType == 2) {
-		int tmpX = GameConfig().InternalWidth - (WeaponIconWidth + (ProgressBarWidth + SlimSeparator + SlimBorder) * 2);
-		int tmpY = 80 + DrawLevelPos * 70;
-		DrawFlatWeaponPanel(tmpX, tmpY,
+		break;
+
+	case eWeaponPanelView::flat:
+		DrawFlatWeaponPanel(GameConfig().InternalWidth -
+					(WeaponIconWidth + (ProgressBarWidth + SlimSeparator + SlimBorder) * 2),
+				    80 + DrawLevelPos * 70,
 				    WeaponIconWidth + ProgressBarWidth + FlatSeparator * 2,
 				    WeaponIconWidth + FlatSeparator,
 				    0,
 				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
-	} else if (GameConfig().GameWeaponInfoType == 3) {
-		int tmpX = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
-		int tmpY = 80 + DrawLevelPos * 70;
-		DrawSlimWeaponPanel(tmpX, tmpY, ProgressBarWidth + SlimSeparator, 0,
+		break;
+
+	case eWeaponPanelView::slim:
+		DrawSlimWeaponPanel(GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2),
+				    80 + DrawLevelPos * 70,
+				    ProgressBarWidth + SlimSeparator,
+				    0,
 				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		break;
+
+	case eWeaponPanelView::hide: // suppress warnings, we should never have this case here
+		break;
 	}
 
 	DrawLevelPos++;
@@ -342,8 +357,8 @@ void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip ||
-	    (GameConfig().GameWeaponInfoType < 1) ||
-	    (GameConfig().GameWeaponInfoType > 3))
+	    (static_cast<int>(GameConfig().WeaponPanelView) < static_cast<int>(eWeaponPanelView::hide)) ||
+	    (static_cast<int>(GameConfig().WeaponPanelView) > static_cast<int>(eWeaponPanelView::full)))
 		return;
 
 	// FIXME move this calculation to the "weapon panels" init, should be called one time only
@@ -368,6 +383,30 @@ void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip)
 				DrawRightWeaponPanel(sharedSpaceShip, sharedWeapon, RightDrawLevelPos);
 		}
 	}
+}
+
+/*
+ * Find next weapon panel view (cycled).
+ */
+void WeaponPanelViewNext(eWeaponPanelView &Value)
+{
+	int tmpWeaponPanelView = static_cast<int>(Value);
+	tmpWeaponPanelView++;
+	if (tmpWeaponPanelView > static_cast<int>(eWeaponPanelView::full))
+		tmpWeaponPanelView = static_cast<int>(eWeaponPanelView::hide);
+	Value = static_cast<eWeaponPanelView>(tmpWeaponPanelView);
+}
+
+/*
+ * Find previous weapon panel view (cycled).
+ */
+void WeaponPanelViewPrev(eWeaponPanelView &Value)
+{
+	int tmpWeaponPanelView = static_cast<int>(Value);
+	tmpWeaponPanelView--;
+	if (tmpWeaponPanelView < static_cast<int>(eWeaponPanelView::hide))
+		tmpWeaponPanelView = static_cast<int>(eWeaponPanelView::full);
+	Value = static_cast<eWeaponPanelView>(tmpWeaponPanelView);
 }
 
 } // astromenace namespace

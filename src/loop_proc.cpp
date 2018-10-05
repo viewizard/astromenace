@@ -34,6 +34,7 @@
 #include "ui/fps_counter.h"
 #include "ui/game_speed.h"
 #include "gfx/star_system.h"
+#include "game/weapon_panel.h"
 #include "command.h"
 #include "enum.h"
 #include "game.h" // FIXME "game.h" should be replaced by individual headers
@@ -137,9 +138,7 @@ void Loop_Proc()
 	if (MenuStatus == eMenuStatus::GAME) {
 		// изменение вывода состояния вооружения
 		if (vw_GetKeyStatus(SDLK_F8)) {
-			ChangeGameConfig().GameWeaponInfoType++;
-			if (GameConfig().GameWeaponInfoType > 4)
-				ChangeGameConfig().GameWeaponInfoType = 1;
+			WeaponPanelViewNext(ChangeGameConfig().WeaponPanelView);
 			vw_SetKeyStatus(SDLK_F8, false);
 		}
 		// изменение типов стрельбы

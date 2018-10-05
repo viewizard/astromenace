@@ -29,6 +29,7 @@
 #define CONFIG_CONFIG_H
 
 #include "../core/base.h"
+#include "../game/weapon_panel.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -201,7 +202,7 @@ struct sGameConfig {
 
 	float GameSpeed{1.5f};
 	bool ShowFPS{false};
-	int GameWeaponInfoType{1};
+	eWeaponPanelView WeaponPanelView{eWeaponPanelView::full};
 
 	sPilotProfile Profile[config::MAX_PROFILES];
 

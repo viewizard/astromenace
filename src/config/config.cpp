@@ -176,7 +176,8 @@ void SaveXMLConfigFile()
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "VSync"), "value", Config.VSync);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "Brightness"), "value", Config.Brightness);
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "ShowFPS"), "value", Config.ShowFPS);
-	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "GameWeaponInfoType"), "value", Config.GameWeaponInfoType);
+	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "WeaponPanelView"),
+				  "value", static_cast<int>(Config.WeaponPanelView));
 	XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, "GameSpeed"), "value", Config.GameSpeed);
 
 	XMLdoc->AddComment(*RootXMLEntry, " Control settings ");
@@ -410,9 +411,15 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "ShowFPS"))
 		XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "ShowFPS"), "value",
 					   Config.ShowFPS);
-	if (XMLdoc->FindEntryByName(*RootXMLEntry, "GameWeaponInfoType"))
-		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameWeaponInfoType"), "value",
-					   Config.GameWeaponInfoType);
+	if (XMLdoc->FindEntryByName(*RootXMLEntry, "WeaponPanelView")) {
+		int tmpWeaponPanelView{static_cast<int>(eWeaponPanelView::full)};
+		XMLdoc->iGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "WeaponPanelView"), "value",
+					   tmpWeaponPanelView);
+		if ((tmpWeaponPanelView < static_cast<int>(eWeaponPanelView::hide)) ||
+		    (tmpWeaponPanelView > static_cast<int>(eWeaponPanelView::full)))
+			tmpWeaponPanelView = static_cast<int>(eWeaponPanelView::full);
+		Config.WeaponPanelView = static_cast<eWeaponPanelView>(tmpWeaponPanelView);
+	}
 	if (XMLdoc->FindEntryByName(*RootXMLEntry, "GameSpeed"))
 		XMLdoc->fGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, "GameSpeed"), "value",
 					   Config.GameSpeed);

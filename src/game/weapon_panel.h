@@ -28,12 +28,30 @@
 #ifndef GAME_WEAPONPANEL_H
 #define GAME_WEAPONPANEL_H
 
+#include "../core/base.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
 
+class cSpaceShip;
+
+// do not use specific numbers here, since we use incrementation and decrementation
+// with cast to int, see WeaponPanelViewNext() and WeaponPanelViewPrev()
+enum eWeaponPanelView : int {
+	hide = 0, // should be the first one
+	slim,
+	flat,
+	full // should be the last one
+};
+
+
 // Draw in-game weapon panels (part of HUD).
 void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip);
+// Find next weapon panel view (cycled).
+void WeaponPanelViewNext(eWeaponPanelView &Value);
+// Find previous weapon panel view (cycled).
+void WeaponPanelViewPrev(eWeaponPanelView &Value);
 
 } // astromenace namespace
 } // viewizard namespace

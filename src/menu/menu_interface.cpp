@@ -34,6 +34,7 @@
 #include "../assets/texture.h"
 #include "../ui/font.h"
 #include "../ui/fps_counter.h"
+#include "../game/weapon_panel.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
@@ -41,15 +42,25 @@
 namespace viewizard {
 namespace astromenace {
 
-const char *ButtonGameWeaponInfoType[4] = {
-	"Full",
-	"Flat",
-	"Slim",
-	"Off"
-};
 
+static std::string GetWeaponPanelViewTitle(eWeaponPanelView WeaponPanelView)
+{
+	switch (WeaponPanelView) {
+	case eWeaponPanelView::full:
+		return "Full";
 
+	case eWeaponPanelView::flat:
+		return "Flat";
 
+	case eWeaponPanelView::slim:
+		return "Slim";
+
+	case eWeaponPanelView::hide:
+		return "Off"; // FIXME this should be "Hide"
+	}
+
+	return {};
+}
 
 
 
@@ -191,19 +202,15 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
 	// вид панелей с оружием в игре
 	Y1 += Prir1;
 	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Weapon Panels View"));
-	if (DrawButton128_2(X1 + 300, Y1 - 6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().GameWeaponInfoType==1)) {
-		ChangeGameConfig().GameWeaponInfoType--;
-		if (GameConfig().GameWeaponInfoType < 1)
-			ChangeGameConfig().GameWeaponInfoType = 1;
+	if (DrawButton128_2(X1 + 300, Y1 - 6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().WeaponPanelView == eWeaponPanelView::hide)) {
+		WeaponPanelViewPrev(ChangeGameConfig().WeaponPanelView);
 	}
-	if (DrawButton128_2(X1 + 616, Y1 - 6, vw_GetTextUTF32("Next"), ContentTransp, GameConfig().GameWeaponInfoType==4)) {
-		ChangeGameConfig().GameWeaponInfoType++;
-		if (GameConfig().GameWeaponInfoType > 4)
-			ChangeGameConfig().GameWeaponInfoType = 4;
+	if (DrawButton128_2(X1 + 616, Y1 - 6, vw_GetTextUTF32("Next"), ContentTransp, GameConfig().WeaponPanelView == eWeaponPanelView::full)) {
+		WeaponPanelViewNext(ChangeGameConfig().WeaponPanelView);
 	}
-	Size = vw_TextWidthUTF32(vw_GetTextUTF32(ButtonGameWeaponInfoType[GameConfig().GameWeaponInfoType - 1]));
+	Size = vw_TextWidthUTF32(vw_GetTextUTF32(GetWeaponPanelViewTitle(GameConfig().WeaponPanelView)));
 	SizeI = (170 - Size) / 2;
-	vw_DrawTextUTF32(X1 + 438 + SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32(ButtonGameWeaponInfoType[GameConfig().GameWeaponInfoType - 1]));
+	vw_DrawTextUTF32(X1 + 438 + SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32(GetWeaponPanelViewTitle(GameConfig().WeaponPanelView)));
 
 
 
