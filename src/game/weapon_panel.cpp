@@ -54,8 +54,8 @@ constexpr int SlimSeparator{2};
 constexpr int FlatBorder{2};
 constexpr int FlatSeparator{2};
 
-constexpr int FullSlotWidth{164};
-constexpr int FullSlotHeight{88};
+constexpr int FullPanelWidth{164};
+constexpr int FullPanelHeight{88};
 constexpr int FullProgressBarHeight{56};
 
 } // unnamed namespace
@@ -106,10 +106,10 @@ static int WeaponReloadProgress(std::shared_ptr<cWeapon> &sharedWeapon, float Ti
 }
 
 /*
- * Draw slim weapon slot.
+ * Draw slim weapon panel.
  */
-static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
-			       std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
+static void DrawSlimWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
+				std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
 {
 	sRECT SrcRect(0, 0, 2, 2);
 	sRECT DstRect(X,
@@ -153,10 +153,10 @@ static void DrawSlimWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 }
 
 /*
- * Draw flat weapon slot.
+ * Draw flat weapon panel.
  */
-static void DrawFlatWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX, int IconOffsetX,
-			       std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
+static void DrawFlatWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX, int IconOffsetX,
+				std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
 {
 	sRECT SrcRect(0, 0, 2, 2);
 	sRECT DstRect(X,
@@ -221,18 +221,18 @@ static void DrawFlatWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 }
 
 /*
- * Draw full weapon slot.
+ * Draw full weapon panel.
  */
-static void DrawFullWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX, int IconOffsetX,
-			       GLtexture SlotBorder,
-			       std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
+static void DrawFullWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX, int IconOffsetX,
+				GLtexture PanelBorder,
+				std::shared_ptr<cWeapon> &sharedWeapon, float TimeLastUpdate)
 {
-	sRECT SrcRect(0, 0, FullSlotWidth, FullSlotHeight);
+	sRECT SrcRect(0, 0, FullPanelWidth, FullPanelHeight);
 	sRECT DstRect(X,
 		      Y,
-		      X + FullSlotWidth,
-		      Y + FullSlotHeight);
-	vw_Draw2D(DstRect, SrcRect, SlotBorder, true, 1.0f);
+		      X + FullPanelWidth,
+		      Y + FullPanelHeight);
+	vw_Draw2D(DstRect, SrcRect, PanelBorder, true, 1.0f);
 
 	SrcRect(0, 0, WeaponIconWidth, WeaponIconHeight);
 	DstRect(X + IconOffsetX,
@@ -276,60 +276,60 @@ static void DrawFullWeaponSlot(int X, int Y, int AmmoOffsetX, int ReloadOffsetX,
 }
 
 /*
- * Draw left weapon slot.
+ * Draw left weapon panel.
  */
-static void DrawLeftWeaponSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
-			       std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
+static void DrawLeftWeaponPanel(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
+				std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
 	if (GameConfig().GameWeaponInfoType == 1) {
 		int tmpX = 0;
 		int tmpY = 70 + DrawLevelPos * 85;
-		DrawFullWeaponSlot(tmpX, tmpY, 2, 12, 24,
-				   GetPreloadedTextureAsset("game/weapon_panel_left.tga"),
-				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		DrawFullWeaponPanel(tmpX, tmpY, 2, 12, 24,
+				    GetPreloadedTextureAsset("game/weapon_panel_left.tga"),
+				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	} else if (GameConfig().GameWeaponInfoType == 2) {
 		int tmpX = 0;
 		int tmpY = 80 + DrawLevelPos * 70;
-		DrawFlatWeaponSlot(tmpX, tmpY,
-				   0,
-				   ProgressBarWidth + FlatSeparator,
-				   (ProgressBarWidth + FlatSeparator) * 2,
-				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		DrawFlatWeaponPanel(tmpX, tmpY,
+				    0,
+				    ProgressBarWidth + FlatSeparator,
+				    (ProgressBarWidth + FlatSeparator) * 2,
+				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	} else if (GameConfig().GameWeaponInfoType == 3) {
 		int tmpX = 0;
 		int tmpY = 80 + DrawLevelPos * 70;
-		DrawSlimWeaponSlot(tmpX, tmpY, 0, ProgressBarWidth + SlimSeparator,
-				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		DrawSlimWeaponPanel(tmpX, tmpY, 0, ProgressBarWidth + SlimSeparator,
+				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
 
 	DrawLevelPos++;
 }
 
 /*
- * Draw right weapon slot.
+ * Draw right weapon panel.
  */
-static void DrawRightWeaponSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
-				std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
+static void DrawRightWeaponPanel(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
+				 std::shared_ptr<cWeapon> &sharedWeapon, int &DrawLevelPos)
 {
 	if (GameConfig().GameWeaponInfoType == 1) {
 		int tmpX = GameConfig().InternalWidth - 164;
 		int tmpY = 70 + DrawLevelPos * 85;
-		DrawFullWeaponSlot(tmpX, tmpY, 154, 144, 12,
-				   GetPreloadedTextureAsset("game/weapon_panel_right.tga"),
-				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		DrawFullWeaponPanel(tmpX, tmpY, 154, 144, 12,
+				    GetPreloadedTextureAsset("game/weapon_panel_right.tga"),
+				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	} else if (GameConfig().GameWeaponInfoType == 2) {
 		int tmpX = GameConfig().InternalWidth - (WeaponIconWidth + (ProgressBarWidth + SlimSeparator + SlimBorder) * 2);
 		int tmpY = 80 + DrawLevelPos * 70;
-		DrawFlatWeaponSlot(tmpX, tmpY,
-				   WeaponIconWidth + ProgressBarWidth + FlatSeparator * 2,
-				   WeaponIconWidth + FlatSeparator,
-				   0,
-				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		DrawFlatWeaponPanel(tmpX, tmpY,
+				    WeaponIconWidth + ProgressBarWidth + FlatSeparator * 2,
+				    WeaponIconWidth + FlatSeparator,
+				    0,
+				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	} else if (GameConfig().GameWeaponInfoType == 3) {
 		int tmpX = GameConfig().InternalWidth - (ProgressBarWidth * 2 + SlimSeparator + SlimBorder * 2);
 		int tmpY = 80 + DrawLevelPos * 70;
-		DrawSlimWeaponSlot(tmpX, tmpY, ProgressBarWidth + SlimSeparator, 0,
-				   sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+		DrawSlimWeaponPanel(tmpX, tmpY, ProgressBarWidth + SlimSeparator, 0,
+				    sharedWeapon, sharedSpaceShip->TimeLastUpdate);
 	}
 
 	DrawLevelPos++;
@@ -346,7 +346,7 @@ void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip)
 	    (GameConfig().GameWeaponInfoType > 3))
 		return;
 
-	// FIXME move this calculation to the "weapon slots" init, should be called one time only
+	// FIXME move this calculation to the "weapon panels" init, should be called one time only
 	float tmpInvMatrix[9];
 	memcpy(tmpInvMatrix,
 	       sharedSpaceShip->CurrentRotationMat,
@@ -357,15 +357,15 @@ void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip)
 	int LeftDrawLevelPos{0};
 	for (auto &tmpWeaponSlot : sharedSpaceShip->WeaponSlots) {
 		// revert back rotation + ship shaking effect, since we need initial weapon slot location
-		// FIXME move this calculation to the "weapon slots" init, should be called one time only
+		// FIXME move this calculation to the "weapon panels" init, should be called one time only
 		sVECTOR3D tmpInitialLocation = tmpWeaponSlot.Location;
 		vw_Matrix33CalcPoint(tmpInitialLocation, tmpInvMatrix);
 
 		if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
 			if (tmpInitialLocation.x > -0.01f) // denote a small quantity, which will be taken to zero
-				DrawLeftWeaponSlot(sharedSpaceShip, sharedWeapon, LeftDrawLevelPos);
+				DrawLeftWeaponPanel(sharedSpaceShip, sharedWeapon, LeftDrawLevelPos);
 			else
-				DrawRightWeaponSlot(sharedSpaceShip, sharedWeapon, RightDrawLevelPos);
+				DrawRightWeaponPanel(sharedSpaceShip, sharedWeapon, RightDrawLevelPos);
 		}
 	}
 }
