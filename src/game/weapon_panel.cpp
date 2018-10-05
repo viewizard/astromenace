@@ -336,9 +336,9 @@ static void DrawRightWeaponSlot(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 }
 
 /*
- * Draw weapon slots in-game (HUD).
+ * Draw in-game weapon panels (part of HUD).
  */
-void DrawGameWeaponSlots(std::weak_ptr<cSpaceShip> &SpaceShip)
+void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
 	auto sharedSpaceShip = SpaceShip.lock();
 	if (!sharedSpaceShip ||

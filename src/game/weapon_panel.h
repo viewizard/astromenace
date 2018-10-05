@@ -32,8 +32,8 @@
 namespace viewizard {
 namespace astromenace {
 
-// Draw weapon slots in-game (HUD).
-void DrawGameWeaponSlots(std::weak_ptr<cSpaceShip> &SpaceShip);
+// Draw in-game weapon panels (part of HUD).
+void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip);
 
 } // astromenace namespace
 } // viewizard namespace
