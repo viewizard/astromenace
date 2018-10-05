@@ -97,7 +97,7 @@ static int WeaponReloadProgress(std::shared_ptr<cWeapon> &sharedWeapon, float Ti
 		     static_cast<int>((BarHeight * (TimeLastUpdate - sharedWeapon->LastFireTime)) / sharedWeapon->NextFireTime);
 
 	if ((sharedWeapon->InternalType == 17) && // swarm
-	    (sharedWeapon->SwarmNum) > 0)
+	    (sharedWeapon->SwarmNum) > 0) // for swarm, reload will be started after last missile fired
 		Reload = 64;
 	else if (Reload < 0)
 		Reload = 0;

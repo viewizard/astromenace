@@ -49,6 +49,7 @@
 #include "../object3d/space_ship/space_ship.h"
 #include "../command.h"
 #include "../game/camera.h"
+#include "../game/weapon_panel.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 #include <sstream>
 #include <iomanip>

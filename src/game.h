@@ -352,33 +352,6 @@ void SetCurrentDialogBox(eDialogBox DialogBox);
 bool isDialogBoxDrawing();
 void DrawDialogBox();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//------------------------------------------------------------------------------------
-// Game_WeaponSlot.cpp
-//------------------------------------------------------------------------------------
-void DrawGameWeaponSlots(std::weak_ptr<cSpaceShip> &SpaceShip);
-
-
-
-
-
-
-
-
-
 } // astromenace namespace
 } // viewizard namespace
 
