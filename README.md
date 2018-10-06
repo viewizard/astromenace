@@ -63,7 +63,7 @@ The easy way to get up to date AstroMenace on your computer:
 
 ### 1) Make sure all necessary packages with development headers installed in your system: 
 
-gcc or clang, cmake, make, git, libsdl2, libogg, libvorbis, openal, alut (freealut), freetype2
+gcc or clang or any compiler with full [ISO/IEC 14882:2011 (C++11)](https://www.iso.org/standard/50372.html) support, cmake, make, git, libsdl2, libogg, libvorbis, openal, alut (freealut), freetype2
 
 #### For macOS:
 Download and install "Command Line Tools for Xcode" or "Xcode".
