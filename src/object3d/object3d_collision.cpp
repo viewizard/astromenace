@@ -77,8 +77,9 @@ static void AddBonusForKilledEnemy(const cObject3D &Object, eObjectStatus Killed
 		return;
 
 	// TODO probably, we should calculate "static part" on mission start only
-	float tmpBonus = Object.ArmorInitialStatus * GameEnemyArmorPenalty /
-			 (2.0f * GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]);
+	float tmpBonus = Object.ArmorInitialStatus * GameEnemyArmorPenalty;
+	if (GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0)
+			 tmpBonus /= 2.0f * GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission];
 	float tmpExperience = Object.ArmorInitialStatus * GameEnemyArmorPenalty * ProfileDifficulty(CurrentProfile) / 100.0f;
 
 	switch (Object.ObjectType) {
