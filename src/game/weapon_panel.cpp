@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO use internal variable instead of CurrentAlert3
-
 // NOTE should be tested with in-game resolution changes
 
 #include "../core/core.h"
@@ -56,10 +54,10 @@ constexpr int FullPanelWidth{164};
 constexpr int FullPanelHeight{88};
 constexpr int FullProgressBarHeight{56};
 
-} // unnamed namespace
+uint32_t LastUpdateTick{0};
+float WeaponStatusBlinking{1.0f};
 
-// FIXME should be fixed, don't allow global scope interaction for local variables
-extern float CurrentAlert3;
+} // unnamed namespace
 
 
 /*
@@ -187,15 +185,15 @@ static void DrawFlatWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
 
 	bool WeaponDestroyed = (sharedWeapon->ArmorCurrentStatus <= 0.0f);
 	if (WeaponDestroyed) {
-		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
 		return;
 	}
 
 	if (sharedWeapon->CurrentEnergyAccumulated < sharedWeapon->EnergyUse)
-		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 	else if (sharedWeapon->Ammo == 0)
-		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 	else
 		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, 1.0f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
 
@@ -241,15 +239,15 @@ static void DrawFullWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
 
 	bool WeaponDestroyed = (sharedWeapon->ArmorCurrentStatus <= 0.0f);
 	if (WeaponDestroyed) {
-		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
 		return;
 	}
 
 	if (sharedWeapon->CurrentEnergyAccumulated < sharedWeapon->EnergyUse)
-		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{0.0f, 1.0f, 1.0f});
 	else if (sharedWeapon->Ammo == 0)
-		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, CurrentAlert3, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
+		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{1.0f, 0.5f, 0.2f});
 	else
 		vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, 1.0f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
 
@@ -360,6 +358,15 @@ void DrawWeaponPanels(std::weak_ptr<cSpaceShip> &SpaceShip)
 	    (static_cast<int>(GameConfig().WeaponPanelView) < static_cast<int>(eWeaponPanelView::hide)) ||
 	    (static_cast<int>(GameConfig().WeaponPanelView) > static_cast<int>(eWeaponPanelView::full)))
 		return;
+
+	// FIXME should be moved from "draw" to "update" code
+	uint32_t CurrentTick = SDL_GetTicks();
+	constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
+	WeaponStatusBlinking -= 1.9f * (CurrentTick - LastUpdateTick) / TicksInSecond;
+	if ((WeaponStatusBlinking < 0.1f) ||
+	    (WeaponStatusBlinking > 1.0f))
+		WeaponStatusBlinking = 1.0f;
+	LastUpdateTick = CurrentTick;
 
 	// FIXME move this calculation to the "weapon panels" init, should be called one time only
 	float tmpInvMatrix[9];
