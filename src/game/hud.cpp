@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// FIXME split "draw" and "update" code
+
 // TODO translate comments
 
 #include "../core/core.h"
