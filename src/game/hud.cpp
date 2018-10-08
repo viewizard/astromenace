@@ -38,10 +38,10 @@ namespace astromenace {
 
 namespace {
 
-std::weak_ptr<cParticleSystem2D> EnergyParticleSystem2D{};
-std::weak_ptr<cParticleSystem2D> LifeParticleSystem2D{};
-std::weak_ptr<cParticleSystem2D> Life2ParticleSystem2D{};
-std::weak_ptr<cParticleSystem2D> Life3ParticleSystem2D{};
+std::weak_ptr<cParticleSystem2D> EnergyEmblem{};
+std::weak_ptr<cParticleSystem2D> ArmorEmblemCircle{};
+std::weak_ptr<cParticleSystem2D> ArmorEmblemHoriz{};
+std::weak_ptr<cParticleSystem2D> ArmorEmblemVert{};
 
 } // unnamed namespace
 
@@ -60,101 +60,101 @@ float GetShipMaxEnergy(int Num);
  */
 void InitHUDParticleSystems()
 {
-	if (EnergyParticleSystem2D.expired())
-		EnergyParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
-	if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
-		sharedEnergyParticleSystem2D->ColorStart = sRGBCOLOR{0.7f, 0.8f, 1.0f};
-		sharedEnergyParticleSystem2D->ColorEnd = sRGBCOLOR{0.0f, 0.0f, 1.0f};
-		sharedEnergyParticleSystem2D->AlphaStart = 1.0f;
-		sharedEnergyParticleSystem2D->AlphaEnd = 1.0f;
-		sharedEnergyParticleSystem2D->SizeStart = 12.0f;
-		sharedEnergyParticleSystem2D->SizeVar = 10.0f;
-		sharedEnergyParticleSystem2D->SizeEnd = 0.0f;
-		sharedEnergyParticleSystem2D->Speed = 70.0f;
-		sharedEnergyParticleSystem2D->SpeedVar = 20.0f;
-		sharedEnergyParticleSystem2D->Theta = 360.0f;
-		sharedEnergyParticleSystem2D->Life = 2.1f;
-		sharedEnergyParticleSystem2D->LifeVar = 0.05f;
-		sharedEnergyParticleSystem2D->ParticlesPerSec = 50;
-		sharedEnergyParticleSystem2D->IsMagnet = true;
-		sharedEnergyParticleSystem2D->MagnetFactor = 150.0f;
-		sharedEnergyParticleSystem2D->CreationType = eParticle2DCreationType::Point;
-		sharedEnergyParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		sharedEnergyParticleSystem2D->MoveSystem(sVECTOR3D{33.0f, 29.0f, 0.0f});
+	if (EnergyEmblem.expired())
+		EnergyEmblem = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
+	if (auto sharedEnergyEmblem = EnergyEmblem.lock()) {
+		sharedEnergyEmblem->ColorStart = sRGBCOLOR{0.7f, 0.8f, 1.0f};
+		sharedEnergyEmblem->ColorEnd = sRGBCOLOR{0.0f, 0.0f, 1.0f};
+		sharedEnergyEmblem->AlphaStart = 1.0f;
+		sharedEnergyEmblem->AlphaEnd = 1.0f;
+		sharedEnergyEmblem->SizeStart = 12.0f;
+		sharedEnergyEmblem->SizeVar = 10.0f;
+		sharedEnergyEmblem->SizeEnd = 0.0f;
+		sharedEnergyEmblem->Speed = 70.0f;
+		sharedEnergyEmblem->SpeedVar = 20.0f;
+		sharedEnergyEmblem->Theta = 360.0f;
+		sharedEnergyEmblem->Life = 2.1f;
+		sharedEnergyEmblem->LifeVar = 0.05f;
+		sharedEnergyEmblem->ParticlesPerSec = 50;
+		sharedEnergyEmblem->IsMagnet = true;
+		sharedEnergyEmblem->MagnetFactor = 150.0f;
+		sharedEnergyEmblem->CreationType = eParticle2DCreationType::Point;
+		sharedEnergyEmblem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+		sharedEnergyEmblem->MoveSystem(sVECTOR3D{33.0f, 29.0f, 0.0f});
 	}
 
-	if (Life3ParticleSystem2D.expired())
-		Life3ParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
-	if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
-		sharedLife3ParticleSystem2D->ColorStart = sRGBCOLOR{1.0f, 0.4f, 0.1f};
-		sharedLife3ParticleSystem2D->ColorEnd = sRGBCOLOR{0.5f, 0.0f, 0.0f};
-		sharedLife3ParticleSystem2D->AlphaStart = 1.0f;
-		sharedLife3ParticleSystem2D->AlphaEnd = 1.0f;
-		sharedLife3ParticleSystem2D->SizeStart = 13.0f;
-		sharedLife3ParticleSystem2D->SizeVar = 5.0f;
-		sharedLife3ParticleSystem2D->SizeEnd = 0.0f;
-		sharedLife3ParticleSystem2D->Speed = 0.0f;
-		sharedLife3ParticleSystem2D->SpeedOnCreation = 8.0f;
-		sharedLife3ParticleSystem2D->SpeedVar = 0.0f;
-		sharedLife3ParticleSystem2D->Theta = 360.0f;
-		sharedLife3ParticleSystem2D->Life = 2.0f;
-		sharedLife3ParticleSystem2D->LifeVar = 0.05f;
-		sharedLife3ParticleSystem2D->ParticlesPerSec = 50;
-		sharedLife3ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
-		sharedLife3ParticleSystem2D->CreationSize(1.0f, 18.0f, 0.0f);
-		sharedLife3ParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		sharedLife3ParticleSystem2D->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
+	if (ArmorEmblemVert.expired())
+		ArmorEmblemVert = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
+	if (auto sharedArmorEmblemVert = ArmorEmblemVert.lock()) {
+		sharedArmorEmblemVert->ColorStart = sRGBCOLOR{1.0f, 0.4f, 0.1f};
+		sharedArmorEmblemVert->ColorEnd = sRGBCOLOR{0.5f, 0.0f, 0.0f};
+		sharedArmorEmblemVert->AlphaStart = 1.0f;
+		sharedArmorEmblemVert->AlphaEnd = 1.0f;
+		sharedArmorEmblemVert->SizeStart = 13.0f;
+		sharedArmorEmblemVert->SizeVar = 5.0f;
+		sharedArmorEmblemVert->SizeEnd = 0.0f;
+		sharedArmorEmblemVert->Speed = 0.0f;
+		sharedArmorEmblemVert->SpeedOnCreation = 8.0f;
+		sharedArmorEmblemVert->SpeedVar = 0.0f;
+		sharedArmorEmblemVert->Theta = 360.0f;
+		sharedArmorEmblemVert->Life = 2.0f;
+		sharedArmorEmblemVert->LifeVar = 0.05f;
+		sharedArmorEmblemVert->ParticlesPerSec = 50;
+		sharedArmorEmblemVert->CreationType = eParticle2DCreationType::Quad;
+		sharedArmorEmblemVert->CreationSize(1.0f, 18.0f, 0.0f);
+		sharedArmorEmblemVert->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+		sharedArmorEmblemVert->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
 	}
 
-	if (Life2ParticleSystem2D.expired())
-		Life2ParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
-	if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
-		sharedLife2ParticleSystem2D->ColorStart = sRGBCOLOR{1.0f, 0.4f, 0.1f};
-		sharedLife2ParticleSystem2D->ColorEnd = sRGBCOLOR{0.5f, 0.0f, 0.0f};
-		sharedLife2ParticleSystem2D->AlphaStart = 1.0f;
-		sharedLife2ParticleSystem2D->AlphaEnd = 1.0f;
-		sharedLife2ParticleSystem2D->SizeStart = 13.0f;
-		sharedLife2ParticleSystem2D->SizeVar = 5.0f;
-		sharedLife2ParticleSystem2D->SizeEnd = 0.0f;
-		sharedLife2ParticleSystem2D->Speed = 0.0f;
-		sharedLife2ParticleSystem2D->SpeedOnCreation = 8.0f;
-		sharedLife2ParticleSystem2D->SpeedVar = 0.0f;
-		sharedLife2ParticleSystem2D->Theta = 360.0f;
-		sharedLife2ParticleSystem2D->Life = 2.0f;
-		sharedLife2ParticleSystem2D->LifeVar = 0.05f;
-		sharedLife2ParticleSystem2D->ParticlesPerSec = 50;
-		sharedLife2ParticleSystem2D->CreationType = eParticle2DCreationType::Quad;
-		sharedLife2ParticleSystem2D->CreationSize(18.0f, 1.0f, 0.0f);
-		sharedLife2ParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
-		sharedLife2ParticleSystem2D->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
+	if (ArmorEmblemHoriz.expired())
+		ArmorEmblemHoriz = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
+	if (auto sharedArmorEmblemHoriz = ArmorEmblemHoriz.lock()) {
+		sharedArmorEmblemHoriz->ColorStart = sRGBCOLOR{1.0f, 0.4f, 0.1f};
+		sharedArmorEmblemHoriz->ColorEnd = sRGBCOLOR{0.5f, 0.0f, 0.0f};
+		sharedArmorEmblemHoriz->AlphaStart = 1.0f;
+		sharedArmorEmblemHoriz->AlphaEnd = 1.0f;
+		sharedArmorEmblemHoriz->SizeStart = 13.0f;
+		sharedArmorEmblemHoriz->SizeVar = 5.0f;
+		sharedArmorEmblemHoriz->SizeEnd = 0.0f;
+		sharedArmorEmblemHoriz->Speed = 0.0f;
+		sharedArmorEmblemHoriz->SpeedOnCreation = 8.0f;
+		sharedArmorEmblemHoriz->SpeedVar = 0.0f;
+		sharedArmorEmblemHoriz->Theta = 360.0f;
+		sharedArmorEmblemHoriz->Life = 2.0f;
+		sharedArmorEmblemHoriz->LifeVar = 0.05f;
+		sharedArmorEmblemHoriz->ParticlesPerSec = 50;
+		sharedArmorEmblemHoriz->CreationType = eParticle2DCreationType::Quad;
+		sharedArmorEmblemHoriz->CreationSize(18.0f, 1.0f, 0.0f);
+		sharedArmorEmblemHoriz->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+		sharedArmorEmblemHoriz->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
 	}
 
-	if (LifeParticleSystem2D.expired())
-		LifeParticleSystem2D = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
-	if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
-		sharedLifeParticleSystem2D->ColorStart = sRGBCOLOR{1.0f, 0.6f, 0.2f};
-		sharedLifeParticleSystem2D->ColorEnd = sRGBCOLOR{0.5f, 0.0f, 0.0f};
-		sharedLifeParticleSystem2D->AlphaStart = 1.0f;
-		sharedLifeParticleSystem2D->AlphaEnd = 1.0f;
-		sharedLifeParticleSystem2D->SizeStart = 25.0f;
-		sharedLifeParticleSystem2D->SizeVar = 5.0f;
-		sharedLifeParticleSystem2D->SizeEnd = 0.0f;
-		sharedLifeParticleSystem2D->Speed = 0.0f;
-		sharedLifeParticleSystem2D->SpeedOnCreation = 8.0f;
-		sharedLifeParticleSystem2D->SpeedVar = 10.0f;
-		sharedLifeParticleSystem2D->Theta = 360.0f;
-		sharedLifeParticleSystem2D->Life = 1.5f;
-		sharedLifeParticleSystem2D->LifeVar = 0.05f;
-		sharedLifeParticleSystem2D->ParticlesPerSec = 70;
-		sharedLifeParticleSystem2D->Direction(1.0f, 0.0f, 0.0f);
-		sharedLifeParticleSystem2D->CreationType = eParticle2DCreationType::Circle;
-		sharedLifeParticleSystem2D->CreationSize(25.0f, 25.0f, 0.0f);
-		sharedLifeParticleSystem2D->DeadZone = 24.0f;
-		sharedLifeParticleSystem2D->IsMagnet = true;
-		sharedLifeParticleSystem2D->MagnetFactor = 25.0f;
-		sharedLifeParticleSystem2D->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
-		sharedLifeParticleSystem2D->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
-		sharedLifeParticleSystem2D->SetRotation(sVECTOR3D{0.0f, 0.0f, 90.0f});
+	if (ArmorEmblemCircle.expired())
+		ArmorEmblemCircle = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
+	if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock()) {
+	sharedArmorEmblemCircle->ColorStart = sRGBCOLOR{1.0f, 0.6f, 0.2f};
+		sharedArmorEmblemCircle->ColorEnd = sRGBCOLOR{0.5f, 0.0f, 0.0f};
+		sharedArmorEmblemCircle->AlphaStart = 1.0f;
+		sharedArmorEmblemCircle->AlphaEnd = 1.0f;
+		sharedArmorEmblemCircle->SizeStart = 25.0f;
+		sharedArmorEmblemCircle->SizeVar = 5.0f;
+		sharedArmorEmblemCircle->SizeEnd = 0.0f;
+		sharedArmorEmblemCircle->Speed = 0.0f;
+		sharedArmorEmblemCircle->SpeedOnCreation = 8.0f;
+		sharedArmorEmblemCircle->SpeedVar = 10.0f;
+		sharedArmorEmblemCircle->Theta = 360.0f;
+		sharedArmorEmblemCircle->Life = 1.5f;
+		sharedArmorEmblemCircle->LifeVar = 0.05f;
+		sharedArmorEmblemCircle->ParticlesPerSec = 70;
+		sharedArmorEmblemCircle->Direction(1.0f, 0.0f, 0.0f);
+		sharedArmorEmblemCircle->CreationType = eParticle2DCreationType::Circle;
+		sharedArmorEmblemCircle->CreationSize(25.0f, 25.0f, 0.0f);
+		sharedArmorEmblemCircle->DeadZone = 24.0f;
+		sharedArmorEmblemCircle->IsMagnet = true;
+		sharedArmorEmblemCircle->MagnetFactor = 25.0f;
+		sharedArmorEmblemCircle->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
+		sharedArmorEmblemCircle->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
+		sharedArmorEmblemCircle->SetRotation(sVECTOR3D{0.0f, 0.0f, 90.0f});
 	}
 }
 
@@ -164,88 +164,88 @@ void InitHUDParticleSystems()
 void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
 {
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
-		if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
-			sharedEnergyParticleSystem2D->ParticlesPerSec =
+		if (auto sharedEnergyEmblem = EnergyEmblem.lock()) {
+			sharedEnergyEmblem->ParticlesPerSec =
 				1 + static_cast<unsigned>(49 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
 		}
 
 		float tmpArmorPercentage = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus;
 		bool tmpLowArmor = (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f);
 
-		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
-			sharedLifeParticleSystem2D->ColorStart.r = 1.0f;
-			sharedLifeParticleSystem2D->ColorStart.g = 0.6f * tmpArmorPercentage;
-			sharedLifeParticleSystem2D->ColorStart.b = 0.2f * tmpArmorPercentage;
+		if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock()) {
+			sharedArmorEmblemCircle->ColorStart.r = 1.0f;
+			sharedArmorEmblemCircle->ColorStart.g = 0.6f * tmpArmorPercentage;
+			sharedArmorEmblemCircle->ColorStart.b = 0.2f * tmpArmorPercentage;
 
 			if (tmpLowArmor) {
-				sharedLifeParticleSystem2D->AlphaStart = CurrentAlert2;
-				sharedLifeParticleSystem2D->AlphaEnd = CurrentAlert2;
+				sharedArmorEmblemCircle->AlphaStart = CurrentAlert2;
+				sharedArmorEmblemCircle->AlphaEnd = CurrentAlert2;
 			} else { // armor could be repaired in-game
-				sharedLifeParticleSystem2D->AlphaStart = 1.0f;
-				sharedLifeParticleSystem2D->AlphaEnd = 1.0f;
+				sharedArmorEmblemCircle->AlphaStart = 1.0f;
+				sharedArmorEmblemCircle->AlphaEnd = 1.0f;
 			}
 		}
 
-		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
-			sharedLife2ParticleSystem2D->ColorStart.r = 1.0f;
-			sharedLife2ParticleSystem2D->ColorStart.g = 0.6f * tmpArmorPercentage;
-			sharedLife2ParticleSystem2D->ColorStart.b = 0.2f * tmpArmorPercentage;
+		if (auto sharedArmorEmblemHoriz = ArmorEmblemHoriz.lock()) {
+			sharedArmorEmblemHoriz->ColorStart.r = 1.0f;
+			sharedArmorEmblemHoriz->ColorStart.g = 0.6f * tmpArmorPercentage;
+			sharedArmorEmblemHoriz->ColorStart.b = 0.2f * tmpArmorPercentage;
 
 			if (tmpLowArmor) {
 				if (CurrentAlert2 > 0.6f) {
-					sharedLife2ParticleSystem2D->AlphaStart = CurrentAlert2;
-					sharedLife2ParticleSystem2D->AlphaEnd = CurrentAlert2;
+					sharedArmorEmblemHoriz->AlphaStart = CurrentAlert2;
+					sharedArmorEmblemHoriz->AlphaEnd = CurrentAlert2;
 				} else { // armor could be repaired in-game
-					sharedLife2ParticleSystem2D->AlphaStart = 0.0f;
-					sharedLife2ParticleSystem2D->AlphaEnd = 0.0f;
+					sharedArmorEmblemHoriz->AlphaStart = 0.0f;
+					sharedArmorEmblemHoriz->AlphaEnd = 0.0f;
 				}
 			} else {
-				sharedLife2ParticleSystem2D->AlphaStart = 1.0f;
-				sharedLife2ParticleSystem2D->AlphaEnd = 1.0f;
+				sharedArmorEmblemHoriz->AlphaStart = 1.0f;
+				sharedArmorEmblemHoriz->AlphaEnd = 1.0f;
 			}
 		}
 
-		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
-			sharedLife3ParticleSystem2D->ColorStart.r = 1.0f;
-			sharedLife3ParticleSystem2D->ColorStart.g = 0.6f * tmpArmorPercentage;
-			sharedLife3ParticleSystem2D->ColorStart.b = 0.2f * tmpArmorPercentage;
+		if (auto sharedArmorEmblemVert = ArmorEmblemVert.lock()) {
+			sharedArmorEmblemVert->ColorStart.r = 1.0f;
+			sharedArmorEmblemVert->ColorStart.g = 0.6f * tmpArmorPercentage;
+			sharedArmorEmblemVert->ColorStart.b = 0.2f * tmpArmorPercentage;
 
 			if (tmpLowArmor) {
 				if (CurrentAlert2 > 0.6f) {
-					sharedLife3ParticleSystem2D->AlphaStart = CurrentAlert2;
-					sharedLife3ParticleSystem2D->AlphaEnd = CurrentAlert2;
+					sharedArmorEmblemVert->AlphaStart = CurrentAlert2;
+					sharedArmorEmblemVert->AlphaEnd = CurrentAlert2;
 				} else { // armor could be repaired in-game
-					sharedLife3ParticleSystem2D->AlphaStart = 0.0f;
-					sharedLife3ParticleSystem2D->AlphaEnd = 0.0f;
+					sharedArmorEmblemVert->AlphaStart = 0.0f;
+					sharedArmorEmblemVert->AlphaEnd = 0.0f;
 				}
 			} else {
-				sharedLife3ParticleSystem2D->AlphaStart = 1.0f;
-				sharedLife3ParticleSystem2D->AlphaEnd = 1.0f;
+				sharedArmorEmblemVert->AlphaStart = 1.0f;
+				sharedArmorEmblemVert->AlphaEnd = 1.0f;
 			}
 		}
 	} else {
-		if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
-			sharedEnergyParticleSystem2D->AlphaStart = 0.0f;
-			sharedEnergyParticleSystem2D->AlphaEnd = 0.0f;
-			sharedEnergyParticleSystem2D->ParticlesPerSec = 1;
+		if (auto sharedEnergyEmblem = EnergyEmblem.lock()) {
+			sharedEnergyEmblem->AlphaStart = 0.0f;
+			sharedEnergyEmblem->AlphaEnd = 0.0f;
+			sharedEnergyEmblem->ParticlesPerSec = 1;
 		}
 
-		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
-			sharedLifeParticleSystem2D->AlphaStart = 0.0f;
-			sharedLifeParticleSystem2D->AlphaEnd = 0.0f;
-			sharedLifeParticleSystem2D->ParticlesPerSec = 1;
+		if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock()) {
+			sharedArmorEmblemCircle->AlphaStart = 0.0f;
+			sharedArmorEmblemCircle->AlphaEnd = 0.0f;
+			sharedArmorEmblemCircle->ParticlesPerSec = 1;
 		}
 
-		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
-			sharedLife2ParticleSystem2D->AlphaStart = 0.0f;
-			sharedLife2ParticleSystem2D->AlphaEnd = 0.0f;
-			sharedLife2ParticleSystem2D->ParticlesPerSec = 1;
+		if (auto sharedArmorEmblemHoriz = ArmorEmblemHoriz.lock()) {
+			sharedArmorEmblemHoriz->AlphaStart = 0.0f;
+			sharedArmorEmblemHoriz->AlphaEnd = 0.0f;
+			sharedArmorEmblemHoriz->ParticlesPerSec = 1;
 		}
 
-		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
-			sharedLife3ParticleSystem2D->AlphaStart = 0.0f;
-			sharedLife3ParticleSystem2D->AlphaEnd = 0.0f;
-			sharedLife3ParticleSystem2D->ParticlesPerSec = 1;
+		if (auto sharedArmorEmblemVert = ArmorEmblemVert.lock()) {
+			sharedArmorEmblemVert->AlphaStart = 0.0f;
+			sharedArmorEmblemVert->AlphaEnd = 0.0f;
+			sharedArmorEmblemVert->ParticlesPerSec = 1;
 		}
 	}
 
