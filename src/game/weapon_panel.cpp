@@ -25,6 +25,8 @@
 
 *************************************************************************************/
 
+// FIXME provide adaptive HUD size for high resolution, care about display dpi
+
 // NOTE should be tested with in-game resolution changes
 
 #include "../core/core.h"

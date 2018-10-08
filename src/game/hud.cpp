@@ -25,6 +25,10 @@
 
 *************************************************************************************/
 
+// FIXME if we change game resolution/window size, we should also update particle systems position
+
+// FIXME provide adaptive HUD size for high resolution, care about display dpi
+
 // TODO translate comments
 
 #include "../core/core.h"
