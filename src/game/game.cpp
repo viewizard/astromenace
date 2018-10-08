@@ -971,8 +971,8 @@ void DrawGame()
 	}
 
 
-
-	DrawHUDParticleSystems(PlayerFighter);
+	UpdateHUDParticleSystems(PlayerFighter);
+	DrawHUDParticleSystems();
 
 
 	// выводим состояние жизни и энергии

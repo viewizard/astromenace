@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// FIXME split "draw" and "update" code
-
 // TODO translate comments
 
 #include "../core/core.h"
@@ -161,73 +159,104 @@ void InitHUDParticleSystems()
 }
 
 /*
- * Draw head-up display particle systems.
+ * Update head-up display particle systems.
  */
-void DrawHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
+void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
 {
-	if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
-		// учитываем в эмблеме энергии, сколько у нас ее (визуально меняем вид эмблемы)
-		sharedEnergyParticleSystem2D->ParticlesPerSec =
-				(unsigned int)(50 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
-		if (sharedEnergyParticleSystem2D->ParticlesPerSec == 0)
-			sharedEnergyParticleSystem2D->ParticlesPerSec = 1;
-	}
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
+		if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
+			sharedEnergyParticleSystem2D->ParticlesPerSec =
+				1 + static_cast<unsigned>(49 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
+		}
+
+		float tmpArmorPercentage = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus;
+		bool tmpLowArmor = (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f);
+
 		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
-			sharedLifeParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLifeParticleSystem2D->ColorStart.g = 0.60f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
-			sharedLifeParticleSystem2D->ColorStart.b = 0.20f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
-			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f) {
+			sharedLifeParticleSystem2D->ColorStart.r = 1.0f;
+			sharedLifeParticleSystem2D->ColorStart.g = 0.6f * tmpArmorPercentage;
+			sharedLifeParticleSystem2D->ColorStart.b = 0.2f * tmpArmorPercentage;
+
+			if (tmpLowArmor) {
 				sharedLifeParticleSystem2D->AlphaStart = CurrentAlert2;
 				sharedLifeParticleSystem2D->AlphaEnd = CurrentAlert2;
-			} else { // подчинились, восстанавливаем данные
+			} else { // armor could be repaired in-game
 				sharedLifeParticleSystem2D->AlphaStart = 1.0f;
 				sharedLifeParticleSystem2D->AlphaEnd = 1.0f;
 			}
 		}
 
 		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
-			sharedLife2ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife2ParticleSystem2D->ColorStart.g = 0.60f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
-			sharedLife2ParticleSystem2D->ColorStart.b = 0.20f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
-			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f) {
+			sharedLife2ParticleSystem2D->ColorStart.r = 1.0f;
+			sharedLife2ParticleSystem2D->ColorStart.g = 0.6f * tmpArmorPercentage;
+			sharedLife2ParticleSystem2D->ColorStart.b = 0.2f * tmpArmorPercentage;
+
+			if (tmpLowArmor) {
 				if (CurrentAlert2 > 0.6f) {
 					sharedLife2ParticleSystem2D->AlphaStart = CurrentAlert2;
 					sharedLife2ParticleSystem2D->AlphaEnd = CurrentAlert2;
-				} else {
-					sharedLife2ParticleSystem2D->AlphaStart = 0.00f;
-					sharedLife2ParticleSystem2D->AlphaEnd = 0.00f;
+				} else { // armor could be repaired in-game
+					sharedLife2ParticleSystem2D->AlphaStart = 0.0f;
+					sharedLife2ParticleSystem2D->AlphaEnd = 0.0f;
 				}
-			} else { // подчинились, восстанавливаем данные
-				sharedLife2ParticleSystem2D->AlphaStart = 1.00f;
-				sharedLife2ParticleSystem2D->AlphaEnd = 1.00f;
+			} else {
+				sharedLife2ParticleSystem2D->AlphaStart = 1.0f;
+				sharedLife2ParticleSystem2D->AlphaEnd = 1.0f;
 			}
 		}
 
 		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
-			sharedLife3ParticleSystem2D->ColorStart.r = 1.00f;
-			sharedLife3ParticleSystem2D->ColorStart.g = 0.60f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
-			sharedLife3ParticleSystem2D->ColorStart.b = 0.20f * (sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus);
+			sharedLife3ParticleSystem2D->ColorStart.r = 1.0f;
+			sharedLife3ParticleSystem2D->ColorStart.g = 0.6f * tmpArmorPercentage;
+			sharedLife3ParticleSystem2D->ColorStart.b = 0.2f * tmpArmorPercentage;
 
-			// если меньше 10% нужно бить тревогу
-			if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f) {
+			if (tmpLowArmor) {
 				if (CurrentAlert2 > 0.6f) {
 					sharedLife3ParticleSystem2D->AlphaStart = CurrentAlert2;
 					sharedLife3ParticleSystem2D->AlphaEnd = CurrentAlert2;
-				} else {
-					sharedLife3ParticleSystem2D->AlphaStart = 0.00f;
-					sharedLife3ParticleSystem2D->AlphaEnd = 0.00f;
+				} else { // armor could be repaired in-game
+					sharedLife3ParticleSystem2D->AlphaStart = 0.0f;
+					sharedLife3ParticleSystem2D->AlphaEnd = 0.0f;
 				}
-			} else { // подчинились, восстанавливаем данные
-				sharedLife3ParticleSystem2D->AlphaStart = 1.00f;
-				sharedLife3ParticleSystem2D->AlphaEnd = 1.00f;
+			} else {
+				sharedLife3ParticleSystem2D->AlphaStart = 1.0f;
+				sharedLife3ParticleSystem2D->AlphaEnd = 1.0f;
 			}
+		}
+	} else {
+		if (auto sharedEnergyParticleSystem2D = EnergyParticleSystem2D.lock()) {
+			sharedEnergyParticleSystem2D->AlphaStart = 0.0f;
+			sharedEnergyParticleSystem2D->AlphaEnd = 0.0f;
+			sharedEnergyParticleSystem2D->ParticlesPerSec = 1;
+		}
+
+		if (auto sharedLifeParticleSystem2D = LifeParticleSystem2D.lock()) {
+			sharedLifeParticleSystem2D->AlphaStart = 0.0f;
+			sharedLifeParticleSystem2D->AlphaEnd = 0.0f;
+			sharedLifeParticleSystem2D->ParticlesPerSec = 1;
+		}
+
+		if (auto sharedLife2ParticleSystem2D = Life2ParticleSystem2D.lock()) {
+			sharedLife2ParticleSystem2D->AlphaStart = 0.0f;
+			sharedLife2ParticleSystem2D->AlphaEnd = 0.0f;
+			sharedLife2ParticleSystem2D->ParticlesPerSec = 1;
+		}
+
+		if (auto sharedLife3ParticleSystem2D = Life3ParticleSystem2D.lock()) {
+			sharedLife3ParticleSystem2D->AlphaStart = 0.0f;
+			sharedLife3ParticleSystem2D->AlphaEnd = 0.0f;
+			sharedLife3ParticleSystem2D->ParticlesPerSec = 1;
 		}
 	}
 
 	vw_UpdateAllParticleSystems2D(vw_GetTimeThread(0));
+}
+
+/*
+ * Draw head-up display particle systems.
+ */
+void DrawHUDParticleSystems()
+{
 	vw_DrawAllParticleSystems2D();
 }
 

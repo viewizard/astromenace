@@ -34,8 +34,10 @@ namespace astromenace {
 
 // Init head-up display particle systems.
 void InitHUDParticleSystems();
+// Update head-up display particle systems.
+void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter);
 // Draw head-up display particle systems.
-void DrawHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter);
+void DrawHUDParticleSystems();
 
 } // astromenace namespace
 } // viewizard namespace
