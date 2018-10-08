@@ -41,6 +41,8 @@ void DrawHUDParticleSystems();
 
 // Draw head-up display border.
 void DrawHUDBorder();
+// Draw head-up display experience and money.
+void DrawHUDExpMoney(const int Exp, const int Money);
 
 } // astromenace namespace
 } // viewizard namespace
