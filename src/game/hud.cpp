@@ -260,5 +260,31 @@ void DrawHUDParticleSystems()
 	vw_DrawAllParticleSystems2D();
 }
 
+/*
+ * Draw head-up display border.
+ */
+void DrawHUDBorder()
+{
+	if (GameConfig().InternalWidth == 1024) {
+		sRECT SrcRect{0, 0, 1024, 74};
+		sRECT DstRect{0, 0, 1024, 74};
+		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel.tga"), true, 1.0f);
+		return;
+	}
+
+	sRECT SrcRect{0, 0, 466, 73};
+	sRECT DstRect{0, 0, 466, 73};
+	GLtexture tmpHUDBorder = GetPreloadedTextureAsset("game/game_panel2.tga");
+	vw_Draw2D(DstRect, SrcRect, tmpHUDBorder, true, 1.0f);
+
+	SrcRect(1, 74, 150, 145);
+	DstRect(540, 0, 540 + 149, 71);
+	vw_Draw2D(DstRect, SrcRect, tmpHUDBorder, true, 1.0f);
+
+	SrcRect(150, 74, 610, 145);
+	DstRect(768, 0, 768 + 460, 71);
+	vw_Draw2D(DstRect, SrcRect, tmpHUDBorder, true, 1.0f);
+}
+
 } // astromenace namespace
 } // viewizard namespace

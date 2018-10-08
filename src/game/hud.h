@@ -39,6 +39,9 @@ void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter);
 // Draw head-up display particle systems.
 void DrawHUDParticleSystems();
 
+// Draw head-up display border.
+void DrawHUDBorder();
+
 } // astromenace namespace
 } // viewizard namespace
 

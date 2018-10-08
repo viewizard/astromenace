@@ -948,28 +948,7 @@ void DrawGame()
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Выводим верхнюю информационную панель
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (GameConfig().InternalWidth == 1024) {
-		SrcRect(0, 0, 1024, 74);
-		DstRect(0, 0, 1024, 74);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel.tga"), true, 1.0f);
-	}
-	if (GameConfig().InternalWidth == 1228) {
-		SrcRect(0, 0, 466, 73);
-		DstRect(0, 0, 466, 73);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel2.tga"), true, 1.0f);
-
-		SrcRect(1, 74, 150, 145);
-		DstRect(540, 0, 540+149, 71);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel2.tga"), true, 1.0f);
-
-		SrcRect(150, 74, 610, 145);
-		DstRect(768, 0, 768+460, 71);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel2.tga"), true, 1.0f);
-	}
-
+	DrawHUDBorder();
 
 	UpdateHUDParticleSystems(PlayerFighter);
 	DrawHUDParticleSystems();
