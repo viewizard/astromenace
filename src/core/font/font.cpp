@@ -729,7 +729,6 @@ int vw_DrawText3DUTF32(float X, float Y, float Z, const std::u32string &Text)
 	float ImageHeight{0.0f};
 	float ImageWidth{0.0f};
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
-	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vw_PushMatrix();
 	vw_Translate(sVECTOR3D{X, Y, Z});

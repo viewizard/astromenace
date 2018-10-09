@@ -776,7 +776,6 @@ void DrawGame()
 				tmp = nullptr;
 			}
 			vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
-			vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 			vw_BindTexture(0, 0);
 		}
 	}
