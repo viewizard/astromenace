@@ -29,8 +29,6 @@
 
 // FIXME provide adaptive HUD size for high resolution, care about display dpi
 
-// FIXME ostringstream is not so fast, re-use it only on real exp/money changes, but not all the time
-
 // TODO translate comments
 
 #include "../core/core.h"
@@ -53,6 +51,9 @@ std::weak_ptr<cParticleSystem2D> ArmorEmblemVert{};
 
 float DrawBuffer[(2 + 2 + 4) * 6 * 16]; // RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR = (2 + 2 + 4) * 6 vertices * 16 characters
 unsigned int DrawBufferCurrentPosition{0};
+GLtexture HUDFontTexture{0};
+float HUDFontImageWidth{0.0f};
+float HUDFontImageHeight{0.0f};
 
 } // unnamed namespace
 
@@ -69,7 +70,7 @@ float GetShipMaxEnergy(int Num);
  * Make sure we re-init all particle systems data all the time in order to avoid
  * issues with future code changes.
  */
-void InitHUDParticleSystems()
+static void InitHUDParticleSystems()
 {
 	if (EnergyEmblem.expired())
 		EnergyEmblem = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
@@ -416,34 +417,17 @@ static void AddStringToDrawBuffer(const std::string &String, float Xstart, int Y
 }
 
 /*
- * Init HUD.
+ * Update head-up display experience and money.
  */
-void InitHUD()
+void UpdateHUDExpMoney(const int Experience, const int Money)
 {
-	InitHUDParticleSystems();
-}
-
-/*
- * Draw head-up display experience and money.
- */
-void DrawHUDExpMoney(const int Experience, const int Money)
-{
-	GLtexture Texture = GetPreloadedTextureAsset("game/game_num.tga");
-	if (!Texture)
-		return;
-
-	float ImageWidth{0.0f};
-	float ImageHeight{0.0f};
-	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight))
-		return;
-
 	DrawBufferCurrentPosition = 0;
 	float Transp{1.0f};
 
 	AddCharToDrawBuffer('E', GameConfig().InternalWidth / 2 - 57.0f, 5,
-			    Transp, ImageWidth, ImageHeight);
+			    Transp, HUDFontImageWidth, HUDFontImageHeight);
 	AddCharToDrawBuffer('$', GameConfig().InternalWidth / 2 - 56.0f, 31,
-			    Transp, ImageWidth, ImageHeight);
+			    Transp, HUDFontImageWidth, HUDFontImageHeight);
 
 	std::ostringstream tmpStream;
 	tmpStream << std::fixed << std::setprecision(0)
@@ -451,7 +435,7 @@ void DrawHUDExpMoney(const int Experience, const int Money)
 		  << Experience;
 	AddStringToDrawBuffer(tmpStream.str(),
 			      GameConfig().InternalWidth / 2 - 57 + 23.0f, 5,
-			      ImageWidth, ImageHeight);
+			      HUDFontImageWidth, HUDFontImageHeight);
 
 	tmpStream.clear();
 	tmpStream.str(std::string{});
@@ -459,9 +443,32 @@ void DrawHUDExpMoney(const int Experience, const int Money)
 		  << Money;
 	AddStringToDrawBuffer(tmpStream.str(),
 			      GameConfig().InternalWidth / 2 - 57 + 23.0f, 31,
-			      ImageWidth, ImageHeight);
+			      HUDFontImageWidth, HUDFontImageHeight);
+}
 
-	vw_BindTexture(0, Texture);
+/*
+ * Init HUD.
+ */
+void InitHUD(const int Experience, const int Money)
+{
+	InitHUDParticleSystems();
+
+	HUDFontTexture = GetPreloadedTextureAsset("game/game_num.tga");
+	if (HUDFontTexture &&
+	    vw_FindTextureSizeByID(HUDFontTexture, &HUDFontImageWidth, &HUDFontImageHeight))
+		UpdateHUDExpMoney(Experience, Money);
+}
+
+/*
+ * Draw head-up display experience and money.
+ */
+void DrawHUDExpMoney()
+{
+	if (!HUDFontTexture ||
+	    !DrawBufferCurrentPosition)
+		return;
+
+	vw_BindTexture(0, HUDFontTexture);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
 	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * 16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR,

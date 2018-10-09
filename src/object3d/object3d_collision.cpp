@@ -32,6 +32,7 @@
 #include "../config/config.h"
 #include "../assets/audio.h"
 #include "../game/camera.h"
+#include "../game/hud.h"
 #include "space_ship/space_ship.h"
 #include "ground_object/ground_object.h"
 #include "projectile/projectile.h"
@@ -147,6 +148,8 @@ static void AddBonusForKilledEnemy(const cObject3D &Object, eObjectStatus Killed
 
 	GameMoney += tmpBonus;
 	GameExperience += tmpExperience;
+
+	UpdateHUDExpMoney(static_cast<int>(GameExperience), static_cast<int>(GameMoney));
 }
 
 /*

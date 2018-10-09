@@ -38,11 +38,13 @@ void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter);
 void DrawHUDParticleSystems();
 
 // Init HUD.
-void InitHUD();
+void InitHUD(const int Experience, const int Money);
 // Draw head-up display border.
 void DrawHUDBorder();
+// Update head-up display experience and money.
+void UpdateHUDExpMoney(const int Experience, const int Money);
 // Draw head-up display experience and money.
-void DrawHUDExpMoney(const int Experience, const int Money);
+void DrawHUDExpMoney();
 
 } // astromenace namespace
 } // viewizard namespace

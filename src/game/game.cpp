@@ -268,7 +268,9 @@ void InitGame()
 	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 10.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 
 
-	InitHUD();
+	InitHUD(GameConfig().Profile[CurrentProfile].Experience -
+		GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission],
+		GameConfig().Profile[CurrentProfile].Money);
 
 
 
@@ -792,7 +794,7 @@ void DrawGame()
 
 
 
-	DrawHUDExpMoney((int)GameExperience, (int)GameMoney);
+	DrawHUDExpMoney();
 
 
 
