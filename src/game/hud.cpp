@@ -416,6 +416,14 @@ static void AddStringToDrawBuffer(const std::string &String, float Xstart, int Y
 }
 
 /*
+ * Init HUD.
+ */
+void InitHUD()
+{
+	InitHUDParticleSystems();
+}
+
+/*
  * Draw head-up display experience and money.
  */
 void DrawHUDExpMoney(const int Experience, const int Money)

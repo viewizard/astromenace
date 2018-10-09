@@ -268,7 +268,7 @@ void InitGame()
 	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 10.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 
 
-	InitHUDParticleSystems();
+	InitHUD();
 
 
 
