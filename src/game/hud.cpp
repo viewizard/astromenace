@@ -29,12 +29,16 @@
 
 // FIXME provide adaptive HUD size for high resolution, care about display dpi
 
+// FIXME ostringstream is not so fast, re-use it only on real exp/money changes, but not all the time
+
 // TODO translate comments
 
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../assets/texture.h"
 #include "../object3d/space_ship/space_ship.h"
+#include <sstream>
+#include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -46,6 +50,9 @@ std::weak_ptr<cParticleSystem2D> EnergyEmblem{};
 std::weak_ptr<cParticleSystem2D> ArmorEmblemCircle{};
 std::weak_ptr<cParticleSystem2D> ArmorEmblemHoriz{};
 std::weak_ptr<cParticleSystem2D> ArmorEmblemVert{};
+
+float DrawBuffer[(2 + 2 + 4) * 6 * 16]; // RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR = (2 + 2 + 4) * 6 vertices * 16 characters
+unsigned int DrawBufferCurrentPosition{0};
 
 } // unnamed namespace
 
@@ -136,7 +143,7 @@ void InitHUDParticleSystems()
 	if (ArmorEmblemCircle.expired())
 		ArmorEmblemCircle = vw_CreateParticleSystem2D(vw_GetTimeThread(0));
 	if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock()) {
-	sharedArmorEmblemCircle->ColorStart = sRGBCOLOR{1.0f, 0.6f, 0.2f};
+		sharedArmorEmblemCircle->ColorStart = sRGBCOLOR{1.0f, 0.6f, 0.2f};
 		sharedArmorEmblemCircle->ColorEnd = sRGBCOLOR{0.5f, 0.0f, 0.0f};
 		sharedArmorEmblemCircle->AlphaStart = 1.0f;
 		sharedArmorEmblemCircle->AlphaEnd = 1.0f;
@@ -297,395 +304,161 @@ static void GetHUDCharacterRectangle(char Char, sRECT &Rect)
 {
 	switch (Char) {
 	case '0':
-		Rect(232,4,245,25);
+		Rect(232, 4, 245, 25);
 		break;
 	case '1':
-		Rect(71,4,84,25);
+		Rect(71, 4, 84, 25);
 		break;
 	case '2':
-		Rect(88,4,101,25);
+		Rect(88, 4, 101, 25);
 		break;
 	case '3':
-		Rect(106,4,119,25);
+		Rect(106, 4, 119, 25);
 		break;
 	case '4':
-		Rect(124,4,137,25);
+		Rect(124, 4, 137, 25);
 		break;
 	case '5':
-		Rect(142,4,155,25);
+		Rect(142, 4, 155, 25);
 		break;
 	case '6':
-		Rect(160,4,173,25);
+		Rect(160, 4, 173, 25);
 		break;
 	case '7':
-		Rect(178,4,191,25);
+		Rect(178, 4, 191, 25);
 		break;
 	case '8':
-		Rect(196,4,209,25);
+		Rect(196, 4,209,25);
 		break;
 	case '9':
-		Rect(214,4,227,25);
+		Rect(214,4, 227, 25);
 		break;
 
 	case 'E': // star, experience symbol
-		Rect(47,4,66,25);
+		Rect(47, 4, 66, 25);
 		break;
 	case 'S': // second $ symbol, not in use
-		Rect(4,4,21,25);
+		Rect(4, 4, 21, 25);
 		break;
 	case '$':
-		Rect(25,4,41,25);
+		Rect(25, 4, 41 ,25);
 		break;
 
 	case ' ':
-		Rect(0,0,13,0);
+		Rect(0, 0, 13, 0);
 		break;
+	}
+}
+
+/*
+ * Add data to local draw buffer.
+ */
+static inline void AddToDrawBuffer(float CoordX, float CoordY,
+				   float Alpha, float TextureU, float TextureV)
+{
+	static sRGBCOLOR tmpColor{eRGBCOLOR::white};
+
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
+	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
+	DrawBuffer[DrawBufferCurrentPosition++] = tmpColor.r;
+	DrawBuffer[DrawBufferCurrentPosition++] = tmpColor.g;
+	DrawBuffer[DrawBufferCurrentPosition++] = tmpColor.b;
+	DrawBuffer[DrawBufferCurrentPosition++] = Alpha;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureU;
+	DrawBuffer[DrawBufferCurrentPosition++] = TextureV;
+}
+
+/*
+ * Add character data to local draw buffer.
+ * Return character width.
+ */
+static int AddCharToDrawBuffer(char Character, float Xstart, int Ystart,
+			       float Alpha, float ImageWidth, float ImageHeight)
+{
+	sRECT SrcRect;
+	GetHUDCharacterRectangle(Character, SrcRect);
+	sRECT DstRect{static_cast<int>(Xstart), Ystart,
+		      static_cast<int>(Xstart) + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top};
+
+	// texture's UV coordinates
+	float U_Left{SrcRect.left / ImageWidth};
+	float V_Top{SrcRect.top / ImageHeight};
+	float U_Right{SrcRect.right / ImageWidth};
+	float V_Bottom{SrcRect.bottom / ImageHeight};
+
+	// first triangle
+	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top);
+	AddToDrawBuffer(DstRect.left, DstRect.bottom, Alpha, U_Left, V_Bottom);
+	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom);
+	// second triangle
+	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom);
+	AddToDrawBuffer(DstRect.right, DstRect.top, Alpha, U_Right, V_Top);
+	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top);
+
+	return SrcRect.right - SrcRect.left;
+}
+
+/*
+ * Add string data to local draw buffer.
+ */
+static void AddStringToDrawBuffer(const std::string &String, float Xstart, int Ystart,
+				  float ImageWidth, float ImageHeight)
+{
+	// first '0' characters should be transparent for more nice look
+	float Transp{0.2f};
+	for (auto &tmpCharacter : String) {
+		if (tmpCharacter != '0')
+			Transp = 1.0f;
+
+		Xstart += AddCharToDrawBuffer(tmpCharacter, Xstart, Ystart,
+					      Transp, ImageWidth, ImageHeight);
 	}
 }
 
 /*
  * Draw head-up display experience and money.
  */
-void DrawHUDExpMoney(const int Exp, const int Money)
+void DrawHUDExpMoney(const int Experience, const int Money)
 {
-	sRECT DstRect, SrcRect;
-	int Ystart;
-	float Xstart;
 	GLtexture Texture = GetPreloadedTextureAsset("game/game_num.tga");
 	if (!Texture)
 		return;
 
-	// Установка текстуры и ее свойств...
+	float ImageWidth{0.0f};
+	float ImageHeight{0.0f};
+	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight))
+		return;
+
+	DrawBufferCurrentPosition = 0;
+	float Transp{1.0f};
+
+	AddCharToDrawBuffer('E', GameConfig().InternalWidth / 2 - 57.0f, 5,
+			    Transp, ImageWidth, ImageHeight);
+	AddCharToDrawBuffer('$', GameConfig().InternalWidth / 2 - 56.0f, 31,
+			    Transp, ImageWidth, ImageHeight);
+
+	std::ostringstream tmpStream;
+	tmpStream << std::fixed << std::setprecision(0)
+		  << std::setfill('0') << std::setw(7)
+		  << Experience;
+	AddStringToDrawBuffer(tmpStream.str(),
+			      GameConfig().InternalWidth / 2 - 57 + 23.0f, 5,
+			      ImageWidth, ImageHeight);
+
+	tmpStream.clear();
+	tmpStream.str(std::string{});
+	tmpStream << std::setfill('0') << std::setw(7)
+		  << Money;
+	AddStringToDrawBuffer(tmpStream.str(),
+			      GameConfig().InternalWidth / 2 - 57 + 23.0f, 31,
+			      ImageWidth, ImageHeight);
+
 	vw_BindTexture(0, Texture);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
-	float ImageHeight{0.0f};
-	float ImageWidth{0.0f};
-	vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
+	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * 16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR,
+		  DrawBuffer, 8 * sizeof(DrawBuffer[0]));
 
-	float R=1.0f;
-	float G=1.0f;
-	float B=1.0f;
-	float Transp=1.0f;
-
-	// выделяем память
-	// буфер для последовательности TRIANGLES
-	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float *tmp = new float[(2+2+4)*6*16];
-	int k=0;
-
-
-
-	// вывод эмблем
-
-	Xstart = GameConfig().InternalWidth / 2 - 57.0f;
-	Ystart = 5;
-	GetHUDCharacterRectangle('E', SrcRect);
-	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
-
-	// texture's UV coordinates
-	float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
-	float V_Top{(SrcRect.top * 1.0f) / ImageHeight};
-	float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
-	float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
-
-	// first triangle
-	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top;		// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Left;
-	tmp[k++] = V_Top;
-
-	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.bottom;	// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Left;
-	tmp[k++] = V_Bottom;
-
-	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.bottom;	// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Right;
-	tmp[k++] = V_Bottom;
-
-
-	// second triangle
-	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.bottom;	// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Right;
-	tmp[k++] = V_Bottom;
-
-	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.top;		// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Right;
-	tmp[k++] = V_Top;
-
-	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top;		// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Left;
-	tmp[k++] = V_Top;
-
-	Xstart = GameConfig().InternalWidth / 2 - 56.0f;
-	Ystart = 31;
-	GetHUDCharacterRectangle('$', SrcRect);
-	DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
-
-	// texture's UV coordinates
-	U_Left = (SrcRect.left * 1.0f) / ImageWidth;
-	V_Top = (SrcRect.top * 1.0f) / ImageHeight;
-	U_Right = (SrcRect.right * 1.0f) / ImageWidth;
-	V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
-
-	// first triangle
-	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top;		// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Left;
-	tmp[k++] = V_Top;
-
-	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.bottom;	// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Left;
-	tmp[k++] = V_Bottom;
-
-	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.bottom;	// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Right;
-	tmp[k++] = V_Bottom;
-
-
-	// second triangle
-	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.bottom;	// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Right;
-	tmp[k++] = V_Bottom;
-
-	tmp[k++] = DstRect.right;	// X
-	tmp[k++] = DstRect.top;		// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Right;
-	tmp[k++] = V_Top;
-
-	tmp[k++] = DstRect.left;	// X
-	tmp[k++] = DstRect.top;		// Y
-	tmp[k++] = R;
-	tmp[k++] = G;
-	tmp[k++] = B;
-	tmp[k++] = Transp;
-	tmp[k++] = U_Left;
-	tmp[k++] = V_Top;
-
-
-
-	// вывод опыта
-
-	Xstart = GameConfig().InternalWidth / 2 - 57 + 23.0f;
-	Ystart = 5;
-	std::string tmpString{std::to_string(Exp)};
-
-	for (unsigned int i=0; i<7; i++) {
-		if ((7 - i) > tmpString.size()) {
-			Transp = 0.2f;
-			GetHUDCharacterRectangle('0', SrcRect);
-		} else {
-			Transp = 1.0f;
-			GetHUDCharacterRectangle(tmpString[i + tmpString.size() - 7], SrcRect);
-		}
-		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
-
-		// texture's UV coordinates
-		U_Left = (SrcRect.left * 1.0f) / ImageWidth;
-		V_Top = (SrcRect.top * 1.0f) / ImageHeight;
-		U_Right = (SrcRect.right * 1.0f) / ImageWidth;
-		V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
-
-		// first triangle
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top;		// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Left;
-		tmp[k++] = V_Top;
-
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.bottom;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Left;
-		tmp[k++] = V_Bottom;
-
-		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.bottom;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Right;
-		tmp[k++] = V_Bottom;
-
-
-		// second triangle
-		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.bottom;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Right;
-		tmp[k++] = V_Bottom;
-
-		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.top;		// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Right;
-		tmp[k++] = V_Top;
-
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top;		// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Left;
-		tmp[k++] = V_Top;
-
-		Xstart += SrcRect.right - SrcRect.left;
-	}
-
-
-	// вывод денег
-
-	Xstart = GameConfig().InternalWidth / 2 - 57 + 23.0f;
-	Ystart = 31;
-	tmpString = std::to_string(Money);
-
-	for (unsigned int i=0; i<7; i++) {
-		if ((7 - i) > tmpString.size()) {
-			Transp = 0.2f;
-			GetHUDCharacterRectangle('0', SrcRect);
-		} else {
-			Transp = 1.0f;
-			GetHUDCharacterRectangle(tmpString[i + tmpString.size() - 7], SrcRect);
-		}
-		DstRect((int)Xstart, Ystart, (int)Xstart + SrcRect.right-SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top);
-
-		// texture's UV coordinates
-		U_Left = (SrcRect.left * 1.0f) / ImageWidth;
-		V_Top = (SrcRect.top * 1.0f) / ImageHeight;
-		U_Right = (SrcRect.right * 1.0f) / ImageWidth;
-		V_Bottom = (SrcRect.bottom * 1.0f) / ImageHeight;
-
-		// first triangle
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top;		// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Left;
-		tmp[k++] = V_Top;
-
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.bottom;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Left;
-		tmp[k++] = V_Bottom;
-
-		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.bottom;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Right;
-		tmp[k++] = V_Bottom;
-
-
-		// second triangle
-		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.bottom;	// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Right;
-		tmp[k++] = V_Bottom;
-
-		tmp[k++] = DstRect.right;	// X
-		tmp[k++] = DstRect.top;		// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Right;
-		tmp[k++] = V_Top;
-
-		tmp[k++] = DstRect.left;	// X
-		tmp[k++] = DstRect.top;		// Y
-		tmp[k++] = R;
-		tmp[k++] = G;
-		tmp[k++] = B;
-		tmp[k++] = Transp;
-		tmp[k++] = U_Left;
-		tmp[k++] = V_Top;
-
-		Xstart += SrcRect.right - SrcRect.left;
-	}
-
-	// 16 - 2 эмблемы + 7 цифр опыта + 7 цифр наград
-	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * 16, RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8 * sizeof(tmp[0]));
-
-	if (tmp != nullptr)
-		delete [] tmp;
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	vw_BindTexture(0, 0);
