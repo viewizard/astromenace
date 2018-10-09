@@ -358,21 +358,22 @@ static void GetHUDCharacterRectangle(char Char, sRECT &Rect)
 }
 
 /*
- * Add data to local draw buffer.
+ * Add data to draw buffer.
  */
-static inline void AddToDrawBuffer(float CoordX, float CoordY,
-				   float Alpha, float TextureU, float TextureV)
+static void AddToDrawBuffer(float CoordX, float CoordY,
+			    float Alpha, float TextureU, float TextureV,
+			    float Buffer[], unsigned &BufferPosition)
 {
 	static sRGBCOLOR tmpColor{eRGBCOLOR::white};
 
-	DrawBuffer[DrawBufferCurrentPosition++] = CoordX;
-	DrawBuffer[DrawBufferCurrentPosition++] = CoordY;
-	DrawBuffer[DrawBufferCurrentPosition++] = tmpColor.r;
-	DrawBuffer[DrawBufferCurrentPosition++] = tmpColor.g;
-	DrawBuffer[DrawBufferCurrentPosition++] = tmpColor.b;
-	DrawBuffer[DrawBufferCurrentPosition++] = Alpha;
-	DrawBuffer[DrawBufferCurrentPosition++] = TextureU;
-	DrawBuffer[DrawBufferCurrentPosition++] = TextureV;
+	Buffer[BufferPosition++] = CoordX;
+	Buffer[BufferPosition++] = CoordY;
+	Buffer[BufferPosition++] = tmpColor.r;
+	Buffer[BufferPosition++] = tmpColor.g;
+	Buffer[BufferPosition++] = tmpColor.b;
+	Buffer[BufferPosition++] = Alpha;
+	Buffer[BufferPosition++] = TextureU;
+	Buffer[BufferPosition++] = TextureV;
 }
 
 /*
@@ -394,13 +395,19 @@ static int AddCharToDrawBuffer(char Character, float Xstart, int Ystart,
 	float V_Bottom{SrcRect.bottom / ImageHeight};
 
 	// first triangle
-	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top);
-	AddToDrawBuffer(DstRect.left, DstRect.bottom, Alpha, U_Left, V_Bottom);
-	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom);
+	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top,
+			DrawBuffer, DrawBufferCurrentPosition);
+	AddToDrawBuffer(DstRect.left, DstRect.bottom, Alpha, U_Left, V_Bottom,
+			DrawBuffer, DrawBufferCurrentPosition);
+	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom,
+			DrawBuffer, DrawBufferCurrentPosition);
 	// second triangle
-	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom);
-	AddToDrawBuffer(DstRect.right, DstRect.top, Alpha, U_Right, V_Top);
-	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top);
+	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom,
+			DrawBuffer, DrawBufferCurrentPosition);
+	AddToDrawBuffer(DstRect.right, DstRect.top, Alpha, U_Right, V_Top,
+			DrawBuffer, DrawBufferCurrentPosition);
+	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top,
+			DrawBuffer, DrawBufferCurrentPosition);
 
 	return SrcRect.right - SrcRect.left;
 }
