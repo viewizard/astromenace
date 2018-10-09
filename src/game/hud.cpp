@@ -29,6 +29,8 @@
 
 // FIXME provide adaptive HUD size for high resolution, care about display dpi
 
+// FIXME switch from vw_GetTimeThread(0) to SDL_GetTicks() usage
+
 // TODO translate comments
 
 #include "../core/core.h"
@@ -54,6 +56,10 @@ unsigned int DrawBufferCurrentPosition{0};
 GLtexture HUDFontTexture{0};
 float HUDFontImageWidth{0.0f};
 float HUDFontImageHeight{0.0f};
+
+float CurrentDrawEnergNumFull{0.0f};
+float CurrentDrawLifeNumFull{0.0f};
+float LastUpdateTime{0.0f};
 
 } // unnamed namespace
 
@@ -449,7 +455,7 @@ void UpdateHUDExpMoney(const int Experience, const int Money)
 /*
  * Init HUD.
  */
-void InitHUD(const int Experience, const int Money)
+void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money)
 {
 	InitHUDParticleSystems();
 
@@ -457,6 +463,13 @@ void InitHUD(const int Experience, const int Money)
 	if (HUDFontTexture &&
 	    vw_FindTextureSizeByID(HUDFontTexture, &HUDFontImageWidth, &HUDFontImageHeight))
 		UpdateHUDExpMoney(Experience, Money);
+
+	LastUpdateTime = vw_GetTimeThread(0);
+	CurrentDrawEnergNumFull = 1.0f;
+	if (GamePowerSystem == 0)
+		CurrentDrawEnergNumFull = 0.0f;
+	if (auto sharedSpaceShip = SpaceShip.lock())
+		CurrentDrawLifeNumFull = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
 }
 
 /*
@@ -476,6 +489,236 @@ void DrawHUDExpMoney()
 
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
+}
+
+/*
+ * Draw head-up display energy and armor progress bars.
+ */
+void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
+{
+	float NeedDrawEnergNumFull = 0.0f;
+	float NeedDrawLifeNumFull = 0.0f;
+	if (auto sharedSpaceShip = SpaceShip.lock()) {
+		NeedDrawEnergNumFull = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
+		NeedDrawLifeNumFull = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
+	}
+
+	sRECT SrcRect, DstRect;
+	// находим правильное отображение
+	if (NeedDrawEnergNumFull > CurrentDrawEnergNumFull) {
+		CurrentDrawEnergNumFull += GamePowerSystem*0.5f*(vw_GetTimeThread(0) - LastUpdateTime);
+		if (CurrentDrawEnergNumFull > NeedDrawEnergNumFull)
+			CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
+	} else if (NeedDrawEnergNumFull < CurrentDrawEnergNumFull) {
+		CurrentDrawEnergNumFull -= GamePowerSystem*0.5f*(vw_GetTimeThread(0) - LastUpdateTime);
+		if (CurrentDrawEnergNumFull < NeedDrawEnergNumFull)
+			CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
+	}
+	// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
+	int DrawEnergNum = (int)ceil(CurrentDrawEnergNumFull * 19);
+
+	// находим правильное отображение
+	if (NeedDrawLifeNumFull > CurrentDrawLifeNumFull) {
+		CurrentDrawLifeNumFull += 0.3f*(vw_GetTimeThread(0) - LastUpdateTime);
+		if (CurrentDrawLifeNumFull > NeedDrawLifeNumFull)
+			CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
+	} else if (NeedDrawLifeNumFull < CurrentDrawLifeNumFull) {
+		CurrentDrawLifeNumFull -= 0.3f*(vw_GetTimeThread(0) - LastUpdateTime);
+		if (CurrentDrawLifeNumFull < NeedDrawLifeNumFull)
+			CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
+	}
+
+	LastUpdateTime = vw_GetTimeThread(0);
+
+	// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
+	int DrawLifeNum = (int)ceil(CurrentDrawLifeNumFull * 19);
+
+	if (DrawLifeNum+DrawEnergNum > 0) {
+		float R=1.0f;
+		float G=1.0f;
+		float B=1.0f;
+
+		GLtexture Texture = GetPreloadedTextureAsset("game/game_panel_el.tga");
+		if (!Texture)
+			return;
+
+		// Установка текстуры и ее свойств...
+		vw_BindTexture(0, Texture);
+		vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
+
+		float ImageHeight{0.0f};
+		float ImageWidth{0.0f};
+		vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
+
+		// выделяем память
+		// буфер для последовательности TRIANGLES
+		// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
+		float *tmp = new float[(2+2+4)*6*(DrawLifeNum+DrawEnergNum)];
+		int k = 0;
+
+
+
+		// вывод текущего заряда энергии
+		// прорисовываем все элементы
+		for (int i=0; i<DrawEnergNum; i++) {
+			// получаем данные текущего фрагмента
+			SrcRect(67+i*20, 0, 85+i*20, 64);
+			DstRect = SrcRect;
+			// находим прозначность
+			float Transp = (CurrentDrawEnergNumFull * 19) - i;
+			if (Transp > 1.0f) Transp = 1.0f;
+
+			// texture's UV coordinates
+			float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
+			float V_Top{(SrcRect.top * 1.0f)/ImageHeight};
+			float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
+			float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
+
+			// first triangle
+			tmp[k++] = DstRect.left;	// X
+			tmp[k++] = DstRect.top;		// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Left;
+			tmp[k++] = V_Top;
+
+			tmp[k++] = DstRect.left;	// X
+			tmp[k++] = DstRect.bottom;	// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Left;
+			tmp[k++] = V_Bottom;
+
+			tmp[k++] = DstRect.right;	// X
+			tmp[k++] = DstRect.bottom;	// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Right;
+			tmp[k++] = V_Bottom;
+
+
+			// second triangle
+			tmp[k++] = DstRect.right;	// X
+			tmp[k++] = DstRect.bottom;	// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Right;
+			tmp[k++] = V_Bottom;
+
+			tmp[k++] = DstRect.right;	// X
+			tmp[k++] = DstRect.top;		// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Right;
+			tmp[k++] = V_Top;
+
+			tmp[k++] = DstRect.left;	// X
+			tmp[k++] = DstRect.top;		// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Left;
+			tmp[k++] = V_Top;
+		}
+
+		// вывод текущего состояния жизни
+		// прорисовываем все элементы
+		for (int i=0; i<DrawLifeNum; i++) {
+			// получаем данные текущего фрагмента
+			SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
+			if (GameConfig().InternalWidth == 1024)
+				DstRect = SrcRect;
+			if (GameConfig().InternalWidth == 1228)
+				DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
+			// находим прозначность
+			float Transp = (CurrentDrawLifeNumFull * 19) - i;
+			if (Transp > 1.0f)
+				Transp = 1.0f;
+
+			// texture's UV coordinates
+			float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
+			float V_Top{(SrcRect.top * 1.0f)/ImageHeight};
+			float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
+			float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
+
+			// first triangle
+			tmp[k++] = DstRect.left;	// X
+			tmp[k++] = DstRect.top;		// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Left;
+			tmp[k++] = V_Top;
+
+			tmp[k++] = DstRect.left;	// X
+			tmp[k++] = DstRect.bottom;	// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Left;
+			tmp[k++] = V_Bottom;
+
+			tmp[k++] = DstRect.right;	// X
+			tmp[k++] = DstRect.bottom;	// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Right;
+			tmp[k++] = V_Bottom;
+
+
+			// second triangle
+			tmp[k++] = DstRect.right;	// X
+			tmp[k++] = DstRect.bottom;	// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Right;
+			tmp[k++] = V_Bottom;
+
+			tmp[k++] = DstRect.right;	// X
+			tmp[k++] = DstRect.top;		// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Right;
+			tmp[k++] = V_Top;
+
+			tmp[k++] = DstRect.left;	// X
+			tmp[k++] = DstRect.top;		// Y
+			tmp[k++] = R;
+			tmp[k++] = G;
+			tmp[k++] = B;
+			tmp[k++] = Transp;
+			tmp[k++] = U_Left;
+			tmp[k++] = V_Top;
+		}
+
+		vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * (DrawLifeNum + DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8 * sizeof(tmp[0]));
+
+		if (tmp != nullptr) {
+			delete [] tmp;
+			tmp = nullptr;
+		}
+		vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
+		vw_BindTexture(0, 0);
+	}
 }
 
 } // astromenace namespace

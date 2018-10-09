@@ -154,11 +154,6 @@ extern int LastMouseY;
 extern int LastMouseXR;
 extern int LastMouseYR;
 
-// состояние жизни и энергии, которые сейчас рисуем
-float CurrentDrawEnergNumFull;
-float CurrentDrawLifeNumFull;
-
-
 // щит или дефлектор
 extern std::weak_ptr<cParticleSystem> Shild1;
 extern std::weak_ptr<cParticleSystem> Shild2;
@@ -268,7 +263,8 @@ void InitGame()
 	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 10.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
 
 
-	InitHUD(GameConfig().Profile[CurrentProfile].Experience -
+	InitHUD(PlayerFighter,
+		GameConfig().Profile[CurrentProfile].Experience -
 		GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission],
 		GameConfig().Profile[CurrentProfile].Money);
 
@@ -305,12 +301,6 @@ void InitGame()
 	PirateBuildingsKillBonus = 0.0f;
 	AsteroidsKillQuant = 0;
 	AsteroidsKillBonus = 0.0f;
-
-	CurrentDrawEnergNumFull = 1.0f;
-	if (GamePowerSystem == 0)
-		CurrentDrawEnergNumFull = 0.0f;
-	if (auto sharedPlayerFighter = PlayerFighter.lock())
-		CurrentDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus;
 
 	CurrentTime = vw_GetTimeThread(0);
 	CurrentAlert2 = 1.0f;
@@ -525,7 +515,7 @@ void DrawGame()
 	// 2д часть
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	vw_Start2DMode(-1,1);
-	sRECT SrcRect, DstRect;
+
 
 
 
@@ -543,271 +533,13 @@ void DrawGame()
 	UpdateHUDParticleSystems(PlayerFighter);
 	DrawHUDParticleSystems();
 
-
-	// выводим состояние жизни и энергии
-	float NeedDrawEnergNumFull = 0.0f;
-	float NeedDrawLifeNumFull = 0.0f;
-	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
-		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-		NeedDrawEnergNumFull = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
-		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-		NeedDrawLifeNumFull = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus;
-	}
-
-
-
-
-
-
-
-
-
-	// рисуем жизнь и энергию одним проходом, чтобы не гонять по 4 вертекса
-	{
-
-		// находим правильное отображение
-		if (NeedDrawEnergNumFull > CurrentDrawEnergNumFull) {
-			CurrentDrawEnergNumFull += GamePowerSystem*0.5f*(vw_GetTimeThread(0) - LastGameUpdateTime);
-			if (CurrentDrawEnergNumFull > NeedDrawEnergNumFull) CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
-		} else {
-			if (NeedDrawEnergNumFull < CurrentDrawEnergNumFull) {
-				CurrentDrawEnergNumFull -= GamePowerSystem*0.5f*(vw_GetTimeThread(0) - LastGameUpdateTime);
-				if (CurrentDrawEnergNumFull < NeedDrawEnergNumFull) CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
-			}
-		}
-		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-		int DrawEnergNum = (int)ceil(CurrentDrawEnergNumFull * 19);
-
-		// находим правильное отображение
-		if (NeedDrawLifeNumFull > CurrentDrawLifeNumFull) {
-			CurrentDrawLifeNumFull += 0.3f*(vw_GetTimeThread(0) - LastGameUpdateTime);
-			if (CurrentDrawLifeNumFull > NeedDrawLifeNumFull) CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
-		} else {
-			if (NeedDrawLifeNumFull < CurrentDrawLifeNumFull) {
-				CurrentDrawLifeNumFull -= 0.3f*(vw_GetTimeThread(0) - LastGameUpdateTime);
-				if (CurrentDrawLifeNumFull < NeedDrawLifeNumFull) CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
-			}
-		}
-		// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-		int DrawLifeNum = (int)ceil(CurrentDrawLifeNumFull * 19);
-
-		if (DrawLifeNum+DrawEnergNum > 0) {
-			float R=1.0f;
-			float G=1.0f;
-			float B=1.0f;
-
-			GLtexture Texture = GetPreloadedTextureAsset("game/game_panel_el.tga");
-			if (!Texture)
-				return;
-
-			// Установка текстуры и ее свойств...
-			vw_BindTexture(0, Texture);
-			vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
-
-			float ImageHeight{0.0f};
-			float ImageWidth{0.0f};
-			vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight);
-
-			// выделяем память
-			// буфер для последовательности TRIANGLES
-			// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-			float *tmp = new float[(2+2+4)*6*(DrawLifeNum+DrawEnergNum)];
-			int k = 0;
-
-
-
-			// вывод текущего заряда энергии
-			// прорисовываем все элементы
-			for (int i=0; i<DrawEnergNum; i++) {
-				// получаем данные текущего фрагмента
-				SrcRect(67+i*20, 0, 85+i*20, 64);
-				DstRect = SrcRect;
-				// находим прозначность
-				float Transp = (CurrentDrawEnergNumFull * 19) - i;
-				if (Transp > 1.0f) Transp = 1.0f;
-
-				// texture's UV coordinates
-				float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
-				float V_Top{(SrcRect.top * 1.0f)/ImageHeight};
-				float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
-				float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
-
-				// first triangle
-				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top;		// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Left;
-				tmp[k++] = V_Top;
-
-				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.bottom;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Left;
-				tmp[k++] = V_Bottom;
-
-				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.bottom;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Right;
-				tmp[k++] = V_Bottom;
-
-
-				// second triangle
-				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.bottom;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Right;
-				tmp[k++] = V_Bottom;
-
-				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.top;		// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Right;
-				tmp[k++] = V_Top;
-
-				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top;		// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Left;
-				tmp[k++] = V_Top;
-
-			}
-
-			// вывод текущего состояния жизни
-			// прорисовываем все элементы
-			for (int i=0; i<DrawLifeNum; i++) {
-				// получаем данные текущего фрагмента
-				SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
-				if (GameConfig().InternalWidth == 1024)
-					DstRect = SrcRect;
-				if (GameConfig().InternalWidth == 1228)
-					DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
-				// находим прозначность
-				float Transp = (CurrentDrawLifeNumFull * 19) - i;
-				if (Transp > 1.0f)
-					Transp = 1.0f;
-
-				// texture's UV coordinates
-				float U_Left{(SrcRect.left * 1.0f) / ImageWidth};
-				float V_Top{(SrcRect.top * 1.0f)/ImageHeight};
-				float U_Right{(SrcRect.right * 1.0f) / ImageWidth};
-				float V_Bottom{(SrcRect.bottom * 1.0f) / ImageHeight};
-
-				// first triangle
-				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top;		// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Left;
-				tmp[k++] = V_Top;
-
-				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.bottom;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Left;
-				tmp[k++] = V_Bottom;
-
-				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.bottom;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Right;
-				tmp[k++] = V_Bottom;
-
-
-				// second triangle
-				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.bottom;	// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Right;
-				tmp[k++] = V_Bottom;
-
-				tmp[k++] = DstRect.right;	// X
-				tmp[k++] = DstRect.top;		// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Right;
-				tmp[k++] = V_Top;
-
-				tmp[k++] = DstRect.left;	// X
-				tmp[k++] = DstRect.top;		// Y
-				tmp[k++] = R;
-				tmp[k++] = G;
-				tmp[k++] = B;
-				tmp[k++] = Transp;
-				tmp[k++] = U_Left;
-				tmp[k++] = V_Top;
-			}
-
-
-
-			vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * (DrawLifeNum + DrawEnergNum), RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmp, 8 * sizeof(tmp[0]));
-
-			if (tmp != nullptr) {
-				delete [] tmp;
-				tmp = nullptr;
-			}
-			vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
-			vw_BindTexture(0, 0);
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
+	DrawHUDProgressBars(PlayerFighter);
 
 	DrawHUDExpMoney();
 
-
-
-
 	cGameSpeed::GetInstance().Draw();
 
-
-
-
 	DrawWeaponPanels(PlayerFighter);
-
-
-
 
 	DrawMissionNumberText();
 	DrawMissionFailedText();
@@ -855,8 +587,8 @@ void DrawGame()
 	if (GameContentTransp > 0.0f) {
 		if (GameMissionCompleteStatus) {
 			// выводим подложку меню
-			SrcRect(2, 2, 564-2, 564-2);
-			DstRect(GameConfig().InternalWidth / 2 - 256 - 26, 128 - 28, GameConfig().InternalWidth / 2 - 256 + 534, 128 + 532);
+			sRECT SrcRect(2, 2, 564-2, 564-2);
+			sRECT DstRect(GameConfig().InternalWidth / 2 - 256 - 26, 128 - 28, GameConfig().InternalWidth / 2 - 256 + 534, 128 + 532);
 			vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
 					   true, GameContentTransp);
 			// название меню
@@ -1000,8 +732,8 @@ void DrawGame()
 			// основное меню игры
 			case eGameMenuStatus::GAME_MENU: {
 				// выводим подложку меню
-				SrcRect(2, 2, 564-2, 564-2);
-				DstRect(GameConfig().InternalWidth / 2 - 256+4-30, 128+2-30, GameConfig().InternalWidth / 2 - 256+564-30, 128+564-2-30);
+				sRECT SrcRect(2, 2, 564-2, 564-2);
+				sRECT DstRect(GameConfig().InternalWidth / 2 - 256+4-30, 128+2-30, GameConfig().InternalWidth / 2 - 256+564-30, 128+564-2-30);
 				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
 					  true, GameContentTransp);
 				// название меню
@@ -1081,8 +813,8 @@ void DrawGame()
 
 
 			// вывод надписи пауза
-			SrcRect(0, 0, 256, 64);
-			DstRect(GameConfig().InternalWidth - 256 + 60, 768 - 54, GameConfig().InternalWidth + 60, 768 + 10);
+			sRECT SrcRect(0, 0, 256, 64);
+			sRECT DstRect(GameConfig().InternalWidth - 256 + 60, 768 - 54, GameConfig().InternalWidth + 60, 768 + 10);
 			if (GameContentTransp == 1.0f)
 				vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/pause.tga")), true, CurrentAlert2*GameContentTransp);
 			else
@@ -1155,8 +887,8 @@ void DrawGame()
 			NeedOnGame = false;
 		}
 
-		SrcRect(0, 0, 2, 2);
-		DstRect(0, 0, GameConfig().InternalWidth, 768);
+		sRECT SrcRect(0, 0, 2, 2);
+		sRECT DstRect(0, 0, GameConfig().InternalWidth, 768);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
@@ -1172,8 +904,8 @@ void DrawGame()
 			cCommand::GetInstance().Set(GameExitCommand);
 		}
 
-		SrcRect(0, 0, 2, 2);
-		DstRect(0, 0, GameConfig().InternalWidth, 768);
+		sRECT SrcRect(0, 0, 2, 2);
+		sRECT DstRect(0, 0, GameConfig().InternalWidth, 768);
 		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, GameBlackTransp);
 	}
 
