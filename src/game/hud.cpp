@@ -47,6 +47,8 @@ std::weak_ptr<cParticleSystem2D> ArmorEmblemVert{};
 
 GLtexture HUDBorderTexture{0};
 
+int CurrentExperience{0};
+int CurrenMoney{0};
 float DrawBuffer[(2 + 2 + 4) * 6 * 16]; // RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR = (2 + 2 + 4) * 6 vertices * 16 characters
 unsigned int DrawBufferCurrentPosition{0};
 GLtexture HUDFontTexture{0};
@@ -63,7 +65,6 @@ float ProgressBarImageWidth{0.0f};
 float CurrentDrawEnergyStatus{0.0f};
 float CurrentDrawArmorStatus{0.0f};
 
-float TimeDelta{0.0f};
 uint32_t LastUpdateTick{0};
 float Blinking{1.0f};
 
@@ -452,6 +453,8 @@ static void AddStringToDrawBuffer(const std::string &String, float Xstart, int Y
  */
 void UpdateHUDExpMoney(const int Experience, const int Money)
 {
+	CurrentExperience = Experience;
+	CurrenMoney = Money;
 	DrawBufferCurrentPosition = 0;
 	float Transp{1.0f};
 
@@ -508,6 +511,14 @@ static void DrawHUDExpMoney()
 }
 
 /*
+ * Resize head-up display experience and money.
+ */
+static void ResizeHUDExpMoney()
+{
+	InitHUDExpMoney(CurrentExperience, CurrenMoney);
+}
+
+/*
  * Init head-up display energy and armor progress bars.
  */
 static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
@@ -530,7 +541,7 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 /*
  * Update head-up display energy and armor progress bars.
  */
-static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
+static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip, float TimeDelta)
 {
 	float EnergyStatus{0.0f};
 	float ArmorStatus{0.0f};
@@ -541,7 +552,7 @@ static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 
 	// in case of armor and energy progress bars we provide animation,
 	// looks much better then instant progress bar status changes
-	auto ProgressBarAnimation = [] (float Status, float &CurrentDrawStatus, float AnimationSpeed) {
+	auto ProgressBarAnimation = [TimeDelta] (float Status, float &CurrentDrawStatus, float AnimationSpeed) {
 		if (Status > CurrentDrawStatus) {
 			CurrentDrawStatus += GamePowerSystem * AnimationSpeed * TimeDelta;
 			if (CurrentDrawStatus > Status)
@@ -618,7 +629,6 @@ static void DrawHUDProgressBars()
  */
 void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money)
 {
-	TimeDelta = 0.0f;
 	LastUpdateTick = SDL_GetTicks();
 
 	InitHUDBorder();
@@ -645,7 +655,7 @@ void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
 	uint32_t CurrentTick = SDL_GetTicks();
 	constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
-	TimeDelta = static_cast<float>(CurrentTick - LastUpdateTick) / TicksInSecond;
+	float TimeDelta = static_cast<float>(CurrentTick - LastUpdateTick) / TicksInSecond;
 	Blinking -= 1.9f * TimeDelta;
 	if ((Blinking < 0.1f) ||
 	    (Blinking > 1.0f))
@@ -653,7 +663,7 @@ void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
 	LastUpdateTick = CurrentTick;
 
 	UpdateHUDParticleSystems(SpaceShip);
-	UpdateHUDProgressBars(SpaceShip);
+	UpdateHUDProgressBars(SpaceShip, TimeDelta);
 }
 
 /*
@@ -663,6 +673,7 @@ void ResizeHUD()
 {
 	ResizeHUDBorder();
 	ResizeHUDParticleSystems();
+	ResizeHUDExpMoney();
 }
 
 } // astromenace namespace
