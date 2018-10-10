@@ -32,13 +32,12 @@
 namespace viewizard {
 namespace astromenace {
 
-// Update head-up display particle systems.
-void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter);
-
 // Init HUD.
 void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money);
 // Draw HUD.
 void DrawHUD(std::weak_ptr<cSpaceShip> &SpaceShip);
+// Update HUD.
+void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip);
 
 // Update head-up display experience and money.
 void UpdateHUDExpMoney(const int Experience, const int Money);

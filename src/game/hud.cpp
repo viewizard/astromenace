@@ -179,7 +179,7 @@ static void InitHUDParticleSystems()
 /*
  * Update head-up display particle systems.
  */
-void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
+static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
 {
 	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
 		if (auto sharedEnergyEmblem = EnergyEmblem.lock()) {
@@ -635,6 +635,14 @@ void DrawHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
 	DrawHUDParticleSystems();
 	DrawHUDProgressBars(SpaceShip);
 	DrawHUDExpMoney();
+}
+
+/*
+ * Update HUD.
+ */
+void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
+{
+	UpdateHUDParticleSystems(SpaceShip);
 }
 
 } // astromenace namespace

@@ -529,9 +529,7 @@ void DrawGame()
 
 
 
-	UpdateHUDParticleSystems(PlayerFighter);
-
-
+	UpdateHUD(PlayerFighter);
 	DrawHUD(PlayerFighter);
 	DrawWeaponPanels(PlayerFighter); // (?) part of HUD
 
