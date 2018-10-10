@@ -34,19 +34,15 @@ namespace astromenace {
 
 // Update head-up display particle systems.
 void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter);
-// Draw head-up display particle systems.
-void DrawHUDParticleSystems();
 
 // Init HUD.
 void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money);
-// Draw head-up display border.
-void DrawHUDBorder();
+// Draw HUD.
+void DrawHUD(std::weak_ptr<cSpaceShip> &SpaceShip);
+
 // Update head-up display experience and money.
 void UpdateHUDExpMoney(const int Experience, const int Money);
-// Draw head-up display experience and money.
-void DrawHUDExpMoney();
-// Draw head-up display energy and armor progress bars.
-void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip);
+
 
 } // astromenace namespace
 } // viewizard namespace

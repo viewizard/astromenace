@@ -528,18 +528,15 @@ void DrawGame()
 
 
 
-	DrawHUDBorder();
 
 	UpdateHUDParticleSystems(PlayerFighter);
-	DrawHUDParticleSystems();
 
-	DrawHUDProgressBars(PlayerFighter);
 
-	DrawHUDExpMoney();
+	DrawHUD(PlayerFighter);
+	DrawWeaponPanels(PlayerFighter); // (?) part of HUD
 
 	cGameSpeed::GetInstance().Draw();
 
-	DrawWeaponPanels(PlayerFighter);
 
 	DrawMissionNumberText();
 	DrawMissionFailedText();

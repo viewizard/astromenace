@@ -273,7 +273,7 @@ void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
 /*
  * Draw head-up display particle systems.
  */
-void DrawHUDParticleSystems()
+static void DrawHUDParticleSystems()
 {
 	vw_DrawAllParticleSystems2D();
 }
@@ -281,7 +281,7 @@ void DrawHUDParticleSystems()
 /*
  * Draw head-up display border.
  */
-void DrawHUDBorder()
+static void DrawHUDBorder()
 {
 	if (GameConfig().InternalWidth == 1024) {
 		sRECT SrcRect{0, 0, 1024, 74};
@@ -484,7 +484,7 @@ static void InitHUDExpMoney(const int Experience, const int Money)
 /*
  * Draw head-up display experience and money.
  */
-void DrawHUDExpMoney()
+static void DrawHUDExpMoney()
 {
 	if (!HUDFontTexture ||
 	    !DrawBufferCurrentPosition)
@@ -516,7 +516,7 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 /*
  * Draw head-up display energy and armor progress bars.
  */
-void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
+static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
 	float NeedDrawEnergNumFull{0.0f};
 	float NeedDrawLifeNumFull{0.0f};
@@ -624,6 +624,17 @@ void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const i
 	InitHUDParticleSystems();
 	InitHUDExpMoney(Experience, Money);
 	InitHUDProgressBars(SpaceShip);
+}
+
+/*
+ * Draw HUD.
+ */
+void DrawHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
+{
+	DrawHUDBorder();
+	DrawHUDParticleSystems();
+	DrawHUDProgressBars(SpaceShip);
+	DrawHUDExpMoney();
 }
 
 } // astromenace namespace
