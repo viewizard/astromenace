@@ -54,6 +54,7 @@ float HUDFontImageWidth{0.0f};
 float HUDFontImageHeight{0.0f};
 
 constexpr unsigned ProgressBarSegmentCount{19};
+unsigned int ProgressBarDrawSegments{0};
 // RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR  = (2 + 2 + 4) * 6 vertices * (Armor Segments + Energy Segments)
 float ProgressBarDrawBuffer[(2 + 2 + 4) * 6 * (ProgressBarSegmentCount + ProgressBarSegmentCount)];
 GLtexture ProgressBarTexture{0};
@@ -525,13 +526,10 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 }
 
 /*
- * Draw head-up display energy and armor progress bars.
+ * Update head-up display energy and armor progress bars.
  */
-static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
+static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
-	if (!ProgressBarTexture)
-		return;
-
 	float EnergyStatus{0.0f};
 	float ArmorStatus{0.0f};
 	if (auto sharedSpaceShip = SpaceShip.lock()) {
@@ -591,10 +589,22 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 				    ProgressBarDrawBuffer, tmpBufferPosition);
 	}
 
+	ProgressBarDrawSegments = LastFilledArmorSegment + LastFilledEnergySegment;
+}
+
+/*
+ * Draw head-up display energy and armor progress bars.
+ */
+static void DrawHUDProgressBars()
+{
+	if (!ProgressBarTexture ||
+	    !ProgressBarDrawSegments)
+		return;
+
 	vw_BindTexture(0, ProgressBarTexture);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
-	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * (LastFilledArmorSegment + LastFilledEnergySegment),
+	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * ProgressBarDrawSegments,
 		  RI_2f_XY | RI_1_TEX | RI_4f_COLOR, ProgressBarDrawBuffer, 8 * sizeof(ProgressBarDrawBuffer[0]));
 
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
@@ -617,11 +627,11 @@ void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const i
 /*
  * Draw HUD.
  */
-void DrawHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
+void DrawHUD()
 {
 	DrawHUDBorder();
 	DrawHUDParticleSystems();
-	DrawHUDProgressBars(SpaceShip);
+	DrawHUDProgressBars();
 	DrawHUDExpMoney();
 }
 
@@ -640,6 +650,7 @@ void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
 	LastUpdateTick = CurrentTick;
 
 	UpdateHUDParticleSystems(SpaceShip);
+	UpdateHUDProgressBars(SpaceShip);
 }
 
 } // astromenace namespace

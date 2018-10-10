@@ -524,7 +524,7 @@ void DrawGame()
 
 
 	UpdateHUD(PlayerFighter);
-	DrawHUD(PlayerFighter);
+	DrawHUD();
 	DrawWeaponPanels(PlayerFighter); // (?) part of HUD
 
 	cGameSpeed::GetInstance().Draw();

@@ -35,7 +35,7 @@ namespace astromenace {
 // Init HUD.
 void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money);
 // Draw HUD.
-void DrawHUD(std::weak_ptr<cSpaceShip> &SpaceShip);
+void DrawHUD();
 // Update HUD.
 void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip);
 
