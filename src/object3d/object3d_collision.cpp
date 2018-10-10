@@ -149,7 +149,7 @@ static void AddBonusForKilledEnemy(const cObject3D &Object, eObjectStatus Killed
 	GameMoney += tmpBonus;
 	GameExperience += tmpExperience;
 
-	UpdateHUDExpMoney(static_cast<int>(GameExperience), static_cast<int>(GameMoney));
+	SetupHUDText(static_cast<int>(GameExperience), static_cast<int>(GameMoney));
 }
 
 /*

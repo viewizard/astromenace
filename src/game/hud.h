@@ -41,8 +41,8 @@ void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip);
 // Resize HUD (need this on resolution/window size change).
 void ResizeHUD();
 
-// Update head-up display experience and money.
-void UpdateHUDExpMoney(const int Experience, const int Money);
+// Setup head-up display text (experience and money).
+void SetupHUDText(const int Experience, const int Money);
 
 
 } // astromenace namespace

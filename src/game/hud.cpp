@@ -48,7 +48,7 @@ std::weak_ptr<cParticleSystem2D> ArmorEmblemVert{};
 GLtexture HUDBorderTexture{0};
 
 int CurrentExperience{0};
-int CurrenMoney{0};
+int CurrentMoney{0};
 float DrawBuffer[(2 + 2 + 4) * 6 * 16]; // RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR = (2 + 2 + 4) * 6 vertices * 16 characters
 unsigned int DrawBufferCurrentPosition{0};
 GLtexture HUDFontTexture{0};
@@ -449,12 +449,12 @@ static void AddStringToDrawBuffer(const std::string &String, float Xstart, int Y
 }
 
 /*
- * Update head-up display experience and money.
+ * Setup head-up display text (experience and money).
  */
-void UpdateHUDExpMoney(const int Experience, const int Money)
+void SetupHUDText(const int Experience, const int Money)
 {
 	CurrentExperience = Experience;
-	CurrenMoney = Money;
+	CurrentMoney = Money;
 	DrawBufferCurrentPosition = 0;
 	float Transp{1.0f};
 
@@ -481,20 +481,20 @@ void UpdateHUDExpMoney(const int Experience, const int Money)
 }
 
 /*
- * Init head-up display experience and money.
+ * Init head-up display text (experience and money).
  */
-static void InitHUDExpMoney(const int Experience, const int Money)
+static void InitHUDText(const int Experience, const int Money)
 {
 	HUDFontTexture = GetPreloadedTextureAsset("game/game_num.tga");
 	if (HUDFontTexture &&
 	    vw_FindTextureSizeByID(HUDFontTexture, &HUDFontImageWidth, &HUDFontImageHeight))
-		UpdateHUDExpMoney(Experience, Money);
+		SetupHUDText(Experience, Money);
 }
 
 /*
- * Draw head-up display experience and money.
+ * Draw head-up display text (experience and money).
  */
-static void DrawHUDExpMoney()
+static void DrawHUDText()
 {
 	if (!HUDFontTexture ||
 	    !DrawBufferCurrentPosition)
@@ -511,11 +511,11 @@ static void DrawHUDExpMoney()
 }
 
 /*
- * Resize head-up display experience and money.
+ * Resize head-up display text (experience and money).
  */
-static void ResizeHUDExpMoney()
+static void ResizeHUDText()
 {
-	InitHUDExpMoney(CurrentExperience, CurrenMoney);
+	InitHUDText(CurrentExperience, CurrentMoney);
 }
 
 /*
@@ -633,8 +633,8 @@ void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const i
 
 	InitHUDBorder();
 	InitHUDParticleSystems();
-	InitHUDExpMoney(Experience, Money);
 	InitHUDProgressBars(SpaceShip);
+	InitHUDText(Experience, Money);
 }
 
 /*
@@ -645,7 +645,7 @@ void DrawHUD()
 	DrawHUDBorder();
 	DrawHUDParticleSystems();
 	DrawHUDProgressBars();
-	DrawHUDExpMoney();
+	DrawHUDText();
 }
 
 /*
@@ -673,7 +673,7 @@ void ResizeHUD()
 {
 	ResizeHUDBorder();
 	ResizeHUDParticleSystems();
-	ResizeHUDExpMoney();
+	ResizeHUDText();
 }
 
 } // astromenace namespace
