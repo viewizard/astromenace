@@ -29,8 +29,6 @@
 
 // FIXME provide adaptive HUD size for high resolution, care about display dpi
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../assets/texture.h"
@@ -55,8 +53,9 @@ GLtexture HUDFontTexture{0};
 float HUDFontImageWidth{0.0f};
 float HUDFontImageHeight{0.0f};
 
-float CurrentDrawEnergNumFull{0.0f};
-float CurrentDrawLifeNumFull{0.0f};
+constexpr unsigned ProgressBarSegmentCount{19};
+float CurrentDrawEnergyStatus{0.0f};
+float CurrentDrawArmorStatus{0.0f};
 
 float TimeDelta{0.0f};
 uint32_t LastUpdateTick{0};
@@ -179,16 +178,16 @@ static void InitHUDParticleSystems()
 /*
  * Update head-up display particle systems.
  */
-static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
+static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
-	if (auto sharedPlayerFighter = PlayerFighter.lock()) {
+	if (auto sharedSpaceShip = SpaceShip.lock()) {
 		if (auto sharedEnergyEmblem = EnergyEmblem.lock()) {
 			sharedEnergyEmblem->ParticlesPerSec =
 				1 + static_cast<unsigned>(49 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
 		}
 
-		float tmpArmorPercentage = sharedPlayerFighter->ArmorCurrentStatus / sharedPlayerFighter->ArmorInitialStatus;
-		bool tmpLowArmor = (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f);
+		float tmpArmorPercentage = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
+		bool tmpLowArmor = (sharedSpaceShip->ArmorCurrentStatus < sharedSpaceShip->ArmorInitialStatus / 10.0f);
 
 		if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock()) {
 			sharedArmorEmblemCircle->ColorStart.r = 1.0f;
@@ -505,11 +504,11 @@ static void DrawHUDExpMoney()
  */
 static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
-	CurrentDrawEnergNumFull = 1.0f;
+	CurrentDrawEnergyStatus = 1.0f;
 	if (GamePowerSystem == 0)
-		CurrentDrawEnergNumFull = 0.0f;
+		CurrentDrawEnergyStatus = 0.0f;
 	if (auto sharedSpaceShip = SpaceShip.lock())
-		CurrentDrawLifeNumFull = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
+		CurrentDrawArmorStatus = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
 }
 
 /*
@@ -517,41 +516,33 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
  */
 static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
-	float NeedDrawEnergNumFull{0.0f};
-	float NeedDrawLifeNumFull{0.0f};
+	float EnergyStatus{0.0f};
+	float ArmorStatus{0.0f};
 	if (auto sharedSpaceShip = SpaceShip.lock()) {
-		NeedDrawEnergNumFull = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
-		NeedDrawLifeNumFull = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
+		EnergyStatus = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
+		ArmorStatus = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
 	}
 
-	// находим правильное отображение
-	if (NeedDrawEnergNumFull > CurrentDrawEnergNumFull) {
-		CurrentDrawEnergNumFull += GamePowerSystem * 0.5f * TimeDelta;
-		if (CurrentDrawEnergNumFull > NeedDrawEnergNumFull)
-			CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
-	} else if (NeedDrawEnergNumFull < CurrentDrawEnergNumFull) {
-		CurrentDrawEnergNumFull -= GamePowerSystem * 0.5f * TimeDelta;
-		if (CurrentDrawEnergNumFull < NeedDrawEnergNumFull)
-			CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
-	}
-	// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-	int DrawEnergNum = static_cast<int>(ceil(CurrentDrawEnergNumFull * 19));
+	// in case of armor and energy progress bars we provide animation,
+	// looks much better then instant progress bar status changes
+	auto ProgressBarAnimation = [] (float Status, float &CurrentDrawStatus, float AnimationSpeed) {
+		if (Status > CurrentDrawStatus) {
+			CurrentDrawStatus += GamePowerSystem * AnimationSpeed * TimeDelta;
+			if (CurrentDrawStatus > Status)
+				CurrentDrawStatus = Status;
+		} else if (Status < CurrentDrawStatus) {
+			CurrentDrawStatus -= GamePowerSystem * AnimationSpeed * TimeDelta;
+			if (CurrentDrawStatus < Status)
+				CurrentDrawStatus = Status;
+		}
+	};
+	ProgressBarAnimation(EnergyStatus, CurrentDrawEnergyStatus, 0.5f);
+	ProgressBarAnimation(ArmorStatus, CurrentDrawArmorStatus, 0.5f);
 
-	// находим правильное отображение
-	if (NeedDrawLifeNumFull > CurrentDrawLifeNumFull) {
-		CurrentDrawLifeNumFull += 0.3f * TimeDelta;
-		if (CurrentDrawLifeNumFull > NeedDrawLifeNumFull)
-			CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
-	} else if (NeedDrawLifeNumFull < CurrentDrawLifeNumFull) {
-		CurrentDrawLifeNumFull -= 0.3f * TimeDelta;
-		if (CurrentDrawLifeNumFull < NeedDrawLifeNumFull)
-			CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
-	}
+	int LastFilledEnergySegment = static_cast<int>(ceil(CurrentDrawEnergyStatus * ProgressBarSegmentCount));
+	int LastFilledArmorSegment = static_cast<int>(ceil(CurrentDrawArmorStatus * ProgressBarSegmentCount));
 
-	// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
-	int DrawLifeNum = static_cast<int>(ceil(CurrentDrawLifeNumFull * 19));
-
-	if (DrawLifeNum + DrawEnergNum <= 0)
+	if (LastFilledArmorSegment + LastFilledEnergySegment <= 0)
 		return;
 
 	GLtexture Texture = GetPreloadedTextureAsset("game/game_panel_el.tga");
@@ -563,21 +554,15 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight))
 		return;
 
-	// выделяем память
-	// буфер для последовательности TRIANGLES
-	// войдет RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR
-	float tmpDrawBuffer[(2 + 2 + 4) * 6 * (DrawLifeNum + DrawEnergNum)];
+	// RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR  = (2 + 2 + 4) * 6 vertices * (LastFilledArmorSegment + LastFilledEnergySegment)
+	float tmpDrawBuffer[(2 + 2 + 4) * 6 * (LastFilledArmorSegment + LastFilledEnergySegment)];
 	unsigned int tmpBufferPosition{0};
-	sRECT SrcRect, DstRect;
 
-	// вывод текущего заряда энергии
-	// прорисовываем все элементы
-	for (int i = 0; i < DrawEnergNum; i++) {
-		// получаем данные текущего фрагмента
-		SrcRect(67 + i * 20, 0, 85 + i * 20, 64);
-		DstRect = SrcRect;
-		// находим прозначность
-		float Transp = CurrentDrawEnergNumFull * 19 - i;
+	for (int i = 0; i < LastFilledEnergySegment; i++) {
+		sRECT SrcRect{67 + i * 20, 0, 85 + i * 20, 64};
+		sRECT DstRect = SrcRect;
+
+		float Transp = CurrentDrawEnergyStatus * ProgressBarSegmentCount - i;
 		if (Transp > 1.0f)
 			Transp = 1.0f;
 
@@ -585,17 +570,13 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 				    tmpDrawBuffer, tmpBufferPosition);
 	}
 
-	// вывод текущего состояния жизни
-	// прорисовываем все элементы
-	for (int i = 0; i < DrawLifeNum; i++) {
-		// получаем данные текущего фрагмента
-		SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
-		if (GameConfig().InternalWidth == 1024)
-			DstRect = SrcRect;
-		else if (GameConfig().InternalWidth == 1228)
+	for (int i = 0; i < LastFilledArmorSegment; i++) {
+		sRECT SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
+		sRECT DstRect = SrcRect;
+		if (GameConfig().InternalWidth == 1228)
 			DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
-		// находим прозначность
-		float Transp = CurrentDrawLifeNumFull * 19 - i;
+
+		float Transp = CurrentDrawArmorStatus * ProgressBarSegmentCount - i;
 		if (Transp > 1.0f)
 			Transp = 1.0f;
 
@@ -606,7 +587,7 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 	vw_BindTexture(0, Texture);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
-	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * (DrawLifeNum + DrawEnergNum),
+	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * (LastFilledArmorSegment + LastFilledEnergySegment),
 		  RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmpDrawBuffer, 8 * sizeof(tmpDrawBuffer[0]));
 
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
