@@ -304,6 +304,14 @@ static void DrawHUDBorder()
 }
 
 /*
+ * Resize head-up display border.
+ */
+static void ResizeHUDBorder()
+{
+	InitHUDBorder();
+}
+
+/*
  * Sub-image rectangle in head-up display font texture for character.
  */
 static void GetHUDCharacterRectangle(char Char, sRECT &Rect)
@@ -653,6 +661,7 @@ void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
  */
 void ResizeHUD()
 {
+	ResizeHUDBorder();
 	ResizeHUDParticleSystems();
 }
 
