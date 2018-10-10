@@ -54,6 +54,11 @@ float HUDFontImageWidth{0.0f};
 float HUDFontImageHeight{0.0f};
 
 constexpr unsigned ProgressBarSegmentCount{19};
+// RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR  = (2 + 2 + 4) * 6 vertices * (Armor Segments + Energy Segments)
+float ProgressBarDrawBuffer[(2 + 2 + 4) * 6 * (ProgressBarSegmentCount + ProgressBarSegmentCount)];
+GLtexture ProgressBarTexture{0};
+float ProgressBarImageHeight{0.0f};
+float ProgressBarImageWidth{0.0f};
 float CurrentDrawEnergyStatus{0.0f};
 float CurrentDrawArmorStatus{0.0f};
 
@@ -509,6 +514,14 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 		CurrentDrawEnergyStatus = 0.0f;
 	if (auto sharedSpaceShip = SpaceShip.lock())
 		CurrentDrawArmorStatus = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
+
+	ProgressBarTexture = GetPreloadedTextureAsset("game/game_panel_el.tga");
+	if (!ProgressBarTexture)
+		return;
+
+	ProgressBarImageHeight = 0.0f;
+	ProgressBarImageWidth = 0.0f;
+	vw_FindTextureSizeByID(ProgressBarTexture, &ProgressBarImageWidth, &ProgressBarImageHeight);
 }
 
 /*
@@ -516,6 +529,9 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
  */
 static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
+	if (!ProgressBarTexture)
+		return;
+
 	float EnergyStatus{0.0f};
 	float ArmorStatus{0.0f};
 	if (auto sharedSpaceShip = SpaceShip.lock()) {
@@ -545,17 +561,6 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 	if (LastFilledArmorSegment + LastFilledEnergySegment <= 0)
 		return;
 
-	GLtexture Texture = GetPreloadedTextureAsset("game/game_panel_el.tga");
-	if (!Texture)
-		return;
-
-	float ImageHeight{0.0f};
-	float ImageWidth{0.0f};
-	if (!vw_FindTextureSizeByID(Texture, &ImageWidth, &ImageHeight))
-		return;
-
-	// RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR  = (2 + 2 + 4) * 6 vertices * (LastFilledArmorSegment + LastFilledEnergySegment)
-	float tmpDrawBuffer[(2 + 2 + 4) * 6 * (LastFilledArmorSegment + LastFilledEnergySegment)];
 	unsigned int tmpBufferPosition{0};
 
 	for (int i = 0; i < LastFilledEnergySegment; i++) {
@@ -566,8 +571,9 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 		if (Transp > 1.0f)
 			Transp = 1.0f;
 
-		AddQuadToDrawBuffer(SrcRect, DstRect, Transp, ImageWidth, ImageHeight,
-				    tmpDrawBuffer, tmpBufferPosition);
+		AddQuadToDrawBuffer(SrcRect, DstRect, Transp,
+				    ProgressBarImageWidth, ProgressBarImageHeight,
+				    ProgressBarDrawBuffer, tmpBufferPosition);
 	}
 
 	for (int i = 0; i < LastFilledArmorSegment; i++) {
@@ -580,15 +586,16 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 		if (Transp > 1.0f)
 			Transp = 1.0f;
 
-		AddQuadToDrawBuffer(SrcRect, DstRect, Transp, ImageWidth, ImageHeight,
-				    tmpDrawBuffer, tmpBufferPosition);
+		AddQuadToDrawBuffer(SrcRect, DstRect, Transp,
+				    ProgressBarImageWidth, ProgressBarImageHeight,
+				    ProgressBarDrawBuffer, tmpBufferPosition);
 	}
 
-	vw_BindTexture(0, Texture);
+	vw_BindTexture(0, ProgressBarTexture);
 	vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE_MINUS_SRC_ALPHA);
 
 	vw_Draw3D(ePrimitiveType::TRIANGLES, 6 * (LastFilledArmorSegment + LastFilledEnergySegment),
-		  RI_2f_XY | RI_1_TEX | RI_4f_COLOR, tmpDrawBuffer, 8 * sizeof(tmpDrawBuffer[0]));
+		  RI_2f_XY | RI_1_TEX | RI_4f_COLOR, ProgressBarDrawBuffer, 8 * sizeof(ProgressBarDrawBuffer[0]));
 
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
