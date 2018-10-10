@@ -377,6 +377,35 @@ static void AddToDrawBuffer(float CoordX, float CoordY,
 }
 
 /*
+ * Add quad to draw buffer.
+ */
+static void AddQuadToDrawBuffer(const sRECT &SrcRect, const sRECT &DstRect,
+				float Alpha, float ImageWidth, float ImageHeight,
+				float Buffer[], unsigned &BufferPosition)
+{
+	// texture's UV coordinates
+	float U_Left{SrcRect.left / ImageWidth};
+	float V_Top{SrcRect.top/ImageHeight};
+	float U_Right{SrcRect.right / ImageWidth};
+	float V_Bottom{SrcRect.bottom / ImageHeight};
+
+	// first triangle
+	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top,
+			Buffer, BufferPosition);
+	AddToDrawBuffer(DstRect.left, DstRect.bottom, Alpha, U_Left, V_Bottom,
+			Buffer, BufferPosition);
+	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom,
+			Buffer, BufferPosition);
+	// second triangle
+	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom,
+			Buffer, BufferPosition);
+	AddToDrawBuffer(DstRect.right, DstRect.top, Alpha, U_Right, V_Top,
+			Buffer, BufferPosition);
+	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top,
+			Buffer, BufferPosition);
+}
+
+/*
  * Add character data to local draw buffer.
  * Return character width.
  */
@@ -388,26 +417,8 @@ static int AddCharToDrawBuffer(char Character, float Xstart, int Ystart,
 	sRECT DstRect{static_cast<int>(Xstart), Ystart,
 		      static_cast<int>(Xstart) + SrcRect.right - SrcRect.left, Ystart + SrcRect.bottom - SrcRect.top};
 
-	// texture's UV coordinates
-	float U_Left{SrcRect.left / ImageWidth};
-	float V_Top{SrcRect.top / ImageHeight};
-	float U_Right{SrcRect.right / ImageWidth};
-	float V_Bottom{SrcRect.bottom / ImageHeight};
-
-	// first triangle
-	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top,
-			DrawBuffer, DrawBufferCurrentPosition);
-	AddToDrawBuffer(DstRect.left, DstRect.bottom, Alpha, U_Left, V_Bottom,
-			DrawBuffer, DrawBufferCurrentPosition);
-	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom,
-			DrawBuffer, DrawBufferCurrentPosition);
-	// second triangle
-	AddToDrawBuffer(DstRect.right, DstRect.bottom, Alpha, U_Right, V_Bottom,
-			DrawBuffer, DrawBufferCurrentPosition);
-	AddToDrawBuffer(DstRect.right, DstRect.top, Alpha, U_Right, V_Top,
-			DrawBuffer, DrawBufferCurrentPosition);
-	AddToDrawBuffer(DstRect.left, DstRect.top, Alpha, U_Left, V_Top,
-			DrawBuffer, DrawBufferCurrentPosition);
+	AddQuadToDrawBuffer(SrcRect, DstRect, Alpha, ImageWidth, ImageHeight,
+			    DrawBuffer, DrawBufferCurrentPosition);
 
 	return SrcRect.right - SrcRect.left;
 }
@@ -573,26 +584,8 @@ void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 		if (Transp > 1.0f)
 			Transp = 1.0f;
 
-		// texture's UV coordinates
-		float U_Left{SrcRect.left / ImageWidth};
-		float V_Top{SrcRect.top/ImageHeight};
-		float U_Right{SrcRect.right / ImageWidth};
-		float V_Bottom{SrcRect.bottom / ImageHeight};
-
-		// first triangle
-		AddToDrawBuffer(DstRect.left, DstRect.top, Transp, U_Left, V_Top,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.left, DstRect.bottom, Transp, U_Left, V_Bottom,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.right, DstRect.bottom, Transp, U_Right, V_Bottom,
-				tmpDrawBuffer, tmpBufferPosition);
-		// second triangle
-		AddToDrawBuffer(DstRect.right, DstRect.bottom, Transp, U_Right, V_Bottom,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.right, DstRect.top, Transp, U_Right, V_Top,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.left, DstRect.top, Transp, U_Left, V_Top,
-				tmpDrawBuffer, tmpBufferPosition);
+		AddQuadToDrawBuffer(SrcRect, DstRect, Transp, ImageWidth, ImageHeight,
+				    tmpDrawBuffer, tmpBufferPosition);
 	}
 
 	// вывод текущего состояния жизни
@@ -609,26 +602,8 @@ void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 		if (Transp > 1.0f)
 			Transp = 1.0f;
 
-		// texture's UV coordinates
-		float U_Left{SrcRect.left / ImageWidth};
-		float V_Top{SrcRect.top /ImageHeight};
-		float U_Right{SrcRect.right / ImageWidth};
-		float V_Bottom{SrcRect.bottom / ImageHeight};
-
-		// first triangle
-		AddToDrawBuffer(DstRect.left, DstRect.top, Transp, U_Left, V_Top,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.left, DstRect.bottom, Transp, U_Left, V_Bottom,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.right, DstRect.bottom, Transp, U_Right, V_Bottom,
-				tmpDrawBuffer, tmpBufferPosition);
-		// second triangle
-		AddToDrawBuffer(DstRect.right, DstRect.bottom, Transp, U_Right, V_Bottom,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.right, DstRect.top, Transp, U_Right, V_Top,
-				tmpDrawBuffer, tmpBufferPosition);
-		AddToDrawBuffer(DstRect.left, DstRect.top, Transp, U_Left, V_Top,
-				tmpDrawBuffer, tmpBufferPosition);
+		AddQuadToDrawBuffer(SrcRect, DstRect, Transp, ImageWidth, ImageHeight,
+				    tmpDrawBuffer, tmpBufferPosition);
 	}
 
 	vw_BindTexture(0, Texture);
