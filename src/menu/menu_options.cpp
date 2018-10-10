@@ -41,6 +41,7 @@
 #include "../assets/texture.h"
 #include "../ui/cursor.h"
 #include "../ui/fps_counter.h"
+#include "../game/hud.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
 
@@ -452,6 +453,9 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
 						   &ChangeGameConfig().MSAA, &ChangeGameConfig().CSAA);
 
 				ConfigVirtualInternalResolution();
+
+				if (MenuStatus == eMenuStatus::GAME)
+					ResizeHUD();
 			}
 		}
 	}

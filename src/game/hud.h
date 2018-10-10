@@ -38,6 +38,8 @@ void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const i
 void DrawHUD();
 // Update HUD.
 void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip);
+// Resize HUD (need this on resolution/window size change).
+void ResizeHUD();
 
 // Update head-up display experience and money.
 void UpdateHUDExpMoney(const int Experience, const int Money);

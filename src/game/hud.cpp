@@ -250,6 +250,21 @@ static void DrawHUDParticleSystems()
 }
 
 /*
+ * Resize head-up display particle systems.
+ */
+static void ResizeHUDParticleSystems()
+{
+	if (auto sharedArmorEmblemVert = ArmorEmblemVert.lock())
+		sharedArmorEmblemVert->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
+
+	if (auto sharedArmorEmblemHoriz = ArmorEmblemHoriz.lock())
+		sharedArmorEmblemHoriz->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
+
+	if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock())
+		sharedArmorEmblemCircle->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
+}
+
+/*
  * Draw head-up display border.
  */
 static void DrawHUDBorder()
@@ -617,6 +632,14 @@ void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
 
 	UpdateHUDParticleSystems(SpaceShip);
 	UpdateHUDProgressBars(SpaceShip);
+}
+
+/*
+ * Resize HUD (need this on resolution/window size change).
+ */
+void ResizeHUD()
+{
+	ResizeHUDParticleSystems();
 }
 
 } // astromenace namespace
