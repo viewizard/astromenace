@@ -28,8 +28,13 @@
 #ifndef GAME_CAMERA_H
 #define GAME_CAMERA_H
 
+#include "../core/base.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
+
+struct sVECTOR3D;
+
 namespace astromenace {
 
 // Initialize camera.

@@ -28,9 +28,13 @@
 #ifndef GAME_HUD_H
 #define GAME_HUD_H
 
+#include "../core/base.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+class cSpaceShip;
 
 // Init HUD.
 void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money);
@@ -43,7 +47,6 @@ void ResizeHUD();
 
 // Setup head-up display text (experience and money).
 void SetupHUDText(const int Experience, const int Money);
-
 
 } // astromenace namespace
 } // viewizard namespace
