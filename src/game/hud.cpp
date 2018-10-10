@@ -29,8 +29,6 @@
 
 // FIXME provide adaptive HUD size for high resolution, care about display dpi
 
-// FIXME switch from vw_GetTimeThread(0) to SDL_GetTicks() usage
-
 // TODO translate comments
 
 #include "../core/core.h"
@@ -59,14 +57,16 @@ float HUDFontImageHeight{0.0f};
 
 float CurrentDrawEnergNumFull{0.0f};
 float CurrentDrawLifeNumFull{0.0f};
-float LastUpdateTime{0.0f};
+
+float TimeDelta{0.0f};
+uint32_t LastUpdateTick{0};
+float Blinking{1.0f};
 
 } // unnamed namespace
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern int GamePowerSystem;
 extern float CurrentPlayerShipEnergy;
-extern float CurrentAlert2;
 
 float GetShipMaxEnergy(int Num);
 
@@ -196,8 +196,8 @@ static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
 			sharedArmorEmblemCircle->ColorStart.b = 0.2f * tmpArmorPercentage;
 
 			if (tmpLowArmor) {
-				sharedArmorEmblemCircle->AlphaStart = CurrentAlert2;
-				sharedArmorEmblemCircle->AlphaEnd = CurrentAlert2;
+				sharedArmorEmblemCircle->AlphaStart = Blinking;
+				sharedArmorEmblemCircle->AlphaEnd = Blinking;
 			} else { // armor could be repaired in-game
 				sharedArmorEmblemCircle->AlphaStart = 1.0f;
 				sharedArmorEmblemCircle->AlphaEnd = 1.0f;
@@ -210,9 +210,9 @@ static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
 			sharedArmorEmblemHoriz->ColorStart.b = 0.2f * tmpArmorPercentage;
 
 			if (tmpLowArmor) {
-				if (CurrentAlert2 > 0.6f) {
-					sharedArmorEmblemHoriz->AlphaStart = CurrentAlert2;
-					sharedArmorEmblemHoriz->AlphaEnd = CurrentAlert2;
+				if (Blinking > 0.6f) {
+					sharedArmorEmblemHoriz->AlphaStart = Blinking;
+					sharedArmorEmblemHoriz->AlphaEnd = Blinking;
 				} else { // armor could be repaired in-game
 					sharedArmorEmblemHoriz->AlphaStart = 0.0f;
 					sharedArmorEmblemHoriz->AlphaEnd = 0.0f;
@@ -229,9 +229,9 @@ static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &PlayerFighter)
 			sharedArmorEmblemVert->ColorStart.b = 0.2f * tmpArmorPercentage;
 
 			if (tmpLowArmor) {
-				if (CurrentAlert2 > 0.6f) {
-					sharedArmorEmblemVert->AlphaStart = CurrentAlert2;
-					sharedArmorEmblemVert->AlphaEnd = CurrentAlert2;
+				if (Blinking > 0.6f) {
+					sharedArmorEmblemVert->AlphaStart = Blinking;
+					sharedArmorEmblemVert->AlphaEnd = Blinking;
 				} else { // armor could be repaired in-game
 					sharedArmorEmblemVert->AlphaStart = 0.0f;
 					sharedArmorEmblemVert->AlphaEnd = 0.0f;
@@ -505,7 +505,6 @@ static void DrawHUDExpMoney()
  */
 static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
-	LastUpdateTime = vw_GetTimeThread(0);
 	CurrentDrawEnergNumFull = 1.0f;
 	if (GamePowerSystem == 0)
 		CurrentDrawEnergNumFull = 0.0f;
@@ -527,11 +526,11 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 
 	// находим правильное отображение
 	if (NeedDrawEnergNumFull > CurrentDrawEnergNumFull) {
-		CurrentDrawEnergNumFull += GamePowerSystem * 0.5f * (vw_GetTimeThread(0) - LastUpdateTime);
+		CurrentDrawEnergNumFull += GamePowerSystem * 0.5f * TimeDelta;
 		if (CurrentDrawEnergNumFull > NeedDrawEnergNumFull)
 			CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
 	} else if (NeedDrawEnergNumFull < CurrentDrawEnergNumFull) {
-		CurrentDrawEnergNumFull -= GamePowerSystem * 0.5f * (vw_GetTimeThread(0) - LastUpdateTime);
+		CurrentDrawEnergNumFull -= GamePowerSystem * 0.5f * TimeDelta;
 		if (CurrentDrawEnergNumFull < NeedDrawEnergNumFull)
 			CurrentDrawEnergNumFull = NeedDrawEnergNumFull;
 	}
@@ -540,16 +539,14 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 
 	// находим правильное отображение
 	if (NeedDrawLifeNumFull > CurrentDrawLifeNumFull) {
-		CurrentDrawLifeNumFull += 0.3f * (vw_GetTimeThread(0) - LastUpdateTime);
+		CurrentDrawLifeNumFull += 0.3f * TimeDelta;
 		if (CurrentDrawLifeNumFull > NeedDrawLifeNumFull)
 			CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
 	} else if (NeedDrawLifeNumFull < CurrentDrawLifeNumFull) {
-		CurrentDrawLifeNumFull -= 0.3f * (vw_GetTimeThread(0) - LastUpdateTime);
+		CurrentDrawLifeNumFull -= 0.3f * TimeDelta;
 		if (CurrentDrawLifeNumFull < NeedDrawLifeNumFull)
 			CurrentDrawLifeNumFull = NeedDrawLifeNumFull;
 	}
-
-	LastUpdateTime = vw_GetTimeThread(0);
 
 	// находим целую часть... т.е. номер последней, которую будем рисовать уже с прозрачностью
 	int DrawLifeNum = static_cast<int>(ceil(CurrentDrawLifeNumFull * 19));
@@ -621,6 +618,9 @@ static void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
  */
 void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money)
 {
+	TimeDelta = 0.0f;
+	LastUpdateTick = SDL_GetTicks();
+
 	InitHUDParticleSystems();
 	InitHUDExpMoney(Experience, Money);
 	InitHUDProgressBars(SpaceShip);
@@ -642,6 +642,15 @@ void DrawHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
  */
 void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
 {
+	uint32_t CurrentTick = SDL_GetTicks();
+	constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
+	TimeDelta = static_cast<float>(CurrentTick - LastUpdateTick) / TicksInSecond;
+	Blinking -= 1.9f * TimeDelta;
+	if ((Blinking < 0.1f) ||
+	    (Blinking > 1.0f))
+		Blinking = 1.0f;
+	LastUpdateTick = CurrentTick;
+
 	UpdateHUDParticleSystems(SpaceShip);
 }
 
