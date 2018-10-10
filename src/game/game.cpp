@@ -27,12 +27,6 @@
 
 // TODO translate comments
 
-// TODO since we use TRIANGLES, use 4 vertices + index buffer for vw_SendVertices()
-//      instead of 6 vertices, so, we send 4 vertices and index buffer for 6 elements,
-//      something like {1, 2, 3, 3, 4, 1}
-//                               ^  ^  ^ second triangle indexes
-//                      ^  ^  ^ first triangle indexes
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../core/core.h"
