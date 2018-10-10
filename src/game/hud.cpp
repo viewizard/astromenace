@@ -195,81 +195,47 @@ static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &SpaceShip)
 		float tmpArmorPercentage = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
 		bool tmpLowArmor = (sharedSpaceShip->ArmorCurrentStatus < sharedSpaceShip->ArmorInitialStatus / 10.0f);
 
-		if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock()) {
-			sharedArmorEmblemCircle->ColorStart.r = 1.0f;
-			sharedArmorEmblemCircle->ColorStart.g = 0.6f * tmpArmorPercentage;
-			sharedArmorEmblemCircle->ColorStart.b = 0.2f * tmpArmorPercentage;
+		auto BlinkingOnLowArmor = [&] (std::weak_ptr<cParticleSystem2D> &ParticleSystem) {
+			auto sharedParticleSystem = ParticleSystem.lock();
+			if (!sharedParticleSystem)
+				return;
+
+			sharedParticleSystem->ColorStart.r = 1.0f;
+			sharedParticleSystem->ColorStart.g = 0.6f * tmpArmorPercentage;
+			sharedParticleSystem->ColorStart.b = 0.2f * tmpArmorPercentage;
 
 			if (tmpLowArmor) {
-				sharedArmorEmblemCircle->AlphaStart = Blinking;
-				sharedArmorEmblemCircle->AlphaEnd = Blinking;
+				if (Blinking > 0.6f) {
+					sharedParticleSystem->AlphaStart = Blinking;
+					sharedParticleSystem->AlphaEnd = Blinking;
+				} else {
+					sharedParticleSystem->AlphaStart = 0.0f;
+					sharedParticleSystem->AlphaEnd = 0.0f;
+				}
 			} else { // armor could be repaired in-game
-				sharedArmorEmblemCircle->AlphaStart = 1.0f;
-				sharedArmorEmblemCircle->AlphaEnd = 1.0f;
+				sharedParticleSystem->AlphaStart = 1.0f;
+				sharedParticleSystem->AlphaEnd = 1.0f;
 			}
-		}
+		};
 
-		if (auto sharedArmorEmblemHoriz = ArmorEmblemHoriz.lock()) {
-			sharedArmorEmblemHoriz->ColorStart.r = 1.0f;
-			sharedArmorEmblemHoriz->ColorStart.g = 0.6f * tmpArmorPercentage;
-			sharedArmorEmblemHoriz->ColorStart.b = 0.2f * tmpArmorPercentage;
-
-			if (tmpLowArmor) {
-				if (Blinking > 0.6f) {
-					sharedArmorEmblemHoriz->AlphaStart = Blinking;
-					sharedArmorEmblemHoriz->AlphaEnd = Blinking;
-				} else { // armor could be repaired in-game
-					sharedArmorEmblemHoriz->AlphaStart = 0.0f;
-					sharedArmorEmblemHoriz->AlphaEnd = 0.0f;
-				}
-			} else {
-				sharedArmorEmblemHoriz->AlphaStart = 1.0f;
-				sharedArmorEmblemHoriz->AlphaEnd = 1.0f;
-			}
-		}
-
-		if (auto sharedArmorEmblemVert = ArmorEmblemVert.lock()) {
-			sharedArmorEmblemVert->ColorStart.r = 1.0f;
-			sharedArmorEmblemVert->ColorStart.g = 0.6f * tmpArmorPercentage;
-			sharedArmorEmblemVert->ColorStart.b = 0.2f * tmpArmorPercentage;
-
-			if (tmpLowArmor) {
-				if (Blinking > 0.6f) {
-					sharedArmorEmblemVert->AlphaStart = Blinking;
-					sharedArmorEmblemVert->AlphaEnd = Blinking;
-				} else { // armor could be repaired in-game
-					sharedArmorEmblemVert->AlphaStart = 0.0f;
-					sharedArmorEmblemVert->AlphaEnd = 0.0f;
-				}
-			} else {
-				sharedArmorEmblemVert->AlphaStart = 1.0f;
-				sharedArmorEmblemVert->AlphaEnd = 1.0f;
-			}
-		}
+		BlinkingOnLowArmor(ArmorEmblemCircle);
+		BlinkingOnLowArmor(ArmorEmblemHoriz);
+		BlinkingOnLowArmor(ArmorEmblemVert);
 	} else {
-		if (auto sharedEnergyEmblem = EnergyEmblem.lock()) {
-			sharedEnergyEmblem->AlphaStart = 0.0f;
-			sharedEnergyEmblem->AlphaEnd = 0.0f;
-			sharedEnergyEmblem->ParticlesPerSec = 1;
-		}
+		auto FadeOut = [] (std::weak_ptr<cParticleSystem2D> &ParticleSystem) {
+			auto sharedParticleSystem = ParticleSystem.lock();
+			if (!sharedParticleSystem)
+				return;
 
-		if (auto sharedArmorEmblemCircle = ArmorEmblemCircle.lock()) {
-			sharedArmorEmblemCircle->AlphaStart = 0.0f;
-			sharedArmorEmblemCircle->AlphaEnd = 0.0f;
-			sharedArmorEmblemCircle->ParticlesPerSec = 1;
-		}
+			sharedParticleSystem->AlphaStart = 0.0f;
+			sharedParticleSystem->AlphaEnd = 0.0f;
+			sharedParticleSystem->ParticlesPerSec = 1;
+		};
 
-		if (auto sharedArmorEmblemHoriz = ArmorEmblemHoriz.lock()) {
-			sharedArmorEmblemHoriz->AlphaStart = 0.0f;
-			sharedArmorEmblemHoriz->AlphaEnd = 0.0f;
-			sharedArmorEmblemHoriz->ParticlesPerSec = 1;
-		}
-
-		if (auto sharedArmorEmblemVert = ArmorEmblemVert.lock()) {
-			sharedArmorEmblemVert->AlphaStart = 0.0f;
-			sharedArmorEmblemVert->AlphaEnd = 0.0f;
-			sharedArmorEmblemVert->ParticlesPerSec = 1;
-		}
+		FadeOut(EnergyEmblem);
+		FadeOut(ArmorEmblemCircle);
+		FadeOut(ArmorEmblemHoriz);
+		FadeOut(ArmorEmblemVert);
 	}
 
 	vw_UpdateAllParticleSystems2D(vw_GetTimeThread(0));
