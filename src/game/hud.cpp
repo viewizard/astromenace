@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// FIXME if we change game resolution/window size, we should also update particle systems position
-
 // FIXME provide adaptive HUD size for high resolution, care about display dpi
 
 #include "../core/core.h"
@@ -46,6 +44,8 @@ std::weak_ptr<cParticleSystem2D> EnergyEmblem{};
 std::weak_ptr<cParticleSystem2D> ArmorEmblemCircle{};
 std::weak_ptr<cParticleSystem2D> ArmorEmblemHoriz{};
 std::weak_ptr<cParticleSystem2D> ArmorEmblemVert{};
+
+GLtexture HUDBorderTexture{0};
 
 float DrawBuffer[(2 + 2 + 4) * 6 * 16]; // RI_2f_XYZ | RI_2f_TEX | RI_4f_COLOR = (2 + 2 + 4) * 6 vertices * 16 characters
 unsigned int DrawBufferCurrentPosition{0};
@@ -265,29 +265,42 @@ static void ResizeHUDParticleSystems()
 }
 
 /*
+ * Init head-up display border.
+ */
+static void InitHUDBorder()
+{
+	if (GameConfig().InternalWidth == 1024)
+		HUDBorderTexture = GetPreloadedTextureAsset("game/game_panel.tga");
+	else
+		HUDBorderTexture = GetPreloadedTextureAsset("game/game_panel2.tga");
+}
+
+/*
  * Draw head-up display border.
  */
 static void DrawHUDBorder()
 {
+	if (!HUDBorderTexture)
+		return;
+
 	if (GameConfig().InternalWidth == 1024) {
 		sRECT SrcRect{0, 0, 1024, 74};
 		sRECT DstRect{0, 0, 1024, 74};
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/game_panel.tga"), true, 1.0f);
+		vw_Draw2D(DstRect, SrcRect, HUDBorderTexture, true, 1.0f);
 		return;
 	}
 
 	sRECT SrcRect{0, 0, 466, 73};
 	sRECT DstRect{0, 0, 466, 73};
-	GLtexture tmpHUDBorder = GetPreloadedTextureAsset("game/game_panel2.tga");
-	vw_Draw2D(DstRect, SrcRect, tmpHUDBorder, true, 1.0f);
+	vw_Draw2D(DstRect, SrcRect, HUDBorderTexture, true, 1.0f);
 
 	SrcRect(1, 74, 150, 145);
 	DstRect(540, 0, 540 + 149, 71);
-	vw_Draw2D(DstRect, SrcRect, tmpHUDBorder, true, 1.0f);
+	vw_Draw2D(DstRect, SrcRect, HUDBorderTexture, true, 1.0f);
 
 	SrcRect(150, 74, 610, 145);
 	DstRect(768, 0, 768 + 460, 71);
-	vw_Draw2D(DstRect, SrcRect, tmpHUDBorder, true, 1.0f);
+	vw_Draw2D(DstRect, SrcRect, HUDBorderTexture, true, 1.0f);
 }
 
 /*
@@ -600,6 +613,7 @@ void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const i
 	TimeDelta = 0.0f;
 	LastUpdateTick = SDL_GetTicks();
 
+	InitHUDBorder();
 	InitHUDParticleSystems();
 	InitHUDExpMoney(Experience, Money);
 	InitHUDProgressBars(SpaceShip);
