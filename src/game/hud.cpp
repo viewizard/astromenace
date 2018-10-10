@@ -460,23 +460,14 @@ void UpdateHUDExpMoney(const int Experience, const int Money)
 }
 
 /*
- * Init HUD.
+ * Init head-up display experience and money.
  */
-void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money)
+static void InitHUDExpMoney(const int Experience, const int Money)
 {
-	InitHUDParticleSystems();
-
 	HUDFontTexture = GetPreloadedTextureAsset("game/game_num.tga");
 	if (HUDFontTexture &&
 	    vw_FindTextureSizeByID(HUDFontTexture, &HUDFontImageWidth, &HUDFontImageHeight))
 		UpdateHUDExpMoney(Experience, Money);
-
-	LastUpdateTime = vw_GetTimeThread(0);
-	CurrentDrawEnergNumFull = 1.0f;
-	if (GamePowerSystem == 0)
-		CurrentDrawEnergNumFull = 0.0f;
-	if (auto sharedSpaceShip = SpaceShip.lock())
-		CurrentDrawLifeNumFull = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
 }
 
 /*
@@ -496,6 +487,19 @@ void DrawHUDExpMoney()
 
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
+}
+
+/*
+ * Init head-up display energy and armor progress bars.
+ */
+static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
+{
+	LastUpdateTime = vw_GetTimeThread(0);
+	CurrentDrawEnergNumFull = 1.0f;
+	if (GamePowerSystem == 0)
+		CurrentDrawEnergNumFull = 0.0f;
+	if (auto sharedSpaceShip = SpaceShip.lock())
+		CurrentDrawLifeNumFull = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
 }
 
 /*
@@ -635,6 +639,16 @@ void DrawHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 
 	vw_SetTextureBlend(false, eTextureBlendFactor::ONE, eTextureBlendFactor::ZERO);
 	vw_BindTexture(0, 0);
+}
+
+/*
+ * Init HUD.
+ */
+void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money)
+{
+	InitHUDParticleSystems();
+	InitHUDExpMoney(Experience, Money);
+	InitHUDProgressBars(SpaceShip);
 }
 
 } // astromenace namespace
