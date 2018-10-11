@@ -114,6 +114,8 @@ float SecondaryGroupCurrentFireWeaponDelay = 0.0f;
 float GetShipMaxEnergy(int Num)
 {
 	switch (Num) {
+	case 0:
+		return 0.0f;
 	// аккамулятор
 	case 1:
 		return 100.0f;
@@ -132,7 +134,7 @@ float GetShipMaxEnergy(int Num)
 		break;
 	}
 
-	return 0.0f;
+	return -1.0f;
 }
 //------------------------------------------------------------------------------------
 // Получаем перезарядку энергии, в секунду
@@ -140,6 +142,8 @@ float GetShipMaxEnergy(int Num)
 float GetShipRechargeEnergy(int Num)
 {
 	switch (Num) {
+	case 0:
+		return 0.0f;
 	// аккамулятор
 	case 1:
 		return 20.0f;
@@ -158,7 +162,7 @@ float GetShipRechargeEnergy(int Num)
 		break;
 	}
 
-	return 0.0f;
+	return -1.0f;
 }
 //------------------------------------------------------------------------------------
 // Получаем расход энергии в секунду для доп систем (GameAdvancedProtectionSystem)
