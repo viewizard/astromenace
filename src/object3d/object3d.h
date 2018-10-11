@@ -56,7 +56,6 @@ extern int GameSpaceShipControlMode;
 extern int GameEngineSystem;
 extern int GameTargetingSystem;
 extern int GameAdvancedProtectionSystem;
-extern int GamePowerSystem;
 extern int GameTargetingMechanicSystem;
 
 enum class eObjectStatus {

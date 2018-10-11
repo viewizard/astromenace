@@ -27,6 +27,8 @@
 
 // FIXME provide adaptive HUD size for high resolution, care about display dpi
 
+// FIXME all energy related stuff (recharge rate, max capacitor) should be part of player's ship class
+
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../assets/texture.h"
@@ -69,12 +71,6 @@ uint32_t LastUpdateTick{0};
 float Blinking{1.0f};
 
 } // unnamed namespace
-
-// FIXME should be fixed, don't allow global scope interaction for local variables
-extern int GamePowerSystem;
-extern float CurrentPlayerShipEnergy;
-
-float GetShipMaxEnergy(int Num);
 
 
 /*
@@ -185,12 +181,12 @@ static void InitHUDParticleSystems()
 /*
  * Update head-up display particle systems.
  */
-static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &SpaceShip)
+static void UpdateHUDParticleSystems(std::weak_ptr<cSpaceShip> &SpaceShip, float EnergyStatus)
 {
 	if (auto sharedSpaceShip = SpaceShip.lock()) {
 		if (auto sharedEnergyEmblem = EnergyEmblem.lock()) {
 			sharedEnergyEmblem->ParticlesPerSec =
-				1 + static_cast<unsigned>(49 * (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)));
+				1 + static_cast<unsigned>(49 * EnergyStatus);
 		}
 
 		float tmpArmorPercentage = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
@@ -270,7 +266,7 @@ static void ResizeHUDParticleSystems()
  */
 static void InitHUDBorder()
 {
-	if (GameConfig().InternalWidth == 1024)
+	if (GameConfig().InternalWidth == config::VirtualWidth_Standard)
 		HUDBorderTexture = GetPreloadedTextureAsset("game/game_panel.tga");
 	else
 		HUDBorderTexture = GetPreloadedTextureAsset("game/game_panel2.tga");
@@ -284,7 +280,7 @@ static void DrawHUDBorder()
 	if (!HUDBorderTexture)
 		return;
 
-	if (GameConfig().InternalWidth == 1024) {
+	if (GameConfig().InternalWidth == config::VirtualWidth_Standard) {
 		sRECT SrcRect{0, 0, 1024, 74};
 		sRECT DstRect{0, 0, 1024, 74};
 		vw_Draw2D(DstRect, SrcRect, HUDBorderTexture, true, 1.0f);
@@ -521,11 +517,9 @@ static void ResizeHUDText()
 /*
  * Init head-up display energy and armor progress bars.
  */
-static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
+static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip, float EnergyStatus)
 {
-	CurrentDrawEnergyStatus = 1.0f;
-	if (GamePowerSystem == 0)
-		CurrentDrawEnergyStatus = 0.0f;
+	CurrentDrawEnergyStatus = EnergyStatus;
 	if (auto sharedSpaceShip = SpaceShip.lock())
 		CurrentDrawArmorStatus = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
 
@@ -541,24 +535,23 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip)
 /*
  * Update head-up display energy and armor progress bars.
  */
-static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip, float TimeDelta)
+static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip, float EnergyStatus, float TimeDelta)
 {
-	float EnergyStatus{0.0f};
 	float ArmorStatus{0.0f};
-	if (auto sharedSpaceShip = SpaceShip.lock()) {
-		EnergyStatus = CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem);
+	if (auto sharedSpaceShip = SpaceShip.lock())
 		ArmorStatus = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
-	}
+	else
+		EnergyStatus = 0.0f;
 
 	// in case of armor and energy progress bars we provide animation,
 	// looks much better then instant progress bar status changes
 	auto ProgressBarAnimation = [TimeDelta] (float Status, float &CurrentDrawStatus, float AnimationSpeed) {
 		if (Status > CurrentDrawStatus) {
-			CurrentDrawStatus += GamePowerSystem * AnimationSpeed * TimeDelta;
+			CurrentDrawStatus += AnimationSpeed * TimeDelta;
 			if (CurrentDrawStatus > Status)
 				CurrentDrawStatus = Status;
 		} else if (Status < CurrentDrawStatus) {
-			CurrentDrawStatus -= GamePowerSystem * AnimationSpeed * TimeDelta;
+			CurrentDrawStatus -= AnimationSpeed * TimeDelta;
 			if (CurrentDrawStatus < Status)
 				CurrentDrawStatus = Status;
 		}
@@ -590,7 +583,7 @@ static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip, float Ti
 	for (int i = 0; i < LastFilledArmorSegment; i++) {
 		sRECT SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
 		sRECT DstRect = SrcRect;
-		if (GameConfig().InternalWidth == 1228)
+		if (GameConfig().InternalWidth == config::VirtualWidth_Wide)
 			DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
 
 		float Transp = CurrentDrawArmorStatus * ProgressBarSegmentCount - i;
@@ -627,13 +620,13 @@ static void DrawHUDProgressBars()
 /*
  * Init HUD.
  */
-void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, const int Experience, const int Money)
+void InitHUD(std::weak_ptr<cSpaceShip> &SpaceShip, float EnergyStatus, const int Experience, const int Money)
 {
 	LastUpdateTick = SDL_GetTicks();
 
 	InitHUDBorder();
 	InitHUDParticleSystems();
-	InitHUDProgressBars(SpaceShip);
+	InitHUDProgressBars(SpaceShip, EnergyStatus);
 	InitHUDText(Experience, Money);
 }
 
@@ -651,7 +644,7 @@ void DrawHUD()
 /*
  * Update HUD.
  */
-void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
+void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip, float EnergyStatus)
 {
 	uint32_t CurrentTick = SDL_GetTicks();
 	constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
@@ -662,8 +655,8 @@ void UpdateHUD(std::weak_ptr<cSpaceShip> &SpaceShip)
 		Blinking = 1.0f;
 	LastUpdateTick = CurrentTick;
 
-	UpdateHUDParticleSystems(SpaceShip);
-	UpdateHUDProgressBars(SpaceShip, TimeDelta);
+	UpdateHUDParticleSystems(SpaceShip, EnergyStatus);
+	UpdateHUDProgressBars(SpaceShip, EnergyStatus, TimeDelta);
 }
 
 /*

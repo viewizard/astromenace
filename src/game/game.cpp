@@ -258,6 +258,7 @@ void InitGame()
 
 
 	InitHUD(PlayerFighter,
+		GamePowerSystem ? (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)) : 0.0f,
 		GameConfig().Profile[CurrentProfile].Experience -
 		GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission],
 		GameConfig().Profile[CurrentProfile].Money);
@@ -520,10 +521,8 @@ void DrawGame()
 	GamePlayerShip();
 
 
-
-
-
-	UpdateHUD(PlayerFighter);
+	UpdateHUD(PlayerFighter,
+		  GamePowerSystem ? (CurrentPlayerShipEnergy / GetShipMaxEnergy(GamePowerSystem)) : 0.0f);
 	DrawHUD();
 	DrawWeaponPanels(PlayerFighter); // (?) part of HUD
 
