@@ -582,9 +582,9 @@ static void UpdateHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip, float En
 
 	for (int i = 0; i < LastFilledArmorSegment; i++) {
 		sRECT SrcRect(582 + i * 20, 0, 599 + i * 20, 64);
-		sRECT DstRect = SrcRect;
-		if (GameConfig().InternalWidth == config::VirtualWidth_Wide)
-			DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
+		sRECT DstRect(204 + 582 + i * 20, 0, 204 + 599 + i * 20, 64);
+		if (GameConfig().InternalWidth == config::VirtualWidth_Standard)
+			DstRect = SrcRect;
 
 		float Transp = CurrentDrawArmorStatus * ProgressBarSegmentCount - i;
 		if (Transp > 1.0f)
