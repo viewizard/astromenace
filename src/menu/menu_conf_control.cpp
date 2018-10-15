@@ -331,13 +331,13 @@ void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButto
 	Y1 += Prir1;
 	int SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("MOUSE"));
 	int SizeI = SizeI1 > 130 ? -15 : (100-SizeI1)/2;
-	vw_DrawTextUTF32(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("MOUSE"));
+	vw_DrawTextUTF32(X1+315+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("MOUSE"));
 	SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("KEYBOARD"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
-	vw_DrawTextUTF32(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("KEYBOARD"));
+	vw_DrawTextUTF32(X1+446+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("KEYBOARD"));
 	SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("JOYSTICK"));
 	SizeI = SizeI1 > 130 ? 10 : (150-SizeI1)/2;
-	vw_DrawTextUTF32(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("JOYSTICK"));
+	vw_DrawTextUTF32(X1+605+SizeI, Y1, SizeI1 > 130 ? -130 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("JOYSTICK"));
 
 
 	Y1 += Prir1;
