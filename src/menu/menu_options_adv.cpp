@@ -115,7 +115,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 	// качество визуальных эффектов
 	// VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
-	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, ContentTransp, vw_GetTextUTF32("Visual Effects Quality"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Visual Effects Quality"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().VisualEffectsQuality == 2)) {
 		ChangeGameConfig().VisualEffectsQuality++;
 		if (GameConfig().VisualEffectsQuality > 2)
@@ -142,7 +142,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 	// Максимальное кол-во источников света на 1 объекта
 	Y1 += Prir1;
-	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, ContentTransp, vw_GetTextUTF32("Point Lights per Object"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Point Lights per Object"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().MaxPointLights == 0)) {
 		ChangeGameConfig().MaxPointLights--;
 		if (GameConfig().MaxPointLights < 0)
@@ -163,7 +163,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 	// анизотропия
 	Y1 += Prir1;
-	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::green}, ContentTransp, vw_GetTextUTF32("Anisotropy Level"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Anisotropy Level"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, (Options_TexturesAnisotropyLevel == 1) || !vw_DevCaps().MaxAnisotropyLevel)) {
 		Options_TexturesAnisotropyLevel >>= 1;
 		if (Options_TexturesAnisotropyLevel < 1)
@@ -198,7 +198,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 	//Options_MultiSampleType
 	Y1 += Prir1;
-	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, ContentTransp, vw_GetTextUTF32("Multisample Antialiasing"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Multisample Antialiasing"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, (Options_MSAA == 0) || vw_DevCaps().MultisampleCoverageModes.empty())) {
 		// находим текущий режим
 		int CurrentMode = 0;
@@ -285,7 +285,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 	// вкл-выкл шейдеров, если они поддерживаются
 	Y1 += Prir1;
-	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, ContentTransp, vw_GetTextUTF32("OpenGL Shading Language"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("OpenGL Shading Language"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Off"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || !Options_UseGLSL120) ||
 	    DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("On"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || Options_UseGLSL120)) {
 		Options_UseGLSL120 = !Options_UseGLSL120;
@@ -311,7 +311,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 	// качество теней
 	Y1 += Prir1;
-	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, ContentTransp, vw_GetTextUTF32("Shadow Quality"));
+	vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Shadow Quality"));
 	if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, (Options_ShadowMap == 0) || !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported ||
 			    !vw_DevCaps().OpenGL_3_0_supported || !Options_UseGLSL120 || (vw_DevCaps().FramebufferObjectDepthSize < 24))) {
 		Options_ShadowMap--;
