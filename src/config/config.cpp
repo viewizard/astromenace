@@ -532,7 +532,7 @@ int ProfileDifficulty(int ProfileNumber, eDifficultyAction Action)
 		return tmpDifficultiesArray;
 	};
 
-	static std::array<int, config::MAX_PROFILES> DifficultiesArray{CalculateDifficulties()};
+	static std::array<int, config::MAX_PROFILES> DifficultiesArray = CalculateDifficulties();
 
 	switch (Action) {
 	case eDifficultyAction::Get:
