@@ -221,11 +221,6 @@ IF(WINDOWS)
 	SET(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 ENDIF(WINDOWS)
 
-# by default, cmake should create only 'release' build with optimization and without debug routines
-ADD_DEFINITIONS(-DNDEBUG)
-ADD_DEFINITIONS(-O2)
-
-
 IF(WINDOWS)
 	# WIN32 - suppress terminal
 	ADD_EXECUTABLE(astromenace WIN32 ${astromenace_SRCS})
