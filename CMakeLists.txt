@@ -203,7 +203,7 @@ MESSAGE("Game data dir: ${astromenace_DATA}")
 
 # custom game data sources location
 IF(DATADIR)
-	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
+	ADD_DEFINITIONS(-DDATADIR="${DATADIR}")
 ENDIF(DATADIR)
 
 IF(WINDOWS)
