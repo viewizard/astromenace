@@ -445,6 +445,8 @@ size_t sFILE::fread(void *buffer, size_t size, size_t count)
  */
 int sFILE::fseek(long offset, int origin)
 {
+	// FIXME offset could be positive or negative, fix logic and use proper types (don't allow signed/unsigned comparison)
+
 	switch (origin) {
 	case SEEK_CUR:
 		if ((Pos + offset) > Size)
