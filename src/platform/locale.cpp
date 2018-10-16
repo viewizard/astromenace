@@ -58,10 +58,12 @@ static bool GetUserLocale(std::string &NeutralLocale, std::string &RegionalLocal
 	RegionalLocale.clear();
 
 #ifdef __unix
-	// LC_ALL overrides all other
+	// LC_ALL > LC_MESSAGES > LANG
 	const char *LangEnv = SDL_getenv("LC_ALL");
 
-	// LANG environment variable
+	if (!LangEnv)
+		LangEnv = SDL_getenv("LC_MESSAGES");
+
 	if (!LangEnv)
 		LangEnv = SDL_getenv("LANG");
 
