@@ -240,6 +240,6 @@ IF(NOT DONTCREATEVFS)
 	ADD_CUSTOM_COMMAND(
 		TARGET astromenace
 		POST_BUILD
-		COMMAND ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA}
+		COMMAND ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA} --dir=${PROJECT_BINARY_DIR}
 	)
 ENDIF(NOT DONTCREATEVFS)
