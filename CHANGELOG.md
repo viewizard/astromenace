@@ -1,3 +1,16 @@
+# Version 1.4.0
+
+### Overall changes:
+
+- Code refactored in order to use C++11 and STL (work still in progress).
+- Migrated from libSDL 1.2 to libSDL 2.
+- Added language detection on first start.
+- Renamed command line parameter "safe-mode" to "reset-config".
+- Fixed particle system's code for low FPS. All effects will looks now as they should.
+- Fixed old bug with turret's barrel rotation position during explosion.
+- Added Polish language translation, thanks to Jacek Fiedorowicz.
+- About 1300 minor fixes and changes since last release.
+
 # Version 1.3.2
 
 ### Overall changes:
