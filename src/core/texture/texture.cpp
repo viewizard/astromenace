@@ -335,7 +335,7 @@ void vw_ConvertImageToVW2D(const std::string &SrcName, const std::string &DestNa
 	std::unique_ptr<uint8_t[]> tmpPixelsArray{};
 	eLoadTextureAs LoadAs{eLoadTextureAs::TGA};
 
-	std::unique_ptr<sFILE> pFile = vw_fopen(SrcName);
+	std::unique_ptr<cFILE> pFile = vw_fopen(SrcName);
 	if (pFile == nullptr) {
 		std::cerr << __func__ << "(): " << "Unable to found " << SrcName << "\n";
 		return;
@@ -396,7 +396,7 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
 	// don't use std::vector here, since it allocates AND value-initializes
 	std::unique_ptr<uint8_t[]> tmpPixelsArray{};
 
-	std::unique_ptr<sFILE> pFile = vw_fopen(TextureName);
+	std::unique_ptr<cFILE> pFile = vw_fopen(TextureName);
 	if (!pFile) {
 		std::cerr << __func__ << "(): " << "Unable to found " << TextureName << "\n";
 		return 0;

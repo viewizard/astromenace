@@ -115,7 +115,7 @@ static void CreateTextTableUTF32()
 /*
  * Parse each row's block, separated by 1.SymbolSeparator, 2.SymbolEndOfLine, 3.EOF
  */
-static int GetRowTextBlock(std::string &CurrentTextBlock, uint8_t *Data, unsigned DataSize, unsigned &i,
+static int GetRowTextBlock(std::string &CurrentTextBlock, uint8_t *Data, long DataSize, long &i,
 			   const char SymbolSeparator, const char SymbolEndOfLine)
 {
 	constexpr char SymbolQuotes{'\"'};
@@ -159,7 +159,7 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	vw_ReleaseText();
 
 	// open and don't call vw_fclose(), use tmpFile->Data directly
-	std::unique_ptr<sFILE> tmpFile = vw_fopen(FileName);
+	std::unique_ptr<cFILE> tmpFile = vw_fopen(FileName);
 	if (!tmpFile)
 		return ERR_FILE_NOT_FOUND;
 	std::cout << "Load and parse .csv file " << FileName << "\n";
@@ -171,15 +171,15 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 	std::string CurrentRowCode;
 	unsigned int CurrentColumnNumber{0};
 	unsigned int LineNumber{1}; // line number for error message
-	for (unsigned int i = 0; i < tmpFile->Size; i++) {
+	for (long i = 0; i < tmpFile->GetSize(); i++) {
 		// parse each row
-		for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {
+		for (; (tmpFile->GetData()[i] != SymbolEndOfLine) && (i < tmpFile->GetSize()); i++) {
 			// read text block in line, .csv line looks like:
 			// text_block;text_block;...;text_blockSymbolEndOfLine
 			// if text braced by quotes:
 			// "text_block";"text_block";...;"text_block"SymbolEndOfLine
 			std::string CurrentRowTextBlock{};
-			if (GetRowTextBlock(CurrentRowTextBlock, tmpFile->Data.get(), tmpFile->Size, i,
+			if (GetRowTextBlock(CurrentRowTextBlock, tmpFile->GetData(), tmpFile->GetSize(), i,
 					    SymbolSeparator, SymbolEndOfLine)) {
 				std::cerr << __func__ << "(): " << "file corrupted.";
 				vw_ReleaseText();
@@ -198,10 +198,10 @@ int vw_InitText(const char *FileName, const char SymbolSeparator, const char Sym
 			if (isElementPresentInTable(TextTable, CurrentColumnNumber, CurrentRowCode)) {
 				std::cerr << __func__ << "(): " << "* Duplicate line detected, line number "
 					  << LineNumber << "\n";
-				for (; (tmpFile->Data[i] != SymbolEndOfLine) && (i < tmpFile->Size); i++) {}
+				for (; (tmpFile->GetData()[i] != SymbolEndOfLine) && (i < tmpFile->GetSize()); i++) {}
 			}
 			// we found SymbolEndOfLine in previous cycle, in order to prevent "i" changes, break cycle
-			if (tmpFile->Data[i] == SymbolEndOfLine)
+			if (tmpFile->GetData()[i] == SymbolEndOfLine)
 				break;
 		}
 		// move to next row

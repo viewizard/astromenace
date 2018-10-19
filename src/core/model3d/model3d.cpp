@@ -565,7 +565,7 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
 	if (FileName.empty())
 		return false;
 
-	std::unique_ptr<sFILE> File = vw_fopen(FileName);
+	std::unique_ptr<cFILE> File = vw_fopen(FileName);
 	if (!File)
 		return false;
 

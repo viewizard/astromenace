@@ -25,8 +25,6 @@
 
 *************************************************************************************/
 
-// TODO struct sFILE should use encapsulation (switch to class)
-
 #ifndef CORE_VFS_VFS_H
 #define CORE_VFS_VFS_H
 
@@ -45,30 +43,43 @@ int vw_OpenVFS(const std::string &Name, unsigned int BuildNumber);
 // Shutdown VFS.
 void vw_ShutdownVFS();
 
-struct sFILE {
-	uint32_t Size{0};
-	// std::unique_ptr, we need only memory allocation without container's features
-	// don't use std::vector here, since it allocates AND value-initializes
-	std::unique_ptr<uint8_t[]> Data{};
+class cFILE {
+	friend std::unique_ptr<cFILE> vw_fopen(const std::string &FileName);
+
+public:
+	explicit cFILE(long Size, long Pos) :
+		Size_{Size},
+		Pos_{Pos}
+	{}
+
+	long GetSize()
+	{
+		return Size_;
+	}
+
+	uint8_t *GetData()
+	{
+		return Data_.get();
+	}
 
 	size_t fread(void *buffer, size_t size, size_t count);
 	int fseek(long offset, int origin);
 	long ftell();
 
-	explicit sFILE(unsigned int _Size, long _Pos) :
-		Size{_Size},
-		Pos{_Pos}
-	{}
-
 private:
-	long Pos{0};
+	long Size_{0};
+	long Pos_{0};
+
+	// std::unique_ptr, we need only memory allocation without container's features
+	// don't use std::vector here, since it allocates AND value-initializes
+	std::unique_ptr<uint8_t[]> Data_{};
 };
 
 // Return std::unique_ptr, provide smart pointer connected to caller's scope.
-std::unique_ptr<sFILE> vw_fopen(const std::string &FileName);
+std::unique_ptr<cFILE> vw_fopen(const std::string &FileName);
 // You could call vw_fclose() if you should release memory in particular
 // part of code. Otherwise, it will be released automatically (see. unique_ptr).
-int vw_fclose(std::unique_ptr<sFILE> &stream);
+int vw_fclose(std::unique_ptr<cFILE> &stream);
 
 } // viewizard namespace
 

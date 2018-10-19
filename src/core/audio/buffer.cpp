@@ -46,7 +46,7 @@ constexpr unsigned DYNBUF_SIZE{16384};	// (stream) buffer size
 
 struct sStreamBuffer {
 	std::array<ALuint, NUM_OF_DYNBUF> Buffers{};
-	std::unique_ptr<sFILE> File{};
+	std::unique_ptr<cFILE> File{};
 	OggVorbis_File mVF{};
 	vorbis_info *mInfo{nullptr};
 };
@@ -64,12 +64,12 @@ std::unordered_map<std::string, sStreamBuffer> StreamBuffersMap;
  */
 static size_t VorbisRead(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource)
 {
-	sFILE *vorbisData = static_cast<sFILE *>(datasource);
+	cFILE *vorbisData = static_cast<cFILE *>(datasource);
 	return vorbisData->fread(ptr, byteSize, sizeToRead);
 }
 static int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 {
-	sFILE *vorbisData = static_cast<sFILE *>(datasource);
+	cFILE *vorbisData = static_cast<cFILE *>(datasource);
 	return vorbisData->fseek(offset, whence);
 }
 static int VorbisClose(void *UNUSED(datasource))
@@ -78,7 +78,7 @@ static int VorbisClose(void *UNUSED(datasource))
 }
 static long VorbisTell(void *datasource)
 {
-	sFILE *vorbisData = static_cast<sFILE *>(datasource);
+	cFILE *vorbisData = static_cast<cFILE *>(datasource);
 	return vorbisData->ftell();
 }
 
@@ -372,7 +372,7 @@ ALuint vw_CreateSoundBufferFromOGG(const std::string &Name)
 	if (Buffer)
 		return Buffer;
 
-	std::unique_ptr<sFILE> file = vw_fopen(Name);
+	std::unique_ptr<cFILE> file = vw_fopen(Name);
 	if (!file)
 		return 0;
 
@@ -438,11 +438,11 @@ ALuint vw_CreateSoundBufferFromWAV(const std::string &Name)
 	if (Buffer)
 		return Buffer;
 
-	std::unique_ptr<sFILE> file = vw_fopen(Name);
+	std::unique_ptr<cFILE> file = vw_fopen(Name);
 	if (!file)
 		return 0;
 
-	Buffer = alutCreateBufferFromFileImage(file->Data.get(), file->Size);
+	Buffer = alutCreateBufferFromFileImage(file->GetData(), static_cast<ALsizei>(file->GetSize()));
 	if (!CheckALUTError(__func__))
 		return 0;
 

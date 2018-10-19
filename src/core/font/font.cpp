@@ -153,7 +153,7 @@ int vw_InitFont(const std::string &FontName)
 	if (InternalFontBuffer.get())
 		InternalFontBuffer.reset();
 
-	std::unique_ptr<sFILE> FontFile = vw_fopen(FontName);
+	std::unique_ptr<cFILE> FontFile = vw_fopen(FontName);
 	if (!FontFile) {
 		std::cerr << __func__ << "(): " << "Can't open font file: " << FontName << "\n";
 		return ERR_FILE_NOT_FOUND;

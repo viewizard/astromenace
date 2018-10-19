@@ -36,13 +36,13 @@
  On VFS file open, VFS entries list generated with all available in this VFS
  files data. Could be opened multiple VFS files, in this case VFS entries list
  will contain all available in all opened VFS files data.
- On sFILE open, all requested data will be copied into memory buffer (sFILE->Data).
- Opened sFILE is not connected to VFS file or VFS entries list in any way.
+ On cFILE open, all requested data will be copied into memory buffer (cFILE->Data_).
+ Opened cFILE is not connected to VFS file or VFS entries list in any way.
 
- Caller should hold sFILE open as long, as it need memory buffer (sFILE->Data).
- In order to code simplicity, read and write direct access to sFILE data allowed.
- Caller could reset() memory buffer with different size (sFILE->Data), but should
- care about sFILE->Size and sFILE->Pos field (access by fseek()).
+ Caller should hold cFILE open as long, as it need memory buffer (cFILE->Data_).
+ In order to code simplicity, read and write direct access to cFILE data allowed.
+ Caller could reset() memory buffer with different size (cFILE->Data), but should
+ care about cFILE->Size_ and cFILE->Pos_ field (access by fseek()).
 
  Game data VFS v1.6 structure.
 
@@ -85,7 +85,7 @@ struct sVFS {
 
 struct sVFS_Entry {
 	uint32_t Offset{0};
-	uint32_t Size{0};
+	uint32_t Size{0}; // NOTE cFILE::Size_ is long (32/64 depending from platform)
 	std::weak_ptr<sVFS> Parent{};
 };
 
@@ -225,11 +225,12 @@ int vw_CreateVFS(const std::string &Name, unsigned int BuildNumber,
 
 		// copy all files from pack into new VFS
 		for (const auto &tmpVFSEntry : VFSEntriesMap) {
-			std::unique_ptr<sFILE> tmpFile = vw_fopen(tmpVFSEntry.first);
+			std::unique_ptr<cFILE> tmpFile = vw_fopen(tmpVFSEntry.first);
 			if (!tmpFile)
 				return ERR_FILE_NOT_FOUND;
-			err = WriteIntoVFSfromMemory(TempVFS, tmpVFSEntry.first, tmpFile->Data.get(),
-						     tmpFile->Size, FileTableOffset, WritableVFSEntriesMap);
+			err = WriteIntoVFSfromMemory(TempVFS, tmpVFSEntry.first, tmpFile->GetData(),
+						     static_cast<uint32_t>(tmpFile->GetSize()),
+						     FileTableOffset, WritableVFSEntriesMap);
 			if (err) {
 				std::cerr << __func__ << "(): " << "VFS compilation process aborted!\n";
 				return err;
@@ -364,7 +365,7 @@ void vw_ShutdownVFS()
  * Open the sFILE.
  * Return std::unique_ptr, provide smart pointer connected to caller's scope.
  */
-std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
+std::unique_ptr<cFILE> vw_fopen(const std::string &FileName)
 {
 	if (FileName.empty())
 		return nullptr;
@@ -377,12 +378,12 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 			return nullptr;
 		}
 
-		std::unique_ptr<sFILE> File(new sFILE(0, 0));
+		std::unique_ptr<cFILE> File(new cFILE(0, 0));
 
-		File->Size = FileInVFS->second.Size;
+		File->Size_ = static_cast<long>(FileInVFS->second.Size);
 		sharedParent->File.seekg(FileInVFS->second.Offset, std::ios::beg);
-		File->Data.reset(new uint8_t[File->Size]);
-		sharedParent->File.read(reinterpret_cast<char*>(File->Data.get()), File->Size);
+		File->Data_.reset(new uint8_t[File->Size_]);
+		sharedParent->File.read(reinterpret_cast<char*>(File->Data_.get()), File->Size_);
 
 		return File;
 	}
@@ -395,11 +396,11 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
 			return nullptr;
 		fsFile.seekg(0, std::ios::beg);
 
-		std::unique_ptr<sFILE> File(new sFILE(0, 0));
+		std::unique_ptr<cFILE> File(new cFILE(0, 0));
 
-		File->Size = static_cast<uint32_t>(tmpSize);
-		File->Data.reset(new uint8_t[File->Size]);
-		fsFile.read(reinterpret_cast<char*>(File->Data.get()), File->Size);
+		File->Size_ = static_cast<long>(tmpSize);
+		File->Data_.reset(new uint8_t[File->Size_]);
+		fsFile.read(reinterpret_cast<char*>(File->Data_.get()), File->Size_);
 
 		return File;
 	}
@@ -411,7 +412,7 @@ std::unique_ptr<sFILE> vw_fopen(const std::string &FileName)
  * You could call vw fclose() if you should release memory in particular
  * part of code. Otherwise, it will be released automatically (see. unique_ptr).
  */
-int vw_fclose(std::unique_ptr<sFILE> &stream)
+int vw_fclose(std::unique_ptr<cFILE> &stream)
 {
 	if (!stream.get())
 		return ERR_PARAMETERS;
@@ -426,15 +427,15 @@ int vw_fclose(std::unique_ptr<sFILE> &stream)
  * Reads an array of 'count' elements, each one with a size of 'size' bytes,
  * from the stream and stores them in the block of memory specified by 'buffer'.
  */
-size_t sFILE::fread(void *buffer, size_t size, size_t count)
+size_t cFILE::fread(void *buffer, size_t size, size_t count)
 {
-	if (!buffer || !Data)
+	if (!buffer || !Data_)
 		return ERR_PARAMETERS;
 
 	size_t CopyCount{0};
-	for (; (CopyCount < count) && (Size >= static_cast<uint32_t>(Pos + size)); CopyCount++) {
-		memcpy(static_cast<uint8_t *>(buffer) + CopyCount * size, Data.get() + Pos, size);
-		Pos += size;
+	for (; (CopyCount < count) && (Size_ >= static_cast<long>(Pos_ + size)); CopyCount++) {
+		memcpy(static_cast<uint8_t *>(buffer) + CopyCount * size, Data_.get() + Pos_, size);
+		Pos_ += size;
 	}
 
 	return CopyCount;
@@ -443,27 +444,25 @@ size_t sFILE::fread(void *buffer, size_t size, size_t count)
 /*
  * Sets the position indicator associated with the stream to a new position.
  */
-int sFILE::fseek(long offset, int origin)
+int cFILE::fseek(long offset, int origin)
 {
-	// FIXME offset could be positive or negative, fix logic and use proper types (don't allow signed/unsigned comparison)
-
 	switch (origin) {
 	case SEEK_CUR:
-		if ((Pos + offset) > Size)
+		if ((Pos_ + offset > Size_) || (Pos_ + offset < 0))
 			return ERR_PARAMETERS;
-		Pos += offset;
+		Pos_ += offset;
 		break;
 
 	case SEEK_END:
-		if (offset > Size)
+		if ((offset > 0) || (Size_ + offset < 0))
 			return ERR_PARAMETERS;
-		Pos = Size - offset;
+		Pos_ = Size_ + offset;
 		break;
 
 	case SEEK_SET:
-		if ((offset < 0) || (offset > Size))
+		if ((offset < 0) || (offset > Size_))
 			return ERR_PARAMETERS;
-		Pos = offset;
+		Pos_ = offset;
 		break;
 
 	default:
@@ -477,9 +476,9 @@ int sFILE::fseek(long offset, int origin)
 /*
  * Returns the current value of the position indicator of the stream.
  */
-long sFILE::ftell()
+long cFILE::ftell()
 {
-	return Pos;
+	return Pos_;
 }
 
 } // viewizard namespace

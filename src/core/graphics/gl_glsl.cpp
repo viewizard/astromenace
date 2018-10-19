@@ -236,7 +236,7 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 		// create empty object
 		ShadersMap[ShaderName]->VertexShader = pfn_glCreateShader(GL_VERTEX_SHADER);
 
-		std::unique_ptr<sFILE> VertexFile = vw_fopen(VertexShaderFileName);
+		std::unique_ptr<cFILE> VertexFile = vw_fopen(VertexShaderFileName);
 
 		if (!VertexFile) {
 			ShadersMap.erase(ShaderName);
@@ -244,8 +244,8 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 			return std::weak_ptr<cGLSL>{};
 		}
 
-		const GLchar *TmpGLchar = (const GLchar *)VertexFile->Data.get();
-		GLint TmpGLint = (GLint)VertexFile->Size;
+		const GLchar *TmpGLchar = (const GLchar *)VertexFile->GetData();
+		GLint TmpGLint = (GLint)VertexFile->GetSize();
 		pfn_glShaderSource(ShadersMap[ShaderName]->VertexShader, 1, &TmpGLchar, &TmpGLint);
 		vw_fclose(VertexFile);
 	}
@@ -254,7 +254,7 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 		// create empty object
 		ShadersMap[ShaderName]->FragmentShader = pfn_glCreateShader(GL_FRAGMENT_SHADER);
 
-		std::unique_ptr<sFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
+		std::unique_ptr<cFILE> FragmentFile = vw_fopen(FragmentShaderFileName);
 
 		if (!FragmentFile) {
 			ShadersMap.erase(ShaderName);
@@ -262,8 +262,8 @@ std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
 			return std::weak_ptr<cGLSL>{};
 		}
 
-		const GLchar *TmpGLchar = (const GLchar *)FragmentFile->Data.get();
-		GLint TmpGLint = (GLint)FragmentFile->Size;
+		const GLchar *TmpGLchar = (const GLchar *)FragmentFile->GetData();
+		GLint TmpGLint = (GLint)FragmentFile->GetSize();
 		pfn_glShaderSource(ShadersMap[ShaderName]->FragmentShader, 1, &TmpGLchar, &TmpGLint);
 		vw_fclose(FragmentFile);
 	}

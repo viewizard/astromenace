@@ -32,7 +32,7 @@
 
 namespace viewizard {
 
-int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, sFILE *pFile, int &DWidth, int &DHeight, int &DChanels);
+int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, cFILE *pFile, int &DWidth, int &DHeight, int &DChanels);
 
 } // viewizard namespace
 
