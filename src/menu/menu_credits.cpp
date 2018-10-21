@@ -74,6 +74,7 @@ const std::vector<std::string> CreditsArray{
 	"",
 	"COMMUNITY CONTRIBUTORS",
 	"Alistair Findlay",
+	"Dmitry Marakasov",
 	"",
 	"TESTERS",
 	"Dmitriy Schigolev",
