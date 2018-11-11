@@ -4,7 +4,7 @@
 * [Build (macOS, Linux)](https://github.com/viewizard/astromenace#build)
 * [Translators Wanted](https://github.com/viewizard/astromenace#translators-wanted)
 * [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
-* [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6)  [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)  [![patreon](https://img.shields.io/badge/donate-patreon-f96854.svg)](https://github.com/viewizard/astromenace#patreon-httpswwwpatreoncomviewizard)
+* [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6)  [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)
 
 ---
 
@@ -154,25 +154,3 @@ We also have a surprise for you, here is the artwork 1 of 12 light ships and 1 o
 </p>
 
 #### PayPal: https://www.paypal.me/viewizard
-
-#### Patreon: https://www.patreon.com/viewizard
-
-#### Bank Transfer
-* All donations are anonymous. Any sender details are not published or shared.
-* A tax-related donation receipt can not be issued because Viewizard is not a commercial nor registered organization.
-* Legally, it is a private donation.
-
-##### On the transfer form, «Donation» or «Financial assistance» must be mentioned in the purpose area.
-```
-Beneficiary’s bank             ALFA-BANK
-Beneficiary’s bank address     27 Kalanchevskaya str., Moscow, 107078
-S.W.I.F.T.                     ALFARUMM
-Beneficiary’s Acc. №           40817840506220005728
-Beneficiary                    Kurinnoi Mikhail Georgievich
-
-Correspondent bank of beneficiary’s bank
-CITIBANK NA
-399 Park Avenue, New York, NY 10043, USA
-CITIUS33
-Acc. With corresp Bank № 36310481
-```
