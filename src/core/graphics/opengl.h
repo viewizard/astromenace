@@ -37,7 +37,8 @@
 	#include <OpenGL/gl.h>
 	#include <OpenGL/glu.h>
 #else
-	#define __glext_h_ // don't let gl.h include glext.h
+	#define GL_GLEXT_LEGACY
+	#define __glext_h_
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 	#undef __glext_h_
