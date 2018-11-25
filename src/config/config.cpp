@@ -251,14 +251,6 @@ static void CheckConfig()
 	if (Config.KeyBoardSecondary == SDLK_UNKNOWN)
 		Config.KeyBoardSecondary = SDLK_SPACE;
 
-	// std::atoi() - if no conversion can be performed, ​0​ is returned, mouse buttons should starts from 1
-	if (Config.MousePrimary == 0)
-		Config.MousePrimary = SDL_BUTTON_LEFT;
-	if (Config.MouseSecondary == 0)
-		Config.MouseSecondary = SDL_BUTTON_RIGHT;
-
-	// note, we don't check JoystickPrimary and JoystickSecondary here (same std::atoi() are used), since 0 is allowed
-
 	if ((Config.FontNumber < 0) || (Config.FontNumber >= GetFontQuantity()))
 		Config.FontNumber = 0;
 	if (Config.ControlSensivity > 10) // NOTE use std::clamp here (since C++17)
