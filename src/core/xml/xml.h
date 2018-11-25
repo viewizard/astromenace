@@ -183,7 +183,7 @@ public:
 		if (tmpAttr == XMLEntry.Attributes.end())
 			return false;
 
-		Result = std::atoi(tmpAttr->second.c_str());
+		Result = std::stoi(tmpAttr->second);
 		return true;
 	}
 
@@ -193,7 +193,7 @@ public:
 		if (tmpAttr == XMLEntry.Attributes.end())
 			return false;
 
-		Result = static_cast<float>(std::atof(tmpAttr->second.c_str()));
+		Result = std::stof(tmpAttr->second);
 		return true;
 	}
 
