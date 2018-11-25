@@ -108,7 +108,7 @@ bool vw_InitAudio()
 		if (!extensions.empty()) {
 			// replace all ' ' to '\n'
 			std::replace(extensions.begin(), extensions.end(), ' ', '\n');
-			std::cout << "Supported OpenAL extensions:\n" << extensions.c_str() << "\n";
+			std::cout << "Supported OpenAL extensions:\n" << extensions << "\n";
 		}
 	}
 #endif // NDEBUG

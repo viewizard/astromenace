@@ -207,7 +207,7 @@ void SaveXMLConfigFile()
 	XMLdoc->AddComment(*RootXMLEntry, " Tips and Hints settings ");
 	for (unsigned i = 0; i < config::MAX_HINTS; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
-		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, tmpString.c_str()), "value",
+		XMLdoc->AddEntryAttribute(XMLdoc->AddEntry(*RootXMLEntry, tmpString), "value",
 					  Config.NeedShowHint[i]);
 	}
 
@@ -496,8 +496,8 @@ bool LoadXMLConfigFile(bool NeedResetConfig)
 
 	for (unsigned i = 0; i < config::MAX_HINTS; i++) {
 		std::string tmpString{"HintStatus" + std::to_string(i + 1)};
-		if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()))
-			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString.c_str()), "value",
+		if (XMLdoc->FindEntryByName(*RootXMLEntry, tmpString))
+			 XMLdoc->bGetEntryAttribute(*XMLdoc->FindEntryByName(*RootXMLEntry, tmpString), "value",
 						    Config.NeedShowHint[i]);
 	}
 

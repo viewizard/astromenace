@@ -111,7 +111,7 @@ void MissionListInit()
 	std::string ScriptName{"script/list.xml"};
 
 	// по скрипту, смотрим что загружать + считаем сколько позиций
-	std::unique_ptr<cXMLDocument> xmlDoc{new cXMLDocument(ScriptName.c_str())};
+	std::unique_ptr<cXMLDocument> xmlDoc{new cXMLDocument{ScriptName}};
 
 	// проверяем корневой элемент
 	if (!xmlDoc->GetRootEntry() || ("AstroMenaceMissionList" != xmlDoc->GetRootEntry()->Name)) {

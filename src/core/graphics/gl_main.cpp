@@ -231,7 +231,7 @@ bool vw_CreateOpenGLContext(int VSync)
 		std::string extensions{(char *)glGetString(GL_EXTENSIONS)}; // WARNING fix conversion
 		if (!extensions.empty()) {
 			std::replace(extensions.begin(), extensions.end(), ' ', '\n'); // replace all ' ' to '\n'
-			std::cout << "Supported OpenGL extensions:\n" << extensions.c_str() << "\n";
+			std::cout << "Supported OpenGL extensions:\n" << extensions << "\n";
 		}
 	}
 #endif // NDEBUG
