@@ -183,7 +183,7 @@ public:
 		if (tmpAttr == XMLEntry.Attributes.end())
 			return false;
 
-		Result = std::stoi(tmpAttr->second);
+		Result = std::stoi(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
 		return true;
 	}
 
@@ -193,7 +193,7 @@ public:
 		if (tmpAttr == XMLEntry.Attributes.end())
 			return false;
 
-		Result = std::stof(tmpAttr->second);
+		Result = std::stof(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
 		return true;
 	}
 
