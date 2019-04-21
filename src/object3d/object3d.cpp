@@ -549,10 +549,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					if (auto sharedGLSL = GLSLShaderType2.lock()) {
 						vw_UseShaderProgram(sharedGLSL);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 0);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 0);
-						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 3), Chunks[0].ShaderData[0]);
-						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), Chunks[0].ShaderData[1]);
+						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), Chunks[0].ShaderData[0]);
+						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), Chunks[0].ShaderData[1]);
 					}
 				}
 
@@ -605,10 +603,6 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			N1 = true;
 	}
 
-	int PCFMode{0};
-	if (ShadowMap)
-		PCFMode = GameConfig().ShadowMap;
-
 	vw_MaterialV(eMaterialParameter::DIFFUSE, Diffuse);
 	vw_MaterialV(eMaterialParameter::AMBIENT, Ambient);
 	vw_MaterialV(eMaterialParameter::SPECULAR, Specular);
@@ -636,8 +630,9 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 			vw_BindTexture(3, CurrentNormalMap);
 		}
 
+		// FIXME we don't need LightType1 and LightType2 any more, revise vw_CheckAndActivateAllLights()
 		int LightType1, LightType2;
-		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 2, GameConfig().MaxPointLights, Matrix);
+		vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 1, GameConfig().MaxPointLights, Matrix);
 
 		if (GameConfig().UseGLSL120 && (Chunks[0].ShaderType >= 0)) {
 			std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
@@ -675,41 +670,34 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				case 1: // per pixel light
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), LightType2);
 					if (!TextureIllum.empty() && TextureIllum[0])
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 1);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 1);
 					else
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 0);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 0);
 
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 5), 3);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), NeedNormalMapping);
+					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), 3);
+					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), NeedNormalMapping);
 					break;
 
 				case 2: // explosion
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), LightType1);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType2);
-					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 3), Chunks[0].ShaderData[0]);
-					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), Chunks[0].ShaderData[1]);
+					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), Chunks[0].ShaderData[0]);
+					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), Chunks[0].ShaderData[1]);
 					break;
 
 				case 3: // shadow map
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), LightType2);
 					if (!TextureIllum.empty() && TextureIllum[0])
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 1);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 1);
 					else
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 0);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 0);
 
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 5), 2);
-					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 6), ShadowMap_Get_xPixelOffset());
-					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 7), ShadowMap_Get_yPixelOffset());
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 8), 3);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 9), NeedNormalMapping);
-					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 10), PCFMode);
+					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), 2);
+					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), ShadowMap_Get_xPixelOffset());
+					vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 5), ShadowMap_Get_yPixelOffset());
+					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), 3);
+					vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 7), NeedNormalMapping);
 					break;
 				}
 			}
@@ -797,11 +785,12 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 				vw_Rotate(Chunks[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
 			}
 
+			// FIXME we don't need LightType1 and LightType2 any more, revise vw_CheckAndActivateAllLights()
 			int LightType1, LightType2;
 			if (!HitBB.empty())
-				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBB[i].Location, HitBB[i].Radius2, 2, GameConfig().MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBB[i].Location, HitBB[i].Radius2, 1, GameConfig().MaxPointLights, Matrix);
 			else
-				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius * Radius, 2, GameConfig().MaxPointLights, Matrix);
+				vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius * Radius, 1, GameConfig().MaxPointLights, Matrix);
 
 			// for planet's clouds
 			if (N1)
@@ -850,41 +839,34 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 					case 1: // per pixel light
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), LightType2);
 						if (!TextureIllum.empty() && TextureIllum[0])
-							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 1);
+							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 1);
 						else
-							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 0);
+							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 0);
 
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 5), 3);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), NeedNormalMapping);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), 3);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), NeedNormalMapping);
 						break;
 
 					case 2: // explosion
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), LightType1);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType2);
-						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 3), Chunks[0].ShaderData[0]);
-						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), Chunks[0].ShaderData[1]);
+						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), Chunks[0].ShaderData[0]);
+						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), Chunks[0].ShaderData[1]);
 						break;
 
 					case 3: // shadow map
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
 						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 1), 1);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), LightType1);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), LightType2);
 						if (!TextureIllum.empty() && TextureIllum[0])
-							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 1);
+							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 1);
 						else
-							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 4), 0);
+							vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 2), 0);
 
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 5), 2);
-						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 6), ShadowMap_Get_xPixelOffset());
-						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 7), ShadowMap_Get_yPixelOffset());
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 8), 3);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 9), NeedNormalMapping);
-						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 10), PCFMode);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 3), 2);
+						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 4), ShadowMap_Get_xPixelOffset());
+						vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 5), ShadowMap_Get_yPixelOffset());
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 6), 3);
+						vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 7), NeedNormalMapping);
 						break;
 					}
 				}

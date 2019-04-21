@@ -6,9 +6,6 @@ uniform sampler2D Texture1, Texture2, NormalMap;
 uniform int NeedMultitexture;
 uniform int NeedNormalMapping;
 uniform sampler2DShadow ShadowMap;
-uniform int PCFMode;
-uniform int DirectLightCount;
-uniform int PointLightCount;
 uniform float xPixelOffset;
 uniform float yPixelOffset;
 
@@ -17,7 +14,6 @@ varying vec3 pTangent;
 varying vec3 pBinormal;
 varying vec3 Vertex;
 varying vec4 ShadowTexCoord;
-
 
 float lookup(vec2 offSet)
 {
@@ -28,6 +24,61 @@ float lookup(vec2 offSet)
 						  0.0005, 0.0)).w;
 }
 
+vec4 direct_light(int i, vec3 Normal, float Shadow)
+{
+	vec3 halfV;
+	float NdotL, NdotHV;
+	vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+
+	// ambient
+	color += gl_FrontMaterial.ambient * gl_LightSource[i].ambient;
+
+	NdotL = max(dot(Normal, normalize(gl_LightSource[i].position.xyz)), 0.0) * Shadow;
+	if (NdotL > 0.0) {
+		color += gl_FrontMaterial.diffuse * gl_LightSource[i].diffuse * NdotL;
+		// specular
+		halfV = normalize(gl_LightSource[i].halfVector.xyz);
+		NdotHV = max(dot(Normal, halfV), 0.0);
+		color += gl_FrontMaterial.specular *
+			 gl_LightSource[i].specular *
+			 pow(NdotHV, gl_FrontMaterial.shininess) *
+			 Shadow;
+	}
+
+	return color;
+}
+
+vec4 point_light(int i, vec3 Normal)
+{
+	vec3 halfV;
+	float NdotL, NdotHV;
+	vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+
+	vec3 Direction = vec3(gl_LightSource[i].position.xyz - Vertex);
+
+	NdotL = max(dot(Normal, normalize(Direction)), 0.0);
+	if (NdotL > 0.0) {
+		float Dist = length(Direction);
+
+		// calculate attenuations
+		float att = 1.0 / (gl_LightSource[i].constantAttenuation +
+				   gl_LightSource[i].linearAttenuation * Dist +
+				   gl_LightSource[i].quadraticAttenuation * Dist * Dist);
+		// diffuse and ambient
+		color += att * (gl_FrontMaterial.diffuse * gl_LightSource[i].diffuse * NdotL +
+				gl_FrontMaterial.ambient * gl_LightSource[i].ambient);
+		// specular
+		halfV = normalize(gl_LightSource[i].halfVector.xyz);
+		NdotHV = max(dot(Normal, halfV), 0.0);
+		color += att *
+			 gl_FrontMaterial.specular *
+			 gl_LightSource[i].specular *
+			 pow(NdotHV,gl_FrontMaterial.shininess);
+	}
+
+	return color;
+}
+
 void main()
 {
 	vec3 Normal = pNormal;
@@ -36,25 +87,18 @@ void main()
 		Normal = normalize(TBN * normalize(texture2D(NormalMap, gl_TexCoord[0].st).xyz * 2.0 - 1.0));
 	}
 
-	vec3 halfV;
-	float NdotL, NdotHV;
 	float Shadow = 1.0f;
 
 	// avoid counter shadow
 	if (ShadowTexCoord.w > 1.0) {
-		if (PCFMode == 1) {
-			// 8x8 kernel PCF
-			float x, y;
-			for (y = -3.5 ; y <= 3.5 ; y += 1.0) {
-				for (x = -3.5 ; x <= 3.5 ; x += 1.0) {
-					Shadow += lookup(vec2(x,y));
-				}
+		// 8x8 kernel PCF
+		float x, y;
+		for (y = -3.5 ; y <= 3.5 ; y += 1.0) {
+			for (x = -3.5 ; x <= 3.5 ; x += 1.0) {
+				Shadow += lookup(vec2(x,y));
 			}
-			Shadow /= 64.0 ;
-		} else {
-			// simple lookup, no PCF
-			Shadow = lookup(vec2(0.0, 0.0));
 		}
+		Shadow /= 64.0 ;
 	}
 
 	// global ambient
@@ -62,49 +106,13 @@ void main()
 	color += gl_LightModel.ambient * gl_FrontMaterial.ambient;
 
 	// for each light sources, calculate directional & point light per pixel
-
-	// directional light per pixel
-	for (int i = 0; i < DirectLightCount; i++) {
-		// ambient
-		color += gl_FrontMaterial.ambient * gl_LightSource[i].ambient;
-
-		NdotL = max(dot(Normal, normalize(gl_LightSource[i].position.xyz)), 0.0) * Shadow;
-		if (NdotL > 0.0) {
-			color += gl_FrontMaterial.diffuse * gl_LightSource[i].diffuse * NdotL;
-			// specular
-			halfV = normalize(gl_LightSource[i].halfVector.xyz);
-			NdotHV = max(dot(Normal, halfV), 0.0);
-			color += gl_FrontMaterial.specular *
-				 gl_LightSource[i].specular *
-				 pow(NdotHV, gl_FrontMaterial.shininess) *
-				 Shadow;
-		}
-	}
-
-	// point light per pixel
-	for (int i = DirectLightCount; i < DirectLightCount + PointLightCount; i++) {
-		vec3 Direction = vec3(gl_LightSource[i].position.xyz - Vertex);
-
-		NdotL = max(dot(Normal, normalize(Direction)), 0.0);
-		if (NdotL > 0.0) {
-			float Dist = length(Direction);
-
-			// calculate attenuations
-			float att = 1.0 / (gl_LightSource[i].constantAttenuation +
-					   gl_LightSource[i].linearAttenuation * Dist +
-					   gl_LightSource[i].quadraticAttenuation * Dist * Dist);
-			// diffuse and ambient
-			color += att * (gl_FrontMaterial.diffuse * gl_LightSource[i].diffuse * NdotL +
-					gl_FrontMaterial.ambient * gl_LightSource[i].ambient);
-			// specular
-			halfV = normalize(gl_LightSource[i].halfVector.xyz);
-			NdotHV = max(dot(Normal, halfV), 0.0);
-			color += att *
-				 gl_FrontMaterial.specular *
-				 gl_LightSource[i].specular *
-				 pow(NdotHV,gl_FrontMaterial.shininess);
-		}
-	}
+	color += direct_light(0, Normal, Shadow);
+	color += point_light(1, Normal);
+	color += point_light(2, Normal);
+	color += point_light(3, Normal);
+	color += point_light(4, Normal);
+	color += point_light(5, Normal);
+	color += point_light(6, Normal);
 
 	gl_FragColor = clamp(color, 0.0, 1.0) * texture2D(Texture1, gl_TexCoord[0].st);
 	if (NeedMultitexture == 1)

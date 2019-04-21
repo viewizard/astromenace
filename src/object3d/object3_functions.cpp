@@ -180,8 +180,6 @@ bool SetupObject3DShaders()
 	const std::vector<std::string> GLSLShaderType1UniformLocationNames{
 		{"Texture1"},
 		{"Texture2"},
-		{"DirectLightCount"},
-		{"PointLightCount"},
 		{"NeedMultitexture"},
 		{"NormalMap"},
 		{"NeedNormalMapping"}
@@ -191,8 +189,6 @@ bool SetupObject3DShaders()
 
 	const std::vector<std::string> GLSLShaderType2UniformLocationNames{
 		{"Texture1"},
-		{"DirectLightCount"},
-		{"PointLightCount"},
 		{"SpeedData1"},
 		{"SpeedData2"}
 	};
@@ -202,15 +198,12 @@ bool SetupObject3DShaders()
 	const std::vector<std::string> GLSLShaderType3UniformLocationNames{
 		{"Texture1"},
 		{"Texture2"},
-		{"DirectLightCount"},
-		{"PointLightCount"},
 		{"NeedMultitexture"},
 		{"ShadowMap"},
 		{"xPixelOffset"},
 		{"yPixelOffset"},
 		{"NormalMap"},
 		{"NeedNormalMapping"},
-		{"PCFMode"}
 	};
 	if (!SetupShader(GLSLShaderType3, "PerPixelLight_ShadowMap", GLSLShaderType3UniformLocationNames))
 		return false;
