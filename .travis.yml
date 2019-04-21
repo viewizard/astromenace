@@ -1,6 +1,6 @@
 language: cpp
 sudo: required
-dist: trusty
+dist: xenial
 os:
   - linux
   - osx
@@ -12,8 +12,8 @@ compiler:
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then travis_retry curl -L https://www.libsdl.org/release/SDL2-2.0.5.tar.gz | tar xz; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then pushd SDL2-2.0.5; fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then ./configure; fi
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then make; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then ./configure --enable-mir-shared=no; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then make -j8; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo make install; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then popd; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then eval "CC=gcc-7 && CXX=g++-7"; fi
