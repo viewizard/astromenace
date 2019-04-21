@@ -94,6 +94,7 @@ std::weak_ptr<cGroundObject> CreateWheeled(const int WheeledNum)
  */
 void UpdateAllGroundObjects(float Time)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
 		if (!iter->get()->Update(Time))
 			iter = GroundObjectList.erase(iter);
@@ -155,6 +156,7 @@ void ForEachGroundObject(std::function<void (cGroundObject &Object)> function)
  */
 void ForEachGroundObject(std::function<void (cGroundObject &Object, eGroundCycle &Command)> function)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = GroundObjectList.begin(); iter != GroundObjectList.end();) {
 		eGroundCycle Command{eGroundCycle::Continue};
 		function(*iter->get(), Command);

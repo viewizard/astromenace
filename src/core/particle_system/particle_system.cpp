@@ -150,6 +150,7 @@ bool cParticleSystem::Update(float Time)
 
 	TimeLastUpdate = Time;
 
+	// NOTE (?) use std::erase_if here (since C++20)
 	// update and remove (erase) dead particles
 	auto prev_iter = ParticlesList.before_begin();
 	for (auto iter = ParticlesList.begin(); iter != ParticlesList.end();) {
@@ -952,6 +953,7 @@ void vw_DrawParticleSystems(std::vector<std::weak_ptr<cParticleSystem>> &DrawPar
  */
 void vw_UpdateAllParticleSystems(float Time)
 {
+	// NOTE (?) use std::erase_if here (since C++20)
 	auto prev_iter = ParticleSystemsList.before_begin();
 	for (auto iter = ParticleSystemsList.begin(); iter != ParticleSystemsList.end();) {
 		if (!(*iter)->Update(Time))

@@ -113,6 +113,7 @@ std::weak_ptr<cSpaceObject> CreateBasePart(const int BasePartNum)
  */
 void UpdateAllSpaceObject(float Time)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = SpaceObjectList.begin(); iter != SpaceObjectList.end();) {
 		if (!iter->get()->Update(Time))
 			iter = SpaceObjectList.erase(iter);
@@ -177,6 +178,7 @@ void ForEachSpaceObject(std::function<void (cSpaceObject &Object)> function)
  */
 void ForEachSpaceObject(std::function<void (cSpaceObject &Object, eSpaceCycle &Command)> function)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = SpaceObjectList.begin(); iter != SpaceObjectList.end();) {
 		eSpaceCycle Command{eSpaceCycle::Continue};
 		function(*iter->get(), Command);
@@ -212,6 +214,7 @@ void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 			Command = eSpacePairCycle::Continue;
 			function(*iterFirst->get(), *iterSecond->get(), Command);
 
+			// NOTE (?) use std::erase_if here (since C++20)
 			if ((Command == eSpacePairCycle::DeleteSecondObjectAndContinue) ||
 			    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
 				iterSecond = SpaceObjectList.erase(iterSecond);
@@ -224,6 +227,7 @@ void ForEachSpaceObjectPair(std::function<void (cSpaceObject &FirstObject,
 				break;
 		}
 
+		// NOTE (?) use std::erase_if here (since C++20)
 		if ((Command == eSpacePairCycle::DeleteFirstObjectAndContinue) ||
 		    (Command == eSpacePairCycle::DeleteBothObjectsAndContinue))
 			iterFirst = SpaceObjectList.erase(iterFirst);

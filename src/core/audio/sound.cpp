@@ -242,6 +242,7 @@ void vw_ReleaseAllSounds()
  */
 void vw_StopAllSoundsIfAllowed()
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = SoundsMap.begin(); iter != SoundsMap.end();) {
 		if (iter->second.AllowedStop) {
 			// stopped sound will be released on update() call,
@@ -319,6 +320,7 @@ void vw_UpdateSound(uint32_t CurrentTick)
 		    CheckALSourceState(iter->second.Source, AL_STOPPED))
 			NeedRelease = true;
 
+		// NOTE (?) use std::erase_if here (since C++20)
 		if (NeedRelease)
 			iter = SoundsMap.erase(iter);
 		else

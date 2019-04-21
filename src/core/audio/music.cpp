@@ -302,6 +302,7 @@ void vw_ReleaseAllMusic()
  */
 void vw_UpdateMusic(uint32_t CurrentTick)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = MusicMap.begin(); iter != MusicMap.end();) {
 		if (!iter->second.Update(CurrentTick))
 			iter = MusicMap.erase(iter);

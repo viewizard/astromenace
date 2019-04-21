@@ -184,6 +184,7 @@ std::weak_ptr<cWeapon> CreateWeapon(const int WeaponNum)
  */
 void UpdateAllWeapon(float Time)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = WeaponList.begin(); iter != WeaponList.end();) {
 		if (!iter->get()->Update(Time))
 			iter = WeaponList.erase(iter);

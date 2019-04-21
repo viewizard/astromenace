@@ -99,6 +99,7 @@ void cParticleSystem2D::Update(float Time)
 	float TimeDelta = Time - TimeLastUpdate;
 	TimeLastUpdate = Time;
 
+	// NOTE use std::erase_if here (since C++20)
 	// update and remove (erase) dead particles
 	for (auto iter = ParticlesList.begin(); iter != ParticlesList.end();) {
 		if (!iter->Update(TimeDelta, Location, IsMagnet, MagnetFactor))

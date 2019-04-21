@@ -190,6 +190,7 @@ std::weak_ptr<cProjectile> CreateProjectile(const int ProjectileNum)
  */
 void UpdateAllProjectile(float Time)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
 		if (!iter->get()->Update(Time))
 			iter = ProjectileList.erase(iter);
@@ -251,6 +252,7 @@ void ForEachProjectile(std::function<void (cProjectile &Object)> function)
  */
 void ForEachProjectile(std::function<void (cProjectile &Object, eProjectileCycle &Command)> function)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
 		eProjectileCycle Command{eProjectileCycle::Continue};
 		function(*iter->get(), Command);
@@ -286,6 +288,7 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 			Command = eProjectilePairCycle::Continue;
 			function(*iterFirst->get(), *iterSecond->get(), Command);
 
+			// NOTE (?) use std::erase_if here (since C++20)
 			if ((Command == eProjectilePairCycle::DeleteSecondObjectAndContinue) ||
 			    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
 				iterSecond = ProjectileList.erase(iterSecond);
@@ -298,6 +301,7 @@ void ForEachProjectilePair(std::function<void (cProjectile &FirstObject,
 				break;
 		}
 
+		// NOTE (?) use std::erase_if here (since C++20)
 		if ((Command == eProjectilePairCycle::DeleteFirstObjectAndContinue) ||
 		    (Command == eProjectilePairCycle::DeleteBothObjectsAndContinue))
 			iterFirst = ProjectileList.erase(iterFirst);

@@ -116,6 +116,7 @@ std::weak_ptr<cSpaceShip> CreatePirateShip(const int SpaceShipNum)
  */
 void UpdateAllSpaceShip(float Time)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = ShipList.begin(); iter != ShipList.end();) {
 		if (!iter->get()->Update(Time))
 			iter = ShipList.erase(iter);
@@ -177,6 +178,7 @@ void ForEachSpaceShip(std::function<void (cSpaceShip &Object)> function)
  */
 void ForEachSpaceShip(std::function<void (cSpaceShip &Object, eShipCycle &Command)> function)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = ShipList.begin(); iter != ShipList.end();) {
 		eShipCycle Command{eShipCycle::Continue};
 		function(*iter->get(), Command);
@@ -212,6 +214,7 @@ void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 			Command = eShipPairCycle::Continue;
 			function(*iterFirst->get(), *iterSecond->get(), Command);
 
+			// NOTE (?) use std::erase_if here (since C++20)
 			if ((Command == eShipPairCycle::DeleteSecondObjectAndContinue) ||
 			    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
 				iterSecond = ShipList.erase(iterSecond);
@@ -224,6 +227,7 @@ void ForEachSpaceShipPair(std::function<void (cSpaceShip &FirstObject,
 				break;
 		}
 
+		// NOTE (?) use std::erase_if here (since C++20)
 		if ((Command == eShipPairCycle::DeleteFirstObjectAndContinue) ||
 		    (Command == eShipPairCycle::DeleteBothObjectsAndContinue))
 			iterFirst = ShipList.erase(iterFirst);

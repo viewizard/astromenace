@@ -83,6 +83,7 @@ void CreateSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3D &Expl
  */
 void UpdateAllExplosion(float Time)
 {
+	// NOTE use std::erase_if here (since C++20)
 	for (auto iter = ExplosionList.begin(); iter != ExplosionList.end();) {
 		if (!iter->get()->Update(Time))
 			iter = ExplosionList.erase(iter);
