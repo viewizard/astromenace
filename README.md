@@ -114,10 +114,10 @@ $ git clone https://github.com/viewizard/astromenace.git astromenace
 $ cd ~/astromenace
 ```
 ```
-$ cmake ./
+$ cmake -DCMAKE_BUILD_TYPE=Release ./
 ```
 ```
-$ make
+$ make -j5
 ```
 
 ### 4) Create desktop shortcut or start AstroMenace
