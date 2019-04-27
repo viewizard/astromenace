@@ -1,3 +1,12 @@
+# Version 1.4.1
+
+### Overall changes:
+
+- Revised shaders and all related code (should work fine with all open source linux video drivers now).
+- Fixed compilation warnings.
+- Updated CMakeLists.txt.
+- Minor code improvements.
+
 # Version 1.4.0
 
 ### Overall changes:
