@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 #include "fps_counter.h"
 #include "../config/config.h"
@@ -39,7 +39,7 @@ namespace astromenace {
  */
 void cFPS::ClearDrawString()
 {
-	DrawStringUTF32_ = ConvertUTF8.from_bytes(vw_GetText("fps") + std::string{" ..."});
+    DrawStringUTF32_ = ConvertUTF8.from_bytes(vw_GetText("fps") + std::string{" ..."});
 }
 
 /*
@@ -47,9 +47,9 @@ void cFPS::ClearDrawString()
  */
 void cFPS::Reset()
 {
-	LastTick_ = SDL_GetTicks();
-	CurrentFrame_ = 0;
-	ClearDrawString();
+    LastTick_ = SDL_GetTicks();
+    CurrentFrame_ = 0;
+    ClearDrawString();
 }
 
 /*
@@ -57,10 +57,11 @@ void cFPS::Reset()
  */
 void cFPS::Switch()
 {
-	ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
+    ChangeGameConfig().ShowFPS = !GameConfig().ShowFPS;
 
-	if (GameConfig().ShowFPS)
-		Reset();
+    if (GameConfig().ShowFPS) {
+        Reset();
+    }
 }
 
 /*
@@ -68,11 +69,12 @@ void cFPS::Switch()
  */
 void cFPS::CheckKeyboard()
 {
-	if (!vw_GetKeyStatus(SDLK_F2))
-		return;
+    if (!vw_GetKeyStatus(SDLK_F2)) {
+        return;
+    }
 
-	vw_SetKeyStatus(SDLK_F2, false);
-	Switch();
+    vw_SetKeyStatus(SDLK_F2, false);
+    Switch();
 }
 
 /*
@@ -81,10 +83,11 @@ void cFPS::CheckKeyboard()
  */
 void cFPS::Draw()
 {
-	if (!GameConfig().ShowFPS)
-		return;
+    if (!GameConfig().ShowFPS) {
+        return;
+    }
 
-	vw_DrawTextUTF32(6, 5, 0, 0, 1.0f, TextColor_, 1.0f, DrawStringUTF32_);
+    vw_DrawTextUTF32(6, 5, 0, 0, 1.0f, TextColor_, 1.0f, DrawStringUTF32_);
 }
 
 /*
@@ -92,34 +95,37 @@ void cFPS::Draw()
  */
 void cFPS::Update()
 {
-	CheckKeyboard();
+    CheckKeyboard();
 
-	if (!GameConfig().ShowFPS)
-		return;
+    if (!GameConfig().ShowFPS) {
+        return;
+    }
 
-	uint32_t CurrentTick = SDL_GetTicks();
-	if (LastTick_ < CurrentTick) {
-		uint32_t TicksDelta = CurrentTick - LastTick_;
-		constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
+    uint32_t CurrentTick = SDL_GetTicks();
+    if (LastTick_ < CurrentTick) {
+        uint32_t TicksDelta = CurrentTick - LastTick_;
+        constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
 
-		if (TicksDelta >= TicksInSecond) {
-			// ostringstream is not so fast, but we use it one time per second
-			std::ostringstream tmpStream;
-			tmpStream << vw_GetText("fps") << " "
-				  << std::fixed << std::setprecision(1)
-				  << static_cast<float>(CurrentFrame_ * TicksInSecond) / TicksDelta;
-			if (GameConfig().VSync)
-				tmpStream << " (VSync - " << vw_GetText("On") << ")";
+        if (TicksDelta >= TicksInSecond) {
+            // ostringstream is not so fast, but we use it one time per second
+            std::ostringstream tmpStream;
+            tmpStream << vw_GetText("fps") << " "
+                      << std::fixed << std::setprecision(1)
+                      << static_cast<float>(CurrentFrame_ * TicksInSecond) / TicksDelta;
+            if (GameConfig().VSync) {
+                tmpStream << " (VSync - " << vw_GetText("On") << ")";
+            }
 
-			DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
-			CurrentFrame_ = 0;
-			LastTick_ = CurrentTick;
-		}
-	} else if (LastTick_ > CurrentTick) // game was restarted, or SDL was re-inited
-		Reset();
-	// if LastTick_ == CurrentTick - do nothing
+            DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
+            CurrentFrame_ = 0;
+            LastTick_ = CurrentTick;
+        }
+    } else if (LastTick_ > CurrentTick) { // game was restarted, or SDL was re-inited
+        Reset();
+    }
+    // if LastTick_ == CurrentTick - do nothing
 
-	CurrentFrame_++;
+    CurrentFrame_++;
 }
 
 } // astromenace namespace

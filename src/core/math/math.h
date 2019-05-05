@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 #ifndef CORE_MATH_MATH_H
 #define CORE_MATH_MATH_H
@@ -33,92 +33,92 @@
 namespace viewizard {
 
 struct sVECTOR3D {
-	float x{0.0f}, y{0.0f}, z{0.0f};
+    float x{0.0f}, y{0.0f}, z{0.0f};
 
-	sVECTOR3D() = default;
-	explicit sVECTOR3D(float _x, float _y, float _z) :
-		x{_x},
-		y{_y},
-		z{_z}
-	{}
-	void Set(float _x, float _y, float _z)
-	{
-		x = _x;
-		y = _y;
-		z = _z;
-	}
+    sVECTOR3D() = default;
+    explicit sVECTOR3D(float _x, float _y, float _z) :
+        x{_x},
+        y{_y},
+        z{_z}
+    {}
+    void Set(float _x, float _y, float _z)
+    {
+        x = _x;
+        y = _y;
+        z = _z;
+    }
 
-	// Equal
-	bool operator == (const sVECTOR3D &A) const
-	{
-		return ((A.x == x) &&
-			(A.y == y) &&
-			(A.z == z));
-	}
-	// Not equal
-	bool operator != (const sVECTOR3D &A) const
-	{
-		return ((A.x != x) ||
-			(A.y != y) ||
-			(A.z != z));
-	}
-	// Multiply
-	friend float operator * (const sVECTOR3D &A, const sVECTOR3D &B)
-	{
-		return A.x * B.x + A.y * B.y + A.z * B.z;
-	}
+    // Equal
+    bool operator == (const sVECTOR3D &A) const
+    {
+        return (A.x == x
+                && A.y == y
+                && A.z == z);
+    }
+    // Not equal
+    bool operator != (const sVECTOR3D &A) const
+    {
+        return (A.x != x
+                || A.y != y
+                || A.z != z);
+    }
+    // Multiply
+    friend float operator * (const sVECTOR3D &A, const sVECTOR3D &B)
+    {
+        return A.x * B.x + A.y * B.y + A.z * B.z;
+    }
 
-	sVECTOR3D operator ^ (const float C) const
-	{
-		return sVECTOR3D{x * C, y * C, z * C};
-	}
+    sVECTOR3D operator ^ (const float C) const
+    {
+        return sVECTOR3D{x * C, y * C, z * C};
+    }
 
-	sVECTOR3D operator / (const float C) const
-	{
-		return sVECTOR3D{x / C, y / C, z / C};
-	}
+    sVECTOR3D operator / (const float C) const
+    {
+        return sVECTOR3D{x / C, y / C, z / C};
+    }
 
-	void operator () (const float _x, const float _y, const float _z)
-	{
-		x = _x;
-		y = _y;
-		z = _z;
-	}
+    void operator () (const float _x, const float _y, const float _z)
+    {
+        x = _x;
+        y = _y;
+        z = _z;
+    }
 
-	void operator *= (float C)
-	{
-		x *= C;
-		y *= C;
-		z *= C;
-	}
+    void operator *= (float C)
+    {
+        x *= C;
+        y *= C;
+        z *= C;
+    }
 
-	// Add
-	sVECTOR3D operator + (const sVECTOR3D &A) const
-	{
-		return sVECTOR3D{x + A.x, y + A.y, z + A.z};
-	}
-	void operator += (const sVECTOR3D &A)
-	{
-		x += A.x;
-		y += A.y;
-		z += A.z;
-	}
-	// Subtract
-	sVECTOR3D operator - (const sVECTOR3D &A) const
-	{
-		return sVECTOR3D{x - A.x, y - A.y, z - A.z};
-	}
-	void operator -= (const sVECTOR3D &A)
-	{
-		x -= A.x;
-		y -= A.y;
-		z -= A.z;
-	}
+    // Add
+    sVECTOR3D operator + (const sVECTOR3D &A) const
+    {
+        return sVECTOR3D{x + A.x, y + A.y, z + A.z};
+    }
+    void operator += (const sVECTOR3D &A)
+    {
+        x += A.x;
+        y += A.y;
+        z += A.z;
+    }
+    // Subtract
+    sVECTOR3D operator - (const sVECTOR3D &A) const
+    {
+        return sVECTOR3D{x - A.x, y - A.y, z - A.z};
+    }
+    void operator -= (const sVECTOR3D &A)
+    {
+        x -= A.x;
+        y -= A.y;
+        z -= A.z;
+    }
 
-	float Length() const;
-	void Normalize();
-	void NormalizeHi();
-	void Multiply(const sVECTOR3D &A);
+    float Length() const;
+    void Normalize();
+    void NormalizeHi();
+    void Multiply(const sVECTOR3D &A);
 };
 
 /*
@@ -128,34 +128,33 @@ struct sVECTOR3D {
 // Note, we use left-top as starting point (upper left is origin), this is why sRECT
 // keeps together pairs "left-top" and "right-bottom".
 struct sRECT {
-	int left{0}, top{0}, right{0}, bottom{0};
+    int left{0}, top{0}, right{0}, bottom{0};
 
-	sRECT() = default;
-	explicit sRECT(const int _left, const int _top, const int _right, const int _bottom) :
-		left{_left},
-		top{_top},
-		right{_right},
-		bottom{_bottom}
-	{}
-	void operator () (const int _left, const int _top, const int _right, const int _bottom)
-	{
-		left = _left;
-		top = _top;
-		right = _right;
-		bottom = _bottom;
-	}
+    sRECT() = default;
+    explicit sRECT(const int _left, const int _top, const int _right, const int _bottom) :
+        left{_left},
+        top{_top},
+        right{_right},
+        bottom{_bottom}
+    {}
+    void operator () (const int _left, const int _top, const int _right, const int _bottom)
+    {
+        left = _left;
+        top = _top;
+        right = _right;
+        bottom = _bottom;
+    }
 };
 
 // utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
 template <class Facet>
-struct deletable_facet : Facet
-{
-	template<class ...Args>
-	deletable_facet(Args&& ...args) :
-		Facet(std::forward<Args>(args)...)
-	{}
-	~deletable_facet()
-	{}
+struct deletable_facet : Facet {
+    template<class ...Args>
+    deletable_facet(Args&& ...args) :
+        Facet(std::forward<Args>(args)...)
+    {}
+    ~deletable_facet()
+    {}
 };
 // Convert utf8 to utf32: ConvertUTF8.from_bytes(utf8)
 // Convert utf32 to utf8: ConvertUTF8.to_bytes(utf32)
@@ -174,7 +173,7 @@ float vw_sqrtf(float x);
 template <typename T>
 inline void vw_Clamp(T &value, T low, T high)
 {
-	value = (value < low) ? low : ((value > high) ? high : value);
+    value = (value < low) ? low : ((value > high) ? high : value);
 }
 
 // Calculate point rotation.
@@ -183,21 +182,22 @@ void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle);
 void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle);
 // Calculates the plane equation given three points.
 void vw_GetPlaneABCD(float &A, float &B, float &C, float &D,
-		     const sVECTOR3D &Point1, const sVECTOR3D &Point2, const sVECTOR3D &Point3);
+                     const sVECTOR3D &Point1, const sVECTOR3D &Point2, const sVECTOR3D &Point3);
 
 // Check file extension (for extensions with ASCII characters).
 inline bool vw_CheckFileExtension(const std::string &FileName, const std::string &Extension)
 {
-	if (Extension.size() > FileName.size())
-		return false;
+    if (Extension.size() > FileName.size()) {
+        return false;
+    }
 
-	auto predicate = [] (unsigned char a, unsigned char b) {
-		return (std::tolower(a) == std::tolower(b));
-	};
+    auto predicate = [] (unsigned char a, unsigned char b) {
+        return (std::tolower(a) == std::tolower(b));
+    };
 
-	std::string FileExt = FileName.substr(FileName.size() - Extension.size());
+    std::string FileExt = FileName.substr(FileName.size() - Extension.size());
 
-	return std::equal(FileExt.begin(), FileExt.end(), Extension.begin(), predicate);
+    return std::equal(FileExt.begin(), FileExt.end(), Extension.begin(), predicate);
 }
 
 /*
@@ -213,7 +213,7 @@ unsigned vw_uRandNum(unsigned Max);
 // Generate random float in range (-1.0f, 1.0f).
 inline float vw_fRand0()
 {
-	return vw_fRand() - vw_fRand();
+    return vw_fRand() - vw_fRand();
 }
 
 /*

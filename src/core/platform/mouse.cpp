@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 #include "../graphics/graphics.h"
 #include "../math/math.h"
@@ -58,18 +58,18 @@ bool MouseLeftDoubleClick{false};
  */
 void vw_GetMousePos(int &X, int &Y)
 {
-	float tmpViewportWidth, tmpViewportHeight;
-	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
+    float tmpViewportWidth, tmpViewportHeight;
+    vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 
-	float tmpInternalWidth, tmpInternalHeight;
-	if (vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight)) {
-		// WARNING probably, we could move mouse position's vatiables to float type (blocked by sRECT)
-		X = static_cast<int>(static_cast<float>(MouseX) * tmpInternalWidth / tmpViewportWidth);
-		Y = static_cast<int>(static_cast<float>(MouseY) * tmpInternalHeight / tmpViewportHeight);
-	} else {
-		X = MouseX;
-		Y = MouseY;
-	}
+    float tmpInternalWidth, tmpInternalHeight;
+    if (vw_GetInternalResolution(&tmpInternalWidth, &tmpInternalHeight)) {
+        // WARNING probably, we could move mouse position's vatiables to float type (blocked by sRECT)
+        X = static_cast<int>(static_cast<float>(MouseX) * tmpInternalWidth / tmpViewportWidth);
+        Y = static_cast<int>(static_cast<float>(MouseY) * tmpInternalHeight / tmpViewportHeight);
+    } else {
+        X = MouseX;
+        Y = MouseY;
+    }
 }
 
 /*
@@ -77,7 +77,7 @@ void vw_GetMousePos(int &X, int &Y)
  */
 void vw_SetMouseLeftDoubleClick(bool NewStatus)
 {
-	MouseLeftDoubleClick = NewStatus;
+    MouseLeftDoubleClick = NewStatus;
 }
 
 /*
@@ -85,11 +85,12 @@ void vw_SetMouseLeftDoubleClick(bool NewStatus)
  */
 bool vw_GetMouseLeftDoubleClick(bool ResetStatus)
 {
-	bool tmp = MouseLeftDoubleClick;
-	if (ResetStatus)
-		MouseLeftDoubleClick = false;
+    bool tmp = MouseLeftDoubleClick;
+    if (ResetStatus) {
+        MouseLeftDoubleClick = false;
+    }
 
-	return tmp;
+    return tmp;
 }
 
 /*
@@ -97,7 +98,7 @@ bool vw_GetMouseLeftDoubleClick(bool ResetStatus)
  */
 void vw_SetMouseLeftClick(bool NewStatus)
 {
-	MouseLeftClick = NewStatus;
+    MouseLeftClick = NewStatus;
 }
 
 /*
@@ -105,11 +106,12 @@ void vw_SetMouseLeftClick(bool NewStatus)
  */
 bool vw_GetMouseLeftClick(bool ResetStatus)
 {
-	bool tmp = MouseLeftClick;
-	if (ResetStatus)
-		MouseLeftClick = false;
+    bool tmp = MouseLeftClick;
+    if (ResetStatus) {
+        MouseLeftClick = false;
+    }
 
-	return tmp;
+    return tmp;
 }
 
 /*
@@ -117,7 +119,7 @@ bool vw_GetMouseLeftClick(bool ResetStatus)
  */
 void vw_SetMouseRightClick(bool NewStatus)
 {
-	MouseRightClick = NewStatus;
+    MouseRightClick = NewStatus;
 }
 
 /*
@@ -125,11 +127,12 @@ void vw_SetMouseRightClick(bool NewStatus)
  */
 bool vw_GetMouseRightClick(bool ResetStatus)
 {
-	bool tmp = MouseRightClick;
-	if (ResetStatus)
-		MouseRightClick = false;
+    bool tmp = MouseRightClick;
+    if (ResetStatus) {
+        MouseRightClick = false;
+    }
 
-	return tmp;
+    return tmp;
 }
 
 /*
@@ -137,13 +140,14 @@ bool vw_GetMouseRightClick(bool ResetStatus)
  */
 void vw_SetMouseButtonStatus(unsigned Button, bool NewStatus)
 {
-	assert(Button);
+    assert(Button);
 
-	// note, SDL provide button's number that starts from 1
-	if (Button > MouseButtonArray.size())
-		MouseButtonArray.resize(Button, false);
+    // note, SDL provide button's number that starts from 1
+    if (Button > MouseButtonArray.size()) {
+        MouseButtonArray.resize(Button, false);
+    }
 
-	MouseButtonArray[Button - 1] = NewStatus;
+    MouseButtonArray[Button - 1] = NewStatus;
 }
 
 /*
@@ -151,13 +155,14 @@ void vw_SetMouseButtonStatus(unsigned Button, bool NewStatus)
  */
 bool vw_GetMouseButtonStatus(unsigned Button)
 {
-	assert(Button);
+    assert(Button);
 
-	// note, SDL provide button's number that starts from 1
-	if (Button > MouseButtonArray.size())
-		MouseButtonArray.resize(Button, false);
+    // note, SDL provide button's number that starts from 1
+    if (Button > MouseButtonArray.size()) {
+        MouseButtonArray.resize(Button, false);
+    }
 
-	return MouseButtonArray[Button - 1];
+    return MouseButtonArray[Button - 1];
 }
 
 /*
@@ -165,7 +170,7 @@ bool vw_GetMouseButtonStatus(unsigned Button)
  */
 unsigned vw_GetMaxMouseButtonNum()
 {
-	return static_cast<unsigned>(MouseButtonArray.size());
+    return static_cast<unsigned>(MouseButtonArray.size());
 }
 
 /*
@@ -173,7 +178,7 @@ unsigned vw_GetMaxMouseButtonNum()
  */
 void vw_ResetMouseButtons()
 {
-	std::fill(MouseButtonArray.begin(), MouseButtonArray.end(), false);
+    std::fill(MouseButtonArray.begin(), MouseButtonArray.end(), false);
 }
 
 /*
@@ -181,7 +186,7 @@ void vw_ResetMouseButtons()
  */
 void vw_ChangeWheelStatus(int Value)
 {
-	MouseWheelStatus += Value;
+    MouseWheelStatus += Value;
 }
 
 /*
@@ -189,7 +194,7 @@ void vw_ChangeWheelStatus(int Value)
  */
 void vw_ResetWheelStatus()
 {
-	MouseWheelStatus = 0;
+    MouseWheelStatus = 0;
 }
 
 /*
@@ -197,7 +202,7 @@ void vw_ResetWheelStatus()
  */
 int vw_GetWheelStatus()
 {
-	return MouseWheelStatus;
+    return MouseWheelStatus;
 }
 
 /*
@@ -205,14 +210,14 @@ int vw_GetWheelStatus()
  */
 void vw_SetMousePosRel(int X, int Y)
 {
-	MouseX += X;
-	MouseY += Y;
+    MouseX += X;
+    MouseY += Y;
 
-	int tmpViewportWidth, tmpViewportHeight;
-	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
+    int tmpViewportWidth, tmpViewportHeight;
+    vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
 
-	vw_Clamp(MouseX, 0, tmpViewportWidth);
-	vw_Clamp(MouseY, 0, tmpViewportHeight);
+    vw_Clamp(MouseX, 0, tmpViewportWidth);
+    vw_Clamp(MouseY, 0, tmpViewportHeight);
 }
 
 /*
@@ -220,8 +225,8 @@ void vw_SetMousePosRel(int X, int Y)
  */
 void vw_SetMousePos(int X, int Y)
 {
-	MouseX = X;
-	MouseY = Y;
+    MouseX = X;
+    MouseY = Y;
 }
 
 /*
@@ -229,16 +234,17 @@ void vw_SetMousePos(int X, int Y)
  */
 bool vw_MouseOverRect(const sRECT &MDetect)
 {
-	int tmpMouseX, tmpMouseY;
-	vw_GetMousePos(tmpMouseX, tmpMouseY);
+    int tmpMouseX, tmpMouseY;
+    vw_GetMousePos(tmpMouseX, tmpMouseY);
 
-	if  ((MDetect.right >= tmpMouseX) &&
-	     (MDetect.left <= tmpMouseX) &&
-	     (MDetect.bottom >= tmpMouseY) &&
-	     (MDetect.top <= tmpMouseY))
-		return true;
+    if (MDetect.right >= tmpMouseX
+        && MDetect.left <= tmpMouseX
+        && MDetect.bottom >= tmpMouseY
+        && MDetect.top <= tmpMouseY) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 } // viewizard namespace

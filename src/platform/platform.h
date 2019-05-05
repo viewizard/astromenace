@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 #ifndef PLATFORM_PLATFORM_H
 #define PLATFORM_PLATFORM_H
@@ -91,20 +91,20 @@ std::string JoystickButtonName(int ButtonNum);
  */
 
 struct sViewSize {
-	int Width{0};
-	int Height{0};
+    int Width{0};
+    int Height{0};
 
-	sViewSize() = default;
-	explicit sViewSize(int _Width, int _Height) :
-		Width{_Width},
-		Height{_Height}
-	{}
+    sViewSize() = default;
+    explicit sViewSize(int _Width, int _Height) :
+        Width{_Width},
+        Height{_Height}
+    {}
 
-	bool operator == (const sViewSize &A) const
-	{
-		return ((A.Width == Width) &&
-			(A.Height == Height));
-	}
+    bool operator == (const sViewSize &A) const
+    {
+        return A.Width == Width
+               && A.Height == Height;
+    }
 };
 
 // Detect current display size for fullscreen mode.

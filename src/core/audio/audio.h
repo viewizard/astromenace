@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 #ifndef CORE_AUDIO_AUDIO_H
 #define CORE_AUDIO_AUDIO_H
@@ -47,7 +47,7 @@ void vw_ReleaseSoundBuffer(const std::string &Name);
 
 // Play sound.
 unsigned int vw_PlaySound(const std::string &Name, float LocalVolume, float GlobalVolume,
-			  const sVECTOR3D &Location, bool Relative, bool AllowStop, int AtType);
+                          const sVECTOR3D &Location, bool Relative, bool AllowStop, int AtType);
 // Load sound buffer data according to file extension.
 unsigned int vw_LoadSoundBuffer(const std::string &Name);
 // Check, is sound available (created) or not.
@@ -73,7 +73,7 @@ void vw_StopAllSoundsIfAllowed();
 
 // Create and play music.
 bool vw_PlayMusic(const std::string &Name, float LocalVolume, float GlobalVolume,
-		  bool Loop, const std::string &LoopFileName);
+                  bool Loop, const std::string &LoopFileName);
 // Set global music volume.
 void vw_SetMusicGlobalVolume(float NewGlobalVolume);
 // Check, is music theme playing.
@@ -82,7 +82,7 @@ bool vw_IsMusicPlaying(const std::string &Name);
 bool vw_IsAnyMusicPlaying();
 // Fade-out all music themes, except provided.
 void vw_FadeOutAllMusicWithException(const std::string &Name, uint32_t Ticks,
-				     float ExceptionFadeInEndVol, uint32_t ExceptionFadeInTicks);
+                                     float ExceptionFadeInEndVol, uint32_t ExceptionFadeInTicks);
 // Set music fade-in.
 void vw_SetMusicFadeIn(const std::string &Name, float EndVol, uint32_t Ticks);
 // Update all music themes status and calculate effects.

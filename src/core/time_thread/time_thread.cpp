@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 /*
 The idea of this code - time manipulations, what we need in the game. For example,
@@ -57,16 +57,16 @@ namespace viewizard {
 namespace {
 
 struct sTimeThread {
-	// current time thread pause status
-	bool Paused{true};
-	// last ticks, in order to care about time thread pause
-	uint32_t LastGetTicks{0};
-	// "time point", ticks of last speed change
-	uint32_t DiffGetTicks{0};
-	// current time thread speed
-	float Speed{1.0f};
-	// all "previous time" on last speed change
-	float Buffer{0.0f};
+    // current time thread pause status
+    bool Paused{true};
+    // last ticks, in order to care about time thread pause
+    uint32_t LastGetTicks{0};
+    // "time point", ticks of last speed change
+    uint32_t DiffGetTicks{0};
+    // current time thread speed
+    float Speed{1.0f};
+    // all "previous time" on last speed change
+    float Buffer{0.0f};
 };
 
 // std::unordered_map - caller could use any integer thread number (negative also
@@ -82,11 +82,11 @@ std::unordered_map<int, sTimeThread> TimeThreadsMap;
  */
 void vw_InitTimeThread(int TimeThread)
 {
-	TimeThreadsMap[TimeThread].Paused = false;
-	TimeThreadsMap[TimeThread].LastGetTicks = 0;
-	TimeThreadsMap[TimeThread].DiffGetTicks = 0;
-	TimeThreadsMap[TimeThread].Speed = 1.0f;
-	TimeThreadsMap[TimeThread].Buffer = 0.0f;
+    TimeThreadsMap[TimeThread].Paused = false;
+    TimeThreadsMap[TimeThread].LastGetTicks = 0;
+    TimeThreadsMap[TimeThread].DiffGetTicks = 0;
+    TimeThreadsMap[TimeThread].Speed = 1.0f;
+    TimeThreadsMap[TimeThread].Buffer = 0.0f;
 }
 
 /*
@@ -94,7 +94,7 @@ void vw_InitTimeThread(int TimeThread)
  */
 void vw_ReleaseAllTimeThread()
 {
-	TimeThreadsMap.clear();
+    TimeThreadsMap.clear();
 }
 
 /*
@@ -102,26 +102,26 @@ void vw_ReleaseAllTimeThread()
  */
 float vw_GetTimeThread(int TimeThread)
 {
-	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
-		std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
-		return 0.0f;
-	}
+    if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
+        std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
+        return 0.0f;
+    }
 
-	assert(!TimeThreadsMap[TimeThread].Paused);
+    assert(!TimeThreadsMap[TimeThread].Paused);
 
-	// time manipulations
-	if (TimeThreadsMap[TimeThread].Speed != 1.0f) {
-		// calculate time from "time point" (DiffGetTicks), when speed was changed last time, till now
-		// FIXME static_cast, we could have an issue with float type value
-		float RealTimeThread = (static_cast<float>(SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) *
-					TimeThreadsMap[TimeThread].Speed) / 1000.0f;
-		// add "previous time" from time buffer
-		return RealTimeThread + TimeThreadsMap[TimeThread].Buffer;
-	}
+    // time manipulations
+    if (TimeThreadsMap[TimeThread].Speed != 1.0f) {
+        // calculate time from "time point" (DiffGetTicks), when speed was changed last time, till now
+        // FIXME static_cast, we could have an issue with float type value
+        float RealTimeThread = (static_cast<float>(SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) *
+                                TimeThreadsMap[TimeThread].Speed) / 1000.0f;
+        // add "previous time" from time buffer
+        return RealTimeThread + TimeThreadsMap[TimeThread].Buffer;
+    }
 
-	// FIXME static_cast, we could have an issue with float type value
-	return TimeThreadsMap[TimeThread].Buffer +
-			static_cast<float>(SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) / 1000.0f;
+    // FIXME static_cast, we could have an issue with float type value
+    return TimeThreadsMap[TimeThread].Buffer +
+           static_cast<float>(SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) / 1000.0f;
 }
 
 /*
@@ -129,12 +129,12 @@ float vw_GetTimeThread(int TimeThread)
  */
 void vw_PauseTimeThreads()
 {
-	for (auto &TimeThread : TimeThreadsMap) {
-		if (!TimeThread.second.Paused) {
-			TimeThread.second.LastGetTicks = SDL_GetTicks();
-			TimeThread.second.Paused = true;
-		}
-	}
+    for (auto &TimeThread : TimeThreadsMap) {
+        if (!TimeThread.second.Paused) {
+            TimeThread.second.LastGetTicks = SDL_GetTicks();
+            TimeThread.second.Paused = true;
+        }
+    }
 }
 
 /*
@@ -142,12 +142,12 @@ void vw_PauseTimeThreads()
  */
 void vw_ResumeTimeThreads()
 {
-	for (auto &TimeThread : TimeThreadsMap) {
-		if (TimeThread.second.Paused) {
-			TimeThread.second.DiffGetTicks += SDL_GetTicks() - TimeThread.second.LastGetTicks;
-			TimeThread.second.Paused = false;
-		}
-	}
+    for (auto &TimeThread : TimeThreadsMap) {
+        if (TimeThread.second.Paused) {
+            TimeThread.second.DiffGetTicks += SDL_GetTicks() - TimeThread.second.LastGetTicks;
+            TimeThread.second.Paused = false;
+        }
+    }
 }
 
 /*
@@ -155,18 +155,18 @@ void vw_ResumeTimeThreads()
  */
 void vw_SetTimeThreadSpeed(int TimeThread, float NewSpeed)
 {
-	if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
-		std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
-		return;
-	}
+    if (TimeThreadsMap.find(TimeThread) == TimeThreadsMap.end()) {
+        std::cerr << __func__ << "(): " << "TimeThread was not initialized: " << TimeThread << "\n";
+        return;
+    }
 
-	// store "previous time" in the time buffer
-	// FIXME static_cast, we could have an issue with float type value
-	TimeThreadsMap[TimeThread].Buffer += (static_cast<float>(SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) *
-					      TimeThreadsMap[TimeThread].Speed) / 1000.0f;
-	// store "time point", when speed was changed
-	TimeThreadsMap[TimeThread].DiffGetTicks = SDL_GetTicks();
-	TimeThreadsMap[TimeThread].Speed = NewSpeed;
+    // store "previous time" in the time buffer
+    // FIXME static_cast, we could have an issue with float type value
+    TimeThreadsMap[TimeThread].Buffer += (static_cast<float>(SDL_GetTicks() - TimeThreadsMap[TimeThread].DiffGetTicks) *
+                                          TimeThreadsMap[TimeThread].Speed) / 1000.0f;
+    // store "time point", when speed was changed
+    TimeThreadsMap[TimeThread].DiffGetTicks = SDL_GetTicks();
+    TimeThreadsMap[TimeThread].Speed = NewSpeed;
 }
 
 } // viewizard namespace

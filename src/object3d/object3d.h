@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // TODO as soon, as cSpaceShip will be moved to STL usage with weapon (shared_ptr?),
 //      switch to eDeleteAfterLeaveScene::enabled by default and remove SetDeleteAfterLeaveScene()
@@ -59,45 +59,45 @@ extern int GameAdvancedProtectionSystem;
 extern int GameTargetingMechanicSystem;
 
 enum class eObjectStatus {
-	none,
-	Enemy,
-	Ally,
-	Player
+    none,
+    Enemy,
+    Ally,
+    Player
 };
 
 inline bool ObjectsStatusFoe(eObjectStatus Object1, eObjectStatus Object2)
 {
-	return ((Object1 == eObjectStatus::Enemy) && ((Object2 == eObjectStatus::Ally) || (Object2 == eObjectStatus::Player))) ||
-	       ((Object2 == eObjectStatus::Enemy) && ((Object1 == eObjectStatus::Ally) || (Object1 == eObjectStatus::Player)));
+    return ((Object1 == eObjectStatus::Enemy) && ((Object2 == eObjectStatus::Ally) || (Object2 == eObjectStatus::Player))) ||
+           ((Object2 == eObjectStatus::Enemy) && ((Object1 == eObjectStatus::Ally) || (Object1 == eObjectStatus::Player)));
 }
 
 enum class eObjectType {
-	none,
-	EarthFighter,
-	AlienFighter,
-	AlienMotherShip,
-	PirateShip,
-	PirateVehicle,
-	PirateBuilding,
-	SmallAsteroid,
-	SpaceDebris,
-	ShipWeapon,
-	Projectile,
-	Explosion,
-	CivilianBuilding,
-	BasePart,
-	Planet,
-	Planetoid,
-	BigAsteroid
-	// if you change this enum, make sure that AddBonusForKilledEnemy() also reflect this changes
+    none,
+    EarthFighter,
+    AlienFighter,
+    AlienMotherShip,
+    PirateShip,
+    PirateVehicle,
+    PirateBuilding,
+    SmallAsteroid,
+    SpaceDebris,
+    ShipWeapon,
+    Projectile,
+    Explosion,
+    CivilianBuilding,
+    BasePart,
+    Planet,
+    Planetoid,
+    BigAsteroid
+    // if you change this enum, make sure that AddBonusForKilledEnemy() also reflect this changes
 };
 
 enum class eDeleteAfterLeaveScene {
-	disabled,
-	enabled,	// waiting, object should being shown on the scene first
-	showed,		// object shown, waiting when it will be out of the scene
-	need_delete,	// object shown and out of the scene, should be deleted
-	wait_delay	// will be deleted after delay
+    disabled,
+    enabled,        // waiting, object should being shown on the scene first
+    showed,         // object shown, waiting when it will be out of the scene
+    need_delete,    // object shown and out of the scene, should be deleted
+    wait_delay      // will be deleted after delay
 };
 // delay before object delete, since object could back to the scene
 constexpr float DeleteAfterLeaveSceneDelay{1.0f};
@@ -111,152 +111,152 @@ EM (electromagnetic) - good for shield (stable damage value), have a chance to k
 // TODO probably, we also need "Explosion" damage type for shock wave, that now connected to 75% of Kinetic damage
 class cDamage {
 private:
-	float Kinetic_{0.0f};
-	float EM_{0.0f}; // electromagnetic
+    float Kinetic_{0.0f};
+    float EM_{0.0f}; // electromagnetic
 
 public:
-	cDamage() = default;
-	explicit cDamage(float Value) :
-		Kinetic_{Value},
-		EM_{Value}
-	{}
-	explicit cDamage(float Kinetic, float EM) :
-		Kinetic_{Kinetic},
-		EM_{EM}
-	{}
+    cDamage() = default;
+    explicit cDamage(float Value) :
+        Kinetic_{Value},
+        EM_{Value}
+    {}
+    explicit cDamage(float Kinetic, float EM) :
+        Kinetic_{Kinetic},
+        EM_{EM}
+    {}
 
-	cDamage& operator = (float Value)
-	{
-		Kinetic_ = Value;
-		EM_ = Value;
-		return *this;
-	}
+    cDamage& operator = (float Value)
+    {
+        Kinetic_ = Value;
+        EM_ = Value;
+        return *this;
+    }
 
-	cDamage& operator /= (float Value)
-	{
-		Kinetic_ /= Value;
-		EM_ /= Value;
-		return *this;
-	}
+    cDamage& operator /= (float Value)
+    {
+        Kinetic_ /= Value;
+        EM_ /= Value;
+        return *this;
+    }
 
-	cDamage& operator *= (float Value)
-	{
-		Kinetic_ *= Value;
-		EM_ *= Value;
-		return *this;
-	}
+    cDamage& operator *= (float Value)
+    {
+        Kinetic_ *= Value;
+        EM_ *= Value;
+        return *this;
+    }
 
-	float Kinetic() const
-	{
-		return Kinetic_;
-	}
+    float Kinetic() const
+    {
+        return Kinetic_;
+    }
 
-	float &Kinetic()
-	{
-		return Kinetic_;
-	}
+    float &Kinetic()
+    {
+        return Kinetic_;
+    }
 
-	float EM() const
-	{
-		return EM_;
-	}
+    float EM() const
+    {
+        return EM_;
+    }
 
-	float &EM()
-	{
-		return EM_;
-	}
+    float &EM()
+    {
+        return EM_;
+    }
 
-	float Full() const
-	{
-		return Kinetic_ + EM_;
-	}
+    float Full() const
+    {
+        return Kinetic_ + EM_;
+    }
 };
 
 inline cDamage operator * (const cDamage &Damage, float Value)
 {
-	return cDamage{Damage.Kinetic() * Value, Damage.EM() * Value};
+    return cDamage{Damage.Kinetic() * Value, Damage.EM() * Value};
 }
 
 class cObject3D : public sModel3D {
 protected:
-	// don't allow object of this class creation
-	cObject3D() = default;
-	~cObject3D() = default;
+    // don't allow object of this class creation
+    cObject3D() = default;
+    ~cObject3D() = default;
 
 public:
-	virtual void Draw(bool VertexOnlyPass, bool ShadowMap = false);
-	bool NeedCullFaces{true};
-	bool NeedAlphaTest{false};
-	virtual bool Update(float Time);
+    virtual void Draw(bool VertexOnlyPass, bool ShadowMap = false);
+    bool NeedCullFaces{true};
+    bool NeedAlphaTest{false};
+    virtual bool Update(float Time);
 
-	void SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum);
-	void SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum);
-	virtual void SetLocation(const sVECTOR3D &NewLocation);
-	virtual void SetRotation(const sVECTOR3D &NewRotation);
+    void SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum);
+    void SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum);
+    virtual void SetLocation(const sVECTOR3D &NewLocation);
+    virtual void SetRotation(const sVECTOR3D &NewRotation);
 
-	// in-game object's status relatively to player
-	eObjectStatus ObjectStatus{eObjectStatus::none};
-	// global object type
-	eObjectType ObjectType{eObjectType::none};
-	// internal object's type for objects with same ObjectType, usually, same as creation type (num)
-	int InternalType{0};
+    // in-game object's status relatively to player
+    eObjectStatus ObjectStatus{eObjectStatus::none};
+    // global object type
+    eObjectType ObjectType{eObjectType::none};
+    // internal object's type for objects with same ObjectType, usually, same as creation type (num)
+    int InternalType{0};
 
-	// in case we need show object and delete after it leave scene (after DeleteAfterLeaveSceneDelay time)
-	eDeleteAfterLeaveScene DeleteAfterLeaveScene{eDeleteAfterLeaveScene::disabled};
-	// note, Lifetime could be changed by DeleteAfterLeaveScene settings
-	float Lifetime{-1.0f};
+    // in case we need show object and delete after it leave scene (after DeleteAfterLeaveSceneDelay time)
+    eDeleteAfterLeaveScene DeleteAfterLeaveScene{eDeleteAfterLeaveScene::disabled};
+    // note, Lifetime could be changed by DeleteAfterLeaveScene settings
+    float Lifetime{-1.0f};
 
-	sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
-	sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
-	sVECTOR3D OldRotationInv{0.0f, 0.0f, 0.0f};
-	sVECTOR3D Location{0.0f, 0.0f, 0.0f};
-	sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
+    sVECTOR3D Orientation{0.0f, 0.0f, 1.0f};
+    sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
+    sVECTOR3D OldRotationInv{0.0f, 0.0f, 0.0f};
+    sVECTOR3D Location{0.0f, 0.0f, 0.0f};
+    sVECTOR3D PrevLocation{0.0f, 0.0f, 0.0f};
 
-	float TimeLastUpdate{-1.0f};
-	float TimeDelta{0.0f};
+    float TimeLastUpdate{-1.0f};
+    float TimeDelta{0.0f};
 
-	std::vector<GLtexture> Texture{};
-	std::vector<GLtexture> TextureIllum{};
-	std::vector<GLtexture> NormalMap{};
+    std::vector<GLtexture> Texture{};
+    std::vector<GLtexture> TextureIllum{};
+    std::vector<GLtexture> NormalMap{};
 
-	float PromptDrawDist2{-1.0f}; // LOD related
-	int InternalLights{0};
+    float PromptDrawDist2{-1.0f}; // LOD related
+    int InternalLights{0};
 
-	// material related
-	float Diffuse[4]{1.0f, 1.0f, 1.0f, 1.0f};
-	float Specular[4]{1.0f, 1.0f, 1.0f, 1.0f};
-	float Ambient[4]{0.1f, 0.1f, 0.1f, 0.1f};
-	float Power[1]{64.0f};
+    // material related
+    float Diffuse[4]{1.0f, 1.0f, 1.0f, 1.0f};
+    float Specular[4]{1.0f, 1.0f, 1.0f, 1.0f};
+    float Ambient[4]{0.1f, 0.1f, 0.1f, 0.1f};
+    float Power[1]{64.0f};
 
-	float ArmorCurrentStatus{0.0f};
-	float ArmorInitialStatus{0.0f};
+    float ArmorCurrentStatus{0.0f};
+    float ArmorInitialStatus{0.0f};
 
-	float ShieldCurrentStatus{0.0f};
-	float ShieldInitialStatus{0.0f};
-	float ShieldRechargeRate{0.0f};
+    float ShieldCurrentStatus{0.0f};
+    float ShieldInitialStatus{0.0f};
+    float ShieldRechargeRate{0.0f};
 
-	bool ShowStatus{true};
-	bool ShowStatusAllTime{false};
+    bool ShowStatus{true};
+    bool ShowStatusAllTime{false};
 
-	float CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
-				    0.0f, 1.0f, 0.0f,
-				    0.0f, 0.0f, 1.0f};
-	float OldInvRotationMat[9]{1.0f, 0.0f, 0.0f,
-				   0.0f, 1.0f, 0.0f,
-				   0.0f, 0.0f, 1.0f};
+    float CurrentRotationMat[9]{1.0f, 0.0f, 0.0f,
+                                0.0f, 1.0f, 0.0f,
+                                0.0f, 0.0f, 1.0f};
+    float OldInvRotationMat[9]{1.0f, 0.0f, 0.0f,
+                               0.0f, 1.0f, 0.0f,
+                               0.0f, 0.0f, 1.0f};
 
-	std::u32string ScriptLineNumberUTF32{}; // debug info, line number in script file
+    std::u32string ScriptLineNumberUTF32{}; // debug info, line number in script file
 
-	std::list<sTimeSheet> TimeSheetList{};
+    std::list<sTimeSheet> TimeSheetList{};
 };
 
 
 // we need fixed integers here, since we use them in scripts
 enum class eRenderBoundingBoxes : int {
-	None = 0,
-	AABB_Only = 1,
-	AABB_And_OBB = 2,
-	All = 3 // AABB, OBB, HitBB
+    None = 0,
+    AABB_Only = 1,
+    AABB_And_OBB = 2,
+    All = 3 // AABB, OBB, HitBB
 };
 
 // Set bounding boxes render mode.

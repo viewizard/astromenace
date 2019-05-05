@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // TODO this is temporary code, should be revised to be a part of new 'menu' window class hierarchy instead of singleton
 
@@ -38,34 +38,34 @@ namespace astromenace {
 
 class cFPS {
 private:
-	cFPS()
-	{
-		ClearDrawString();
-	}
-	~cFPS() = default;
+    cFPS()
+    {
+        ClearDrawString();
+    }
+    ~cFPS() = default;
 
-	void CheckKeyboard();
-	void ClearDrawString();
+    void CheckKeyboard();
+    void ClearDrawString();
 
-	uint32_t LastTick_{SDL_GetTicks()};
-	std::u32string DrawStringUTF32_{};
-	uint32_t CurrentFrame_{0};
-	sRGBCOLOR TextColor_{eRGBCOLOR::white};
+    uint32_t LastTick_{SDL_GetTicks()};
+    std::u32string DrawStringUTF32_{};
+    uint32_t CurrentFrame_{0};
+    sRGBCOLOR TextColor_{eRGBCOLOR::white};
 
 public:
-	cFPS(cFPS const&) = delete;
-	void operator = (cFPS const&) = delete;
+    cFPS(cFPS const&) = delete;
+    void operator = (cFPS const&) = delete;
 
-	static cFPS &GetInstance()
-	{
-		static cFPS Instance;
-		return Instance;
-	}
+    static cFPS &GetInstance()
+    {
+        static cFPS Instance;
+        return Instance;
+    }
 
-	void Switch();
-	void Reset();
-	void Draw();
-	void Update();
+    void Switch();
+    void Reset();
+    void Draw();
+    void Update();
 };
 
 } // astromenace namespace

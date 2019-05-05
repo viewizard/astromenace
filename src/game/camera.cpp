@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // FIXME camera code should not include player's ship manipulations code...
 
@@ -82,15 +82,15 @@ float CameraShakePower{0.0f};
  */
 void ResetCamera()
 {
-	CameraCoveredDistance(0.0f, 0.0f, 0.0f);
-	CameraLastUpdate = 0.0f;
+    CameraCoveredDistance(0.0f, 0.0f, 0.0f);
+    CameraLastUpdate = 0.0f;
 
-	CameraCurrentShake = 0.0f;
-	CameraNeedShake = 0.0f;
-	CameraShakeTimeLeft = 0.0f;
-	CameraShakeInitialTime = 0.0f;
-	CameraShakePower = 0.0f;
-	vw_SetCameraDeviation(sVECTOR3D{0.0f, 0.0f, 0.0f});
+    CameraCurrentShake = 0.0f;
+    CameraNeedShake = 0.0f;
+    CameraShakeTimeLeft = 0.0f;
+    CameraShakeInitialTime = 0.0f;
+    CameraShakePower = 0.0f;
+    vw_SetCameraDeviation(sVECTOR3D{0.0f, 0.0f, 0.0f});
 }
 
 /*
@@ -98,8 +98,8 @@ void ResetCamera()
  */
 void InitCamera()
 {
-	ResetCamera();
-	CameraLastUpdate = vw_GetTimeThread(1);
+    ResetCamera();
+    CameraLastUpdate = vw_GetTimeThread(1);
 }
 
 /*
@@ -107,27 +107,31 @@ void InitCamera()
  */
 void SetupCameraShake(const sVECTOR3D &Location, float Power)
 {
-	auto sharedPlayerFighter = PlayerFighter.lock();
-	if (!sharedPlayerFighter)
-		return;
+    auto sharedPlayerFighter = PlayerFighter.lock();
+    if (!sharedPlayerFighter) {
+        return;
+    }
 
-	float tmpDist2 = (sharedPlayerFighter->Location.x - Location.x) * (sharedPlayerFighter->Location.x - Location.x) +
-			 (sharedPlayerFighter->Location.y - Location.y) * (sharedPlayerFighter->Location.y - Location.y) +
-			 (sharedPlayerFighter->Location.z - Location.z) * (sharedPlayerFighter->Location.z - Location.z);
+    float tmpDist2 = (sharedPlayerFighter->Location.x - Location.x) * (sharedPlayerFighter->Location.x - Location.x) +
+                     (sharedPlayerFighter->Location.y - Location.y) * (sharedPlayerFighter->Location.y - Location.y) +
+                     (sharedPlayerFighter->Location.z - Location.z) * (sharedPlayerFighter->Location.z - Location.z);
 
-	if (tmpDist2 > MaxInfluenceDistance2)
-		return;
+    if (tmpDist2 > MaxInfluenceDistance2) {
+        return;
+    }
 
-	if (tmpDist2 <= sharedPlayerFighter->Radius * sharedPlayerFighter->Radius)
-		tmpDist2 = sharedPlayerFighter->Radius * sharedPlayerFighter->Radius;
+    if (tmpDist2 <= sharedPlayerFighter->Radius * sharedPlayerFighter->Radius) {
+        tmpDist2 = sharedPlayerFighter->Radius * sharedPlayerFighter->Radius;
+    }
 
-	CameraShakeInitialTime = CameraShakeTimeLeft = (MaxInfluenceDistance2 - tmpDist2) / MaxInfluenceDistance2;
-	if (Power > 1.0f) // huge explosion
-		CameraShakeInitialTime = CameraShakeTimeLeft = CameraShakeTimeLeft * 3.0f;
+    CameraShakeInitialTime = CameraShakeTimeLeft = (MaxInfluenceDistance2 - tmpDist2) / MaxInfluenceDistance2;
+    if (Power > 1.0f) { // huge explosion
+        CameraShakeInitialTime = CameraShakeTimeLeft = CameraShakeTimeLeft * 3.0f;
+    }
 
-	CameraShakePower = Power * (MaxInfluenceDistance2 - tmpDist2) / (MaxInfluenceDistance2 * 2);
+    CameraShakePower = Power * (MaxInfluenceDistance2 - tmpDist2) / (MaxInfluenceDistance2 * 2);
 
-	CameraNeedShake = CameraShakePower * vw_fRand0();
+    CameraNeedShake = CameraShakePower * vw_fRand0();
 }
 
 /*
@@ -135,34 +139,36 @@ void SetupCameraShake(const sVECTOR3D &Location, float Power)
  */
 static void UpdateCameraShake(float TimeDelta)
 {
-	CameraShakeTimeLeft -= TimeDelta;
-	if (CameraShakeTimeLeft < 0.0f)
-		CameraShakeTimeLeft = 0.0f;
+    CameraShakeTimeLeft -= TimeDelta;
+    if (CameraShakeTimeLeft < 0.0f) {
+        CameraShakeTimeLeft = 0.0f;
+    }
 
-	bool tmpNeedStopDeviation{false};
-	if ((CameraShakeTimeLeft <= 0.0f) && (CameraCurrentShake != 0.0f)) {
-		tmpNeedStopDeviation = true;
-		CameraNeedShake = 0.0f;
-	}
+    bool tmpNeedStopDeviation{false};
+    if (CameraShakeTimeLeft <= 0.0f && CameraCurrentShake != 0.0f) {
+        tmpNeedStopDeviation = true;
+        CameraNeedShake = 0.0f;
+    }
 
-	if ((CameraShakeTimeLeft > 0.0f) || tmpNeedStopDeviation) {
-		float Sign{1.0f};
-		if (CameraNeedShake < CameraCurrentShake)
-			Sign = -1.0f;
+    if (CameraShakeTimeLeft > 0.0f || tmpNeedStopDeviation) {
+        float Sign{1.0f};
+        if (CameraNeedShake < CameraCurrentShake) {
+            Sign = -1.0f;
+        }
 
-		float tmpIncrement = Sign * 5.0f * TimeDelta;
+        float tmpIncrement = Sign * 5.0f * TimeDelta;
 
-		if (((Sign > 0.0f) && (CameraNeedShake <= CameraCurrentShake + tmpIncrement)) ||
-		    ((Sign < 0.0f) && (CameraNeedShake >= CameraCurrentShake + tmpIncrement))) {
-			CameraCurrentShake = CameraNeedShake;
-			CameraShakePower *= CameraShakeTimeLeft / CameraShakeInitialTime;
-			CameraNeedShake = CameraShakePower * vw_fRand0();
-		} else {
-			CameraCurrentShake += tmpIncrement;
-		}
-	}
+        if ((Sign > 0.0f && CameraNeedShake <= CameraCurrentShake + tmpIncrement) ||
+            (Sign < 0.0f && CameraNeedShake >= CameraCurrentShake + tmpIncrement)) {
+            CameraCurrentShake = CameraNeedShake;
+            CameraShakePower *= CameraShakeTimeLeft / CameraShakeInitialTime;
+            CameraNeedShake = CameraShakePower * vw_fRand0();
+        } else {
+            CameraCurrentShake += tmpIncrement;
+        }
+    }
 
-	vw_SetCameraDeviation(sVECTOR3D{CameraCurrentShake * 2.0f, CameraCurrentShake, 0.0f});
+    vw_SetCameraDeviation(sVECTOR3D{CameraCurrentShake * 2.0f, CameraCurrentShake, 0.0f});
 }
 
 /*
@@ -170,17 +176,18 @@ static void UpdateCameraShake(float TimeDelta)
  */
 void CameraUpdate(float Time)
 {
-	float TimeDelta = Time - CameraLastUpdate;
-	CameraLastUpdate = Time;
+    float TimeDelta = Time - CameraLastUpdate;
+    CameraLastUpdate = Time;
 
-	sVECTOR3D tmpDistance = CameraMovementDirection ^ (CameraSpeed * TimeDelta);
-	CameraCoveredDistance += tmpDistance;
-	vw_IncCameraLocation(tmpDistance);
+    sVECTOR3D tmpDistance = CameraMovementDirection ^ (CameraSpeed * TimeDelta);
+    CameraCoveredDistance += tmpDistance;
+    vw_IncCameraLocation(tmpDistance);
 
-	if (auto sharedPlayerFighter = PlayerFighter.lock())
-		sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + tmpDistance);
+    if (auto sharedPlayerFighter = PlayerFighter.lock()) {
+        sharedPlayerFighter->SetLocationArcadePlayer(sharedPlayerFighter->Location + tmpDistance);
+    }
 
-	UpdateCameraShake(TimeDelta);
+    UpdateCameraShake(TimeDelta);
 }
 
 /*
@@ -188,7 +195,7 @@ void CameraUpdate(float Time)
  */
 float GetCameraShake()
 {
-	return CameraCurrentShake;
+    return CameraCurrentShake;
 }
 
 /*
@@ -196,7 +203,7 @@ float GetCameraShake()
  */
 float GetCameraSpeed()
 {
-	return CameraSpeed;
+    return CameraSpeed;
 }
 
 /*
@@ -204,7 +211,7 @@ float GetCameraSpeed()
  */
 const sVECTOR3D &GetCameraCoveredDistance()
 {
-	return CameraCoveredDistance;
+    return CameraCoveredDistance;
 }
 
 /*
@@ -212,7 +219,7 @@ const sVECTOR3D &GetCameraCoveredDistance()
  */
 const sVECTOR3D &GetCameraMovementDirection()
 {
-	return CameraMovementDirection;
+    return CameraMovementDirection;
 }
 
 } // astromenace namespace

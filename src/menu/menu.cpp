@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // TODO translate comments
 
@@ -106,108 +106,109 @@ float LastButton14UpdateTime = 0.0f;
 //------------------------------------------------------------------------------------
 void InitMenu(eMenuStatus NewMenuStatus)
 {
-	MenuStatus = NewMenuStatus;
+    MenuStatus = NewMenuStatus;
 
-	ShadowMap_SizeSetup(eShadowMapSetup::Menu);
+    ShadowMap_SizeSetup(eShadowMapSetup::Menu);
 
-	// установка курсора на центр
-	// получаем размер клиентской области
-	float tmpViewportWidth, tmpViewportHeight;
-	vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
-	// установка мышки, чтобы не учитывать перемещения в меню
-	SDL_WarpMouseInWindow(vw_GetSDLWindow(),
-			      static_cast<int>((512.0f + 256.0f) / (GameConfig().InternalWidth / tmpViewportWidth)),
-			      static_cast<int>(384.0f / (GameConfig().InternalHeight / tmpViewportHeight)));
-
-
-
-	Button1Transp = 1.0f;
-	LastButton1UpdateTime = 0.0f;
-	Button2Transp = 1.0f;
-	LastButton2UpdateTime = 0.0f;
-	Button3Transp = 1.0f;
-	LastButton3UpdateTime = 0.0f;
-	Button4Transp = 1.0f;
-	LastButton4UpdateTime = 0.0f;
-	Button5Transp = 1.0f;
-	LastButton5UpdateTime = 0.0f;
-	Button6Transp = 1.0f;
-	LastButton6UpdateTime = 0.0f;
-	Button7Transp = 1.0f;
-	LastButton7UpdateTime = 0.0f;
-	Button8Transp = 1.0f;
-	LastButton8UpdateTime = 0.0f;
-	Button9Transp = 1.0f;
-	LastButton9UpdateTime = 0.0f;
-	Button10Transp = 1.0f;
-	LastButton10UpdateTime = 0.0f;
-	Button11Transp = 1.0f;
-	LastButton11UpdateTime = 0.0f;
-	Button12Transp = 1.0f;
-	LastButton12UpdateTime = 0.0f;
-	Button13Transp = 1.0f;
-	LastButton13UpdateTime = 0.0f;
-	Button14Transp = 1.0f;
-	LastButton14UpdateTime = 0.0f;
-	LastMenuUpdateTime = 0.0f;
-	MenuContentTransp = 0.0f;
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// иним камеру, всегда до работы со скриптом (!!!)
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
-	vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
-	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
-
-	// since we use scripts with background animation in the same way as
-	// games levels do, we should reset game camera first
-	ResetCamera();
-
-	StarSystemInitByType(eDrawType::MENU); // should be before RunScript()
-
-	MenuScript.reset(new cMissionScript);
-
-	if (GameConfig().MenuScript > 2)
-		ChangeGameConfig().MenuScript = 0;
-	switch (GameConfig().MenuScript) {
-	case 0:
-		MenuScript->RunScript("script/menu1.xml", vw_GetTimeThread(0));
-		break;
-	case 1:
-		MenuScript->RunScript("script/menu2.xml", vw_GetTimeThread(0));
-		break;
-	case 2:
-		MenuScript->RunScript("script/menu3.xml", vw_GetTimeThread(0));
-		break;
-	// на всякий случай
-	default:
-		MenuScript->RunScript("script/menu1.xml", vw_GetTimeThread(0));
-		break;
-	}
-	ChangeGameConfig().MenuScript++;
-
-	// немного прокручиваем скрипт
-	float Time1 = vw_GetTimeThread(0);
-	MenuScript->StartTime = Time1-30;
-	MenuScript->TimeLastOp = Time1-30;
-	for (float i=Time1-30; i<Time1; i+=1.0f) {
-		UpdateAllObject3D(i);
-		MenuScript->Update(i);
-	}
-	MenuScript->StartTime = Time1;
-	MenuScript->TimeLastOp = Time1;
+    // установка курсора на центр
+    // получаем размер клиентской области
+    float tmpViewportWidth, tmpViewportHeight;
+    vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
+    // установка мышки, чтобы не учитывать перемещения в меню
+    SDL_WarpMouseInWindow(vw_GetSDLWindow(),
+                          static_cast<int>((512.0f + 256.0f) / (GameConfig().InternalWidth / tmpViewportWidth)),
+                          static_cast<int>(384.0f / (GameConfig().InternalHeight / tmpViewportHeight)));
 
 
 
-	LastMenuUpdateTime = vw_GetTimeThread(0);
-	NeedShowMenu = true;
-	NeedHideMenu = false;
-	LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
-	MenuBlackTransp = 1.0f;
-	NeedOnMenu = true;
-	NeedOffMenu = false;
-	SetShowGameCursor(true);
+    Button1Transp = 1.0f;
+    LastButton1UpdateTime = 0.0f;
+    Button2Transp = 1.0f;
+    LastButton2UpdateTime = 0.0f;
+    Button3Transp = 1.0f;
+    LastButton3UpdateTime = 0.0f;
+    Button4Transp = 1.0f;
+    LastButton4UpdateTime = 0.0f;
+    Button5Transp = 1.0f;
+    LastButton5UpdateTime = 0.0f;
+    Button6Transp = 1.0f;
+    LastButton6UpdateTime = 0.0f;
+    Button7Transp = 1.0f;
+    LastButton7UpdateTime = 0.0f;
+    Button8Transp = 1.0f;
+    LastButton8UpdateTime = 0.0f;
+    Button9Transp = 1.0f;
+    LastButton9UpdateTime = 0.0f;
+    Button10Transp = 1.0f;
+    LastButton10UpdateTime = 0.0f;
+    Button11Transp = 1.0f;
+    LastButton11UpdateTime = 0.0f;
+    Button12Transp = 1.0f;
+    LastButton12UpdateTime = 0.0f;
+    Button13Transp = 1.0f;
+    LastButton13UpdateTime = 0.0f;
+    Button14Transp = 1.0f;
+    LastButton14UpdateTime = 0.0f;
+    LastMenuUpdateTime = 0.0f;
+    MenuContentTransp = 0.0f;
+
+
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // иним камеру, всегда до работы со скриптом (!!!)
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
+    vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
+    vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
+
+    // since we use scripts with background animation in the same way as
+    // games levels do, we should reset game camera first
+    ResetCamera();
+
+    StarSystemInitByType(eDrawType::MENU); // should be before RunScript()
+
+    MenuScript.reset(new cMissionScript);
+
+    if (GameConfig().MenuScript > 2) {
+        ChangeGameConfig().MenuScript = 0;
+    }
+    switch (GameConfig().MenuScript) {
+    case 0:
+        MenuScript->RunScript("script/menu1.xml", vw_GetTimeThread(0));
+        break;
+    case 1:
+        MenuScript->RunScript("script/menu2.xml", vw_GetTimeThread(0));
+        break;
+    case 2:
+        MenuScript->RunScript("script/menu3.xml", vw_GetTimeThread(0));
+        break;
+    // на всякий случай
+    default:
+        MenuScript->RunScript("script/menu1.xml", vw_GetTimeThread(0));
+        break;
+    }
+    ChangeGameConfig().MenuScript++;
+
+    // немного прокручиваем скрипт
+    float Time1 = vw_GetTimeThread(0);
+    MenuScript->StartTime = Time1-30;
+    MenuScript->TimeLastOp = Time1-30;
+    for (float i=Time1-30; i<Time1; i+=1.0f) {
+        UpdateAllObject3D(i);
+        MenuScript->Update(i);
+    }
+    MenuScript->StartTime = Time1;
+    MenuScript->TimeLastOp = Time1;
+
+
+
+    LastMenuUpdateTime = vw_GetTimeThread(0);
+    NeedShowMenu = true;
+    NeedHideMenu = false;
+    LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
+    MenuBlackTransp = 1.0f;
+    NeedOnMenu = true;
+    NeedOffMenu = false;
+    SetShowGameCursor(true);
 }
 
 
@@ -223,108 +224,117 @@ void InitMenu(eMenuStatus NewMenuStatus)
 //------------------------------------------------------------------------------------
 void SetOptionsMenu(eMenuStatus Menu)
 {
-	switch (Menu) {
-	case eMenuStatus::OPTIONS:
-		Options_Width = GameConfig().Width;
-		Options_Height = GameConfig().Height;
-		Options_Fullscreen = GameConfig().Fullscreen;
-		Options_VSync = GameConfig().VSync;
-		break;
+    switch (Menu) {
+    case eMenuStatus::OPTIONS:
+        Options_Width = GameConfig().Width;
+        Options_Height = GameConfig().Height;
+        Options_Fullscreen = GameConfig().Fullscreen;
+        Options_VSync = GameConfig().VSync;
+        break;
 
-	case eMenuStatus::OPTIONS_ADVANCED:
-		Options_UseGLSL120 = GameConfig().UseGLSL120;
-		Options_MSAA = GameConfig().MSAA;
-		Options_CSAA = GameConfig().CSAA;
-		Options_TexturesAnisotropyLevel = GameConfig().AnisotropyLevel;
-		Options_ShadowMap = GameConfig().ShadowMap;
-		break;
+    case eMenuStatus::OPTIONS_ADVANCED:
+        Options_UseGLSL120 = GameConfig().UseGLSL120;
+        Options_MSAA = GameConfig().MSAA;
+        Options_CSAA = GameConfig().CSAA;
+        Options_TexturesAnisotropyLevel = GameConfig().AnisotropyLevel;
+        Options_ShadowMap = GameConfig().ShadowMap;
+        break;
 
-	case eMenuStatus::CONFCONTROL:
-		if (!GameConfig().KeyBoardUp)
-			ChangeGameConfig().KeyBoardUp = SDLK_UP;
-		if (!GameConfig().KeyBoardDown)
-			ChangeGameConfig().KeyBoardDown = SDLK_DOWN;
-		if (!GameConfig().KeyBoardLeft)
-			ChangeGameConfig().KeyBoardLeft = SDLK_LEFT;
-		if (!GameConfig().KeyBoardRight)
-			ChangeGameConfig().KeyBoardRight = SDLK_RIGHT;
-		if (!GameConfig().KeyBoardPrimary)
-			ChangeGameConfig().KeyBoardPrimary = SDLK_LCTRL;
-		if (!GameConfig().KeyBoardSecondary)
-			ChangeGameConfig().KeyBoardSecondary = SDLK_SPACE;
-		if (!GameConfig().MousePrimary)
-			ChangeGameConfig().MousePrimary = SDL_BUTTON_LEFT;
-		if (!GameConfig().MouseSecondary)
-			ChangeGameConfig().MouseSecondary = SDL_BUTTON_RIGHT;
-		if (GameConfig().JoystickPrimary == -1)
-			ChangeGameConfig().JoystickPrimary = 0;
-		if (GameConfig().JoystickSecondary == -1)
-			ChangeGameConfig().JoystickSecondary = 1;
-		break;
+    case eMenuStatus::CONFCONTROL:
+        if (!GameConfig().KeyBoardUp) {
+            ChangeGameConfig().KeyBoardUp = SDLK_UP;
+        }
+        if (!GameConfig().KeyBoardDown) {
+            ChangeGameConfig().KeyBoardDown = SDLK_DOWN;
+        }
+        if (!GameConfig().KeyBoardLeft) {
+            ChangeGameConfig().KeyBoardLeft = SDLK_LEFT;
+        }
+        if (!GameConfig().KeyBoardRight) {
+            ChangeGameConfig().KeyBoardRight = SDLK_RIGHT;
+        }
+        if (!GameConfig().KeyBoardPrimary) {
+            ChangeGameConfig().KeyBoardPrimary = SDLK_LCTRL;
+        }
+        if (!GameConfig().KeyBoardSecondary) {
+            ChangeGameConfig().KeyBoardSecondary = SDLK_SPACE;
+        }
+        if (!GameConfig().MousePrimary) {
+            ChangeGameConfig().MousePrimary = SDL_BUTTON_LEFT;
+        }
+        if (!GameConfig().MouseSecondary) {
+            ChangeGameConfig().MouseSecondary = SDL_BUTTON_RIGHT;
+        }
+        if (GameConfig().JoystickPrimary == -1) {
+            ChangeGameConfig().JoystickPrimary = 0;
+        }
+        if (GameConfig().JoystickSecondary == -1) {
+            ChangeGameConfig().JoystickSecondary = 1;
+        }
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 }
 void SetMenu(eMenuStatus Menu)
 {
-	PlayMenuSFX(eMenuSFX::SwitchToAnotherMenu, 1.0f);
+    PlayMenuSFX(eMenuSFX::SwitchToAnotherMenu, 1.0f);
 
-	switch (Menu) {
-	case eMenuStatus::PROFILE:
-		NewProfileName.clear();
-		vw_SetCurrentUnicodeChar(nullptr);
-		break;
+    switch (Menu) {
+    case eMenuStatus::PROFILE:
+        NewProfileName.clear();
+        vw_SetCurrentUnicodeChar(nullptr);
+        break;
 
-	case eMenuStatus::OPTIONS:
-	case eMenuStatus::OPTIONS_ADVANCED:
-	case eMenuStatus::CONFCONTROL:
-		SetOptionsMenu(Menu);
-		break;
+    case eMenuStatus::OPTIONS:
+    case eMenuStatus::OPTIONS_ADVANCED:
+    case eMenuStatus::CONFCONTROL:
+        SetOptionsMenu(Menu);
+        break;
 
-	case eMenuStatus::TOP_SCORES:
-		InitTopScoresMenu();
-		break;
+    case eMenuStatus::TOP_SCORES:
+        InitTopScoresMenu();
+        break;
 
-	case eMenuStatus::MISSION:
-		MissionListInit();
-		vw_ResetWheelStatus();
-		// ставим нужный лист миссий
-		StartMission = 0;
-		EndMission = 4;
-		if (CurrentMission != -1)
-			if (CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
-				StartMission = CurrentMission-2;
-				EndMission = CurrentMission+2;
+    case eMenuStatus::MISSION:
+        MissionListInit();
+        vw_ResetWheelStatus();
+        // ставим нужный лист миссий
+        StartMission = 0;
+        EndMission = 4;
+        if (CurrentMission != -1 && CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
+            StartMission = CurrentMission-2;
+            EndMission = CurrentMission+2;
 
-				if (CurrentMission >= AllMission-2) {
-					StartMission = AllMission-5;
-					EndMission = AllMission-1;
-				}
-			}
-		break;
+            if (CurrentMission >= AllMission-2) {
+                StartMission = AllMission-5;
+                EndMission = AllMission-1;
+            }
+        }
+        break;
 
-	case eMenuStatus::INFORMATION:
-		vw_ResetWheelStatus();
-		CreateNum = 1;
-		CreateInfoObject();
-		break;
+    case eMenuStatus::INFORMATION:
+        vw_ResetWheelStatus();
+        CreateNum = 1;
+        CreateInfoObject();
+        break;
 
-	case eMenuStatus::CREDITS:
-		InitCreditsMenu(vw_GetTimeThread(0));
-		break;
+    case eMenuStatus::CREDITS:
+        InitCreditsMenu(vw_GetTimeThread(0));
+        break;
 
-	default:
-		break;
+    default:
+        break;
 
-	}
+    }
 
-	NextMenu = Menu;
+    NextMenu = Menu;
 
-	// прячем текущее меню
-	NeedShowMenu = false;
-	NeedHideMenu = true;
-	LastMenuUpdateTime = vw_GetTimeThread(0);
+    // прячем текущее меню
+    NeedShowMenu = false;
+    NeedHideMenu = true;
+    LastMenuUpdateTime = vw_GetTimeThread(0);
 
 
 
@@ -334,52 +344,52 @@ void SetMenu(eMenuStatus Menu)
 
 void SetMenu2(eMenuStatus Menu)
 {
-	// текущее меню уже стало невидимым, освобождаем память после воркшопа + выключаем голосовые сообщения
-	// раньше удалять нельзя - для вывода используем данные из 3д объектов (!)
-	switch (MenuStatus) {
-	case eMenuStatus::WORKSHOP:
-		WorkshopDestroyData();
-		VoiceNeedMoreEnergy = 0;
-		VoiceAmmoOut = 0;
-		break;
-	default:
-		break;
-	}
+    // текущее меню уже стало невидимым, освобождаем память после воркшопа + выключаем голосовые сообщения
+    // раньше удалять нельзя - для вывода используем данные из 3д объектов (!)
+    switch (MenuStatus) {
+    case eMenuStatus::WORKSHOP:
+        WorkshopDestroyData();
+        VoiceNeedMoreEnergy = 0;
+        VoiceAmmoOut = 0;
+        break;
+    default:
+        break;
+    }
 
 
 
-	PrevMenu = MenuStatus;
-	MenuStatus = Menu;
+    PrevMenu = MenuStatus;
+    MenuStatus = Menu;
 
-	float Time = vw_GetTimeThread(0);
-	Button1Transp = 1.0f;
-	LastButton1UpdateTime = Time;
-	Button2Transp = 1.0f;
-	LastButton2UpdateTime = Time;
-	Button3Transp = 1.0f;
-	LastButton3UpdateTime = Time;
-	Button4Transp = 1.0f;
-	LastButton4UpdateTime = Time;
-	Button5Transp = 1.0f;
-	LastButton5UpdateTime = Time;
-	Button6Transp = 1.0f;
-	LastButton6UpdateTime = Time;
-	Button7Transp = 1.0f;
-	LastButton7UpdateTime = Time;
-	Button8Transp = 1.0f;
-	LastButton8UpdateTime = Time;
-	Button9Transp = 1.0f;
-	LastButton9UpdateTime = Time;
-	Button10Transp = 1.0f;
-	LastButton10UpdateTime = Time;
-	Button11Transp = 1.0f;
-	LastButton11UpdateTime = Time;
-	Button12Transp = 1.0f;
-	LastButton12UpdateTime = Time;
-	Button13Transp = 1.0f;
-	LastButton13UpdateTime = Time;
-	Button14Transp = 1.0f;
-	LastButton14UpdateTime = Time;
+    float Time = vw_GetTimeThread(0);
+    Button1Transp = 1.0f;
+    LastButton1UpdateTime = Time;
+    Button2Transp = 1.0f;
+    LastButton2UpdateTime = Time;
+    Button3Transp = 1.0f;
+    LastButton3UpdateTime = Time;
+    Button4Transp = 1.0f;
+    LastButton4UpdateTime = Time;
+    Button5Transp = 1.0f;
+    LastButton5UpdateTime = Time;
+    Button6Transp = 1.0f;
+    LastButton6UpdateTime = Time;
+    Button7Transp = 1.0f;
+    LastButton7UpdateTime = Time;
+    Button8Transp = 1.0f;
+    LastButton8UpdateTime = Time;
+    Button9Transp = 1.0f;
+    LastButton9UpdateTime = Time;
+    Button10Transp = 1.0f;
+    LastButton10UpdateTime = Time;
+    Button11Transp = 1.0f;
+    LastButton11UpdateTime = Time;
+    Button12Transp = 1.0f;
+    LastButton12UpdateTime = Time;
+    Button13Transp = 1.0f;
+    LastButton13UpdateTime = Time;
+    Button14Transp = 1.0f;
+    LastButton14UpdateTime = Time;
 }
 
 
@@ -393,219 +403,219 @@ void SetMenu2(eMenuStatus Menu)
 void DrawMenu()
 {
 
-	// делаем плавное появление меню
-	if (NeedShowMenu) {
-		MenuContentTransp = 2.4f*(vw_GetTimeThread(0) - LastMenuUpdateTime);
-		if (MenuContentTransp >= 1.0f) {
-			MenuContentTransp = 1.0f;
-			NeedShowMenu = false;
-			LastMenuUpdateTime = vw_GetTimeThread(0);
+    // делаем плавное появление меню
+    if (NeedShowMenu) {
+        MenuContentTransp = 2.4f*(vw_GetTimeThread(0) - LastMenuUpdateTime);
+        if (MenuContentTransp >= 1.0f) {
+            MenuContentTransp = 1.0f;
+            NeedShowMenu = false;
+            LastMenuUpdateTime = vw_GetTimeThread(0);
 
-			// выводим подсказку, если нужно
-			if ((MenuStatus == eMenuStatus::PROFILE) &&
-			    GameConfig().NeedShowHint[0])
-				SetCurrentDialogBox(eDialogBox::ProfileTipsAndTricks);
-			if (MenuStatus == eMenuStatus::WORKSHOP) {
-				if ((CurrentWorkshop == 1) &&
-				    GameConfig().NeedShowHint[1])
-					SetCurrentDialogBox(eDialogBox::ShipyardTipsAndTricks);
-				if ((CurrentWorkshop == 2) &&
-				    GameConfig().NeedShowHint[2])
-					SetCurrentDialogBox(eDialogBox::SystemsTipsAndTricks);
-				if ((CurrentWorkshop == 3) &&
-				    GameConfig().NeedShowHint[3])
-					SetCurrentDialogBox(eDialogBox::WeaponryTipsAndTricks);
-			}
-		}
-	}
+            // выводим подсказку, если нужно
+            if (MenuStatus == eMenuStatus::PROFILE && GameConfig().NeedShowHint[0]) {
+                SetCurrentDialogBox(eDialogBox::ProfileTipsAndTricks);
+            }
+            if (MenuStatus == eMenuStatus::WORKSHOP) {
+                if (CurrentWorkshop == 1 && GameConfig().NeedShowHint[1]) {
+                    SetCurrentDialogBox(eDialogBox::ShipyardTipsAndTricks);
+                }
+                if (CurrentWorkshop == 2 && GameConfig().NeedShowHint[2]) {
+                    SetCurrentDialogBox(eDialogBox::SystemsTipsAndTricks);
+                }
+                if (CurrentWorkshop == 3 && GameConfig().NeedShowHint[3]) {
+                    SetCurrentDialogBox(eDialogBox::WeaponryTipsAndTricks);
+                }
+            }
+        }
+    }
 
-	// делаем полавное угасание меню
-	if (NeedHideMenu) {
-		MenuContentTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastMenuUpdateTime);
-		if (MenuContentTransp <= 0.0f) {
-			MenuContentTransp = 0.0f;
-			SetMenu2(NextMenu);
-			LastMenuUpdateTime = vw_GetTimeThread(0);
-			NeedShowMenu = true;
-			NeedHideMenu = false;
-		}
-	}
-
-
-	vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
-	vw_CameraLookAt();
+    // делаем полавное угасание меню
+    if (NeedHideMenu) {
+        MenuContentTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastMenuUpdateTime);
+        if (MenuContentTransp <= 0.0f) {
+            MenuContentTransp = 0.0f;
+            SetMenu2(NextMenu);
+            LastMenuUpdateTime = vw_GetTimeThread(0);
+            NeedShowMenu = true;
+            NeedHideMenu = false;
+        }
+    }
 
 
-
-
-	// всегда первым рисуем скайбокс и "далекое" окружение
-	StarSystemDraw(eDrawType::MENU);
+    vw_SetCameraMoveAroundPoint(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.0f, sVECTOR3D{0.0f, 0.0f, 0.0f});
+    vw_CameraLookAt();
 
 
 
 
-	// рисуем название игры, чтобы звезды и корабли пролетали перед ним
-	vw_Start2DMode(-1,1);
-	// надпись AstroMenace
-	sRECT SrcRect, DstRect;
-	SrcRect(0,0,863,128 );
-	int StartX = (GameConfig().InternalWidth - 863)/2;
-	DstRect(StartX,10,StartX+863,10+128);
-
-	if ((MenuStatus != eMenuStatus::WORKSHOP) &&
-	    (MenuStatus != eMenuStatus::INTERFACE) &&
-	    (MenuStatus != eMenuStatus::OPTIONS) &&
-	    (MenuStatus != eMenuStatus::CONFCONTROL) &&
-	    (MenuStatus != eMenuStatus::OPTIONS_ADVANCED)) {
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/astromenace.tga"), true, MenuContentTransp);
-	}
-
-	vw_End2DMode();
-
-
-
-	// рисуем все 3д объекты
-	DrawAllObject3D(eDrawType::MENU);
-
-
-
-	// после полной прорисовки делаем обновление данных
-	UpdateAllObject3D(vw_GetTimeThread(0));
-	vw_UpdateAllParticleSystems(vw_GetTimeThread(0));
+    // всегда первым рисуем скайбокс и "далекое" окружение
+    StarSystemDraw(eDrawType::MENU);
 
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// работаем со скриптом, пока он есть
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (MenuScript &&
-	    (!MenuScript->Update(vw_GetTimeThread(0))))
-		MenuScript.reset();
+    // рисуем название игры, чтобы звезды и корабли пролетали перед ним
+    vw_Start2DMode(-1,1);
+    // надпись AstroMenace
+    sRECT SrcRect, DstRect;
+    SrcRect(0,0,863,128 );
+    int StartX = (GameConfig().InternalWidth - 863)/2;
+    DstRect(StartX,10,StartX+863,10+128);
+
+    if (MenuStatus != eMenuStatus::WORKSHOP
+        && MenuStatus != eMenuStatus::INTERFACE
+        && MenuStatus != eMenuStatus::OPTIONS
+        && MenuStatus != eMenuStatus::CONFCONTROL
+        && MenuStatus != eMenuStatus::OPTIONS_ADVANCED) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/astromenace.tga"), true, MenuContentTransp);
+    }
+
+    vw_End2DMode();
+
+
+
+    // рисуем все 3д объекты
+    DrawAllObject3D(eDrawType::MENU);
+
+
+
+    // после полной прорисовки делаем обновление данных
+    UpdateAllObject3D(vw_GetTimeThread(0));
+    vw_UpdateAllParticleSystems(vw_GetTimeThread(0));
+
+
+
+
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // работаем со скриптом, пока он есть
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    if (MenuScript && !MenuScript->Update(vw_GetTimeThread(0))) {
+        MenuScript.reset();
+    }
 
 
 
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// переходим в 2д режим для прорисовки всех 2д частей
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_Start2DMode(-1,1);
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // переходим в 2д режим для прорисовки всех 2д частей
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    vw_Start2DMode(-1,1);
 
-	switch (MenuStatus) {
-	case eMenuStatus::MAIN_MENU:
-		MainMenu();
-		break;
-	case eMenuStatus::TOP_SCORES:
-		TopScoresMenu();
-		break;
-	case eMenuStatus::INTERFACE:
-		InterfaceMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime);
-		break;
-	case eMenuStatus::OPTIONS:
-		OptionsMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime, Button11Transp, LastButton11UpdateTime);
-		break;
-	case eMenuStatus::OPTIONS_ADVANCED:
-		OptionsAdvMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime, Button11Transp, LastButton11UpdateTime);
-		break;
-	case eMenuStatus::INFORMATION:
-		InformationMenu();
-		break;
-	case eMenuStatus::CREDITS:
-		CreditsMenu();
-		break;
-	case eMenuStatus::CONFCONTROL:
-		ConfControlMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime);
-		break;
-	case eMenuStatus::PROFILE:
-		ProfileMenu();
-		break;
-	case eMenuStatus::DIFFICULTY:
-		DifficultyMenu();
-		break;
-	case eMenuStatus::MISSION:
-		MissionMenu();
-		break;
-	case eMenuStatus::WORKSHOP:
-		WorkshopMenu();
-		break;
+    switch (MenuStatus) {
+    case eMenuStatus::MAIN_MENU:
+        MainMenu();
+        break;
+    case eMenuStatus::TOP_SCORES:
+        TopScoresMenu();
+        break;
+    case eMenuStatus::INTERFACE:
+        InterfaceMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime);
+        break;
+    case eMenuStatus::OPTIONS:
+        OptionsMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime, Button11Transp, LastButton11UpdateTime);
+        break;
+    case eMenuStatus::OPTIONS_ADVANCED:
+        OptionsAdvMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime, Button11Transp, LastButton11UpdateTime);
+        break;
+    case eMenuStatus::INFORMATION:
+        InformationMenu();
+        break;
+    case eMenuStatus::CREDITS:
+        CreditsMenu();
+        break;
+    case eMenuStatus::CONFCONTROL:
+        ConfControlMenu(MenuContentTransp, Button10Transp, LastButton10UpdateTime);
+        break;
+    case eMenuStatus::PROFILE:
+        ProfileMenu();
+        break;
+    case eMenuStatus::DIFFICULTY:
+        DifficultyMenu();
+        break;
+    case eMenuStatus::MISSION:
+        MissionMenu();
+        break;
+    case eMenuStatus::WORKSHOP:
+        WorkshopMenu();
+        break;
 
-	default:
-		break;
-	}
-
-
+    default:
+        break;
+    }
 
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// последнее - вывод версии и копирайта
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	vw_SetFontSize(10);
 
-	// Version
-	int VSize = vw_TextWidthUTF32(vw_GetTextUTF32("Version"));
-	vw_DrawTextUTF32(6, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, vw_GetTextUTF32("Version"));
-	vw_DrawText(16 + VSize, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, GAME_VERSION);
-	// Copyright
+
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // последнее - вывод версии и копирайта
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    vw_SetFontSize(10);
+
+    // Version
+    int VSize = vw_TextWidthUTF32(vw_GetTextUTF32("Version"));
+    vw_DrawTextUTF32(6, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, vw_GetTextUTF32("Version"));
+    vw_DrawText(16 + VSize, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, GAME_VERSION);
+    // Copyright
     int CSize = vw_TextWidth("Copyright © 2007-2019, Viewizard");
-	vw_DrawText(GameConfig().InternalWidth - 6 - CSize, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f,
-            "Copyright © 2007-2019, Viewizard");
+    vw_DrawText(GameConfig().InternalWidth - 6 - CSize, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f,
+                "Copyright © 2007-2019, Viewizard");
 
-	ResetFontSize();
-	vw_End2DMode();
-
-
-	// если нужно - рисуем в окошке еще одном
-	switch (MenuStatus) {
-	case eMenuStatus::INFORMATION:
-		InformationDrawObject();
-		break;
-
-	default:
-		break;
-	}
+    ResetFontSize();
+    vw_End2DMode();
 
 
+    // если нужно - рисуем в окошке еще одном
+    switch (MenuStatus) {
+    case eMenuStatus::INFORMATION:
+        InformationDrawObject();
+        break;
+
+    default:
+        break;
+    }
 
 
-	// черное затемнение, если нужно
-	if (NeedOnMenu) {
-		MenuBlackTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastMenuOnOffUpdateTime);
-		if (MenuBlackTransp <= 0.0f) {
-			MenuBlackTransp = 0.0f;
-			NeedOnMenu = false;
-			LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
-		}
 
-		vw_Start2DMode(-1,1);
 
-		SrcRect(0, 0, 2, 2);
-		DstRect(0, 0, GameConfig().InternalWidth, 768);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, MenuBlackTransp);
+    // черное затемнение, если нужно
+    if (NeedOnMenu) {
+        MenuBlackTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastMenuOnOffUpdateTime);
+        if (MenuBlackTransp <= 0.0f) {
+            MenuBlackTransp = 0.0f;
+            NeedOnMenu = false;
+            LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
+        }
 
-		vw_End2DMode();
-	}
+        vw_Start2DMode(-1,1);
 
-	// черное затемнение, выключаем воркшоп (готовимся к переходу на игру)
-	if (NeedOffMenu) {
-		MenuBlackTransp = 2.4f*(vw_GetTimeThread(0) - LastMenuOnOffUpdateTime);
-		if (MenuBlackTransp >= 1.0f) {
-			MenuBlackTransp = 1.0f;
-			NeedOffMenu = false;
-			LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
-			// переход на игру
-			WorkshopDestroyData();
-			cCommand::GetInstance().Set(eCommand::SWITCH_FROM_MENU_TO_GAME);
-		}
+        SrcRect(0, 0, 2, 2);
+        DstRect(0, 0, GameConfig().InternalWidth, 768);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, MenuBlackTransp);
 
-		vw_Start2DMode(-1,1);
+        vw_End2DMode();
+    }
 
-		SrcRect(0, 0, 2, 2);
-		DstRect(0, 0, GameConfig().InternalWidth, 768);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, MenuBlackTransp);
+    // черное затемнение, выключаем воркшоп (готовимся к переходу на игру)
+    if (NeedOffMenu) {
+        MenuBlackTransp = 2.4f*(vw_GetTimeThread(0) - LastMenuOnOffUpdateTime);
+        if (MenuBlackTransp >= 1.0f) {
+            MenuBlackTransp = 1.0f;
+            NeedOffMenu = false;
+            LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
+            // переход на игру
+            WorkshopDestroyData();
+            cCommand::GetInstance().Set(eCommand::SWITCH_FROM_MENU_TO_GAME);
+        }
 
-		vw_End2DMode();
-	}
+        vw_Start2DMode(-1,1);
+
+        SrcRect(0, 0, 2, 2);
+        DstRect(0, 0, GameConfig().InternalWidth, 768);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, MenuBlackTransp);
+
+        vw_End2DMode();
+    }
 
 }
 
@@ -626,43 +636,48 @@ void DrawMenu()
 void MainMenu()
 {
 
-	int Prir = 100;
-	int X = (GameConfig().InternalWidth - 384) / 2;
-	int Y = 165;
+    int Prir = 100;
+    int X = (GameConfig().InternalWidth - 384) / 2;
+    int Y = 165;
 
-	if (DrawButton384(X,Y, vw_GetTextUTF32("START GAME"), MenuContentTransp, Button1Transp, LastButton1UpdateTime)) {
-		// если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
-		if (CurrentProfile < 0)
-			cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
-		else
-			cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
-	}
-
-
-
+    if (DrawButton384(X,Y, vw_GetTextUTF32("START GAME"), MenuContentTransp, Button1Transp, LastButton1UpdateTime)) {
+        // если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
+        if (CurrentProfile < 0) {
+            cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
+        } else {
+            cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
+        }
+    }
 
 
-	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("TOP SCORES"), MenuContentTransp, Button2Transp, LastButton2UpdateTime))
-		cCommand::GetInstance().Set(eCommand::SWITCH_TO_TOP_SCORES);
 
-	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("OPTIONS"), MenuContentTransp, Button3Transp, LastButton3UpdateTime))
-		cCommand::GetInstance().Set(eCommand::SWITCH_TO_OPTIONS);
 
-	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("INFORMATION"), MenuContentTransp, Button4Transp, LastButton4UpdateTime))
-		cCommand::GetInstance().Set(eCommand::SWITCH_TO_INFORMATION);
 
-	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("CREDITS"), MenuContentTransp, Button5Transp, LastButton5UpdateTime)) {
-		cCommand::GetInstance().Set(eCommand::SWITCH_TO_CREDITS);
-		PlayMusicTheme(eMusicTheme::CREDITS, 2000, 2000);
-	}
+    Y = Y+Prir;
+    if (DrawButton384(X,Y, vw_GetTextUTF32("TOP SCORES"), MenuContentTransp, Button2Transp, LastButton2UpdateTime)) {
+        cCommand::GetInstance().Set(eCommand::SWITCH_TO_TOP_SCORES);
+    }
 
-	Y = Y+Prir;
-	if (DrawButton384(X,Y, vw_GetTextUTF32("QUIT"), MenuContentTransp, Button6Transp, LastButton6UpdateTime))
-		SetCurrentDialogBox(eDialogBox::QuitFromGame);
+    Y = Y+Prir;
+    if (DrawButton384(X,Y, vw_GetTextUTF32("OPTIONS"), MenuContentTransp, Button3Transp, LastButton3UpdateTime)) {
+        cCommand::GetInstance().Set(eCommand::SWITCH_TO_OPTIONS);
+    }
+
+    Y = Y+Prir;
+    if (DrawButton384(X,Y, vw_GetTextUTF32("INFORMATION"), MenuContentTransp, Button4Transp, LastButton4UpdateTime)) {
+        cCommand::GetInstance().Set(eCommand::SWITCH_TO_INFORMATION);
+    }
+
+    Y = Y+Prir;
+    if (DrawButton384(X,Y, vw_GetTextUTF32("CREDITS"), MenuContentTransp, Button5Transp, LastButton5UpdateTime)) {
+        cCommand::GetInstance().Set(eCommand::SWITCH_TO_CREDITS);
+        PlayMusicTheme(eMusicTheme::CREDITS, 2000, 2000);
+    }
+
+    Y = Y+Prir;
+    if (DrawButton384(X,Y, vw_GetTextUTF32("QUIT"), MenuContentTransp, Button6Transp, LastButton6UpdateTime)) {
+        SetCurrentDialogBox(eDialogBox::QuitFromGame);
+    }
 
 }
 

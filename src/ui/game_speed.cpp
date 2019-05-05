@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 #include "game_speed.h"
 #include "font.h"
@@ -49,8 +49,8 @@ constexpr float ShowNotificationSeconds{2.0f};
  */
 void cGameSpeed::InitGameSpeed()
 {
-	vw_InitTimeThread(GameTimeThread);
-	SetSpeed(GameConfig().GameSpeed);
+    vw_InitTimeThread(GameTimeThread);
+    SetSpeed(GameConfig().GameSpeed);
 }
 
 /*
@@ -58,7 +58,7 @@ void cGameSpeed::InitGameSpeed()
  */
 void cGameSpeed::SetThreadSpeed(float Speed)
 {
-	vw_SetTimeThreadSpeed(GameTimeThread, Speed);
+    vw_SetTimeThreadSpeed(GameTimeThread, Speed);
 }
 
 /*
@@ -66,18 +66,18 @@ void cGameSpeed::SetThreadSpeed(float Speed)
  */
 void cGameSpeed::SetSpeed(float Speed)
 {
-	vw_Clamp(Speed, MinSpeed, MaxSpeed);
+    vw_Clamp(Speed, MinSpeed, MaxSpeed);
 
-	ChangeGameConfig().GameSpeed = Speed;
-	SetThreadSpeed(Speed);
+    ChangeGameConfig().GameSpeed = Speed;
+    SetThreadSpeed(Speed);
 
-	RemainingDrawTime_ = ShowNotificationSeconds;
-	LastUpdateTick_ = SDL_GetTicks();
+    RemainingDrawTime_ = ShowNotificationSeconds;
+    LastUpdateTick_ = SDL_GetTicks();
 
-	std::ostringstream tmpStream;
-	tmpStream << std::fixed << std::setprecision(1)
-		  << vw_GetText("Game Speed:") << " " << Speed;
-	DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
+    std::ostringstream tmpStream;
+    tmpStream << std::fixed << std::setprecision(1)
+              << vw_GetText("Game Speed:") << " " << Speed;
+    DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
 }
 
 /*
@@ -85,23 +85,24 @@ void cGameSpeed::SetSpeed(float Speed)
  */
 void cGameSpeed::CheckKeyboard()
 {
-	if ((MenuStatus != eMenuStatus::GAME) ||
-	    (GameContentTransp > 0.0f) ||
-	    GameMissionCompleteStatus)
-		return;
+    if (MenuStatus != eMenuStatus::GAME
+        || GameContentTransp > 0.0f
+        || GameMissionCompleteStatus) {
+        return;
+    }
 
-	if (vw_GetKeyStatus(SDLK_F5)) {
-		SetSpeed(GameConfig().GameSpeed - SpeedChangeStep);
-		vw_SetKeyStatus(SDLK_F5, false);
-	}
-	if (vw_GetKeyStatus(SDLK_F6)) {
-		SetSpeed(DefaultSpeed);
-		vw_SetKeyStatus(SDLK_F6, false);
-	}
-	if (vw_GetKeyStatus(SDLK_F7)) {
-		SetSpeed(GameConfig().GameSpeed + SpeedChangeStep);
-		vw_SetKeyStatus(SDLK_F7, false);
-	}
+    if (vw_GetKeyStatus(SDLK_F5)) {
+        SetSpeed(GameConfig().GameSpeed - SpeedChangeStep);
+        vw_SetKeyStatus(SDLK_F5, false);
+    }
+    if (vw_GetKeyStatus(SDLK_F6)) {
+        SetSpeed(DefaultSpeed);
+        vw_SetKeyStatus(SDLK_F6, false);
+    }
+    if (vw_GetKeyStatus(SDLK_F7)) {
+        SetSpeed(GameConfig().GameSpeed + SpeedChangeStep);
+        vw_SetKeyStatus(SDLK_F7, false);
+    }
 }
 
 /*
@@ -109,17 +110,18 @@ void cGameSpeed::CheckKeyboard()
  */
 void cGameSpeed::Update()
 {
-	CheckKeyboard();
+    CheckKeyboard();
 
-	if (RemainingDrawTime_ <= 0.0f)
-		return;
+    if (RemainingDrawTime_ <= 0.0f) {
+        return;
+    }
 
-	uint32_t CurrentTick = SDL_GetTicks();
-	if (LastUpdateTick_ < CurrentTick) {
-		constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
-		RemainingDrawTime_ -= static_cast<float>(CurrentTick - LastUpdateTick_) / TicksInSecond;
-	}
-	LastUpdateTick_ = CurrentTick;
+    uint32_t CurrentTick = SDL_GetTicks();
+    if (LastUpdateTick_ < CurrentTick) {
+        constexpr uint32_t TicksInSecond{1000}; // connected to SDL_GetTicks()
+        RemainingDrawTime_ -= static_cast<float>(CurrentTick - LastUpdateTick_) / TicksInSecond;
+    }
+    LastUpdateTick_ = CurrentTick;
 }
 
 /*
@@ -128,16 +130,17 @@ void cGameSpeed::Update()
  */
 void cGameSpeed::Draw()
 {
-	if (RemainingDrawTime_ <= 0.0f)
-		return;
+    if (RemainingDrawTime_ <= 0.0f) {
+        return;
+    }
 
-	vw_SetFontSize(20);
+    vw_SetFontSize(20);
 
-	int tmpTextPositionX = (GameConfig().InternalWidth - vw_TextWidthUTF32(DrawStringUTF32_)) / 2;
-	vw_DrawTextUTF32(tmpTextPositionX, 80, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white},
-			 (RemainingDrawTime_ > 1.0f) ? 1.0f : RemainingDrawTime_, DrawStringUTF32_);
+    int tmpTextPositionX = (GameConfig().InternalWidth - vw_TextWidthUTF32(DrawStringUTF32_)) / 2;
+    vw_DrawTextUTF32(tmpTextPositionX, 80, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white},
+                     (RemainingDrawTime_ > 1.0f) ? 1.0f : RemainingDrawTime_, DrawStringUTF32_);
 
-	ResetFontSize();
+    ResetFontSize();
 }
 
 } // astromenace namespace

@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // TODO check sources, direct OpenGL usage outside 'graphics' are prohibited,
 //      for 'graphics' code - switch to "vw_*" functions-wrappers for OpenGL if possible.
@@ -50,343 +50,343 @@ struct sVECTOR3D;
 class cTexture;
 
 enum class eOrigin {
-	upper_left,
-	bottom_left
+    upper_left,
+    bottom_left
 };
 
 enum class ePrimitiveType : GLenum {
-	LINES = GL_LINES,
-	TRIANGLES = GL_TRIANGLES,
-	TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
-	TRIANGLE_FAN = GL_TRIANGLE_FAN
+    LINES = GL_LINES,
+    TRIANGLES = GL_TRIANGLES,
+    TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
+    TRIANGLE_FAN = GL_TRIANGLE_FAN
 };
 
 enum class eCompareFunc : GLint {
-	LEQUAL = GL_LEQUAL,
-	GEQUAL = GL_GEQUAL,
-	LESS = GL_LESS,
-	GREATER = GL_GREATER,
-	EQUAL = GL_EQUAL,
-	NOTEQUAL = GL_NOTEQUAL,
-	ALWAYS = GL_ALWAYS,
-	NEVER = GL_NEVER
+    LEQUAL = GL_LEQUAL,
+    GEQUAL = GL_GEQUAL,
+    LESS = GL_LESS,
+    GREATER = GL_GREATER,
+    EQUAL = GL_EQUAL,
+    NOTEQUAL = GL_NOTEQUAL,
+    ALWAYS = GL_ALWAYS,
+    NEVER = GL_NEVER
 };
 
 enum class eMatrixMode : GLenum {
-	PROJECTION = GL_PROJECTION,
-	MODELVIEW = GL_MODELVIEW,
-	TEXTURE = GL_TEXTURE
+    PROJECTION = GL_PROJECTION,
+    MODELVIEW = GL_MODELVIEW,
+    TEXTURE = GL_TEXTURE
 };
 
 enum class eMatrixPname : GLenum {
-	PROJECTION = GL_PROJECTION_MATRIX,
-	MODELVIEW = GL_MODELVIEW_MATRIX,
-	TEXTURE = GL_TEXTURE_MATRIX
+    PROJECTION = GL_PROJECTION_MATRIX,
+    MODELVIEW = GL_MODELVIEW_MATRIX,
+    TEXTURE = GL_TEXTURE_MATRIX
 };
 
 enum class eTextureBlendFactor : GLenum {
-	ZERO = GL_ZERO,
-	ONE = GL_ONE,
-	SRC_COLOR = GL_SRC_COLOR,
-	ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
-	DST_COLOR = GL_DST_COLOR,
-	MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
-	SRC_ALPHA = GL_SRC_ALPHA,
-	ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
-	DST_ALPHA = GL_DST_ALPHA,
-	ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
-	CONSTANT_COLOR = GL_CONSTANT_COLOR,
-	ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_COLOR,
-	CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
-	ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA,
-	SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE,
-	SRC1_COLOR = GL_SRC1_COLOR,
-	ONE_MINUS_SRC1_COLOR = GL_ONE_MINUS_SRC1_COLOR,
-	SRC1_ALPHA = GL_SRC1_ALPHA,
-	ONE_MINUS_SRC1_ALPHA = GL_ONE_MINUS_SRC1_ALPHA
+    ZERO = GL_ZERO,
+    ONE = GL_ONE,
+    SRC_COLOR = GL_SRC_COLOR,
+    ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
+    DST_COLOR = GL_DST_COLOR,
+    MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
+    SRC_ALPHA = GL_SRC_ALPHA,
+    ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
+    DST_ALPHA = GL_DST_ALPHA,
+    ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
+    CONSTANT_COLOR = GL_CONSTANT_COLOR,
+    ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_COLOR,
+    CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
+    ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA,
+    SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE,
+    SRC1_COLOR = GL_SRC1_COLOR,
+    ONE_MINUS_SRC1_COLOR = GL_ONE_MINUS_SRC1_COLOR,
+    SRC1_ALPHA = GL_SRC1_ALPHA,
+    ONE_MINUS_SRC1_ALPHA = GL_ONE_MINUS_SRC1_ALPHA
 };
 
 enum class eTextureEnvMode : GLint {
-	DECAL = GL_DECAL,
-	BLEND = GL_BLEND,
-	REPLACE = GL_REPLACE,
-	ADD = GL_ADD,
-	COMBINE = GL_COMBINE,
-	MODULATE = GL_MODULATE
+    DECAL = GL_DECAL,
+    BLEND = GL_BLEND,
+    REPLACE = GL_REPLACE,
+    ADD = GL_ADD,
+    COMBINE = GL_COMBINE,
+    MODULATE = GL_MODULATE
 };
 
 enum class eTextureDepthMode : GLint {
-	LUMINANCE = GL_LUMINANCE,
-	INTENSITY = GL_INTENSITY,
-	ALPHA = GL_ALPHA
+    LUMINANCE = GL_LUMINANCE,
+    INTENSITY = GL_INTENSITY,
+    ALPHA = GL_ALPHA
 };
 
 enum class eTextureCompareMode : GLint {
-	REF_TO_TEXTURE = GL_COMPARE_REF_TO_TEXTURE,
-	NONE = GL_NONE
+    REF_TO_TEXTURE = GL_COMPARE_REF_TO_TEXTURE,
+    NONE = GL_NONE
 };
 
 enum class eTextureWrapCoord : GLenum {
-	S = GL_TEXTURE_WRAP_S,
-	T = GL_TEXTURE_WRAP_T,
-	R = GL_TEXTURE_WRAP_R
+    S = GL_TEXTURE_WRAP_S,
+    T = GL_TEXTURE_WRAP_T,
+    R = GL_TEXTURE_WRAP_R
 };
 
 enum class eTextureWrapMode : GLint {
-	CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
-	CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
-	MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
-	REPEAT = GL_REPEAT,
-	MIRROR_CLAMP_TO_EDGE = GL_MIRROR_CLAMP_TO_EDGE
+    CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+    CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
+    MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+    REPEAT = GL_REPEAT,
+    MIRROR_CLAMP_TO_EDGE = GL_MIRROR_CLAMP_TO_EDGE
 };
 
 struct sTextureWrap {
-	eTextureWrapMode S{eTextureWrapMode::REPEAT};
-	eTextureWrapMode T{eTextureWrapMode::REPEAT};
-	eTextureWrapMode R{eTextureWrapMode::REPEAT};
+    eTextureWrapMode S{eTextureWrapMode::REPEAT};
+    eTextureWrapMode T{eTextureWrapMode::REPEAT};
+    eTextureWrapMode R{eTextureWrapMode::REPEAT};
 
-	sTextureWrap() = default;
-	explicit sTextureWrap(eTextureWrapMode param) :
-		S{param},
-		T{param},
-		R{param}
-	{}
+    sTextureWrap() = default;
+    explicit sTextureWrap(eTextureWrapMode param) :
+        S{param},
+        T{param},
+        R{param}
+    {}
 };
 
 enum class eTextureMinFilter : GLint {
-	NEAREST = GL_NEAREST,
-	LINEAR = GL_LINEAR,
-	NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
-	LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
-	NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
-	LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
+    NEAREST = GL_NEAREST,
+    LINEAR = GL_LINEAR,
+    NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+    LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+    NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+    LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
 };
 
 enum class eTextureMagFilter : GLint {
-	NEAREST = GL_NEAREST,
-	LINEAR = GL_LINEAR
+    NEAREST = GL_NEAREST,
+    LINEAR = GL_LINEAR
 };
 
 enum class eTextureBasicFilter {
-	NONE,
-	BILINEAR,
-	TRILINEAR
+    NONE,
+    BILINEAR,
+    TRILINEAR
 };
 
 struct sTextureFilter {
-	eTextureMinFilter Min{eTextureMinFilter::NEAREST_MIPMAP_LINEAR};
-	eTextureMagFilter Mag{eTextureMagFilter::LINEAR};
+    eTextureMinFilter Min{eTextureMinFilter::NEAREST_MIPMAP_LINEAR};
+    eTextureMagFilter Mag{eTextureMagFilter::LINEAR};
 
-	sTextureFilter() = default;
-	explicit sTextureFilter(eTextureBasicFilter Filter)
-	{
-		switch (Filter) {
-		case eTextureBasicFilter::NONE:
-			Min = eTextureMinFilter::NEAREST;
-			Mag = eTextureMagFilter::NEAREST;
-			break;
-		case eTextureBasicFilter::BILINEAR:
-			Min = eTextureMinFilter::LINEAR;
-			Mag = eTextureMagFilter::LINEAR;
-			break;
-		case eTextureBasicFilter::TRILINEAR:
-			Min = eTextureMinFilter::LINEAR_MIPMAP_LINEAR;
-			Mag = eTextureMagFilter::LINEAR;
-			break;
-		}
-	}
+    sTextureFilter() = default;
+    explicit sTextureFilter(eTextureBasicFilter Filter)
+    {
+        switch (Filter) {
+        case eTextureBasicFilter::NONE:
+            Min = eTextureMinFilter::NEAREST;
+            Mag = eTextureMagFilter::NEAREST;
+            break;
+        case eTextureBasicFilter::BILINEAR:
+            Min = eTextureMinFilter::LINEAR;
+            Mag = eTextureMagFilter::LINEAR;
+            break;
+        case eTextureBasicFilter::TRILINEAR:
+            Min = eTextureMinFilter::LINEAR_MIPMAP_LINEAR;
+            Mag = eTextureMagFilter::LINEAR;
+            break;
+        }
+    }
 };
 
 enum class eTextureCombinerName : GLenum {
-	COMBINE_RGB = GL_COMBINE_RGB
+    COMBINE_RGB = GL_COMBINE_RGB
 };
 
 enum class eTextureCombinerOp : GLint {
-	ADD = GL_ADD
+    ADD = GL_ADD
 };
 
 enum class eTextureCompressionType : int {
-	NONE = 0,
-	S3TC = 1,
-	BPTC = 2
+    NONE = 0,
+    S3TC = 1,
+    BPTC = 2
 };
 
 enum class eMaterialParameter : GLenum {
-	AMBIENT = GL_AMBIENT,
-	DIFFUSE = GL_DIFFUSE,
-	SPECULAR = GL_SPECULAR,
-	EMISSION = GL_EMISSION,
-	SHININESS = GL_SHININESS
+    AMBIENT = GL_AMBIENT,
+    DIFFUSE = GL_DIFFUSE,
+    SPECULAR = GL_SPECULAR,
+    EMISSION = GL_EMISSION,
+    SHININESS = GL_SHININESS
 };
 
 enum class eLightParameter : GLenum {
-	SPOT_EXPONENT = GL_SPOT_EXPONENT,
-	SPOT_CUTOFF = GL_SPOT_CUTOFF,
-	CONSTANT_ATTENUATION = GL_CONSTANT_ATTENUATION,
-	LINEAR_ATTENUATION = GL_LINEAR_ATTENUATION,
-	QUADRATIC_ATTENUATION = GL_QUADRATIC_ATTENUATION
+    SPOT_EXPONENT = GL_SPOT_EXPONENT,
+    SPOT_CUTOFF = GL_SPOT_CUTOFF,
+    CONSTANT_ATTENUATION = GL_CONSTANT_ATTENUATION,
+    LINEAR_ATTENUATION = GL_LINEAR_ATTENUATION,
+    QUADRATIC_ATTENUATION = GL_QUADRATIC_ATTENUATION
 };
 
 enum class eLightVParameter : GLenum {
-	SPOT_EXPONENT = GL_SPOT_EXPONENT,
-	SPOT_CUTOFF = GL_SPOT_CUTOFF,
-	CONSTANT_ATTENUATION = GL_CONSTANT_ATTENUATION,
-	LINEAR_ATTENUATION = GL_LINEAR_ATTENUATION,
-	QUADRATIC_ATTENUATION = GL_QUADRATIC_ATTENUATION,
-	AMBIENT = GL_AMBIENT,
-	DIFFUSE = GL_DIFFUSE,
-	SPECULAR = GL_SPECULAR,
-	POSITION = GL_POSITION,
-	SPOT_DIRECTION = GL_SPOT_DIRECTION
+    SPOT_EXPONENT = GL_SPOT_EXPONENT,
+    SPOT_CUTOFF = GL_SPOT_CUTOFF,
+    CONSTANT_ATTENUATION = GL_CONSTANT_ATTENUATION,
+    LINEAR_ATTENUATION = GL_LINEAR_ATTENUATION,
+    QUADRATIC_ATTENUATION = GL_QUADRATIC_ATTENUATION,
+    AMBIENT = GL_AMBIENT,
+    DIFFUSE = GL_DIFFUSE,
+    SPECULAR = GL_SPECULAR,
+    POSITION = GL_POSITION,
+    SPOT_DIRECTION = GL_SPOT_DIRECTION
 };
 
 enum class eBufferObject : GLenum {
-	Vertex = GL_ARRAY_BUFFER,
-	Index = GL_ELEMENT_ARRAY_BUFFER
+    Vertex = GL_ARRAY_BUFFER,
+    Index = GL_ELEMENT_ARRAY_BUFFER
 };
 
 enum class eBufferObjectUsage : GLenum {
-	STREAM = GL_STREAM_DRAW,	// The data store contents will be modified once and used at most a few times.
-	STATIC = GL_STATIC_DRAW,	// The data store contents will be modified once and used many times.
-	DYNAMIC = GL_DYNAMIC_DRAW	// The data store contents will be modified repeatedly and used many times.
+    STREAM = GL_STREAM_DRAW,    // The data store contents will be modified once and used at most a few times.
+    STATIC = GL_STATIC_DRAW,    // The data store contents will be modified once and used many times.
+    DYNAMIC = GL_DYNAMIC_DRAW   // The data store contents will be modified repeatedly and used many times.
 };
 
 enum class eCullFace : GLenum {
-	NONE = GL_NONE,
-	BACK = GL_BACK,
-	FRONT = GL_FRONT,
-	FRONT_AND_BACK = GL_FRONT_AND_BACK
+    NONE = GL_NONE,
+    BACK = GL_BACK,
+    FRONT = GL_FRONT,
+    FRONT_AND_BACK = GL_FRONT_AND_BACK
 };
 
 struct sCoverageModes {
-	int ColorSamples{0};
-	int CoverageSamples{0};
+    int ColorSamples{0};
+    int CoverageSamples{0};
 
-	sCoverageModes() = default;
-	explicit sCoverageModes(int _ColorSamples, int _CoverageSamples) :
-		ColorSamples{_ColorSamples},
-		CoverageSamples{_CoverageSamples}
-	{}
+    sCoverageModes() = default;
+    explicit sCoverageModes(int _ColorSamples, int _CoverageSamples) :
+        ColorSamples{_ColorSamples},
+        CoverageSamples{_CoverageSamples}
+    {}
 };
 
 enum class eRGBCOLOR {
-	white,
-	black,
-	red,
-	green,
-	blue,
-	yellow,
-	orange
+    white,
+    black,
+    red,
+    green,
+    blue,
+    yellow,
+    orange
 };
 
 struct sRGBCOLOR {
-	float r{0.0f};
-	float g{0.0f};
-	float b{0.0f};
+    float r{0.0f};
+    float g{0.0f};
+    float b{0.0f};
 
-	sRGBCOLOR() = default;
-	explicit sRGBCOLOR(float _r, float _g, float _b) :
-		r{_r},
-		g{_g},
-		b{_b}
-	{}
-	explicit sRGBCOLOR(eRGBCOLOR color)
-	{
-		switch (color) {
-		case eRGBCOLOR::white:
-			r = 1.0f;
-			g = 1.0f;
-			b = 1.0f;
-			break;
-		case eRGBCOLOR::black:
-			r = 0.0f;
-			g = 0.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::red:
-			r = 1.0f;
-			g = 0.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::green:
-			r = 0.0f;
-			g = 1.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::blue:
-			r = 0.0f;
-			g = 0.0f;
-			b = 1.0f;
-			break;
-		case eRGBCOLOR::yellow:
-			r = 1.0f;
-			g = 1.0f;
-			b = 0.0f;
-			break;
-		case eRGBCOLOR::orange:
-			r = 1.0f;
-			g = 0.5f;
-			b = 0.0f;
-			break;
-		}
-	}
+    sRGBCOLOR() = default;
+    explicit sRGBCOLOR(float _r, float _g, float _b) :
+        r{_r},
+        g{_g},
+        b{_b}
+    {}
+    explicit sRGBCOLOR(eRGBCOLOR color)
+    {
+        switch (color) {
+        case eRGBCOLOR::white:
+            r = 1.0f;
+            g = 1.0f;
+            b = 1.0f;
+            break;
+        case eRGBCOLOR::black:
+            r = 0.0f;
+            g = 0.0f;
+            b = 0.0f;
+            break;
+        case eRGBCOLOR::red:
+            r = 1.0f;
+            g = 0.0f;
+            b = 0.0f;
+            break;
+        case eRGBCOLOR::green:
+            r = 0.0f;
+            g = 1.0f;
+            b = 0.0f;
+            break;
+        case eRGBCOLOR::blue:
+            r = 0.0f;
+            g = 0.0f;
+            b = 1.0f;
+            break;
+        case eRGBCOLOR::yellow:
+            r = 1.0f;
+            g = 1.0f;
+            b = 0.0f;
+            break;
+        case eRGBCOLOR::orange:
+            r = 1.0f;
+            g = 0.5f;
+            b = 0.0f;
+            break;
+        }
+    }
 };
 
 struct sDevCaps {
-	int OpenGLmajorVersion{0};
-	int OpenGLminorVersion{0};
-	int MaxTextureWidth{0};
-	int MaxTextureHeight{0};
-	int MaxActiveLights{0};
-	GLint MaxAnisotropyLevel{0}; // could be 0 (not supported by hardware/drivers)
-	// MSAA + CSAA modes
-	std::vector<sCoverageModes> MultisampleCoverageModes{};
-	// available depth's size for FBO
-	GLint FramebufferObjectDepthSize{0};
+    int OpenGLmajorVersion{0};
+    int OpenGLminorVersion{0};
+    int MaxTextureWidth{0};
+    int MaxTextureHeight{0};
+    int MaxActiveLights{0};
+    GLint MaxAnisotropyLevel{0}; // could be 0 (not supported by hardware/drivers)
+    // MSAA + CSAA modes
+    std::vector<sCoverageModes> MultisampleCoverageModes{};
+    // available depth's size for FBO
+    GLint FramebufferObjectDepthSize{0};
 
-	bool OpenGL_1_3_supported{false};
-	bool OpenGL_1_5_supported{false};
-	bool OpenGL_2_0_supported{false};
-	bool OpenGL_2_1_supported{false};
-	bool OpenGL_3_0_supported{false};
-	bool OpenGL_4_2_supported{false};
+    bool OpenGL_1_3_supported{false};
+    bool OpenGL_1_5_supported{false};
+    bool OpenGL_2_0_supported{false};
+    bool OpenGL_2_1_supported{false};
+    bool OpenGL_3_0_supported{false};
+    bool OpenGL_4_2_supported{false};
 
-	bool EXT_texture_compression_s3tc{false};
-	bool ARB_texture_compression_bptc{false}; // note, bptc also part of OpenGL 4.2
-	bool ARB_texture_non_power_of_two{false};
-	bool SGIS_generate_mipmap{false};
+    bool EXT_texture_compression_s3tc{false};
+    bool ARB_texture_compression_bptc{false}; // note, bptc also part of OpenGL 4.2
+    bool ARB_texture_non_power_of_two{false};
+    bool SGIS_generate_mipmap{false};
 };
 
 // Buffer clear bit
-#define RI_COLOR_BUFFER		0x1000
-#define RI_DEPTH_BUFFER		0x0100
-#define RI_ACCUM_BUFFER		0x0010
-#define RI_STENCIL_BUFFER	0x0001
+#define RI_COLOR_BUFFER     0x1000
+#define RI_DEPTH_BUFFER     0x0100
+#define RI_ACCUM_BUFFER     0x0010
+#define RI_STENCIL_BUFFER   0x0001
 
 // Data format
-#define RI_COORD			0x000F000
-#define RI_3f_XYZ			0x0001000
-#define RI_2f_XY			0x0002000
-#define RI_NORMAL			0x0000F00
-#define RI_3f_NORMAL			0x0000100
-#define RI_COLOR			0x00000F0
-#define RI_4f_COLOR			0x0000010
-#define RI_TEXTURE			0x0F00000
-#define RI_2f_TEX			0x0200000
+#define RI_COORD            0x000F000
+#define RI_3f_XYZ           0x0001000
+#define RI_2f_XY            0x0002000
+#define RI_NORMAL           0x0000F00
+#define RI_3f_NORMAL        0x0000100
+#define RI_COLOR            0x00000F0
+#define RI_4f_COLOR         0x0000010
+#define RI_TEXTURE          0x0F00000
+#define RI_2f_TEX           0x0200000
 // кол-во текстур
-#define RI_TEX_COUNT			0x000000F
-#define RI_1_TEX			0x0000001
-#define RI_2_TEX			0x0000002
-#define RI_3_TEX			0x0000003
-#define RI_4_TEX			0x0000004
-#define RI_5_TEX			0x0000005
-#define RI_6_TEX			0x0000006
-#define RI_7_TEX			0x0000007
-#define RI_8_TEX			0x0000008
+#define RI_TEX_COUNT        0x000000F
+#define RI_1_TEX            0x0000001
+#define RI_2_TEX            0x0000002
+#define RI_3_TEX            0x0000003
+#define RI_4_TEX            0x0000004
+#define RI_5_TEX            0x0000005
+#define RI_6_TEX            0x0000006
+#define RI_7_TEX            0x0000007
+#define RI_8_TEX            0x0000008
 // тип работы с координатами текстуры
-#define RI_TEX_COORD_TYPE		0xF000000
-#define RI_SEPARATE_TEX_COORD		0x0000000
-#define RI_DUBLICATE_TEX_COORD		0x1000000
+#define RI_TEX_COORD_TYPE       0xF000000
+#define RI_SEPARATE_TEX_COORD   0x0000000
+#define RI_DUBLICATE_TEX_COORD  0x1000000
 
 
 /*
@@ -451,8 +451,8 @@ void vw_PolygonOffset(bool status, GLfloat factor, GLfloat units);
 
 // Create texture.
 GLtexture vw_BuildTexture(const std::unique_ptr<uint8_t[]> &PixelsArray,
-			  GLsizei Width, GLsizei Height, bool MipMap, int Bytes,
-			  eTextureCompressionType CompressionType);
+                          GLsizei Width, GLsizei Height, bool MipMap, int Bytes,
+                          eTextureCompressionType CompressionType);
 // Select active texture unit (starts from 0, for GL_TEXTURE0 unit).
 void vw_SelectActiveTextureUnit(GLenum Unit);
 // Bind texture for particular texture unit (starts from 0, for GL_TEXTURE0 unit).
@@ -488,8 +488,8 @@ void vw_SetTextureDepthMode(eTextureDepthMode mode);
 
 // Draw 3D primitives.
 void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *VertexArray,
-	       GLsizei Stride, GLuint VertexBO = 0, unsigned int RangeStart = 0,
-	       unsigned int *IndexArray = nullptr, GLuint IndexBO = 0, GLuint VAO = 0);
+               GLsizei Stride, GLuint VertexBO = 0, unsigned int RangeStart = 0,
+               unsigned int *IndexArray = nullptr, GLuint IndexBO = 0, GLuint VAO = 0);
 
 /*
  * gl_matrix
@@ -537,7 +537,7 @@ void vw_MaterialV(eMaterialParameter pname, const GLfloat *param);
 
 // Build buffer object (size in bytes).
 bool vw_BuildBufferObject(eBufferObject target, GLsizeiptr size, const GLvoid *data,
-			  GLuint &buffer, eBufferObjectUsage usage = eBufferObjectUsage::STATIC);
+                          GLuint &buffer, eBufferObjectUsage usage = eBufferObjectUsage::STATIC);
 // Bind buffer object.
 void vw_BindBufferObject(eBufferObject target, GLuint buffer);
 // Delete buffer object.
@@ -559,29 +559,29 @@ void vw_DeleteVAO(GLuint &VAO);
  */
 
 struct sFBO {
-	friend std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
-						 bool NeedDepth, GLsizei MSAA, GLsizei *CSAA);
+    friend std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
+                                             bool NeedDepth, GLsizei MSAA, GLsizei *CSAA);
 public:
-	GLrenderbuffer ColorBuffer{0};
-	GLrenderbuffer DepthBuffer{0};
-	GLtexture ColorTexture{0};
-	GLtexture DepthTexture{0};
-	GLint DepthSize{0};
-	GLframebuffer FrameBufferObject{0};
-	// we are safe with sIF_dual_type here, since Width and Height not exceed 'float'
-	sIF_dual_type<GLsizei, float> Width{0};
-	sIF_dual_type<GLsizei, float> Height{0};
+    GLrenderbuffer ColorBuffer{0};
+    GLrenderbuffer DepthBuffer{0};
+    GLtexture ColorTexture{0};
+    GLtexture DepthTexture{0};
+    GLint DepthSize{0};
+    GLframebuffer FrameBufferObject{0};
+    // we are safe with sIF_dual_type here, since Width and Height not exceed 'float'
+    sIF_dual_type<GLsizei, float> Width{0};
+    sIF_dual_type<GLsizei, float> Height{0};
 
 private:
-	// Don't allow direct new/delete usage in code, only vw_BuildFBO()
-	// allowed for FBO creation and release setup (deleter must be provided).
-	sFBO() = default;
-	~sFBO();
+    // Don't allow direct new/delete usage in code, only vw_BuildFBO()
+    // allowed for FBO creation and release setup (deleter must be provided).
+    sFBO() = default;
+    ~sFBO();
 };
 
 // Build FBO.
 std::shared_ptr<sFBO> vw_BuildFBO(GLsizei Width, GLsizei Height, bool NeedColor,
-				   bool NeedDepth, GLsizei MSAA = 0, GLsizei *CSAA = nullptr);
+                                  bool NeedDepth, GLsizei MSAA = 0, GLsizei *CSAA = nullptr);
 // Bind FBO.
 void vw_BindFBO(std::shared_ptr<sFBO> &FBO);
 // Get current FBO (nullptr if FrameBuffer).
@@ -599,8 +599,8 @@ struct cGLSL;
 
 // Create shader program.
 std::weak_ptr<cGLSL> vw_CreateShader(const std::string &ShaderName,
-				     const std::string &VertexShaderFileName,
-				     const std::string &FragmentShaderFileName);
+                                     const std::string &VertexShaderFileName,
+                                     const std::string &FragmentShaderFileName);
 // Release all shaders.
 void vw_ReleaseAllShaders();
 // Check, is shaders Map empty.
@@ -638,7 +638,7 @@ void vw_Start2DMode(GLdouble zNear, GLdouble zFar);
 void vw_End2DMode();
 // Draw transparent. Origin is upper left corner.
 void vw_Draw2D(const sRECT &DstRect, const sRECT &SrcRect, GLtexture Texture, bool Alpha, float Transp = 1.0f,
-	       float RotateAngle = 0.0f, const sRGBCOLOR &Color = sRGBCOLOR{eRGBCOLOR::white});
+               float RotateAngle = 0.0f, const sRGBCOLOR &Color = sRGBCOLOR{eRGBCOLOR::white});
 
 /*
  * misc

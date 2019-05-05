@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // NOTE in future, use std::filesystem::create_directory() instead of mkdir() (since C++17)
 
@@ -51,14 +51,14 @@ namespace {
 
 std::string DataPath{
 #ifdef DATADIR
-	std::string(DATADIR) +
+    std::string(DATADIR) +
 #ifdef WIN32
-	std::string("\\")
+    std::string("\\")
 #else
-	std::string("/")
+    std::string("/")
 #endif // WIN32
 #endif // DATADIR
-	};
+};
 
 std::string RawDataPath{};
 
@@ -70,50 +70,52 @@ std::string RawDataPath{};
  */
 const std::string &GetConfigPath()
 {
-	static std::string ConfigPath{};
+    static std::string ConfigPath{};
 
-	if (!ConfigPath.empty())
-		return ConfigPath;
+    if (!ConfigPath.empty()) {
+        return ConfigPath;
+    }
 
-	// by some reason, SDL use XDG_CONFIG_DATA for preferences/configs, so,
-	// we are forced to use own code instead of SDL_GetPrefPath() for unix
+    // by some reason, SDL use XDG_CONFIG_DATA for preferences/configs, so,
+    // we are forced to use own code instead of SDL_GetPrefPath() for unix
 #ifdef __unix
-	// act accordingly to XDG Base Directory Specification
-	// "$XDG_CONFIG_HOME" > "$HOME/.config"
-	const char *tmpEnvCH = std::getenv("XDG_CONFIG_HOME");
-	if (tmpEnvCH)
-		ConfigPath = tmpEnvCH;
-	else {
-		const char *tmpEnvH = std::getenv("HOME");
-		if (tmpEnvH) {
-			ConfigPath = tmpEnvH;
-			ConfigPath += "/.config";
+    // act accordingly to XDG Base Directory Specification
+    // "$XDG_CONFIG_HOME" > "$HOME/.config"
+    const char *tmpEnvCH = std::getenv("XDG_CONFIG_HOME");
+    if (tmpEnvCH) {
+        ConfigPath = tmpEnvCH;
+    } else {
+        const char *tmpEnvH = std::getenv("HOME");
+        if (tmpEnvH) {
+            ConfigPath = tmpEnvH;
+            ConfigPath += "/.config";
 
-			struct stat st;
-			if (stat(ConfigPath.c_str(), &st) == -1) {
-				mkdir(ConfigPath.c_str(), 0755);
-			}
-		} else
-			return ConfigPath;
-	}
+            struct stat st;
+            if (stat(ConfigPath.c_str(), &st) == -1) {
+                mkdir(ConfigPath.c_str(), 0755);
+            }
+        } else {
+            return ConfigPath;
+        }
+    }
 
-	ConfigPath += "/astromenace";
+    ConfigPath += "/astromenace";
 
-	struct stat st;
-	if (stat(ConfigPath.c_str(), &st) == -1) {
-		mkdir(ConfigPath.c_str(), 0755);
-	}
+    struct stat st;
+    if (stat(ConfigPath.c_str(), &st) == -1) {
+        mkdir(ConfigPath.c_str(), 0755);
+    }
 
-	ConfigPath += "/";
+    ConfigPath += "/";
 #else
-	char *pref_path = SDL_GetPrefPath("Viewizard", "AstroMenace");
-	if (pref_path) {
-		ConfigPath = pref_path;
-		SDL_free(pref_path);
-	}
+    char *pref_path = SDL_GetPrefPath("Viewizard", "AstroMenace");
+    if (pref_path) {
+        ConfigPath = pref_path;
+        SDL_free(pref_path);
+    }
 #endif // unix
 
-	return ConfigPath;
+    return ConfigPath;
 }
 
 /*
@@ -121,55 +123,59 @@ const std::string &GetConfigPath()
  */
 const std::string &GetDesktopPath()
 {
-	static std::string DesktopPath{};
+    static std::string DesktopPath{};
 
-	if (!DesktopPath.empty())
-		return DesktopPath;
+    if (!DesktopPath.empty()) {
+        return DesktopPath;
+    }
 
 #ifdef __unix
-	// act accordingly to XDG Base Directory Specification
-	// "$XDG_DESKTOP_DIR" > "$HOME/Desktop"
-	const char *tmpEnvDD = std::getenv("XDG_DESKTOP_DIR");
-	if (tmpEnvDD)
-		DesktopPath = tmpEnvDD;
-	else {
-		const char *tmpEnvH = std::getenv("HOME");
-		if (tmpEnvH) {
-			DesktopPath = tmpEnvH;
-			DesktopPath += "/Desktop";
-		}
-	}
+    // act accordingly to XDG Base Directory Specification
+    // "$XDG_DESKTOP_DIR" > "$HOME/Desktop"
+    const char *tmpEnvDD = std::getenv("XDG_DESKTOP_DIR");
+    if (tmpEnvDD) {
+        DesktopPath = tmpEnvDD;
+    } else {
+        const char *tmpEnvH = std::getenv("HOME");
+        if (tmpEnvH) {
+            DesktopPath = tmpEnvH;
+            DesktopPath += "/Desktop";
+        }
+    }
 
-	// only check, that DesktopPath is available, don't create it
-	struct stat st;
-	if (stat(DesktopPath.c_str(), &st) == -1) {
-		DesktopPath.clear();
-	} else
-		DesktopPath += "/";
+    // only check, that DesktopPath is available, don't create it
+    struct stat st;
+    if (stat(DesktopPath.c_str(), &st) == -1) {
+        DesktopPath.clear();
+    } else {
+        DesktopPath += "/";
+    }
 #elif defined(__APPLE__) && defined(__MACH__)
-	const char *tmpEnvH = std::getenv("HOME");
-	if (tmpEnvH) {
-		DesktopPath = tmpEnvH;
-		DesktopPath += "/Desktop";
-	}
+    const char *tmpEnvH = std::getenv("HOME");
+    if (tmpEnvH) {
+        DesktopPath = tmpEnvH;
+        DesktopPath += "/Desktop";
+    }
 
-	// only check, that DesktopPath is available, don't create it
-	struct stat st;
-	if (stat(DesktopPath.c_str(), &st) == -1) {
-		DesktopPath.clear();
-	} else
-		DesktopPath += "/";
+    // only check, that DesktopPath is available, don't create it
+    struct stat st;
+    if (stat(DesktopPath.c_str(), &st) == -1) {
+        DesktopPath.clear();
+    } else {
+        DesktopPath += "/";
+    }
 #elif defined(WIN32)
-	WCHAR tmpPath[MAX_PATH];
-	if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY, nullptr, 0, tmpPath))) {
-		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter_wchar;
-		DesktopPath = converter_wchar.to_bytes(tmpPath);
-		if (DesktopPath.back() != '\\')
-			DesktopPath += "\\";
-	}
+    WCHAR tmpPath[MAX_PATH];
+    if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_DESKTOPDIRECTORY, nullptr, 0, tmpPath))) {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter_wchar;
+        DesktopPath = converter_wchar.to_bytes(tmpPath);
+        if (DesktopPath.back() != '\\') {
+            DesktopPath += "\\";
+        }
+    }
 #endif
 
-	return DesktopPath;
+    return DesktopPath;
 }
 
 /*
@@ -177,19 +183,21 @@ const std::string &GetDesktopPath()
  */
 const std::string &GetBasePath()
 {
-	static std::string BasePath{};
+    static std::string BasePath{};
 
-	if (!BasePath.empty())
-		return BasePath;
+    if (!BasePath.empty()) {
+        return BasePath;
+    }
 
-	char *base_path = SDL_GetBasePath();
-	if (base_path) {
-		BasePath = base_path;
-		SDL_free(base_path);
-	} else
-		BasePath = "./";
+    char *base_path = SDL_GetBasePath();
+    if (base_path) {
+        BasePath = base_path;
+        SDL_free(base_path);
+    } else {
+        BasePath = "./";
+    }
 
-	return BasePath;
+    return BasePath;
 }
 
 /*
@@ -197,18 +205,20 @@ const std::string &GetBasePath()
  */
 static void SetPathByParameter(std::string &Path, char *argv, const std::string &ParameterName)
 {
-	if (!argv ||
-	    (strlen(argv) <= ParameterName.size()))
-		return;
+    if (!argv || strlen(argv) <= ParameterName.size()) {
+        return;
+    }
 
-	Path = argv + ParameterName.size();
+    Path = argv + ParameterName.size();
 
 #ifdef WIN32
-	if (Path.back() != '\\')
-		Path += "\\";
+    if (Path.back() != '\\') {
+        Path += "\\";
+    }
 #else
-	if (Path.back() != '/')
-		Path += "/";
+    if (Path.back() != '/') {
+        Path += "/";
+    }
 #endif // WIN32
 }
 
@@ -217,7 +227,7 @@ static void SetPathByParameter(std::string &Path, char *argv, const std::string 
  */
 void SetDataPathByParameter(char *argv, const std::string &ParameterName)
 {
-	SetPathByParameter(DataPath, argv, ParameterName);
+    SetPathByParameter(DataPath, argv, ParameterName);
 }
 
 /*
@@ -225,12 +235,13 @@ void SetDataPathByParameter(char *argv, const std::string &ParameterName)
  */
 const std::string &GetDataPath()
 {
-	if (!DataPath.empty())
-		return DataPath;
+    if (!DataPath.empty()) {
+        return DataPath;
+    }
 
-	DataPath = GetBasePath();
+    DataPath = GetBasePath();
 
-	return DataPath;
+    return DataPath;
 }
 
 /*
@@ -238,7 +249,7 @@ const std::string &GetDataPath()
  */
 void SetRawDataPathByParameter(char *argv, const std::string &ParameterName)
 {
-	SetPathByParameter(RawDataPath, argv, ParameterName);
+    SetPathByParameter(RawDataPath, argv, ParameterName);
 }
 
 /*
@@ -246,14 +257,16 @@ void SetRawDataPathByParameter(char *argv, const std::string &ParameterName)
  */
 const std::string &GetRawDataPath()
 {
-	if (!RawDataPath.empty())
-		return RawDataPath;
+    if (!RawDataPath.empty()) {
+        return RawDataPath;
+    }
 
-	RawDataPath = GetBasePath();
-	if (!RawDataPath.empty())
-		RawDataPath += "gamedata/";
+    RawDataPath = GetBasePath();
+    if (!RawDataPath.empty()) {
+        RawDataPath += "gamedata/";
+    }
 
-	return RawDataPath;
+    return RawDataPath;
 }
 
 } // astromenace namespace

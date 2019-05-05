@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // TODO move to SDL_GetTicks() usage
 
@@ -64,13 +64,14 @@ GLtexture DraggingItemIcon{0};
  */
 void CursorInit(bool ShowSystemCursor)
 {
-	if (!ShowSystemCursor)
-		SDL_ShowCursor(SDL_DISABLE);
+    if (!ShowSystemCursor) {
+        SDL_ShowCursor(SDL_DISABLE);
+    }
 
-	CursorBlinkingLastTime = vw_GetTimeThread(0);
+    CursorBlinkingLastTime = vw_GetTimeThread(0);
 
-	CursorFront = GetPreloadedTextureAsset("menu/cursor.tga");
-	CursorShadow = GetPreloadedTextureAsset("menu/cursor_shadow.tga");
+    CursorFront = GetPreloadedTextureAsset("menu/cursor.tga");
+    CursorShadow = GetPreloadedTextureAsset("menu/cursor_shadow.tga");
 }
 
 /*
@@ -78,8 +79,9 @@ void CursorInit(bool ShowSystemCursor)
  */
 void CursorRelease()
 {
-	if (SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE)
-		SDL_ShowCursor(SDL_ENABLE);
+    if (SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE) {
+        SDL_ShowCursor(SDL_ENABLE);
+    }
 }
 
 /*
@@ -87,12 +89,13 @@ void CursorRelease()
  */
 void CursorUpdate()
 {
-	SetCursorStatus(eCursorStatus::Undefined);
+    SetCursorStatus(eCursorStatus::Undefined);
 
-	CursorBlinking -= vw_GetTimeThread(0) - CursorBlinkingLastTime;
-	if (CursorBlinking < 0.3f)
-		CursorBlinking = 1.0f;
-	CursorBlinkingLastTime = vw_GetTimeThread(0);
+    CursorBlinking -= vw_GetTimeThread(0) - CursorBlinkingLastTime;
+    if (CursorBlinking < 0.3f) {
+        CursorBlinking = 1.0f;
+    }
+    CursorBlinkingLastTime = vw_GetTimeThread(0);
 }
 
 /*
@@ -100,18 +103,19 @@ void CursorUpdate()
  */
 static void DrawDraggingItemIcon(int X, int Y)
 {
-	if (!DraggingItemIcon)
-		return;
+    if (!DraggingItemIcon) {
+        return;
+    }
 
-	// we use "fixed" icon size for now
-	constexpr int IconWidth{128};
-	constexpr int IconHeight{64};
+    // we use "fixed" icon size for now
+    constexpr int IconWidth{128};
+    constexpr int IconHeight{64};
 
-	sRECT SrcRect(0, 0, IconWidth, IconHeight);
-	sRECT DstRect(X - IconWidth / 2, Y - IconHeight / 2,
-		      X + IconWidth / 2, Y + IconHeight / 2);
+    sRECT SrcRect(0, 0, IconWidth, IconHeight);
+    sRECT DstRect(X - IconWidth / 2, Y - IconHeight / 2,
+                  X + IconWidth / 2, Y + IconHeight / 2);
 
-	vw_Draw2D(DstRect, SrcRect, DraggingItemIcon, true);
+    vw_Draw2D(DstRect, SrcRect, DraggingItemIcon, true);
 }
 
 /*
@@ -119,37 +123,38 @@ static void DrawDraggingItemIcon(int X, int Y)
  */
 void CursorDraw()
 {
-	if (!ShowGameCursorStatus)
-		return;
+    if (!ShowGameCursorStatus) {
+        return;
+    }
 
-	int MouseX, MouseY;
-	vw_GetMousePos(MouseX, MouseY);
+    int MouseX, MouseY;
+    vw_GetMousePos(MouseX, MouseY);
 
-	sRECT SrcRect(0, 0, 64, 64);
-	sRECT DstRect(MouseX-12, MouseY-13, MouseX+64-12, MouseY+64-13);
+    sRECT SrcRect(0, 0, 64, 64);
+    sRECT DstRect(MouseX-12, MouseY-13, MouseX+64-12, MouseY+64-13);
 
-	switch (CursorStatus) {
-	case eCursorStatus::Undefined:
-		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
-		vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
-		break;
+    switch (CursorStatus) {
+    case eCursorStatus::Undefined:
+        vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+        vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{0.8f, 0.7f, 0.0f});
+        break;
 
-	case eCursorStatus::ActionAllowed:
-		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
-		vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
-		break;
+    case eCursorStatus::ActionAllowed:
+        vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+        vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
+        break;
 
-	case eCursorStatus::ActionProhibited:
-		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
-		vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
-		break;
+    case eCursorStatus::ActionProhibited:
+        vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+        vw_Draw2D(DstRect, SrcRect, CursorFront, true, CursorBlinking, 0.0f, sRGBCOLOR{1.0f, 0.2f, 0.0f});
+        break;
 
-	case eCursorStatus::DraggingItem:
-		DrawDraggingItemIcon(MouseX, MouseY);
-		vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
-		vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
-		break;
-	}
+    case eCursorStatus::DraggingItem:
+        DrawDraggingItemIcon(MouseX, MouseY);
+        vw_Draw2D(DstRect, SrcRect, CursorShadow, true);
+        vw_Draw2D(DstRect, SrcRect, CursorFront, true, 0.80f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
+        break;
+    }
 }
 
 /*
@@ -157,7 +162,7 @@ void CursorDraw()
  */
 void SetCursorStatus(eCursorStatus Status)
 {
-	CursorStatus = Status;
+    CursorStatus = Status;
 }
 
 /*
@@ -165,7 +170,7 @@ void SetCursorStatus(eCursorStatus Status)
  */
 eCursorStatus GetCursorStatus()
 {
-	return CursorStatus;
+    return CursorStatus;
 }
 
 /*
@@ -173,7 +178,7 @@ eCursorStatus GetCursorStatus()
  */
 void SetCursorDraggingItemIcon(GLtexture Icon)
 {
-	DraggingItemIcon = Icon;
+    DraggingItemIcon = Icon;
 }
 
 /*
@@ -181,7 +186,7 @@ void SetCursorDraggingItemIcon(GLtexture Icon)
  */
 void SetShowGameCursor(bool Toggle)
 {
-	ShowGameCursorStatus = Toggle;
+    ShowGameCursorStatus = Toggle;
 }
 
 /*
@@ -189,7 +194,7 @@ void SetShowGameCursor(bool Toggle)
  */
 bool GetShowGameCursor()
 {
-	return ShowGameCursorStatus;
+    return ShowGameCursorStatus;
 }
 
 } // astromenace namespace

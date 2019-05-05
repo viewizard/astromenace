@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // NOTE ARB_vertex_attrib_binding (since OpenGL 4.3)
 //      specify the attribute format and the attribute data separately
@@ -42,28 +42,29 @@ namespace viewizard {
  */
 bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, GLuint IndexBO)
 {
-	if (!pfn_glGenVertexArrays ||
-	    !pfn_glIsVertexArray)
-		return false;
+    if (!pfn_glGenVertexArrays || !pfn_glIsVertexArray) {
+        return false;
+    }
 
-	// we can not generate VAO without VBO
-	if (!VertexBO) {
-		std::cerr << __func__ << "(): " << "VertexBO must be provided.\n";
-		return false;
-	}
+    // we can not generate VAO without VBO
+    if (!VertexBO) {
+        std::cerr << __func__ << "(): " << "VertexBO must be provided.\n";
+        return false;
+    }
 
-	pfn_glGenVertexArrays(1, &VAO);
+    pfn_glGenVertexArrays(1, &VAO);
 
-	vw_BindVAO(VAO);
-	Draw3D_EnableStates(DataFormat, nullptr, Stride, VertexBO, IndexBO);
+    vw_BindVAO(VAO);
+    Draw3D_EnableStates(DataFormat, nullptr, Stride, VertexBO, IndexBO);
 
-	vw_BindVAO(0);
-	Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
+    vw_BindVAO(0);
+    Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
 
-	if (!pfn_glIsVertexArray(VAO))
-		return false;
+    if (!pfn_glIsVertexArray(VAO)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 /*
@@ -71,11 +72,12 @@ bool vw_BuildVAO(GLuint &VAO, int DataFormat, GLsizei Stride, GLuint VertexBO, G
  */
 void vw_BindVAO(GLuint VAO)
 {
-	// don't call glIsVertexArray() here, for best speed
-	if (!pfn_glBindVertexArray)
-		return;
+    // don't call glIsVertexArray() here, for best speed
+    if (!pfn_glBindVertexArray) {
+        return;
+    }
 
-	pfn_glBindVertexArray(VAO);
+    pfn_glBindVertexArray(VAO);
 }
 
 /*
@@ -83,13 +85,12 @@ void vw_BindVAO(GLuint VAO)
  */
 void vw_DeleteVAO(GLuint &VAO)
 {
-	if (!pfn_glIsVertexArray ||
-	    !pfn_glDeleteVertexArrays ||
-	    !pfn_glIsVertexArray(VAO))
-		return;
+    if (!pfn_glIsVertexArray || !pfn_glDeleteVertexArrays || !pfn_glIsVertexArray(VAO)) {
+        return;
+    }
 
-	pfn_glDeleteVertexArrays(1, &VAO);
-	VAO = 0;
+    pfn_glDeleteVertexArrays(1, &VAO);
+    VAO = 0;
 }
 
 } // viewizard namespace

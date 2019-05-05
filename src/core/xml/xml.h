@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
@@ -52,183 +52,197 @@
 namespace viewizard {
 
 enum class eEntryType {
-	Regular,	// regular, could contain attributes and sub-entries
-	Comment		// <--! comment -->
+    Regular,    // regular, could contain attributes and sub-entries
+    Comment     // <--! comment -->
 };
 
 struct sXMLEntry {
-	eEntryType EntryType{eEntryType::Regular};
-	std::string Name{}; // name, if entry type is comment - comment's text
-	unsigned NameHash{0}; // name's hash
-	std::string Content{};
-	std::unordered_map<std::string, std::string> Attributes{};
-	std::list<sXMLEntry> ChildrenList{};
+    eEntryType EntryType{eEntryType::Regular};
+    std::string Name{}; // name, if entry type is comment - comment's text
+    unsigned NameHash{0}; // name's hash
+    std::string Content{};
+    std::unordered_map<std::string, std::string> Attributes{};
+    std::list<sXMLEntry> ChildrenList{};
 
-	int LineNumber{0}; // line number in file (for new created, 0)
+    int LineNumber{0}; // line number in file (for new created, 0)
 };
 
-class cXMLDocument {
+class cXMLDocument
+{
 public:
-	cXMLDocument() = default;
-	// Load XML from file.
-	explicit cXMLDocument(const std::string &XMLFileName, bool Hash = false);
+    cXMLDocument() = default;
+    // Load XML from file.
+    explicit cXMLDocument(const std::string &XMLFileName, bool Hash = false);
 
-	// Save XML to file (libSDL RWops).
-	bool Save(const std::string &XMLFileName);
+    // Save XML to file (libSDL RWops).
+    bool Save(const std::string &XMLFileName);
 
-	sXMLEntry *CreateRootEntry(const std::string &EntryName)
-	{
-		RootXMLEntry.reset(new sXMLEntry);
-		RootXMLEntry->Name = EntryName;
-		return RootXMLEntry.get();
-	}
+    sXMLEntry *CreateRootEntry(const std::string &EntryName)
+    {
+        RootXMLEntry.reset(new sXMLEntry);
+        RootXMLEntry->Name = EntryName;
+        return RootXMLEntry.get();
+    }
 
-	sXMLEntry *GetRootEntry()
-	{
-		return RootXMLEntry.get();
-	}
+    sXMLEntry *GetRootEntry()
+    {
+        return RootXMLEntry.get();
+    }
 
-	sXMLEntry *AddEntry(sXMLEntry &ParentXMLEntry, const std::string &EntryName)
-	{
-		// NOTE emplace_back() return reference to the inserted element (since C++17)
-		ParentXMLEntry.ChildrenList.emplace_back();
-		ParentXMLEntry.ChildrenList.back().Name = EntryName;
-		return &ParentXMLEntry.ChildrenList.back();
-	}
+    sXMLEntry *AddEntry(sXMLEntry &ParentXMLEntry, const std::string &EntryName)
+    {
+        // NOTE emplace_back() return reference to the inserted element (since C++17)
+        ParentXMLEntry.ChildrenList.emplace_back();
+        ParentXMLEntry.ChildrenList.back().Name = EntryName;
+        return &ParentXMLEntry.ChildrenList.back();
+    }
 
-	void AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData)
-	{
-		if (!XMLEntry)
-			return;
+    void AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData)
+    {
+        if (!XMLEntry) {
+            return;
+        }
 
-		XMLEntry->Content = EntryData;
-	}
+        XMLEntry->Content = EntryData;
+    }
 
-	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
-	{
-		if (!XMLEntry)
-			return;
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
+    {
+        if (!XMLEntry) {
+            return;
+        }
 
-		XMLEntry->Attributes[AttributeName] = AttributeData;
-	}
+        XMLEntry->Attributes[AttributeName] = AttributeData;
+    }
 
-	// string literal matches bool overload instead of "std::string&", forced to use "const char*" here too
-	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
-	{
-		if (!XMLEntry || !AttributeData)
-			return;
+    // string literal matches bool overload instead of "std::string&", forced to use "const char*" here too
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
+    {
+        if (!XMLEntry || !AttributeData) {
+            return;
+        }
 
-		XMLEntry->Attributes[AttributeName] = AttributeData;
-	}
+        XMLEntry->Attributes[AttributeName] = AttributeData;
+    }
 
-	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
-	{
-		if (!XMLEntry)
-			return;
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
+    {
+        if (!XMLEntry) {
+            return;
+        }
 
-		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
-	}
+        AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
+    }
 
-	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
-	{
-		if (!XMLEntry)
-			return;
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
+    {
+        if (!XMLEntry) {
+            return;
+        }
 
-		AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
-	}
+        AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
+    }
 
-	void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
-	{
-		if (!XMLEntry)
-			return;
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
+    {
+        if (!XMLEntry) {
+            return;
+        }
 
-		if (AttributeData)
-			AddEntryAttribute(XMLEntry, AttributeName, "on");
-		else
-			AddEntryAttribute(XMLEntry, AttributeName, "off");
-	}
+        if (AttributeData) {
+            AddEntryAttribute(XMLEntry, AttributeName, "on");
+        } else {
+            AddEntryAttribute(XMLEntry, AttributeName, "off");
+        }
+    }
 
-	void AddComment(sXMLEntry &ParentXMLEntry, const std::string &Text)
-	{
-		// NOTE emplace_back() return reference to the inserted element (since C++17)
-		ParentXMLEntry.ChildrenList.emplace_back();
-		ParentXMLEntry.ChildrenList.back().Name = Text;
-		ParentXMLEntry.ChildrenList.back().EntryType = eEntryType::Comment;
-	}
+    void AddComment(sXMLEntry &ParentXMLEntry, const std::string &Text)
+    {
+        // NOTE emplace_back() return reference to the inserted element (since C++17)
+        ParentXMLEntry.ChildrenList.emplace_back();
+        ParentXMLEntry.ChildrenList.back().Name = Text;
+        ParentXMLEntry.ChildrenList.back().EntryType = eEntryType::Comment;
+    }
 
-	// find first children element by name
-	sXMLEntry *FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name)
-	{
-		for (auto &tmpEntry : ParentXMLEntry.ChildrenList) {
-			if (tmpEntry.Name == Name)
-				return &tmpEntry;
-		}
+    // find first children element by name
+    sXMLEntry *FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name)
+    {
+        for (auto &tmpEntry : ParentXMLEntry.ChildrenList) {
+            if (tmpEntry.Name == Name) {
+                return &tmpEntry;
+            }
+        }
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
-	bool GetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, std::string &Result)
-	{
-		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-		if (tmpAttr == XMLEntry.Attributes.end())
-			return false;
+    bool GetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, std::string &Result)
+    {
+        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+        if (tmpAttr == XMLEntry.Attributes.end()) {
+            return false;
+        }
 
-		Result = tmpAttr->second;
-		return true;
-	}
+        Result = tmpAttr->second;
+        return true;
+    }
 
-	bool iGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, int &Result)
-	{
-		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-		if (tmpAttr == XMLEntry.Attributes.end())
-			return false;
+    bool iGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, int &Result)
+    {
+        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+        if (tmpAttr == XMLEntry.Attributes.end()) {
+            return false;
+        }
 
-		Result = std::stoi(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
-		return true;
-	}
+        Result = std::stoi(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
+        return true;
+    }
 
-	bool fGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, float &Result)
-	{
-		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-		if (tmpAttr == XMLEntry.Attributes.end())
-			return false;
+    bool fGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, float &Result)
+    {
+        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+        if (tmpAttr == XMLEntry.Attributes.end()) {
+            return false;
+        }
 
-		Result = std::stof(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
-		return true;
-	}
+        Result = std::stof(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
+        return true;
+    }
 
-	bool bGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, bool &Result)
-	{
-		auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-		if (tmpAttr == XMLEntry.Attributes.end())
-			return false;
+    bool bGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, bool &Result)
+    {
+        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+        if (tmpAttr == XMLEntry.Attributes.end()) {
+            return false;
+        }
 
-		Result = false;
-		if ((tmpAttr->second == "on") ||
-		    (tmpAttr->second == "true") ||
-		    (tmpAttr->second == "yes") ||
-		    (tmpAttr->second == "1"))
-			Result = true;
+        Result = false;
+        if (tmpAttr->second == "on"
+            || tmpAttr->second == "true"
+            || tmpAttr->second == "yes"
+            || tmpAttr->second == "1") {
+            Result = true;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 private:
-	// Save XML elements to file recursively.
-	void SaveRecursive(const sXMLEntry &XMLEntry, std::ofstream &File, unsigned int Level);
-	// Parce tag line.
-	bool ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry);
-	// Parse tag content.
-	bool ParseTagContent(const std::string &OriginBuffer, unsigned long StartPosition,
-			     const std::string &Buffer, sXMLEntry *ParentXMLEntry);
+    // Save XML elements to file recursively.
+    void SaveRecursive(const sXMLEntry &XMLEntry, std::ofstream &File, unsigned int Level);
+    // Parce tag line.
+    bool ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry);
+    // Parse tag content.
+    bool ParseTagContent(const std::string &OriginBuffer, unsigned long StartPosition,
+                         const std::string &Buffer, sXMLEntry *ParentXMLEntry);
 
-	// Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
-	// "XML documents must contain one root element that is the parent of all other elements".
-	std::unique_ptr<sXMLEntry> RootXMLEntry{};
-	// calculate hash for tags names
-	bool CalculateHash{false};
-	// hash check for collisions
-	std::map<unsigned, std::string> HashCheckMap{};
+    // Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
+    // "XML documents must contain one root element that is the parent of all other elements".
+    std::unique_ptr<sXMLEntry> RootXMLEntry{};
+    // calculate hash for tags names
+    bool CalculateHash{false};
+    // hash check for collisions
+    std::map<unsigned, std::string> HashCheckMap{};
 };
 
 } // viewizard namespace

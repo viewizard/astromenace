@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // TODO translate comments
 
@@ -60,107 +60,111 @@ int NeedPlayOnButtonSoundY = 0;
 //------------------------------------------------------------------------------------
 bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float &ButTransp, float &Update)
 {
-	sRECT SrcRect, DstRect;
-	bool ON = false;
-	float IntTransp = Transp;
+    sRECT SrcRect, DstRect;
+    bool ON = false;
+    float IntTransp = Transp;
 
 
-	// работаем с клавиатурой
-	if ((Transp >= 0.99f) &&
-	    !isDialogBoxDrawing() &&
-	    GetShowGameCursor())
-		CurrentActiveMenuElement++;
+    // работаем с клавиатурой
+    if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        CurrentActiveMenuElement++;
+    }
 
-	bool InFocusByKeyboard = false;
-	if ((CurrentKeyboardSelectMenuElement > 0) &&
-	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
-			InFocusByKeyboard = true;
-
-
-
-	DstRect(X+2,Y+1,X+384,Y+63);
-	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) &&
-	     !isDialogBoxDrawing() &&
-	     GetShowGameCursor()) {
-		// если тухнем или появляемся - не жать
-		ON = true;
-		if (Transp == 1.0f)
-			SetCursorStatus(eCursorStatus::ActionAllowed);
-
-		if (ButTransp == 1.0f) {
-			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
-			Update = vw_GetTimeThread(0);
-			ButTransp = 0.99f;
-		}
-
-		ButTransp -= 3.0f*(vw_GetTimeThread(0) - Update);
-		if (ButTransp < 0.60f)
-			ButTransp = 0.60f;
-		Update = vw_GetTimeThread(0);
-
-		IntTransp = ButTransp * Transp;
-	} else {
-		if (ButTransp < 1.0f) {
-			ButTransp += 3.0f*(vw_GetTimeThread(0) - Update);
-			if (ButTransp > 1.0f)
-				ButTransp =1.0f;
-			Update = vw_GetTimeThread(0);
-		}
-
-		IntTransp = ButTransp * Transp;
-	}
+    bool InFocusByKeyboard = false;
+    if (CurrentKeyboardSelectMenuElement > 0
+        && CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+        InFocusByKeyboard = true;
+    }
 
 
 
-	// размер задней тени
-	SrcRect(2,2,512-2,96-2 );
-	// рисуем тень
-	DstRect(X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_back.tga"), true, IntTransp);
+    DstRect(X+2,Y+1,X+384,Y+63);
+    if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)
+        && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        // если тухнем или появляемся - не жать
+        ON = true;
+        if (Transp == 1.0f) {
+            SetCursorStatus(eCursorStatus::ActionAllowed);
+        }
 
-	SrcRect(0,0,384,64 );
-	// рисуем кнопку
-	DstRect(X,Y,X+384,Y+64);
-	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_out.tga"), true, Transp);
-	else
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_in.tga"), true, Transp);
+        if (ButTransp == 1.0f) {
+            PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
+            Update = vw_GetTimeThread(0);
+            ButTransp = 0.99f;
+        }
 
+        ButTransp -= 3.0f*(vw_GetTimeThread(0) - Update);
+        if (ButTransp < 0.60f) {
+            ButTransp = 0.60f;
+        }
+        Update = vw_GetTimeThread(0);
 
+        IntTransp = ButTransp * Transp;
+    } else {
+        if (ButTransp < 1.0f) {
+            ButTransp += 3.0f*(vw_GetTimeThread(0) - Update);
+            if (ButTransp > 1.0f) {
+                ButTransp =1.0f;
+            }
+            Update = vw_GetTimeThread(0);
+        }
 
-	// получаем длину текста
-	int Size = vw_TextWidthUTF32(Text);
-
-	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
-	float WScale = 0;
-	if (Size > 310) {
-		Size = 310;
-		WScale = -310;
-	}
-
-	// находим смещение текста
-	int SizeI = X + (SrcRect.right-SrcRect.left-Size)/2;
-
-	// рисуем текст
-	if (!ON)
-		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
-	else
-		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
-
+        IntTransp = ButTransp * Transp;
+    }
 
 
-	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
-	    (vw_GetMouseLeftClick(true) ||
-	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		PlayMenuSFX(eMenuSFX::Click, 1.0f);
-		if (InFocusByKeyboard) {
-			vw_SetKeyStatus(SDLK_KP_ENTER, false);
-			vw_SetKeyStatus(SDLK_RETURN, false);
-		}
-		return true;
-	}
 
-	return false;
+    // размер задней тени
+    SrcRect(2,2,512-2,96-2 );
+    // рисуем тень
+    DstRect(X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_back.tga"), true, IntTransp);
+
+    SrcRect(0,0,384,64 );
+    // рисуем кнопку
+    DstRect(X,Y,X+384,Y+64);
+    if (!ON) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_out.tga"), true, Transp);
+    } else {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_in.tga"), true, Transp);
+    }
+
+
+
+    // получаем длину текста
+    int Size = vw_TextWidthUTF32(Text);
+
+    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    float WScale = 0;
+    if (Size > 310) {
+        Size = 310;
+        WScale = -310;
+    }
+
+    // находим смещение текста
+    int SizeI = X + (SrcRect.right-SrcRect.left-Size)/2;
+
+    // рисуем текст
+    if (!ON) {
+        vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+    } else {
+        vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+    }
+
+
+
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+        && (vw_GetMouseLeftClick(true)
+            || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+        PlayMenuSFX(eMenuSFX::Click, 1.0f);
+        if (InFocusByKeyboard) {
+            vw_SetKeyStatus(SDLK_KP_ENTER, false);
+            vw_SetKeyStatus(SDLK_RETURN, false);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -177,138 +181,141 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
 //------------------------------------------------------------------------------------
 bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float &ButTransp, float &Update, bool Off)
 {
-	sRECT SrcRect, DstRect;
+    sRECT SrcRect, DstRect;
 
 
-	if (Off || DragWeapon) {
+    if (Off || DragWeapon) {
 
-		SrcRect(2,2,512-2,96-2 );
-		DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, Transp);
+        SrcRect(2,2,512-2,96-2 );
+        DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, Transp);
 
-		SrcRect(0,0,256,64 );
-		DstRect(X,Y,X+256,Y+64);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_off.tga"), true, Transp);
-
-
-		int Size = vw_TextWidthUTF32(Text);
-		int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-		vw_DrawTextUTF32(SizeI, Y+21, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
-
-		DstRect(X+2,Y+1,X+256,Y+63);
-		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
-			if (Transp==1.0f && !DragWeapon) {
-				SetCursorStatus(eCursorStatus::ActionProhibited);
-				if (vw_GetMouseLeftClick(true))
-					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
-			}
-		}
-
-		return false;
-	}
+        SrcRect(0,0,256,64 );
+        DstRect(X,Y,X+256,Y+64);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_off.tga"), true, Transp);
 
 
+        int Size = vw_TextWidthUTF32(Text);
+        int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
+        vw_DrawTextUTF32(SizeI, Y+21, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
-	bool ON = false;
-	float IntTransp = Transp;
+        DstRect(X+2,Y+1,X+256,Y+63);
+        if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && Transp == 1.0f && !DragWeapon) {
+            SetCursorStatus(eCursorStatus::ActionProhibited);
+            if (vw_GetMouseLeftClick(true)) {
+                PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
+            }
+        }
 
-
-	// работаем с клавиатурой
-	if ((Transp >= 0.99f) &&
-	    !isDialogBoxDrawing() &&
-	    GetShowGameCursor())
-		CurrentActiveMenuElement++;
-
-	bool InFocusByKeyboard = false;
-	if ((CurrentKeyboardSelectMenuElement > 0) &&
-	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
-			InFocusByKeyboard = true;
+        return false;
+    }
 
 
 
-	DstRect(X+2,Y+1,X+256,Y+63);
-	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) &&
-	     !isDialogBoxDrawing() &&
-	     GetShowGameCursor()) {
-		// если тухнем или появляемся - не жать
-		ON = true;
-		if (Transp == 1.0f)
-			SetCursorStatus(eCursorStatus::ActionAllowed);
+    bool ON = false;
+    float IntTransp = Transp;
 
-		if (ButTransp == 1.0f) {
-			PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
-			Update = vw_GetTimeThread(0);
-			ButTransp = 0.98f;
-		}
 
-		ButTransp -= 3.0f*(vw_GetTimeThread(0) - Update);
-		if (ButTransp < 0.60f)
-			ButTransp = 0.60f;
-		Update = vw_GetTimeThread(0);
+    // работаем с клавиатурой
+    if ((Transp >= 0.99f) && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        CurrentActiveMenuElement++;
+    }
 
-		IntTransp = ButTransp * Transp;
-	} else {
-		if (ButTransp < 1.0f) {
-			ButTransp += 3.0f*(vw_GetTimeThread(0) - Update);
-			if (ButTransp > 1.0f)
-				ButTransp =1.0f;
-			Update = vw_GetTimeThread(0);
-		}
-
-		IntTransp = ButTransp * Transp;
-	}
+    bool InFocusByKeyboard = false;
+    if (CurrentKeyboardSelectMenuElement > 0
+        && CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+        InFocusByKeyboard = true;
+    }
 
 
 
+    DstRect(X+2,Y+1,X+256,Y+63);
+    if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)
+        && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        // если тухнем или появляемся - не жать
+        ON = true;
+        if (Transp == 1.0f) {
+            SetCursorStatus(eCursorStatus::ActionAllowed);
+        }
+
+        if (ButTransp == 1.0f) {
+            PlayMenuSFX(eMenuSFX::OverBigButton, 1.0f);
+            Update = vw_GetTimeThread(0);
+            ButTransp = 0.98f;
+        }
+
+        ButTransp -= 3.0f*(vw_GetTimeThread(0) - Update);
+        if (ButTransp < 0.60f) {
+            ButTransp = 0.60f;
+        }
+        Update = vw_GetTimeThread(0);
+
+        IntTransp = ButTransp * Transp;
+    } else {
+        if (ButTransp < 1.0f) {
+            ButTransp += 3.0f*(vw_GetTimeThread(0) - Update);
+            if (ButTransp > 1.0f) {
+                ButTransp =1.0f;
+            }
+            Update = vw_GetTimeThread(0);
+        }
+
+        IntTransp = ButTransp * Transp;
+    }
 
 
 
 
-	// размер задней тени
-	SrcRect(2,2,512-2,96-2 );
-	// рисуем тень
-	DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, IntTransp);
-
-	SrcRect(0,0,256,64 );
-	// рисуем кнопку
-	DstRect(X,Y,X+256,Y+64);
-	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_out.tga"), true, Transp);
-	else
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_in.tga"), true, Transp);
 
 
-	// получаем длину текста
-	int Size = vw_TextWidthUTF32(Text);
 
-	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
-	float WScale = 0;
-	if (Size > 190) {
-		Size = 190;
-		WScale = -190;
-	}
+    // размер задней тени
+    SrcRect(2,2,512-2,96-2 );
+    // рисуем тень
+    DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, IntTransp);
 
-	// находим смещение текста
-	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-	// рисуем текст
-	if (!ON)
-		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
-	else
-		vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+    SrcRect(0,0,256,64 );
+    // рисуем кнопку
+    DstRect(X,Y,X+256,Y+64);
+    if (!ON) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_out.tga"), true, Transp);
+    } else {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_in.tga"), true, Transp);
+    }
 
-	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
-	    (vw_GetMouseLeftClick(true) ||
-	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		PlayMenuSFX(eMenuSFX::Click, 1.0f);
-		if (InFocusByKeyboard) {
-			vw_SetKeyStatus(SDLK_KP_ENTER, false);
-			vw_SetKeyStatus(SDLK_RETURN, false);
-		}
-		return true;
-	}
 
-	return false;
+    // получаем длину текста
+    int Size = vw_TextWidthUTF32(Text);
+
+    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    float WScale = 0;
+    if (Size > 190) {
+        Size = 190;
+        WScale = -190;
+    }
+
+    // находим смещение текста
+    int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
+    // рисуем текст
+    if (!ON) {
+        vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+    } else {
+        vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+    }
+
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+        && (vw_GetMouseLeftClick(true)
+            || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+        PlayMenuSFX(eMenuSFX::Click, 1.0f);
+        if (InFocusByKeyboard) {
+            vw_SetKeyStatus(SDLK_KP_ENTER, false);
+            vw_SetKeyStatus(SDLK_RETURN, false);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -320,100 +327,101 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
 //------------------------------------------------------------------------------------
 bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, bool Off)
 {
-	sRECT SrcRect, DstRect, MouseRect;
-	SrcRect(2,2,230-2,64-2);
-	DstRect(X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
-	MouseRect(X,Y,X+204,Y+35);
+    sRECT SrcRect, DstRect, MouseRect;
+    SrcRect(2,2,230-2,64-2);
+    DstRect(X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
+    MouseRect(X,Y,X+204,Y+35);
 
-	// получаем длину текста
-	int Size = vw_TextWidthUTF32(Text);
+    // получаем длину текста
+    int Size = vw_TextWidthUTF32(Text);
 
-	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
-	float WScale = 0;
-	if (Size > 176) {
-		Size = 176;
-		WScale = -176;
-	}
-	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-
-
-	if (Off || DragWeapon) {
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_off.tga"), true, Transp);
-
-		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
-
-		DstRect(X,Y,X+204,Y+35);
-		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
-			if (Transp==1.0f && !DragWeapon) {
-				SetCursorStatus(eCursorStatus::ActionProhibited);
-				if (vw_GetMouseLeftClick(true))
-					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
-			}
-		}
-
-		return false;
-	}
+    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    float WScale = 0;
+    if (Size > 176) {
+        Size = 176;
+        WScale = -176;
+    }
+    int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 
 
-	bool ON = false;
+    if (Off || DragWeapon) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_off.tga"), true, Transp);
+
+        vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+
+        DstRect(X,Y,X+204,Y+35);
+        if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && Transp == 1.0f && !DragWeapon) {
+            SetCursorStatus(eCursorStatus::ActionProhibited);
+            if (vw_GetMouseLeftClick(true)) {
+                PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
+            }
+        }
+
+        return false;
+    }
 
 
-	// работаем с клавиатурой
-	if ((Transp >= 0.99f) &&
-	    !isDialogBoxDrawing() &&
-	    GetShowGameCursor())
-		CurrentActiveMenuElement++;
-
-	bool InFocusByKeyboard = false;
-	if ((CurrentKeyboardSelectMenuElement > 0) &&
-	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
-			InFocusByKeyboard = true;
+    bool ON = false;
 
 
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
-	     !isDialogBoxDrawing() &&
-	     GetShowGameCursor()) {
-		// если тухнем или появляемся - не жать
-		ON = true;
-		if (Transp == 1.0f)
-			SetCursorStatus(eCursorStatus::ActionAllowed);
+    // работаем с клавиатурой
+    if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        CurrentActiveMenuElement++;
+    }
 
-		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
-			NeedPlayOnButtonSoundX = X;
-			NeedPlayOnButtonSoundY = Y;
-		}
-	} else {
-		if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
-			NeedPlayOnButtonSoundX = 0;
-			NeedPlayOnButtonSoundY = 0;
-		}
-	}
+    bool InFocusByKeyboard = false;
+    if (CurrentKeyboardSelectMenuElement > 0
+        && CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+        InFocusByKeyboard = true;
+    }
 
 
-	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_out.tga"), true, Transp);
-	else
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_in.tga"), true, Transp);
+    if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
+        && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        // если тухнем или появляемся - не жать
+        ON = true;
+        if (Transp == 1.0f) {
+            SetCursorStatus(eCursorStatus::ActionAllowed);
+        }
 
-	// рисуем текст
-	if (!ON)
-		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
-	else
-		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+        if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
+            PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
+            NeedPlayOnButtonSoundX = X;
+            NeedPlayOnButtonSoundY = Y;
+        }
+    } else {
+        if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
+            NeedPlayOnButtonSoundX = 0;
+            NeedPlayOnButtonSoundY = 0;
+        }
+    }
 
-	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
-	    (vw_GetMouseLeftClick(true) ||
-	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		PlayMenuSFX(eMenuSFX::Click, 1.0f);
-		if (InFocusByKeyboard) {
-			vw_SetKeyStatus(SDLK_KP_ENTER, false);
-			vw_SetKeyStatus(SDLK_RETURN, false);
-		}
-		return true;
-	}
 
-	return false;
+    if (!ON) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_out.tga"), true, Transp);
+    } else {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_in.tga"), true, Transp);
+    }
+
+    // рисуем текст
+    if (!ON) {
+        vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+    } else {
+        vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+    }
+
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+        && (vw_GetMouseLeftClick(true)
+            || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+        PlayMenuSFX(eMenuSFX::Click, 1.0f);
+        if (InFocusByKeyboard) {
+            vw_SetKeyStatus(SDLK_KP_ENTER, false);
+            vw_SetKeyStatus(SDLK_RETURN, false);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -422,104 +430,106 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
 //------------------------------------------------------------------------------------
 bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, bool Off, bool SoundClick)
 {
-	sRECT SrcRect, DstRect, MouseRect;
-	SrcRect(2,2,158-2,64-2);
-	DstRect(X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
-	MouseRect(X,Y,X+132,Y+35);
+    sRECT SrcRect, DstRect, MouseRect;
+    SrcRect(2,2,158-2,64-2);
+    DstRect(X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
+    MouseRect(X,Y,X+132,Y+35);
 
-	// получаем длину текста
-	int Size = vw_TextWidthUTF32(Text);
+    // получаем длину текста
+    int Size = vw_TextWidthUTF32(Text);
 
-	// если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
-	float WScale = 0;
-	if (Size > 108) {
-		Size = 108;
-		WScale = -108;
-	}
+    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    float WScale = 0;
+    if (Size > 108) {
+        Size = 108;
+        WScale = -108;
+    }
 
-	// находим смещение текста
-	int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-
-
-	if (Off || DragWeapon) {
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_off.tga"), true, Transp);
-
-		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
-
-		DstRect(X,Y,X+132,Y+35);
-		if  (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
-			if (Transp==1.0f && !DragWeapon) {
-				SetCursorStatus(eCursorStatus::ActionProhibited);
-				if (vw_GetMouseLeftClick(true))
-					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
-			}
-		}
-
-		return false;
-	}
+    // находим смещение текста
+    int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 
 
+    if (Off || DragWeapon) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_off.tga"), true, Transp);
 
-	bool ON = false;
+        vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
+        DstRect(X,Y,X+132,Y+35);
+        if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && Transp == 1.0f && !DragWeapon) {
+            SetCursorStatus(eCursorStatus::ActionProhibited);
+            if (vw_GetMouseLeftClick(true)) {
+                PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
+            }
+        }
 
-	// работаем с клавиатурой
-	if ((Transp >= 0.99f) &&
-	    !isDialogBoxDrawing() &&
-	    GetShowGameCursor())
-		CurrentActiveMenuElement++;
-
-	bool InFocusByKeyboard = false;
-	if ((CurrentKeyboardSelectMenuElement > 0) &&
-	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
-			InFocusByKeyboard = true;
-
-
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
-	     !isDialogBoxDrawing() &&
-	     GetShowGameCursor()) {
-		// если тухнем или появляемся - не жать
-		ON = true;
-		if (Transp == 1.0f)
-			SetCursorStatus(eCursorStatus::ActionAllowed);
-
-		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
-			NeedPlayOnButtonSoundX = X;
-			NeedPlayOnButtonSoundY = Y;
-		}
-	} else {
-		if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
-			NeedPlayOnButtonSoundX = 0;
-			NeedPlayOnButtonSoundY = 0;
-		}
-	}
+        return false;
+    }
 
 
-	if (!ON)
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_out.tga"), true, Transp);
-	else
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_in.tga"), true, Transp);
 
-	// рисуем текст
-	if (!ON)
-		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
-	else
-		vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+    bool ON = false;
 
-	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
-	    (vw_GetMouseLeftClick(true) ||
-	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		if (SoundClick)
-			PlayMenuSFX(eMenuSFX::Click, 1.0f);
-		if (InFocusByKeyboard) {
-			vw_SetKeyStatus(SDLK_KP_ENTER, false);
-			vw_SetKeyStatus(SDLK_RETURN, false);
-		}
-		return true;
-	}
 
-	return false;
+    // работаем с клавиатурой
+    if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        CurrentActiveMenuElement++;
+    }
+
+    bool InFocusByKeyboard = false;
+    if (CurrentKeyboardSelectMenuElement > 0
+        && CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+        InFocusByKeyboard = true;
+    }
+
+
+    if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
+        && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        // если тухнем или появляемся - не жать
+        ON = true;
+        if (Transp == 1.0f) {
+            SetCursorStatus(eCursorStatus::ActionAllowed);
+        }
+
+        if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
+            PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
+            NeedPlayOnButtonSoundX = X;
+            NeedPlayOnButtonSoundY = Y;
+        }
+    } else {
+        if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
+            NeedPlayOnButtonSoundX = 0;
+            NeedPlayOnButtonSoundY = 0;
+        }
+    }
+
+
+    if (!ON) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_out.tga"), true, Transp);
+    } else {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_in.tga"), true, Transp);
+    }
+
+    // рисуем текст
+    if (!ON) {
+        vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
+    } else {
+        vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+    }
+
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+        && (vw_GetMouseLeftClick(true)
+            || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+        if (SoundClick) {
+            PlayMenuSFX(eMenuSFX::Click, 1.0f);
+        }
+        if (InFocusByKeyboard) {
+            vw_SetKeyStatus(SDLK_KP_ENTER, false);
+            vw_SetKeyStatus(SDLK_RETURN, false);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -536,62 +546,65 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
 //------------------------------------------------------------------------------------
 void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text, float Transp)
 {
-	sRECT SrcRect, DstRect;
+    sRECT SrcRect, DstRect;
 
-	// получаем длину текста
-	int Size = vw_TextWidthUTF32(Text);
+    // получаем длину текста
+    int Size = vw_TextWidthUTF32(Text);
 
-	bool ON = false;
-
-
-	// работаем с клавиатурой
-	if ((Transp >= 0.99f) &&
-	    !isDialogBoxDrawing() &&
-	    GetShowGameCursor())
-		CurrentActiveMenuElement++;
-
-	bool InFocusByKeyboard = false;
-	if ((CurrentKeyboardSelectMenuElement > 0) &&
-	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
-			InFocusByKeyboard = true;
+    bool ON = false;
 
 
-	// 20 - расстояние между текстом
-	DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
-	if  ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) &&
-	     !isDialogBoxDrawing() &&
-	     GetShowGameCursor()) {
-		// если тухнем или появляемся - не жать
-		ON = true;
-		if (Transp == 1.0f)
-			SetCursorStatus(eCursorStatus::ActionAllowed);
-	}
+    // работаем с клавиатурой
+    if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        CurrentActiveMenuElement++;
+    }
+
+    bool InFocusByKeyboard = false;
+    if (CurrentKeyboardSelectMenuElement > 0
+        && CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+        InFocusByKeyboard = true;
+    }
+
+
+    // 20 - расстояние между текстом
+    DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
+    if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)
+        && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        // если тухнем или появляемся - не жать
+        ON = true;
+        if (Transp == 1.0f) {
+            SetCursorStatus(eCursorStatus::ActionAllowed);
+        }
+    }
 
 
 
-	// рисуем
-	SrcRect(0,0,40,38);
-	DstRect(X,Y,X+40,Y+38);
-	if (!ON || DragWeapon)
-		vw_DrawTextUTF32(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
-	else
-		vw_DrawTextUTF32(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
+    // рисуем
+    SrcRect(0,0,40,38);
+    DstRect(X,Y,X+40,Y+38);
+    if (!ON || DragWeapon) {
+        vw_DrawTextUTF32(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
+    } else {
+        vw_DrawTextUTF32(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
+    }
 
-	vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
-	if (CheckBoxStatus)
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
+    if (CheckBoxStatus) {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
+    }
 
 
-	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) && !DragWeapon &&
-	    (vw_GetMouseLeftClick(true) ||
-	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		CheckBoxStatus = !CheckBoxStatus;
-		PlayMenuSFX(eMenuSFX::Click, 1.0f);
-		if (InFocusByKeyboard) {
-			vw_SetKeyStatus(SDLK_KP_ENTER, false);
-			vw_SetKeyStatus(SDLK_RETURN, false);
-		}
-	}
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+        && !DragWeapon
+        && (vw_GetMouseLeftClick(true)
+            || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+        CheckBoxStatus = !CheckBoxStatus;
+        PlayMenuSFX(eMenuSFX::Click, 1.0f);
+        if (InFocusByKeyboard) {
+            vw_SetKeyStatus(SDLK_KP_ENTER, false);
+            vw_SetKeyStatus(SDLK_RETURN, false);
+        }
+    }
 }
 
 
@@ -603,84 +616,84 @@ void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text
 //------------------------------------------------------------------------------------
 bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 {
-	sRECT SrcRect, DstRect, MouseRect;
-	SrcRect(0,0,32,32);
-	DstRect(X,Y,X+32,Y+32);
-	MouseRect(X,Y,X+32,Y+32);
+    sRECT SrcRect, DstRect, MouseRect;
+    SrcRect(0,0,32,32);
+    DstRect(X,Y,X+32,Y+32);
+    MouseRect(X,Y,X+32,Y+32);
 
 
-	if (Off || DragWeapon) {
-		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
+    if (Off || DragWeapon) {
+        DstRect(X+2,Y+2,X+32-2,Y+32-2);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
 
-		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
-			if (Transp==1.0f && !DragWeapon) {
-				SetCursorStatus(eCursorStatus::ActionProhibited);
-				if (vw_GetMouseLeftClick(true))
-					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
-			}
-		}
+        if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing() && Transp == 1.0f && !DragWeapon) {
+            SetCursorStatus(eCursorStatus::ActionProhibited);
+            if (vw_GetMouseLeftClick(true)) {
+                PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
+            }
+        }
 
-		return false;
-	}
-
+        return false;
+    }
 
 
-	bool ON = false;
+
+    bool ON = false;
 
 
-	// работаем с клавиатурой
-	if ((Transp >= 0.99f) &&
-	    !isDialogBoxDrawing() &&
-	    GetShowGameCursor())
-		CurrentActiveMenuElement++;
+    // работаем с клавиатурой
+    if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        CurrentActiveMenuElement++;
+    }
 
-	bool InFocusByKeyboard = false;
-	if ((CurrentKeyboardSelectMenuElement > 0) &&
-	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
-			InFocusByKeyboard = true;
-
-
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
-	     !isDialogBoxDrawing() &&
-	     GetShowGameCursor()) {
-		// если тухнем или появляемся - не жать
-		ON = true;
-		if (Transp == 1.0f)
-			SetCursorStatus(eCursorStatus::ActionAllowed);
-
-		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
-			NeedPlayOnButtonSoundX = X;
-			NeedPlayOnButtonSoundY = Y;
-		}
-	} else {
-		if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
-			NeedPlayOnButtonSoundX = 0;
-			NeedPlayOnButtonSoundY = 0;
-		}
-	}
+    bool InFocusByKeyboard = false;
+    if (CurrentKeyboardSelectMenuElement > 0
+        && CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+        InFocusByKeyboard = true;
+    }
 
 
-	if (!ON) {
-		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
-	} else
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, Transp);
+    if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
+        && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        // если тухнем или появляемся - не жать
+        ON = true;
+        if (Transp == 1.0f) {
+            SetCursorStatus(eCursorStatus::ActionAllowed);
+        }
+
+        if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
+            PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
+            NeedPlayOnButtonSoundX = X;
+            NeedPlayOnButtonSoundY = Y;
+        }
+    } else {
+        if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
+            NeedPlayOnButtonSoundX = 0;
+            NeedPlayOnButtonSoundY = 0;
+        }
+    }
 
 
-	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
-	    (vw_GetMouseLeftClick(true) ||
-	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		PlayMenuSFX(eMenuSFX::Click, 1.0f);
-		if (InFocusByKeyboard) {
-			vw_SetKeyStatus(SDLK_KP_ENTER, false);
-			vw_SetKeyStatus(SDLK_RETURN, false);
-		}
-		return true;
-	}
+    if (!ON) {
+        DstRect(X+2,Y+2,X+32-2,Y+32-2);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
+    } else {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, Transp);
+    }
 
-	return false;
+
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+        && (vw_GetMouseLeftClick(true)
+            || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+        PlayMenuSFX(eMenuSFX::Click, 1.0f);
+        if (InFocusByKeyboard) {
+            vw_SetKeyStatus(SDLK_KP_ENTER, false);
+            vw_SetKeyStatus(SDLK_RETURN, false);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -690,84 +703,84 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 //------------------------------------------------------------------------------------
 bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 {
-	sRECT SrcRect, DstRect, MouseRect;
-	SrcRect(0,0,32,32);
-	DstRect(X,Y,X+32,Y+32);
-	MouseRect(X,Y,X+32,Y+32);
+    sRECT SrcRect, DstRect, MouseRect;
+    SrcRect(0,0,32,32);
+    DstRect(X,Y,X+32,Y+32);
+    MouseRect(X,Y,X+32,Y+32);
 
 
-	if (Off || DragWeapon) {
-		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
+    if (Off || DragWeapon) {
+        DstRect(X+2,Y+2,X+32-2,Y+32-2);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
 
-		if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing()) {
-			if (Transp==1.0f && !DragWeapon) {
-				SetCursorStatus(eCursorStatus::ActionProhibited);
-				if (vw_GetMouseLeftClick(true))
-					PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
-			}
-		}
+        if (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing() && Transp == 1.0f && !DragWeapon) {
+            SetCursorStatus(eCursorStatus::ActionProhibited);
+            if (vw_GetMouseLeftClick(true)) {
+                PlayMenuSFX(eMenuSFX::CanNotClick, 1.0f);
+            }
+        }
 
-		return false;
-	}
-
+        return false;
+    }
 
 
-	bool ON = false;
+
+    bool ON = false;
 
 
-	// работаем с клавиатурой
-	if ((Transp >= 0.99f) &&
-	    !isDialogBoxDrawing() &&
-	    GetShowGameCursor())
-		CurrentActiveMenuElement++;
+    // работаем с клавиатурой
+    if ((Transp >= 0.99f) && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        CurrentActiveMenuElement++;
+    }
 
-	bool InFocusByKeyboard = false;
-	if ((CurrentKeyboardSelectMenuElement > 0) &&
-	    (CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement))
-			InFocusByKeyboard = true;
-
-
-	if  ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard) &&
-	     !isDialogBoxDrawing() &&
-	     GetShowGameCursor()) {
-		// если тухнем или появляемся - не жать
-		ON = true;
-		if (Transp == 1.0f)
-			SetCursorStatus(eCursorStatus::ActionAllowed);
-
-		if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
-			PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
-			NeedPlayOnButtonSoundX = X;
-			NeedPlayOnButtonSoundY = Y;
-		}
-	} else {
-		if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
-			NeedPlayOnButtonSoundX = 0;
-			NeedPlayOnButtonSoundY = 0;
-		}
-	}
+    bool InFocusByKeyboard = false;
+    if (CurrentKeyboardSelectMenuElement > 0
+        && CurrentKeyboardSelectMenuElement == CurrentActiveMenuElement) {
+        InFocusByKeyboard = true;
+    }
 
 
-	if (!ON) {
-		DstRect(X+2,Y+2,X+32-2,Y+32-2);
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
-	} else
-		vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, Transp);
+    if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
+        && !isDialogBoxDrawing() && GetShowGameCursor()) {
+        // если тухнем или появляемся - не жать
+        ON = true;
+        if (Transp == 1.0f) {
+            SetCursorStatus(eCursorStatus::ActionAllowed);
+        }
+
+        if (NeedPlayOnButtonSoundX != X || NeedPlayOnButtonSoundY != Y) {
+            PlayMenuSFX(eMenuSFX::OverSmallButton, 1.0f);
+            NeedPlayOnButtonSoundX = X;
+            NeedPlayOnButtonSoundY = Y;
+        }
+    } else {
+        if (NeedPlayOnButtonSoundX == X && NeedPlayOnButtonSoundY == Y) {
+            NeedPlayOnButtonSoundX = 0;
+            NeedPlayOnButtonSoundY = 0;
+        }
+    }
 
 
-	if ((GetCursorStatus() == eCursorStatus::ActionAllowed) &&
-	    (vw_GetMouseLeftClick(true) ||
-	     (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
-		PlayMenuSFX(eMenuSFX::Click, 1.0f);
-		if (InFocusByKeyboard) {
-			vw_SetKeyStatus(SDLK_KP_ENTER, false);
-			vw_SetKeyStatus(SDLK_RETURN, false);
-		}
-		return true;
-	}
+    if (!ON) {
+        DstRect(X+2,Y+2,X+32-2,Y+32-2);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
+    } else {
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, Transp);
+    }
 
-	return false;
+
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+        && (vw_GetMouseLeftClick(true)
+            || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
+        PlayMenuSFX(eMenuSFX::Click, 1.0f);
+        if (InFocusByKeyboard) {
+            vw_SetKeyStatus(SDLK_KP_ENTER, false);
+            vw_SetKeyStatus(SDLK_RETURN, false);
+        }
+        return true;
+    }
+
+    return false;
 }
 
 } // astromenace namespace

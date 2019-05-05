@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // NOTE GL_ARB_vertex_program (since OpenGL 2.0)
 //      glVertexAttribPointer(), glEnableVertexAttribArray(), glDisableVertexAttribArray()
@@ -53,60 +53,65 @@ namespace viewizard {
  * Also used for VAO generation.
  */
 void Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
-			 GLsizei stride, GLuint VertexBO, GLuint IndexBO)
+                         GLsizei stride, GLuint VertexBO, GLuint IndexBO)
 {
-	if (!VertexArray && !VertexBO)
-		return;
+    if (!VertexArray && !VertexBO) {
+        return;
+    }
 
-	uint8_t *tmpPointer{nullptr};
+    uint8_t *tmpPointer{nullptr};
 
-	// VBO (GL_ARRAY_BUFFER) binding affects VAO state indirectly,
-	// as the current GL_ARRAY_BUFFER binding is saved in VAO state
-	// at the time of the gl***Pointer() call
-	if (VertexBO && vw_DevCaps().OpenGL_1_5_supported)
-		vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
-	else
-		tmpPointer = static_cast<uint8_t *>(VertexArray);
+    // VBO (GL_ARRAY_BUFFER) binding affects VAO state indirectly,
+    // as the current GL_ARRAY_BUFFER binding is saved in VAO state
+    // at the time of the gl***Pointer() call
+    if (VertexBO && vw_DevCaps().OpenGL_1_5_supported) {
+        vw_BindBufferObject(eBufferObject::Vertex, VertexBO);
+    } else {
+        tmpPointer = static_cast<uint8_t *>(VertexArray);
+    }
 
-	// IBO (GL_ELEMENT_ARRAY_BUFFER) binding is part of the VAO state
-	if (IndexBO && vw_DevCaps().OpenGL_1_5_supported)
-		vw_BindBufferObject(eBufferObject::Index, IndexBO);
+    // IBO (GL_ELEMENT_ARRAY_BUFFER) binding is part of the VAO state
+    if (IndexBO && vw_DevCaps().OpenGL_1_5_supported) {
+        vw_BindBufferObject(eBufferObject::Index, IndexBO);
+    }
 
-	if ((DataFormat & RI_COORD) == RI_3f_XYZ) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, stride, tmpPointer);
-		tmpPointer += 3 * sizeof(GLfloat);
-	}
+    if ((DataFormat & RI_COORD) == RI_3f_XYZ) {
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, stride, tmpPointer);
+        tmpPointer += 3 * sizeof(GLfloat);
+    }
 
-	if ((DataFormat & RI_COORD) == RI_2f_XY) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(2, GL_FLOAT, stride, tmpPointer);
-		tmpPointer += 2 * sizeof(GLfloat);
-	}
+    if ((DataFormat & RI_COORD) == RI_2f_XY) {
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(2, GL_FLOAT, stride, tmpPointer);
+        tmpPointer += 2 * sizeof(GLfloat);
+    }
 
-	if ((DataFormat & RI_NORMAL) == RI_3f_NORMAL) {
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glNormalPointer(GL_FLOAT, stride, tmpPointer);
-		tmpPointer += 3 * sizeof(GLfloat);
-	}
+    if ((DataFormat & RI_NORMAL) == RI_3f_NORMAL) {
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glNormalPointer(GL_FLOAT, stride, tmpPointer);
+        tmpPointer += 3 * sizeof(GLfloat);
+    }
 
-	if ((DataFormat & RI_COLOR) == RI_4f_COLOR) {
-		glEnableClientState(GL_COLOR_ARRAY);
-		glColorPointer(4, GL_FLOAT, stride, tmpPointer);
-		tmpPointer += 4 * sizeof(GLfloat);
-	}
+    if ((DataFormat & RI_COLOR) == RI_4f_COLOR) {
+        glEnableClientState(GL_COLOR_ARRAY);
+        glColorPointer(4, GL_FLOAT, stride, tmpPointer);
+        tmpPointer += 4 * sizeof(GLfloat);
+    }
 
-	int TexturesCount = DataFormat & RI_TEX_COUNT;
-	if (TexturesCount > 0) {
-		for (int i = 0; i < TexturesCount; i++) {
-			if (pfn_glClientActiveTexture)
-				pfn_glClientActiveTexture(GL_TEXTURE0 + i);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2, GL_FLOAT, stride, tmpPointer);
-			if ((DataFormat & RI_TEX_COORD_TYPE) == RI_SEPARATE_TEX_COORD)
-				tmpPointer += 2 * sizeof(GLfloat);
-		}
-	}
+    int TexturesCount = DataFormat & RI_TEX_COUNT;
+    if (TexturesCount > 0) {
+        for (int i = 0; i < TexturesCount; i++) {
+            if (pfn_glClientActiveTexture) {
+                pfn_glClientActiveTexture(GL_TEXTURE0 + i);
+            }
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glTexCoordPointer(2, GL_FLOAT, stride, tmpPointer);
+            if ((DataFormat & RI_TEX_COORD_TYPE) == RI_SEPARATE_TEX_COORD) {
+                tmpPointer += 2 * sizeof(GLfloat);
+            }
+        }
+    }
 }
 
 /*
@@ -114,54 +119,64 @@ void Draw3D_EnableStates(int DataFormat, GLvoid *VertexArray,
  */
 void Draw3D_DisableStates(int DataFormat, GLuint VertexBO, GLuint IndexBO)
 {
-	if (DataFormat & RI_NORMAL)
-		glDisableClientState(GL_NORMAL_ARRAY);
-	if (DataFormat & RI_COLOR)
-		glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
+    if (DataFormat & RI_NORMAL) {
+        glDisableClientState(GL_NORMAL_ARRAY);
+    }
+    if (DataFormat & RI_COLOR) {
+        glDisableClientState(GL_COLOR_ARRAY);
+    }
+    glDisableClientState(GL_VERTEX_ARRAY);
 
-	int TexturesCount = DataFormat & RI_TEX_COUNT;
-	for (int i = 0; i < TexturesCount; i++) {
-		if (pfn_glClientActiveTexture)
-			pfn_glClientActiveTexture(GL_TEXTURE0 + i);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	}
+    int TexturesCount = DataFormat & RI_TEX_COUNT;
+    for (int i = 0; i < TexturesCount; i++) {
+        if (pfn_glClientActiveTexture) {
+            pfn_glClientActiveTexture(GL_TEXTURE0 + i);
+        }
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
 
-	if (VertexBO && vw_DevCaps().OpenGL_1_5_supported)
-		vw_BindBufferObject(eBufferObject::Vertex, 0);
-	if (IndexBO && vw_DevCaps().OpenGL_1_5_supported)
-		vw_BindBufferObject(eBufferObject::Index, 0);
+    if (VertexBO && vw_DevCaps().OpenGL_1_5_supported) {
+        vw_BindBufferObject(eBufferObject::Vertex, 0);
+    }
+    if (IndexBO && vw_DevCaps().OpenGL_1_5_supported) {
+        vw_BindBufferObject(eBufferObject::Index, 0);
+    }
 }
 
 /*
  * Draw 3D primitives.
  */
 void vw_Draw3D(ePrimitiveType mode, GLsizei count, int DataFormat, GLvoid *VertexArray,
-	       GLsizei Stride, GLuint VertexBO, unsigned int RangeStart,
-	       unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
+               GLsizei Stride, GLuint VertexBO, unsigned int RangeStart,
+               unsigned int *IndexArray, GLuint IndexBO, GLuint VAO)
 {
-	if (!VertexArray && !VertexBO)
-		return;
+    if (!VertexArray && !VertexBO) {
+        return;
+    }
 
-	if (VAO && vw_DevCaps().OpenGL_3_0_supported)
-		vw_BindVAO(VAO);
-	else
-		Draw3D_EnableStates(DataFormat, VertexArray, Stride, VertexBO, IndexBO);
+    if (VAO && vw_DevCaps().OpenGL_3_0_supported) {
+        vw_BindVAO(VAO);
+    } else {
+        Draw3D_EnableStates(DataFormat, VertexArray, Stride, VertexBO, IndexBO);
+    }
 
-	if (IndexArray || IndexBO) {
-		// all IBO binding related code moved to Draw3D_EnableStates(),
-		// we should care only about index array pointer here
-		GLuint *indices{nullptr};
-		if (!IndexBO || !vw_DevCaps().OpenGL_1_5_supported)
-			indices = IndexArray;
-		glDrawElements(static_cast<GLenum>(mode), count, GL_UNSIGNED_INT, indices + RangeStart);
-	} else
-		glDrawArrays(static_cast<GLenum>(mode), RangeStart, count);
+    if (IndexArray || IndexBO) {
+        // all IBO binding related code moved to Draw3D_EnableStates(),
+        // we should care only about index array pointer here
+        GLuint *indices{nullptr};
+        if (!IndexBO || !vw_DevCaps().OpenGL_1_5_supported) {
+            indices = IndexArray;
+        }
+        glDrawElements(static_cast<GLenum>(mode), count, GL_UNSIGNED_INT, indices + RangeStart);
+    } else {
+        glDrawArrays(static_cast<GLenum>(mode), RangeStart, count);
+    }
 
-	if (VAO && vw_DevCaps().OpenGL_3_0_supported)
-		vw_BindVAO(0);
-	else
-		Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
+    if (VAO && vw_DevCaps().OpenGL_3_0_supported) {
+        vw_BindVAO(0);
+    } else {
+        Draw3D_DisableStates(DataFormat, VertexBO, IndexBO);
+    }
 }
 
 } // viewizard namespace

@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 #include "stopwatch.h"
 #include "../../ui/game_speed.h"
@@ -39,13 +39,14 @@ namespace astromenace {
  */
 void cStopwatch::Reset(bool Enable)
 {
-	Enabled_ = Enable;
-	if (!Enabled_)
-		return;
+    Enabled_ = Enable;
+    if (!Enabled_) {
+        return;
+    }
 
-	LastTick_ = SDL_GetTicks();
-	InitialTime_ = vw_GetTimeThread(GameTimeThread);
-	DrawStringUTF32_.clear();
+    LastTick_ = SDL_GetTicks();
+    InitialTime_ = vw_GetTimeThread(GameTimeThread);
+    DrawStringUTF32_.clear();
 }
 
 /*
@@ -54,10 +55,11 @@ void cStopwatch::Reset(bool Enable)
  */
 void cStopwatch::Draw()
 {
-	if (!Enabled_)
-		return;
+    if (!Enabled_) {
+        return;
+    }
 
-	vw_DrawTextUTF32(6,45, 0, 0, 1.0f, TextColor_, 1.0f, DrawStringUTF32_);
+    vw_DrawTextUTF32(6,45, 0, 0, 1.0f, TextColor_, 1.0f, DrawStringUTF32_);
 }
 
 /*
@@ -65,22 +67,24 @@ void cStopwatch::Draw()
  */
 void cStopwatch::Update()
 {
-	if (!Enabled_)
-		return;
+    if (!Enabled_) {
+        return;
+    }
 
-	uint32_t CurrentTick = SDL_GetTicks();
-	constexpr uint32_t UpdateInterval{100}; // 100 milliseconds (ticks), connected to SDL_GetTicks()
+    uint32_t CurrentTick = SDL_GetTicks();
+    constexpr uint32_t UpdateInterval{100}; // 100 milliseconds (ticks), connected to SDL_GetTicks()
 
-	if (CurrentTick < (LastTick_ + UpdateInterval))
-		return;
+    if (CurrentTick < LastTick_ + UpdateInterval) {
+        return;
+    }
 
-	LastTick_ = CurrentTick;
+    LastTick_ = CurrentTick;
 
-	// ostringstream is not so fast, but we use it one time per 100 milliseconds
-	std::ostringstream tmpStream;
-	tmpStream << "mission time: " << std::fixed << std::setprecision(1)
-		  << vw_GetTimeThread(GameTimeThread) - InitialTime_;
-	DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
+    // ostringstream is not so fast, but we use it one time per 100 milliseconds
+    std::ostringstream tmpStream;
+    tmpStream << "mission time: " << std::fixed << std::setprecision(1)
+              << vw_GetTimeThread(GameTimeThread) - InitialTime_;
+    DrawStringUTF32_ = ConvertUTF8.from_bytes(tmpStream.str());
 }
 
 } // astromenace namespace

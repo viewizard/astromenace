@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 // NOTE the matrix stack and related matrix manipulation functions deprecated in OpenGL 3.1 core profile
 //      https://www.khronos.org/registry/OpenGL/specs/gl/glspec30.pdf
@@ -44,7 +44,7 @@ namespace viewizard {
  */
 void vw_LoadIdentity()
 {
-	glLoadIdentity();
+    glLoadIdentity();
 }
 
 /*
@@ -52,7 +52,7 @@ void vw_LoadIdentity()
  */
 void vw_Translate(sVECTOR3D Location)
 {
-	glTranslatef(Location.x, Location.y, Location.z);
+    glTranslatef(Location.x, Location.y, Location.z);
 }
 
 /*
@@ -60,7 +60,7 @@ void vw_Translate(sVECTOR3D Location)
  */
 void vw_Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
-	glRotatef(angle, x, y, z);
+    glRotatef(angle, x, y, z);
 }
 
 /*
@@ -68,7 +68,7 @@ void vw_Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
  */
 void vw_Scale(GLfloat x, GLfloat y, GLfloat z)
 {
-	glScalef(x, y, z);
+    glScalef(x, y, z);
 }
 
 /*
@@ -76,7 +76,7 @@ void vw_Scale(GLfloat x, GLfloat y, GLfloat z)
  */
 void vw_GetMatrix(eMatrixPname pname, GLfloat *params)
 {
-	glGetFloatv(static_cast<GLenum>(pname), params);
+    glGetFloatv(static_cast<GLenum>(pname), params);
 }
 
 /*
@@ -84,7 +84,7 @@ void vw_GetMatrix(eMatrixPname pname, GLfloat *params)
  */
 void vw_SetMatrix(const GLfloat *matrix)
 {
-	glLoadMatrixf(matrix);
+    glLoadMatrixf(matrix);
 }
 
 /*
@@ -92,7 +92,7 @@ void vw_SetMatrix(const GLfloat *matrix)
  */
 void vw_MatrixMode(eMatrixMode mode)
 {
-	glMatrixMode(static_cast<GLenum>(mode));
+    glMatrixMode(static_cast<GLenum>(mode));
 }
 
 /*
@@ -100,7 +100,7 @@ void vw_MatrixMode(eMatrixMode mode)
  */
 void vw_MultMatrix(const GLfloat *matrix)
 {
-	glMultMatrixf(matrix);
+    glMultMatrixf(matrix);
 }
 
 /*
@@ -108,7 +108,7 @@ void vw_MultMatrix(const GLfloat *matrix)
  */
 void vw_PushMatrix()
 {
-	glPushMatrix();
+    glPushMatrix();
 }
 
 /*
@@ -116,7 +116,7 @@ void vw_PushMatrix()
  */
 void vw_PopMatrix()
 {
-	glPopMatrix();
+    glPopMatrix();
 }
 
 } // viewizard namespace

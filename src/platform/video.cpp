@@ -1,29 +1,29 @@
-/************************************************************************************
+/****************************************************************************
 
-	AstroMenace
-	Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-	Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
-
-
-	AstroMenace is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	AstroMenace is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+    AstroMenace
+    Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
+    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
 
 
-	Website: https://viewizard.com/
-	Project: https://github.com/viewizard/astromenace
-	E-mail: viewizard@viewizard.com
+    AstroMenace is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-*************************************************************************************/
+    AstroMenace is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with AstroMenace. If not, see <https://www.gnu.org/licenses/>.
+
+
+    Website: https://viewizard.com/
+    Project: https://github.com/viewizard/astromenace
+    E-mail: viewizard@viewizard.com
+
+*****************************************************************************/
 
 /*
 Note, we use view size instead of window size (or display size),
@@ -64,20 +64,23 @@ std::vector<sViewSize> WindowSizeArray{};
  */
 void ChangeDisplayIndex(int NewDisplayIndex)
 {
-	if (DisplayIndex == NewDisplayIndex)
-		return;
+    if (DisplayIndex == NewDisplayIndex) {
+        return;
+    }
 
-	// prevent out of range index usage
-	int DisplaysCount = SDL_GetNumVideoDisplays();
-	if (DisplaysCount >= 1) {
-		if (NewDisplayIndex >= DisplaysCount)
-			NewDisplayIndex = 0; // fallback to first display
-	} else
-		std::cerr << __func__ << "(): " << "SDL_GetNumVideoDisplays() failed: " << SDL_GetError() << "\n";
+    // prevent out of range index usage
+    int DisplaysCount = SDL_GetNumVideoDisplays();
+    if (DisplaysCount >= 1) {
+        if (NewDisplayIndex >= DisplaysCount) {
+            NewDisplayIndex = 0; // fallback to first display
+        }
+    } else {
+        std::cerr << __func__ << "(): " << "SDL_GetNumVideoDisplays() failed: " << SDL_GetError() << "\n";
+    }
 
-	DisplayIndex = NewDisplayIndex;
-	FullscreenSizeArray.clear();
-	WindowSizeArray.clear();
+    DisplayIndex = NewDisplayIndex;
+    FullscreenSizeArray.clear();
+    WindowSizeArray.clear();
 }
 
 /*
@@ -85,13 +88,13 @@ void ChangeDisplayIndex(int NewDisplayIndex)
  */
 bool StandardAspectRation(const sViewSize &ViewSize)
 {
-	float tmpAspectRatio = static_cast<float>(ViewSize.Width) / static_cast<float>(ViewSize.Height);
+    float tmpAspectRatio = static_cast<float>(ViewSize.Width) / static_cast<float>(ViewSize.Height);
 
-	if ((tmpAspectRatio > 1.24f) &&
-	    (tmpAspectRatio < 1.4f))
-		return true;
+    if (tmpAspectRatio > 1.24f && tmpAspectRatio < 1.4f) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 /*
@@ -99,14 +102,14 @@ bool StandardAspectRation(const sViewSize &ViewSize)
  */
 static bool AllowedAspectRatio(const sViewSize &ViewSize)
 {
-	float tmpAspectRatio = static_cast<float>(ViewSize.Width) / static_cast<float>(ViewSize.Height);
+    float tmpAspectRatio = static_cast<float>(ViewSize.Width) / static_cast<float>(ViewSize.Height);
 
-	// only aspect ratio from 5:4 to 16:9 are allowed
-	if ((tmpAspectRatio > 1.24f) &&
-	    (tmpAspectRatio < 1.78f))
-		return true;
+    // only aspect ratio from 5:4 to 16:9 are allowed
+    if (tmpAspectRatio > 1.24f && tmpAspectRatio < 1.78f) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 /*
@@ -114,23 +117,25 @@ static bool AllowedAspectRatio(const sViewSize &ViewSize)
  */
 static bool GetDisplaySize(sViewSize &ViewSize)
 {
-	SDL_Rect DisplayBounds;
-	if (SDL_GetDisplayBounds(DisplayIndex, &DisplayBounds) == 0) {
-		ViewSize.Width = DisplayBounds.w;
-		ViewSize.Height = DisplayBounds.h;
-		return true;
-	} else
-		std::cerr << __func__ << "(): " << "SDL_GetDisplayBounds() failed: " << SDL_GetError() << "\n";
+    SDL_Rect DisplayBounds;
+    if (SDL_GetDisplayBounds(DisplayIndex, &DisplayBounds) == 0) {
+        ViewSize.Width = DisplayBounds.w;
+        ViewSize.Height = DisplayBounds.h;
+        return true;
+    } else {
+        std::cerr << __func__ << "(): " << "SDL_GetDisplayBounds() failed: " << SDL_GetError() << "\n";
+    }
 
-	SDL_DisplayMode DisplayMode;
-	if (SDL_GetDesktopDisplayMode(DisplayIndex, &DisplayMode) == 0) {
-		ViewSize.Width = DisplayMode.w;
-		ViewSize.Height = DisplayMode.h;
-		return true;
-	} else
-		std::cerr << __func__ << "(): " << "SDL_GetDesktopDisplayMode() failed: " << SDL_GetError() << "\n";
+    SDL_DisplayMode DisplayMode;
+    if (SDL_GetDesktopDisplayMode(DisplayIndex, &DisplayMode) == 0) {
+        ViewSize.Width = DisplayMode.w;
+        ViewSize.Height = DisplayMode.h;
+        return true;
+    } else {
+        std::cerr << __func__ << "(): " << "SDL_GetDesktopDisplayMode() failed: " << SDL_GetError() << "\n";
+    }
 
-	return false;
+    return false;
 }
 
 /*
@@ -140,18 +145,21 @@ static bool GetDisplaySize(sViewSize &ViewSize)
  */
 const std::vector<sViewSize> &DetectFullscreenSize()
 {
-	if (!FullscreenSizeArray.empty())
-		return FullscreenSizeArray;
+    if (!FullscreenSizeArray.empty()) {
+        return FullscreenSizeArray;
+    }
 
-	sViewSize tmpViewSize;
-	if (!GetDisplaySize(tmpViewSize))
-		return FullscreenSizeArray; // return empty vector
+    sViewSize tmpViewSize;
+    if (!GetDisplaySize(tmpViewSize)) {
+        return FullscreenSizeArray; // return empty vector
+    }
 
-	if (!AllowedAspectRatio(tmpViewSize))
-		return FullscreenSizeArray; // return empty vector
+    if (!AllowedAspectRatio(tmpViewSize)) {
+        return FullscreenSizeArray; // return empty vector
+    }
 
-	FullscreenSizeArray.emplace_back(tmpViewSize);
-	return FullscreenSizeArray;
+    FullscreenSizeArray.emplace_back(tmpViewSize);
+    return FullscreenSizeArray;
 }
 
 /*
@@ -159,16 +167,17 @@ const std::vector<sViewSize> &DetectFullscreenSize()
  */
 static bool GetDisplayUsableSize(sViewSize &ViewSize)
 {
-	SDL_Rect DisplayUsableBounds;
-	if (SDL_GetDisplayUsableBounds(DisplayIndex, &DisplayUsableBounds) == 0) {
-		ViewSize.Width = DisplayUsableBounds.w;
-		ViewSize.Height = DisplayUsableBounds.h;
-		return true;
-	} else
-		std::cerr << __func__ << "(): " << "SDL_GetDisplayUsableBounds() failed: " << SDL_GetError() << "\n";
+    SDL_Rect DisplayUsableBounds;
+    if (SDL_GetDisplayUsableBounds(DisplayIndex, &DisplayUsableBounds) == 0) {
+        ViewSize.Width = DisplayUsableBounds.w;
+        ViewSize.Height = DisplayUsableBounds.h;
+        return true;
+    } else {
+        std::cerr << __func__ << "(): " << "SDL_GetDisplayUsableBounds() failed: " << SDL_GetError() << "\n";
+    }
 
-	// fallback
-	return GetDisplaySize(ViewSize);
+    // fallback
+    return GetDisplaySize(ViewSize);
 }
 
 /*
@@ -176,99 +185,101 @@ static bool GetDisplayUsableSize(sViewSize &ViewSize)
  */
 const std::vector<sViewSize> &DetectWindowSizeArray()
 {
-	if (!WindowSizeArray.empty())
-		return WindowSizeArray;
+    if (!WindowSizeArray.empty()) {
+        return WindowSizeArray;
+    }
 
-	// we need array of "well known" sizes, so, I did not find anything better,
-	// than use more or less popular resolutions as default array
-	static const std::vector<sViewSize> DefaultWindowSizeArray{
-		sViewSize{640, 480},
-		sViewSize{768, 480},
-		sViewSize{800, 480},
-		sViewSize{800, 600},
-		sViewSize{832, 624},
-		sViewSize{854, 480},
-		sViewSize{960, 540},
-		sViewSize{960, 544},
-		sViewSize{960, 640},
-		sViewSize{960, 720},
-		sViewSize{1024, 576},
-		sViewSize{1024, 600},
-		sViewSize{1024, 640},
-		sViewSize{1024, 768},
-		sViewSize{1024, 800},
-		sViewSize{1120, 832},
-		sViewSize{1152, 720},
-		sViewSize{1152, 768},
-		sViewSize{1152, 864},
-		sViewSize{1152, 900},
-		sViewSize{1280, 720},
-		sViewSize{1280, 768},
-		sViewSize{1280, 800},
-		sViewSize{1280, 854},
-		sViewSize{1280, 960},
-		sViewSize{1280, 1024},
-		sViewSize{1360, 768},
-		sViewSize{1366, 768},
-		sViewSize{1400, 1050},
-		sViewSize{1440, 900},
-		sViewSize{1440, 960},
-		sViewSize{1440, 1024},
-		sViewSize{1440, 1080},
-		sViewSize{1536, 864},
-		sViewSize{1600, 900},
-		sViewSize{1600, 1024},
-		sViewSize{1600, 1200},
-		sViewSize{1680, 1050},
-		sViewSize{1792, 1344},
-		sViewSize{1856, 1392},
-		sViewSize{1800, 1440},
-		sViewSize{1920, 1080},
-		sViewSize{1920, 1200},
-		sViewSize{1920, 1400},
-		sViewSize{1920, 1440},
-		sViewSize{2048, 1280},
-		sViewSize{2048, 1536},
-		sViewSize{2304, 1440},
-		sViewSize{2304, 1728},
-		sViewSize{2560, 1440},
-		sViewSize{2560, 1600},
-		sViewSize{2560, 1920},
-		sViewSize{2560, 2048},
-		sViewSize{2800, 2100},
-		sViewSize{2880, 1800},
-		sViewSize{3200, 2048},
-		sViewSize{3200, 2400},
-		sViewSize{3840, 2160},
-		sViewSize{3840, 2400},
-		sViewSize{4096, 2304},
-		sViewSize{4096, 3072},
-		sViewSize{5120, 3200},
-		sViewSize{5120, 4096},
-		sViewSize{6400, 4096},
-		sViewSize{6400, 4800},
-		sViewSize{7680, 4320},
-		sViewSize{7680, 4800}
-	};
+    // we need array of "well known" sizes, so, I did not find anything better,
+    // than use more or less popular resolutions as default array
+    static const std::vector<sViewSize> DefaultWindowSizeArray{
+        sViewSize{640, 480},
+        sViewSize{768, 480},
+        sViewSize{800, 480},
+        sViewSize{800, 600},
+        sViewSize{832, 624},
+        sViewSize{854, 480},
+        sViewSize{960, 540},
+        sViewSize{960, 544},
+        sViewSize{960, 640},
+        sViewSize{960, 720},
+        sViewSize{1024, 576},
+        sViewSize{1024, 600},
+        sViewSize{1024, 640},
+        sViewSize{1024, 768},
+        sViewSize{1024, 800},
+        sViewSize{1120, 832},
+        sViewSize{1152, 720},
+        sViewSize{1152, 768},
+        sViewSize{1152, 864},
+        sViewSize{1152, 900},
+        sViewSize{1280, 720},
+        sViewSize{1280, 768},
+        sViewSize{1280, 800},
+        sViewSize{1280, 854},
+        sViewSize{1280, 960},
+        sViewSize{1280, 1024},
+        sViewSize{1360, 768},
+        sViewSize{1366, 768},
+        sViewSize{1400, 1050},
+        sViewSize{1440, 900},
+        sViewSize{1440, 960},
+        sViewSize{1440, 1024},
+        sViewSize{1440, 1080},
+        sViewSize{1536, 864},
+        sViewSize{1600, 900},
+        sViewSize{1600, 1024},
+        sViewSize{1600, 1200},
+        sViewSize{1680, 1050},
+        sViewSize{1792, 1344},
+        sViewSize{1856, 1392},
+        sViewSize{1800, 1440},
+        sViewSize{1920, 1080},
+        sViewSize{1920, 1200},
+        sViewSize{1920, 1400},
+        sViewSize{1920, 1440},
+        sViewSize{2048, 1280},
+        sViewSize{2048, 1536},
+        sViewSize{2304, 1440},
+        sViewSize{2304, 1728},
+        sViewSize{2560, 1440},
+        sViewSize{2560, 1600},
+        sViewSize{2560, 1920},
+        sViewSize{2560, 2048},
+        sViewSize{2800, 2100},
+        sViewSize{2880, 1800},
+        sViewSize{3200, 2048},
+        sViewSize{3200, 2400},
+        sViewSize{3840, 2160},
+        sViewSize{3840, 2400},
+        sViewSize{4096, 2304},
+        sViewSize{4096, 3072},
+        sViewSize{5120, 3200},
+        sViewSize{5120, 4096},
+        sViewSize{6400, 4096},
+        sViewSize{6400, 4800},
+        sViewSize{7680, 4320},
+        sViewSize{7680, 4800}
+    };
 
-	sViewSize DisplayUsableSize;
-	if (!GetDisplayUsableSize(DisplayUsableSize))
-		return WindowSizeArray; // return empty vector
+    sViewSize DisplayUsableSize;
+    if (!GetDisplayUsableSize(DisplayUsableSize)) {
+        return WindowSizeArray; // return empty vector
+    }
 
-	// we have DefaultWindowSizeArray, but we need sizes less then display usable bounds only
-	auto UnaryPredicate = [&DisplayUsableSize] (const sViewSize &a) {
-		return ((a.Width >= DisplayUsableSize.Width) ||
-			(a.Height >= DisplayUsableSize.Height));
-	};
-	// make sure std::back_inserter() are used, since we do not resize() our vector,
-	// moreover, we don't even know what size we need
-	std::remove_copy_if(DefaultWindowSizeArray.begin(), DefaultWindowSizeArray.end(),
-			    std::back_inserter(WindowSizeArray), UnaryPredicate);
+    // we have DefaultWindowSizeArray, but we need sizes less then display usable bounds only
+    auto UnaryPredicate = [&DisplayUsableSize] (const sViewSize &a) {
+        return a.Width >= DisplayUsableSize.Width
+               || a.Height >= DisplayUsableSize.Height;
+    };
+    // make sure std::back_inserter() are used, since we do not resize() our vector,
+    // moreover, we don't even know what size we need
+    std::remove_copy_if(DefaultWindowSizeArray.begin(), DefaultWindowSizeArray.end(),
+                        std::back_inserter(WindowSizeArray), UnaryPredicate);
 
-	// TODO probably, we also need SDL_GetDisplayMode() here, this is not exactly
-	//      what we need, but in this way we could extend the array
+    // TODO probably, we also need SDL_GetDisplayMode() here, this is not exactly
+    //      what we need, but in this way we could extend the array
 
-	return WindowSizeArray;
+    return WindowSizeArray;
 }
 
 } // astromenace namespace
