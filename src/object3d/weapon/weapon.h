@@ -71,7 +71,8 @@ public:
     float EnergyUse{1.0f}; // energy consumption
     float CurrentEnergyAccumulated{0.0f}; // current capacitor status
 
-    int SwarmNum{0}; // need this for swarm missiles and flares
+    int SwarmNum{0}; // need this for swarm missiles
+    int FlaresNum{0}; // need this for flares
 
     bool NeedRotateOnTargeting{true};
 

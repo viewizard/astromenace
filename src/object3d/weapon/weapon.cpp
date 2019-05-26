@@ -939,7 +939,7 @@ bool cWeapon::Update(float Time)
         SwarmNum--;
     }
 
-    if (InternalType == 203 && SwarmNum > 0
+    if (InternalType == 203 && FlaresNum > 0
         && LastFireTime + 0.4f < Time
         && (Ammo > 0 || !GameUnlimitedAmmo)) {
         LastFireTime = Time;
@@ -947,8 +947,6 @@ bool cWeapon::Update(float Time)
         if (!GameUnlimitedAmmo) {
             Ammo -= 1;
         }
-
-        float CurrentPenalty = 1.0f; // FIXME why we need if-else below if we use 1.0f only?
 
         std::weak_ptr<cProjectile> tmpProjectile = CreateProjectile(InternalType);
         if (auto sharedProjectile = tmpProjectile.lock()) {
@@ -960,27 +958,15 @@ bool cWeapon::Update(float Time)
             for (auto &tmpGFX : sharedProjectile->GraphicFX) {
                 if (auto sharedGFX = tmpGFX.lock()) {
                     sharedGFX->Direction = Orientation ^ -1;
-
-                    if (CurrentPenalty == 2) {
-                        sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
-                    } else if (CurrentPenalty == 3) {
-                        sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
-                    }
-                    sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
-                    sharedGFX->Life = sharedGFX->Life * CurrentPenalty;
-                    sharedGFX->MagnetFactor = sharedGFX->MagnetFactor / (CurrentPenalty * CurrentPenalty);
                 }
             }
             sharedProjectile->ObjectStatus = ObjectStatus;
-            sharedProjectile->SpeedStart = sharedProjectile->SpeedEnd = sharedProjectile->SpeedStart / CurrentPenalty;
-            sharedProjectile->Age = sharedProjectile->Lifetime = sharedProjectile->Age * CurrentPenalty;
-            sharedProjectile->Damage /= CurrentPenalty;
 
             if (SFX != eGameSFX::none) {
                 PlayGameSFX(SFX, 1.0f, sharedProjectile->Location);
             }
         }
-        SwarmNum--;
+        FlaresNum--;
     }
 
     if (WeaponTurret) {
@@ -1380,7 +1366,7 @@ bool cWeapon::WeaponFire(float Time)
     }
 
     if (InternalType == 203) { // 4 more flares
-        SwarmNum = 4;
+        FlaresNum = 4;
     }
 
     return true;
