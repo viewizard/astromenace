@@ -1052,16 +1052,7 @@ bool cWeapon::Update(float Time)
             }
 
             TargetVertChunkCurrentAngle = NeedRotate;
-
-            sVECTOR3D tmp = Chunks[TargetVertChunkNum].Location - Chunks[TargetVertChunkNum].Location; // FIXME (0,0,0)???
-
-            vw_RotatePointInv(tmp, Chunks[TargetVertChunkNum].Rotation ^ (-1.0f));
-
             Chunks[TargetVertChunkNum].Rotation.x = -NeedRotate;
-
-            vw_RotatePoint(tmp, Chunks[TargetVertChunkNum].Rotation);
-
-            Chunks[TargetVertChunkNum].Location = tmp + Chunks[TargetVertChunkNum].Location;
         }
 
         sVECTOR3D RotationBase = Rotation;
