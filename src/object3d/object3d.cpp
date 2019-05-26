@@ -671,9 +671,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
             vw_BindTexture(3, CurrentNormalMap);
         }
 
-        // FIXME we don't need LightType1 and LightType2 any more, revise vw_CheckAndActivateAllLights()
-        int LightType1, LightType2;
-        vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius*Radius, 1, GameConfig().MaxPointLights, Matrix);
+        vw_CheckAndActivateAllLights(Location, Radius*Radius, 1, GameConfig().MaxPointLights, Matrix);
 
         if (GameConfig().UseGLSL120 && (Chunks[0].ShaderType >= 0)) {
             std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
@@ -839,12 +837,10 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
                 vw_Rotate(Chunks[i].GeometryAnimation.x, 1.0f, 0.0f, 0.0f);
             }
 
-            // FIXME we don't need LightType1 and LightType2 any more, revise vw_CheckAndActivateAllLights()
-            int LightType1, LightType2;
             if (!HitBB.empty()) {
-                vw_CheckAndActivateAllLights(LightType1, LightType2, Location + HitBB[i].Location, HitBB[i].Radius2, 1, GameConfig().MaxPointLights, Matrix);
+                vw_CheckAndActivateAllLights(Location + HitBB[i].Location, HitBB[i].Radius2, 1, GameConfig().MaxPointLights, Matrix);
             } else {
-                vw_CheckAndActivateAllLights(LightType1, LightType2, Location, Radius * Radius, 1, GameConfig().MaxPointLights, Matrix);
+                vw_CheckAndActivateAllLights(Location, Radius * Radius, 1, GameConfig().MaxPointLights, Matrix);
             }
 
             // for planet's clouds

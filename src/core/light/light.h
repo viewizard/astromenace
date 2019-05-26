@@ -87,8 +87,8 @@ private:
 
 
 // Activate proper lights for particular object (presented by location and radius^2).
-int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Location, float Radius2,
-                                 int DirLimit, int PointLimit, const float (&Matrix)[16]);
+void vw_CheckAndActivateAllLights(const sVECTOR3D &Location, float Radius2, int DirLimit,
+                                  int PointLimit, const float (&Matrix)[16]);
 // Calculate affected lights counter and create sorted map with affected lights.
 int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radius2,
                                           std::multimap<float, cLight*> *AffectedLightsMap);

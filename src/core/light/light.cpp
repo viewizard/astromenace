@@ -87,18 +87,21 @@ int vw_CalculateAllPointLightsAttenuation(const sVECTOR3D &Location, float Radiu
 /*
  * Activate proper lights for particular object (presented by location and radius^2).
  */
-int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Location, float Radius2,
-                                 int DirLimit, int PointLimit, const float (&Matrix)[16])
+void vw_CheckAndActivateAllLights(const sVECTOR3D &Location, float Radius2, int DirLimit,
+                                  int PointLimit, const float (&Matrix)[16])
 {
-    Type1 = 0; // counter for directional light
-    Type2 = 0; // counter for point light
+    int countType1 = 0; // counter for directional light
+    int countType2 = 0; // counter for point light
 
     // directional light should be first, since this is the main scene light
     auto range = LightsMap.equal_range(eLightType::Directional);
-    for (; (range.first != range.second) && (Type1 < DirLimit) && (Type1 < vw_DevCaps().MaxActiveLights); ++range.first) {
+    for (; range.first != range.second
+           && countType1 < DirLimit
+           && countType1 < vw_DevCaps().MaxActiveLights
+         ; ++range.first) {
         auto &tmpLight = *range.first;
-        if (tmpLight.second->Activate(Type1, Matrix)) {
-            Type1++;
+        if (tmpLight.second->Activate(countType1, Matrix)) {
+            countType1++;
         }
     }
 
@@ -110,17 +113,16 @@ int vw_CheckAndActivateAllLights(int &Type1, int &Type2, const sVECTOR3D &Locati
 
         // enable lights with less attenuation first
         for (auto &tmpLight : AffectedLightsMap) {
-            if (Type2 >= PointLimit || Type1 + Type2 >= vw_DevCaps().MaxActiveLights) {
+            if (countType2 >= PointLimit || countType1 + countType2 >= vw_DevCaps().MaxActiveLights) {
                 break;
             }
-            if (tmpLight.second->Activate(Type1 + Type2, Matrix)) {
-                Type2++;
+            if (tmpLight.second->Activate(countType1 + countType2, Matrix)) {
+                countType2++;
             }
         }
     }
 
     vw_Lighting(true);
-    return Type1 + Type2;
 }
 
 /*
