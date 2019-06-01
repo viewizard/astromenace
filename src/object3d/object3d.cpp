@@ -673,7 +673,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
         vw_CheckAndActivateAllLights(Location, Radius*Radius, 1, GameConfig().MaxPointLights, Matrix);
 
-        if (GameConfig().UseGLSL120 && (Chunks[0].ShaderType >= 0)) {
+        if (GameConfig().UseGLSL120) {
             std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
             // FIXME we know what exactly we have, why we need shaders setup in this way?
@@ -854,7 +854,7 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
                 vw_PolygonOffset(true, 1.0f, 1.0f);
             }
 
-            if (GameConfig().UseGLSL120 && Chunks[i].ShaderType >= 0) {
+            if (GameConfig().UseGLSL120) {
                 std::weak_ptr<cGLSL> CurrentObject3DGLSL{};
 
                 // FIXME we know what exactly we have, why we need shaders setup in this way?
