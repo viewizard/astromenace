@@ -666,8 +666,8 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 
         if (GameConfig().UseGLSL120) {
             ShaderType = 2;
-            ShaderData[0] = 1.0f; // speed delta
-            ShaderData[1] = 0.0f; // range factor
+            ExplShaderSpeedDelta = 1.0f;
+            ExplShaderRangeFactor = 0.0f;
         }
 
         AABBResizeSpeed = sqrtf(AABBResizeSpeed);

@@ -653,10 +653,8 @@ bool cExplosion::Update(float Time)
             }
         }
     } else {
-        // speed delta
-        ShaderData[1] += ShaderData[0] * TimeDelta;
-        // range factor
-        ShaderData[0] -= ShaderData[0] * TimeDelta;
+        ExplShaderRangeFactor += ExplShaderSpeedDelta * TimeDelta;
+        ExplShaderSpeedDelta -= ExplShaderSpeedDelta * TimeDelta;
     }
 
     // simplified AABB recalculation (we don't need real AABB for sure here)

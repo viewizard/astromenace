@@ -574,8 +574,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
                 if (auto sharedGLSL = GLSLShaderType2.lock()) {
                     vw_UseShaderProgram(sharedGLSL);
                     vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
-                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), ShaderData[0]);
-                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), ShaderData[1]);
+                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), ExplShaderSpeedDelta);
+                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), ExplShaderRangeFactor);
                 }
             }
 
@@ -717,8 +717,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
                 case 2: // explosion
                     vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
-                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), ShaderData[0]);
-                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), ShaderData[1]);
+                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), ExplShaderSpeedDelta);
+                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), ExplShaderRangeFactor);
                     break;
 
                 case 3: // shadow map
@@ -797,8 +797,8 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 
                 case 2: // explosion
                     vw_Uniform1i(vw_GetShaderUniformLocation(sharedGLSL, 0), 0);
-                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), ShaderData[0]);
-                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), ShaderData[1]);
+                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 1), ExplShaderSpeedDelta);
+                    vw_Uniform1f(vw_GetShaderUniformLocation(sharedGLSL, 2), ExplShaderRangeFactor);
                     break;
 
                 case 3: // shadow map

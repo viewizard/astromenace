@@ -251,7 +251,8 @@ public:
 
     // GLSL-related
     int ShaderType{1};
-    std::array<float, 16> ShaderData{};
+    float ExplShaderSpeedDelta{0.0f};
+    float ExplShaderRangeFactor{0.0f};
 };
 
 
