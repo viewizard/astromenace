@@ -653,12 +653,10 @@ bool cExplosion::Update(float Time)
             }
         }
     } else {
-        for (auto &tmpChunk : Chunks) {
-            // speed delta
-            tmpChunk.ShaderData[1] += tmpChunk.ShaderData[0] * TimeDelta;
-            // range factor
-            tmpChunk.ShaderData[0] -= tmpChunk.ShaderData[0] * TimeDelta;
-        }
+        // speed delta
+        ShaderData[1] += ShaderData[0] * TimeDelta;
+        // range factor
+        ShaderData[0] -= ShaderData[0] * TimeDelta;
     }
 
     // simplified AABB recalculation (we don't need real AABB for sure here)

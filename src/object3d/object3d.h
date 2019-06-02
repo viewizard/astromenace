@@ -248,6 +248,10 @@ public:
     std::u32string ScriptLineNumberUTF32{}; // debug info, line number in script file
 
     std::list<sTimeSheet> TimeSheetList{};
+
+    // GLSL-related
+    int ShaderType{1};
+    std::array<float, 16> ShaderData{};
 };
 
 

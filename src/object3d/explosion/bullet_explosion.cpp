@@ -764,9 +764,9 @@ cBulletExplosion::cBulletExplosion(const cObject3D *Object, cProjectile &Project
         AABBResizeSpeed = sqrtf(AABBResizeSpeed);
 
         if (GameConfig().UseGLSL120) {
-            Chunks[0].ShaderType = 2;
-            Chunks[0].ShaderData[0] = 1.0f; // speed delta
-            Chunks[0].ShaderData[1] = 0.0f; // range factor
+            ShaderType = 2;
+            ShaderData[0] = 1.0f; // speed delta
+            ShaderData[1] = 0.0f; // range factor
         }
 
         if (Chunks[0].VBO) {

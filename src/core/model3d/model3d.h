@@ -58,10 +58,6 @@ enum class eModel3DDrawType {
 struct sChunk3D {
     ~sChunk3D();
 
-    // GLSL-related
-    int ShaderType{1};
-    std::array<float, 16> ShaderData{};
-
     sVECTOR3D Location{0.0f, 0.0f, 0.0f};
     sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
 

@@ -82,7 +82,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType,
 
             sharedSpaceDebris->Chunks.resize(1);
             sharedSpaceDebris->Chunks[0] = Object.Chunks[i];
-            sharedSpaceDebris->Chunks[0].ShaderType = 1;
+            sharedSpaceDebris->ShaderType = 1;
             if (Object.Chunks[i].NeedReleaseOpenGLBuffers) {
                 Object.Chunks[i].NeedReleaseOpenGLBuffers = false;
                 sharedSpaceDebris->Chunks[0].NeedReleaseOpenGLBuffers = true;

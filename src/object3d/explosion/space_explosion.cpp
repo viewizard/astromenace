@@ -662,13 +662,14 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
                              tmpChunk.VBO, tmpChunk.IBO)) {
                 tmpChunk.VAO = 0;
             }
-
-            if (GameConfig().UseGLSL120) {
-                tmpChunk.ShaderType = 2;
-                tmpChunk.ShaderData[0] = 1.0f; // speed delta
-                tmpChunk.ShaderData[1] = 0.0f; // range factor
-            }
         }
+
+        if (GameConfig().UseGLSL120) {
+            ShaderType = 2;
+            ShaderData[0] = 1.0f; // speed delta
+            ShaderData[1] = 0.0f; // range factor
+        }
+
         AABBResizeSpeed = sqrtf(AABBResizeSpeed);
     }
 
