@@ -125,7 +125,7 @@ static int WriteIntoVFSfromMemory(const std::shared_ptr<sVFS> &WritableVFS, cons
     for (const auto &tmpEntry : WritableVFSEntriesMap) {
         auto sharedParent = tmpEntry.second.Parent.lock();
         if (sharedParent == WritableVFS) {
-            uint16_t tmpNameSize{(uint16_t)(tmpEntry.first.size())};
+            uint16_t tmpNameSize{static_cast<uint16_t>(tmpEntry.first.size())};
             WritableVFS->File.write(reinterpret_cast<char*>(&tmpNameSize), sizeof(tmpNameSize));
             WritableVFS->File.write(tmpEntry.first.c_str(), tmpEntry.first.size());
             WritableVFS->File.write(reinterpret_cast<const char*>(&tmpEntry.second.Offset),

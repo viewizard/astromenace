@@ -125,7 +125,7 @@ void CreditsMenu()
     LastUpdate = vw_GetTimeThread(0);
 
     // 690 - start inside internal fixed size of screen (768) with "offset"
-    int TextY = 690 + (int)CurrentTextPos;
+    int TextY = 690 + static_cast<int>(CurrentTextPos);
     int Offset = 30;
 
     // cycling (internal fixed size of screen (768) - "borders" + CreditsArray.size() * Offset)
