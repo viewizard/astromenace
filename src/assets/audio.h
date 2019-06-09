@@ -29,6 +29,7 @@
 #define ASSETS_AUDIO_H
 
 #include "../core/base.h"
+#include "../core/math/math.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

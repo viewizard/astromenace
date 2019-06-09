@@ -33,8 +33,6 @@
 
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
-#include "../math/math.h"
-#include "../graphics/graphics.h"
 #include "../texture/texture.h"
 #include "particle_system2d.h"
 

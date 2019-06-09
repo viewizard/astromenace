@@ -28,6 +28,8 @@
 #ifndef UTILS_FS2VFS_H
 #define UTILS_FS2VFS_H
 
+#include "../core/base.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {

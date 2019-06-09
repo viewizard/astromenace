@@ -29,6 +29,7 @@
 #define CORE_TEXTURE_TEXTURETGA_H
 
 #include "../base.h"
+#include "../vfs/vfs.h"
 
 namespace viewizard {
 

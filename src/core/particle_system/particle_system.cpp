@@ -34,8 +34,6 @@
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../camera/camera.h"
-#include "../graphics/graphics.h"
-#include "../math/math.h"
 #include "../light/light.h"
 #include "particle_system.h"
 

@@ -28,6 +28,8 @@
 #ifndef UI_FONT_H
 #define UI_FONT_H
 
+#include "../core/base.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {

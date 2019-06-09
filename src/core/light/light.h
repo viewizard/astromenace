@@ -31,6 +31,7 @@
 #define CORE_LIGHT_LIGHT_H
 
 #include "../base.h"
+#include "../math/math.h"
 
 namespace viewizard {
 

@@ -28,6 +28,8 @@
 #ifndef GFX_STARSYSTEM_H
 #define GFX_STARSYSTEM_H
 
+#include "../core/math/math.h"
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {

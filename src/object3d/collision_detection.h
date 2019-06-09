@@ -29,6 +29,7 @@
 #define OBJECT3D_COLLISIONDETECTION_H
 
 #include "../core/core.h"
+#include "object3d.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

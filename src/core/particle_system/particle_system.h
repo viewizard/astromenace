@@ -31,6 +31,8 @@
 #define CORE_PARTICLESYSTEM_PARTICLESYSTEM_H
 
 #include "../base.h"
+#include "../math/math.h"
+#include "../graphics/graphics.h"
 
 namespace viewizard {
 
