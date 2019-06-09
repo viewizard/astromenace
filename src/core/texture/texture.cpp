@@ -94,7 +94,7 @@ void vw_SetTextureProp(const sTextureFilter &Filtering, GLint AnisotropyLevel, c
                        bool Alpha, eAlphaCreateMode AFlag, bool MipMap)
 {
     FilteringTex = Filtering;
-    AnisotropyLevelTex = AnisotropyLevel,
+    AnisotropyLevelTex = AnisotropyLevel;
     AddressModeTex = AddressMode;
     AlphaTex = Alpha;
     AFlagTex = AFlag;
