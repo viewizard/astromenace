@@ -63,7 +63,7 @@ public:
     std::unique_ptr<sExplosionPiece[]> ExplosionPieceData{};
 
     // NOTE this is part of non shader geometry calculation
-    float ExplosionGeometryMoveLastTime{-1};
+    float ExplosionGeometryMoveLastTime{-1.0f};
 
     sVECTOR3D VelocityOrientation{0.0f, 0.0f, 0.0f};
     float OldSpeed{0.0f};

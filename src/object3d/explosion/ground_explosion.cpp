@@ -101,7 +101,7 @@ cGroundExplosion::cGroundExplosion(cGroundObject &Object, int ExplType,
             if (ExplType == 1) {
                 sharedSpaceDebris->Speed = 0.0f;
                 sVECTOR3D VelocityTMP = sharedSpaceDebris->Location - ExplLocation;
-                if (sharedSpaceDebris->Radius != 0) {
+                if (sharedSpaceDebris->Radius != 0.0f) {
                     sharedSpaceDebris->Velocity = VelocityTMP ^ (1.0f / sharedSpaceDebris->Radius);
                 } else {
                     sharedSpaceDebris->Velocity = VelocityTMP ^ (1.0f + 5.0f * vw_fRand());

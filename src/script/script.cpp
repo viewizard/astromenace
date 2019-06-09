@@ -240,7 +240,7 @@ bool cMissionScript::Update(float Time)
 
     // in case of "AsteroidField", we need generate asteroid field
     if (AsterOn) {
-        if (AsterLastTime == -1.0) {
+        if (AsterLastTime == -1.0f) {
             AsterLastTime = Time;
         }
         float AsterTimeDelta = Time - AsterLastTime;
@@ -869,7 +869,7 @@ void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
             }
 
             // for cycled, create duplicate at the end of unpacked elements
-            if (TimeSheetList.front().Time == -1) {
+            if (TimeSheetList.front().Time == -1.0f) {
                 TimeSheetList.emplace(++iter, TimeSheetList.front());
             }
 

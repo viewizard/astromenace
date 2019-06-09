@@ -565,7 +565,7 @@ bool cExplosion::Update(float Time)
     }
 
     if (!GameConfig().UseGLSL120) {
-        if (ExplosionGeometryMoveLastTime == -1) {
+        if (ExplosionGeometryMoveLastTime == -1.0f) {
             ExplosionGeometryMoveLastTime = Time;
         }
 

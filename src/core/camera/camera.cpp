@@ -160,7 +160,7 @@ void vw_SetCameraMoveAroundPoint(const sVECTOR3D &Point, float ChangeDistance, c
                 Point.y - CameraLocation.y,
                 Point.z - CameraLocation.z};
     V.Normalize();
-    if (V.x * V.x + V.y * V.y + V.z * V.z != 0) {
+    if (V.x * V.x + V.y * V.y + V.z * V.z != 0.0f) {
         exV = V;
     }
 

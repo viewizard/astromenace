@@ -269,7 +269,7 @@ void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle)
     float tmpZ = Point.z;
 
     // X
-    if (Angle.x != 0) {
+    if (Angle.x != 0.0f) {
         float a = -Angle.x * DegToRadFactor;
         float c = cosf(a);
         float s = sinf(a);
@@ -280,7 +280,7 @@ void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle)
         tmpZ = Point.z;
     }
     // Y
-    if (Angle.y != 0) {
+    if (Angle.y != 0.0f) {
         float a = Angle.y * DegToRadFactor;
         float c = cosf(a);
         float s = sinf(a);
@@ -290,7 +290,7 @@ void vw_RotatePoint(sVECTOR3D &Point, const sVECTOR3D &Angle)
         tmpY = Point.y;
     }
     // Z
-    if (Angle.z != 0) {
+    if (Angle.z != 0.0f) {
         float a = -Angle.z * DegToRadFactor;
         float c = cosf(a);
         float s = sinf(a);
@@ -310,7 +310,7 @@ void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle)
     float tmpZ = Point.z;
 
     // Z
-    if (Angle.z != 0) {
+    if (Angle.z != 0.0f) {
         float a = -Angle.z * DegToRadFactor;
         float c = cosf(a);
         float s = sinf(a);
@@ -321,7 +321,7 @@ void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle)
         tmpZ = Point.z;
     }
     // Y
-    if (Angle.y != 0) {
+    if (Angle.y != 0.0f) {
         float a = Angle.y * DegToRadFactor;
         float c = cosf(a);
         float s = sinf(a);
@@ -331,7 +331,7 @@ void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle)
         tmpZ = Point.z;
     }
     // X
-    if (Angle.x != 0) {
+    if (Angle.x != 0.0f) {
         float a = -Angle.x * DegToRadFactor;
         float c = cosf(a);
         float s = sinf(a);

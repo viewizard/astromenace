@@ -645,7 +645,7 @@ void GamePlayerShip()
 
         // находим конечную точку перемещения
         sVECTOR3D PlayerFighterEndLocation;
-        if (GameConfig().InternalWidth == 1024) {
+        if (GameConfig().InternalWidth == 1024.0f) {
             PlayerFighterEndLocation = sVECTOR3D{-(73.15f-sharedPlayerFighter->Width/2.0f+MoveFB*(20.05f-sharedPlayerFighter->Length/6.0f))*MoveLR,
                                                  0.0f,
                                                  (46.0f-sharedPlayerFighter->Length/2.0f)*MoveFB};
@@ -766,7 +766,7 @@ void GamePlayerShip()
 
 
         // если стандартный аспект рейшен, надо перемещать камеру в дополнении к перемещению корабля
-        if (GameConfig().InternalWidth == 1024) {
+        if (GameConfig().InternalWidth == 1024.0f) {
             float DeviationSize = 14.55f;
 
             if (sharedPlayerFighter->Location.x < 0.0f) {

@@ -916,9 +916,9 @@ bool cWeapon::Update(float Time)
                         sharedGFX->Direction = sharedFire->Direction ^ -1;
                     }
 
-                    if (CurrentPenalty == 2) {
+                    if (CurrentPenalty == 2.0f) {
                         sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.33f);
-                    } else if (CurrentPenalty == 3) {
+                    } else if (CurrentPenalty == 3.0f) {
                         sharedGFX->ParticlesPerSec -= (int)(sharedGFX->ParticlesPerSec * 0.5f);
                     }
                     sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;
