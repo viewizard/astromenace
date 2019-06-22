@@ -118,8 +118,8 @@ void ShadowMap_SizeSetup(eShadowMapSetup ShadowMapSetup)
     switch (ShadowMapSetup) {
     case eShadowMapSetup::Menu:
         // since we need "soft" shadows for less price, reduce shadow map size
-        if (ShadowMapSize > 2048) {
-            ShadowMapSize = 2048;
+        if (ShadowMapSize > config::MAX_SHADOWMAP_SIZE) {
+            ShadowMapSize = config::MAX_SHADOWMAP_SIZE;
         }
         if (!ShadowMap_Init(ShadowMapSize, ShadowMapSize / 2)) {
             ChangeGameConfig().ShadowMap = 0;

@@ -185,7 +185,7 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
     if (!vw_DevCaps().OpenGL_2_0_supported
         || !vw_DevCaps().OpenGL_2_1_supported
         || !vw_DevCaps().OpenGL_3_0_supported
-        || vw_DevCaps().MaxTextureWidth < 2048) {
+        || vw_DevCaps().MaxTextureWidth < config::MAX_SHADOWMAP_SIZE) {
         ChangeGameConfig().ShadowMap = 0;
     }
 

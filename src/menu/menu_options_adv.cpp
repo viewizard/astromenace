@@ -37,6 +37,7 @@
 #include "../config/config.h"
 #include "../gfx/shadow_map.h"
 #include "../assets/texture.h"
+#include "../config/config.h"
 #include "../main.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
@@ -309,7 +310,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
             } else {
                 // same behaviour as for CheckOpenGLCapabilities()
                 if (vw_DevCaps().OpenGL_3_0_supported
-                    && vw_DevCaps().MaxTextureWidth >= 2048) {
+                    && vw_DevCaps().MaxTextureWidth >= config::MAX_SHADOWMAP_SIZE) {
                     Options_ShadowMap = 1;
                 } else {
                     Options_ShadowMap = 0;

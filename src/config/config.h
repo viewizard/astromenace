@@ -60,6 +60,12 @@ constexpr unsigned MAX_HINTS{10};
 } // config
 
 namespace config {
+
+constexpr int MAX_SHADOWMAP_SIZE{2048};
+
+} // config
+
+namespace config {
 // (!) changes could corrupt 2D rendering
 
 constexpr float VirtualWidth_Wide{1228.0f};
