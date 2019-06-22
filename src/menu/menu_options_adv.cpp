@@ -304,7 +304,17 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
         if (!Options_UseGLSL120) {
             Options_ShadowMap = 0;
         } else {
-            Options_ShadowMap = GameConfig().ShadowMap;
+            if (GameConfig().UseGLSL120) {
+                Options_ShadowMap = GameConfig().ShadowMap;
+            } else {
+                // same behaviour as for CheckOpenGLCapabilities()
+                if (vw_DevCaps().OpenGL_3_0_supported
+                    && vw_DevCaps().MaxTextureWidth >= 2048) {
+                    Options_ShadowMap = 1;
+                } else {
+                    Options_ShadowMap = 0;
+                }
+            }
         }
     }
     if (vw_DevCaps().OpenGL_2_0_supported && vw_DevCaps().OpenGL_2_1_supported) {
