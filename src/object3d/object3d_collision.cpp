@@ -184,8 +184,8 @@ static void SetupSpaceShipExplosion(cSpaceShip &SpaceShip, int ObjectChunkNum)
         CreateSpaceExplosion(SpaceShip, 31, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
         break;
     case eObjectType::AlienMotherShip:
-        if (ObjectChunkNum == -1) { // FIXME do we really need this?
-            ObjectChunkNum = 0;
+        if (ObjectChunkNum == -1) {
+            ObjectChunkNum = 0; // FIXME should explode main biggest element for best effect
         }
         CreateSpaceExplosion(SpaceShip, 33, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
         break;
@@ -193,8 +193,8 @@ static void SetupSpaceShipExplosion(cSpaceShip &SpaceShip, int ObjectChunkNum)
         if (SpaceShip.InternalType <= 5) {
             CreateSpaceExplosion(SpaceShip, 3, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
         } else {
-            if (ObjectChunkNum == -1) { // FIXME do we really need this?
-                ObjectChunkNum = 0;
+            if (ObjectChunkNum == -1) {
+                ObjectChunkNum = 0; // FIXME should explode main biggest element for best effect
             }
             CreateSpaceExplosion(SpaceShip, 31, SpaceShip.Location, SpaceShip.Speed, ObjectChunkNum);
         }

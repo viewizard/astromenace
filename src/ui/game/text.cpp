@@ -140,7 +140,7 @@ void DrawMissionNumberText()
     MissionNumberLifeTime -= CurrentTime - MissionNumberLastUpdateTime;
     MissionNumberLastUpdateTime = CurrentTime;
 
-    // FIXME SrcRect/DstRect/XStart/YStart should be calculated one time during setup
+    // FIXME SrcRect/DstRect/XStart/YStart should be calculated one time during setup, change only on window resize
 
     sRECT SrcRect{0, 0, 226, 64}; // "Mission" image-related rectangle
     constexpr int tmpSpace{20};
@@ -188,7 +188,7 @@ void DrawMissionFailedText()
     MissionFailedLifeTime -= CurrentTime - MissionFailedLastUpdateTime;
     MissionFailedLastUpdateTime = CurrentTime;
 
-    // FIXME SrcRect/DstRect should be calculated one time during setup
+    // FIXME SrcRect/DstRect should be calculated one time during setup, change only on window resize
 
     sRECT SrcRect{0, 0, 512, 84}; // "Mission failed" image-related rectangle
     sRECT DstRect{static_cast<int>(GameConfig().InternalWidth - (SrcRect.right - SrcRect.left)) / 2,
