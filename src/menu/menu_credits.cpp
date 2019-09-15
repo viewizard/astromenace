@@ -69,6 +69,7 @@ const std::vector<std::string> CreditsArray{
     "Bernd Dau (de)",
     "Mikhail Kurinnoi (ru)",
     "Jacek Fiedorowicz (pl)",
+    "Juan Francisco Astudillo Palacios (es)",
     "",
     "COMMUNITY CONTRIBUTORS",
     "Alistair Findlay",
