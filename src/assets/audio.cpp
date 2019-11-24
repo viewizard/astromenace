@@ -35,7 +35,7 @@ namespace astromenace {
 
 namespace {
 
-// empirical found "everage load value" for one sfx asset
+// empirical found "average load value" for one sfx asset
 // small value mean that asset loads fast, big value - slow
 constexpr unsigned SFXLoadValue{20};
 
