@@ -1373,24 +1373,24 @@ bool cSpaceShip::Update(float Time)
                         float Min{0.0f};
                         float Max{0.0f};
                         GetShipWeaponSlotAngle(GameConfig().Profile[CurrentProfile].ShipHull, i, Min, Max);
-                        if (sharedWeapon->Rotation.y > NeedAngle.y) {
+                        if (sharedWeapon->Rotation.y < NeedAngle.y) {
                             float NeedAngle_y = sharedWeapon->Rotation.y + 40.0f * TargetingSpeed * TimeDelta;
                             if (NeedAngle_y > NeedAngle.y) {
                                 NeedAngle_y = NeedAngle.y;
                             }
                             NeedAngle.y = NeedAngle_y;
-                            if (NeedAngle.y > Max + sharedWeapon->Rotation.y) {
-                                NeedAngle.y = Max + sharedWeapon->Rotation.y;
+                            if (NeedAngle.y > Max + Rotation.y) {
+                                NeedAngle.y = Max + Rotation.y;
                             }
                         }
-                        if (sharedWeapon->Rotation.y < NeedAngle.y) {
+                        if (sharedWeapon->Rotation.y > NeedAngle.y) {
                             float NeedAngle_y = sharedWeapon->Rotation.y - 40.0f * TargetingSpeed * TimeDelta;
                             if (NeedAngle_y < NeedAngle.y) {
                                 NeedAngle_y = NeedAngle.y;
                             }
                             NeedAngle.y = NeedAngle_y;
-                            if (NeedAngle.y < Min + sharedWeapon->Rotation.y) {
-                                NeedAngle.y = Min + sharedWeapon->Rotation.y;
+                            if (NeedAngle.y < Min + Rotation.y) {
+                                NeedAngle.y = Min + Rotation.y;
                             }
                         }
 
