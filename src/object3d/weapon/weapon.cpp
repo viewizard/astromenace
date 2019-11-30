@@ -108,15 +108,15 @@ const std::vector<sWeaponData> PresetAlienWeaponData {
     {eGameSFX::WeaponFire_Plasma2,  false,  1.0f,   1,    1,    2500,    2.5f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
     // like Kinetic2
     {eGameSFX::WeaponFire_Plasma1,  true,   1.0f,   1,    1,    2500,    3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
-    // emergy mine 1
+    // energy mine 1
     {eGameSFX::WeaponFire_Antimatter, false, 1.0f,  1,    1,    50,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
-    // emergy mine 2, with homing
+    // energy mine 2, with homing
     {eGameSFX::WeaponFire_Antimatter, false, 1.0f,  1,    1,    50,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
     // like Plasma3
     {eGameSFX::WeaponFire_Plasma3,  true,   10,     3,    50,    800,    0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
     // like Plasma2
     {eGameSFX::WeaponFire_Plasma2,  true,   15,     2,    25,    1000,    0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
-    // like Laser (for matherships)
+    // like Laser (for motherships)
     {eGameSFX::WeaponFire_Laser,    true,   15,     5,    150,    800,    1.2f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""}
 };
 #pragma GCC diagnostic pop
@@ -125,9 +125,9 @@ const std::vector<sWeaponData> PresetAlienWeaponData {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetPirateWeaponData {
-    // turrent 1
+    // turret 1
     {eGameSFX::WeaponFire_Kinetic1,     false,  10,     1,    1,    3000,   0.7f, sVECTOR3D{0.0f, 1.5f, 1.0f}, sVECTOR3D{0.0f, 1.5f, 1.0f}, "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
-    // turrent 2
+    // turret 2
     {eGameSFX::WeaponFire_Kinetic2,     false,  10,     1,    1,    3000,   0.7f, sVECTOR3D{0.0f, 1.0f, 0.0f}, sVECTOR3D{0.0f, 1.0f, 0.0f}, "models/turret/turret-02.vw3d", "models/turret/turrets.tga", ""},
 
     // flares
