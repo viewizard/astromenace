@@ -1251,7 +1251,6 @@ bool cSpaceShip::Update(float Time)
                                 NeedAngle_x = NeedAngle.x;
                             }
                             NeedAngle.x = NeedAngle_x;
-
                         }
                         if (sharedWeapon->Rotation.x > NeedAngle.x) {
                             float NeedAngle_x = sharedWeapon->Rotation.x - 40.0f * TargetingSpeed * TimeDelta;
@@ -1354,13 +1353,13 @@ bool cSpaceShip::Update(float Time)
 
                         sVECTOR3D NeedAngleTmp = NeedAngle;
 
+                        // FIXME remove this code duplication (same as above)
                         if (sharedWeapon->Rotation.x < NeedAngle.x) {
                             float NeedAngle_x = sharedWeapon->Rotation.x + 40.0f * TargetingSpeed * TimeDelta;
                             if (NeedAngle_x > NeedAngle.x) {
                                 NeedAngle_x = NeedAngle.x;
                             }
                             NeedAngle.x = NeedAngle_x;
-
                         }
                         if (sharedWeapon->Rotation.x > NeedAngle.x) {
                             float NeedAngle_x = sharedWeapon->Rotation.x - 40.0f * TargetingSpeed * TimeDelta;
