@@ -50,7 +50,7 @@ sudo yum install astromenace
 
 #### Gentoo
 ```
-sudo emerge openastromenace
+sudo emerge astromenace
 ```
 
 ## Build
