@@ -116,7 +116,7 @@ void GenerateFonts()
     GenerateFont(256, 256, MainFontSize, tmpSymbols);
 
     // 10
-    std::string tmpSymbols10{"Copyright © 2007-2019, Viewizard"};
+    std::string tmpSymbols10{"Copyright © 2007-2020, Viewizard"};
     tmpSymbols10 += vw_GetText("Version");
     tmpSymbols10 += GAME_VERSION;
     GenerateFont(128, 128, 10, tmpSymbols10);

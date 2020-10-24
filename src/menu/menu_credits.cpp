@@ -97,7 +97,7 @@ const std::vector<std::string> CreditsArray{
     "",
     "",
     " ", /* this is correct, we need not empty line for white text color in next line */
-    "Copyright © 2007-2019, Viewizard",
+    "Copyright © 2007-2020, Viewizard",
     "https://viewizard.com"
 };
 
