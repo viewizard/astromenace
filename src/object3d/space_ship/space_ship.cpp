@@ -530,6 +530,10 @@ bool cSpaceShip::Update(float Time)
         NeedRotate = TimeSheetList.front().Rotation;
         RotationSpeed = TimeSheetList.front().RotationAcceler;
 
+        if (TimeSheetList.front().NeedSetAngle) {
+            SetRotation(TimeSheetList.front().SetAngle);
+        }
+
         if (!WeaponSlots.empty()) {
             for (auto &tmpWeaponSlot : WeaponSlots) {
                 if (!tmpWeaponSlot.Weapon.expired()) {
@@ -1181,6 +1185,7 @@ bool cSpaceShip::Update(float Time)
                                                          sharedWeapon->InternalType, tmpTargetLocation)
                         && GetTurretOnTargetOrientation(tmpWeaponLocation, Rotation, CurrentRotationMat,
                                                         tmpTargetLocation, tmpNeedAngle)) {
+                        // FIXME ship could have z axis rotation (Pirate, lvl 2), current math care about weapon rotation by x and y axis only
                         sharedWeapon->SetRotation(sVECTOR3D{-sharedWeapon->Rotation.x - tmpNeedAngle.x,
                                                             0.0f,
                                                             0.0f});
@@ -1203,6 +1208,7 @@ bool cSpaceShip::Update(float Time)
                                                          sharedWeapon->InternalType, tmpTargetLocation)
                         && GetTurretOnTargetOrientation(tmpWeaponLocation, Rotation, CurrentRotationMat,
                                                         tmpTargetLocation, tmpNeedAngle)) {
+                        // FIXME ship could have z axis rotation (Pirate, lvl 2), current math care about weapon rotation by x and y axis only
                         sharedWeapon->SetRotation(sVECTOR3D{-sharedWeapon->Rotation.x - tmpNeedAngle.x,
                                                             0.0f,
                                                             0.0f});

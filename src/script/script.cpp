@@ -611,6 +611,15 @@ static void LoadTimeSheetData(cXMLDocument &xmlDoc, const sXMLEntry &XMLEntry,
     vw_Clamp(TimeSheet.RotationAcceler.x, 0.0f, 1.0f);
     vw_Clamp(TimeSheet.RotationAcceler.y, 0.0f, 1.0f);
     vw_Clamp(TimeSheet.RotationAcceler.z, 0.0f, 1.0f);
+    if (xmlDoc.fGetEntryAttribute(XMLEntry, "anglx", TimeSheet.SetAngle.x)) {
+        TimeSheet.NeedSetAngle = true;
+    }
+    if (xmlDoc.fGetEntryAttribute(XMLEntry, "angly", TimeSheet.SetAngle.y)) {
+        TimeSheet.NeedSetAngle = true;
+    }
+    if (xmlDoc.fGetEntryAttribute(XMLEntry, "anglz", TimeSheet.SetAngle.z)) {
+        TimeSheet.NeedSetAngle = true;
+    }
 
     int tmpFire{0};
     if (xmlDoc.iGetEntryAttribute(XMLEntry, "fire", tmpFire) && tmpFire > 0) {

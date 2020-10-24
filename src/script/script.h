@@ -61,6 +61,8 @@ struct sTimeSheet {
 
     sVECTOR3D Rotation{0.0f, 0.0f, 0.0f};
     sVECTOR3D RotationAcceler{1.0f, 1.0f, 1.0f}; // [0.0f, 1.0f]
+    sVECTOR3D SetAngle{0.0f, 0.0f, 0.0f};
+    bool NeedSetAngle{false};
     bool Fire{false};
     bool BossFire{false};
     bool Targeting{false};
