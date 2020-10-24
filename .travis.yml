@@ -24,3 +24,7 @@ before_install:
         brew install sdl2 libogg libvorbis freealut freetype
       fi
 
+script:
+  - cmake ./
+  - make -j8
+
