@@ -3,7 +3,9 @@ matrix:
     - name: Ubuntu 20.04 Clang
       os: linux
       dist: focal
-      env: MATRIX_EVAL="CC=clang && CXX=clang++"
+      env:
+      - MATRIX_EVAL="CC=clang && CXX=clang++"
+      - FILE_SUF="clang"
       addons:
         apt:
           packages:
@@ -21,7 +23,7 @@ matrix:
       dist: focal
       env:
       - MATRIX_EVAL="CC=gcc && CXX=g++"
-      - NEED_DEPLOY="true"
+      - FILE_SUF="gcc"
       addons:
         apt:
           packages:
@@ -37,9 +39,7 @@ matrix:
     - name: Ubuntu 20.04 MinGW
       os: linux
       dist: focal
-      env:
-      - NEED_DEPLOY="true"
-      - MINGW="true"
+      env: MINGW="true"
       addons:
         apt:
           packages:
@@ -52,7 +52,6 @@ matrix:
     - name: macOS native compilation
       os: osx
       osx_image: xcode12
-      env: NEED_DEPLOY="true"
       addons:
         homebrew:
           packages:
@@ -94,7 +93,7 @@ script:
 
 before_deploy:
   - |
-      if [ "$TRAVIS_BRANCH" = "$RELEASE_BRANCH" -a "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$NEED_DEPLOY" = "true" ]; then
+      if [ "$TRAVIS_BRANCH" = "$RELEASE_BRANCH" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
         if [[ -z "$TRAVIS_TAG" ]]; then
           export TRAVIS_TAG="$(awk -F'"' '/GAME_VERSION/ {print $2}' ./src/build_config.h)-$(git rev-list HEAD --count)"
           git config --local user.name "Travis"
@@ -108,7 +107,7 @@ before_deploy:
           7z a astromenace-win.zip astromenace
         elif [ ${TRAVIS_OS_NAME} = 'linux' ]; then
           echo "Make sure, you have all required libs installed: libSDL2 (ver 2.0.5+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+)." > ./astromenace/ReadMe.txt
-          tar cfz astromenace-${TRAVIS_OS_NAME}-${TRAVIS_CPU_ARCH}.tar.gz ./astromenace/*
+          tar cfz astromenace-${TRAVIS_OS_NAME}-${FILE_SUF}-${TRAVIS_CPU_ARCH}.tar.gz ./astromenace/*
         elif [ ${TRAVIS_OS_NAME} = 'osx' ]; then
           echo "Make sure, you have all required libs installed with HomeBrew (https://brew.sh/): sdl2, libogg, libvorbis, freealut, freetype." > ./astromenace/ReadMe.txt
           tar cfz astromenace-${TRAVIS_OS_NAME}.tar.gz ./astromenace/*
