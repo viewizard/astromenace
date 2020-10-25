@@ -47,6 +47,7 @@ matrix:
           - make
           - mingw-w64
           - wine
+          - wine32
     - name: macOS native compilation
       os: osx
       osx_image: xcode12
@@ -78,7 +79,7 @@ before_install:
   - | 
       if [ "$MINGW" = "true" ]; then
         wget https://github.com/viewizard/astromenace-mingw-deps/releases/download/latest/deps.zip
-        unzip deps.zip
+        unzip -o deps.zip
         export CUSTOM_CMAKE_ARGS="-DMINGW32=1 -DDEPS_PATH=$PWD/deps"
       fi
 
