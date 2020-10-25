@@ -28,7 +28,7 @@
 #ifndef BUILDCONFIG_H
 #define BUILDCONFIG_H
 
-#define GAME_VERSION    "1.4.2 git"
+#define GAME_VERSION    "1.4.2"
 #define GAME_VFS_BUILD  201024
 
 
