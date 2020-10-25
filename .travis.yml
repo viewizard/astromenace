@@ -45,6 +45,7 @@ matrix:
           packages:
           - cmake
           - make
+          - p7zip-full
           - mingw-w64
           - wine
           - wine32
