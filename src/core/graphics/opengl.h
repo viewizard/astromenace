@@ -34,6 +34,7 @@
 
 #if defined(__APPLE__) && defined(__MACH__)
     #define GL_GLEXT_LEGACY
+    #define GL_SILENCE_DEPRECATION
     #include <OpenGL/gl.h>
     #include <OpenGL/glu.h>
 #else
