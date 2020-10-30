@@ -5,12 +5,13 @@ matrix:
       dist: focal
       env:
       - MATRIX_EVAL="CC=clang && CXX=clang++"
-      - FILE_SUF="clang"
+      - NEED_DEPLOY="true"
       addons:
         apt:
           packages:
           - cmake
           - make
+          - ninja-build
           - libsdl2-dev
           - libogg-dev
           - libvorbis-dev
@@ -23,12 +24,13 @@ matrix:
       dist: focal
       env:
       - MATRIX_EVAL="CC=gcc && CXX=g++"
-      - FILE_SUF="gcc"
+      - NEED_DEPLOY="false"
       addons:
         apt:
           packages:
           - cmake
           - make
+          - ninja-build
           - libsdl2-dev
           - libogg-dev
           - libvorbis-dev
@@ -42,12 +44,13 @@ matrix:
       dist: focal
       env:
       - MATRIX_EVAL="CC=clang && CXX=clang++"
-      - FILE_SUF="clang"
+      - NEED_DEPLOY="true"
       addons:
         apt:
           packages:
           - cmake
           - make
+          - ninja-build
           - libsdl2-dev
           - libogg-dev
           - libvorbis-dev
@@ -61,12 +64,13 @@ matrix:
       dist: focal
       env:
       - MATRIX_EVAL="CC=gcc && CXX=g++"
-      - FILE_SUF="gcc"
+      - NEED_DEPLOY="false"
       addons:
         apt:
           packages:
           - cmake
           - make
+          - ninja-build
           - libsdl2-dev
           - libogg-dev
           - libvorbis-dev
@@ -77,22 +81,33 @@ matrix:
     - name: Ubuntu 20.04 MinGW
       os: linux
       dist: focal
-      env: MINGW="true"
+      env:
+      - MINGW="true"
+      - NEED_DEPLOY="true"
       addons:
         apt:
           packages:
           - cmake
           - make
+          - ninja-build
+          - libsdl2-dev
+          - libogg-dev
+          - libvorbis-dev
+          - libopenal-dev
+          - libalut-dev
+          - libfreetype6-dev
+          - libfontconfig1-dev
           - p7zip-full
           - mingw-w64
-          - wine
-          - wine32
     - name: macOS native compilation
       os: osx
       osx_image: xcode12
+      env:
+      - NEED_DEPLOY="true"
       addons:
         homebrew:
           packages:
+          - ninja
           - sdl2
           - libogg
           - libvorbis
@@ -107,26 +122,35 @@ git:
 branches:
   only:
   - master
+  - test_ci
 
 env:
   global:
-  - RELEASE_BRANCH=master
+  - RELEASE_BRANCH=test_ci
 
 before_install:
   - eval "${MATRIX_EVAL}"
   - | 
       if [ "$MINGW" = "true" ]; then
-        wget https://github.com/viewizard/astromenace-mingw-deps/releases/download/latest/deps.zip
-        unzip deps.zip
-        rm deps.zip
-        export CUSTOM_CMAKE_ARGS="-DMINGW32=1 -DDEPS_PATH=$PWD/deps"
+        wget https://github.com/viewizard/astromenace-windows-prebuilt-dependencies/releases/download/latest/prebuilt_dep_mingw_32bit.zip
+        unzip prebuilt_dep_mingw_32bit.zip
+        rm prebuilt_dep_mingw_32bit.zip
+        export CUSTOM_CMAKE_ARGS="-DMINGW=1 -DDEPS_PATH=$PWD/prebuilt_dep_mingw_32bit -DDONTCREATEVFS=1"
       fi
 
 script:
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release ${CUSTOM_CMAKE_ARGS}
-  - cmake --build . --target install -- -j8
+  - cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release ${CUSTOM_CMAKE_ARGS}
+  - cmake --build . --target install
+  - | 
+      if [ "$MINGW" = "true" ]; then
+        mkdir ../build-vfs
+        cd ../build-vfs
+        cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
+        cmake --build .
+        mv gamedata.vfs ../bin/gamedata.vfs
+      fi
   - cd ..
 
 before_deploy:
@@ -148,7 +172,7 @@ before_deploy:
           7z a astromenace-win.zip astromenace
         elif [ ${TRAVIS_OS_NAME} = 'linux' ]; then
           echo "Make sure, you have all required libs installed: libSDL2 (ver 2.0.5+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+)." > ./astromenace/ReadMe.txt
-          tar cfz astromenace-${TRAVIS_OS_NAME}-${FILE_SUF}-${TRAVIS_CPU_ARCH}.tar.gz ./astromenace/*
+          tar cfz astromenace-${TRAVIS_OS_NAME}-${TRAVIS_CPU_ARCH}.tar.gz ./astromenace/*
         elif [ ${TRAVIS_OS_NAME} = 'osx' ]; then
           echo "Make sure, you have all required libs installed with HomeBrew (https://brew.sh/): sdl2, libogg, libvorbis, freealut, freetype." > ./astromenace/ReadMe.txt
           tar cfz astromenace-${TRAVIS_OS_NAME}.tar.gz ./astromenace/*
@@ -170,4 +194,5 @@ deploy:
   on:
     repo: $TRAVIS_REPO_SLUG
     branch: $RELEASE_BRANCH
+    condition: $NEED_DEPLOY == "true"
 
