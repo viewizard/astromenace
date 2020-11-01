@@ -9,23 +9,23 @@ ENDIF()
 # $ sudo apt-get install mingw-w64
 # $ mkdir build
 # $ cd build
-# $ cmake .. -DMINGW32=1 -DDEPS_PATH=$HOME/share/AstroMenace/deps/ -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release
+# $ cmake .. -DMINGW=1 -DDEPS_PATH=/path -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release
 # $ cmake --build . --target install
 # Will automatically create VFS file on Windows and Linux (wine package must be installed).
 # If Linux don't have wine installed, use -DDONTCREATEVFS=1 and create VFS file manually.
-IF(MINGW32)
+IF(MINGW)
     # make sure, this block located before PROJECT
     SET(CMAKE_SYSTEM_NAME Windows)
     SET(CMAKE_C_COMPILER i686-w64-mingw32-gcc)
     SET(CMAKE_CXX_COMPILER i686-w64-mingw32-g++)
-ENDIF(MINGW32)
+ENDIF(MINGW)
 
 # project name
 PROJECT(AstroMenace)
 
 IF(CMAKE_HOST_WIN32)
     # at this moment, only MinGW supported for Windows build
-    SET(MINGW32 1)
+    SET(MINGW 1)
 ELSEIF(CMAKE_HOST_APPLE)
     # make sure, that CMAKE_HOST_APPLE called before CMAKE_HOST_UNIX
     SET(MACOS 1)
@@ -34,23 +34,24 @@ ELSEIF(CMAKE_HOST_UNIX)
 ENDIF()
 
 
-IF(MINGW32)
+IF(MINGW)
     # provide deps location with -DDEPS_PATH=path
     # all libs must be in 'lib' folder
     # all headers must be in 'include' folder
-    SET(ALL_LIBRARIES "mingw32
-                       -lopengl32
-                       -lglu32
-                       ${DEPS_PATH}/lib/libSDL2main.a
-                       ${DEPS_PATH}/lib/SDL2.dll
-                       ${DEPS_PATH}/lib/alut.dll
-                       ${DEPS_PATH}/lib/ogg.dll
-                       ${DEPS_PATH}/lib/vorbis.dll
-                       ${DEPS_PATH}/lib/vorbisfile.dll
-                       ${DEPS_PATH}/lib/OpenAL32.dll
-                       ${DEPS_PATH}/lib/freetype.dll")
+    SET(ALL_LIBRARIES "mingw32 \
+                       -lopengl32 \
+                       -lglu32 \
+                       ${DEPS_PATH}/lib/libSDL2main.a \
+                       ${DEPS_PATH}/lib/libSDL2.dll.a \
+                       ${DEPS_PATH}/lib/libalut.dll.a \
+                       ${DEPS_PATH}/lib/libogg.dll.a \
+                       ${DEPS_PATH}/lib/libvorbis.dll.a \
+                       ${DEPS_PATH}/lib/libvorbisfile.dll.a \
+                       ${DEPS_PATH}/lib/libOpenAL32.dll.a \
+                       ${DEPS_PATH}/lib/libfreetype.dll.a")
     INCLUDE_DIRECTORIES(SYSTEM "${DEPS_PATH}/include/")
-ELSE(MINGW32)
+    INCLUDE_DIRECTORIES(SYSTEM "${DEPS_PATH}/include/freetype2")
+ELSE(MINGW)
     # libSDL2 (./share/cmake/FindSDL2.cmake)
 
     SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/share/cmake)
@@ -161,7 +162,7 @@ ELSE(MINGW32)
     ELSE(FREETYPE_FOUND)
         MESSAGE(FATAL_ERROR "freetype not found")
     ENDIF(FREETYPE_FOUND)
-ENDIF(MINGW32)
+ENDIF(MINGW)
 
 
 # Use C++11.
@@ -215,64 +216,61 @@ IF(DATADIR)
     ADD_DEFINITIONS(-DDATADIR="${DATADIR}")
 ENDIF(DATADIR)
 
-IF(MINGW32)
+IF(MINGW)
     ADD_DEFINITIONS(-D__GNUWIN32__)
     ADD_DEFINITIONS(-DWIN32)
     ADD_DEFINITIONS(-DOV_EXCLUDE_STATIC_CALLBACKS)
     SET(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
-ENDIF(MINGW32)
+ENDIF(MINGW)
 
-IF(MINGW32)
+IF(MINGW)
     # WIN32 - suppress terminal
     ADD_EXECUTABLE(astromenace WIN32 ${astromenace_SRCS})
-ELSE(MINGW32)
+ELSE(MINGW)
     ADD_EXECUTABLE(astromenace ${astromenace_SRCS})
-ENDIF(MINGW32)
+ENDIF(MINGW)
 TARGET_LINK_LIBRARIES(astromenace ${ALL_LIBRARIES})
 
 
 ADD_CUSTOM_TARGET(CopyLIBS
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/lib/SDL2.dll ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/lib/alut.dll ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/lib/ogg.dll ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/lib/vorbis.dll ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/lib/vorbisfile.dll ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/lib/OpenAL32.dll ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/lib/freetype.dll ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/SDL2.dll          ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libalut.dll       ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libogg.dll        ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libvorbis.dll     ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libvorbisfile.dll ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/soft_oal.dll      ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libfreetype.dll   ${CMAKE_BINARY_DIR}
 )
-IF(MINGW32)
+IF(MINGW)
     ADD_DEPENDENCIES(astromenace CopyLIBS)
-ENDIF(MINGW32)
+ENDIF(MINGW)
 
 
 # generate game data file (gamedata.vfs)
 IF(NOT DONTCREATEVFS)
     SET(astromenace_BIN "astromenace")
-    IF(MINGW32)
+    IF(MINGW)
         SET(astromenace_BIN "astromenace.exe")
-        IF(CMAKE_HOST_UNIX)
-            SET(wine_BIN "wine")
-        ENDIF(CMAKE_HOST_UNIX)
-    ENDIF(MINGW32)
+    ENDIF(MINGW)
 
     ADD_CUSTOM_COMMAND(
         TARGET astromenace
         POST_BUILD
-        COMMAND ${wine_BIN} ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA} --dir=${PROJECT_BINARY_DIR}
+        COMMAND ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA} --dir=${PROJECT_BINARY_DIR}
     )
 ENDIF(NOT DONTCREATEVFS)
 
 
 INSTALL(TARGETS astromenace DESTINATION ${CMAKE_INSTALL_PREFIX})
-IF(MINGW32)
-    INSTALL(FILES "${PROJECT_BINARY_DIR}/SDL2.dll"       DESTINATION ${CMAKE_INSTALL_PREFIX})
-    INSTALL(FILES "${PROJECT_BINARY_DIR}/alut.dll"       DESTINATION ${CMAKE_INSTALL_PREFIX})
-    INSTALL(FILES "${PROJECT_BINARY_DIR}/ogg.dll"        DESTINATION ${CMAKE_INSTALL_PREFIX})
-    INSTALL(FILES "${PROJECT_BINARY_DIR}/vorbis.dll"     DESTINATION ${CMAKE_INSTALL_PREFIX})
-    INSTALL(FILES "${PROJECT_BINARY_DIR}/vorbisfile.dll" DESTINATION ${CMAKE_INSTALL_PREFIX})
-    INSTALL(FILES "${PROJECT_BINARY_DIR}/OpenAL32.dll"   DESTINATION ${CMAKE_INSTALL_PREFIX})
-    INSTALL(FILES "${PROJECT_BINARY_DIR}/freetype.dll"   DESTINATION ${CMAKE_INSTALL_PREFIX})
-ENDIF(MINGW32)
+IF(MINGW)
+    INSTALL(FILES "${DEPS_PATH}/bin/SDL2.dll"          DESTINATION ${CMAKE_INSTALL_PREFIX})
+    INSTALL(FILES "${DEPS_PATH}/bin/libalut.dll"       DESTINATION ${CMAKE_INSTALL_PREFIX})
+    INSTALL(FILES "${DEPS_PATH}/bin/libogg.dll"        DESTINATION ${CMAKE_INSTALL_PREFIX})
+    INSTALL(FILES "${DEPS_PATH}/bin/libvorbis.dll"     DESTINATION ${CMAKE_INSTALL_PREFIX})
+    INSTALL(FILES "${DEPS_PATH}/bin/libvorbisfile.dll" DESTINATION ${CMAKE_INSTALL_PREFIX})
+    INSTALL(FILES "${DEPS_PATH}/bin/soft_oal.dll"      DESTINATION ${CMAKE_INSTALL_PREFIX})
+    INSTALL(FILES "${DEPS_PATH}/bin/libfreetype.dll"   DESTINATION ${CMAKE_INSTALL_PREFIX})
+ENDIF(MINGW)
 IF(NOT DONTCREATEVFS)
     INSTALL(FILES "${PROJECT_BINARY_DIR}/gamedata.vfs"   DESTINATION ${CMAKE_INSTALL_PREFIX})
 ENDIF(NOT DONTCREATEVFS)
