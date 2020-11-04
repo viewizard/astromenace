@@ -1,10 +1,11 @@
 # AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace)
 
 * [Installation (Windows, macOS, Linux)](https://github.com/viewizard/astromenace#installation)
-* [Build (macOS, Linux)](https://github.com/viewizard/astromenace#build)
+* [Build (Windows)](https://github.com/viewizard/astromenace#build-windows)
+* [Build (macOS, Linux, BSD)](https://github.com/viewizard/astromenace#build-macos-linux-bsd)
 * [Translators Wanted](https://github.com/viewizard/astromenace#translators-wanted)
 * [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
-* [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development)  [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6)  [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)
+* [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development) [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6) [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)
 
 ---
 
@@ -26,12 +27,11 @@ More information and screenshots could be found at [AstroMenace website](https:/
 
 ## Installation
 
-Installer for Windows and macOS bundle could be found at [release](https://github.com/viewizard/astromenace/releases) section.
+Installer for Windows could be found in [Releases](https://github.com/viewizard/astromenace/releases).
 
-Almost all popular Linux distros already have a stable version of the game in their repositories. Install the "astromenace" package with your distro's package manager. We do not provide compiled binary packages for Linux anymore, contact maintainers of your Linux distro in order to get binary package.
+Almost all popular Linux distros already have a stable version of the game in their repositories. Install the "astromenace" package with your distro's package manager. We do not provide packages for any Linux anymore, contact maintainers of your Linux distro.
 
-[![latest packaged version(s)](https://repology.org/badge/latest-versions/astromenace.svg)](https://repology.org/metapackage/astromenace)
-[![Packaging status](https://repology.org/badge/tiny-repos/astromenace.svg)](https://repology.org/metapackage/astromenace)
+[![latest packaged version(s)](https://repology.org/badge/latest-versions/astromenace.svg)](https://repology.org/metapackage/astromenace) [![Packaging status](https://repology.org/badge/tiny-repos/astromenace.svg)](https://repology.org/metapackage/astromenace)
 
 #### Debian/Ubuntu and derivatives
 ```
@@ -53,7 +53,48 @@ sudo yum install astromenace
 sudo emerge astromenace
 ```
 
-## Build
+## Build (Windows)
+
+- Install MSYS2 from https://www.msys2.org (follow step-by-step instruction on first page in order to install and update MSYS2)
+- Start `MSYS2 64bit` > `MSYS2 MinGW 32-bit` terminal session from `Start` menu
+- Install all necessary packages
+```
+$ pacman -S git unzip mingw-w64-i686-{toolchain,make,cmake,ninja}
+```
+- Clone git with latest source files
+```
+$ cd ~/
+```
+```
+$ git clone https://github.com/viewizard/astromenace.git
+```
+- Download prebuilt dependencies
+```
+$ wget https://github.com/viewizard/astromenace-windows-prebuilt-dependencies/releases/download/latest/prebuilt_dep_mingw_32bit.zip
+```
+```
+$ unzip ./prebuilt_dep_mingw_32bit.zip
+```
+- Compile game binary (game data file will be created automatically):
+```
+$ mkdir ~/astromenace/build
+```
+```
+$ cd ~/astromenace/build
+```
+```
+$ cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release -DDEPS_PATH=$PWD/../../prebuilt_dep_mingw_32bit
+```
+```
+$ cmake --build . --target install
+```
+- Create desktop shortcut or start AstroMenace
+```
+$ ~/astromenace/bin/astromenace
+```
+Note, in case of default MSYS2 path, all AstroMenace binary files will be stored into folder `C:\msys64\home\user\astromenace\bin`. You can copy this files into folder you want and remove MSYS2 from your system.
+
+## Build (macOS, Linux, BSD)
 
 Build dependencies:
 libSDL2 (ver 2.0.5+), libopenal (ver 1.0+), libalut (ver 1.0+), libogg (ver 1.1+), libvorbis (ver 1.1+), freetype (ver 2.1.6+)
@@ -69,36 +110,36 @@ gcc or clang or any compiler with full [ISO/IEC 14882:2011 (C++11)](https://www.
 Download and install "Command Line Tools for Xcode" or "Xcode".
 Install HomeBrew package manager: https://brew.sh/
 ```
-$ brew install cmake sdl2 git libogg libvorbis freealut freetype
+$ brew install ninja cmake sdl2 git libogg libvorbis freealut freetype
 ```
 
 #### For Ubuntu/Mint/Debian:
 ```
-$ sudo apt-get install g++ cmake make git libsdl2-dev libogg-dev \
-  libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev
+$ sudo apt-get install g++ cmake make ninja-build libsdl2-dev libogg-dev \
+  git libvorbis-dev libopenal-dev libalut-dev libfreetype6-dev
 ```
 
 #### For Mageia:
 ```
-$ sudo urpmi gcc-c++ cmake make git libsdl2.0-devel libogg-devel \
+$ sudo urpmi gcc-c++ ninja cmake make git libsdl2.0-devel libogg-devel \
   libvorbis-devel libopenal-devel libfreealut-devel freetype2-devel
 ```
 
 #### For OpenSuse:
 ```
-$ sudo zypper install gcc-c++ cmake make git libSDL2-devel libogg-devel \
-  libvorbis-devel openal-soft-devel freealut-devel freetype2-devel
+$ sudo zypper install gcc-c++ ninja cmake make libSDL2-devel libogg-devel \
+  git libvorbis-devel openal-soft-devel freealut-devel freetype2-devel
 ```
 
 #### For Fedora:
 ```
 $ sudo yum install gcc-c++ cmake make git SDL2-devel libogg-devel libvorbis-devel \
-  openal-soft-devel freealut-devel freetype-devel linux-libertine-fonts
+  ninja-build openal-soft-devel freealut-devel freetype-devel linux-libertine-fonts
 ```
 
 #### For FreeBSD:
 ```
-$ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal freealut freetype2
+$ sudo pkg_add -r -v gcc cmake git ninja sdl20 libogg libvorbis openal freealut freetype2
 ```
 
 ### 2) Clone git with latest source files
@@ -106,23 +147,26 @@ $ sudo pkg_add -r -v gcc cmake git sdl20 libogg libvorbis openal freealut freety
 $ cd ~/
 ```
 ```
-$ git clone https://github.com/viewizard/astromenace.git astromenace
+$ git clone https://github.com/viewizard/astromenace.git
 ```
 
 ### 3) Compile game binary (game data file will be created automatically)
 ```
-$ cd ~/astromenace
+$ mkdir ~/astromenace/build
 ```
 ```
-$ cmake -DCMAKE_BUILD_TYPE=Release ./
+$ cd ~/astromenace/build
 ```
 ```
-$ make -j5
+$ cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release
+```
+```
+$ cmake --build . --target install
 ```
 
 ### 4) Create desktop shortcut or start AstroMenace
 ```
-$ ~/astromenace/astromenace
+$ ~/astromenace/bin/astromenace
 ```
 
 ## Translators Wanted
