@@ -126,7 +126,7 @@ branches:
 
 env:
   global:
-  - RELEASE_BRANCH=test_ci
+  - RELEASE_BRANCH=master
 
 before_install:
   - eval "${MATRIX_EVAL}"

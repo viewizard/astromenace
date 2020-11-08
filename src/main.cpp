@@ -150,6 +150,10 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
         return false;
     }
 
+// use minimal (default) settings for ARM, since we can't detect real performance
+#if defined(__arm__) || defined(__arm64__) || defined(__aarch64__)
+    FirstStart = false;
+#endif
     if (FirstStart) {
         if (vw_DevCaps().OpenGL_3_0_supported) {
             ChangeGameConfig().UseGLSL120 = true;
@@ -158,6 +162,7 @@ static bool CheckOpenGLCapabilities(bool FirstStart)
             ChangeGameConfig().CSAA = 2;
             ChangeGameConfig().AnisotropyLevel = vw_DevCaps().MaxAnisotropyLevel;
             ChangeGameConfig().MaxPointLights = 4;
+            ChangeGameConfig().VisualEffectsQuality = 0; // inverted (0 - all effects, 2 - minimum effects)
         }
         if (vw_DevCaps().OpenGL_4_2_supported) {
             ChangeGameConfig().ShadowMap = 1;

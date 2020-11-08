@@ -182,7 +182,7 @@ struct sGameConfig {
     int MSAA{0}; // MS anti aliasing
     int CSAA{0}; // CS anti aliasing
 
-    int VisualEffectsQuality{0};    // VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
+    int VisualEffectsQuality{2};    // VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
     int AnisotropyLevel{1};         // textures anisotropic filtering level
     bool UseGLSL120{false};         // 120 (OpenGL 2.1)
     int ShadowMap{0};               // gfx (shadow map)
