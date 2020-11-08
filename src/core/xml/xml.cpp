@@ -48,16 +48,16 @@ const std::string EndLine{"\r\n"};
  * Line number in XML file.
  */
 #ifdef NDEBUG
-static unsigned int GetLineNumber(const std::string &UNUSED(Buffer), unsigned long UNUSED(Pos))
+static std::string::size_type GetLineNumber(const std::string &UNUSED(Buffer), std::string::size_type UNUSED(Pos))
 {
     return 0;
 }
 #else
-static unsigned int GetLineNumber(const std::string &Buffer, unsigned long Pos)
+static std::string::size_type GetLineNumber(const std::string &Buffer, std::string::size_type Pos)
 {
-    unsigned int LineNumber = 1;
+    std::string::size_type LineNumber = 1;
 
-    for (unsigned int i = 0; i < Pos; i++) {
+    for (std::string::size_type i = 0; i < Pos; i++) {
         if (Buffer[i] == '\n') {
             LineNumber++;
         }
@@ -73,7 +73,7 @@ static unsigned int GetLineNumber(const std::string &Buffer, unsigned long Pos)
 bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry)
 {
     // 1 - tag's name (starts after '<' and ends by ' ', '>', '/' (/>), '\t')
-    unsigned long TagNameEnd = Buffer.find_first_of(" />\t");
+    std::string::size_type TagNameEnd = Buffer.find_first_of(" />\t");
     XMLEntry->Name = Buffer.substr(1, TagNameEnd - 1);
     if (CalculateHash) {
         XMLEntry->NameHash = constexpr_hash_djb2a(XMLEntry->Name.c_str());
@@ -88,7 +88,7 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
     }
 
     // 2 - check for attributes
-    unsigned long i = TagNameEnd;
+    std::string::size_type i = TagNameEnd;
     while (Buffer[i] != '>' || Buffer[i] != '\0') {
         // skip all ' ' and '\t'
         while ((Buffer[i] == ' ' || Buffer[i] == '\t') && Buffer[i] != '\0') {
@@ -105,7 +105,7 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
         }
 
         // attribute name
-        unsigned long AttribNameStart = i;
+        std::string::size_type AttribNameStart = i;
         while (Buffer[i] != '=' && Buffer[i] != '\0') {
             i++;
         }
@@ -114,7 +114,7 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
                       << LineNumber << "\n";
             break;
         }
-        unsigned long AttribNameEnd = i;
+        std::string::size_type AttribNameEnd = i;
         // skip all symbols till '\'' or '\"', should be next after '='
         i += 2;
         unsigned long AttribDataStart = i;
@@ -149,7 +149,7 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
  * Parse tag content.
  * We start from root and parse all children tags recursively.
  */
-bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned long StartPosition,
+bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, std::string::size_type StartPosition,
                                    const std::string &Buffer, sXMLEntry *ParentXMLEntry)
 {
     // 1 - text content
@@ -159,10 +159,10 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned lon
     }
 
     // 2 - if tag's open symbol found, parse recursively
-    unsigned long CurrentBufferPosition{0};
+    std::string::size_type CurrentBufferPosition{0};
     while (CurrentBufferPosition < Buffer.size()) {
         // locate tag open and close symbols
-        unsigned long DetectTagOpenSymbol = Buffer.find("<", CurrentBufferPosition);
+        std::string::size_type DetectTagOpenSymbol = Buffer.find("<", CurrentBufferPosition);
 
         // if no tag's open symbols - nothing to do
         if (DetectTagOpenSymbol == std::string::npos) {
@@ -172,7 +172,7 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned lon
         // check for comment
         if (!strncmp(Buffer.data() + DetectTagOpenSymbol, "<!--", strlen("<!--"))) {
             // find tag's close symbol
-            unsigned long DetectCommentCloseSymbol = Buffer.find("-->", CurrentBufferPosition);
+            std::string::size_type DetectCommentCloseSymbol = Buffer.find("-->", CurrentBufferPosition);
             if (DetectCommentCloseSymbol == std::string::npos) {
                 std::cerr << __func__ << "(): "
                           << "XML file corrupted, can't find comment end in line "
@@ -186,7 +186,7 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned lon
             continue;
         }
 
-        unsigned long DetectTagCloseSymbol = Buffer.find(">", CurrentBufferPosition);
+        std::string::size_type DetectTagCloseSymbol = Buffer.find(">", CurrentBufferPosition);
         // something wrong, xml don't have a tag's close symbol
         if (DetectTagCloseSymbol == std::string::npos) {
             std::cerr << __func__ << "(): "
@@ -225,7 +225,7 @@ bool cXMLDocument::ParseTagContent(const std::string &OriginBuffer, unsigned lon
 
         // tag opened, look at tag's close element - </tag>
         std::string CloseElement{"</" + XMLEntry->Name + ">"};
-        auto CloseElementPosition = Buffer.find(CloseElement, CurrentBufferPosition);
+        std::string::size_type CloseElementPosition = Buffer.find(CloseElement, CurrentBufferPosition);
         // something wrong, xml don't have tag's close element
         if (CloseElementPosition == std::string::npos) {
             std::cerr << __func__ << "(): "

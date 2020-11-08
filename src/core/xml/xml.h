@@ -233,7 +233,7 @@ private:
     // Parce tag line.
     bool ParseTagLine(unsigned int LineNumber, const std::string &Buffer, sXMLEntry *XMLEntry);
     // Parse tag content.
-    bool ParseTagContent(const std::string &OriginBuffer, unsigned long StartPosition,
+    bool ParseTagContent(const std::string &OriginBuffer, std::string::size_type StartPosition,
                          const std::string &Buffer, sXMLEntry *ParentXMLEntry);
 
     // Accordinately to https://www.w3schools.com/XML/xml_syntax.asp
