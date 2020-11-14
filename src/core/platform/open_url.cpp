@@ -82,11 +82,9 @@ bool vw_OpenWebsiteURL(const std::string &WebsiteURL)
         return true;
     }
 #elif defined(WIN32)
-    int rc = reinterpret_cast<int>(ShellExecuteA(nullptr, "open", WebsiteURL.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
-    // https://msdn.microsoft.com/en-us/library/windows/desktop/bb762153%28v=vs.85%29.aspx
-    // Return value (HINSTANCE)
-    // If the function succeeds, it returns a value greater than 32. If the function fails, it returns
-    // an error value that indicates the cause of the failure.
+    intptr_t rc = reinterpret_cast<intptr_t>(ShellExecuteA(nullptr, "open", WebsiteURL.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
+    // https://docs.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutea
+    // If the function succeeds, it returns a value greater than 32.
     // It can be cast only to an int and compared to either 32 or the following error codes below.
     if (rc > 32) {
         return true;
