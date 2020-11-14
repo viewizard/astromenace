@@ -127,10 +127,17 @@ static bool GetUserLocale(std::string &NeutralLocale, std::string &RegionalLocal
     typedef BOOL (WINAPI *GETUSERPREFERREDUILANGUAGES)(DWORD, PULONG, PZZWSTR, PULONG);
     GETUSERPREFERREDUILANGUAGES pGetUserPreferredUILanguages{nullptr};
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
+#endif
     pGetUserPreferredUILanguages = (GETUSERPREFERREDUILANGUAGES) GetProcAddress(hKernelDLL, "GetUserPreferredUILanguages");
     if (!pGetUserPreferredUILanguages) {
         return ReleaseDLLAndExitWithFalse();
     }
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
     ULONG numLanguages{0};
     DWORD cchLanguagesBuffer{0};
@@ -164,6 +171,7 @@ static bool GetUserLocale(std::string &NeutralLocale, std::string &RegionalLocal
     }
 
     FreeLibrary(hKernelDLL);
+
 #endif
 
     return (!NeutralLocale.empty() || !RegionalLocale.empty());
