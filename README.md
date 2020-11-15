@@ -57,23 +57,26 @@ sudo emerge astromenace
 
 - Install MSYS2 from https://www.msys2.org (follow step-by-step instruction on first page in order to install and update MSYS2)
 - Start `MSYS2 64bit` > `MSYS2 MinGW 32-bit` terminal session from `Start` menu
-- Install all necessary packages
+- Install all necessary packages and download prebuilt dependencies
+
+**For Windows 32bit build**
 ```
+$ cd /
 $ pacman -S git unzip mingw-w64-i686-{toolchain,make,cmake,ninja}
+$ wget https://github.com/viewizard/astromenace-windows-prebuilt-dependencies/releases/download/latest/prebuilt_dep_mingw_32bit.zip
+$ unzip ./prebuilt_dep_mingw_32bit.zip
 ```
+**For Windows 64bit build**
+```
+$ cd /
+$ pacman -S git unzip mingw-w64-x86_64-{toolchain,make,cmake,ninja}
+$ wget https://github.com/viewizard/astromenace-windows-prebuilt-dependencies/releases/download/latest/prebuilt_dep_mingw_64bit.zip
+$ unzip ./prebuilt_dep_mingw_64bit.zip
+```
+
 - Clone git with latest source files
 ```
-$ cd ~/
-```
-```
 $ git clone https://github.com/viewizard/astromenace.git
-```
-- Download prebuilt dependencies
-```
-$ wget https://github.com/viewizard/astromenace-windows-prebuilt-dependencies/releases/download/latest/prebuilt_dep_mingw_32bit.zip
-```
-```
-$ unzip ./prebuilt_dep_mingw_32bit.zip
 ```
 - Compile game binary (game data file will be created automatically):
 ```
