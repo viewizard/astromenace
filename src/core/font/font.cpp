@@ -45,6 +45,7 @@
 #include "../camera/camera.h"
 #include "../math/math.h"
 #include "../vfs/vfs.h"
+#include "SDL2/SDL.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 

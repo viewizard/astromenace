@@ -35,6 +35,7 @@
 #include "../ui/font.h"
 #include "config.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -51,6 +52,53 @@ const std::string ProfilesFileName{std::string{"PilotProfiles_"} +
 
 } // unnamed namespace
 
+sPilotProfile::sPilotProfile()
+{
+    memset(Name, 0, config::PROFILE_NAME_SIZE);
+
+    for (unsigned i = 0; i < config::MAX_WEAPONS; i++) {
+        Weapon[i] = 0;
+        WeaponAmmo[i] = 0;
+        WeaponSlotYAngle[i] = 0.0f;
+        WeaponControl[i] = 0;
+        WeaponAltControl[i] = 0;
+        WeaponAltControlData[i] = 0;
+    }
+
+    // default weapons for default ship
+    Weapon[0] = 1;
+    WeaponAmmo[0] = 3000;
+    WeaponControl[0] = 1;
+    Weapon[1] = 1;
+    WeaponAmmo[1] = 3000;
+    WeaponControl[1] = 1;
+    Weapon[2] = 16;
+    WeaponAmmo[2] = 200;
+    WeaponControl[2] = 2;
+
+    for (unsigned i = 0; i < config::MAX_MISSIONS; i++) {
+        ByMissionExperience[i] = 0;
+        MissionReplayCount[i] = 0;
+    }
+}
+
+sGameConfig::sGameConfig()
+{
+    // keyboard
+    KeyBoardLeft = SDLK_LEFT;
+    KeyBoardRight = SDLK_RIGHT;
+    KeyBoardUp = SDLK_UP;
+    KeyBoardDown = SDLK_DOWN;
+    KeyBoardPrimary = SDLK_LCTRL;
+    KeyBoardSecondary = SDLK_SPACE;
+    // mouse
+    MousePrimary = SDL_BUTTON_LEFT;
+    MouseSecondary = SDL_BUTTON_RIGHT;
+
+    for (unsigned i = 0; i < config::MAX_HINTS; i++) {
+        NeedShowHint[i] = true;
+    }
+}
 
 /*
  * Get configuration for read only.

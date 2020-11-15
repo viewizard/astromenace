@@ -32,6 +32,7 @@
 
 #include "buffer.h"
 #include "../math/math.h"
+#include "SDL2/SDL.h"
 
 namespace viewizard {
 

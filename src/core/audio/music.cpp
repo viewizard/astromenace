@@ -42,6 +42,7 @@ vw_UpdateMusic() and vw_IsAnyMusicPlaying() designed to be called in loop.
 */
 
 #include "buffer.h"
+#include "SDL2/SDL.h"
 
 namespace viewizard {
 

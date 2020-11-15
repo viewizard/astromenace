@@ -38,6 +38,7 @@ itself and drag object (if drag and drop are used).
 
 #include "cursor.h"
 #include "../assets/texture.h"
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

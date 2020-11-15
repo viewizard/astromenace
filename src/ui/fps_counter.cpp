@@ -27,12 +27,19 @@
 
 #include "fps_counter.h"
 #include "../config/config.h"
+#include "SDL2/SDL.h"
 #include <sstream>
 #include <iomanip>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {
+
+cFPS::cFPS()
+{
+    LastTick_ = SDL_GetTicks();
+    ClearDrawString();
+}
 
 /*
  * Clear DrawString_, if appropriate FPS not calculated yet.

@@ -33,6 +33,7 @@
 #include "../../assets/audio.h"
 #include "../space_object/space_object.h"
 #include "../../game/camera.h"
+#include <cstring>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

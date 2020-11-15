@@ -27,6 +27,7 @@
 
 #include "../base.h"
 #include "opengl.h"
+#include "SDL2/SDL.h"
 
 namespace viewizard {
 

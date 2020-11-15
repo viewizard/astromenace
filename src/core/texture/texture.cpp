@@ -45,6 +45,7 @@ care about byte alignment.
 #include "../math/math.h"
 #include "texture.h"
 #include "texture_tga.h"
+#include <cstring>
 
 namespace viewizard {
 

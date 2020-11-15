@@ -44,6 +44,7 @@
 #include "../game/hud.h"
 #include "../command.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -444,7 +445,7 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
                     Flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
                 }
 
-                if (SDL_SetWindowFullscreen(vw_GetSDLWindow(), Flags) != 0) {
+                if (SDL_SetWindowFullscreen(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), Flags) != 0) {
                     std::cerr << __func__ << "(): " << "SDL_SetWindowFullscreen() failed: "
                               << SDL_GetError() << "\n";
                     Options_Fullscreen = GameConfig().Fullscreen;
@@ -461,11 +462,11 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
                 ChangeGameConfig().Width = Options_Width;
                 ChangeGameConfig().Height = Options_Height;
 
-                SDL_SetWindowSize(vw_GetSDLWindow(),
+                SDL_SetWindowSize(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()),
                                   GameConfig().Width,
                                   GameConfig().Height);
 
-                SDL_SetWindowPosition(vw_GetSDLWindow(),
+                SDL_SetWindowPosition(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()),
                                       SDL_WINDOWPOS_CENTERED_DISPLAY(GameConfig().DisplayIndex),
                                       SDL_WINDOWPOS_CENTERED_DISPLAY(GameConfig().DisplayIndex));
 

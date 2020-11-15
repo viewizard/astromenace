@@ -36,6 +36,7 @@
 #include "../camera/camera.h"
 #include "../light/light.h"
 #include "particle_system.h"
+#include <cstring>
 
 namespace viewizard {
 

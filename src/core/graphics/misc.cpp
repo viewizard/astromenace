@@ -28,6 +28,7 @@
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "graphics.h"
+#include "SDL2/SDL.h"
 
 namespace viewizard {
 

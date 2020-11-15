@@ -41,6 +41,7 @@
 #include "../object3d/ground_object/ground_object.h"
 #include "../object3d/projectile/projectile.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "SDL2/SDL.h"
 #include <sstream>
 #include <iomanip>
 

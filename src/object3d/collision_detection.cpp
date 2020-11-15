@@ -31,6 +31,7 @@
 // TODO change from cObject3D to sModel3D
 
 #include "object3d.h"
+#include <cstring>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

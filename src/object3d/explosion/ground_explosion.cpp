@@ -32,6 +32,7 @@
 #include "../../object3d/space_object/space_object.h"
 #include "../../object3d/ground_object/ground_object.h"
 #include "../../game/camera.h"
+#include <cstring>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

@@ -31,6 +31,7 @@
 #include "../../ui/cursor.h"
 #include "../../command.h"
 #include "../../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -171,7 +172,7 @@ void SetupMissionFailedText(float NotificationTime)
 
     SetShowGameCursor(true);
     vw_GetMouseLeftClick(true);
-    SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE); // release mouse control
+    SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_FALSE); // release mouse control
 }
 
 /*

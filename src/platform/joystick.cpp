@@ -39,6 +39,7 @@ Which Joystick should be used, could be configured via config file, "JoystickNum
 #include "../core/core.h"
 #include "../config/config.h"
 #include "platform.h"
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

@@ -398,7 +398,7 @@ bool vw_CreateWindow(const char *Title, int Width, int Height, bool Fullscreen, 
 // Destroy window.
 void vw_DestroyWindow();
 // Get SDL window handle.
-SDL_Window *vw_GetSDLWindow();
+uintptr_t  vw_GetSDLWindow();
 // Create OpenGL context.
 bool vw_CreateOpenGLContext(int VSync);
 // Delete OpenGL context.

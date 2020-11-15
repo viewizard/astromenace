@@ -46,6 +46,7 @@
 #include "../game/weapon_panel.h"
 #include "../game/hud.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "SDL2/SDL.h"
 #include <sstream>
 #include <iomanip>
 
@@ -203,7 +204,7 @@ void InitGame()
     GameExperience = (GameConfig().Profile[CurrentProfile].Experience - GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission]) * 1.0f;
 
     // grab mouse control for both - windows and fullscren mode (need this for multi-monitor systems)
-    SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_TRUE);
+    SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_TRUE);
 
 
     // сбрасываем все кнопки мыши
@@ -211,7 +212,7 @@ void InitGame()
     // установка мышки на центр
     float tmpViewportWidth, tmpViewportHeight;
     vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
-    SDL_WarpMouseInWindow(vw_GetSDLWindow(), tmpViewportWidth / 2, tmpViewportHeight / 2);
+    SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), tmpViewportWidth / 2, tmpViewportHeight / 2);
     SetShowGameCursor(false);
 
     LastMouseXR = 0;
@@ -339,7 +340,7 @@ void ExitGame(eCommand Command)
         NeedHideGameMenu = true;
         SetShowGameCursor(false);
         // установка в последюю точку указателя
-        SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
+        SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
     }
 }
 void RealExitGame()
@@ -353,7 +354,7 @@ void RealExitGame()
     vw_ReleaseParticleSystem(Shild2);
 
     // release mouse control
-    SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
+    SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_FALSE);
 }
 
 //------------------------------------------------------------------------------------
@@ -555,8 +556,8 @@ void DrawGame()
             SetShowGameCursor(true);
 
             // release mouse control
-            SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_FALSE);
-            SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
+            SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_FALSE);
+            SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
         }
         // плавно возвращаем игре сокрость
         if (GameContentTransp != 0.0f) {
@@ -572,8 +573,8 @@ void DrawGame()
             GameMenuStatus = eGameMenuStatus::GAME_MENU;
 
             // grab mouse control for both - windows and fullscren mode (need this for multi-monitor systems)
-            SDL_SetWindowGrab(vw_GetSDLWindow(), SDL_TRUE);
-            SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
+            SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_TRUE);
+            SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
         }
         // останавливаем игру
         cGameSpeed::GetInstance().SetThreadSpeed((1.0f - GameContentTransp) * GameConfig().GameSpeed);
@@ -752,7 +753,7 @@ void DrawGame()
                     NeedHideGameMenu = true;
                     SetShowGameCursor(false);
                     // установка в последюю точку указателя
-                    SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
+                    SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
 
                     if (vw_IsSoundAvailable(SoundShowHideMenu)) {
                         vw_StopSound(SoundShowHideMenu, 150);
@@ -865,7 +866,7 @@ void DrawGame()
                     NeedShowGameMenu = false;
                     NeedHideGameMenu = true;
                     // установка в последюю точку указателя
-                    SDL_WarpMouseInWindow(vw_GetSDLWindow(), LastMouseXR, LastMouseYR);
+                    SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
 
                     if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu)) {
                         vw_StopSound(SoundShowHideMenu, 150);

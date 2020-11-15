@@ -40,6 +40,7 @@
 #include "../object3d/weapon/weapon.h"
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/projectile/projectile.h"
+#include "SDL2/SDL.h"
 #include <sstream>
 #include <iomanip>
 

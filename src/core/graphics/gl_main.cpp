@@ -44,6 +44,7 @@
 #include "graphics_internal.h"
 #include "graphics.h"
 #include "extensions.h"
+#include "SDL2/SDL.h"
 
 namespace viewizard {
 
@@ -76,11 +77,11 @@ std::shared_ptr<sFBO> ResolveFBO{};
 /*
  * Get SDL window handle.
  */
-SDL_Window *vw_GetSDLWindow()
+uintptr_t  vw_GetSDLWindow()
 {
     assert(SDLWindow);
 
-    return SDLWindow;
+    return reinterpret_cast<uintptr_t >(SDLWindow);
 }
 
 /*

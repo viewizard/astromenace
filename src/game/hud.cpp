@@ -33,6 +33,7 @@
 #include "../config/config.h"
 #include "../assets/texture.h"
 #include "../object3d/space_ship/space_ship.h"
+#include "SDL2/SDL.h"
 #include <sstream>
 #include <iomanip>
 

@@ -35,8 +35,6 @@
 #include <shellapi.h>
 #endif
 
-#include "SDL2/SDL.h"
-
 // STL (only includes what's really used)
 #include <unordered_map>
 #include <unordered_set>

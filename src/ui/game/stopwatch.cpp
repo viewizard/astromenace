@@ -27,6 +27,7 @@
 
 #include "stopwatch.h"
 #include "../../ui/game_speed.h"
+#include "SDL2/SDL.h"
 #include <sstream>
 #include <iomanip>
 

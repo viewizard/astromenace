@@ -30,7 +30,7 @@
 /*
  The main VFS concept:
  1. store all game data in one file;
- 2. provide unified access to game data (libSDL2 used as backend);
+ 2. provide unified access to game data;
  3. on request, copy game data to memory buffer and care about it.
 
  On VFS file open, VFS entries list generated with all available in this VFS
@@ -71,6 +71,7 @@ https://stackoverflow.com/questions/20895648/difference-in-make-shared-and-norma
 
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
+#include <cstring>
 
 namespace viewizard {
 

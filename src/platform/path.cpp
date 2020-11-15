@@ -34,6 +34,7 @@
 
 #include "../core/base.h"
 #include "../build_config.h"
+#include "SDL2/SDL.h"
 
 #if defined(WIN32)
 #include <shlobj.h>

@@ -127,35 +127,7 @@ struct sPilotProfile {
     int ByMissionExperience[config::MAX_MISSIONS];  // experience for each mission
     int MissionReplayCount[config::MAX_MISSIONS];   // how many times mission was replayed
 
-    sPilotProfile()
-    {
-        memset(Name, 0, config::PROFILE_NAME_SIZE);
-
-        for (unsigned i = 0; i < config::MAX_WEAPONS; i++) {
-            Weapon[i] = 0;
-            WeaponAmmo[i] = 0;
-            WeaponSlotYAngle[i] = 0.0f;
-            WeaponControl[i] = 0;
-            WeaponAltControl[i] = 0;
-            WeaponAltControlData[i] = 0;
-        }
-
-        // default weapons for default ship
-        Weapon[0] = 1;
-        WeaponAmmo[0] = 3000;
-        WeaponControl[0] = 1;
-        Weapon[1] = 1;
-        WeaponAmmo[1] = 3000;
-        WeaponControl[1] = 1;
-        Weapon[2] = 16;
-        WeaponAmmo[2] = 200;
-        WeaponControl[2] = 2;
-
-        for (unsigned i = 0; i < config::MAX_MISSIONS; i++) {
-            ByMissionExperience[i] = 0;
-            MissionReplayCount[i] = 0;
-        }
-    }
+    sPilotProfile();
 };
 
 struct sGameConfig {
@@ -189,15 +161,15 @@ struct sGameConfig {
     int MaxPointLights{3};          // lights point max quantity
 
     // keyboard
-    int KeyBoardLeft{SDLK_LEFT};
-    int KeyBoardRight{SDLK_RIGHT};
-    int KeyBoardUp{SDLK_UP};
-    int KeyBoardDown{SDLK_DOWN};
-    int KeyBoardPrimary{SDLK_LCTRL};
-    int KeyBoardSecondary{SDLK_SPACE};
+    int KeyBoardLeft{0};
+    int KeyBoardRight{0};
+    int KeyBoardUp{0};
+    int KeyBoardDown{0};
+    int KeyBoardPrimary{0};
+    int KeyBoardSecondary{0};
     // mouse
-    int MousePrimary{SDL_BUTTON_LEFT};
-    int MouseSecondary{SDL_BUTTON_RIGHT};
+    int MousePrimary{0};
+    int MouseSecondary{0};
     bool MouseControl{true};
     int ControlSensivity{5};
     // joystick
@@ -219,12 +191,7 @@ struct sGameConfig {
 
     int MenuScript{0}; // last used menu background script number
 
-    sGameConfig()
-    {
-        for (unsigned i = 0; i < config::MAX_HINTS; i++) {
-            NeedShowHint[i] = true;
-        }
-    }
+    sGameConfig();
 };
 
 

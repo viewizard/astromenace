@@ -28,6 +28,7 @@
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../vfs/vfs.h"
+#include <cstring>
 
 namespace viewizard {
 

@@ -41,6 +41,7 @@
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/projectile/projectile.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

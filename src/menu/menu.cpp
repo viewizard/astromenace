@@ -43,6 +43,7 @@
 #include "../command.h"
 #include "../game/camera.h"
 #include "../game.h" // FIXME "game.h" should be replaced by individual headers
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
@@ -115,7 +116,7 @@ void InitMenu(eMenuStatus NewMenuStatus)
     float tmpViewportWidth, tmpViewportHeight;
     vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
     // установка мышки, чтобы не учитывать перемещения в меню
-    SDL_WarpMouseInWindow(vw_GetSDLWindow(),
+    SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()),
                           static_cast<int>((512.0f + 256.0f) / (GameConfig().InternalWidth / tmpViewportWidth)),
                           static_cast<int>(384.0f / (GameConfig().InternalHeight / tmpViewportHeight)));
 

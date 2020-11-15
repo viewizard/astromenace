@@ -33,6 +33,7 @@
 #include "model3d.h"
 #include "shader.h"
 #include "texture.h"
+#include "SDL2/SDL.h"
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
