@@ -193,6 +193,12 @@ IF(NOT (MACOS AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
 ENDIF(NOT (MACOS AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
 
+# Suppress GCC 9+ warning: -param max-inline-insns-single limit reached [-Winline]
+# Set max-inline-insns-single to 400, same as GCC 8 default value.
+IF((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.0.0))
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --param max-inline-insns-single=400")
+ENDIF((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.0.0))
+
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wundef")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wfloat-equal")
