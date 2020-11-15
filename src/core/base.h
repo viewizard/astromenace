@@ -43,6 +43,7 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <array>
 #include <string>
 #include <locale>
 #include <iostream>
