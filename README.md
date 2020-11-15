@@ -56,17 +56,15 @@ sudo emerge astromenace
 ## Build (Windows)
 
 - Install MSYS2 from https://www.msys2.org (follow step-by-step instruction on first page in order to install and update MSYS2)
-- Start `MSYS2 64bit` > `MSYS2 MinGW 32-bit` terminal session from `Start` menu
-- Install all necessary packages and download prebuilt dependencies
 
-**For Windows 32bit build**
+**For Windows 32bit build.** Start `MSYS2 64bit` > `MSYS2 MinGW 32-bit` terminal session from `Start` menu. Install all necessary packages and download prebuilt dependencies:
 ```
 $ cd /
 $ pacman -S git unzip mingw-w64-i686-{toolchain,make,cmake,ninja}
 $ wget https://github.com/viewizard/astromenace-windows-prebuilt-dependencies/releases/download/latest/prebuilt_dep_mingw_32bit.zip
 $ unzip ./prebuilt_dep_mingw_32bit.zip
 ```
-**For Windows 64bit build**
+**For Windows 64bit build.** Start `MSYS2 64bit` > `MSYS2 MinGW 64-bit` terminal session from `Start` menu. Install all necessary packages and download prebuilt dependencies:
 ```
 $ cd /
 $ pacman -S git unzip mingw-w64-x86_64-{toolchain,make,cmake,ninja}
