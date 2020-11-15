@@ -35,6 +35,7 @@
 #include "../ui/font.h"
 #include "../assets/texture.h"
 #include "../object3d/space_ship/space_ship.h"
+#include <algorithm>
 #include <sstream>
 #include <iomanip>
 

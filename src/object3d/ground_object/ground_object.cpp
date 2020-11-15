@@ -29,6 +29,7 @@
 #include "../weapon/functions.h" // TODO code should be revised, weapon-related code should be in 'weapon' sources only
 #include "../../script/script.h"
 #include "../../config/config.h"
+#include <cmath>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

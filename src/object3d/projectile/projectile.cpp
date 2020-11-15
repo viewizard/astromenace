@@ -49,6 +49,7 @@ will not kill their speed and maneuverability and we will have nice difficulty m
 #include "functions.h"
 #include "../explosion/explosion.h"
 #include "../../assets/texture.h"
+#include <cmath>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

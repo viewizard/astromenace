@@ -27,6 +27,7 @@
 
 #include "../math/math.h"
 #include "../model3d/model3d.h"
+#include <cmath>
 
 namespace viewizard {
 

@@ -35,6 +35,7 @@
 
 #include "../texture/texture.h"
 #include "particle_system2d.h"
+#include <cmath>
 
 namespace viewizard {
 

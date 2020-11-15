@@ -28,7 +28,9 @@
 #include "../graphics/graphics.h"
 #include "../vfs/vfs.h"
 #include "model3d.h"
+#include <cmath>
 #include <cstring>
+#include <fstream>
 
 namespace viewizard {
 

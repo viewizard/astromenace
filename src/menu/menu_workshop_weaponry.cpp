@@ -41,6 +41,7 @@
 #include "../object3d/space_ship/space_ship.h"
 #include "../object3d/projectile/projectile.h"
 #include "SDL2/SDL.h"
+#include <cmath>
 #include <sstream>
 #include <iomanip>
 

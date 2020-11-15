@@ -36,6 +36,7 @@
 #include "../projectile/projectile.h"
 #include "../../assets/audio.h"
 #include "../../assets/texture.h"
+#include <cmath>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

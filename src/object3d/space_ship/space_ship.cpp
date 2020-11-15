@@ -37,6 +37,7 @@
 #include "../../config/config.h"
 #include "../../script/script.h"
 #include "../../game/camera.h"
+#include <cmath>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

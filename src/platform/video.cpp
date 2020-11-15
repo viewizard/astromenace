@@ -43,6 +43,7 @@ In real, we allow any view size with aspect ratio from 5:4 (1.25) to 16:9 (1.77)
 #include "../core/base.h"
 #include "platform.h"
 #include "SDL2/SDL.h"
+#include <algorithm>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

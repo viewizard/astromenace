@@ -35,7 +35,7 @@
 #include <shellapi.h>
 #endif
 
-// STL (only includes what's really used)
+// STL (only include here what's really used in headers)
 #include <unordered_map>
 #include <unordered_set>
 #include <forward_list>
@@ -43,17 +43,10 @@
 #include <memory>
 #include <map>
 #include <vector>
-#include <array>
 #include <string>
-#include <algorithm>
 #include <locale>
-#include <codecvt>
 #include <iostream>
-#include <ctime>
 #include <functional>
-#include <cmath>
-#include <cstdlib>
-#include <fstream>
 
 // don't setup NDEBUG in sources, use definition in build system instead
 #include <cassert>

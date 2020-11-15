@@ -29,6 +29,7 @@
 #include "../math/math.h"
 #include "../audio/audio.h"
 #include "camera.h"
+#include <cmath>
 
 namespace viewizard {
 

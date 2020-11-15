@@ -72,6 +72,7 @@ https://stackoverflow.com/questions/20895648/difference-in-make-shared-and-norma
 #include "vfs.h"
 #include <limits> // need this one for UINT16_MAX only
 #include <cstring>
+#include <fstream>
 
 namespace viewizard {
 

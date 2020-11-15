@@ -38,6 +38,7 @@
 
 #if defined(WIN32)
 #include <shlobj.h>
+#include <codecvt>
 #endif // WIN32
 
 #if defined(__unix) || (defined(__APPLE__) && defined(__MACH__))

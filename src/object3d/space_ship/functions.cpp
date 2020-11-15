@@ -30,6 +30,7 @@
 #include "../ground_object/ground_object.h"
 #include "../projectile/projectile.h"
 #include "../space_object/space_object.h"
+#include <cmath>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {

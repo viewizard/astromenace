@@ -33,6 +33,7 @@
 #include "../vfs/vfs.h"
 #include "xml.h"
 #include <cstring>
+#include <fstream>
 
 namespace viewizard {
 

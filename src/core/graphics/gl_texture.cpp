@@ -50,6 +50,7 @@
 #include "graphics_internal.h"
 #include "graphics.h"
 #include "extensions.h"
+#include <cmath>
 
 namespace viewizard {
 

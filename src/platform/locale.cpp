@@ -46,6 +46,11 @@ language name, as distinct from "en-BZ" (English, Belize).
 #include "platform.h"
 #include "SDL2/SDL.h"
 
+#if defined(WIN32)
+#include <algorithm>
+#include <codecvt>
+#endif // WIN32
+
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
 namespace astromenace {

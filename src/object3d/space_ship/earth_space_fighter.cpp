@@ -33,6 +33,8 @@
 
 #include "space_ship.h"
 #include "../../assets/texture.h"
+#include <algorithm>
+#include <cmath>
 
 // NOTE switch to nested namespace definition (namespace A::B::C { ... }) (since C++17)
 namespace viewizard {
