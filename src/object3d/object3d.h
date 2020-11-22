@@ -183,11 +183,14 @@ protected:
     cObject3D() = default;
     ~cObject3D() = default;
 
+    // should be called in UpdateWithTimeSheetList() only
+    virtual bool Update(float Time);
+
 public:
     virtual void Draw(bool VertexOnlyPass, bool ShadowMap = false);
     bool NeedCullFaces{true};
     bool NeedAlphaTest{false};
-    virtual bool Update(float Time);
+    bool UpdateWithTimeSheetList(float Time);
 
     void SetChunkLocation(const sVECTOR3D &NewLocation, unsigned ChunkNum);
     void SetChunkRotation(const sVECTOR3D &NewRotation, unsigned ChunkNum);

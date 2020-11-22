@@ -120,7 +120,7 @@ void UpdateAllSpaceShip(float Time)
 {
     // NOTE use std::erase_if here (since C++20)
     for (auto iter = ShipList.begin(); iter != ShipList.end();) {
-        if (!iter->get()->Update(Time)) {
+        if (!iter->get()->UpdateWithTimeSheetList(Time)) {
             iter = ShipList.erase(iter);
         } else {
             ++iter;
@@ -507,10 +507,6 @@ bool cSpaceShip::Update(float Time)
         return false;
     }
 
-    if (TimeDelta == 0.0f) {
-        return true;
-    }
-
     if (!TimeSheetList.empty() && !TimeSheetList.front().InUse) {
         TimeSheetList.front().InUse = true;
 
@@ -549,6 +545,11 @@ bool cSpaceShip::Update(float Time)
                 }
             }
         }
+    }
+
+    // should be after TimeSheetList block, since we may have zero time action (instant changes for states)
+    if (TimeDelta == 0.0f) {
+        return true;
     }
 
     if (!FlareWeaponSlots.empty()) {

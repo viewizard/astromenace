@@ -54,8 +54,10 @@ private:
     explicit cWeapon(const int WeaponNum);
     ~cWeapon();
 
-public:
+    // should be called in UpdateWithTimeSheetList() only
     virtual bool Update(float Time) override;
+
+public:
     virtual bool WeaponFire(float Time);
     virtual void SetRotation(const sVECTOR3D &NewRotation) override;
     virtual void SetLocation(const sVECTOR3D &NewLocation) override;

@@ -110,7 +110,7 @@ private:
 /*
  * Unpack TimeSheet to the list.
  */
-void InterAIMode(std::list<sTimeSheet> &TimeSheetList);
+void UnpackAIMode(std::list<sTimeSheet> &TimeSheetList);
 
 } // astromenace namespace
 } // viewizard namespace

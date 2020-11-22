@@ -115,7 +115,7 @@ void UpdateAllSpaceObject(float Time)
 {
     // NOTE use std::erase_if here (since C++20)
     for (auto iter = SpaceObjectList.begin(); iter != SpaceObjectList.end();) {
-        if (!iter->get()->Update(Time)) {
+        if (!iter->get()->UpdateWithTimeSheetList(Time)) {
             iter = SpaceObjectList.erase(iter);
         } else {
             ++iter;

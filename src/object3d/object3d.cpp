@@ -1001,26 +1001,65 @@ void cObject3D::Draw(bool VertexOnlyPass, bool ShadowMap)
 }
 
 /*
- * Update.
+ * Update with TimeSheetList.
  */
-bool cObject3D::Update(float Time)
+bool cObject3D::UpdateWithTimeSheetList(float Time)
 {
     if (TimeLastUpdate == -1.0f) {
         TimeLastUpdate = Time;
         return true;
     }
 
+    float tmpTimeDelta = Time - TimeLastUpdate;
+    while (tmpTimeDelta > 0.0f) {
+        // no TimeSheet in list
+        if (TimeSheetList.empty()) {
+            TimeDelta = tmpTimeDelta;
+            TimeLastUpdate = Time;
+            return Update(Time);
+        }
+
+        // if AIMode, should be unpacked first (note, we may have nested AIMode)
+        while (TimeSheetList.front().AI_Mode != 0) {
+            UnpackAIMode(TimeSheetList);
+        }
+
+        // infinity looped action
+        if (TimeSheetList.front().Time == -1.0f) {
+            TimeDelta = tmpTimeDelta;
+            TimeLastUpdate = Time;
+            return Update(Time);
+        }
+
+        // action will take all time we have
+        if (TimeSheetList.front().Time > tmpTimeDelta) {
+            TimeDelta = tmpTimeDelta;
+            TimeLastUpdate = Time;
+            TimeSheetList.front().Time -= TimeDelta;
+            return Update(Time);
+        }
+
+        TimeDelta = TimeSheetList.front().Time;
+        tmpTimeDelta -= TimeDelta;
+        TimeLastUpdate += TimeDelta;
+        if (!Update(TimeLastUpdate)) {
+            return false;
+        }
+        TimeSheetList.pop_front();
+    }
+
+    return true;
+}
+
+/*
+ * Update.
+ */
+bool cObject3D::Update(float UNUSED(Time))
+{
     if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::need_delete) {
         Lifetime = DeleteAfterLeaveSceneDelay;
         DeleteAfterLeaveScene = eDeleteAfterLeaveScene::wait_delay;
     }
-
-    TimeDelta = Time - TimeLastUpdate;
-    if (TimeDelta == 0.0f) {
-        return true;
-    }
-
-    TimeLastUpdate = Time;
 
     if (Lifetime > -1.0f) {
         Lifetime -= TimeDelta;
@@ -1034,25 +1073,6 @@ bool cObject3D::Update(float Time)
         if (ShieldCurrentStatus > ShieldInitialStatus) {
             ShieldCurrentStatus = ShieldInitialStatus;
         }
-    }
-
-    // if we have TimeSheet with actions and this is not a cycled entry
-    if (!TimeSheetList.empty() && TimeSheetList.front().Time > -1.0f) {
-        TimeSheetList.front().Time -= TimeDelta;
-        // if this entry is out of time, remove it
-        if (TimeSheetList.front().Time <= 0.0f) {
-            // correct time delta
-            if (TimeSheetList.front().Time < 0.0f) {
-                TimeDelta += TimeSheetList.front().Time;
-            }
-            TimeSheetList.pop_front();
-        }
-    }
-    // should be unpacked
-    if (!TimeSheetList.empty() && TimeSheetList.front().AI_Mode != 0) {
-        InterAIMode(TimeSheetList);
-        // since we already unpack this entry, remove it
-        TimeSheetList.pop_front();
     }
 
     return true;

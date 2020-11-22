@@ -85,7 +85,7 @@ void UpdateAllExplosion(float Time)
 {
     // NOTE use std::erase_if here (since C++20)
     for (auto iter = ExplosionList.begin(); iter != ExplosionList.end();) {
-        if (!iter->get()->Update(Time)) {
+        if (!iter->get()->UpdateWithTimeSheetList(Time)) {
             iter = ExplosionList.erase(iter);
         } else {
             ++iter;

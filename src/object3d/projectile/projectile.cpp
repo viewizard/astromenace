@@ -193,7 +193,7 @@ void UpdateAllProjectile(float Time)
 {
     // NOTE use std::erase_if here (since C++20)
     for (auto iter = ProjectileList.begin(); iter != ProjectileList.end();) {
-        if (!iter->get()->Update(Time)) {
+        if (!iter->get()->UpdateWithTimeSheetList(Time)) {
             iter = ProjectileList.erase(iter);
         } else {
             ++iter;

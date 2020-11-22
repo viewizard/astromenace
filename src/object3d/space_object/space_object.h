@@ -57,9 +57,10 @@ protected:
     cSpaceObject();
     ~cSpaceObject() = default;
 
-public:
+    // should be called in UpdateWithTimeSheetList() only
     virtual bool Update(float Time) override;
 
+public:
     float Speed{0.0f};
     sVECTOR3D RotationSpeed{0.0f, 0.0f, 0.0f};
     sVECTOR3D Velocity{0.0f, 0.0f, 0.0f};

@@ -64,8 +64,10 @@ private:
     explicit cProjectile(const int ProjectileNum);
     ~cProjectile();
 
-public:
+    // should be called in UpdateWithTimeSheetList() only
     virtual bool Update(float Time) override;
+
+public:
     virtual void SetRotation(const sVECTOR3D &NewRotation) override;
     virtual void SetLocation(const sVECTOR3D &NewLocation) override;
 

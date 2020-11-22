@@ -88,8 +88,10 @@ protected:
     cSpaceShip() = default;
     ~cSpaceShip();
 
-public:
+    // should be called in UpdateTimUpdateWithTimeSheetListeSheet() only
     virtual bool Update(float Time) override;
+
+public:
     virtual void SetLocation(const sVECTOR3D &NewLocation) override;
     virtual void SetLocationArcadePlayer(const sVECTOR3D &NewLocation);
     virtual void SetRotation(const sVECTOR3D &NewRotation) override;

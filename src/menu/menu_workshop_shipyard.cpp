@@ -450,7 +450,7 @@ void WorkshopCreateBuyShip()
                                            -1000.0f - (sharedWorkshopFighterGame->Height / 2.0f + sharedWorkshopFighterGame->AABB[6].y),
                                            -(sharedWorkshopFighterGame->Length / 2.0f + sharedWorkshopFighterGame->AABB[6].z)});
     // чтобы оружие заняло свое место...
-    sharedWorkshopFighterGame->Update(vw_GetTimeThread(0));
+    sharedWorkshopFighterGame->UpdateWithTimeSheetList(vw_GetTimeThread(0));
 
     sharedWorkshopFighterGame->SetRotation(sVECTOR3D{0.0f, 150.0f, 0.0f});
 }

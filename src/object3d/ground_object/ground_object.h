@@ -80,8 +80,10 @@ protected:
     cGroundObject();
     ~cGroundObject() = default;
 
-public:
+    // should be called in UpdateWithTimeSheetList() only
     virtual bool Update(float Time) override;
+
+public:
     virtual void SetLocation(const sVECTOR3D &NewLocation) override;
     virtual void SetRotation(const sVECTOR3D &NewRotation) override;
 

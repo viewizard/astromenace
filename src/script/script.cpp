@@ -855,12 +855,8 @@ void cMissionScript::UpdateTimeLine()
 /*
  * Unpack TimeSheet to the list.
  */
-void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
+void UnpackAIMode(std::list<sTimeSheet> &TimeSheetList)
 {
-    if (TimeSheetList.empty()) {
-        return;
-    }
-
     auto iter = TimeSheetList.begin();
 
     for (auto &xmlEntry : TimeSheetList.front().xmlAI->GetRootEntry()->ChildrenList) {
@@ -882,6 +878,8 @@ void InterAIMode(std::list<sTimeSheet> &TimeSheetList)
                 TimeSheetList.emplace(++iter, TimeSheetList.front());
             }
 
+            // since we already unpack this entry, remove it
+            TimeSheetList.pop_front();
             return;
         }
     }

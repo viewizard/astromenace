@@ -52,9 +52,10 @@ protected:
     cExplosion();
     ~cExplosion();
 
-public:
+    // should be called in UpdateWithTimeSheetList() only
     virtual bool Update(float Time) override;
 
+public:
     int ExplosionType{0};
     int ExplosionTypeByClass{0};
 

@@ -497,7 +497,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
                 }
 
                 // чтобы оружие заняло свое место...
-                sharedWorkshopFighterGame->Update(vw_GetTimeThread(0));
+                sharedWorkshopFighterGame->UpdateWithTimeSheetList(vw_GetTimeThread(0));
 
                 // сброс
                 DragWeapon = false;
@@ -925,7 +925,7 @@ void ShipSlotSetupWeapon(int SlotNum)
                 }
 
                 // чтобы оружие заняло свое место...
-                sharedWorkshopFighterGame->Update(vw_GetTimeThread(0));
+                sharedWorkshopFighterGame->UpdateWithTimeSheetList(vw_GetTimeThread(0));
 
                 // сброс
                 DragWeapon = false;
