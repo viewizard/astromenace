@@ -41,6 +41,7 @@
 // NOTE GL_MAX_TEXTURE_MAX_ANISOTROPY (since OpenGL 4.6)
 //      could be used to replace GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
 
+#include <algorithm>
 #include "graphics_internal.h"
 #include "graphics.h"
 #include "extensions.h"
