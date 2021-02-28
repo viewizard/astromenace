@@ -1,9 +1,11 @@
 [Desktop Entry]
+Version=1.0
 Type=Application
 Name=AstroMenace
+GenericName=Spaceshooter
 Comment=Hardcore 3D space scroll-shooter with spaceship upgrade possibilities
 Exec=astromenace
 Icon=astromenace
-Categories=Game;
+Categories=Game;ArcadeGame;
 StartupNotify=false
 Terminal=false
