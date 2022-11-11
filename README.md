@@ -1,10 +1,8 @@
-# AstroMenace  [![Build Status](https://travis-ci.org/viewizard/astromenace.svg?branch=master)](https://travis-ci.org/viewizard/astromenace)
+# AstroMenace
 
 * [Installation (Windows, macOS, Linux)](https://github.com/viewizard/astromenace#installation)
 * [Build (Windows)](https://github.com/viewizard/astromenace#build-windows)
 * [Build (macOS, Linux, BSD)](https://github.com/viewizard/astromenace#build-macos-linux-bsd)
-* [Translators Wanted](https://github.com/viewizard/astromenace#translators-wanted)
-* [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
 
 ---
 
@@ -173,25 +171,3 @@ $ cmake --build . --target install
 ```
 $ ~/astromenace/bin/astromenace
 ```
-
-## Translators Wanted
-Please help us make AstroMenace more friendly and clear for all gamers.
-
-AstroMenace localization now supported by Crowdin https://crowdin.com/project/astromenace.
-
-Don't hesitate to create [issue](https://github.com/viewizard/astromenace/issues), if you have questions or you need help.
-
-## Work In Progress
-Yes, AstroMenace was first released in 2007, but work still in progress. For open source game, no need to change game's title in order to evolve.
-
-The main goal now is code refactoring for modern OpenGL features and new C++ standards (C++11, STL). Plus, I still provide AstroMenace code support, that means changes for new libs versions and new compilers versions.
-
-Unfortunately, I could not provide you with any new version's release dates, since this is extremely depends from my free time and limited resources. Check project's [plans](https://github.com/viewizard/astromenace/projects) for more info about current progress.
-
-We also have a surprise for you, here is the artwork 1 of 12 light ships and 1 of 8 capital ships we already have, with best wishes from Oleg Linkov (3D models author). Since this is ours 3D models, we will release sources under GPLv3 in [astromenace-artwork](https://github.com/viewizard/astromenace-artwork) repository as soon, as AstroMenace will use them. I hope, some day we will replace all 3D models licensed under CC-BY-SA (without sources) to open source 3D models.
-<p align="center">
-  <img src="./share/wip/scout.png" alt="preview"/>
-</p>
-<p align="center">
-  <img src="./share/wip/heavy.png" alt="preview"/>
-</p>
