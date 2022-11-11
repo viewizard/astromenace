@@ -5,7 +5,6 @@
 * [Build (macOS, Linux, BSD)](https://github.com/viewizard/astromenace#build-macos-linux-bsd)
 * [Translators Wanted](https://github.com/viewizard/astromenace#translators-wanted)
 * [Work In Progress](https://github.com/viewizard/astromenace#work-in-progress)
-* [Donate to Support Development](https://github.com/viewizard/astromenace#donate-to-support-development) [![bitcoin](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://github.com/viewizard/astromenace#bitcoin-14kdalnntroffuur2tzmudup8ek3ps2uq6) [![paypal](https://img.shields.io/badge/donate-paypal-009cde.svg)](https://github.com/viewizard/astromenace#paypal-httpswwwpaypalmeviewizard)
 
 ---
 
@@ -83,8 +82,13 @@ $ mkdir ~/astromenace/build
 ```
 $ cd ~/astromenace/build
 ```
+**For Windows 32bit build:**
 ```
 $ cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release -DDEPS_PATH=$PWD/../../prebuilt_dep_mingw_32bit
+```
+**For Windows 64bit build:**
+```
+$ cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release -DDEPS_PATH=$PWD/../../prebuilt_dep_mingw_64bit
 ```
 ```
 $ cmake --build . --target install
@@ -191,11 +195,3 @@ We also have a surprise for you, here is the artwork 1 of 12 light ships and 1 o
 <p align="center">
   <img src="./share/wip/heavy.png" alt="preview"/>
 </p>
-
-## Donate to Support Development
-#### Bitcoin: 14kDaLnNTroFfuur2tZmUdUp8eK3pS2Uq6
-<p align="left">
-  <img src="./share/donate/bitcoin-qr-code.png" alt="bitcoin-qr-code"/>
-</p>
-
-#### PayPal: https://www.paypal.me/viewizard
