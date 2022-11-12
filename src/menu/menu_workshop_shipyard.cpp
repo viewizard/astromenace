@@ -432,14 +432,9 @@ void WorkshopCreateBuyShip()
         }
     }
     // если было больше слотов чем есть сейчас
-    if (OldWeaponQuantity > sharedWorkshopFighterGame->WeaponSlots.size()) {
-        for (unsigned j = 0; j < OldWeaponQuantity; j++) {
-            if (sharedWorkshopFighterGame->WeaponSlots.size() <= j) {
-                ChangeGameConfig().Profile[CurrentProfile].Weapon[j] = 0;
-            }
-        }
+    for (unsigned j = sharedWorkshopFighterGame->WeaponSlots.size(); j < OldWeaponQuantity; j++) {
+        ChangeGameConfig().Profile[CurrentProfile].Weapon[j] = 0;
     }
-
 
     // создаем системы (визуальные)
     SetEarthSpaceFighterEngine(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].EngineSystem);
