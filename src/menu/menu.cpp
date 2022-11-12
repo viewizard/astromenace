@@ -558,9 +558,9 @@ void DrawMenu()
     vw_DrawTextUTF32(6, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, vw_GetTextUTF32("Version"));
     vw_DrawText(16 + VSize, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f, GAME_VERSION);
     // Copyright
-    int CSize = vw_TextWidth("Copyright © 2007-2020, Viewizard");
+    int CSize = vw_TextWidth("Copyright © 2007-2022, Viewizard");
     vw_DrawText(GameConfig().InternalWidth - 6 - CSize, GameConfig().InternalHeight - 16, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.99f,
-                "Copyright © 2007-2020, Viewizard");
+                "Copyright © 2007-2022, Viewizard");
 
     ResetFontSize();
     vw_End2DMode();

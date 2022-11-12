@@ -67,9 +67,12 @@ const std::vector<std::string> CreditsArray{
     "",
     "TRANSLATORS",
     "Bernd Dau (de)",
+    "Jürgen Buchmüller (de)", // Not in `text.csv` file.
+    "Michael Lauenburger (de)", // Not in `text.csv` file.
     "Mikhail Kurinnoi (ru)",
     "Jacek Fiedorowicz (pl)",
     "Juan Francisco Astudillo Palacios (es)",
+    "p1p2r (tr)", // Not in `text.csv` file.
     "",
     "COMMUNITY CONTRIBUTORS",
     "Alistair Findlay",
@@ -97,7 +100,7 @@ const std::vector<std::string> CreditsArray{
     "",
     "",
     " ", /* this is correct, we need not empty line for white text color in next line */
-    "Copyright © 2007-2020, Viewizard",
+    "Copyright © 2007-2022, Viewizard",
     "https://viewizard.com"
 };
 
@@ -158,6 +161,7 @@ void CreditsMenu()
         tmpColor = CreditsArray[i].empty() ? eRGBCOLOR::yellow : eRGBCOLOR::white;
     }
 
+/*
     int X = GameConfig().InternalWidth / 2 - 256 - 38;
     int Y = 165 + 100 * 5;
     if (DrawButton256(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, Button10Transp, LastButton10UpdateTime)) {
@@ -167,6 +171,13 @@ void CreditsMenu()
     X = GameConfig().InternalWidth / 2 + 38;
     if (DrawButton256(X,Y, vw_GetTextUTF32("DONATE"), MenuContentTransp, Button11Transp, LastButton11UpdateTime)) {
         vw_OpenWebsiteURL("https://viewizard.com/donate.html");
+    }
+*/
+    int X = (GameConfig().InternalWidth - 384) / 2;
+    int Y = 165 + 100 * 5;
+    if (DrawButton384(X,Y, vw_GetTextUTF32("MAIN MENU"), MenuContentTransp, Button10Transp, LastButton10UpdateTime)) {
+        cCommand::GetInstance().Set(eCommand::SWITCH_TO_MAIN_MENU);
+        PlayMusicTheme(eMusicTheme::MENU, 2000, 2000);
     }
 }
 
