@@ -154,7 +154,7 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
 
 
 
-    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed && ON
         && (vw_GetMouseLeftClick(true)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -305,7 +305,7 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
         vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
     }
 
-    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed && ON
         && (vw_GetMouseLeftClick(true)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -411,7 +411,7 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
     }
 
-    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed && ON
         && (vw_GetMouseLeftClick(true)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -517,7 +517,7 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, Transp, Text);
     }
 
-    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed && ON
         && (vw_GetMouseLeftClick(true)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         if (SoundClick) {
@@ -595,7 +595,7 @@ void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text
     }
 
 
-    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed && ON
         && !DragWeapon
         && (vw_GetMouseLeftClick(true)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
@@ -683,7 +683,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
     }
 
 
-    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed && ON
         && (vw_GetMouseLeftClick(true)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -770,7 +770,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
     }
 
 
-    if (GetCursorStatus() == eCursorStatus::ActionAllowed
+    if (GetCursorStatus() == eCursorStatus::ActionAllowed && ON
         && (vw_GetMouseLeftClick(true)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
