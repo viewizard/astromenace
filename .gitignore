@@ -4,3 +4,5 @@ CppCheckResults.xml
 CMakeLists.txt.user
 .vscode
 build
+bin
+
