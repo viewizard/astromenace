@@ -5,7 +5,7 @@
 	<AIFile>script/aimode.xml</AIFile>
 
 	<!-- Debug setup -->
-	<Debug showline="0" undead="0" showbb="0"/>
+	<Debug showline="0" showbb="0"/>
 
 	<!-- Environment setup-->
 	

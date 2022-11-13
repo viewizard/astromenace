@@ -29,7 +29,7 @@
 #define BUILDCONFIG_H
 
 #define GAME_VERSION    "1.4.2"
-#define GAME_VFS_BUILD  221112
+#define GAME_VFS_BUILD  221114
 
 
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file.
