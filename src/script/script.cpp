@@ -67,8 +67,6 @@ Z = 0 at the level start, and increased during level.
 namespace viewizard {
 namespace astromenace {
 
-extern bool UndeadDebugMode;
-
 // FIXME should be fixed, don't allow global scope interaction for local variables
 extern std::weak_ptr<cSpaceShip> PlayerFighter;
 // FIXME should be fixed, use 'include' instead
@@ -204,7 +202,6 @@ bool cMissionScript::RunScript(const std::string &FileName, float InitTime)
 
     ShowLineNumber = false;
     SetObjectsBBRenderMode(eRenderBoundingBoxes::None);
-    UndeadDebugMode = false;
 
     xmlDoc.reset(new cXMLDocument(FileName, true));
 
@@ -369,9 +366,6 @@ bool cMissionScript::Update(float Time)
                     SetObjectsBBRenderMode(static_cast<eRenderBoundingBoxes>(tmpBBRenderMode));
                 }
             }
-
-            UndeadDebugMode = false;
-            xmlDoc->bGetEntryAttribute(xmlEntry, "undead", UndeadDebugMode);
 
             bool tmpStopwatchStatus{false};
             xmlDoc->bGetEntryAttribute(xmlEntry, "time", tmpStopwatchStatus);

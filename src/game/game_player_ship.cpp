@@ -25,8 +25,6 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../platform/platform.h"
@@ -47,26 +45,25 @@
 namespace viewizard {
 namespace astromenace {
 
-// режим неубиваемости... отладка
-bool UndeadDebugMode = false;
+// Immortal player ship mode for debug.
+//#define ImmortalDebugMode
 
-// состояние управления, нужно, чтобы определять что менялось
+// last mouse position, need in order to detect do we have mouse move or not
 int LastMouseX = -1;
 int LastMouseY = -1;
-// для восстановления положения курсора в меню, точнее при выходе из него
+// last mouse position for restore at exit from game to menu
 int LastMouseXR = 0;
 int LastMouseYR = 0;
 
-// в показателях от -1.0f до 1.0f
-// назад-вперед
+// appropriate range: [-1.0f, 1.0f]
+// forward-backward move
 float MoveFB = 0.0f;
-// лево-право
+// left-right move
 float MoveLR = 0.0f;
 
-// текущая энергия корабля
 float CurrentPlayerShipEnergy;
 
-// для управления в аркадном режиме маневровыми двигателями
+// control of maneurous engines
 bool PlayerFighterLeftEng = false;
 bool PlayerFighterRightEng = false;
 
@@ -76,31 +73,29 @@ float ShildRadius;
 float ShildEnergyStatus;
 float ShildStartHitStatus;
 
-// голос с ворнингом, если столкнулись с несбиваемой частью
+// voice (index in voice array) with warning about collision detected
 unsigned int VoiceWarningCollisionDetected{0};
 
-// Номер, для проигрывания голосового сообщения об обнаружении ракеты
+// voice (index in voice array) with warning about missile detected
 unsigned int VoiceMissileDetected{0};
 bool VoiceMissileDetectedStatus{false};
-// номер, для проигрывания голосового сообщения о проблемах в орудии
-// Номер, для проигрывания голосового сообщения об отсутствии снарядов в боекомплекте
+// voice (index in voice array) with weapon malfunction + no ammo
 unsigned int VoiceWeaponMalfunction{0};
-// для звука - мало жизни
+// sound that player have low life (armor)
 unsigned int SoundLowLife{0};
 
 
-// тут храним какая часть взорвалась на корабле игрока
+// in case of destroy, player ship represented as several parts, store part number that should be explode (part that was hit)
 int PlayerDeadObjectPieceNum;
 
 
-// симулятивный режим
+// movement calculation for semulative mode
 sVECTOR3D CurrentMovementVel(0.0f, 0.0f, 0.0f);
 
-// работа с морганием вывода
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 
-// для переменного типа стрельбы
+// repeated fire related variables
 int PrimaryGroupCurrentFireWeaponNum = 1;
 float PrimaryGroupCurrentFireWeaponDelay = 0.0f;
 int SecondaryGroupCurrentFireWeaponNum = 1;
@@ -110,23 +105,23 @@ float SecondaryGroupCurrentFireWeaponDelay = 0.0f;
 
 
 //------------------------------------------------------------------------------------
-// Получаем максимально возможное значение энергии для устройства реактора-батареи
+// Return max energy count produced by energy system by its number
 //------------------------------------------------------------------------------------
 float GetShipMaxEnergy(int Num)
 {
     switch (Num) {
     case 0:
         return 0.0f;
-    // аккамулятор
+    // accumulator
     case 1:
         return 100.0f;
-    // ядерный
+    // nuclear
     case 2:
         return 200.0f;
-    // плазменный
+    // plasma
     case 3:
         return 400.0f;
-    // антиматерия
+    // antimatter
     case 4:
         return 800.0f;
 
@@ -138,23 +133,23 @@ float GetShipMaxEnergy(int Num)
     return -1.0f;
 }
 //------------------------------------------------------------------------------------
-// Получаем перезарядку энергии, в секунду
+// Return energy recharge per second
 //------------------------------------------------------------------------------------
 float GetShipRechargeEnergy(int Num)
 {
     switch (Num) {
     case 0:
         return 0.0f;
-    // аккамулятор
+    // accumulator
     case 1:
         return 20.0f;
-    // ядерный
+    // nuclear
     case 2:
         return 50.0f;
-    // плазменный
+    // plasma
     case 3:
         return 130.0f;
-    // антиматерия
+    // antimatter
     case 4:
         return 250.0f;
 
@@ -166,21 +161,21 @@ float GetShipRechargeEnergy(int Num)
     return -1.0f;
 }
 //------------------------------------------------------------------------------------
-// Получаем расход энергии в секунду для доп систем (GameAdvancedProtectionSystem)
+// Return energy consumption per second for GameAdvancedProtectionSystem by its number
 //------------------------------------------------------------------------------------
 float GetShipProtectionSystemEnergyUse(int Num)
 {
     switch (Num) {
-    // нано роботы
+    // nano
     case 1:
         return 10.0f;
-    // спец защитный слой
+    // layer
     case 2:
         return 0.0f;
-    // щит
+    // shild
     case 3:
         return 50.0f;
-    // отражатель
+    // deflector
     case 4:
         return 100.0f;
 
@@ -192,21 +187,21 @@ float GetShipProtectionSystemEnergyUse(int Num)
     return 0.0f;
 }
 //------------------------------------------------------------------------------------
-// Получаем расход энергии в секунду для двигателей GameEngineSystem
+// Return energy consumption per second for GameEngineSystem by its number
 //------------------------------------------------------------------------------------
 float GetShipEngineSystemEnergyUse(int Num)
 {
     switch (Num) {
-    // обычные двигатели
+    // jet
     case 1:
         return 5.0f;
-    // фатоновые
+    // foton
     case 2:
         return 10.0f;
-    // плазменные
+    // plasma
     case 3:
         return 30.0f;
-    // на антиматерии
+    // antimatter
     case 4:
         return 60.0f;
 
@@ -224,11 +219,11 @@ float GetShipEngineSystemEnergyUse(int Num)
 
 
 //------------------------------------------------------------------------------------
-// Инициализация корабля игрока
+// Player ship initialization at each game start/restart
 //------------------------------------------------------------------------------------
 void InitGamePlayerShip()
 {
-    // создаем корабль игрока по настройкам в профайле
+    //create ship
     VoiceMissileDetected = 0;
     VoiceMissileDetectedStatus = false;
     VoiceWeaponMalfunction = 0;
@@ -237,7 +232,6 @@ void InitGamePlayerShip()
     int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
     GameEnemyArmorPenalty = 1;
 
-    // если не создано, здесь будет ноль скорее всего
     if (GameConfig().Profile[CurrentProfile].ShipHull == 0) {
         std::cerr << __func__ << "(): " << "Error, Pilot Profile not created.\n";
     }
@@ -258,7 +252,7 @@ void InitGamePlayerShip()
     sharedPlayerFighter->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ArmorStatus;
     sharedPlayerFighter->ShowStatus = false;
 
-    // создаем оружие
+    // create weapon
     for (unsigned i=0; i<sharedPlayerFighter->WeaponSlots.size(); i++) {
         if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
             if (SetEarthSpaceFighterWeapon(PlayerFighter, i+1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
@@ -270,7 +264,7 @@ void InitGamePlayerShip()
         }
     }
 
-    // создаем системы (визуальные)
+    // create systems (visual part of internal ship systems)
     SetEarthSpaceFighterEngine(PlayerFighter, GameEngineSystem);
     SetEarthSpaceFighterArmor(PlayerFighter, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 
@@ -382,17 +376,17 @@ void InitGamePlayerShip()
 
 
 
-    // предварительная установка, полностью заряженное устройство
+    // initial setup, ship have full amount of energy
     CurrentPlayerShipEnergy = GetShipMaxEnergy(GamePowerSystem);
 
-    // предварительно иним состояния управления
+    // initial setup for controls
     LastMouseX = -1;
     LastMouseY = -1;
     MoveFB = 0.0f;
     MoveLR = 0.0f;
     CurrentMovementVel = sVECTOR3D{0.0f, 0.0f, 0.0f};
 
-    // сброс стрельбы...
+    // initial setup for fire related variables
     PrimaryGroupCurrentFireWeaponNum = 1;
     PrimaryGroupCurrentFireWeaponDelay = 0.0f;
     SecondaryGroupCurrentFireWeaponNum = 1;
@@ -407,7 +401,7 @@ void InitGamePlayerShip()
 
 
 //------------------------------------------------------------------------------------
-// Основная процедура обработки состояния корабля игрока
+// Main loop for player ship
 //------------------------------------------------------------------------------------
 void GamePlayerShip()
 {
@@ -417,68 +411,60 @@ void GamePlayerShip()
     }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // проверяем, корабль живой еще, или сбили и нужно его удалить...
+    // check player's ship "life" status (in our case "life" is "armor")
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (sharedPlayerFighter->ArmorCurrentStatus <= 0.0f) {
-        // редкий случай
-        if (UndeadDebugMode) {
-            sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->ArmorInitialStatus;
-        } else {
-            // делаем взрыв
-            // + 10.0f движение камеры
-            CreateSpaceExplosion(*sharedPlayerFighter, 31, sharedPlayerFighter->Location, sharedPlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
+#ifdef ImmortalDebugMode
+        sharedPlayerFighter->ArmorCurrentStatus = sharedPlayerFighter->ArmorInitialStatus;
+#else
+        // create explosion with camera movement increased by 10.0f
+        CreateSpaceExplosion(*sharedPlayerFighter, 31, sharedPlayerFighter->Location, sharedPlayerFighter->Speed+10.0f, PlayerDeadObjectPieceNum);
 
-            // включаем музыку и отображение "миссия провалена"
-            PlayMusicTheme(eMusicTheme::FAILED, 2000, 2000);
-
-            // удаляем и уходим отсюда
-            ReleaseSpaceShip(PlayerFighter);
-
-            SetupMissionFailedText(20.0f);
-
-            return;
-        }
+        // switch to "FAILED" music theme and show "mission failed" text
+        PlayMusicTheme(eMusicTheme::FAILED, 2000, 2000);
+        ReleaseSpaceShip(PlayerFighter);
+        SetupMissionFailedText(20.0f);
+        return;
+#endif
     }
 
 
-
-    // голос выводим только в игре! в меню включается пауза
-    // и если не закончился уровень
+    // play voice only in game (not in menu) and only in case mission not complete yet
     if (GameContentTransp < 0.99f && !GameMissionCompleteStatus) {
         int WarningMessagesCount = 0;
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Вывод голосового предупреждения, если навелась ракета
+        // Check is we have some missile that targeted on player ship
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        bool CheckStatus{false};
+        bool CheckTargetedStatus{false};
         ForEachProjectile([&] (const cProjectile &Projectile) {
             if (auto sharedTarget = Projectile.Target.lock()) {
                 if (sharedTarget.get() == sharedPlayerFighter.get() &&
-                    // homing missile targeted on this ship, but not homing mine
+                    // homing missile targeted on player ship, but not homing mine
                     (Projectile.Num < 26 || Projectile.Num > 29)) {
-                    CheckStatus = true;
+                    CheckTargetedStatus = true;
                 }
             }
         });
 
-        if (CheckStatus) {
-            // проверяем, действительно еще играем (играем только 1 раз!)
+        if (CheckTargetedStatus) {
+            // check is we play "missile detected" voice (must play only one instance)
             if (!vw_IsSoundAvailable(VoiceMissileDetected) && !VoiceMissileDetectedStatus) {
                 VoiceMissileDetected = PlayVoicePhrase(eVoicePhrase::MissileDetected, 1.0f);
                 VoiceMissileDetectedStatus = true;
             }
 
-            // визуальный вывод - выводим постоянно
+            // draw "Missile Detected" text
             vw_SetFontSize(24);
             int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidthUTF32(vw_GetTextUTF32("Missile Detected"))) / 2;
             vw_DrawTextUTF32(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3, vw_GetTextUTF32("Missile Detected"));
             ResetFontSize();
             WarningMessagesCount++;
         } else {
-            if (CurrentAlert3 == 1.0f) { // сделали полный цикл , предыдущее значение счетчика было минимальное
+            if (CurrentAlert3 == 1.0f) {
                 VoiceMissileDetectedStatus = false;
             } else if (VoiceMissileDetectedStatus) {
-                // визуальный вывод - выводим постоянно
+                // draw "Missile Detected" text
                 vw_SetFontSize(24);
                 int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidthUTF32(vw_GetTextUTF32("Missile Detected"))) / 2;
                 vw_DrawTextUTF32(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, CurrentAlert3, vw_GetTextUTF32("Missile Detected"));
@@ -490,7 +476,7 @@ void GamePlayerShip()
 
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Вывод голосового предупреждения если возможно столкновение
+        // Check collision with object on player ship course
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         bool CollisionDetected = false;
         ForEachSpaceObject([&CollisionDetected, &sharedPlayerFighter] (const cSpaceObject &tmpSpace, eSpaceCycle &Command) {
@@ -519,13 +505,12 @@ void GamePlayerShip()
             }
         });
         if (CollisionDetected) {
-            // голос, ворнинг, можем столкнуться с объектом
-            // проверяем, действительно еще играем
+            // check is we play "collision detected" voice (must play only one instance)
             if (!vw_IsSoundAvailable(VoiceWarningCollisionDetected)) {
                 VoiceWarningCollisionDetected = PlayVoicePhrase(eVoicePhrase::Warning, 1.0f);
             }
 
-            // визуальный вывод - выводим постоянно
+            // draw "Collision Course Detected" text
             vw_SetFontSize(24);
             int TmpFontSize = (GameConfig().InternalWidth - vw_TextWidthUTF32(vw_GetTextUTF32("Collision Course Detected"))) / 2;
             vw_DrawTextUTF32(TmpFontSize, 720 - 40*WarningMessagesCount, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3, vw_GetTextUTF32("Collision Course Detected"));
@@ -538,15 +523,15 @@ void GamePlayerShip()
 
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Вывод голосового предупреждения, если в оружие нет пуль
+        // Check ammo in player ship's weapon
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        if (!sharedPlayerFighter->WeaponSlots.empty()) { // если вообще есть оружие
+        if (!sharedPlayerFighter->WeaponSlots.empty()) {
             for (const auto &tmpWeaponSlot : sharedPlayerFighter->WeaponSlots) {
-                // если нажали стрелять, а патронов нет в одном из орудий
+                // in case player try to fire, but some weapon don't have ammo
                 if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
                     if (tmpWeaponSlot.SetFire
                         && sharedWeapon->Ammo <= 0
-                        && !vw_IsSoundAvailable(VoiceWeaponMalfunction)) { // проверяем, действительно еще играем
+                        && !vw_IsSoundAvailable(VoiceWeaponMalfunction)) { // check is we play "weapon malfunction" voice (must play only one instance)
                         VoiceWeaponMalfunction = PlayVoicePhrase(eVoicePhrase::WeaponMalfunction, 1.0f);
                     }
                 }
@@ -555,12 +540,11 @@ void GamePlayerShip()
 
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Звуковое оповещение, если жизни менее 10%
+        // SFX that player ship have less than 10% armor
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // если меньше 10% нужно бить тревогу
         if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus / 10.0f
+            // must play only one instance
             && !vw_IsSoundAvailable(SoundLowLife)) {
-            // если не играем, запускаем звук сирены
             SoundLowLife = PlayMenuSFX(eMenuSFX::WarningLowLife, 1.0f);
         }
     }
@@ -570,14 +554,14 @@ void GamePlayerShip()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // управление кораблем - движение
+    // player ship's control - movement
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if (GameContentTransp < 1.0f) { // если не в меню нажимают
-        // получаем данные, для обоих типов управления
-        // уже получили данные, нужно игнорировать остальные источникик
+    if (GameContentTransp < 1.0f) { // in case this is not menu, but game
+        // get data for both - sim and arcade control mode
+        // in case we already have data from mouse/joystick - ignore keyboard
         bool NeedSkip = false;
 
-        // mouse + joystick (since we emulate mouse movements)
+        // mouse + joystick (since joystick emulate mouse movements)
         if (GameConfig().MouseControl) {
             SDL_GetMouseState(&LastMouseXR, &LastMouseYR);
 
@@ -588,10 +572,10 @@ void GamePlayerShip()
                 LastMouseY = Y;
             } else {
                 if (X != LastMouseX || Y != LastMouseY) {
-                    // 0.9+0.1 = 1.0 - минимум, всегда 1.0 должен быть!
+                    // 0.9+0.1 = 1.0 - minimal, must be 1.0!
                     float Koef = 0.9f + GameConfig().ControlSensivity / 10.0f;
 
-                    // при любом реальном разрешении у нас x и y меняются с учетом AspectRatio
+                    // for any resolution x and y will take into account AspectRatio
                     float AWw2 = GameConfig().InternalWidth / 2.0f;
                     float AHw2 = GameConfig().InternalHeight / 2.0f;
 
@@ -607,7 +591,7 @@ void GamePlayerShip()
 
         }
 
-        // клавиатура
+        // keyboard
         if (!NeedSkip) {
             if (vw_GetKeyStatus(GameConfig().KeyBoardDown)) {
                 MoveFB -= 2.0f * (GameConfig().ControlSensivity / 10.0f) * sharedPlayerFighter->TimeDelta;
@@ -625,7 +609,7 @@ void GamePlayerShip()
 
 
 
-        // дополнительная проверка, т.к. можем выйти выйти за пределы
+        // additional check, since previously we could calculate out of range value
         if (MoveFB < -1.0f) {
             MoveFB = -1.0f;
         }
@@ -644,7 +628,7 @@ void GamePlayerShip()
 
 
 
-        // находим конечную точку перемещения
+        // calculate end point of movement
         sVECTOR3D PlayerFighterEndLocation;
         if (GameConfig().InternalWidth == 1024.0f) {
             PlayerFighterEndLocation = sVECTOR3D{-(73.15f-sharedPlayerFighter->Width/2.0f+MoveFB*(20.05f-sharedPlayerFighter->Length/6.0f))*MoveLR,
@@ -658,33 +642,27 @@ void GamePlayerShip()
 
         PlayerFighterEndLocation += GetCameraCoveredDistance();
 
-        // если есть двигатель
+        // check, that we have engines (yes, player could sell it and don't have any engines on ship)
         if (GameEngineSystem != 0) {
-            // в зависимости от типа управления выполняем действия
             if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode == 1) {
-                // аркадный режим
+                // arcade control mode
 
-                // запускаем маневровые двигатели, если тянем корабль в сторону
+
+                // by default, stop maneurouse engines
+                PlayerFighterLeftEng = false;
+                PlayerFighterRightEng = false;
+                // in case ship move left or right, start maneurouse engines
                 if ((int)sharedPlayerFighter->Location.x > (int)PlayerFighterEndLocation.x) {
                     PlayerFighterLeftEng = true;
-                    PlayerFighterRightEng = false;
                 }
-                if ((int)sharedPlayerFighter->Location.x < (int)PlayerFighterEndLocation.x) {
-                    PlayerFighterLeftEng = false;
+                else if ((int)sharedPlayerFighter->Location.x < (int)PlayerFighterEndLocation.x) {
                     PlayerFighterRightEng = true;
                 }
-                // если не двигаем, останавливаем маневровые двигатели
-                if ((int)sharedPlayerFighter->Location.x == (int)PlayerFighterEndLocation.x) {
-                    PlayerFighterLeftEng = false;
-                    PlayerFighterRightEng = false;
-                }
 
 
-                // находим расстояние
+                // calculate direction and distance from current location to end location
                 sVECTOR3D PlayerFighterNewDirection = PlayerFighterEndLocation - sharedPlayerFighter->Location;
                 float EndLocationDistance = PlayerFighterNewDirection.Length();
-
-                // находим направление движения
                 PlayerFighterNewDirection.Normalize();
 
                 float SimMoveSpeed = EndLocationDistance;
@@ -696,10 +674,10 @@ void GamePlayerShip()
                 SimMoveSpeed = SimMoveSpeed*4.0f*sharedPlayerFighter->TimeDelta;
 
 
-                // получаем текущее движение
+                // calculate current movement location
                 CurrentMovementVel = PlayerFighterNewDirection^SimMoveSpeed;
 
-                // проверка
+                // additional check that movement are in allowed range
                 float MaxSpeed = CurrentMovementVel.Length();
                 CurrentMovementVel.Normalize();
                 if (MaxSpeed > 30.0f) {
@@ -709,30 +687,24 @@ void GamePlayerShip()
                 CurrentMovementVel = CurrentMovementVel^MaxSpeed;
 
             } else {
-                // симулятивный режим
+                // sim control mode
 
 
-                // запускаем маневровые двигатели, если тянем корабль в сторону
+                // by default, stop maneurouse engines
+                PlayerFighterLeftEng = false;
+                PlayerFighterRightEng = false;
+                // in case ship move left or right, start maneurouse engines
                 if ((int)sharedPlayerFighter->Location.x > (int)PlayerFighterEndLocation.x) {
                     PlayerFighterLeftEng = true;
-                    PlayerFighterRightEng = false;
                 }
-                if ((int)sharedPlayerFighter->Location.x < (int)PlayerFighterEndLocation.x) {
-                    PlayerFighterLeftEng = false;
+                else if ((int)sharedPlayerFighter->Location.x < (int)PlayerFighterEndLocation.x) {
                     PlayerFighterRightEng = true;
                 }
-                // если не двигаем, останавливаем маневровые двигатели
-                if ((int)sharedPlayerFighter->Location.x == (int)PlayerFighterEndLocation.x) {
-                    PlayerFighterLeftEng = false;
-                    PlayerFighterRightEng = false;
-                }
 
 
-                // находим расстояние
+                // calculate direction and distance from current location to end location
                 sVECTOR3D PlayerFighterNewDirection = PlayerFighterEndLocation - sharedPlayerFighter->Location;
                 float EndLocationDistance = PlayerFighterNewDirection.Length();
-
-                // находим направление движения
                 PlayerFighterNewDirection.Normalize();
 
                 float SimMoveSpeed = EndLocationDistance;
@@ -744,10 +716,10 @@ void GamePlayerShip()
                 SimMoveSpeed = SimMoveSpeed*(sharedPlayerFighter->MaxAcceler/14.0f)*sharedPlayerFighter->TimeDelta;
 
 
-                // получаем текущее движение
+                // calculate current movement location
                 CurrentMovementVel = PlayerFighterNewDirection^SimMoveSpeed;
 
-                // проверка
+                // additional check that movement are in allowed range
                 float MaxSpeed = CurrentMovementVel.Length();
                 CurrentMovementVel.Normalize();
                 if (MaxSpeed > sharedPlayerFighter->MaxSpeed) {
@@ -759,14 +731,22 @@ void GamePlayerShip()
             }
         }
 
-        // переносим корабль
+        // move ship to new location
         sVECTOR3D CurrentVel = sharedPlayerFighter->Location + CurrentMovementVel;
         CurrentVel.y = 0.0f;
         sharedPlayerFighter->SetLocationArcadePlayer(CurrentVel);
 
 
 
-        // если стандартный аспект рейшен, надо перемещать камеру в дополнении к перемещению корабля
+        // in case "standard" AspectRatio, care about camera movement too
+        // in this case camera "move" left-right inside more wide size of widescreen view
+        //
+        //   widescreen view
+        //   [    <- [standard view] ->        ]
+        //   [       [             ]           ]
+        //   [       [             ]           ]
+        //   [       [             ]           ]
+        //
         if (GameConfig().InternalWidth == 1024.0f) {
             float DeviationSize = 14.55f;
 
@@ -800,10 +780,10 @@ void GamePlayerShip()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // управление кораблем - стрельба
+    // player ship's control - fire
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if (GameContentTransp < 0.5f // если не в меню нажимают
-        && !sharedPlayerFighter->WeaponSlots.empty()) { // если вообще есть оружие
+    if (GameContentTransp < 0.5f // in case this is not menu, but game
+        && !sharedPlayerFighter->WeaponSlots.empty()) {
 
         int PrimCount = 0;
         float PrimTime = 0.0f;
@@ -813,9 +793,9 @@ void GamePlayerShip()
         PrimaryGroupCurrentFireWeaponDelay -= sharedPlayerFighter->TimeDelta;
         SecondaryGroupCurrentFireWeaponDelay -= sharedPlayerFighter->TimeDelta;
 
-        // находим кол-во оружия в группах
+        // calculate weapons quantity in groups (primary, secondary)
         for (unsigned i = 0; i < sharedPlayerFighter->WeaponSlots.size(); i++) {
-            if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
+            if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // if weapon istalled
 
                 if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 1
                     || GameConfig().Profile[CurrentProfile].WeaponControl[i] == 3) {
@@ -839,11 +819,10 @@ void GamePlayerShip()
         int SecNum = 0;
 
         for (unsigned i = 0; i < sharedPlayerFighter->WeaponSlots.size(); i++) {
-            if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // если это оружие установлено
+            if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) { // if weapon istalled
 
                 sharedPlayerFighter->WeaponSlots[i].SetFire = false;
 
-                // получаем данные, в какую группу относится
                 bool primary_fire = false;
                 bool secondary_fire = false;
                 if (GameConfig().Profile[CurrentProfile].WeaponControl[i] == 1
@@ -855,7 +834,7 @@ void GamePlayerShip()
                     secondary_fire = true;
                 }
 
-                // мышка
+                // mouse
                 if (GameConfig().MouseControl) {
                     // primary fire
                     if (primary_fire) {
@@ -897,7 +876,7 @@ void GamePlayerShip()
                         }
                     }
 
-                    // альтернативное управление
+                    // custom control
                     if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 2
                         && vw_GetMouseButtonStatus(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i])) {
                         sharedPlayerFighter->WeaponSlots[i].SetFire = true;
@@ -905,7 +884,7 @@ void GamePlayerShip()
                 }
 
 
-                // джойстик
+                // joystick
                 if (isJoystickAvailable()) {
                     // primary fire
                     if (primary_fire) {
@@ -947,14 +926,14 @@ void GamePlayerShip()
                         }
                     }
 
-                    // альтернативное управление
+                    // custom control
                     if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 3
                         && GetJoystickButton(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i])) {
                         sharedPlayerFighter->WeaponSlots[i].SetFire = true;
                     }
                 }
 
-                // клавиатура
+                // keyboard
 
                 // primary fire
                 if (primary_fire) {
@@ -996,7 +975,7 @@ void GamePlayerShip()
                     }
                 }
 
-                // альтернативное управление
+                // custom control
                 if (GameConfig().Profile[CurrentProfile].WeaponAltControl[i] == 1
                     && vw_GetKeyStatus(GameConfig().Profile[CurrentProfile].WeaponAltControlData[i])) {
                         sharedPlayerFighter->WeaponSlots[i].SetFire = true;
@@ -1010,17 +989,14 @@ void GamePlayerShip()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // управление и работа внутренних систем корабля
+    // internal ship's systems
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // сделать:
-    // учитывать, как работает двигатель... стоим или летим...
-    // если не аркадный режим...
-    if (GameSpaceShipControlMode != 1) {
+    if (GameSpaceShipControlMode != 1) { // for sim mode only
         if (CurrentPlayerShipEnergy < GetShipEngineSystemEnergyUse(GameEngineSystem)*sharedPlayerFighter->TimeDelta) {
+            // no power, stifle all engines
             sharedPlayerFighter->MaxSpeed = 0.0f;
             sharedPlayerFighter->MaxAcceler = 0.0f;
             sharedPlayerFighter->MaxSpeedRotate = 0.0f;
-            // глушим двигатели
             for (auto &tmpEngine : sharedPlayerFighter->Engines) {
                 if (auto sharedEngine = tmpEngine.lock()) {
                     sharedEngine->IsSuppressed = true;
@@ -1044,7 +1020,6 @@ void GamePlayerShip()
             sharedPlayerFighter->MaxSpeed = GetEnginePower(GameEngineSystem);
             sharedPlayerFighter->MaxAcceler = GetEngineAcceleration(GameEngineSystem);
             sharedPlayerFighter->MaxSpeedRotate = GetEngineRotatePower(GameEngineSystem);
-            // запускаем прорисовку
             for (auto &tmpEngine : sharedPlayerFighter->Engines) {
                 if (auto sharedEngine = tmpEngine.lock()) {
                     sharedEngine->IsSuppressed = false;
@@ -1071,23 +1046,20 @@ void GamePlayerShip()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // энергия для перезарядки и выстрела...
+    // weapon energy related routine
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // сейчас получаем всю энергию для перезарядки и выстрела
-    // потом лучше будет переделать на постепенный отбор энергии
     for (unsigned i = 0; i < sharedPlayerFighter->WeaponSlots.size(); i++) {
         if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
             if (auto sharedWeapon = sharedPlayerFighter->WeaponSlots[i].Weapon.lock()) {
                 if (sharedWeapon->CurrentEnergyAccumulated < sharedWeapon->EnergyUse) {
-                    // если энергии не достаточно для зарядки орудия
+                    // not enough energy for weapon fire
                     if (CurrentPlayerShipEnergy < sharedWeapon->EnergyUse) {
-                        // останавливаем перезарядку оружия
+                        // stop energy weapon reload
                         sharedWeapon->LastFireTime += sharedPlayerFighter->TimeDelta;
                         if (auto sharedFire = sharedWeapon->Fire.lock()) {
                             sharedFire->IsSuppressed = true;
                         }
                     } else {
-                        // если энергии достаточно, все нормально берем ее и перезаряжаем оружие
                         sharedWeapon->CurrentEnergyAccumulated = sharedWeapon->EnergyUse;
                         CurrentPlayerShipEnergy -= sharedWeapon->EnergyUse;
                     }
@@ -1098,14 +1070,14 @@ void GamePlayerShip()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // питание других (защитных) систем
+    // defence system energy related routine
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (CurrentPlayerShipEnergy >= GetShipEngineSystemEnergyUse(GameEngineSystem)*sharedPlayerFighter->TimeDelta) {
 
         switch (GameAdvancedProtectionSystem) {
-        // нано роботы
+        // nano
         case 1:
-            // восстанавливаем на 0.5% в секунду
+            // repair 0.5% armor per second
             if (sharedPlayerFighter->ArmorCurrentStatus < sharedPlayerFighter->ArmorInitialStatus) {
                 CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem) * sharedPlayerFighter->TimeDelta;
                 sharedPlayerFighter->ArmorCurrentStatus += (sharedPlayerFighter->ArmorInitialStatus / 200.0f) * sharedPlayerFighter->TimeDelta;
@@ -1114,12 +1086,12 @@ void GamePlayerShip()
                 }
             }
             break;
-        // спец защитный слой
+        // armor layer
         case 2:
-            break; // ничего не делаем
-        // щит
+            break; // do nothing, this passive resistance system
+        // shield
         case 3:
-            // восстанавливаем полностью за 4 секунды
+            // full restore during 4 seconds
             if (ShildEnergyStatus < 1.0f) {
                 CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem) * sharedPlayerFighter->TimeDelta;
                 ShildEnergyStatus += 0.02f * sharedPlayerFighter->TimeDelta;
@@ -1128,9 +1100,9 @@ void GamePlayerShip()
                 }
             }
             break;
-        // отражатель
+        // deflector
         case 4:
-            // восстанавливаем полностью за 2 секунды
+            // full restore during 2 seconds
             if (ShildEnergyStatus < 1.0f) {
                 CurrentPlayerShipEnergy -= GetShipProtectionSystemEnergyUse(GameAdvancedProtectionSystem) * sharedPlayerFighter->TimeDelta;
                 ShildEnergyStatus += 0.03f * sharedPlayerFighter->TimeDelta;
@@ -1144,7 +1116,7 @@ void GamePlayerShip()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // управление визуализацией щитов-дефлекторов
+    // shield and deflector current strength status visualization
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (auto sharedShild1 = Shild1.lock()) {
         sharedShild1->MoveSystem(sharedPlayerFighter->Location + sharedPlayerFighter->OBB.Location);
@@ -1161,7 +1133,7 @@ void GamePlayerShip()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // если реактор - можем генерировать энергию, если баттарея - нет
+    // generate energy for reactors only, not battery
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     CurrentPlayerShipEnergy += GetShipRechargeEnergy(GamePowerSystem)*sharedPlayerFighter->TimeDelta;
     if (CurrentPlayerShipEnergy > GetShipMaxEnergy(GamePowerSystem)) {

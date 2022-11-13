@@ -25,8 +25,6 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
 #include "core/core.h"
 #include "config/config.h"
 #include "platform/platform.h"
@@ -92,13 +90,13 @@ void Loop_Proc()
     cGameSpeed::GetInstance().Update();
     cFPS::GetInstance().Update();
 
-    // после обхода всех активных элементов меню, надо подкорректировать состояние выбора через клавиатуру (если оно было)
+    // switch active menu element by keyboard (TAB key)
     if (vw_GetKeyStatus(SDLK_TAB)) {
         CurrentKeyboardSelectMenuElement++;
         vw_SetKeyStatus(SDLK_TAB, false);
     }
 
-    // если не в игре, используем и кнопки курсора
+    // switch active menu element by keyboard (arrow keys)
     if (MenuStatus != eMenuStatus::GAME
         || (MenuStatus == eMenuStatus::GAME && (isDialogBoxDrawing() || GameContentTransp >= 0.99f))) {
         if (vw_GetKeyStatus(SDLK_RIGHT) || vw_GetKeyStatus(SDLK_DOWN)) {
@@ -117,7 +115,7 @@ void Loop_Proc()
     }
 
     if (CurrentKeyboardSelectMenuElement > 0) {
-        // если у нас вообще есть активные элементы, ставим на первый
+        // if we have active menu elements, switch to first
         if (CurrentActiveMenuElement > 0) {
             if (CurrentKeyboardSelectMenuElement > CurrentActiveMenuElement) {
                 CurrentKeyboardSelectMenuElement = 1;
@@ -128,7 +126,7 @@ void Loop_Proc()
     }
     CurrentActiveMenuElement = 0;
 
-    // делаем на рабочем столе бмп скриншоты
+    // make screenshot and save it as BMP file at Desktop
     if (vw_GetKeyStatus(SDLK_PRINTSCREEN) || vw_GetKeyStatus(SDLK_F12)) {
         std::time_t RawTime = std::time(nullptr);
         std::array<char, 128> tmpBuffer;
@@ -140,12 +138,12 @@ void Loop_Proc()
     }
 
     if (MenuStatus == eMenuStatus::GAME) {
-        // изменение вывода состояния вооружения
+        // change weapon panel's view
         if (vw_GetKeyStatus(SDLK_F8)) {
             WeaponPanelViewNext(ChangeGameConfig().WeaponPanelView);
             vw_SetKeyStatus(SDLK_F8, false);
         }
-        // изменение типов стрельбы
+        // change fire mode
         if (vw_GetKeyStatus(SDLK_F9)) {
             ChangeGameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode++;
             if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode > 2) {

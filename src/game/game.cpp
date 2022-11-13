@@ -134,7 +134,7 @@ bool NeedShowGameMenu = false;
 bool NeedHideGameMenu = false;
 
 
-// работа с морганием вывода
+// alarm's blinking internal counters
 extern float CurrentAlert2;
 extern float CurrentAlert3;
 extern float CurrentTime;
