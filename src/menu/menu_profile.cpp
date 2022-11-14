@@ -28,8 +28,6 @@
 // FIXME ostringstream is not so fast, move all string initialization into setup,
 //       all ostringstream-related code should be called only one time in init
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
@@ -46,8 +44,8 @@
 namespace viewizard {
 namespace astromenace {
 
-// вот тут храним самый важный номер! - номер текущего профайла!!!
-int CurrentProfile=-1;
+// current active profile number
+int CurrentProfile = -1;
 
 
 std::u32string NewProfileName;
@@ -60,11 +58,11 @@ unsigned int SoundTaping{0};
 
 
 //------------------------------------------------------------------------------------
-// создание новой записи
+// create new record
 //------------------------------------------------------------------------------------
 void NewRecord()
 {
-    // заносим в новый профайл (последний)
+    // add new profile as the last one
     int ProfileNum = -1;
     for (int i = 4; i >= 0; i--) {
         if (!GameConfig().Profile[i].Used) {
@@ -73,29 +71,30 @@ void NewRecord()
     }
 
 
-    // выводим диалог - все заняты!
     if (ProfileNum == -1) {
+        // no empty slot
         SetCurrentDialogBox(eDialogBox::ProfileCreationError);
         return;
     }
 
     if (NewProfileName.empty()) {
+        // can't create profile without profile name
         return;
     }
 
 
-    // пишем данные в профайл
+    // store profile data
 
     ChangeGameConfig().Profile[ProfileNum] = sPilotProfile{};
     ChangeGameConfig().Profile[ProfileNum].Used = true;
     strcpy(ChangeGameConfig().Profile[ProfileNum].Name, ConvertUTF8.to_bytes(NewProfileName).c_str());
 
-    // подготавливаем, для новой записи
+    // clear for next usage
     NewProfileName.clear();
 
     CurrentProfile = ProfileNum;
     ChangeGameConfig().LastProfile = CurrentProfile;
-    // сразу ставим первую миссию все равно выбирать не из чего
+    // by default, first mission only allowed and active (player will not need choose it from mission list)
     CurrentMission = 0;
     ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
     ProfileDifficulty(ProfileNum, eDifficultyAction::Update);
@@ -105,11 +104,11 @@ void NewRecord()
 
 
 //------------------------------------------------------------------------------------
-// создание дубликата записи
+// duplicate record
 //------------------------------------------------------------------------------------
 void DuplicateRecord()
 {
-    // ищем номер пустого слота для создания копии профайла
+    // find empty slot for duplicate
     int ProfileNum = -1;
     for (int i = 4; i >= 0; i--) {
         if (!GameConfig().Profile[i].Used) {
@@ -117,13 +116,13 @@ void DuplicateRecord()
         }
     }
 
-    // выводим диалог - все слоты заняты!
     if (ProfileNum == -1) {
+        // no empty slot
         SetCurrentDialogBox(eDialogBox::ProfileCreationError);
         return;
     }
 
-    // копируем данные в новый профайл
+    // copy all data into new profile record
     memcpy(&ChangeGameConfig().Profile[ProfileNum], &GameConfig().Profile[CurrentProfile], sizeof(GameConfig().Profile[0]));
 
     CurrentProfile = ProfileNum;
@@ -136,7 +135,7 @@ void DuplicateRecord()
 
 
 //------------------------------------------------------------------------------------
-// удаление записи
+// delete record
 //------------------------------------------------------------------------------------
 void DeleteRecord()
 {
@@ -144,31 +143,25 @@ void DeleteRecord()
         return;
     }
 
-    // если это последняя запись
-    if (CurrentProfile == 4) {
+    if (CurrentProfile == config::MAX_PROFILES - 1 || !GameConfig().Profile[CurrentProfile + 1].Used) {
+        // delete last record in list
         ChangeGameConfig().Profile[CurrentProfile].Used = false;
         CurrentProfile -= 1;
     } else {
-        // или после этой записи - ничего нет
-        if (!GameConfig().Profile[CurrentProfile+1].Used) {
-            ChangeGameConfig().Profile[CurrentProfile].Used = false;
-            CurrentProfile -= 1;
-        } else {
-            // удалили где-то в середине, сдвигаем все записи
-            for (int i = CurrentProfile; i < 4; i++) {
-                memcpy(&ChangeGameConfig().Profile[i], &GameConfig().Profile[i + 1], sizeof(GameConfig().Profile[0]));
-                ChangeGameConfig().Profile[i+1].Used = false;
-            }
+        // delete record from the middle of list
+        for (int i = CurrentProfile; i < config::MAX_PROFILES - 1; i++) {
+            memcpy(&ChangeGameConfig().Profile[i], &GameConfig().Profile[i + 1], sizeof(GameConfig().Profile[0]));
+            ChangeGameConfig().Profile[i+1].Used = false;
         }
     }
 
-
-    // проверяем, текущий номер
+    // if first profile was deleted - make first profile active again (if have it)
     if (CurrentProfile == -1 && GameConfig().Profile[0].Used) {
         CurrentProfile = 0;
     }
 
     ChangeGameConfig().LastProfile = CurrentProfile;
+    // re-calculate all difficulty % in array for all profiles (we use pre-calculated array in order to update it only when we change something)
     ProfileDifficulty(config::MAX_PROFILES /*out of range*/, eDifficultyAction::UpdateAll);
 }
 
@@ -182,12 +175,12 @@ void DeleteRecord()
 
 
 //------------------------------------------------------------------------------------
-// ввод названия
+// input text (new profile name)
 //------------------------------------------------------------------------------------
 void ProfileInputText()
 {
 
-    if (!vw_GetCurrentUnicodeChar().empty()) {// если тут не ноль, а юникод - значит нажали
+    if (!vw_GetCurrentUnicodeChar().empty()) {// in case this is not 0, but unicode - key is pressed
         if (vw_TextWidthUTF32(NewProfileName) < 540) {
             NewProfileName += vw_GetCurrentUnicodeChar();
 
@@ -196,12 +189,11 @@ void ProfileInputText()
             }
             SoundTaping = PlayMenuSFX(eMenuSFX::TapingClick, 1.0f);
         }
-        vw_SetCurrentUnicodeChar(nullptr); // сразу сбрасываем данные
+        vw_SetCurrentUnicodeChar(nullptr); // reset data
     }
 
 
 
-    // проверяем, может спец-код
     if (vw_GetKeyStatus(SDLK_BACKSPACE) && !NewProfileName.empty()) {
         NewProfileName.pop_back();
 
@@ -213,7 +205,6 @@ void ProfileInputText()
         vw_SetKeyStatus(SDLK_BACKSPACE, false);
     }
 
-    // ввод названия
     if ((vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)) && !NewProfileName.empty()) {
         NewRecord();
         //Audio_PlayMenuSound(4,1.0f);
@@ -226,7 +217,7 @@ void ProfileInputText()
     int X1 = GameConfig().InternalWidth / 2 - 372;
     int Y1 = 230;
 
-    // находим положения ввода
+    // draw input's blinking cursor
     int Size = vw_TextWidthUTF32(NewProfileName);
     sRECT SrcRect{0, 0, 2, 2};
     sRECT DstRect{X1 + Size + 2, Y1 - 2, X1 + 26 + Size, Y1 + 24};
@@ -259,7 +250,7 @@ void ProfileInputText()
 
 
 //------------------------------------------------------------------------------------
-// выбор текущего профайла
+// choice profile from the list
 //------------------------------------------------------------------------------------
 void ProfileMenu()
 {
@@ -272,7 +263,6 @@ void ProfileMenu()
     int Y1 = 200;
     int Prir1 = 24;
 
-    // надпись
     vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetTextUTF32("New Pilot Profile"));
 
 
@@ -282,7 +272,7 @@ void ProfileMenu()
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
     DstRect(X1,Y1-4,X1+590,Y1-4+30);
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
-    // кнопка, создания новой записи
+    // new profile creation button
     bool Off = false;
     if (NewProfileName.empty()) {
         Off = true;
@@ -291,7 +281,6 @@ void ProfileMenu()
         NewRecord();
     }
 
-    // ввод текста
     if (!isDialogBoxDrawing() && MenuContentTransp == 1.0f) {
         ProfileInputText();
     }
@@ -306,7 +295,7 @@ void ProfileMenu()
 
 
 
-    // список для выбора записи
+    // profile list
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, MenuContentTransp, vw_GetTextUTF32("Pilot Profiles"));
     int Size = vw_TextWidthUTF32(vw_GetTextUTF32("Money"));
@@ -388,7 +377,7 @@ void ProfileMenu()
             vw_DrawText(SizeI, TmpY, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
 
 
-            // работаем с клавиатурой
+            // keyboard control
             if (MenuContentTransp >= 0.99f && !isDialogBoxDrawing()) {
                 CurrentActiveMenuElement++;
             }
@@ -399,29 +388,25 @@ void ProfileMenu()
                 }
             }
 
-            // проверяем, если стоим над записью
             SrcRect(0,0,2,2);
             DstRect(X1,Y1-233+46*i,X1+750,Y1-234+46+46*i);
             if (!isDialogBoxDrawing() && (vw_MouseOverRect(DstRect) || InFocusByKeyboard)) {
                 TMPSoundOnProfileID = i;
                 SetCursorStatus(eCursorStatus::ActionAllowed);
-                // если только встали - нужно звуком это показать
                 if (SoundOnProfileID != i) {
                     SoundOnProfileID = i;
-                    // если задействуем клавиатуру - неиграем тут звук
+                    // don't play SFX for keyboard control
                     if (CurrentKeyboardSelectMenuElement == 0) {
                         PlayMenuSFX(eMenuSFX::OverLine, 1.0f);
                     }
                 }
 
                 if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
-                    // если другой - нужно сбросить миссию...
                     if (CurrentProfile != i) {
                         CurrentMission = GameConfig().Profile[i].LastMission;
                     }
                     CurrentProfile = i;
                     ChangeGameConfig().LastProfile = CurrentProfile;
-                    // играем звук выбора
                     PlayMenuSFX(eMenuSFX::SelectLine, 1.0f);
                     if (InFocusByKeyboard) {
                         vw_SetKeyStatus(SDLK_KP_ENTER, false);
@@ -430,11 +415,9 @@ void ProfileMenu()
                 }
 
                 if (CurrentProfile != i) {
-                    // переход по 2-му клику
                     if (vw_GetMouseLeftDoubleClick(true)) {
                         CurrentProfile = i;
                         ChangeGameConfig().LastProfile = CurrentProfile;
-                        // если другой - нужно сбросить миссию...
                         CurrentMission = GameConfig().Profile[CurrentProfile].LastMission;
                         cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
                     }
@@ -445,7 +428,6 @@ void ProfileMenu()
                         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
                     }
                 } else {
-                    // переход по 2-му клику
                     if (vw_GetMouseLeftDoubleClick(true)) {
                         cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
                     }
@@ -463,13 +445,12 @@ void ProfileMenu()
 
         TmpY += 46;
     }
-    // если не стоим над профайлами - нужно сбросить флаг
     if (TMPSoundOnProfileID == -1) {
         SoundOnProfileID = -1;
     }
 
 
-    // подсветка выбранного...
+    // highlight chosen profile
     if (CurrentProfile != -1) {
         SrcRect(0,0,2,2);
         DstRect(X1+2,Y1-233+46*CurrentProfile,X1+748,Y1-235+46+46*CurrentProfile);
@@ -486,7 +467,7 @@ void ProfileMenu()
     Y1 += Prir1;
 
 
-    // кнопка создания дубликата
+    // duplicate profile button
     Off = true;
     if (CurrentProfile >= 0) {
         Off = false;
@@ -495,7 +476,7 @@ void ProfileMenu()
         DuplicateRecord();
     }
 
-    // кнопка удаления записи
+    // delete profile button
     Off = true;
     if (CurrentProfile >= 0) {
         Off = false;
@@ -505,7 +486,7 @@ void ProfileMenu()
     }
 
 
-    // кнопка установки сложности
+    // profile difficulty button
     Off = true;
     if (CurrentProfile >= 0) {
         Off = false;

@@ -25,8 +25,6 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../assets/audio.h"
 #include "../assets/texture.h"
@@ -42,22 +40,22 @@ extern bool DragWeapon;
 
 
 
-// для управление через клавиатуру
+// for keyboard control (for bypass menu items)
 int CurrentActiveMenuElement = 0;
 int CurrentKeyboardSelectMenuElement = 0;
 
 
 
 
-// для кнопок, чтобы проигрывать наведение
-// последние координаты кнопки на которую наводились
+// for mouse/joystick control, play only one SFX instance at moves over button
+// hold last mouse position coordinates (X, Y)
 int NeedPlayOnButtonSoundX = 0;
 int NeedPlayOnButtonSoundY = 0;
 
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки 384
+// 384 button
 //------------------------------------------------------------------------------------
 bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float &ButTransp, float &Update)
 {
@@ -66,7 +64,7 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
     float IntTransp = Transp;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -82,9 +80,8 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
     DstRect(X+2,Y+1,X+384,Y+63);
     if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)
         && !isDialogBoxDrawing() && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
         ON = true;
-        if (Transp == 1.0f) {
+        if (Transp == 1.0f) { // in case showing/hiding menu - button must be not active
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
 
@@ -115,14 +112,12 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
 
 
 
-    // размер задней тени
+    // draw shadow
     SrcRect(2,2,512-2,96-2 );
-    // рисуем тень
     DstRect(X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_back.tga"), true, IntTransp);
-
+    // draw button
     SrcRect(0,0,384,64 );
-    // рисуем кнопку
     DstRect(X,Y,X+384,Y+64);
     if (!ON) {
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_out.tga"), true, Transp);
@@ -132,20 +127,18 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
 
 
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
-
-    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    // in case text is too long for this button size, make some scaling
     float WScale = 0;
     if (Size > 310) {
         Size = 310;
         WScale = -310;
     }
 
-    // находим смещение текста
+    // text start draw position
     int SizeI = X + (SrcRect.right-SrcRect.left-Size)/2;
 
-    // рисуем текст
+    // draw text
     if (!ON) {
         vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
     } else {
@@ -178,7 +171,7 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки - 256
+// 256 button
 //------------------------------------------------------------------------------------
 bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float &ButTransp, float &Update, bool Off)
 {
@@ -217,7 +210,7 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
     float IntTransp = Transp;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if ((Transp >= 0.99f) && !isDialogBoxDrawing() && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -233,9 +226,8 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
     DstRect(X+2,Y+1,X+256,Y+63);
     if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)
         && !isDialogBoxDrawing() && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
         ON = true;
-        if (Transp == 1.0f) {
+        if (Transp == 1.0f) { // in case showing/hiding menu - button must be not active
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
 
@@ -270,14 +262,12 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
 
 
 
-    // размер задней тени
+    // draw shadow
     SrcRect(2,2,512-2,96-2 );
-    // рисуем тень
     DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, IntTransp);
-
+    // draw button
     SrcRect(0,0,256,64 );
-    // рисуем кнопку
     DstRect(X,Y,X+256,Y+64);
     if (!ON) {
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_out.tga"), true, Transp);
@@ -286,19 +276,17 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
     }
 
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
-
-    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    // in case text is too long for this button size, make some scaling
     float WScale = 0;
     if (Size > 190) {
         Size = 190;
         WScale = -190;
     }
 
-    // находим смещение текста
+    // text start draw position
     int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-    // рисуем текст
+    // draw text
     if (!ON) {
         vw_DrawTextUTF32(SizeI, Y+21, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
     } else {
@@ -324,7 +312,7 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки - 200
+// 200 dialog button
 //------------------------------------------------------------------------------------
 bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, bool Off)
 {
@@ -333,10 +321,8 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
     DstRect(X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
     MouseRect(X,Y,X+204,Y+35);
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
-
-    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    // in case text is too long for this button size, make some scaling
     float WScale = 0;
     if (Size > 176) {
         Size = 176;
@@ -365,7 +351,7 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
     bool ON = false;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -379,9 +365,8 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
     if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
         && !isDialogBoxDrawing() && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
         ON = true;
-        if (Transp == 1.0f) {
+        if (Transp == 1.0f) { // in case showing/hiding menu - button must be not active
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
 
@@ -404,7 +389,7 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_in.tga"), true, Transp);
     }
 
-    // рисуем текст
+    // draw text
     if (!ON) {
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
     } else {
@@ -427,7 +412,7 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки - 128
+// 128 dialog button
 //------------------------------------------------------------------------------------
 bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, bool Off, bool SoundClick)
 {
@@ -436,17 +421,15 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
     DstRect(X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
     MouseRect(X,Y,X+132,Y+35);
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
-
-    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
+    // in case text is too long for this button size, make some scaling
     float WScale = 0;
     if (Size > 108) {
         Size = 108;
         WScale = -108;
     }
 
-    // находим смещение текста
+    // text start draw position
     int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
 
 
@@ -471,7 +454,7 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
     bool ON = false;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -485,9 +468,8 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
     if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
         && !isDialogBoxDrawing() && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
         ON = true;
-        if (Transp == 1.0f) {
+        if (Transp == 1.0f) { // in case showing/hiding menu - button must be not active
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
 
@@ -510,7 +492,7 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_in.tga"), true, Transp);
     }
 
-    // рисуем текст
+    // draw text
     if (!ON) {
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
     } else {
@@ -543,19 +525,18 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
 
 //------------------------------------------------------------------------------------
-// прорисовка чекбокса
+// checkbox
 //------------------------------------------------------------------------------------
 void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text, float Transp)
 {
     sRECT SrcRect, DstRect;
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
 
     bool ON = false;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -567,20 +548,18 @@ void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text
     }
 
 
-    // 20 - расстояние между текстом
+    // 20 - spacing between text
     DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
     if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard)
         && !isDialogBoxDrawing() && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
         ON = true;
-        if (Transp == 1.0f) {
+        if (Transp == 1.0f) { // in case showing/hiding menu - button must be not active
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
     }
 
 
 
-    // рисуем
     SrcRect(0,0,40,38);
     DstRect(X,Y,X+40,Y+38);
     if (!ON || DragWeapon) {
@@ -613,7 +592,7 @@ void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки вверх для списков
+// up button for list
 //------------------------------------------------------------------------------------
 bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 {
@@ -642,7 +621,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
     bool ON = false;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f && !isDialogBoxDrawing() && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -656,9 +635,8 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
     if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
         && !isDialogBoxDrawing() && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
         ON = true;
-        if (Transp == 1.0f) {
+        if (Transp == 1.0f) { // in case showing/hiding menu - button must be not active
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
 
@@ -700,7 +678,7 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки вниз для списков
+// down button for list
 //------------------------------------------------------------------------------------
 bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 {
@@ -729,7 +707,7 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
     bool ON = false;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if ((Transp >= 0.99f) && !isDialogBoxDrawing() && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -743,9 +721,8 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
     if ((vw_MouseOverRect(MouseRect) || InFocusByKeyboard)
         && !isDialogBoxDrawing() && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
         ON = true;
-        if (Transp == 1.0f) {
+        if (Transp == 1.0f) { // in case showing/hiding menu - button must be not active
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
 

@@ -25,8 +25,6 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
@@ -78,7 +76,7 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
 
 
 
-    // выбор языка меню
+    // Menu Language
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Menu Language"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, false)) {
         if (GameConfig().MenuLanguage == 0) {
@@ -113,7 +111,7 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
 
 
 
-    // выбор языка голосовых сообщений
+    // Voice Language
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Voice Language"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, false)) {
@@ -139,7 +137,7 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
 
 
 
-    // выбор шрифта
+    // Menu Font
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Menu Font"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().FontNumber <= 0)) {
@@ -170,10 +168,10 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
 
 
 
-    // сброс подсказок
+    // 'Tips and hints' Status
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("'Tips and hints' Status"));
-    // узнаем есть ли вообще что ресетить
+    // check, do we have Hints, that previously was hided
     bool NeedReset = false;
     for (int i = 0; i < 10; i++) {
         if (!GameConfig().NeedShowHint[i]) {
@@ -191,7 +189,7 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
 
 
 
-    // вкл-выкл отображения счетчика фпс
+    // FPS Counter
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("FPS Counter"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Off"), ContentTransp, !ChangeGameConfig().ShowFPS)
@@ -206,7 +204,7 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
 
 
 
-    // вид панелей с оружием в игре
+    // Weapon Panels View
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Weapon Panels View"));
     if (DrawButton128_2(X1 + 300, Y1 - 6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().WeaponPanelView == eWeaponPanelView::hide)) {

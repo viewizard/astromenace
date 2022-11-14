@@ -170,7 +170,7 @@ extern int ButQuant;
 extern float But[10];
 
 void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1);
-void CheckMouseKeybJState();
+void CheckMouseKeysJoystickState();
 
 
 

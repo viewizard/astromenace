@@ -31,8 +31,6 @@
 
 // TODO applying changes should be moved out from the vw_BeginRendering()/vw_EndRendering() block
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
@@ -52,7 +50,7 @@ namespace viewizard {
 namespace astromenace {
 
 // FIXME should be fixed, don't allow global scope interaction for local variables
-// временные данные для изменения и восстановления
+// temporary variables to store modified state before real apply them
 int Options_Width;
 int Options_Height;
 int Options_Fullscreen;

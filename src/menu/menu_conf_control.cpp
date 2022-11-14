@@ -25,9 +25,7 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
-// TODO NeedCheck in CheckMouseKeybJState() should be moved to enumeration
+// TODO NeedCheck in CheckMouseKeysJoystickState() should be moved to enumeration
 
 #include "../core/core.h"
 #include "../enum.h"
@@ -96,12 +94,11 @@ static bool ReservedKeys(int Key)
 }
 
 
-// проверка, выбрали что-то или нет
-void CheckMouseKeybJState()
+// check mouse/keys/joystick during control configuration/weapon slot setup
+void CheckMouseKeysJoystickState()
 {
-    // проверяем, нужно ли вытягивать что-то или нет...
     if (!isDialogBoxDrawing() && NeedCheck > 0) {
-        // клавиатура
+        // keyboard
         if ((NeedCheck > 0 && NeedCheck <= 6) || NeedCheck == 100) {
             for (int k = 0; k < vw_GetKeyStateArraySize(); k++) {
                 int i = SDL_GetKeyFromScancode((SDL_Scancode)k);
@@ -138,7 +135,7 @@ void CheckMouseKeybJState()
         }
 
 
-        // мышка
+        // mouse
         if ((NeedCheck >= 7 && NeedCheck <= 8) || NeedCheck == 100) {
             // note, SDL provide button's number that starts from 1
             for (unsigned i = 1; i <= vw_GetMaxMouseButtonNum(); i++) {
@@ -162,7 +159,7 @@ void CheckMouseKeybJState()
         }
 
 
-        // джойстик
+        // joystick
         if (isJoystickAvailable()) {
             if ((NeedCheck >= 9 && NeedCheck <= 10) || NeedCheck == 100) {
                 for (int i = 0; i < GetJoystickButtonsQuantity(); i++) {
@@ -188,14 +185,14 @@ void CheckMouseKeybJState()
         }
 
 
-        // если нажали Esc - возвращаем старые настройки выбора текущей кнопки
+        // in case Esc button - prevent future checks
         if (vw_GetKeyStatus(SDLK_ESCAPE)) {
             vw_SetKeyStatus(SDLK_ESCAPE, false);
             NeedCheck = 0;
         }
     }
 
-    // мерцание кнопок, ставим сюда, чтобы не тягать его везде
+    // button blinking (button that used for custom control configuration for current check)
     float Delta = vw_GetTimeThread(0) - LastTimeBut;
     for (int i=0; i<ButQuant; i++) {
         if (But[i] > 0.3f) {
@@ -247,8 +244,8 @@ void CheckKeysBeforeExit()
 
 void ConfControlMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpdateTime1)
 {
-    // проверяем, нужно ли вытягивать что-то или нет...
-    CheckMouseKeybJState();
+    // check mouse/keys/joystick during control configuration setup if need
+    CheckMouseKeysJoystickState();
 
 
     sRECT SrcRect, DstRect;

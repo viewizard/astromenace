@@ -30,8 +30,6 @@
 
 // TODO applying changes should be moved out from the vw_BeginRendering()/vw_EndRendering() block
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../enum.h"
 #include "../config/config.h"
@@ -48,7 +46,7 @@
 namespace viewizard {
 namespace astromenace {
 
-// временные данные для изменения и восстановления
+// temporary variables to store modified state before real apply them
 int Options_TexturesAnisotropyLevel;
 int Options_UseGLSL120;
 int Options_MSAA;
@@ -114,7 +112,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 
 
-    // качество визуальных эффектов
+    // Visual Effects Quality
     // VisualEffectsQuality is inverted (0 - all effects, 2 - minimum effects)
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Visual Effects Quality"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().VisualEffectsQuality == 2)) {
@@ -134,7 +132,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
         vw_InitParticleSystems(GameConfig().UseGLSL120, GameConfig().VisualEffectsQuality + 1.0f);
     }
     int Size = vw_TextWidthUTF32(vw_GetTextUTF32(ButtonQuality[GameConfig().VisualEffectsQuality]));
-    int SizeI = (170 - Size) / 2;//High, Medium, Low
+    int SizeI = (170 - Size) / 2; //High, Medium, Low
     vw_DrawTextUTF32(X1+438+SizeI, Y1, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32(ButtonQuality[GameConfig().VisualEffectsQuality]));
 
 
@@ -143,7 +141,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 
 
-    // Максимальное кол-во источников света на 1 объекта
+    // Point Lights per Object
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Point Lights per Object"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, GameConfig().MaxPointLights == 0)) {
@@ -166,7 +164,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 
 
-    // анизотропия
+    // Anisotropy Level
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Anisotropy Level"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, (Options_TexturesAnisotropyLevel == 1) || !vw_DevCaps().MaxAnisotropyLevel)) {
@@ -203,11 +201,11 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 
 
-    //Options_MultiSampleType
+    //Multisample Antialiasing
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Multisample Antialiasing"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, Options_MSAA == 0 || vw_DevCaps().MultisampleCoverageModes.empty())) {
-        // находим текущий режим
+        // find current mode
         int CurrentMode = 0;
         if (Options_MSAA == 0) {
             CurrentMode = -1;
@@ -226,7 +224,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
             CurrentMode = vw_DevCaps().MultisampleCoverageModes.size() - 1;
         }
 
-        // -1 - делаем "выключение" антиалиасинга
+        // -1 - "turn off" antialiasing
         if (CurrentMode == -1) {
             Options_MSAA = 0;
             Options_CSAA = 0;
@@ -241,7 +239,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
                           && vw_DevCaps().MultisampleCoverageModes.back().CoverageSamples == Options_CSAA;
     }
     if (DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("Next"), ContentTransp, TestStateButton || vw_DevCaps().MultisampleCoverageModes.empty())) {
-        // находим текущий режим
+        // find current mode
         int CurrentMode = 0;
         if (Options_MSAA == 0) {
             CurrentMode = -1;
@@ -260,7 +258,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
             CurrentMode = -1;
         }
 
-        // -1 - делаем "выключение" антиалиасинга
+        // -1 - "turn off" antialiasing
         if (CurrentMode == -1) {
             Options_MSAA = 0;
             Options_CSAA = 0;
@@ -295,13 +293,13 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 
 
-    // вкл-выкл шейдеров, если они поддерживаются
+    // OpenGL Shading Language
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("OpenGL Shading Language"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Off"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || !Options_UseGLSL120)
         || DrawButton128_2(X1+616, Y1-6, vw_GetTextUTF32("On"), ContentTransp, !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported || Options_UseGLSL120)) {
         Options_UseGLSL120 = !Options_UseGLSL120;
-        // если выключены шейдеры - выключаем и тени
+        // shadow feature can work only with shaders
         if (!Options_UseGLSL120) {
             Options_ShadowMap = 0;
         } else {
@@ -332,7 +330,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
 
 
 
-    // качество теней
+    // Shadow Quality
     Y1 += Prir1;
     vw_DrawTextUTF32(X1, Y1, -280, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32("Shadow Quality"));
     if (DrawButton128_2(X1+300, Y1-6, vw_GetTextUTF32("Prev"), ContentTransp, Options_ShadowMap == 0 || !vw_DevCaps().OpenGL_2_0_supported || !vw_DevCaps().OpenGL_2_1_supported ||
@@ -356,7 +354,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
             Size = 170;
             WScale = -170;
         }
-        SizeI = (170-Size)/2;//High, Medium, Low
+        SizeI = (170-Size)/2; //High, Medium, Low
         vw_DrawTextUTF32(X1+438+SizeI, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, ContentTransp, vw_GetTextUTF32(ShadowButtonQuality[Options_ShadowMap]));
     } else {
         Size = vw_TextWidthUTF32(vw_GetTextUTF32("Not available"));
@@ -458,7 +456,7 @@ void OptionsAdvMenu(float ContentTransp, float &ButtonTransp1, float &LastButton
                 ShadowMap_SizeSetup(eShadowMapSetup::Menu);
             }
 
-            // проверяем, нужно перегружать или нет
+            // check, do we need restart game in order to apply this settings or not
             if (Options_UseGLSL120 != GameConfig().UseGLSL120) {
                 if (MenuStatus == eMenuStatus::GAME) {
                     SetCurrentDialogBox(eDialogBox::RestartOnAdvOptChanged);

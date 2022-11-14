@@ -28,8 +28,6 @@
 // FIXME ostringstream is not so fast, move all string initialization into setup,
 //       all ostringstream-related code should be called only one time in init
 
-// TODO translate comments
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../core/core.h"
@@ -68,9 +66,9 @@ std::vector<cMission> MissionList{};
 int SoundOnMissionID = -1;
 
 int CurrentMission = -1;
-// всего доступно миссий
+// total available missions
 int AllMission;
-// начало и конец отображаемых миссий
+// start and end of displayed missions
 int StartMission = 0;
 int EndMission = 4;
 
@@ -78,7 +76,7 @@ bool SliderUnderMouseControl = false;
 
 
 
-// получаем имя файла миссии
+// get mission file name
 std::string GetCurrentMissionFileName()
 {
     if (CurrentMission >= 0 && MissionList.size() > static_cast<unsigned>(CurrentMission)) {
@@ -102,7 +100,7 @@ std::string GetCurrentMissionFileName()
 
 
 //------------------------------------------------------------------------------------
-// инициализация данных списка миссий
+// mission list data initialization
 //------------------------------------------------------------------------------------
 void MissionListInit()
 {
@@ -112,10 +110,10 @@ void MissionListInit()
 
     std::string ScriptName{"script/list.xml"};
 
-    // по скрипту, смотрим что загружать + считаем сколько позиций
+    // look what should be download from script + count how many positions we have
     std::unique_ptr<cXMLDocument> xmlDoc{new cXMLDocument{ScriptName}};
 
-    // проверяем корневой элемент
+    // check root element
     if (!xmlDoc->GetRootEntry() || "AstroMenaceMissionList" != xmlDoc->GetRootEntry()->Name) {
         std::cerr << __func__ << "(): " << "Can't find AstroMenaceMissionList element in the: " << ScriptName << "\n";
         return;
@@ -124,10 +122,9 @@ void MissionListInit()
     for (const auto &xmlEntry : xmlDoc->GetRootEntry()->ChildrenList) {
         MissionList.emplace_back();
 
-        // берем каждую миссию и смотрим настройки
+        // get data for each mission
         if (xmlEntry.Name == "Mission") {
             for (const auto &TMission : xmlEntry.ChildrenList) {
-                // тайтл миссии
                 if (TMission.Name == "Title") {
                     int tmpColor{0};
                     if (xmlDoc->iGetEntryAttribute(TMission, "color", tmpColor)) {
@@ -208,12 +205,12 @@ void MissionListInit()
 
 
 //------------------------------------------------------------------------------------
-// выбор миссии
+// mission selection
 //------------------------------------------------------------------------------------
 void MissionMenu()
 {
 
-    // проверка ограничения
+    // check range
     if (GameConfig().Profile[CurrentProfile].OpenLevelNum > AllMission-1) {
         ChangeGameConfig().Profile[CurrentProfile].OpenLevelNum = AllMission-1;
     }
@@ -233,7 +230,7 @@ void MissionMenu()
 
 
 
-    // выводим текущий профиль пилота
+    // display the current pilot profile
     std::ostringstream tmpStream;
     tmpStream << vw_GetText("Pilot Profile") << ": ";
     int Size = vw_TextWidth(tmpStream.str());
@@ -253,7 +250,6 @@ void MissionMenu()
 
 
 
-    // подложка для вывода описания миссий
     SrcRect(0,0,2,2);
     DstRect(X1-2,Y1-2,X1+2+710,Y1+2+320);
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
@@ -263,7 +259,7 @@ void MissionMenu()
 
 
 
-    // подсвечиваем выбранный уровень
+    // highlight the selected level
     if (CurrentMission != -1 && StartMission<=CurrentMission && CurrentMission<=EndMission) {
         int ShowLine = CurrentMission;
         if (ShowLine>=StartMission) {
@@ -278,11 +274,11 @@ void MissionMenu()
 
 
 
-    // выводим миссии текущего листа
+    // display the missions of the current sheet
     int TMPSoundOnMissionID = -1;
     for (int i=StartMission; i<=EndMission; i++) {
         if (AllMission > i) {
-            // если не можем выбирать...
+            // if we can't choose...
             if (i > GameConfig().Profile[CurrentProfile].OpenLevelNum) {
                 SrcRect(0,0,64,64);
                 DstRect(X1+2,Y1+2,X1+62,Y1+62);
@@ -295,7 +291,7 @@ void MissionMenu()
 
             DstRect(X1, Y1+1, X1+710, Y1+64);
             if (i <= GameConfig().Profile[CurrentProfile].OpenLevelNum) {
-                // работаем с клавиатурой
+                // keyboard
                 if (MenuContentTransp >= 0.99f && !isDialogBoxDrawing()) {
                     CurrentActiveMenuElement++;
                 }
@@ -308,16 +304,14 @@ void MissionMenu()
                 if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && !isDialogBoxDrawing()) {
                     TMPSoundOnMissionID = i;
                     SetCursorStatus(eCursorStatus::ActionAllowed);
-                    // если только встали - нужно звуком это показать
                     if (SoundOnMissionID != i) {
                         SoundOnMissionID = i;
-                        // если задействуем клавиатуру - неиграем тут звук
+                        // don't play SFX for keyboard control
                         if (CurrentKeyboardSelectMenuElement == 0) {
                             PlayMenuSFX(eMenuSFX::OverLine, 1.0f);
                         }
                     }
 
-                    // если стоим над ним...
                     SrcRect(0,0,64,64);
                     DstRect(X1,Y1,X1+64,Y1+64);
                     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, MenuContentTransp);
@@ -344,7 +338,7 @@ void MissionMenu()
                     if (vw_GetMouseLeftDoubleClick(true)) {
                         CurrentMission = i;
                         ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
-                        // если уже играли в эту миссию
+                        // if player already played this mission
                         if (GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
                             if (GameConfig().NeedShowHint[5]) {
                                 SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);
@@ -360,7 +354,6 @@ void MissionMenu()
                         }
                     }
                 } else {
-                    // если не стоим над ним, но можем выбирать
                     SrcRect(0,0,64,64);
                     DstRect(X1+2,Y1+2,X1+62,Y1+62);
                     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, 0.8f*MenuContentTransp);
@@ -372,7 +365,6 @@ void MissionMenu()
             Y1 += 64;
         }
     }
-    // если не стоим над профилями - нужно сбросить флаг
     if (TMPSoundOnMissionID == -1) {
         SoundOnMissionID = -1;
     }
@@ -382,17 +374,17 @@ void MissionMenu()
 
 
     Y1 = 270;
-    // стрелки перемещения списка
+    // arrow up
     if (DrawListUpButton(X1+718, Y1, MenuContentTransp, !(StartMission > 0))) {
         StartMission--;
         EndMission--;
     }
-
+    // arrow down
     if (DrawListDownButton(X1+718,Y1+320-32, MenuContentTransp, !(StartMission < AllMission-5))) {
         StartMission++;
         EndMission++;
     }
-    // проверяем колесико мышки, если курсор находится над активной частью
+    // check mouse wheel, if cursor under
     DstRect(X1,Y1,X1+750,Y1+320);
     if (vw_MouseOverRect(DstRect)) {
         if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
@@ -414,34 +406,34 @@ void MissionMenu()
         vw_ResetWheelStatus();
     }
 
-    // выводим отображение положени в списке на полоске со стрелками
+    // display position in the list on the strip with arrows
     SrcRect(0,0,32,32);
     DstRect(X1+750-32+4,Y1+32+((320.0f-64)/AllMission)*StartMission,X1+750-4,Y1+32+((320.0f-64)/AllMission)*(EndMission+1));
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"), true, 0.3f*MenuContentTransp);
 
-    // обработка перетягивания ползунка отображения позиции списка
-    // если стоим на ползунком и нажали кнопку мышки - "захватываем"
+    // handle dragging the slider to display the list position
+    // if we stand on the slider and press the mouse button - "capture"
     if (!SliderUnderMouseControl && vw_MouseOverRect(DstRect) && vw_GetMouseLeftClick(false) && !isDialogBoxDrawing()) {
         SliderUnderMouseControl = true;
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
     }
-    // если ползунок был захвачен, но уже не над секцией где его можно перетягивать или отпустили мышку - отпускаем
+    // if the slider was captured, but is no longer over the section where it can be dragged or the mouse is released - release
     sRECT DstRect2;
     DstRect2(X1+750-32+4,Y1+32,X1+750-4,Y1+32+(320.0f-64));
     if ((SliderUnderMouseControl && (!vw_MouseOverRect(DstRect2) || !vw_GetMouseLeftClick(false))) || isDialogBoxDrawing()) {
         SliderUnderMouseControl = false;
     }
-    // просто кликнули на зону перетягивания, не на ползунок
+    // just clicked on the drag zone, not on the slider
     if (!vw_MouseOverRect(DstRect) && vw_MouseOverRect(DstRect2) && vw_GetMouseLeftClick(false) && !isDialogBoxDrawing()) {
         SliderUnderMouseControl = true;
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
         vw_SetMouseLeftClick(false);
     }
-    // отображаем курсором, что можно кликать на полосе прокрутки
+    // switch cursor status that you can click on the scrollbar
     if (vw_MouseOverRect(DstRect2)) {
         SetCursorStatus(eCursorStatus::ActionAllowed);
     }
-    // корректируем его положение ползунка согласно положению мышки
+    // adjust its slider position according to the position of the mouse
     if (SliderUnderMouseControl) {
         int MouseX, MouseY;
         vw_GetMousePos(MouseX, MouseY);
@@ -473,7 +465,6 @@ void MissionMenu()
 
     X = GameConfig().InternalWidth / 2 + 28;
     if (DrawButton256(X,Y, vw_GetTextUTF32("NEXT"), MenuContentTransp, Button11Transp, LastButton11UpdateTime, !(CurrentMission >= 0))) {
-        // если уже играли в эту миссию
         if (GameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission] > 0) {
             if (GameConfig().NeedShowHint[5]) {
                 SetCurrentDialogBox(eDialogBox::StartMissionSecondTime);

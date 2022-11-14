@@ -654,8 +654,8 @@ void ShipSlotSetupWeapon(int SlotNum)
 
     sRECT SrcRect, DstRect;
 
-    // проверяем, нужно ли вытягивать что-то или нет...
-    CheckMouseKeybJState();
+    // check mouse/keys/joystick during slot control setup if need
+    CheckMouseKeysJoystickState();
 
     SrcRect(0,0,404,570);
     int Xpos = GameConfig().InternalWidth / 2 + 55;
