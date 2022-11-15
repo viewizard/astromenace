@@ -28,8 +28,6 @@
 // FIXME ostringstream is not so fast, move all string initialization into setup,
 //       all ostringstream-related code should be called only one time in init
 
-// TODO translate comments
-
 #include "../game.h"
 #include "../config/config.h"
 #include "../ui/font.h"
@@ -55,17 +53,16 @@ float GetShipProtectionSystemEnergyUse(int Num);
 float GetShipRechargeEnergy(int Num);
 
 
-// проблемы с энергией
 extern bool NeedMoreEnergyDialog;
-// Номер, для проигрывания голосового сообщения об проблемы с энергией
+// voice (index in voice array) with warning about not enough energy
 unsigned int VoiceNeedMoreEnergy{0};
 
 
-// что рисовать в диалоге 6,7,8
+// what should draw in dialogue 6,7,8
 extern int DialogSystem;
 
 
-// текущий номер системы в мастерской
+// current system number in workshop
 int CurrentSystemStockNum = 1;
 
 
@@ -384,8 +381,8 @@ void BuyCurrentSystem()
 
 
 
-// для кнопок, чтобы проигрывать наведение
-// последние координаты кнопки на которую наводились
+// for mouse/joystick control, play only one SFX instance at moves over button
+// hold last mouse position coordinates (X, Y)
 int NeedPlayWorkshopOnButtonSoundX = 0;
 int NeedPlayWorkshopOnButtonSoundY = 0;
 
@@ -393,7 +390,7 @@ int NeedPlayWorkshopOnButtonSoundY = 0;
 
 
 //------------------------------------------------------------------------------------
-// покупка-установка систем корабля
+// buy-setup internal system
 //------------------------------------------------------------------------------------
 void Workshop_Workshop()
 {
@@ -414,7 +411,7 @@ void Workshop_Workshop()
 
 
 
-    // выводим иконки систем в магазине, по которым тоже можно кликать
+    // draw clickable icons for systems in shop
 
     float Current = 0.4f;
 
@@ -596,7 +593,7 @@ void Workshop_Workshop()
 
 
 
-    // проверяем, а все ли нормально с энергией... если не нормально, будем моргать и выведем соотв. надпись
+    // check energy, if not enough - start blinking and show proper warning
     bool NeedMoreEnergy = false;
 
     if (GameConfig().Profile[CurrentProfile].PowerSystem != 0) {
@@ -605,33 +602,33 @@ void Workshop_Workshop()
 
         float Need = 0.0f;
 
-        // если это не аркадный режим, нужно учитывать двигатель
+        // engine for sim mode only
         if (GameConfig().Profile[CurrentProfile].SpaceShipControlMode != 1
             && GameConfig().Profile[CurrentProfile].EngineSystem != 0) {
             Need += GetShipEngineSystemEnergyUse(GameConfig().Profile[CurrentProfile].EngineSystem);
         }
-        // если есть спец система, ее нужно тоже учитывать
+        // advanced system
         if (GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem != 0) {
             Need += GetShipProtectionSystemEnergyUse(GameConfig().Profile[CurrentProfile].AdvancedProtectionSystem);
         }
 
-        // слабый реактор
+        // power unit provide not enough energy for all internal systems
         if (Need >= Have) {
             NeedMoreEnergy = true;
         }
     } else {
-        // у нас вообще нет реактора... караул!!!
+        // no power unit at all
         NeedMoreEnergy = true;
     }
 
-    // выводим информационную надпись + голосовое сообщение
+    // show proper warning + voice
     if (NeedMoreEnergy) {
-        // запускаем голос...
+        // voice
         if (!vw_IsSoundAvailable(VoiceNeedMoreEnergy)) {
             VoiceNeedMoreEnergy = PlayVoicePhrase(eVoicePhrase::ReactorMalfunction, 1.0f);
         }
 
-        // вывод текста
+        // text
         int SizeI = (GameConfig().InternalWidth - vw_TextWidthUTF32(vw_GetTextUTF32("Warning! Low energy recharge rate!"))) / 2;
         vw_DrawTextUTF32(SizeI, 60, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::red}, CurrentAlert3 * MenuContentTransp, vw_GetTextUTF32("Warning! Low energy recharge rate!"));
 
@@ -645,7 +642,7 @@ void Workshop_Workshop()
 
 
 
-    // сбор данных
+    // cost data
     int Cost = 0;
     bool CanSell = false;
     bool CanBuy = true;
@@ -737,7 +734,7 @@ void Workshop_Workshop()
 
 
 
-    // прорисовка
+    // draw
 
 
     // Engine
@@ -1103,7 +1100,7 @@ void Workshop_Workshop()
     vw_DrawTextUTF32(GameConfig().InternalWidth/2+475-vw_TextWidthUTF32(vw_GetTextUTF32("Installed Systems")), 630, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Installed Systems"));
     ResetFontSize();
 
-    // текущая система
+    // current system
     vw_DrawTextUTF32(GameConfig().InternalWidth/2-250, 430, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Selected System"));
     vw_DrawTextUTF32(GameConfig().InternalWidth/2+250-vw_TextWidthUTF32(vw_GetTextUTF32("Installed System")), 430, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Installed System"));
 
@@ -1168,7 +1165,7 @@ void Workshop_Workshop()
     }
 
 
-    // вывод информации
+    // player's money
     vw_SetFontSize(20);
 
     tmpTransp = MenuContentTransp;

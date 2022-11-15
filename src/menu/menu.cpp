@@ -25,8 +25,6 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../core/core.h"
@@ -59,7 +57,7 @@ float LastMenuUpdateTime = 0.0f;
 float MenuContentTransp = 0.0f;
 float LastMenuOnOffUpdateTime = 0.0f;
 float MenuBlackTransp = 0.0f;
-bool NeedOnMenu = false;// если нужно выйти из черного
+bool NeedOnMenu = false; // in case we need show menu (from previous black fade)
 bool NeedOffMenu = false;
 bool NeedShowMenu = false;
 bool NeedHideMenu = false;
@@ -103,7 +101,7 @@ float LastButton14UpdateTime = 0.0f;
 
 
 //------------------------------------------------------------------------------------
-// инициализация меню
+// menu initialization
 //------------------------------------------------------------------------------------
 void InitMenu(eMenuStatus NewMenuStatus)
 {
@@ -111,11 +109,9 @@ void InitMenu(eMenuStatus NewMenuStatus)
 
     ShadowMap_SizeSetup(eShadowMapSetup::Menu);
 
-    // установка курсора на центр
-    // получаем размер клиентской области
+    // set mouse on center position
     float tmpViewportWidth, tmpViewportHeight;
     vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
-    // установка мышки, чтобы не учитывать перемещения в меню
     SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()),
                           static_cast<int>((512.0f + 256.0f) / (GameConfig().InternalWidth / tmpViewportWidth)),
                           static_cast<int>(384.0f / (GameConfig().InternalHeight / tmpViewportHeight)));
@@ -155,7 +151,7 @@ void InitMenu(eMenuStatus NewMenuStatus)
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // иним камеру, всегда до работы со скриптом (!!!)
+    // camera initialization must be before script (!!!)
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
     vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
@@ -182,14 +178,14 @@ void InitMenu(eMenuStatus NewMenuStatus)
     case 2:
         MenuScript->RunScript("script/menu3.xml", vw_GetTimeThread(0));
         break;
-    // на всякий случай
+    // just in case
     default:
         MenuScript->RunScript("script/menu1.xml", vw_GetTimeThread(0));
         break;
     }
     ChangeGameConfig().MenuScript++;
 
-    // немного прокручиваем скрипт
+    // scroll the script a bit, in order to see action on the whole screen
     float Time1 = vw_GetTimeThread(0);
     MenuScript->StartTime = Time1-30;
     MenuScript->TimeLastOp = Time1-30;
@@ -221,7 +217,7 @@ void InitMenu(eMenuStatus NewMenuStatus)
 
 
 //------------------------------------------------------------------------------------
-// установка меню
+// Options menu setup
 //------------------------------------------------------------------------------------
 void SetOptionsMenu(eMenuStatus Menu)
 {
@@ -301,10 +297,10 @@ void SetMenu(eMenuStatus Menu)
     case eMenuStatus::MISSION:
         MissionListInit();
         vw_ResetWheelStatus();
-        // ставим нужный лист миссий
+        // calculate proper mission range view for mission list
         StartMission = 0;
         EndMission = 4;
-        if (CurrentMission != -1 && CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
+        if (CurrentMission != -1 && CurrentMission > 2) { // move range start and end, so, selected element will be in the middle of the list
             StartMission = CurrentMission-2;
             EndMission = CurrentMission+2;
 
@@ -332,21 +328,18 @@ void SetMenu(eMenuStatus Menu)
 
     NextMenu = Menu;
 
-    // прячем текущее меню
+    // hide current menu
     NeedShowMenu = false;
     NeedHideMenu = true;
     LastMenuUpdateTime = vw_GetTimeThread(0);
-
-
-
 }
 
 
 
 void SetMenu2(eMenuStatus Menu)
 {
-    // текущее меню уже стало невидимым, освобождаем память после воркшопа + выключаем голосовые сообщения
-    // раньше удалять нельзя - для вывода используем данные из 3д объектов (!)
+    // current menu has already become invisible (with fade), release memory after workshop menu + turn off voice
+    // NOTE don't release memory before this point, data from 3d objects are still in use (!)
     switch (MenuStatus) {
     case eMenuStatus::WORKSHOP:
         WorkshopDestroyData();
@@ -399,12 +392,12 @@ void SetMenu2(eMenuStatus Menu)
 
 
 //------------------------------------------------------------------------------------
-// прорисовка меню
+// draw menu
 //------------------------------------------------------------------------------------
 void DrawMenu()
 {
 
-    // делаем плавное появление меню
+    // make the menu appear smoothly
     if (NeedShowMenu) {
         MenuContentTransp = 2.4f*(vw_GetTimeThread(0) - LastMenuUpdateTime);
         if (MenuContentTransp >= 1.0f) {
@@ -412,7 +405,7 @@ void DrawMenu()
             NeedShowMenu = false;
             LastMenuUpdateTime = vw_GetTimeThread(0);
 
-            // выводим подсказку, если нужно
+            // show hint
             if (MenuStatus == eMenuStatus::PROFILE && GameConfig().NeedShowHint[0]) {
                 SetCurrentDialogBox(eDialogBox::ProfileTipsAndTricks);
             }
@@ -430,7 +423,7 @@ void DrawMenu()
         }
     }
 
-    // делаем полавное угасание меню
+    // make the menu fade out
     if (NeedHideMenu) {
         MenuContentTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastMenuUpdateTime);
         if (MenuContentTransp <= 0.0f) {
@@ -449,15 +442,14 @@ void DrawMenu()
 
 
 
-    // всегда первым рисуем скайбокс и "далекое" окружение
+    // always draw the skybox and the far away environment first
     StarSystemDraw(eDrawType::MENU);
 
 
 
 
-    // рисуем название игры, чтобы звезды и корабли пролетали перед ним
+    // draw AstroMenace title
     vw_Start2DMode(-1,1);
-    // надпись AstroMenace
     sRECT SrcRect, DstRect;
     SrcRect(0,0,863,128 );
     int StartX = (GameConfig().InternalWidth - 863)/2;
@@ -475,12 +467,12 @@ void DrawMenu()
 
 
 
-    // рисуем все 3д объекты
+    // render 3D objects
     DrawAllObject3D(eDrawType::MENU);
 
 
 
-    // после полной прорисовки делаем обновление данных
+    // update data for all objects after render
     UpdateAllObject3D(vw_GetTimeThread(0));
     vw_UpdateAllParticleSystems(vw_GetTimeThread(0));
 
@@ -488,7 +480,7 @@ void DrawMenu()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // работаем со скриптом, пока он есть
+    // working with script
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (MenuScript && !MenuScript->Update(vw_GetTimeThread(0))) {
         MenuScript.reset();
@@ -499,7 +491,7 @@ void DrawMenu()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // переходим в 2д режим для прорисовки всех 2д частей
+    // switch to 2D render for draw all 2D menu parts
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     vw_Start2DMode(-1,1);
 
@@ -549,7 +541,7 @@ void DrawMenu()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // последнее - вывод версии и копирайта
+    // Version and Copyright
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     vw_SetFontSize(10);
 
@@ -566,7 +558,6 @@ void DrawMenu()
     vw_End2DMode();
 
 
-    // если нужно - рисуем в окошке еще одном
     switch (MenuStatus) {
     case eMenuStatus::INFORMATION:
         InformationDrawObject();
@@ -579,7 +570,7 @@ void DrawMenu()
 
 
 
-    // черное затемнение, если нужно
+    // fade-in
     if (NeedOnMenu) {
         MenuBlackTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastMenuOnOffUpdateTime);
         if (MenuBlackTransp <= 0.0f) {
@@ -597,14 +588,13 @@ void DrawMenu()
         vw_End2DMode();
     }
 
-    // черное затемнение, выключаем воркшоп (готовимся к переходу на игру)
+    // fade-out, switch from menu to game
     if (NeedOffMenu) {
         MenuBlackTransp = 2.4f*(vw_GetTimeThread(0) - LastMenuOnOffUpdateTime);
         if (MenuBlackTransp >= 1.0f) {
             MenuBlackTransp = 1.0f;
             NeedOffMenu = false;
             LastMenuOnOffUpdateTime = vw_GetTimeThread(0);
-            // переход на игру
             WorkshopDestroyData();
             cCommand::GetInstance().Set(eCommand::SWITCH_FROM_MENU_TO_GAME);
         }
@@ -632,7 +622,7 @@ void DrawMenu()
 
 
 //------------------------------------------------------------------------------------
-// прорисовка основного меню
+// main menu
 //------------------------------------------------------------------------------------
 void MainMenu()
 {
@@ -642,7 +632,7 @@ void MainMenu()
     int Y = 165;
 
     if (DrawButton384(X,Y, vw_GetTextUTF32("START GAME"), MenuContentTransp, Button1Transp, LastButton1UpdateTime)) {
-        // если текущего профиля нет - нужно перейти на выбор профилей, если есть - сразу идем на выбор миссий
+        // if there is no current profile - switch to profile list menu, otherwise switch to mission list menu
         if (CurrentProfile < 0) {
             cCommand::GetInstance().Set(eCommand::SWITCH_TO_PROFILE);
         } else {

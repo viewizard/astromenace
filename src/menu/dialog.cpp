@@ -70,7 +70,7 @@ bool NeedHideDialog = false;
 float StartHideTransp = 1.0f;
 
 
-// что рисовать в диалоге 6,7,8
+// what should draw in dialogue 6,7,8
 std::weak_ptr<cSpaceShip> DialogSpaceShip{};
 extern std::weak_ptr<cSpaceShip> WorkshopFighterGame; // корабль игрока в меню шипярд
 char *GetShipGroupTitle(int Num);
@@ -101,8 +101,8 @@ bool NeedMoreEnergyDialog = false;
 
 
 
-// для кнопок, чтобы проигрывать наведение
-// последние координаты кнопки на которую наводились
+// for mouse/joystick control, play only one SFX instance at moves over button
+// hold last mouse position coordinates (X, Y)
 int NeedPlayDialogOnButtonSoundX = 0;
 int NeedPlayDialogOnButtonSoundY = 0;
 

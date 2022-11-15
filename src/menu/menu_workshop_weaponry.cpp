@@ -62,7 +62,7 @@ void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode);
 void WorkshopDrawWeapon(cWeapon *Weapon);
 
 
-// что рисовать в диалоге 6,7,8
+// what should draw in dialogue 6,7,8
 extern cWeapon *DialogWeapon;
 
 
@@ -92,7 +92,7 @@ int NewWeaponControlTypeData = 0;
 // передаем только номер слота оружия
 int WeaponSetupSlot = -1;
 
-// Номер, для проигрывания голосового сообщения об отсутствии снарядов в боекомплекте
+// voice (index in voice array) with info about ammo is out
 unsigned int VoiceAmmoOut{0};
 
 

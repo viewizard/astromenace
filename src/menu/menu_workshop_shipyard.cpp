@@ -56,7 +56,7 @@ int GetSystemCost(int Num);
 int GetWeaponCost(int Num, int Ammo, int AmmoStart);
 int GetWeaponBaseCost(int Num);
 
-// что рисовать в диалоге 6,7,8
+// what should draw in dialogue 6,7,8
 extern std::weak_ptr<cSpaceShip> DialogSpaceShip;
 
 

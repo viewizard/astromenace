@@ -25,8 +25,6 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../gfx/shadow_map.h"
@@ -39,9 +37,6 @@
 namespace viewizard {
 namespace astromenace {
 
-//------------------------------------------------------------------------------------
-// переменные
-//------------------------------------------------------------------------------------
 std::weak_ptr<cSpaceShip> WorkshopFighterGame{};
 std::weak_ptr<cSpaceShip> WorkshopNewFighter{};
 std::weak_ptr<cWeapon> WorkshopNewWeapon{};
@@ -54,17 +49,16 @@ void WorkshopDrawWeapon(cWeapon *Weapon);
 int CurrentWorkshop = 3;
 
 
-// небольшая девиация оружия в слотах
+// small deviation/shake for installed weapons
 float CurrentDeviation = 0.0f;
 float NeedDeviation = vw_fRand0()*5.0f;
 float CurrentDeviationSum = 0.0f;
 float CurrentTime = 0.0f;
 
-// для индикации нужных надписей
+// for blink effect
 float CurrentAlert2 = 1.0f;
 float CurrentAlert3 = 1.0f;
 
-// можем рисовать
 bool CanDrawWorkshop = false;
 
 
@@ -81,11 +75,11 @@ extern int WeaponSetupSlot;
 
 
 //------------------------------------------------------------------------------------
-// создание корабля игрока, в меню (не при покупке нового корпуса!)
+// creating a player ship, in the menu (not when buying a new hull!)
 //------------------------------------------------------------------------------------
 void WorkshopCreateShip(int Num)
 {
-    // создаем объект
+    // create 3D object
     ReleaseSpaceShip(WorkshopFighterGame);
 
     int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
@@ -105,12 +99,12 @@ void WorkshopCreateShip(int Num)
     sharedWorkshopFighterGame->ArmorCurrentStatus = GameConfig().Profile[CurrentProfile].ArmorStatus;
 
 
-    // создаем оружие
+    // create weapon (3D objects)
     for (unsigned i = 0; i < sharedWorkshopFighterGame->WeaponSlots.size(); i++) {
         if (GameConfig().Profile[CurrentProfile].Weapon[i]
             && SetEarthSpaceFighterWeapon(WorkshopFighterGame, i + 1, GameConfig().Profile[CurrentProfile].Weapon[i])) {
             if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[i].Weapon.lock()) {
-                // убираем источник света
+                // remove light source
                 if (auto sharedFire = sharedWeapon->Fire.lock()) {
                     vw_ReleaseLight(sharedFire->Light);
                 }
@@ -126,7 +120,7 @@ void WorkshopCreateShip(int Num)
     }
 
 
-    // создаем системы (визуальные)
+    // create internal systems (that have visual effects)
     SetEarthSpaceFighterEngine(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].EngineSystem);
     SetEarthSpaceFighterArmor(WorkshopFighterGame, GameConfig().Profile[CurrentProfile].ShipHullUpgrade - 1);
 
@@ -154,11 +148,11 @@ void WorkshopCreateShip(int Num)
 
 
 //------------------------------------------------------------------------------------
-// создание корабля для покупки
+// create ship for shopfront
 //------------------------------------------------------------------------------------
 void WorkshopCreateNewShip()
 {
-    // создаем объект
+    // create 3D object
     ReleaseSpaceShip(WorkshopNewFighter);
 
     int TMPGameEnemyArmorPenalty = GameEnemyArmorPenalty;
@@ -185,7 +179,7 @@ void WorkshopCreateNewShip()
 
 
 //------------------------------------------------------------------------------------
-// создание пушки для покупки
+// create weapon for shopfront
 //------------------------------------------------------------------------------------
 void WorkshopCreateNewWeapon()
 {
@@ -215,7 +209,7 @@ void WorkshopCreateNewWeapon()
 
     sharedWeapon->SetRotation(sVECTOR3D{0.0f, -45.0f, 0.0f});
 
-    // убираем источник света
+    // remove light source
     if (auto sharedFire = sharedWeapon->Fire.lock()) {
         vw_ReleaseLight(sharedFire->Light);
     }
@@ -228,11 +222,11 @@ void WorkshopCreateNewWeapon()
 
 
 //------------------------------------------------------------------------------------
-// общая процедура создания
+// create all workshop related stuff
 //------------------------------------------------------------------------------------
 void WorkshopCreate()
 {
-    // все установки в исходные
+    // reset all
     CurrentWorkshopNewFighter = 1;
     CurrentWorkshopNewWeapon = 1;
     CurrentDeviation = 0.0f;
@@ -242,10 +236,11 @@ void WorkshopCreate()
     CurrentAlert2 = 1.0f;
     CurrentAlert3 = 1.0f;
 
-    // чтобы только при старте не повоторялись!
+    // don't show in shopfront same ship hull as player already use now
     if (CurrentWorkshopNewFighter == GameConfig().Profile[CurrentProfile].ShipHull) {
         CurrentWorkshopNewFighter++;
     }
+    // FIXME 22 - should use some variable with name instead (max weapon number)
     if (CurrentWorkshopNewFighter > 22) {
         CurrentWorkshopNewFighter = 1;
     }
@@ -254,7 +249,7 @@ void WorkshopCreate()
     WorkshopCreateNewShip();
     WorkshopCreateNewWeapon();
 
-    // нужно для получение кнопки в веапон
+    // reset custom control setup related switch
     NeedCheck = 0;
 
     CanDrawWorkshop = true;
@@ -269,7 +264,7 @@ void WorkshopCreate()
 
 
 //------------------------------------------------------------------------------------
-// удаление всего...
+// cleanup
 //------------------------------------------------------------------------------------
 void WorkshopDestroyData()
 {
@@ -288,19 +283,18 @@ void WorkshopDestroyData()
 
 
 //------------------------------------------------------------------------------------
-// покупка-установка и ремонт систем корабля
+// buy/setup/repair for internal systems
 //------------------------------------------------------------------------------------
 void WorkshopMenu()
 {
 
-    // небольшое качение... девиация
+    // small deviation/shake
     float TimeDelta = vw_GetTimeThread(0) - CurrentTime;
     if (CurrentTime==0.0f) {
         CurrentTime = vw_GetTimeThread(0);
     } else {
         CurrentTime = vw_GetTimeThread(0);
         float Sign = 1.0f;
-        // нужно двигать
         if (NeedDeviation < 0.0f) {
             Sign = -1.0f;
         }
@@ -337,7 +331,7 @@ void WorkshopMenu()
 
 
 
-    // просчитываем индикацию
+    // blink effect related calculations
     CurrentAlert2 += 0.4f*TimeDelta;
     if (CurrentAlert2 > 1.0f) {
         CurrentAlert2 = 0.3f;
@@ -354,19 +348,19 @@ void WorkshopMenu()
 
 
 
-    // прорисовка 3д части
+    // render 3D part
     switch (CurrentWorkshop) {
-    // покупка - ремонт корабля
+    // buy/repair ship
     case 1:
         Workshop_Shipyard();
         break;
 
-    // покупка - внутренних систем корабля
+    // buy/repair internal systems
     case 2:
         Workshop_Workshop();
         break;
 
-    // покупка - оружия корабля
+    // buy/repair/reload weapons
     case 3:
         Workshop_Weaponry();
         break;
@@ -377,14 +371,14 @@ void WorkshopMenu()
 
 
 
-    // кнопки
+    // buttons
 
     int X = GameConfig().InternalWidth / 2 - 482;
     int Y = 180+100*5;
     if (DrawButton128_2(X,Y, vw_GetTextUTF32("BACK"), MenuContentTransp, false)) {
         cCommand::GetInstance().Set(eCommand::SWITCH_TO_MISSION);
         CanDrawWorkshop = false;
-        // ничего не тянем... только включили меню
+        // reset drag-and-drop mode
         DragWeaponNum = 0;
         DragWeaponLevel = 0;
         DragWeapon = false;
@@ -400,10 +394,10 @@ void WorkshopMenu()
     }
     if (DrawButton200_2(X,Y, vw_GetTextUTF32("Shipyard"), MenuContentTransp, Off)) {
         CurrentWorkshop = 1;
-        // используем разные повороты объектов, нужно пересоздать объект
+        // for each menu we have different 3D objects rotations (for best look)
         WorkshopCreateShip(CurrentWorkshop);
         WorkshopCreateNewShip();
-        // ничего не тянем... только включили меню
+        // reset drag-and-drop mode
         DragWeaponNum = 0;
         DragWeaponLevel = 0;
         DragWeapon = false;
@@ -422,9 +416,9 @@ void WorkshopMenu()
     }
     if (DrawButton200_2(X,Y, vw_GetTextUTF32("Workshop"), MenuContentTransp, Off)) {
         CurrentWorkshop = 2;
-        // используем разные повороты объектов, нужно пересоздать объект
+        // for each menu we have different 3D objects rotations (for best look)
         WorkshopCreateShip(CurrentWorkshop);
-        // ничего не тянем... только включили меню
+        // reset drag-and-drop mode
         DragWeaponNum = 0;
         DragWeaponLevel = 0;
         DragWeapon = false;
@@ -443,10 +437,10 @@ void WorkshopMenu()
     }
     if (DrawButton200_2(X,Y, vw_GetTextUTF32("Weaponry"), MenuContentTransp, Off)) {
         CurrentWorkshop = 3;
-        // используем разные повороты объектов, нужно пересоздать объект
+        // for each menu we have different 3D objects rotations (for best look)
         WorkshopCreateShip(CurrentWorkshop);
         WorkshopCreateNewWeapon();
-        // ничего не тянем... только включили меню
+        // reset drag-and-drop mode
         DragWeaponNum = 0;
         DragWeaponLevel = 0;
         DragWeapon = false;
@@ -464,8 +458,8 @@ void WorkshopMenu()
         if (GameConfig().NeedShowHint[4]) {
             SetCurrentDialogBox(eDialogBox::ShortkeyTipsAndTricks);
         } else {
-            MenuContentTransp = 0.98f; // небольшая "защелка" от быстрых двойных нажатий на кнопку
-            // ничего не тянем... только включили меню
+            MenuContentTransp = 0.98f; // prevent miss double clicking
+            // reset drag-and-drop mode
             DragWeaponNum = 0;
             DragWeaponLevel = 0;
             DragWeapon = false;
@@ -487,7 +481,7 @@ void WorkshopMenu()
 
 
 //------------------------------------------------------------------------------------
-// Прорисовка 3д части
+// 3D menu part rendering
 //------------------------------------------------------------------------------------
 void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode)
 {
@@ -556,7 +550,7 @@ void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode)
             ShadowMap_EndFinalRender();
         }
 
-        // рисуем эффекты двигателей только для этой модели
+        // render engines visual effects for this ship only
         vw_DrawParticleSystems(sharedSpaceShip->Engines);
 
         vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
@@ -617,7 +611,7 @@ void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode)
             ShadowMap_EndFinalRender();
         }
 
-        // рисуем эффекты двигателей только для этой модели
+        // render engines visual effects for this ship only
         vw_DrawParticleSystems(sharedSpaceShip->Engines);
 
         vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
@@ -700,7 +694,7 @@ void WorkshopDrawShip(std::weak_ptr<cSpaceShip> &SpaceShip, int Mode)
         ShadowMap_EndFinalRender();
     }
 
-    // рисуем эффекты двигателей только для этой модели
+    // render engines visual effects for this ship only
     vw_DrawParticleSystems(sharedSpaceShip->Engines);
 
     vw_SetCameraLocation(sVECTOR3D{-50.0f, 30.0f, -50.0f});
@@ -719,7 +713,7 @@ void WorkshopDrawWeapon(cWeapon *Weapon)
     float tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight;
     vw_GetViewport(&tmpViewportX, &tmpViewportY, &tmpViewportWidth, &tmpViewportHeight);
 
-    // удаление относительно размеров оружия
+    // correct distance to weapon in shopfront according to weapon size
     if (Weapon->InternalType == 18 || Weapon->InternalType == 19) {
         WorkShopPointCamera = sVECTOR3D{0.0f, 1.25f, -5.0f};
     } else {
