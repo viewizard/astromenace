@@ -122,7 +122,7 @@ void cCommand::Proceed()
         // mission list
         StartMission = 0;
         EndMission = 4;
-        if (CurrentMission != -1 && CurrentMission > 2) { // should be centered
+        if (CurrentMission != -1 && CurrentMission > 2) { // move range start and end, so, selected element will be in the middle of the list
             StartMission = CurrentMission - 2;
             EndMission = CurrentMission + 2;
 

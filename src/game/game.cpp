@@ -25,8 +25,6 @@
 
 *****************************************************************************/
 
-// TODO translate comments
-
 // NOTE in future, use make_unique() to make unique_ptr-s (since C++14)
 
 #include "../core/core.h"
@@ -68,19 +66,19 @@ eCommand GameExitCommand{eCommand::DO_NOTHING};
 
 
 
-// замедление снарядов NPC ... 1-3...
+// enemy fire rate and bullet speed penalty, range 1-3
 int GameEnemyWeaponPenalty = 1;
-// ум. защиты NPC объектов
+// enemy armor amount penalty
 int GameEnemyArmorPenalty = 1;
-// "замедление" наведения NPC ... 1-4
+// enemy targeting speed (weapon rotation) penalty, range 1-4
 int GameEnemyTargetingSpeedPenalty = 1;
-// 0-ограничено, 1-нет
+// 0 - limited, 1 - unlimited
 int GameUnlimitedAmmo = 0;
-// 0-может быть уничтожено, 1-нет
+// 0 - can be destroyed, 1 - can't be destroyed
 int GameUndestroyableWeapon = 0;
-// 1-аркада, 0-симулятор
+// 1 - arcade, 0 - sim
 int GameWeaponTargetingMode = 0;
-// 1-аркада, 0-симулятор
+// 1 - arcade, 0 - sim
 int GameSpaceShipControlMode = 0;
 
 int GameEngineSystem = 1;
@@ -89,7 +87,7 @@ int GameAdvancedProtectionSystem = 0;
 int GamePowerSystem = 1;
 int GameTargetingMechanicSystem = 1;
 
-// присваиваем в профайл только по завершению уровня!
+// temporary money and experience (gathered during mission), added to profile only at mission complete
 float GameMoney = 0;
 float GameExperience = 0;
 
@@ -107,16 +105,16 @@ int AsteroidsKillQuant;
 float AsteroidsKillBonus;
 
 
-// статус завершена игра или нет
+// mission complete status + dialog box status
 bool GameMissionCompleteStatus = false;
 bool GameMissionCompleteStatusShowDialog = false;
 
-// собственно сам файтер
+// player ship "holder" veriable
 std::weak_ptr<cSpaceShip> PlayerFighter{};
 
 
 
-// флаг отображения меню
+// in-game menu related variable
 bool GameMenu = false;
 float GameContentTransp = 0.0f;
 float LastGameUpdateTime = 0.0f;
@@ -139,7 +137,7 @@ extern float CurrentAlert2;
 extern float CurrentAlert3;
 extern float CurrentTime;
 
-// работа с кораблем игрока
+// player ship related stuff
 void InitGamePlayerShip();
 void GamePlayerShip();
 float GetShipMaxEnergy(int Num);
@@ -149,11 +147,11 @@ extern int LastMouseY;
 extern int LastMouseXR;
 extern int LastMouseYR;
 
-// щит или дефлектор
+// shield and deflector "holder" veriables
 extern std::weak_ptr<cParticleSystem> Shild1;
 extern std::weak_ptr<cParticleSystem> Shild2;
 
-// для звука открытия-закрытия меню в игре
+
 unsigned int SoundShowHideMenu{0};
 
 
@@ -166,7 +164,7 @@ bool NeedOffGame = false;
 
 
 //------------------------------------------------------------------------------------
-// Инициализация игровой части
+// game initialization
 //------------------------------------------------------------------------------------
 void InitGame()
 {
@@ -189,7 +187,7 @@ void InitGame()
     GameSpaceShipControlMode = GameConfig().Profile[CurrentProfile].SpaceShipControlMode;
 
     GameEngineSystem = GameConfig().Profile[CurrentProfile].EngineSystem;
-    // если симулятивный режим, ставим 1...
+    // for sim ship control mode, we need limit ship movements to engine capabilities
     if (GameSpaceShipControlMode == 1 && GameEngineSystem == 0) {
             GameEngineSystem = 1;
     }
@@ -200,16 +198,14 @@ void InitGame()
     GameTargetingMechanicSystem = GameConfig().Profile[CurrentProfile].TargetingMechanicSystem;
     GameMoney = GameConfig().Profile[CurrentProfile].Money * 1.0f;
 
-    // убираем данные этого уровня
     GameExperience = (GameConfig().Profile[CurrentProfile].Experience - GameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission]) * 1.0f;
 
     // grab mouse control for both - windows and fullscren mode (need this for multi-monitor systems)
     SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_TRUE);
 
 
-    // сбрасываем все кнопки мыши
     vw_ResetMouseButtons();
-    // установка мышки на центр
+    // set mouse position to center
     float tmpViewportWidth, tmpViewportHeight;
     vw_GetViewport(nullptr, nullptr, &tmpViewportWidth, &tmpViewportHeight);
     SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), tmpViewportWidth / 2, tmpViewportHeight / 2);
@@ -226,21 +222,12 @@ void InitGame()
 
 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // иним камеру, всегда до работы со скриптом (!!!)
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // camera initialization, must be before script
     InitCamera();
 
-
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // иним корабль
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     InitGamePlayerShip();
 
 
-
-    // !!! пока загрузка идет полная на уровень, и наверно так и нужно оставить
-    // иначе нужно выносить перечень загружаемого в скрипт (менять не смогут уровни)
 
     StarSystemInitByType(eDrawType::GAME); // should be before RunScript()
 
@@ -255,7 +242,7 @@ void InitGame()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // немного "прокручиваем", чтобы сразу по появлению было заполнено
+    // "scroll" a little so space will be looks filled immediately upon game start
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
     vw_SetCameraLocation(sVECTOR3D{0.0f, 65.0f, -100.0f + 10.0f});
@@ -271,7 +258,7 @@ void InitGame()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // инициализация игрового меню
+    // game menu initialization
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     GameContentTransp = 0.0f;
     LastGameUpdateTime = vw_GetTimeThread(0);
@@ -325,7 +312,7 @@ void InitGame()
 
 
 //------------------------------------------------------------------------------------
-// Завершаем игру
+// Exit game
 //------------------------------------------------------------------------------------
 void ExitGame(eCommand Command)
 {
@@ -333,19 +320,18 @@ void ExitGame(eCommand Command)
     NeedOffGame = true;
     LastGameOnOffUpdateTime = vw_GetTimeThread(0);
 
-    // убираем меню
+    // remove game menu
     if (GameMenu) {
         GameMenu = false;
         NeedShowGameMenu = false;
         NeedHideGameMenu = true;
         SetShowGameCursor(false);
-        // установка в последюю точку указателя
+        // restore last mouse position for main menu
         SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
     }
 }
 void RealExitGame()
 {
-    // удаляем корабль игрока
     ReleaseSpaceShip(PlayerFighter);
 
     vw_ReleaseAllParticleSystems2D();
@@ -358,36 +344,30 @@ void RealExitGame()
 }
 
 //------------------------------------------------------------------------------------
-// Завершаем игру, нужно сохранить параметры
+// Exit game, save all data
 //------------------------------------------------------------------------------------
 void ExitGameWithSave(eCommand Command)
 {
-    // данные по деньгам и опыту
     ChangeGameConfig().Profile[CurrentProfile].Money = static_cast<int>(GameMoney);
 
-    // если получили больше опыта
+    // in case player replayed mission, save best results only
     if (GameConfig().Profile[CurrentProfile].Experience < static_cast<int>(GameExperience)) {
         int Incr = static_cast<int>(GameExperience) - GameConfig().Profile[CurrentProfile].Experience;
         ChangeGameConfig().Profile[CurrentProfile].ByMissionExperience[CurrentMission] += Incr;
         ChangeGameConfig().Profile[CurrentProfile].Experience += Incr;
     }
-    // увеличиваем счетчик пройденной миссии
     ChangeGameConfig().Profile[CurrentProfile].MissionReplayCount[CurrentMission]++;
 
     if (auto sharedPlayerFighter = PlayerFighter.lock()) {
-        // состояние корпуса коробля
         ChangeGameConfig().Profile[CurrentProfile].ArmorStatus = sharedPlayerFighter->ArmorCurrentStatus;
 
-        // учет состояния оружия
         for (unsigned i = 0; i < sharedPlayerFighter->WeaponSlots.size(); i++) {
             if (GameConfig().Profile[CurrentProfile].Weapon[i] != 0) {
                 if (auto sharedWeapon = sharedPlayerFighter->WeaponSlots[i].Weapon.lock()) {
-                    // если оружие было уничтожено во время игры
-                    if (sharedWeapon->ArmorCurrentStatus <= 0.0f) {
+                    if (sharedWeapon->ArmorCurrentStatus <= 0.0f) { // weapon was destroyed on mission
                         ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
                         ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
                     } else {
-                        // если все ок, нужно запомнить сколько осталось в боекомплекте
                         ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = sharedWeapon->Ammo;
                     }
                 }
@@ -395,25 +375,24 @@ void ExitGameWithSave(eCommand Command)
         }
     }
 
-    // ставим следующую миссию
+    // set next mission as current
     CurrentMission++;
-    // перемещаем ограничитель дальше, если это нужно
     if (GameConfig().Profile[CurrentProfile].OpenLevelNum < CurrentMission) {
         ChangeGameConfig().Profile[CurrentProfile].OpenLevelNum = CurrentMission;
     }
 
-    // если дальше уже ничего нет, просто снимаем все... пусть игрок сам выберет
+    // if this is was last mission, don't set any mission as current (let player chose)
     if (CurrentMission > AllMission - 1) {
         CurrentMission = -1;
-        // это была последняя миссия, показываем список авторов
+        // that was last mission - switch to Credits (show authors) instead of Main Menu
         Command = eCommand::SWITCH_FROM_GAME_TO_CREDITS;
     }
 
     vw_ResetWheelStatus();
-    // ставим нужный лист миссий
+    // set proper mission list, according to current mission
     StartMission = 0;
     EndMission = 4;
-    if (CurrentMission != -1 && CurrentMission > 2) { // нужно сдвинуть лист, чтобы выбранный элемент был по середине списка
+    if (CurrentMission != -1 && CurrentMission > 2) { // move range start and end, so, selected element will be in the middle of the list
         StartMission = CurrentMission-2;
         EndMission = CurrentMission+2;
 
@@ -435,11 +414,12 @@ void ExitGameWithSave(eCommand Command)
 
 
 //------------------------------------------------------------------------------------
-// Завершение игры, выиграли
+// Mission complete
 //------------------------------------------------------------------------------------
 void SetGameMissionComplete()
 {
-    // если убили, не устанавливаем!
+    // player failed, mission was completed after player ship destroyed
+    // this happens, when player ship was destroyed and game scroll some part of mission (and reach end of mission)
     if (PlayerFighter.expired()) {
         return;
     }
@@ -453,7 +433,7 @@ void SetGameMissionComplete()
 
 
 //------------------------------------------------------------------------------------
-// прорисовка игровой части
+// draw game, main method
 //------------------------------------------------------------------------------------
 void DrawGame()
 {
@@ -462,9 +442,7 @@ void DrawGame()
     CurrentTime = vw_GetTimeThread(0);
 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // просчитываем индикацию
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // blink effect related calculations
     CurrentAlert2 -= TimeDelta;
     if (CurrentAlert2 < 0.1f) {
         CurrentAlert2 = 1.0f;
@@ -477,33 +455,30 @@ void DrawGame()
 
 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // Работа с 3д частью... прорисовка, просчет
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     CameraUpdate(vw_GetTimeThread(1));
     vw_CameraLookAt();
 
 
-    // всегда первым рисуем скайбокс и "далекое" окружение
+    // skybox + far-far away space first
     StarSystemDraw(eDrawType::GAME);
 
 
-    // рисуем все 3д объекты
+    // render 3D objets
     DrawAllObject3D(eDrawType::GAME);
 
 
-    // после полной прорисовки делаем обновление данных
+    // update 3D objects data + particle systems data
     UpdateAllObject3D(vw_GetTimeThread(1));
     vw_UpdateAllParticleSystems(vw_GetTimeThread(1));
 
-    // проверяем на столкновения
-    if (GameContentTransp < 0.99f) { // не нужно проверять коллизии, включено меню
+    // collision detection
+    if (GameContentTransp < 0.99f) {
         DetectCollisionAllObject3D();
     }
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // работаем со скриптом, пока он есть
+    // script
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (MissionScript && !MissionScript->Update(vw_GetTimeThread(1))) {
         MissionScript.reset();
@@ -516,7 +491,7 @@ void DrawGame()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // 2д часть
+    // 2d part
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     vw_Start2DMode(-1,1);
 
@@ -525,7 +500,7 @@ void DrawGame()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // Обработка состояния корабля игрока
+    // handling the state of the player's ship
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     GamePlayerShip();
 
@@ -545,9 +520,9 @@ void DrawGame()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // Рисуем меню, всегда самое последнее в игровой 2д части
+    // Draw menu, must be the last one
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // делаем плавное появление меню
+    // smooth fade-in
     if (NeedShowGameMenu) {
         GameContentTransp += 2.0f*(vw_GetTimeThread(0)-LastGameUpdateTime);
         if (GameContentTransp >= 1.0f) {
@@ -559,12 +534,12 @@ void DrawGame()
             SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_FALSE);
             SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
         }
-        // плавно возвращаем игре сокрость
+        // smooth increase game speed
         if (GameContentTransp != 0.0f) {
             cGameSpeed::GetInstance().SetThreadSpeed((1.0f - GameContentTransp) * GameConfig().GameSpeed);
         }
     }
-    // делаем полавное угасание меню
+    // smooth fade-out
     if (NeedHideGameMenu) {
         GameContentTransp -= vw_GetTimeThread(0) - LastGameUpdateTime;
         if (GameContentTransp <= 0.0f) {
@@ -576,20 +551,20 @@ void DrawGame()
             SDL_SetWindowGrab(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), SDL_TRUE);
             SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
         }
-        // останавливаем игру
+        // set game speed to zero (should looks like all 3D objects are freeze in time)
         cGameSpeed::GetInstance().SetThreadSpeed((1.0f - GameContentTransp) * GameConfig().GameSpeed);
     }
     LastGameUpdateTime = vw_GetTimeThread(0);
 
-    // если можем - рисуем игровое меню
+    // in-game menu
     if (GameContentTransp > 0.0f) {
         if (GameMissionCompleteStatus) {
-            // выводим подложку меню
+            // back
             sRECT SrcRect(2, 2, 564-2, 564-2);
             sRECT DstRect(GameConfig().InternalWidth / 2 - 256 - 26, 128 - 28, GameConfig().InternalWidth / 2 - 256 + 534, 128 + 532);
             vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
                       true, GameContentTransp);
-            // название меню
+            // title
             int Size = vw_TextWidthUTF32(vw_GetTextUTF32("Mission Complete"));
             float WScale = 0;
             if (Size > 190) {
@@ -719,40 +694,38 @@ void DrawGame()
             vw_DrawText(GameConfig().InternalWidth / 2 + 10, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, SummaryQuantString);
             vw_DrawText(GameConfig().InternalWidth / 2+126, Y, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, GameContentTransp, SummaryBonusString);
 
-            // выводим кнопки меню
+            // button
             int X = GameConfig().InternalWidth / 2 - 192;
             Y = 545;
-            // продолжение игры
             if (DrawButton384(X,Y, vw_GetTextUTF32("NEXT"), GameContentTransp, GameButton4Transp, LastGameButton4UpdateTime)) {
                 ExitGameWithSave(eCommand::SWITCH_FROM_GAME_TO_MISSION_MENU);
             }
         } else {
             switch (GameMenuStatus) {
-            // основное меню игры
+            // in-game main menu
             case eGameMenuStatus::GAME_MENU: {
-                // выводим подложку меню
+                // back
                 sRECT SrcRect(2, 2, 564-2, 564-2);
                 sRECT DstRect(GameConfig().InternalWidth / 2 - 256+4-30, 128+2-30, GameConfig().InternalWidth / 2 - 256+564-30, 128+564-2-30);
                 vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
                           true, GameContentTransp);
-                // название меню
+                // title
                 int SizeI = 17 + (234-vw_TextWidthUTF32(vw_GetTextUTF32("GAME MENU")))/2;
                 vw_DrawTextUTF32(GameConfig().InternalWidth / 2 - 256 + SizeI, 128+22, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, 0.7f * GameContentTransp, vw_GetTextUTF32("GAME MENU"));
 
-                // выводим кнопки меню
+                // buttons
 
 
                 int X = GameConfig().InternalWidth / 2 - 192;
                 int Y = 225;
                 int Prir = 100;
 
-                // продолжаем игру
                 if (DrawButton384(X,Y, vw_GetTextUTF32("RESUME"), GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime)) {
                     GameMenu = false;
                     NeedShowGameMenu = false;
                     NeedHideGameMenu = true;
                     SetShowGameCursor(false);
-                    // установка в последюю точку указателя
+                    // set mouse position to last menu mouse position
                     SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
 
                     if (vw_IsSoundAvailable(SoundShowHideMenu)) {
@@ -761,17 +734,14 @@ void DrawGame()
                     SoundShowHideMenu = PlayMenuSFX(eMenuSFX::MissionHideMenu, 1.0f);
                 }
 
-                // выход в настройки
                 Y = Y+Prir;
                 if (DrawButton384(X,Y, vw_GetTextUTF32("OPTIONS"), GameContentTransp, GameButton2Transp, LastGameButton2UpdateTime)) {
                     SetOptionsMenu(eMenuStatus::OPTIONS);
                     GameMenuStatus = eGameMenuStatus::OPTIONS;
                 }
 
-                // прерываем игру
                 Y = Y+Prir;
                 if (DrawButton384(X,Y, vw_GetTextUTF32("RESTART"), GameContentTransp, GameButton3Transp, LastGameButton3UpdateTime)) {
-                    // если убили, выводить диалог не нужно
                     if (PlayerFighter.expired()) {
                         ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
                     } else {
@@ -779,10 +749,8 @@ void DrawGame()
                     }
                 }
 
-                // выход из игры
                 Y = Y+Prir;
                 if (DrawButton384(X,Y, vw_GetTextUTF32("QUIT"), GameContentTransp, GameButton4Transp, LastGameButton4UpdateTime)) {
-                    // если убили, выводить диалог не нужно
                     if (PlayerFighter.expired()) {
                         ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
                     } else {
@@ -793,19 +761,15 @@ void DrawGame()
                 break;
             }
 
-            // основное меню настроек
             case eGameMenuStatus::OPTIONS:
                 OptionsMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime, GameButton2Transp, LastGameButton2UpdateTime);
                 break;
-            // меню продвинутых настроек
             case eGameMenuStatus::OPTIONS_ADVANCED:
                 OptionsAdvMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime, GameButton2Transp, LastGameButton2UpdateTime);
                 break;
-            // меню настройки интерфейса
             case eGameMenuStatus::INTERFACE:
                 InterfaceMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime);
                 break;
-            // меню настройки управления
             case eGameMenuStatus::CONFCONTROL:
                 ConfControlMenu(GameContentTransp, GameButton1Transp, LastGameButton1UpdateTime);
                 break;
@@ -814,7 +778,7 @@ void DrawGame()
             }
 
 
-            // вывод надписи пауза
+            // show "Pause" text
             sRECT SrcRect(0, 0, 256, 64);
             sRECT DstRect(GameConfig().InternalWidth - 256 + 60, 768 - 54, GameConfig().InternalWidth + 60, 768 + 10);
             if (GameContentTransp == 1.0f) {
@@ -833,15 +797,13 @@ void DrawGame()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // открываем меню
+    // open menu
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // если в игре - меню, если в меню - выход
     if (!isDialogBoxDrawing()) {
         if (!PlayerFighter.expired()) { // если не убили
             if (vw_GetKeyStatus(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
                 bool NeedPlaySfx = true;
                 if (GameMissionCompleteStatusShowDialog) {
-                    // если уже было открыто меню и появляется меню окончания миссии, не проигрываем sfx
                     if (GameMenu) {
                         NeedPlaySfx = false;
                     } else {
@@ -851,7 +813,7 @@ void DrawGame()
                     GameMenu = !GameMenu;
                 }
 
-                if (GameMenu && (!GameMissionCompleteStatus || GameMissionCompleteStatusShowDialog)) { // открытываем меню с результатом миссии и больше не даем ничего открывать, после завершения миссии
+                if (GameMenu && (!GameMissionCompleteStatus || GameMissionCompleteStatusShowDialog)) {
                     NeedShowGameMenu = true;
                     NeedHideGameMenu = false;
                     if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu)) {
@@ -860,12 +822,12 @@ void DrawGame()
                     if (NeedPlaySfx) {
                         SoundShowHideMenu = PlayMenuSFX(eMenuSFX::MissionShowMenu, 1.0f);
                     }
-                    // сброс кнопки мышки, чтобы случайно не нажали
+                    // reset mouse click, prevent miss clicking here
                     vw_GetMouseLeftClick(true);
-                } else if (!GameMenu && !GameMissionCompleteStatus) { // открыто меню с выводом результата миссии, нельзя давать его закрывать
+                } else if (!GameMenu && !GameMissionCompleteStatus) { // if menu with mission results are opened - don't allow close it
                     NeedShowGameMenu = false;
                     NeedHideGameMenu = true;
-                    // установка в последюю точку указателя
+                    // set mouse position to last menu mouse position
                     SDL_WarpMouseInWindow(reinterpret_cast<SDL_Window*>(vw_GetSDLWindow()), LastMouseXR, LastMouseYR);
 
                     if (NeedPlaySfx && vw_IsSoundAvailable(SoundShowHideMenu)) {
@@ -877,7 +839,7 @@ void DrawGame()
                     SetShowGameCursor(false);
                 }
 
-                if (GameMissionCompleteStatus && !GameMissionCompleteStatusShowDialog) { // в процессе вывода результатов разрешаем только выход в основное меню (отображение диалога)
+                if (GameMissionCompleteStatus && !GameMissionCompleteStatusShowDialog) { // if displaying the mission results, only allow exit to the main menu
                     SetCurrentDialogBox(eDialogBox::QuiToMenuNoSave);
                 }
                 GameMissionCompleteStatusShowDialog = false;
@@ -889,7 +851,7 @@ void DrawGame()
 
 
 
-    // черное затемнение, если нужно
+    // fade-in
     if (NeedOnGame) {
         GameBlackTransp = 1.0f - 2.4f*(vw_GetTimeThread(0) - LastGameOnOffUpdateTime);
         if (GameBlackTransp <= 0.0f) {
@@ -902,14 +864,14 @@ void DrawGame()
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, GameBlackTransp);
     }
 
-    // черное затемнение, если нужно
+    // fade-out
     if (NeedOffGame) {
         GameBlackTransp = 2.4f * (vw_GetTimeThread(0) - LastGameOnOffUpdateTime);
         if (GameBlackTransp >= 1.0f) {
             GameBlackTransp = 1.0f;
             NeedOffGame = false;
 
-            // выходим из игры
+            // game exit
             RealExitGame();
             cCommand::GetInstance().Set(GameExitCommand);
         }
@@ -925,9 +887,6 @@ void DrawGame()
     cStopwatch::GetInstance().Draw();
 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // завершение 2д части
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     vw_End2DMode();
 }
 

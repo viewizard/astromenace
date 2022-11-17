@@ -28,8 +28,6 @@
 // FIXME ostringstream is not so fast, move all string initialization into setup,
 //       all ostringstream-related code should be called only one time in init
 
-// TODO translate comments
-
 #include "../game.h"
 #include "../config/config.h"
 #include "../platform/platform.h"
@@ -66,30 +64,29 @@ void WorkshopDrawWeapon(cWeapon *Weapon);
 extern cWeapon *DialogWeapon;
 
 
-// флаг-тянем
+// drag-and-drop current status (true - we drag some weapon)
 bool DragWeapon = false;
-// номер оружия, которое тянем
+// weapon number that we drag now
 int DragWeaponNum = 0;
-// уровень оружия, которое тянем
+// weapon level that we drag now
 int DragWeaponLevel = 0;
-// кол-во боекомплекта в оружии
+// weapon current ammo count that we drag now
 int DragWeaponAmmo = 0;
-// общее кол-во боекомплекта в заполненном боекомплекте
+// weapon max ammo that we drag now
 int DragWeaponAmmoStart = 0;
-// управление
+// custom control setup for weapon that we drag now
 int DragWeaponControl = 0;
 int DragWeaponAltControl = 0;
 int DragWeaponAltControlData = 0;
 
 
-// сюда вытягиваем данные
+// new custom control configuration
 int NewWeaponControlType = 0;
 int NewWeaponControlTypeData = 0;
 
 
 
-// вывод большого меню с настройкой оружия
-// передаем только номер слота оружия
+// weapon number for weapon setup dialog
 int WeaponSetupSlot = -1;
 
 // voice (index in voice array) with info about ammo is out
@@ -220,31 +217,29 @@ int GetWeaponBaseCost(int Num)
 }
 int GetWeaponCost(int Num, int Ammo, int AmmoStart)
 {
-    // получаем базовую стоимость оружия
+    // base cost for weapon with full ammo
     int Cost = GetWeaponBaseCost(Num);
-    // находим базовую стоимость оружия
+    // base cost for weapon only
     int BaseCost = Cost/2;
-    // берем половину стоимости, все четное, но на всякий случай так
+    // Cost should be even number, but just in case let's subtract
     Cost -= BaseCost;
-    // находим стоимость боекомплекта
-    BaseCost += (int)(Cost*((Ammo*1.0f)/(AmmoStart*1.0f)));
-
-    return BaseCost;
+    // calculate cost with current amount of ammo
+    return BaseCost + (int)(Cost*((Ammo*1.0f)/(AmmoStart*1.0f)));
 }
 int GetWeaponReloadCost(int Num, int Ammo, int AmmoStart)
 {
-    // получаем базовую стоимость оружия
+    // base cost for weapon with full ammo
     int Cost = GetWeaponBaseCost(Num);
-    // находим базовую стоимость оружия
+    // base cost for weapon only
     int BaseCost = Cost/2;
-    // берем половину стоимости, все четное, но на всякий случай так
+    // Cost should be even number, but just in case let's subtract
     Cost -= BaseCost;
-    // находим стоимость боекомплекта
+    // calculate current ammo reload cost
     return Cost - (int)(Cost*((Ammo*1.0f)/(AmmoStart*1.0f)));
 }
 
 
-// название типа оружия землян
+// get Earth weapon name by number
 const char *GetWeaponGroupTitle(int Num)
 {
     switch (Num) {
@@ -357,7 +352,7 @@ std::string GetWeaponIconName(int Num)
 
 
 
-// вся работа с еденичным слотом
+// all work with one weapon slog
 void ShipSlotWeapon(int SlotNum, int X, int Y)
 {
     auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
@@ -372,13 +367,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel3.tga"), true, MenuContentTransp);
 
 
-    // нужны предупреждения...
+    // ammo related warning
     bool WeaponAmmoOut = false;
 
-    // отображаем боекомплект
+    // show ammo
     if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
         int AmmoShow = (int)((56.0f*(sharedWeapon->AmmoStart-sharedWeapon->Ammo))/sharedWeapon->AmmoStart);
-        // если меняли боекомплект и сделали его меньше, чтобы не вылазила линия боекомплекта...
+        // in case ammo amount was reduced
         if (AmmoShow < 0) {
             AmmoShow = 0;
         }
@@ -396,17 +391,17 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
         }
     }
 
-    // запускаем голос...
+    // voice
     if (WeaponAmmoOut && !vw_IsSoundAvailable(VoiceAmmoOut)) { // уже не играем, нужно запустить опять
         VoiceAmmoOut = PlayVoicePhrase(eVoicePhrase::WeaponMalfunction, 1.0f);
     }
 
 
-    // кнопка Setup
+    // Setup button
     int MouseX, MouseY;
     vw_GetMousePos(MouseX, MouseY);
 
-    // работаем с клавиатурой
+    // keyboard
     if (MenuContentTransp >= 0.99f && !isDialogBoxDrawing() && !DragWeapon) {
         CurrentActiveMenuElement++;
     }
@@ -435,7 +430,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     }
 
 
-    // обработка перетягивания
+    // drag-and-drop
     DstRect(X,Y,X+128,Y+64);
     if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing()) {
 
@@ -446,16 +441,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
                                    sharedWeapon->AmmoStart);
         }
 
-        // если отпустили тут
+        // release weapon during drag
         if (!vw_GetMouseLeftClick(false) && DragWeapon) {
-            // есть уровень слота соотв. уровню оружия
             if (sharedWorkshopFighterGame->WeaponSlots[SlotNum].Type >= DragWeaponLevel
-                    // если стоимость меньше чем есть денег + стоимость оружия
                 && Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)) {
-                // звук устанавливаемого оружия
                 PlayMenuSFX(eMenuSFX::DragInstallToSlot, 1.0f);
 
-                // если тут было оружие - сначало продаем его
+                // if slot is not empty - sell current installed weapon first
                 if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
                     ChangeGameConfig().Profile[CurrentProfile].Money +=
                         GetWeaponCost(sharedWeapon->InternalType,
@@ -466,12 +458,12 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
                     ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
                 }
 
-                // покупаем оружие
+                // buy weapon
                 ChangeGameConfig().Profile[CurrentProfile].Money -= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart);
 
-                // все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
+                // at this point we have weapon installed for sure
                 SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
-                // убираем источник света
+                // remove light source
                 if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
                     if (auto sharedFire = sharedWeapon->Fire.lock()) {
                         vw_ReleaseLight(sharedFire->Light);
@@ -485,8 +477,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
                     sharedWeapon->Ammo = DragWeaponAmmo;
                     sharedWeapon->AmmoStart = DragWeaponAmmoStart;
 
-                    // если не ракетная установка
-                    if (DragWeaponNum < 16) {
+                    if (DragWeaponNum < 16) { // if not rocket/missile/... launcher
                         sharedWorkshopFighterGame->WeaponSlots[SlotNum].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
                         sVECTOR3D NeedAngle = sharedWorkshopFighterGame->Rotation;
                         NeedAngle.y += sharedWorkshopFighterGame->WeaponSlots[SlotNum].YAngle;
@@ -496,39 +487,26 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
                     }
                 }
 
-                // чтобы оружие заняло свое место...
                 sharedWorkshopFighterGame->UpdateWithTimeSheetList(vw_GetTimeThread(0));
-
-                // сброс
-                DragWeapon = false;
-                DragWeaponNum = 0;
-                DragWeaponLevel = 0;
-                DragWeaponAmmo = 0;
-                DragWeaponAmmoStart = 0;
-                DragWeaponControl = 0;
-                DragWeaponAltControl = 0;
-                DragWeaponAltControlData = 0;
             } else {
-                // особый случай - есть не соответствие, нужно проиграть звук неудачной установки
                 PlayMenuSFX(eMenuSFX::DragError, 1.0f);
-
-                // сброс
-                DragWeapon = false;
-                DragWeaponNum = 0;
-                DragWeaponLevel = 0;
-                DragWeaponAmmo = 0;
-                DragWeaponAmmoStart = 0;
-                DragWeaponControl = 0;
-                DragWeaponAltControl = 0;
-                DragWeaponAltControlData = 0;
             }
+
+            // reset drag-and-drop variables
+            DragWeapon = false;
+            DragWeaponNum = 0;
+            DragWeaponLevel = 0;
+            DragWeaponAmmo = 0;
+            DragWeaponAmmoStart = 0;
+            DragWeaponControl = 0;
+            DragWeaponAltControl = 0;
+            DragWeaponAltControlData = 0;
         }
 
 
-        // взяли оружие из слота, чтобы тащить - фактически продали его
+        // start drag weapon from slot - actually sold it
         if (vw_GetMouseLeftClick(false) && !DragWeapon) {
             if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
-                // звук снятия оружия из слота
                 PlayMenuSFX(eMenuSFX::DragUninstallFromSlot, 1.0f);
 
                 DragWeapon = true;
@@ -552,7 +530,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 
-        // если не тянем и в слоте что-то есть, показываем, что можем тянуть
+        // add visual effect, that player could start drag this weapon
         if (!DragWeapon && !sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.expired()) {
             SetCursorStatus(eCursorStatus::ActionAllowed);
         }
@@ -561,9 +539,9 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 
-    // рисуем можем ставить в слот или нет
+    // can install weapon into this slot or not
     bool CanOn = false;
-    // проверка по уровню слота
+    // check slot level
     if (DragWeapon && sharedWorkshopFighterGame->WeaponSlots[SlotNum].Type >= DragWeaponLevel) {
         CanOn = true;
     }
@@ -578,9 +556,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     if (CanOn) {
         if (!WeaponAmmoOut) {
             bool NeedAlert = false;
-            // если есть хоть 1 слот меньшего уровня
             for (unsigned i=0; i<sharedWorkshopFighterGame->WeaponSlots.size(); i++) {
-                // если что-то тянем, смотрим по нему...
                 if (DragWeapon) {
                     if (sharedWorkshopFighterGame->WeaponSlots[i].Type < DragWeaponLevel) {
                         NeedAlert = true;
@@ -608,13 +584,13 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
 
 
-    // прорисовка
+    // draw
     if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
         SrcRect(0,0,128,64);
         DstRect(X,Y,X+128,Y+64);
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, MenuContentTransp);
     } else {
-        // пустой слот, рисуем его
+        // empty slot
 
         DstRect(X,Y,X+128,Y+64);
 
@@ -667,7 +643,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
     if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
         Ypos += 33;
-        // выводим боекомплект   текущий/полный
+        // draw ammo status
         Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
         vw_DrawTextUTF32(Xpos, Ypos, -170, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Ammo:"));
         std::ostringstream tmpStream;
@@ -676,7 +652,7 @@ void ShipSlotSetupWeapon(int SlotNum)
         Xpos = (GameConfig().InternalWidth/2+512)-55 - 50 - vw_TextWidth(tmpStream.str());
 
 
-        // если все нормально - белым... иначе подмаргиваем
+        // in case some issue - start blinking
         float tmpTransp{MenuContentTransp};
         sRGBCOLOR tmpColor{eRGBCOLOR::white};
         if (sharedWeapon->Ammo < sharedWeapon->AmmoStart) {
@@ -686,11 +662,10 @@ void ShipSlotSetupWeapon(int SlotNum)
         vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 
-        // стоимость перезарядки
+        // reload cost
         Xpos = GameConfig().InternalWidth / 2 + 55 + 50;
         Ypos += 30;
         vw_DrawTextUTF32(Xpos, Ypos, -230, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Reload Cost:"));
-        // находим стоимость перезарядки
         int ReloadCost = GetWeaponReloadCost(sharedWeapon->InternalType,
                                              sharedWeapon->Ammo,
                                              sharedWeapon->AmmoStart);
@@ -707,7 +682,7 @@ void ShipSlotSetupWeapon(int SlotNum)
         vw_DrawText(Xpos, Ypos, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
 
-        // кнопка перезарядить оружие
+        // reload button
         Ypos += 40;
         if (DrawButton200_2(GameConfig().InternalWidth / 2 + 155, Ypos, vw_GetTextUTF32("Reload"), MenuContentTransp, (ReloadCost == 0) || GameConfig().Profile[CurrentProfile].Money<ReloadCost)) {
             sharedWeapon->Ammo = sharedWeapon->AmmoStart;
@@ -717,7 +692,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 
 
-        // настройка управления для этого оружия
+        // custom control configuration for this weapon
 
         bool Status1 = false;
         bool Status2 = false;
@@ -725,7 +700,7 @@ void ShipSlotSetupWeapon(int SlotNum)
         Xpos = GameConfig().InternalWidth/2+55+34 + 16;
         Ypos += 60;
         vw_DrawTextUTF32(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Weapon Fire Control:"));
-        // вкл-выкл первичного управления
+        // primary control
         if (GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 1
             || GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 3) {
             Status1 = true;
@@ -733,7 +708,7 @@ void ShipSlotSetupWeapon(int SlotNum)
         Xpos = GameConfig().InternalWidth/2+55+54 + 16;
         Ypos += 30;
         DrawCheckBox(Xpos,Ypos, Status1, vw_GetTextUTF32("Primary Attack"), MenuContentTransp);
-        // вкл-выкл вторичного управления
+        // secondary control
         if (GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 2
             || GameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] == 3) {
             Status2 = true;
@@ -741,7 +716,7 @@ void ShipSlotSetupWeapon(int SlotNum)
         Xpos = GameConfig().InternalWidth/2+55+54 + 16;
         Ypos += 40;
         DrawCheckBox(Xpos,Ypos, Status2, vw_GetTextUTF32("Secondary Attack"), MenuContentTransp);
-        // получаем данны обратно
+        // get data back
         ChangeGameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] = 0;
         if (Status1) {
             ChangeGameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] += 1;
@@ -750,7 +725,7 @@ void ShipSlotSetupWeapon(int SlotNum)
             ChangeGameConfig().Profile[CurrentProfile].WeaponControl[SlotNum] += 2;
         }
 
-        // получение альтернативного управления
+        // configure custom control
         Xpos = GameConfig().InternalWidth/2+55+34 + 16;
         Ypos += 40;
         vw_DrawTextUTF32(Xpos, Ypos, -300, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Alternative Fire Control:"));
@@ -758,7 +733,6 @@ void ShipSlotSetupWeapon(int SlotNum)
         Ypos += 40;
 
         std::string TextTmp{"?"};
-        // установка надписи на кнопке
         if (NeedCheck != 100) {
             if (NewWeaponControlType != 0) {
                 ChangeGameConfig().Profile[CurrentProfile].WeaponAltControl[SlotNum] = NewWeaponControlType;
@@ -782,7 +756,7 @@ void ShipSlotSetupWeapon(int SlotNum)
             }
         }
 
-        // собственно сама кнопка
+        // button
         float Transp = 1.0f;
         bool Off = false;
         if (NeedCheck == 100) {
@@ -800,7 +774,6 @@ void ShipSlotSetupWeapon(int SlotNum)
 
         if (GameConfig().Profile[CurrentProfile].Weapon[SlotNum] < 16) {
 
-            // выводим угол поворота ствола
             Xpos = GameConfig().InternalWidth/2+55+34 + 16;
             Ypos += 60;
             tmpStream.clear();
@@ -843,7 +816,7 @@ void ShipSlotSetupWeapon(int SlotNum)
     } else {
         Xpos += 74;
         Ypos += 128;
-        // пустой слот, рисуем его
+        // empty slot
         SrcRect(0,0,256,256);
         DstRect(Xpos,Ypos,Xpos+256,Ypos+256);
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_empty_icon.tga"), true, MenuContentTransp);
@@ -861,7 +834,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 
 
-    // обработка перетягивания
+    // drag-and-drop
     Xpos = GameConfig().InternalWidth / 2 + 55;
     Ypos = 50-10;
     DstRect(Xpos+10,Ypos+10,Xpos+404-10,Ypos+570-10);
@@ -874,16 +847,14 @@ void ShipSlotSetupWeapon(int SlotNum)
                                    sharedWeapon->AmmoStart);
         }
 
-        // если отпустили тут
+        // release weapon during drag
         if (!vw_GetMouseLeftClick(false) && DragWeapon) {
-            // есть уровень слота соотв. уровню оружия
             if (sharedWorkshopFighterGame->WeaponSlots[SlotNum].Type >= DragWeaponLevel
                     // если стоимость меньше чем есть денег + стоимость оружия
                 && Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)) {
-                // звук устанавливаемого оружия
                 PlayMenuSFX(eMenuSFX::DragInstallToSlot, 1.0f);
 
-                // если тут было оружие - сначало продаем его
+                // if slot is not empty - sell current installed weapon first
                 if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
                     ChangeGameConfig().Profile[CurrentProfile].Money +=
                         GetWeaponCost(sharedWeapon->InternalType,
@@ -894,12 +865,12 @@ void ShipSlotSetupWeapon(int SlotNum)
                     ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[SlotNum] = 0;
                 }
 
-                // покупаем оружие
+                // buy weapon
                 ChangeGameConfig().Profile[CurrentProfile].Money -= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart);
 
-                // все проверки сделали до этого, можем просто вызвать функцию, там 100% будет оружие
+                // at this point we have weapon installed for sure
                 SetEarthSpaceFighterWeapon(WorkshopFighterGame, SlotNum+1, DragWeaponNum);
-                // убираем источник света
+                // remove light source
                 if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
                     if (auto sharedFire = sharedWeapon->Fire.lock()) {
                         vw_ReleaseLight(sharedFire->Light);
@@ -913,8 +884,7 @@ void ShipSlotSetupWeapon(int SlotNum)
                     sharedWeapon->Ammo = DragWeaponAmmo;
                     sharedWeapon->AmmoStart = DragWeaponAmmoStart;
 
-                    // если не ракетная установка
-                    if (DragWeaponNum < 16) {
+                    if (DragWeaponNum < 16) { // if not rocket/missile/... launcher
                         sharedWorkshopFighterGame->WeaponSlots[SlotNum].YAngle = -GameConfig().Profile[CurrentProfile].WeaponSlotYAngle[SlotNum];
                         sVECTOR3D NeedAngle = sharedWorkshopFighterGame->Rotation;
                         NeedAngle.y += sharedWorkshopFighterGame->WeaponSlots[SlotNum].YAngle;
@@ -924,32 +894,21 @@ void ShipSlotSetupWeapon(int SlotNum)
                     }
                 }
 
-                // чтобы оружие заняло свое место...
                 sharedWorkshopFighterGame->UpdateWithTimeSheetList(vw_GetTimeThread(0));
-
-                // сброс
-                DragWeapon = false;
-                DragWeaponNum = 0;
-                DragWeaponLevel = 0;
-                DragWeaponAmmo = 0;
-                DragWeaponAmmoStart = 0;
-                DragWeaponControl = 0;
-                DragWeaponAltControl = 0;
-                DragWeaponAltControlData = 0;
             } else {
                 // особый случай - есть не соответствие, нужно проиграть звук неудачной установки
                 PlayMenuSFX(eMenuSFX::DragError, 1.0f);
-
-                // сброс
-                DragWeapon = false;
-                DragWeaponNum = 0;
-                DragWeaponLevel = 0;
-                DragWeaponAmmo = 0;
-                DragWeaponAmmoStart = 0;
-                DragWeaponControl = 0;
-                DragWeaponAltControl = 0;
-                DragWeaponAltControlData = 0;
             }
+
+            // reset drag-and-drop variables
+            DragWeapon = false;
+            DragWeaponNum = 0;
+            DragWeaponLevel = 0;
+            DragWeaponAmmo = 0;
+            DragWeaponAmmoStart = 0;
+            DragWeaponControl = 0;
+            DragWeaponAltControl = 0;
+            DragWeaponAltControlData = 0;
         }
 
     }
@@ -958,7 +917,7 @@ void ShipSlotSetupWeapon(int SlotNum)
 
 
 
-    //кнопка закрыть
+    // "Close" button
     if (DrawButton200_2(GameConfig().InternalWidth / 2 + 155, 533, vw_GetTextUTF32("Close"), MenuContentTransp, false)) {
         WeaponSetupSlot = -1;
         NeedCheck = 0;
@@ -1081,7 +1040,7 @@ int GetShipWeaponsMaxSlotLevel()
 
 
 //------------------------------------------------------------------------------------
-// покупка-установка и ремонт вооружения корабля
+// sell-buy-repair ship's weapon
 //------------------------------------------------------------------------------------
 void Workshop_Weaponry()
 {
@@ -1089,22 +1048,21 @@ void Workshop_Weaponry()
 
 
 
-    // если нажали - установка и тянем
+    // start weapon dragging from shopfront
     DstRect(GameConfig().InternalWidth/2-416, 100+32, GameConfig().InternalWidth/2-96, 450-32);
     if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && !DragWeapon) {
         SetCursorStatus(eCursorStatus::ActionAllowed);
 
         if (vw_GetMouseLeftClick(false)) {
-            // звук взяли оружие
             PlayMenuSFX(eMenuSFX::DragUninstallFromSlot, 1.0f);
 
-            // установка
+            // setup drag-and-drop variables for new weapon
             DragWeapon = true;
             DragWeaponNum = CurrentWorkshopNewWeapon;
             DragWeaponLevel = WorkshopNewWeapon->WeaponLevel;
             DragWeaponAmmo = WorkshopNewWeapon->Ammo;
             DragWeaponAmmoStart = WorkshopNewWeapon->AmmoStart;
-            // второй по умолчанию только для рокет
+            // by default, second for launchers only
             if (CurrentWorkshopNewWeapon <= 15) {
                 DragWeaponControl = 1;
             } else {
@@ -1116,7 +1074,6 @@ void Workshop_Weaponry()
     }
 
 
-    // затемнение
     SrcRect(0,0,256,256);
     DstRect(GameConfig().InternalWidth/2-480, 100-32, GameConfig().InternalWidth/2-32, 450+32);
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
@@ -1130,7 +1087,7 @@ void Workshop_Weaponry()
     vw_Start2DMode(-1,1);
 
 
-    // вывод названия
+    // current weapon name in shopfront
     vw_DrawTextUTF32(GameConfig().InternalWidth/2-438, 50+6, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32(GetWeaponName(CurrentWorkshopNewWeapon)));
     if (DrawButton128_2(GameConfig().InternalWidth/2-197, 50, vw_GetTextUTF32("Info"), MenuContentTransp, false)) {
         SetCurrentDialogBox(eDialogBox::ShowWeaponsInfo);
@@ -1179,7 +1136,7 @@ void Workshop_Weaponry()
 
 
 
-    // вывод уровня оружия
+    // current weapon level in shopfront
     float tmpTransp{MenuContentTransp};
     sRGBCOLOR tmpColor{eRGBCOLOR::green};
     tmpStream.clear();
@@ -1191,7 +1148,7 @@ void Workshop_Weaponry()
     }
     vw_DrawText(GameConfig().InternalWidth/2-438, 400, 0, 0, 1.0f, tmpColor, tmpTransp, tmpStream.str());
 
-    // вывод стоимости
+    // current weapon cost in shopfront
     tmpTransp = MenuContentTransp;
     tmpColor = sRGBCOLOR{eRGBCOLOR::yellow};
     tmpStream.clear();
@@ -1205,7 +1162,7 @@ void Workshop_Weaponry()
 
 
 
-    // рамки
+    // borders
     SrcRect(0,0,400,35 );
     DstRect(GameConfig().InternalWidth/2-457, 100-11, GameConfig().InternalWidth/2-57, 100+35-11);
     vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel4.tga"), true, MenuContentTransp);
@@ -1218,7 +1175,7 @@ void Workshop_Weaponry()
 
 
 
-    // проверяем колесо мышки
+    // check mouse wheel
     DstRect(GameConfig().InternalWidth/2-457, 100+35-11, GameConfig().InternalWidth/2-57, 450-13);
     if (vw_MouseOverRect(DstRect)) {
         if ((vw_GetWheelStatus() != 0) && !isDialogBoxDrawing()) {
@@ -1275,11 +1232,11 @@ void Workshop_Weaponry()
     }
 
 
-    // кнопка "перезарядить все" оружие
+    // "Reload All" button
     if (WeaponSetupSlot == -1) {
         if (auto sharedWorkshopFighterGame = WorkshopFighterGame.lock()) {
             int ReloadCost = 0;
-            // находим стоимость перезарядки
+            // find the cost of reload
             for (const auto &tmpWeaponSlot : sharedWorkshopFighterGame->WeaponSlots) {
                 if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
                     ReloadCost += GetWeaponReloadCost(sharedWeapon->InternalType,
@@ -1305,7 +1262,6 @@ void Workshop_Weaponry()
     vw_DrawTextUTF32(GameConfig().InternalWidth/2+445-vw_TextWidthUTF32(vw_GetTextUTF32("Installed Weapons")), 600, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Installed Weapons"));
     ResetFontSize();
 
-    // вывод информации
     vw_SetFontSize(20);
 
     tmpTransp = MenuContentTransp;
@@ -1324,17 +1280,19 @@ void Workshop_Weaponry()
     ResetFontSize();
 
 
-    // проверяем состояние, если тянули и отжали, и сюда пришли - значит никто не перехватил, нужно сделать сброс
+    // release weapon during drag
     if (!vw_GetMouseLeftClick(false) && DragWeapon) {
-        // звук пропадающего оружия
         PlayMenuSFX(eMenuSFX::DragRelease, 1.0f);
 
-        // сброс
+        // reset drag-and-drop variables
         DragWeapon = false;
         DragWeaponNum = 0;
         DragWeaponLevel = 0;
         DragWeaponAmmo = 0;
         DragWeaponAmmoStart = 0;
+        DragWeaponControl = 0;
+        DragWeaponAltControl = 0;
+        DragWeaponAltControlData = 0;
     }
 
     if (DragWeapon) {
