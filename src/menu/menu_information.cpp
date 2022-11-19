@@ -28,8 +28,6 @@
 // FIXME ostringstream is not so fast, move all string initialization into setup,
 //       all ostringstream-related code should be called only one time in init
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../assets/texture.h"
@@ -49,9 +47,6 @@
 namespace viewizard {
 namespace astromenace {
 
-//------------------------------------------------------------------------------------
-// переменные
-//------------------------------------------------------------------------------------
 std::weak_ptr<cSpaceShip> InfoShip{};
 std::weak_ptr<cWeapon> InfoWeapon{};
 std::weak_ptr<cProjectile> InfoMine{};
@@ -90,7 +85,6 @@ float InfoObjectRange = 0;
 
 
 
-// кол-во и положение в списке отображения
 #define InfoFighterStart 1
 #define InfoFighterQuant 22
 
@@ -146,9 +140,7 @@ const char *InfoGroupNames[10] = {
 
 
 
-//------------------------------------------------------------------------------------
-// Получаем номер текущего меню, и следующий элемент при нажатии
-//------------------------------------------------------------------------------------
+
 int GetInfoNextGroup()
 {
     if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
@@ -260,7 +252,7 @@ int GetInfoSwitchToGroup(int Group)
 
 
 //------------------------------------------------------------------------------------
-// Удаление текущего объекта в меню
+// Destroy current object
 //------------------------------------------------------------------------------------
 void DestroyInfoObject()
 {
@@ -274,7 +266,7 @@ void DestroyInfoObject()
 
 
 //------------------------------------------------------------------------------------
-// Создание текущего объекта
+// Create current object
 //------------------------------------------------------------------------------------
 void CreateInfoObject()
 {
@@ -587,7 +579,7 @@ void InformationObject3DText(int ObjectNum)
     float WScale = -177;
 
 
-    // общее для файтеров землян
+    // common for Earth fighters
     if (CreateNum>=InfoFighterStart && CreateNum<InfoFighterStart+InfoFighterQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -655,7 +647,7 @@ void InformationObject3DText(int ObjectNum)
                   << InfoObjectEngineQuantity << " " << vw_GetText("units");
         vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
     }
-    // оружие для кораблей землян
+    // weapons for Earth ships
     if (CreateNum>=InfoWeaponStart && CreateNum<InfoWeaponStart+InfoWeaponQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -741,7 +733,7 @@ void InformationObject3DText(int ObjectNum)
                   << InfoObjectRange << " " << vw_GetText("units");
         vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
     }
-    // мины
+    // mines
     if (CreateNum>=InfoMineStart && CreateNum<InfoMineStart+InfoMineQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -801,7 +793,7 @@ void InformationObject3DText(int ObjectNum)
             vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("No"));
         }
     }
-    // общее для файтеров пришельцев
+    // common for Aliens fighters
     if (CreateNum>=InfoAlienStart && CreateNum<InfoAlienStart+InfoAlienQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -862,7 +854,7 @@ void InformationObject3DText(int ObjectNum)
                   << 10 << " - " << 200 << " " << vw_GetText("units");
         vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
     }
-    // общее для MotherShip пришельцев
+    // common for Alien MotherShips
     if (CreateNum>=InfoAlienMotherShipStart && CreateNum<InfoAlienMotherShipStart+InfoAlienMotherShipQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -923,7 +915,7 @@ void InformationObject3DText(int ObjectNum)
                   << 50 << " - " << 500 << " " << vw_GetText("units");
         vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
     }
-    // общее для пиратов
+    // common for pirats
     if (CreateNum>=InfoPirateShipStart && CreateNum<InfoPirateShipStart+InfoPirateShipQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -977,7 +969,7 @@ void InformationObject3DText(int ObjectNum)
         Y1 += Offset;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Damage:"));
     }
-    // общее для зданий
+    // common for buildings
     if (CreateNum>=InfoBuildingStart && CreateNum<InfoBuildingStart+InfoBuildingQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -1015,7 +1007,7 @@ void InformationObject3DText(int ObjectNum)
                   << InfoObjectHeight << " " << vw_GetText("units");
         vw_DrawText(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, tmpStream.str());
     }
-    // общее для наземных войск
+    // common for ground military
     if (CreateNum>=InfoMilitaryBuildingStart && CreateNum<InfoMilitaryBuildingStart+InfoMilitaryBuildingQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -1069,7 +1061,7 @@ void InformationObject3DText(int ObjectNum)
         Y1 += Offset;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Damage:"));
     }
-    // общее для колесного
+    // common for wheeled vehicles
     if (CreateNum>=InfoWheeledStart && CreateNum<InfoWheeledStart+InfoWheeledQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -1123,7 +1115,7 @@ void InformationObject3DText(int ObjectNum)
         Y1 += Offset;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Damage:"));
     }
-    // общее для гусенечного
+    // common for tracked vehicle
     if (CreateNum>=InfoTrackedStart && CreateNum<InfoTrackedStart+InfoTrackedQuant) {
         Y1 += Offset+5;
         vw_DrawTextUTF32(X1, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::yellow}, MenuContentTransp, vw_GetTextUTF32("Object Class:"));
@@ -1189,7 +1181,7 @@ void InformationObject3DText(int ObjectNum)
     switch (ObjectNum) {
 
 
-    // для пиратов
+    // pirates
     case InfoPirateShipStart:
     case InfoPirateShipStart+1:
     case InfoPirateShipStart+2:
@@ -1281,7 +1273,7 @@ void InformationObject3DText(int ObjectNum)
 
 
 
-    // для наземных войск
+    // ground military
     case InfoMilitaryBuildingStart:
     case InfoMilitaryBuildingStart+5:
         Y1 += Offset+Offset+5;
@@ -1331,7 +1323,7 @@ void InformationObject3DText(int ObjectNum)
         break;
 
 
-    // для колесного транспорта
+    // wheeled vehicles
     case InfoWheeledStart:
         Y1 += Offset+Offset+5;
         vw_DrawTextUTF32(X1+Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, MenuContentTransp, vw_GetTextUTF32("Armored Jeep"));
@@ -1398,7 +1390,7 @@ void InformationObject3DText(int ObjectNum)
         break;
 
 
-    // для гусенечного транспорта
+    // tracked vehicles
     case InfoTrackedStart:
     case InfoTrackedStart+1:
     case InfoTrackedStart+5:
@@ -1477,7 +1469,7 @@ void InformationObject3DText(int ObjectNum)
 
 
 //------------------------------------------------------------------------------------
-// Основная процедура прорисовки
+// main draw method
 //------------------------------------------------------------------------------------
 void InformationMenu()
 {
@@ -1492,7 +1484,7 @@ void InformationMenu()
 
 
 
-    // выводим кол-во и текущую страницу
+    // print pages count and current page number
     std::ostringstream tmpStream;
     tmpStream << CreateNum << "/" << InfoEnd;
     int Size = vw_TextWidth(tmpStream.str());
@@ -1512,7 +1504,7 @@ void InformationMenu()
 
 
 
-    // проверяем колесо мышки
+    // check mouse wheel
     DstRect(GameConfig().InternalWidth / 2 - 440, 80, GameConfig().InternalWidth / 2 + 440,590);
     if (vw_MouseOverRect(DstRect)) {
         if (vw_GetWheelStatus() != 0 && !isDialogBoxDrawing()) {
@@ -1607,7 +1599,7 @@ void InformationMenu()
 
 
 //------------------------------------------------------------------------------------
-// Прорисовка 3д части
+// 3D part rendering
 //------------------------------------------------------------------------------------
 void InformationDrawObject()
 {
@@ -1633,7 +1625,7 @@ void InformationDrawObject()
     vw_CameraLookAt();
 
 
-    // вращение объекта
+    // object rotation
 
     float RotateInfoObjectY = 15.0f * (vw_GetTimeThread(0) - LastRotateInfoObject);
     LastRotateInfoObject = vw_GetTimeThread(0);
@@ -1643,7 +1635,7 @@ void InformationDrawObject()
         RotationSumY -= 360.0f;
     }
 
-    // корректируем положение (у нас объекты стоят не в нулевой точке, а со смещением, например - оружие землян)
+    // adjust object position (in case objects located not at zero point, but with some offset, for example, ship's weapons)
     sVECTOR3D TMPLocation = ObjectBaseLocation;
     float tmp_matrix[9];
     vw_Matrix33CreateRotate(tmp_matrix, sVECTOR3D{0.0f, RotationSumY, 0.0f});
@@ -1651,9 +1643,9 @@ void InformationDrawObject()
     TMPLocation += sVECTOR3D{1000.0f, -1000.0f, 0.0f};
 
 
-    // рисуем линии
+    // draw lines
 
-    // делаем массив для всех элементов RI_3f_XYZ | RI_2f_TEX
+    // make an array for all elements RI_3f_XYZ | RI_2f_TEX
     float *tmpDATA = new float[4*(3+2)];
 
 
@@ -1679,7 +1671,6 @@ void InformationDrawObject()
     vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
     vw_BindTexture(0, GetPreloadedTextureAsset("menu/line.tga"));
     for (int i = -SizeCell; i < SizeCell + 2; i += 2) {
-        // номер float'а в последовательности
         int k=0;
 
         tmpDATA[k++] = i*1.0f+LineSize;
@@ -1780,7 +1771,7 @@ void InformationDrawObject()
 
         if (auto sharedShip = InfoShip.lock()) {
             sharedShip->Draw(true);
-            // рисуем оружие
+            // render weapon
             if (!sharedShip->WeaponSlots.empty()) {
                 for (auto &tmpWeaponSlot : sharedShip->WeaponSlots) {
                     if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
@@ -1810,7 +1801,7 @@ void InformationDrawObject()
 
     if (auto sharedShip = InfoShip.lock()) {
         sharedShip->Draw(false, ShadowMap);
-        // рисуем оружие
+        // render weapon
         if (!sharedShip->WeaponSlots.empty()) {
             for (auto &tmpWeaponSlot : sharedShip->WeaponSlots) {
                 if (auto sharedWeapon = tmpWeaponSlot.Weapon.lock()) {
@@ -1818,7 +1809,7 @@ void InformationDrawObject()
                 }
             }
         }
-        // рисуем эффекты двигателей только для этой модели
+        // render engines for this ship only
         vw_DrawParticleSystems(sharedShip->Engines);
     }
     if (auto sharedWeapon = InfoWeapon.lock()) {
@@ -1826,7 +1817,7 @@ void InformationDrawObject()
     }
     if (auto sharedMine = InfoMine.lock()) {
         sharedMine->Draw(false, ShadowMap);
-        vw_DrawParticleSystems(sharedMine->GraphicFX); // рисуем эффекты двигателей только для этой модели
+        vw_DrawParticleSystems(sharedMine->GraphicFX); // visual effects for this ship only
     }
     if (auto sharedObject = InfoGroundObject.lock()) {
         sharedObject->Draw(false, ShadowMap);
@@ -1842,7 +1833,7 @@ void InformationDrawObject()
     vw_SetViewport(tmpViewportX, tmpViewportY, tmpViewportWidth, tmpViewportHeight);
     vw_ResizeScene(45.0f, GameConfig().InternalWidth / GameConfig().InternalHeight, 1.0f, 2000.0f);
 
-    // бордюр с тенью
+    // border with shadow
     vw_Start2DMode(-1,1);
     sRECT SrcRect;
     SrcRect(2,2,482,371);

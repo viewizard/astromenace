@@ -28,8 +28,6 @@
 // FIXME ostringstream is not so fast, move all string initialization into setup,
 //       all ostringstream-related code should be called only one time in dialog init
 
-// TODO translate comments
-
 #include "../core/core.h"
 #include "../config/config.h"
 #include "../ui/font.h"
@@ -72,7 +70,7 @@ float StartHideTransp = 1.0f;
 
 // what should draw in dialogue 6,7,8
 std::weak_ptr<cSpaceShip> DialogSpaceShip{};
-extern std::weak_ptr<cSpaceShip> WorkshopFighterGame; // корабль игрока в меню шипярд
+extern std::weak_ptr<cSpaceShip> WorkshopFighterGame; // player's ship "holder" in shipyard menu
 char *GetShipGroupTitle(int Num);
 char *GetWorkshopShipName(int Num);
 
@@ -80,7 +78,7 @@ cWeapon *DialogWeapon = nullptr;
 char *GetWeaponName(int Num);
 char *GetWeaponGroupTitle(int Num);
 
-// номер системы... 1-20
+// internal system number... 1-20
 int DialogSystem = 0;
 char *GetSystemName(int Num);
 float GetShipEngineSystemEnergyUse(int Num);
@@ -89,14 +87,13 @@ float GetShipRechargeEnergy(int Num);
 float GetShipMaxEnergy(int Num);
 
 
-// флаг-тянем
+// drag-and-drop current status (true - we drag some weapon)
 extern bool DragWeapon;
 extern int DragWeaponNum;
 extern int DragWeaponLevel;
 extern int WeaponSetupSlot;
 extern bool CanDrawWorkshop;
 
-// если в инфо систем есть проблемы с энергией
 bool NeedMoreEnergyDialog = false;
 
 
@@ -120,7 +117,7 @@ void InitDialogBoxes()
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки - 200
+// dialog button 200
 //------------------------------------------------------------------------------------
 static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float Transp)
 {
@@ -128,7 +125,7 @@ static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float 
     bool ON = false;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f) {
         CurrentActiveMenuElement++;
     }
@@ -141,7 +138,7 @@ static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float 
 
     DstRect(X,Y,X+204,Y+35);
     if (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
-        // если тухнем или появляемся - не жать
+        // don't allow to click in case dialog box fade-in or fade-out
         ON = true;
         if (Transp == 1.0f) {
             SetCursorStatus(eCursorStatus::ActionAllowed);
@@ -161,8 +158,8 @@ static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float 
 
 
 
+    // draw
     SrcRect(2,2,230-2,64-2);
-    // рисуем кнопку
     DstRect(X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
     if (!ON) {
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_out.tga"), true, 0.8f*Transp);
@@ -171,17 +168,14 @@ static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float 
     }
 
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
-    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
     float WScale = 0;
     if (Size > 176) {
         Size = 176;
         WScale = -176;
     }
-    // находим смещение текста
     int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-    // рисуем текст
+
     if (!ON) {
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
     } else {
@@ -210,14 +204,14 @@ static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float 
 
 
 //------------------------------------------------------------------------------------
-// прорисовка кнопки - 128
+// dialog button 128
 //------------------------------------------------------------------------------------
 static bool DrawDialogButton128(int X, int Y, const std::u32string &Text, float Transp)
 {
     sRECT SrcRect, DstRect;
     bool ON = false;
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f) {
         CurrentActiveMenuElement++;
     }
@@ -230,7 +224,7 @@ static bool DrawDialogButton128(int X, int Y, const std::u32string &Text, float 
 
     DstRect(X,Y,X+132,Y+35);
     if (vw_MouseOverRect(DstRect) || InFocusByKeyboard) {
-        // если тухнем или появляемся - не жать
+        // don't allow to click in case dialog box fade-in or fade-out
         ON = true;
         if (Transp == 1.0f)
             SetCursorStatus(eCursorStatus::ActionAllowed);
@@ -248,8 +242,8 @@ static bool DrawDialogButton128(int X, int Y, const std::u32string &Text, float 
     }
 
 
+    // draw
     SrcRect(2,2,158-2,64-2);
-    // рисуем кнопку
     DstRect(X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
     if (!ON) {
         vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_out.tga"), true, 0.8f*Transp);
@@ -258,17 +252,14 @@ static bool DrawDialogButton128(int X, int Y, const std::u32string &Text, float 
     }
 
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
-    // если текст сильно большой - сжимаем буквы, чтобы не вылазило за пределы кнопки
     float WScale = 0;
     if (Size > 108) {
         Size = 108;
         WScale = -108;
     }
-    // находим смещение текста
     int SizeI = DstRect.left + (SrcRect.right-SrcRect.left-Size)/2;
-    // рисуем текст
+
     if (!ON) {
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
     } else {
@@ -297,19 +288,18 @@ static bool DrawDialogButton128(int X, int Y, const std::u32string &Text, float 
 
 
 //------------------------------------------------------------------------------------
-// прорисовка чекбокса
+// check box
 //------------------------------------------------------------------------------------
 static void DrawCheckBox_2(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text, float Transp)
 {
     sRECT SrcRect, DstRect;
 
-    // получаем длину текста
     int Size = vw_TextWidthUTF32(Text);
 
     bool ON = false;
 
 
-    // работаем с клавиатурой
+    // keyboard
     if (Transp >= 0.99f && GetShowGameCursor()) {
         CurrentActiveMenuElement++;
     }
@@ -321,10 +311,10 @@ static void DrawCheckBox_2(int X, int Y, bool &CheckBoxStatus, const std::u32str
     }
 
 
-    // 20 - расстояние между текстом
+    // 20 - spacing between text
     DstRect(X+4,Y+4,X+40+20+Size,Y+40-4);
     if ((vw_MouseOverRect(DstRect) || InFocusByKeyboard) && GetShowGameCursor()) {
-        // если тухнем или появляемся - не жать
+        // don't allow to click in case dialog box fade-in or fade-out
         ON = true;
         if (Transp == 1.0f) {
             SetCursorStatus(eCursorStatus::ActionAllowed);
@@ -333,7 +323,7 @@ static void DrawCheckBox_2(int X, int Y, bool &CheckBoxStatus, const std::u32str
 
 
 
-    // рисуем
+    // draw
     SrcRect(0,0,40,38);
     DstRect(X,Y,X+40,Y+38);
     if (!ON || DragWeapon) {
@@ -362,9 +352,6 @@ static void DrawCheckBox_2(int X, int Y, bool &CheckBoxStatus, const std::u32str
 
 
 
-//------------------------------------------------------------------------------------
-// запрос, прорисовываем что-то?
-//------------------------------------------------------------------------------------
 bool isDialogBoxDrawing()
 {
     return (CurrentDialogBox != eDialogBox::None);
@@ -374,14 +361,10 @@ bool isDialogBoxDrawing()
 
 
 //------------------------------------------------------------------------------------
-// прорисовка DialogBox
+// draw DialogBox
 //------------------------------------------------------------------------------------
 void SetCurrentDialogBox(eDialogBox DialogBox)
 {
-
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // если что-то рисуем - продолжаем рисовать...
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (isDialogBoxDrawing()) {
         return;
     }
@@ -395,7 +378,7 @@ void SetCurrentDialogBox(eDialogBox DialogBox)
     NeedHideDialog = false;
     StartHideTransp = 1.0f;
 
-    // сброс если было перетягивание
+    // reset drag-and-drop mode
     DragWeapon = false;
     DragWeaponNum = 0;
     vw_GetMouseLeftClick(true);
@@ -406,7 +389,6 @@ void SetCurrentDialogBox(eDialogBox DialogBox)
 
 
 
-// закрываем диалог
 void CloseDialog()
 {
     NeedMoreEnergyDialog = false;
@@ -422,7 +404,7 @@ void CloseDialog()
 
 
 //------------------------------------------------------------------------------------
-// рисуем DrawDialogBox, если он установлен
+// draw dialog box
 //------------------------------------------------------------------------------------
 void DrawDialogBox()
 {
@@ -446,16 +428,13 @@ void DrawDialogBox()
 
 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // если что-то есть - рисуем
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (!isDialogBoxDrawing()) {
         return;
     }
 
 
 
-    // задаем параметры диалога, все остальное посчитаеться по ним...
+    // setup main dialog parameters, all other will be calculated
     eDialogTypeBySize DialogType = eDialogTypeBySize::w512h256;
     switch (CurrentDialogBox) {
     /*
@@ -513,7 +492,7 @@ void DrawDialogBox()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // затемнение при выводе
+    // grow dark background a little bit
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     SrcRect(0, 0, 2, 2);
     DstRect(0, 0, GameConfig().InternalWidth, 768);
@@ -523,7 +502,7 @@ void DrawDialogBox()
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // подложка диалога
+    // dialog back part
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     switch (DialogType) {
     case eDialogTypeBySize::w512h256:
@@ -545,7 +524,7 @@ void DrawDialogBox()
 
 
 
-    // для название диалога
+    // dialog title
     int SizeI;
     int SizeI1;
     int TitleOffset = 25;
@@ -554,7 +533,7 @@ void DrawDialogBox()
     }
 
 
-    // для кнопок диалога
+    // dialog buttons
     int ButtonOffset = 190;
     if (DialogType == eDialogTypeBySize::w512h512) {
         ButtonOffset = 256+190;
@@ -569,11 +548,11 @@ void DrawDialogBox()
 
 
     switch (CurrentDialogBox) {
-    case eDialogBox::QuitFromGame: // хотим выйти или нет?
-        // название диалога
+    case eDialogBox::QuitFromGame:
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("QUIT")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("QUIT"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to quit?"));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -592,7 +571,7 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all game data will be saved."));
         }
 
-        // кнопки
+        // buttons
         if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
             QuitFromMainLoop();
             CloseDialog();
@@ -602,11 +581,11 @@ void DrawDialogBox()
         }
         break;
 
-    case eDialogBox::ProfileCreationError: // в профайле все занято, не можем создать новую запись.
-        // название диалога
+    case eDialogBox::ProfileCreationError:
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("ERROR")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("ERROR"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Cannot create a Pilot Profile."));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -625,17 +604,17 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Tip: you should clear one line first."));
         }
 
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton200(X+128+64-72/2,Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) {
             CloseDialog();
         }
         break;
 
-    case eDialogBox::DeleteProfile: // удаление профайла - запрос
-        // название диалога
+    case eDialogBox::DeleteProfile:
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("DELETE")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("DELETE"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to delete the Profile?"));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -654,7 +633,7 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: all Pilot Profile data will be lost."));
         }
 
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
             DeleteRecord();
             if (CurrentProfile != -1) {
@@ -668,11 +647,11 @@ void DrawDialogBox()
         break;
 
 
-    case eDialogBox::RepairShip: // не полный ремонт (не достаточно денег)
-        // название диалога
+    case eDialogBox::RepairShip:
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("REPAIR")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("REPAIR"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Not enough money for a full hull repair."));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -691,18 +670,18 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: Repair has been limited by money."));
         }
 
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton128(X+192,Y+ButtonOffset, vw_GetTextUTF32("OK"), DialogContentTransp)) {
             CloseDialog();
         }
         break;
 
 
-    case eDialogBox::QuitNoSave: // хотим выйти или нет?, с предупреждением, что не все сохраним
-        // название диалога
+    case eDialogBox::QuitNoSave:
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("QUIT")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("QUIT"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to quit?"));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -721,7 +700,7 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
         }
 
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
             QuitFromMainLoop();
             CloseDialog();
@@ -730,12 +709,11 @@ void DrawDialogBox()
             CloseDialog();
         }
         break;
-    case eDialogBox::QuiToMenuNoSave: // хотим выйти или нет?, с предупреждением, что не все сохраним
-        // выход из игры в меню (основное)
-        // название диалога
+    case eDialogBox::QuiToMenuNoSave: // quit from game to main menu
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("QUIT")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("QUIT"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to quit?"));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -754,7 +732,7 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
         }
 
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
             ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
             CloseDialog();
@@ -764,11 +742,11 @@ void DrawDialogBox()
         }
         break;
 
-    case eDialogBox::RestartLevelNoSave: // хотим рестарт игры?, с предупреждением, что не все сохраним
-        // название диалога
+    case eDialogBox::RestartLevelNoSave:
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("RESTART")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("RESTART"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to restart the game?"));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -787,7 +765,7 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
         }
 
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
             ExitGame(eCommand::SWITCH_FROM_MENU_TO_GAME);
             CloseDialog();
@@ -800,15 +778,15 @@ void DrawDialogBox()
 
 
 
-    // вывод данных по кораблю
+    // dialog with more info about hull
     case eDialogBox::ShowShipInfo: {
         auto sharedDialogSpaceShip = DialogSpaceShip.lock();
         auto sharedWorkshopFighterGame = WorkshopFighterGame.lock();
         if (sharedDialogSpaceShip && sharedWorkshopFighterGame) {
-            // название диалога
+            // dialog title
             SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32(GetWorkshopShipName(sharedDialogSpaceShip->InternalType))))/2;
             vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32(GetWorkshopShipName(sharedDialogSpaceShip->InternalType)));
-            // текст диалога
+            // dialog text
             int Y1 = Y+80;
             int Offset = 31;
             int Size = 240;
@@ -972,12 +950,12 @@ void DrawDialogBox()
     }
     break;
 
-    // вывод данных по оружию
+    // dialog with more info about weapon
     case eDialogBox::ShowWeaponsInfo: {
-        // название диалога
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32(GetWeaponName(DialogWeapon->InternalType))))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32(GetWeaponName(DialogWeapon->InternalType)));
-        // текст диалога
+        // dialog text
         int Y1 = Y+80;
         int Offset = 31;
         int Size = 230;
@@ -1092,19 +1070,18 @@ void DrawDialogBox()
                   << GetProjectileRange(DialogWeapon->InternalType) << " " << vw_GetText("units");
         vw_DrawText(X1 + Size, Y1, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, tmpStream.str());
 
-        // закрываем...
         if (vw_GetMouseLeftClick(true) || vw_GetMouseRightClick(true)) {
             CloseDialog();
         }
     }
     break;
 
-    // вывод данных по системам
+    // dialog with more info about internal system
     case eDialogBox::ShowSystemsInfo: {
-        // название диалога
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32(GetSystemName(DialogSystem))))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32(GetSystemName(DialogSystem)));
-        // текст диалога
+        // dialog text
         int Y1 = Y+80;
         int Offset = 31;
         int Size = 230;
@@ -1511,12 +1488,12 @@ void DrawDialogBox()
     break;
 
 
-    case eDialogBox::ProfileTipsAndTricks: { // подсказки на меню профилей
-        // название диалога
+    case eDialogBox::ProfileTipsAndTricks: { // hint for profile menu
+        // dialog title
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
         SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
-        // текст диалога
+        // dialog text
 
         SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("It is possible to create five Pilot Profiles in the game in"));
         vw_DrawTextUTF32(X+25, Y+ 80, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("It is possible to create five Pilot Profiles in the game in"));
@@ -1540,22 +1517,22 @@ void DrawDialogBox()
         vw_DrawTextUTF32(X+25, Y+435, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: you can change your difficulty level before each"));
         vw_DrawTextUTF32(X+25, Y+470, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("new mission."));
 
-        // чекбокс
+        // dialog checkbox
         bool ttt = !GameConfig().NeedShowHint[0];
         DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
         ChangeGameConfig().NeedShowHint[0] = !ttt;
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) {
             CloseDialog();
         }
         break;
     }
-    case eDialogBox::ShipyardTipsAndTricks: { // подсказки на меню шипъярд
-        // название диалога
+    case eDialogBox::ShipyardTipsAndTricks: { // hint for shipyard menu
+        // dialog title
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
         SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
-        // текст диалога
+        // dialog text
 
         int k=28;
         SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("There are more than 20 spaceships with unique characteristics"));
@@ -1581,22 +1558,22 @@ void DrawDialogBox()
         vw_DrawTextUTF32(X+25, Y+120+k*12, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Bomber - heavy destroyers with mostly heavy attack weapons."));
         vw_DrawTextUTF32(X+25, Y+120+k*13, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Attack Ship - heavy, large and heavily armed ships."));
 
-        // чекбокс
+        // dialog checkbox
         bool ttt = !GameConfig().NeedShowHint[1];
         DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
         ChangeGameConfig().NeedShowHint[1] = !ttt;
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) {
             CloseDialog();
         }
         break;
     }
-    case eDialogBox::SystemsTipsAndTricks: { // подсказки на меню системы
-        // название диалога
+    case eDialogBox::SystemsTipsAndTricks: { // hint for systems shop menu
+        // dialog title
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
         SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
-        // текст диалога
+        // dialog text
 
         int k=25;
         SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("A set of systems is installed on the ship you operate. All systems"));
@@ -1627,22 +1604,22 @@ void DrawDialogBox()
         vw_DrawTextUTF32(X+25, Y+120+k*14, SizeI > 716 ? -716 : 716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Advanced - The most advanced, but yet untested systems for"));
         vw_DrawTextUTF32(X+40, Y+120+k*15, -701, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("enhancing ship invulnerability."));
 
-        // чекбокс
+        // dialog checkbox
         bool ttt = !GameConfig().NeedShowHint[2];
         DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
         ChangeGameConfig().NeedShowHint[2] = !ttt;
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) {
             CloseDialog();
         }
         break;
     }
-    case eDialogBox::WeaponryTipsAndTricks: { // подсказки на меню оружейная
-        // название диалога
+    case eDialogBox::WeaponryTipsAndTricks: { // hint for weaponry menu
+        // dialog title
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
         SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
-        // текст диалога
+        // dialog text
 
         int k=25;
         SizeI = vw_TextWidthUTF32(vw_GetTextUTF32("You can use this section to buy, sell and set up the weapons on"));
@@ -1676,23 +1653,23 @@ void DrawDialogBox()
 
 
 
-        // чекбокс
+        // dialog checkbox
         bool ttt = !GameConfig().NeedShowHint[3];
         DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
         ChangeGameConfig().NeedShowHint[3] = !ttt;
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) {
             CloseDialog();
         }
         break;
     }
 
-    case eDialogBox::ShortkeyTipsAndTricks: { // подсказки на горячие клавиши в игре
-        // название диалога
+    case eDialogBox::ShortkeyTipsAndTricks: { // hint about hotkeys (right before game start)
+        // dialog title
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
         SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
-        // текст диалога
+        // dialog text
 
         int k=23;
 
@@ -1717,13 +1694,12 @@ void DrawDialogBox()
 
 
 
-        // чекбокс
+        // dialog checkbox
         bool ttt = !GameConfig().NeedShowHint[4];
         DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
         ChangeGameConfig().NeedShowHint[4] = !ttt;
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton128(X+512+90, Y+ButtonOffset, vw_GetTextUTF32("START"), DialogContentTransp)) {
-            // ничего не тянем... только включили меню
             DragWeaponNum = 0;
             DragWeaponLevel = 0;
             DragWeapon = false;
@@ -1736,12 +1712,12 @@ void DrawDialogBox()
         break;
     }
 
-    case eDialogBox::StartMissionSecondTime: { // подсказка, если пытаемся по второму разу пройти миссию
-        // название диалога
+    case eDialogBox::StartMissionSecondTime: { // tip about multiple mission rerun
+        // dialog title
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Tips and hints"));
         SizeI = SizeI1 > 210 ? 17 + (WTitle-210)/2 : 17 + (WTitle-SizeI1)/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, SizeI1 > 210 ? -210 : 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Tips and hints"));
-        // текст диалога
+        // dialog text
 
         int k=30;
 
@@ -1768,11 +1744,11 @@ void DrawDialogBox()
         vw_DrawTextUTF32(X+25, Y+120+k*8, -716, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, DialogContentTransp, vw_GetTextUTF32("in this mission is reduced two times."));
 
 
-        // чекбокс
+        // dialog checkbox
         bool ttt = !GameConfig().NeedShowHint[5];
         DrawCheckBox_2(X+36, Y+ButtonOffset, ttt, vw_GetTextUTF32("Do not show this tip again."), DialogContentTransp);
         ChangeGameConfig().NeedShowHint[5] = !ttt;
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton200(X+512+90-72, Y+ButtonOffset, vw_GetTextUTF32("CLOSE"), DialogContentTransp)) {
             CloseDialog();
             cCommand::GetInstance().Set(eCommand::SWITCH_TO_WORKSHOP);
@@ -1783,9 +1759,8 @@ void DrawDialogBox()
         break;
     }
 
-    // спрашиваем какой язык при первом старте игры
     case eDialogBox::ChoseLanguage: {
-        // название диалога
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("Language")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("Language"));
 
@@ -1827,18 +1802,17 @@ void DrawDialogBox()
         ResetFontSize();
 
         if (DrawDialogButton200(X+128+64-72/2, Y+ButtonOffset, vw_GetTextUTF32("OK"), DialogContentTransp)) {
-            // первоначально, язык голоса ставим такой же, как и язык меню
             ChangeGameConfig().VoiceLanguage = GameConfig().MenuLanguage;
             CloseDialog();
         }
         break;
     }
 
-    case eDialogBox::RestartOnAdvOptChanged: // при изменении продвинутых настроек в самой игре, с предупреждением, что не все сохраним
-        // название диалога
+    case eDialogBox::RestartOnAdvOptChanged:
+        // dialog title
         SizeI = 17 + (WTitle-vw_TextWidthUTF32(vw_GetTextUTF32("RESTART")))/2;
         vw_DrawTextUTF32(X+SizeI, Y+TitleOffset, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.7f*DialogContentTransp, vw_GetTextUTF32("RESTART"));
-        // текст диалога
+        // dialog text
         SizeI1 = vw_TextWidthUTF32(vw_GetTextUTF32("Are you sure you want to restart the game?"));
         SizeI = (W-SizeI1)/2;
         if (SizeI1 > 470) {
@@ -1857,7 +1831,7 @@ void DrawDialogBox()
             vw_DrawTextUTF32(X+SizeI, Y+130, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, 0.5f*DialogContentTransp, vw_GetTextUTF32("Note: the current game data will be lost."));
         }
 
-        // кнопки
+        // dialog buttons
         if (DrawDialogButton128(X+94, Y+ButtonOffset, vw_GetTextUTF32("YES"), DialogContentTransp)) {
             CloseDialog();
             RecreateGameWindow();
@@ -1881,7 +1855,6 @@ void DrawDialogBox()
 
 
 
-    // если можно - снимаем диалог
     if (vw_GetKeyStatus(SDLK_ESCAPE)) {
         CloseDialog();
         vw_SetKeyStatus(SDLK_ESCAPE, false);
