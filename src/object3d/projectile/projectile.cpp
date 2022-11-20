@@ -1727,7 +1727,7 @@ cProjectile::cProjectile(const int ProjectileNum)
             float MaxY = sharedGFX->CreationSize.y/2;
             float MinZ = -sharedGFX->CreationSize.z/2;
             float MaxZ = sharedGFX->CreationSize.z/2;
-            // запоминаем только то, что нужно - float x, float y, float z, float sizeX, float sizeY, float sizeZ
+            // store only what we really need - float x, float y, float z, float sizeX, float sizeY, float sizeZ
             OBB.Box[0] = AABB[0] = sVECTOR3D{MaxX, MaxY, MaxZ};
             OBB.Box[1] = AABB[1] = sVECTOR3D{MinX, MaxY, MaxZ};
             OBB.Box[2] = AABB[2] = sVECTOR3D{MinX, MaxY, MinZ};
@@ -1758,7 +1758,6 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // flares
     case 203:
-        // смотрит вверх
         Orientation = sVECTOR3D{0.0f, 0.5f, 0.5f};
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
@@ -2308,7 +2307,7 @@ void cProjectile::SetLocation(const sVECTOR3D &NewLocation)
             sharedGFX->MoveSystemLocation(GraphicFXLocation[0] + Location);
         }
         break;
-    // как Plasma2
+    // same as Plasma2
     case 213:
         if (auto sharedGFX = GraphicFX[0].lock()) {
             sharedGFX->MoveSystem(GraphicFXLocation[0] + Location);
@@ -2377,7 +2376,7 @@ bool cProjectile::Update(float Time)
     float RotationSpeed;
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // Если что-то надо делать со снарядом (наводить к примеру)
+    // Additional actions (for example, rotate homing missile to target)
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     switch (Num) {
     // Plasma
@@ -2473,14 +2472,14 @@ bool cProjectile::Update(float Time)
     case 19:
         RotationSpeed = 20.0f;
         goto missile;
-    // ракеты пришельцев
+    // Aliens missile
     case 102:
         RotationSpeed = 50.0f;
         goto missile;
     case 104:
         RotationSpeed = 60.0f;
         goto missile;
-    // ракеты пиратов
+    // Pirate missile
     case 205:
         RotationSpeed = 50.0f;
         goto missile;
@@ -2621,12 +2620,12 @@ missile:
         RotationSpeed = 180.0f;
         {
             sVECTOR3D NeedAngle = Rotation;
-            // устанавливаем в Target на что наведен этот снаряд
+            // set in Target what this projectile is aimed at
             Target = FindTargetAndInterceptCourse(ObjectStatus, Location, Rotation,
                                                   CurrentRotationMat, NeedAngle, 1000000);
 
 
-            // учитываем скорость поворота по вертикали
+            // take into account the speed of rotation in the vertical direction
             if (Rotation.y < NeedAngle.y) {
                 float NeedAngle_y = Rotation.y + RotationSpeed * TimeDelta;
                 if (NeedAngle_y > NeedAngle.y) {
@@ -2650,15 +2649,15 @@ missile:
             SetRotation(TTT);
 
 
-            // если есть цель, поднимаемся на ее уровень
+            // if there is a target, rise to its level
             auto sharedTarget = Target.lock();
             if (sharedTarget) {
                 float MineSpeed = 5.0f;
 
-                // получаем положение ближайшего врага
+                // get the position of the nearest enemy
                 sVECTOR3D NeedPoint = sharedTarget->Location;
 
-                // !!! не учитываем положение плоскости
+                // do not care about position of the plane at this point
 
                 float SpeedTmp = MineSpeed * TimeDelta;
                 if (SpeedTmp > fabs(Location.y - NeedPoint.y)) {
@@ -2666,7 +2665,7 @@ missile:
                 }
 
                 if (SpeedTmp != 0.0f) {
-                    // находим направление (если нужно вниз, меняем знак)
+                    // find the direction (if you need to go down, change the sign)
                     if (Location.y > NeedPoint.y) {
                         SpeedTmp *= -1.0f;
                     }
@@ -2682,7 +2681,7 @@ missile:
                 }
             }
 
-            // сбрасываем установку, чтобы не было голосового предупреждения
+            // reset target to avoid play voice with warning
             Target.reset();
         }
         break;
@@ -2707,12 +2706,12 @@ missile:
         RotationSpeed = 180.0f;
         {
             sVECTOR3D NeedAngle = Rotation;
-            // устанавливаем в Target на что наведен этот снаряд
+            // set in Target what this projectile is aimed at
             Target = FindTargetAndInterceptCourse(ObjectStatus, Location, Rotation,
                                                   CurrentRotationMat, NeedAngle, 1000000);
 
 
-            // учитываем скорость поворота по вертикали
+            // take into account the speed of rotation in the vertical direction
             if (Rotation.y < NeedAngle.y) {
                 float NeedAngle_y = Rotation.y + RotationSpeed * TimeDelta;
                 if (NeedAngle_y > NeedAngle.y) {

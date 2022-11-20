@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Описание скрипта меню игры AstroMenace в формате xml -->
 <AstroMenaceScript name="AstroMenace menu background script">
 
-	<!-- Установка и настройка данных работы скрипта -->
 	<!--Debug showline="1"/-->
-	
-	<!-- Начальные настройки окружения -->
+
 	<StarSystem system="1" anglex="-262" angley="50" anglez="160"/>
-	<!-- Создаем планеты -->
 	<CreatePlanet type="5" posax="320" posay="-250" posaz="500" anglay="90"/>
 	<CreatePlanet type="6" posax="400" posay="-350" posaz="200"/>
 
-	
-	<!-- Установка источников света -->
 	<Light dirx="0.5" diry="-0.2" dirz="1" diffr="1" diffg="1" diffb="1" specr="1" specg="1" specb="1" ambir="1" ambig="1" ambib="1"/>
 
-	
-	<!-- Метка в скрипте -->
 	<Label name="Label1"/>
-
-
 
 	<TimeLine value="0">
 		<AlienFighter type="2" speed="30" posax="480" posay="5" posaz="50" anglay="-90"/>
@@ -44,7 +34,6 @@
 	<TimeLine value="1">
 		<AlienFighter type="5" speed="15" posax="320" posay="0" posaz="30" anglay="-90"/>
 		<AlienFighter type="5" speed="15" posax="300" posay="7" posaz="10" anglay="-90"/>
-
 		<AlienFighter type="2" speed="30" posax="460" posay="9" posaz="-30" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="440" posay="5" posaz="-40" anglay="-90"/>
 	</TimeLine>
@@ -54,11 +43,9 @@
 		<AlienFighter type="2" speed="30" posax="370" posay="7" posaz="-20" anglay="-90"/>
 	</TimeLine>
 
-
 	<TimeLine value="3">
 		<AlienFighter type="9" speed="14" posax="300" posay="-5" posaz="-25" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="1">
 		<AlienFighter type="2" speed="30" posax="580" posay="-55" posaz="50" anglay="-90"/>
@@ -66,7 +53,6 @@
 		<AlienFighter type="2" speed="30" posax="590" posay="-59" posaz="70" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="570" posay="-55" posaz="80" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="3">
 		<AlienFighter type="7" speed="14" posax="420" posay="-6" posaz="20" anglay="-90"/>
@@ -79,12 +65,7 @@
 		<AlienFighter type="2" speed="30" posax="470" posay="5" posaz="30" anglay="-90"/>
 	</TimeLine>
 
-	
-
-	
-	<TimeLine value="2"/>	
-	
-	
+	<TimeLine value="2"/>
 
 	<TimeLine>
 		<AlienFighter type="2" speed="30" posax="570" posay="5" posaz="50" anglay="-90"/>
@@ -92,7 +73,6 @@
 		<AlienFighter type="2" speed="30" posax="580" posay="9" posaz="70" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="560" posay="5" posaz="80" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="3"/>
 
@@ -117,21 +97,18 @@
 	<TimeLine value="1">
 		<AlienFighter type="5" speed="15" posax="320" posay="0" posaz="30" anglay="-90"/>
 		<AlienFighter type="5" speed="15" posax="300" posay="7" posaz="10" anglay="-90"/>
-
 		<AlienFighter type="2" speed="30" posax="460" posay="9" posaz="-30" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="440" posay="5" posaz="-40" anglay="-90"/>
 	</TimeLine>
-	
+
 	<TimeLine value="2">
 		<AlienFighter type="2" speed="30" posax="390" posay="10" posaz="-10" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="370" posay="7" posaz="-20" anglay="-90"/>
 	</TimeLine>
 
-
 	<TimeLine value="1">
 		<AlienFighter type="3" speed="14" posax="328" posay="-5" posaz="-25" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="3">
 		<AlienFighter type="2" speed="30" posax="580" posay="-55" posaz="50" anglay="-90"/>
@@ -139,7 +116,6 @@
 		<AlienFighter type="2" speed="30" posax="590" posay="-59" posaz="70" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="570" posay="-55" posaz="80" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="3">
 		<AlienFighter type="4" speed="15" posax="420" posay="-6" posaz="20" anglay="-90"/>
@@ -153,10 +129,7 @@
 		<AlienFighter type="2" speed="30" posax="470" posay="5" posaz="30" anglay="-90"/>
 	</TimeLine>
 
-	
-	
 	<TimeLine value="2"/>
-
 
 	<TimeLine>
 		<AlienFighter type="2" speed="30" posax="570" posay="5" posaz="50" anglay="-90"/>
@@ -165,13 +138,11 @@
 		<AlienFighter type="2" speed="30" posax="560" posay="5" posaz="80" anglay="-90"/>
 	</TimeLine>
 
-
 	<TimeLine value="3"/>
 
 	<TimeLine>
 		<AlienMotherShip type="8" speed="10"  posax="350" posay="-20" posaz="10" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="0">
 		<AlienFighter type="12" speed="14" posax="448" posay="-10" posaz="55" anglay="-90"/>
@@ -182,7 +153,6 @@
 		<AlienFighter type="2" speed="30" posax="370" posay="-47" posaz="20" anglay="-90"/>
 	</TimeLine>
 
-
 	<TimeLine value="1">
 		<AlienFighter type="5" speed="15" posax="320" posay="-20" posaz="-10" anglay="-90"/>
 		<AlienFighter type="5" speed="15" posax="300" posay="-27" posaz="-20" anglay="-90"/>
@@ -191,21 +161,18 @@
 	<TimeLine value="1">
 		<AlienFighter type="5" speed="15" posax="320" posay="0" posaz="30" anglay="-90"/>
 		<AlienFighter type="5" speed="15" posax="300" posay="7" posaz="10" anglay="-90"/>
-
 		<AlienFighter type="2" speed="30" posax="460" posay="9" posaz="-30" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="440" posay="5" posaz="-40" anglay="-90"/>
 	</TimeLine>
-	
+
 	<TimeLine value="2">
 		<AlienFighter type="2" speed="30" posax="390" posay="10" posaz="-10" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="370" posay="7" posaz="-20" anglay="-90"/>
 	</TimeLine>
 
-
 	<TimeLine value="3">
 		<AlienFighter type="10" speed="14" posax="300" posay="-5" posaz="-25" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="1">
 		<AlienFighter type="2" speed="30" posax="580" posay="-55" posaz="50" anglay="-90"/>
@@ -213,7 +180,6 @@
 		<AlienFighter type="2" speed="30" posax="590" posay="-59" posaz="70" anglay="-90"/>
 		<AlienFighter type="2" speed="30" posax="570" posay="-55" posaz="80" anglay="-90"/>
 	</TimeLine>
-
 
 	<TimeLine value="3">
 		<AlienFighter type="4" speed="15" posax="420" posay="-6" posaz="20" anglay="-90"/>
@@ -227,19 +193,8 @@
 		<AlienFighter type="2" speed="30" posax="470" posay="5" posaz="30" anglay="-90"/>
 	</TimeLine>
 
-	
-	
 	<TimeLine value="5"/>
 
-
-
-
-
-	
-	
-	<!-- Безусловный переход на метку -->	
 	<Goto label="Label1"/>
-	
-	
-<!-- Завершение работы скрипта, уже все выполнили -->
+
 </AstroMenaceScript>

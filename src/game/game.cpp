@@ -800,7 +800,7 @@ void DrawGame()
     // open menu
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if (!isDialogBoxDrawing()) {
-        if (!PlayerFighter.expired()) { // если не убили
+        if (!PlayerFighter.expired()) {
             if (vw_GetKeyStatus(SDLK_ESCAPE) || GameMissionCompleteStatusShowDialog) {
                 bool NeedPlaySfx = true;
                 if (GameMissionCompleteStatusShowDialog) {

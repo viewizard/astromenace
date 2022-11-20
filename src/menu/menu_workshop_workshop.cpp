@@ -1152,7 +1152,7 @@ void Workshop_Workshop()
     if (DrawButton128_2(GameConfig().InternalWidth/2-250, 50+580-55, vw_GetTextUTF32("Buy"), MenuContentTransp, !CanBuy)) {
         BuyCurrentSystem();
     }
-    // покупка, если 2 раза кликнули на иконку текущей системы
+    // buy at double click on icon
     DstRect(GameConfig().InternalWidth/2-451, 55+128+20, GameConfig().InternalWidth/2-451+128, 55+128+128+20);
     if (vw_MouseOverRect(DstRect) && !isDialogBoxDrawing() && CanBuy && vw_GetMouseLeftDoubleClick(true)) {
         BuyCurrentSystem();

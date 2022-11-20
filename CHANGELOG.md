@@ -184,7 +184,7 @@
 
 - Fixed "Shadow Quality" option status, if hardware don't support FBO Depth size more than 16 bits (game require at least 24 bits for shadows). 
 - Added font preview in "Interface" menu.
-- Added "VSynс" option in "Options" menu, default value is "Off".
+- Added "VSync" option in "Options" menu, default value is "Off".
 - Added PCF control in "Advanced" menu for shadow mapping shaders. 
 - "Texture Filtering Mode" option moved to "Advanced" menu. 
 - "Textures Quality" option moved to "Advanced" menu. 
@@ -269,7 +269,7 @@
 - Added "Voice Language" option in "Interface" menu.
 - Added "Menu Font" option in "Interface" menu.
 - Added "Tips and hints" status reset option in "Interface" menu.
-- Added "FPS Сounter" option in "Interface" menu.
+- Added "FPS Counter" option in "Interface" menu.
 - Added "Weapon Panels View" option in "Interface" menu.
 - Added "Shadow Quality" option in "Advanced" menu.
 - Added "Visual Effects Quality" option in "Advanced" menu.

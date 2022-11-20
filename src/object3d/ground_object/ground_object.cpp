@@ -760,7 +760,7 @@ bool cGroundObject::Update(float Time)
     sVECTOR3D tmpShift = (Orientation ^ (Speed * TimeDelta));
     if (tmpShift.x != 0.0f || tmpShift.y != 0.0f || tmpShift.z != 0.0f) {
         WheelRotarySpeed = Speed * SpeedToWheelRotarySpeedFactor;
-        // делаем сдвиг модели в указанную точку
+        // move object into new location
         SetLocation(Location + tmpShift);
     }
 

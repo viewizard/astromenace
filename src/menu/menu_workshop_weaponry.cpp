@@ -392,7 +392,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     }
 
     // voice
-    if (WeaponAmmoOut && !vw_IsSoundAvailable(VoiceAmmoOut)) { // уже не играем, нужно запустить опять
+    if (WeaponAmmoOut && !vw_IsSoundAvailable(VoiceAmmoOut)) { // allow only one instance
         VoiceAmmoOut = PlayVoicePhrase(eVoicePhrase::WeaponMalfunction, 1.0f);
     }
 
@@ -850,7 +850,7 @@ void ShipSlotSetupWeapon(int SlotNum)
         // release weapon during drag
         if (!vw_GetMouseLeftClick(false) && DragWeapon) {
             if (sharedWorkshopFighterGame->WeaponSlots[SlotNum].Type >= DragWeaponLevel
-                    // если стоимость меньше чем есть денег + стоимость оружия
+                    // if the cost is less than player have money + weapon's cost
                 && Money >= GetWeaponCost(DragWeaponNum, DragWeaponAmmo, DragWeaponAmmoStart)) {
                 PlayMenuSFX(eMenuSFX::DragInstallToSlot, 1.0f);
 
@@ -896,7 +896,6 @@ void ShipSlotSetupWeapon(int SlotNum)
 
                 sharedWorkshopFighterGame->UpdateWithTimeSheetList(vw_GetTimeThread(0));
             } else {
-                // особый случай - есть не соответствие, нужно проиграть звук неудачной установки
                 PlayMenuSFX(eMenuSFX::DragError, 1.0f);
             }
 

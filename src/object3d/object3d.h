@@ -286,7 +286,7 @@ void ReleaseAllObject3D();
  * object3d_collision
  */
 
-// Проверяем все объекты на столкновение
+// Check collision for all objects
 void DetectCollisionAllObject3D();
 
 /*

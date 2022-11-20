@@ -56,7 +56,7 @@ void SetCursorStatus(eCursorStatus Status);
 eCursorStatus GetCursorStatus();
 // Set cursor dragging item icon texture.
 void SetCursorDraggingItemIcon(GLtexture Icon);
-// Тoggle whether or not the cursor is shown.
+// Toggle whether or not the cursor is shown.
 void SetShowGameCursor(bool Toggle);
 // Get is cursor shown or not.
 bool GetShowGameCursor();

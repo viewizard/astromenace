@@ -373,7 +373,7 @@ struct sDevCaps {
 #define RI_4f_COLOR         0x0000010
 #define RI_TEXTURE          0x0F00000
 #define RI_2f_TEX           0x0200000
-// кол-во текстур
+// Textures coordinates count
 #define RI_TEX_COUNT        0x000000F
 #define RI_1_TEX            0x0000001
 #define RI_2_TEX            0x0000002
@@ -383,7 +383,7 @@ struct sDevCaps {
 #define RI_6_TEX            0x0000006
 #define RI_7_TEX            0x0000007
 #define RI_8_TEX            0x0000008
-// тип работы с координатами текстуры
+// Textures coordinates type
 #define RI_TEX_COORD_TYPE       0xF000000
 #define RI_SEPARATE_TEX_COORD   0x0000000
 #define RI_DUBLICATE_TEX_COORD  0x1000000

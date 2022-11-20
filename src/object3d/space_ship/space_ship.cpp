@@ -89,7 +89,7 @@ std::weak_ptr<cSpaceShip> CreateEarthSpaceFighter(const int SpaceShipNum)
     SetEarthSpaceFighterEngine(tmpSpaceShip, 1);
     for (unsigned int i = 0; i < ShipList.front()->Engines.size(); i++) {
         if (auto sharedEngine = ShipList.front()->Engines[i].lock()) {
-            // находим кол-во внутренних источников света
+            // find the number of internal light sources
             if (!sharedEngine->Light.expired()) {
                 ShipList.front()->InternalLights++;
             }

@@ -129,7 +129,7 @@ void UpdateAllSpaceObject(float Time)
 void DrawAllSpaceObjects(bool VertexOnlyPass, unsigned int ShadowMap)
 {
     for (auto &tmpObject : SpaceObjectList) {
-        // планеты и астероиды рисуем до тайловой анимации в игре!!!
+        // render planets and asteroids before tile animation
         if (tmpObject.get()->ObjectType != eObjectType::Planet
             && tmpObject.get()->ObjectType != eObjectType::Planetoid) {
             tmpObject.get()->Draw(VertexOnlyPass, ShadowMap);

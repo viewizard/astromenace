@@ -559,12 +559,11 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
             TotalCount += Chunks[i].VertexQuantity;
         }
 
-        // расстояние от центра до крайней точки
-        float Diag = Object.Length * Object.Length +
+        float Dist = Object.Length * Object.Length +
                      Object.Height * Object.Height +
                      Object.Width * Object.Width;
 
-        // для каждого треугольника - свои данные
+        // for each triangle
         int Count = 0;
         ExplosionPieceData.reset(new sExplosionPiece[TotalCount / 3]);
         for (auto &tmpChunk : Chunks) {
@@ -585,14 +584,13 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
                 ExplosionPieceData[Count].Velocity.z += tmpChunk.VertexArray.get()[tmpIndex3 + 2];
                 ExplosionPieceData[Count].Velocity.z = ExplosionPieceData[Count].Velocity.z / 3.0f;
 
-                // находим расстояние, чтобы включить его
-                float dist = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +
-                             ExplosionPieceData[Count].Velocity.y * ExplosionPieceData[Count].Velocity.y +
-                             ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z +
-                             vw_fRand0();
+                float Shift = ExplosionPieceData[Count].Velocity.x * ExplosionPieceData[Count].Velocity.x +
+                              ExplosionPieceData[Count].Velocity.y * ExplosionPieceData[Count].Velocity.y +
+                              ExplosionPieceData[Count].Velocity.z * ExplosionPieceData[Count].Velocity.z +
+                              vw_fRand0();
 
 
-                float Acc = (MeshAcc / 1000.0f) * (Diag / dist) * (MeshAcc / Object.Radius);
+                float Acc = (MeshAcc / 1000.0f) * (Dist / Shift) * (MeshAcc / Object.Radius);
                 if (Acc > MeshAcc) {
                     Acc = MeshAcc + vw_fRand0();
                 }
@@ -601,7 +599,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
                 }
 
 
-                // записываем центр треугольника, оно же базовое ускорение + цент UV, для передачи шейдеру
+                // store triangle center (initial acceleration + UV center) for shader
                 if (GameConfig().UseGLSL120) {
                     tmpChunk.VertexArray.get()[tmpIndex1 + 8] = ExplosionPieceData[Count].Velocity.x;
                     tmpChunk.VertexArray.get()[tmpIndex1 + 9] = ExplosionPieceData[Count].Velocity.y;
@@ -612,7 +610,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
                     tmpChunk.VertexArray.get()[tmpIndex3 + 8] = ExplosionPieceData[Count].Velocity.x;
                     tmpChunk.VertexArray.get()[tmpIndex3 + 9] = ExplosionPieceData[Count].Velocity.y;
                     tmpChunk.VertexArray.get()[tmpIndex3 + 10] = ExplosionPieceData[Count].Velocity.z;
-                    if (dist/Diag < 0.01f) {
+                    if (Shift / Dist < 0.01f) {
                         tmpChunk.VertexArray.get()[tmpIndex1 + 11] = Acc + 4.0f * vw_fRand0();
                         tmpChunk.VertexArray.get()[tmpIndex2 + 11] = tmpChunk.VertexArray.get()[tmpIndex1 + 11];
                         tmpChunk.VertexArray.get()[tmpIndex3 + 11] = tmpChunk.VertexArray.get()[tmpIndex1 + 11];
@@ -625,7 +623,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
                 }
 
 
-                if (dist / Diag < 0.01f) {
+                if (Shift / Dist < 0.01f) {
                     ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity ^ (Acc + 4.0f * vw_fRand0());
                 } else {
                     ExplosionPieceData[Count].Velocity = ExplosionPieceData[Count].Velocity ^ Acc;

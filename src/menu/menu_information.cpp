@@ -341,7 +341,7 @@ void CreateInfoObject()
             InfoObjectAmmo = sharedWeapon->AmmoStart;
             InfoObjectReload = sharedWeapon->NextFireTime;
             InfoObjectRange = GetProjectileRange(tmpCreateNum);
-            // убираем источник света
+            // remove light source
             if (auto sharedFire = sharedWeapon->Fire.lock()) {
                 vw_ReleaseLight(sharedFire->Light);
             }

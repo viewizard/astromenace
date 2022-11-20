@@ -313,7 +313,7 @@
 		<PirateShip type="1" speed="10" posx="-40" posy="-2" posz="300" angly="-180"/>
 	</TimeLine>
 
-	<!--малые корабли пиратов... /-->
+	<!-- small pirate ships /-->
 	<TimeLine value="5">
 		<PirateShip type="1" speed="10" posx="0" posy="-2" posz="280" angly="-180"/>
 		<PirateShip type="1" speed="10" posx="20" posy="-2" posz="300" angly="-180"/>

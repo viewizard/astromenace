@@ -704,7 +704,7 @@ cWeapon::cWeapon(const int WeaponNum)
         CurrentEnergyAccumulated = EnergyUse = PresetPirateWeaponData[IntWeaponNum - 1].EnergyUse;
         FireLocation = PresetPirateWeaponData[IntWeaponNum - 1].FireLocation;
 
-        // турели пиратов
+        // pirate turrets
         switch (WeaponNum) {
         case 201:
             WeaponTurret = true;
@@ -1339,7 +1339,7 @@ bool cWeapon::WeaponFire(float Time)
             for (auto &tmpGFX : sharedProjectile->GraphicFX) {
                 if (auto sharedGFX = tmpGFX.lock()) {
                     sharedGFX->Direction = Orientation;
-                    // учитываем пенальти для визуальных эффектов
+                    // apply penalties for visual effects
                     sharedGFX->ParticlesPerSec = (int)(sharedGFX->ParticlesPerSec / CurrentPenalty);
 
                     sharedGFX->Speed = sharedGFX->Speed / CurrentPenalty;

@@ -418,11 +418,11 @@ void WorkshopCreateBuyShip()
                         ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = sharedWeapon->AmmoStart;
                         ChangeGameConfig().Profile[CurrentProfile].WeaponSlotYAngle[i] = 0.0f;
                     }
-                } else { // если поставить не смогли - не такой слот
+                } else { // wrong slot level
                     ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
                     ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
                 }
-            } else { // если не хватило денег снова купить
+            } else { // no enough money
                 ChangeGameConfig().Profile[CurrentProfile].Weapon[i] = 0;
                 ChangeGameConfig().Profile[CurrentProfile].WeaponAmmo[i] = 0;
             }

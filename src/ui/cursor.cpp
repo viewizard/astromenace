@@ -183,7 +183,7 @@ void SetCursorDraggingItemIcon(GLtexture Icon)
 }
 
 /*
- * Тoggle whether or not the cursor is shown.
+ * Toggle whether or not the cursor is shown.
  */
 void SetShowGameCursor(bool Toggle)
 {
