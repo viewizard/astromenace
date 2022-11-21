@@ -77,6 +77,9 @@ const std::vector<std::string> CreditsArray{
     "COMMUNITY CONTRIBUTORS",
     "Alistair Findlay",
     "Dmitry Marakasov",
+    "Gwyn Ciesla", // Not in `text.csv` file.
+    "Stefan Strogin", // Not in `text.csv` file.
+    "sevu", // Not in `text.csv` file.
     "",
     "TESTERS",
     "Dmitriy Schigolev",
