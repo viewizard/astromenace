@@ -241,31 +241,27 @@ ENDIF(MINGW)
 TARGET_LINK_LIBRARIES(astromenace ${ALL_LIBRARIES})
 
 
-ADD_CUSTOM_TARGET(CopyLIBS
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/SDL2.dll          ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libalut.dll       ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libogg.dll        ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libvorbis.dll     ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libvorbisfile.dll ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/OpenAL32.dll      ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libfreetype.dll   ${CMAKE_BINARY_DIR}
-)
-IF(MINGW)
-    ADD_DEPENDENCIES(astromenace CopyLIBS)
-ENDIF(MINGW)
-
-
 # generate game data file (gamedata.vfs)
 IF(NOT DONTCREATEVFS)
     SET(astromenace_BIN "astromenace")
     IF(MINGW)
+        ADD_CUSTOM_TARGET(CopyLIBS
+            COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/SDL2.dll          ${PROJECT_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libalut.dll       ${PROJECT_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libogg.dll        ${PROJECT_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libvorbis.dll     ${PROJECT_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libvorbisfile.dll ${PROJECT_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/OpenAL32.dll      ${PROJECT_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy ${DEPS_PATH}/bin/libfreetype.dll   ${PROJECT_BINARY_DIR}
+        )
+        ADD_DEPENDENCIES(astromenace CopyLIBS)
         SET(astromenace_BIN "astromenace.exe")
     ENDIF(MINGW)
 
     ADD_CUSTOM_COMMAND(
         TARGET astromenace
         POST_BUILD
-        COMMAND ${CMAKE_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA} --dir=${PROJECT_BINARY_DIR}
+        COMMAND ${PROJECT_BINARY_DIR}/${astromenace_BIN} --pack --rawdata=${astromenace_DATA} --dir=${PROJECT_BINARY_DIR}
     )
 ENDIF(NOT DONTCREATEVFS)
 
