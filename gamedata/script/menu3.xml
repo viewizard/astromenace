@@ -56,11 +56,11 @@
 		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 
-	<TimeLine value="4">
-		<PirateShip type="10" speed="12" posx="440" posy="-2" posz="40" angly="-90"/>
+	<TimeLine value="2">
+		<PirateShip type="10" speed="12" posx="464" posy="-2" posz="40" angly="-90"/>
 	</TimeLine>
 
-	<TimeLine value="3">
+	<TimeLine value="5">
 		<PirateShip type="2" speed="25" posx="440" posy="-20" posz="40" angly="-90"/>
 		<PirateShip type="2" speed="22" posx="460" posy="-20" posz="50" angly="-90"/>
 	</TimeLine>
@@ -91,20 +91,20 @@
 		<PirateShip type="2" speed="36" posx="320" posy="-2" posz="0" angly="-90"/>
 	</TimeLine>
 
-	<TimeLine value="4">
-		<PirateShip type="9" speed="12" posx="440" posy="-2" posz="40" angly="-90"/>
+	<TimeLine value="2">
+		<PirateShip type="9" speed="12" posx="464" posy="-2" posz="40" angly="-90"/>
 	</TimeLine>
 
-	<TimeLine value="3">
+	<TimeLine value="5">
 		<PirateShip type="1" speed="23" posx="440" posy="-20" posz="40" angly="-90"/>
 		<PirateShip type="1" speed="22" posx="460" posy="-20" posz="50" angly="-90"/>
 	</TimeLine>
 
-	<TimeLine value="3">
-		<PirateShip type="7" speed="20" posx="440" posy="-20" posz="45" angly="-90"/>
+	<TimeLine value="1">
+		<PirateShip type="7" speed="20" posx="480" posy="-20" posz="45" angly="-90"/>
 	</TimeLine>
 
-	<TimeLine value="8">
+	<TimeLine value="10">
 		<CreateWheeled type="5" speed="15" posax="-190" posay="-10" posaz="-14" anglay="90">
 			<TimeSheet time="12.1" speed="15"/>
 			<TimeSheet time="1.7" speed="10" roty="45" rotacy="1" />
