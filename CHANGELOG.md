@@ -1,3 +1,26 @@
+# Version 1.4.2
+
+### Overall changes:
+
+- Added Spanish language translation, thanks to Juan Francisco Astudillo Palacios.
+- Added Turkish language translation, thanks to p1p2r.
+- Corrected German language translation, thanks to Jürgen Buchmüller and Michael Lauenburger.
+- Corrected Polish language translation, thanks to Dawid Stuchlak.
+- Fixed shader button's behaviour in Option menu.
+- Fixed pirate ships angle in Mission 2.
+- Fixed TimeSheet work, made script work predictable at any FPS.
+- Fixed guns rotation logic.
+- Fixed Mission List menu scroll bar issue.
+- Fixed Windows 64bit binary segmentation fault at start.
+
+### Overall code changes:
+
+- 3D objects rendering code optimized, minor corrected shaders.
+- Pirate turrets code optimized.
+- NPC flares code optimized.
+- All code comments translated into English.
+- Fixed compilation warnings.
+
 # Version 1.4.1
 
 ### Overall changes:
