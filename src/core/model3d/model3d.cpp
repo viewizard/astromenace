@@ -29,6 +29,7 @@
 #include "../vfs/vfs.h"
 #include "model3d.h"
 #include <cmath>
+#include <cstdint>
 #include <cstring>
 #include <fstream>
 
