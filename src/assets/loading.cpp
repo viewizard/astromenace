@@ -120,10 +120,25 @@ static void DrawViewizardLogo(GLtexture ViewizardLogoTexture)
  * Draw assets load progress bar.
  */
 static void DrawLoadProgress(unsigned int Current, unsigned int AllDrawLoading, uint32_t &LastDrawTick,
-                             GLtexture Background, GLtexture ProgressBar, GLtexture ProgressBarBorder)
+                             GLtexture Background, GLtexture ProgressBar, GLtexture ProgressBarBorder,
+                             uint32_t &LoadCycleTicks, bool &IsLoadCycleTicksAdded)
 {
+    // Don't slow down assets loading due to waiting for GPU rendering in case VSync is enabled.
+    // For example, in case VSync is enabled and monitor refresh rate is 30 Hz, TicksCorrection will be set to 33 after several cycles.
+    static uint32_t TicksCorrection = 17; // we don't need high FPS here, ~60 FPS should be enough
+    if (IsLoadCycleTicksAdded)
+    {
+        uint32_t tmpCorrection = (SDL_GetTicks() - LoadCycleTicks);
+        if (tmpCorrection > TicksCorrection)
+            TicksCorrection = tmpCorrection;
+    }
+    else
+        IsLoadCycleTicksAdded = true;
+
+    LoadCycleTicks = SDL_GetTicks();
+
     if (Current != AllDrawLoading // the last one (with 100%) must be rendered for sure
-        && LastDrawTick + 10 >= SDL_GetTicks()) { // we don't need high FPS here, ~100 FPS should be enough
+        && LastDrawTick + TicksCorrection >= LoadCycleTicks) {
         return;
     }
 
@@ -227,10 +242,14 @@ void LoadAllGameAssets()
                             GetModel3DAssetsLoadValue() +
                             GetTextureAssetsLoadValue()};
 
+    uint32_t LoadCycleTicks = 0;
+    bool IsLoadCycleTicksAdded = false;
+
     auto UpdateLoadStatus = [&] (unsigned AssetValue) {
         RealLoadedAssets += AssetValue;
         DrawLoadProgress(RealLoadedAssets, AllDrawLoading, LastDrawTick,
-                         Background, ProgressBar, ProgressBarBorder);
+                         Background, ProgressBar, ProgressBarBorder,
+                         LoadCycleTicks, IsLoadCycleTicksAdded);
         // important, update music buffers
         AudioLoop();
     };
