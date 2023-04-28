@@ -53,10 +53,10 @@ std::weak_ptr<cProjectile> InfoMine{};
 std::weak_ptr<cGroundObject> InfoGroundObject{};
 
 
-char *GetWeaponGroupTitle(int Num);
-char *GetWeaponName(int Num);
-char *GetShipGroupTitle(int Num);
-char *GetWorkshopShipName(int Num);
+const char *GetWeaponGroupTitle(int Num);
+const char *GetWeaponName(int Num);
+const char *GetShipGroupTitle(int Num);
+const char *GetWorkshopShipName(int Num);
 
 
 

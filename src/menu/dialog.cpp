@@ -71,16 +71,16 @@ float StartHideTransp = 1.0f;
 // what should draw in dialogue 6,7,8
 std::weak_ptr<cSpaceShip> DialogSpaceShip{};
 extern std::weak_ptr<cSpaceShip> WorkshopFighterGame; // player's ship "holder" in shipyard menu
-char *GetShipGroupTitle(int Num);
-char *GetWorkshopShipName(int Num);
+const char *GetShipGroupTitle(int Num);
+const char *GetWorkshopShipName(int Num);
 
 cWeapon *DialogWeapon = nullptr;
-char *GetWeaponName(int Num);
-char *GetWeaponGroupTitle(int Num);
+const char *GetWeaponName(int Num);
+const char *GetWeaponGroupTitle(int Num);
 
 // internal system number... 1-20
 int DialogSystem = 0;
-char *GetSystemName(int Num);
+const char *GetSystemName(int Num);
 float GetShipEngineSystemEnergyUse(int Num);
 float GetShipProtectionSystemEnergyUse(int Num);
 float GetShipRechargeEnergy(int Num);
