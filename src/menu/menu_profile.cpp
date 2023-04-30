@@ -183,9 +183,9 @@ void ProfileInputText()
     if ((vw_GetKeyStatus(SDLK_RCTRL) || vw_GetKeyStatus(SDLK_LCTRL)) && vw_GetKeyStatus(SDLK_v) && SDL_HasClipboardText() == SDL_TRUE) {
         char *tmpUTF8 = SDL_GetClipboardText();
         if (tmpUTF8) {
-            for (auto &simbolUTF32 : ConvertUTF8.from_bytes(tmpUTF8)) {
+            for (auto &symbolUTF32 : ConvertUTF8.from_bytes(tmpUTF8)) {
                 if (vw_TextWidthUTF32(NewProfileName) < 540) {
-                    NewProfileName += simbolUTF32;
+                    NewProfileName += symbolUTF32;
                 } else {
                     break;
                 }
