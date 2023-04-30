@@ -546,8 +546,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
         CanOn = true;
     }
 
-    if (auto sharedWorkshopNewWeapon = WorkshopNewWeapon.lock())
-    {
+    if (auto sharedWorkshopNewWeapon = WorkshopNewWeapon.lock()) {
         if (!DragWeapon && sharedWorkshopFighterGame->WeaponSlots[SlotNum].Type >= sharedWorkshopNewWeapon->WeaponLevel) {
             CanOn = true;
         }

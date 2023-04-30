@@ -179,6 +179,23 @@ void DeleteRecord()
 //------------------------------------------------------------------------------------
 void ProfileInputText()
 {
+    // <Ctrl>+<V> for copy text from clipboard.
+    if ((vw_GetKeyStatus(SDLK_RCTRL) || vw_GetKeyStatus(SDLK_LCTRL)) && vw_GetKeyStatus(SDLK_v) && SDL_HasClipboardText() == SDL_TRUE) {
+        char *tmpUTF8 = SDL_GetClipboardText();
+        if (tmpUTF8) {
+            for (auto &simbolUTF32 : ConvertUTF8.from_bytes(tmpUTF8)) {
+                if (vw_TextWidthUTF32(NewProfileName) < 540) {
+                    NewProfileName += simbolUTF32;
+                } else {
+                    break;
+                }
+            }
+            SDL_free(tmpUTF8);
+        }
+        vw_SetKeyStatus(SDLK_v, false);
+    }
+
+
 
     if (!vw_GetCurrentUnicodeChar().empty()) {// in case this is not 0, but unicode - key is pressed
         if (vw_TextWidthUTF32(NewProfileName) < 540) {
