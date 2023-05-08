@@ -80,7 +80,8 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
     sRECT SrcRect, DstRect;
     SrcRect(0, 0, 2, 2);
     DstRect(0, 0, GameConfig().InternalWidth, 768);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/blackpoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.5f * ContentTransp);
 
     int X1 = GameConfig().InternalWidth / 2 - 375;
     int Y1 = 65;
@@ -118,9 +119,11 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
                 }
             }
             if (GameConfig().MusicVolume > i) {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
+                constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/perc.tga");
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, ContentTransp);
             } else {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
+                constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/perc_none.tga");
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, ContentTransp);
             }
         }
     }
@@ -165,9 +168,11 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
                 }
             }
             if (GameConfig().VoiceVolume > i) {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
+                constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/perc.tga");
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, ContentTransp);
             } else {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
+                constexpr unsigned tmpHash5 = constexpr_hash_djb2a("menu/perc_none.tga");
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash5), true, ContentTransp);
             }
         }
     }
@@ -208,9 +213,11 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
                 }
             }
             if (GameConfig().SoundVolume > i) {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
+                constexpr unsigned tmpHash6 = constexpr_hash_djb2a("menu/perc.tga");
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash6), true, ContentTransp);
             } else {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
+                constexpr unsigned tmpHash7 = constexpr_hash_djb2a("menu/perc_none.tga");
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash7), true, ContentTransp);
             }
         }
     }
@@ -332,9 +339,11 @@ void OptionsMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonUpd
             }
         }
         if (GameConfig().Brightness > i) {
-            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc.tga"), true, ContentTransp);
+            constexpr unsigned tmpHash8 = constexpr_hash_djb2a("menu/perc.tga");
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash8), true, ContentTransp);
         } else {
-            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/perc_none.tga"), true, ContentTransp);
+            constexpr unsigned tmpHash9 = constexpr_hash_djb2a("menu/perc_none.tga");
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash9), true, ContentTransp);
         }
     }
 

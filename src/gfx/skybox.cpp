@@ -99,7 +99,8 @@ static inline void AddToVertexArray(float CoordX, float CoordY, float CoordZ,
 void SkyBoxDraw()
 {
     // setup second texture unit (with small stars)
-    vw_BindTexture(1, GetPreloadedTextureAsset("skybox/tile_stars.tga"));
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("skybox/tile_stars.tga");
+    vw_BindTexture(1, GetPreloadedTextureAsset(tmpHash));
     vw_SetTextureEnvMode(eTextureEnvMode::DECAL);
     vw_MatrixMode(eMatrixMode::TEXTURE);
     vw_LoadIdentity();

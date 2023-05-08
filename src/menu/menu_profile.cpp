@@ -238,8 +238,8 @@ void ProfileInputText()
     int Size = vw_TextWidthUTF32(NewProfileName);
     sRECT SrcRect{0, 0, 2, 2};
     sRECT DstRect{X1 + Size + 2, Y1 - 2, X1 + 26 + Size, Y1 + 24};
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"),
-              true, CurrentProfileNameTransp * MenuContentTransp);
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/whitepoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, CurrentProfileNameTransp * MenuContentTransp);
 
     float DeltaTime = vw_GetTimeThread(0) - LastProfileNameTime;
     LastProfileNameTime = vw_GetTimeThread(0);
@@ -273,7 +273,8 @@ void ProfileMenu()
 {
     sRECT SrcRect(2, 2, 861, 482);
     sRECT DstRect(GameConfig().InternalWidth / 2 - 427, 160, GameConfig().InternalWidth / 2 + 432, 160 + 480);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel800_444_back.tga"), true, 0.9f*MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/panel800_444_back.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.9f*MenuContentTransp);
 
 
     int X1 = GameConfig().InternalWidth / 2 - 372;
@@ -286,9 +287,10 @@ void ProfileMenu()
     Y1 += 30;
     SrcRect(0,0,2,2);
     DstRect(X1-2,Y1-6,X1+2+590,Y1-2+30);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/blackpoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.2f*MenuContentTransp);
     DstRect(X1,Y1-4,X1+590,Y1-4+30);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.5f*MenuContentTransp);
     // new profile creation button
     bool Off = false;
     if (NewProfileName.empty()) {
@@ -346,9 +348,9 @@ void ProfileMenu()
     Y1 += 30;
     SrcRect(0,0,2,2);
     DstRect(X1-2,Y1-6,X1+2+750,Y1-2+230);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.2f*MenuContentTransp);
     DstRect(X1,Y1-4,X1+750,Y1-4+230);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.5f*MenuContentTransp);
     Y1 += 230;
 
 
@@ -442,7 +444,8 @@ void ProfileMenu()
 
                     DstRect(X1+2,Y1-233+46*i,X1+748,Y1-235+46+46*i);
                     if (CurrentProfile != i) {
-                        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+                        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/whitepoint.tga");
+                        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, 0.1f*MenuContentTransp);
                     }
                 } else {
                     if (vw_GetMouseLeftDoubleClick(true)) {
@@ -471,7 +474,8 @@ void ProfileMenu()
     if (CurrentProfile != -1) {
         SrcRect(0,0,2,2);
         DstRect(X1+2,Y1-233+46*CurrentProfile,X1+748,Y1-235+46+46*CurrentProfile);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+        constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/whitepoint.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, 0.1f*MenuContentTransp);
     }
 
 

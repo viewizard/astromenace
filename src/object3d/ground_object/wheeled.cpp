@@ -37,20 +37,20 @@ struct sWheeledData {
     float Armor;
     float SpeedToWheelRotarySpeedFactor;
     std::string Model3DFileName;
-    std::string TextureFileName;
+    unsigned TextureFileNameHash;
 };
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWheeledData> PresetWheeledData {
-    {120,   50.0f,    "models/wheeled/jeep-01.vw3d", "models/gr-02.vw2d"},
-    {70,    50.0f,    "models/wheeled/jeep-02.vw3d", "models/gr-02.vw2d"},
-    {100,   50.0f,    "models/wheeled/jeep-03.vw3d", "models/gr-02.vw2d"},
-    {100,   50.0f,    "models/wheeled/jeep-04.vw3d", "models/gr-07.vw2d"},
-    {150,   50.0f,    "models/wheeled/jeep-05.vw3d", "models/gr-03.vw2d"},
-    {250,   30.0f,    "models/wheeled/apc-02.vw3d", "models/gr-03.vw2d"},
-    {200,   30.0f,    "models/wheeled/apc-04.vw3d", "models/gr-01.vw2d"},
-    {400,   34.0f,    "models/wheeled/r-launcher-01.vw3d", "models/gr-02.vw2d"}
+    {120,   50.0f,    "models/wheeled/jeep-01.vw3d", constexpr_hash_djb2a("models/gr-02.vw2d")},
+    {70,    50.0f,    "models/wheeled/jeep-02.vw3d", constexpr_hash_djb2a("models/gr-02.vw2d")},
+    {100,   50.0f,    "models/wheeled/jeep-03.vw3d", constexpr_hash_djb2a("models/gr-02.vw2d")},
+    {100,   50.0f,    "models/wheeled/jeep-04.vw3d", constexpr_hash_djb2a("models/gr-07.vw2d")},
+    {150,   50.0f,    "models/wheeled/jeep-05.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {250,   30.0f,    "models/wheeled/apc-02.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {200,   30.0f,    "models/wheeled/apc-04.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {400,   34.0f,    "models/wheeled/r-launcher-01.vw3d", constexpr_hash_djb2a("models/gr-02.vw2d")}
 };
 #pragma GCC diagnostic pop
 
@@ -76,7 +76,7 @@ cWheeled::cWheeled(const int WheeledNum)
     LoadObjectData(PresetWheeledData[WheeledNum - 1].Model3DFileName, *this);
 
     for (unsigned int i = 0; i < Chunks.size(); i++) {
-        Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureFileName);
+        Texture[i] = GetPreloadedTextureAsset(PresetWheeledData[WheeledNum - 1].TextureFileNameHash);
     }
     SpeedToWheelRotarySpeedFactor = PresetWheeledData[WheeledNum - 1].SpeedToWheelRotarySpeedFactor;
 

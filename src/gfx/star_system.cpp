@@ -87,22 +87,38 @@ void StarSystemInit(int Num, sVECTOR3D SetBaseRotation)
     switch (Num) {
     case 1:
         SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_back6.tga"), eSide::BACK);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_bottom4.tga"), eSide::BOTTOM);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_front5.tga"), eSide::FRONT);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_left2.tga"), eSide::LEFT);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_right1.tga"), eSide::RIGHT);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/1/skybox_top3.tga"), eSide::TOP);
+        {
+            constexpr unsigned tmpHash1 = constexpr_hash_djb2a("skybox/1/skybox_back6.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash1), eSide::BACK);
+            constexpr unsigned tmpHash2 = constexpr_hash_djb2a("skybox/1/skybox_bottom4.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash2), eSide::BOTTOM);
+            constexpr unsigned tmpHash3 = constexpr_hash_djb2a("skybox/1/skybox_front5.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash3), eSide::FRONT);
+            constexpr unsigned tmpHash4 = constexpr_hash_djb2a("skybox/1/skybox_left2.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash4), eSide::LEFT);
+            constexpr unsigned tmpHash5 = constexpr_hash_djb2a("skybox/1/skybox_right1.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash5), eSide::RIGHT);
+            constexpr unsigned tmpHash6 = constexpr_hash_djb2a("skybox/1/skybox_top3.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash6), eSide::TOP);
+        }
         StarSystem_Inited = true;
         break;
     case 2:
         SkyBoxCreate(0.0f, 0.0f, 0.0f, 100.0f, 100.0f, 100.0f);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_back6.tga"), eSide::BACK);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_bottom4.tga"), eSide::BOTTOM);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_front5.tga"), eSide::FRONT);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_left2.tga"), eSide::LEFT);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_right1.tga"), eSide::RIGHT);
-        SkyBoxSetTexture(GetPreloadedTextureAsset("skybox/2/skybox_top3.tga"), eSide::TOP);
+        {
+            constexpr unsigned tmpHash1 = constexpr_hash_djb2a("skybox/2/skybox_back6.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash1), eSide::BACK);
+            constexpr unsigned tmpHash2 = constexpr_hash_djb2a("skybox/2/skybox_bottom4.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash2), eSide::BOTTOM);
+            constexpr unsigned tmpHash3 = constexpr_hash_djb2a("skybox/2/skybox_front5.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash3), eSide::FRONT);
+            constexpr unsigned tmpHash4 = constexpr_hash_djb2a("skybox/2/skybox_left2.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash4), eSide::LEFT);
+            constexpr unsigned tmpHash5 = constexpr_hash_djb2a("skybox/2/skybox_right1.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash5), eSide::RIGHT);
+            constexpr unsigned tmpHash6 = constexpr_hash_djb2a("skybox/2/skybox_top3.tga");
+            SkyBoxSetTexture(GetPreloadedTextureAsset(tmpHash6), eSide::TOP);
+        }
         StarSystem_Inited = true;
         break;
     default:
@@ -150,7 +166,10 @@ void StarSystemInitByType(eDrawType DrawType)
             sharedSpace->CreationType = eParticleCreationType::Cube;
             sharedSpace->CreationSize = sVECTOR3D{2.0f, 50.0f, 30.0f};
             sharedSpace->ParticlesPerSec = 140;
-            sharedSpace->Texture = GetPreloadedTextureAsset("gfx/flare3.tga");
+            {
+                constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare3.tga");
+                sharedSpace->Texture = GetPreloadedTextureAsset(tmpHash);
+            }
             sharedSpace->Direction = sVECTOR3D{1.0f, 0.0f, 0.0f};
             sharedSpace->CameraDistResize = 0.1f;
             sharedSpace->SetStartLocation(sVECTOR3D{-50.0f, 10.0f, -20.0f});
@@ -186,7 +205,10 @@ void StarSystemInitByType(eDrawType DrawType)
             sharedSpace->CreationType = eParticleCreationType::Cube;
             sharedSpace->CreationSize = sVECTOR3D{200.0f, 30.0f, 10.0f};
             sharedSpace->ParticlesPerSec = 100;
-            sharedSpace->Texture = GetPreloadedTextureAsset("gfx/flare3.tga");
+            {
+                constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare3.tga");
+                sharedSpace->Texture = GetPreloadedTextureAsset(tmpHash);
+            }
             sharedSpace->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
             sharedSpace->SetStartLocation(InGameInitialLocation);
 
@@ -373,7 +395,8 @@ void StarSystemDraw(eDrawType DrawType)
         StarsTile += 3.0f;
     }
 
-    GLtexture TileTexture = GetPreloadedTextureAsset("skybox/tile_back.tga");
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("skybox/tile_back.tga");
+    GLtexture TileTexture = GetPreloadedTextureAsset(tmpHash1);
     vw_BindTexture(0, TileTexture);
     vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
 
@@ -403,7 +426,8 @@ void StarSystemDraw(eDrawType DrawType)
                      Color, EndTransparentLayer1,
                      0.0f, 3.0f + StarsTile);
 
-    vw_BindTexture(0, GetPreloadedTextureAsset("skybox/tile_stars.tga"));
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("skybox/tile_stars.tga");
+    vw_BindTexture(0, GetPreloadedTextureAsset(tmpHash2));
 
     DrawVertexArray();
 
@@ -485,7 +509,8 @@ void StarSystemDrawThirdLayer(eDrawType DrawType)
         StarsTile2 += 3.0f;
     }
 
-    GLtexture TileTexture = GetPreloadedTextureAsset("skybox/tile_stars.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("skybox/tile_stars.tga");
+    GLtexture TileTexture = GetPreloadedTextureAsset(tmpHash);
     vw_BindTexture(0, TileTexture);
     vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
     vw_DepthTest(false, eCompareFunc::LESS);

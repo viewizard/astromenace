@@ -340,13 +340,38 @@ const char *GetWeaponName(int Num)
 
 
 
-std::string GetWeaponIconName(int Num)
+unsigned GetWeaponIconNameHash(int Num)
 {
-    if (Num < 1 || Num > 19) {
+    assert(1 <= Num && Num <= 19);
+    if (Num < 1 || 19 < Num) {
         std::cerr << __func__ << "(): " << "wrong Num.\n";
+        Num = 1;
     }
 
-    return "menu/weapon" + std::to_string(Num) + "_icon.tga";
+    static unsigned WeaponIconNameHash[]{
+        constexpr_hash_djb2a("menu/weapon1_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon2_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon3_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon4_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon5_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon6_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon7_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon8_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon9_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon10_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon11_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon12_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon13_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon14_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon15_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon16_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon17_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon18_icon.tga"),
+        constexpr_hash_djb2a("menu/weapon19_icon.tga")
+    };
+
+    // Num range [1; 19] -> WeaponIconNameHash range [0, 18]
+    return WeaponIconNameHash[Num - 1];
 }
 
 
@@ -364,7 +389,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     int Xpos = X-45;
     int Ypos = Y-36;
     sRECT DstRect(Xpos, Ypos, Xpos + 220, Ypos + 128);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel3.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/workshop_panel3.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, MenuContentTransp);
 
 
     // ammo related warning
@@ -380,10 +406,11 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
 
         SrcRect(0,AmmoShow,18,56);
         DstRect(Xpos+23,Ypos+40+AmmoShow,Xpos+18+23,Ypos+56+40);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/ammo.tga");
         if (AmmoShow > 0) {
-            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/ammo.tga"), true, CurrentAlert3*MenuContentTransp);
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, CurrentAlert3*MenuContentTransp);
         } else {
-            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/ammo.tga"), true, MenuContentTransp);
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, MenuContentTransp);
         }
 
         if (sharedWeapon->Ammo == 0) {
@@ -415,7 +442,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     if (((DstRect.right >= MouseX && DstRect.left <= MouseX && DstRect.bottom >= MouseY && DstRect.top <= MouseY)
          || InFocusByKeyboard)
         && !isDialogBoxDrawing() && !DragWeapon) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/menu/button_weaponry_in.tga")), true, MenuContentTransp);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/menu/button_weaponry_in.tga").c_str())), true, MenuContentTransp);
         SetCursorStatus(eCursorStatus::ActionAllowed);
         if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
             PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -426,7 +453,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
             }
         }
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/menu/button_weaponry_out.tga")), true, MenuContentTransp);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/menu/button_weaponry_out.tga").c_str())), true, MenuContentTransp);
     }
 
 
@@ -556,6 +583,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     SrcRect(0,0,128,64);
     DstRect(X,Y,X+128,Y+64);
 
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/weapon_on_icon.tga");
     if (CanOn) {
         if (!WeaponAmmoOut) {
             bool NeedAlert = false;
@@ -572,15 +600,15 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
             }
 
             if (NeedAlert) {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
             } else {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
             }
         } else {
-            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, CurrentAlert3*MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
         }
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_on_icon.tga"), true, MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::orange});
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, MenuContentTransp, 0.0f, sRGBCOLOR{eRGBCOLOR::orange});
     }
 
 
@@ -591,7 +619,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     if (auto sharedWeapon = sharedWorkshopFighterGame->WeaponSlots[SlotNum].Weapon.lock()) {
         SrcRect(0,0,128,64);
         DstRect(X,Y,X+128,Y+64);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, MenuContentTransp);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconNameHash(sharedWeapon->InternalType)), true, MenuContentTransp);
     } else {
         // empty slot
 
@@ -640,7 +668,8 @@ void ShipSlotSetupWeapon(int SlotNum)
     int Xpos = GameConfig().InternalWidth / 2 + 55;
     int Ypos = 50-10;
     DstRect(Xpos,Ypos,Xpos+404,Ypos+570);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel5.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/workshop_panel5.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, MenuContentTransp);
 
 
 
@@ -822,7 +851,8 @@ void ShipSlotSetupWeapon(int SlotNum)
         // empty slot
         SrcRect(0,0,256,256);
         DstRect(Xpos,Ypos,Xpos+256,Ypos+256);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/weapon_empty_icon.tga"), true, MenuContentTransp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/weapon_empty_icon.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, MenuContentTransp);
 
         int Size = vw_TextWidthUTF32(vw_GetTextUTF32("Empty Weapon Slot"));
         float WScale = 0;
@@ -1081,9 +1111,11 @@ void Workshop_Weaponry()
 
     SrcRect(0,0,256,256);
     DstRect(GameConfig().InternalWidth/2-480, 100-32, GameConfig().InternalWidth/2-32, 450+32);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/back_spot2.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.45f * MenuContentTransp);
     DstRect(GameConfig().InternalWidth / 2, 0, GameConfig().InternalWidth/2+512, 622);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot.tga"), true, 0.35f * MenuContentTransp);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/back_spot.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.35f * MenuContentTransp);
 
 
     vw_End2DMode();
@@ -1170,11 +1202,13 @@ void Workshop_Weaponry()
     // borders
     SrcRect(0,0,400,35 );
     DstRect(GameConfig().InternalWidth/2-457, 100-11, GameConfig().InternalWidth/2-57, 100+35-11);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel4.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/workshop_panel4.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, MenuContentTransp);
 
     SrcRect(0,0,400,173 );
     DstRect(GameConfig().InternalWidth/2-457, 450-13, GameConfig().InternalWidth/2-57, 450+173-13);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel1.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/workshop_panel1.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, MenuContentTransp);
 
 
 
@@ -1301,7 +1335,7 @@ void Workshop_Weaponry()
     }
 
     if (DragWeapon) {
-        SetCursorDraggingItemIcon(GetPreloadedTextureAsset(GetWeaponIconName(DragWeaponNum)));
+        SetCursorDraggingItemIcon(GetPreloadedTextureAsset(GetWeaponIconNameHash(DragWeaponNum)));
         SetCursorStatus(eCursorStatus::DraggingItem);
     }
 }

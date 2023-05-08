@@ -44,8 +44,10 @@ cSmallAsteroid::cSmallAsteroid()
     std::string Model3DFileName{"models/space/asteroid-01" + std::to_string(vw_uRandNum(19)) + ".vw3d"};
     LoadObjectData(Model3DFileName, *this);
 
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/space/asteroid-01.tga");
+    GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);
     for (unsigned int i = 0; i < Chunks.size(); i++) {
-        Texture[i] = GetPreloadedTextureAsset("models/space/asteroid-01.tga");
+        Texture[i] = tmpTexture;
     }
 
     RotationSpeed.x = 100.0f + 50.0f * vw_fRand0();

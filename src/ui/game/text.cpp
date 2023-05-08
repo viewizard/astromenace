@@ -63,7 +63,7 @@ void SetupMissionNumberText(float NotificationTime, int Number)
 
     MissionNumberLastUpdateTime = vw_GetTimeThread(0);
     MissionNumberString = std::to_string(Number);
-    MissionNumberTexture = GetPreloadedTextureAsset(vw_GetText("lang/en/game/mission.tga"));
+    MissionNumberTexture = GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/mission.tga").c_str()));
 }
 
 /*
@@ -123,7 +123,8 @@ static void DrawNumberString(int X, int Y, float Transp)
         sRECT SrcRect = GetNumberOnImageRect(Symbol);
         sRECT DstRect{XStart, Y,
                       XStart + (SrcRect.right - SrcRect.left), Y + (SrcRect.bottom - SrcRect.top)};
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/nums.tga"), true, Transp);
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("game/nums.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, Transp);
         XStart += SrcRect.right - SrcRect.left;
     }
 }
@@ -168,7 +169,7 @@ void SetupMissionFailedText(float NotificationTime)
     }
 
     MissionFailedLastUpdateTime = vw_GetTimeThread(0);
-    MissionFailedTexture = GetPreloadedTextureAsset(vw_GetText("lang/en/game/missionfailed.tga"));
+    MissionFailedTexture = GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/missionfailed.tga").c_str()));
 
     SetShowGameCursor(true);
     vw_GetMouseLeftClick(true);

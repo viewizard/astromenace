@@ -115,14 +115,17 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
     // draw shadow
     SrcRect(2,2,512-2,96-2 );
     DstRect(X-64+2,Y-17+2,X-64+512-2,Y-17+96-2);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_back.tga"), true, IntTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/button384_back.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, IntTransp);
     // draw button
     SrcRect(0,0,384,64 );
     DstRect(X,Y,X+384,Y+64);
     if (!ON) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_out.tga"), true, Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/button384_out.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button384_in.tga"), true, Transp);
+        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/button384_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, Transp);
     }
 
 
@@ -182,11 +185,13 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
 
         SrcRect(2,2,512-2,96-2 );
         DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, Transp);
+        constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/button256_back.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, Transp);
 
         SrcRect(0,0,256,64 );
         DstRect(X,Y,X+256,Y+64);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_off.tga"), true, Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/button256_off.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, Transp);
 
 
         int Size = vw_TextWidthUTF32(Text);
@@ -265,14 +270,17 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
     // draw shadow
     SrcRect(2,2,512-2,96-2 );
     DstRect(X-125+2,Y-16+2,X-125+512-2,Y-16+96-2);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_back.tga"), true, IntTransp);
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/button256_back.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, IntTransp);
     // draw button
     SrcRect(0,0,256,64 );
     DstRect(X,Y,X+256,Y+64);
     if (!ON) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_out.tga"), true, Transp);
+        constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/button256_out.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button256_in.tga"), true, Transp);
+        constexpr unsigned tmpHash5 = constexpr_hash_djb2a("menu/button256_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash5), true, Transp);
     }
 
 
@@ -332,7 +340,8 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
 
     if (Off || DragWeapon) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_off.tga"), true, Transp);
+        constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/button_dialog200_off.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, Transp);
 
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
@@ -384,9 +393,11 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
 
     if (!ON) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_out.tga"), true, Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/button_dialog200_out.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_in.tga"), true, Transp);
+        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/button_dialog200_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, Transp);
     }
 
     // draw text
@@ -434,7 +445,8 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
 
     if (Off || DragWeapon) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_off.tga"), true, Transp);
+        constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/button_dialog128_off.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, Transp);
 
         vw_DrawTextUTF32(SizeI, Y+6, WScale, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::white}, (0.7f*Transp)/2.0f, Text);
 
@@ -487,9 +499,11 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
 
 
     if (!ON) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_out.tga"), true, Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/button_dialog128_out.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_in.tga"), true, Transp);
+        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/button_dialog128_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, Transp);
     }
 
     // draw text
@@ -568,9 +582,11 @@ void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text
         vw_DrawTextUTF32(X+40+20, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
     }
 
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/checkbox_main.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, Transp);
     if (CheckBoxStatus) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/checkbox_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, Transp);
     }
 
 
@@ -604,7 +620,8 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
     if (Off || DragWeapon) {
         DstRect(X+2,Y+2,X+32-2,Y+32-2);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
+        constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/arrow_list_up.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.3f*Transp);
 
         if  (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing() && Transp == 1.0f && !DragWeapon) {
             SetCursorStatus(eCursorStatus::ActionProhibited);
@@ -655,9 +672,11 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
 
     if (!ON) {
         DstRect(X+2,Y+2,X+32-2,Y+32-2);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, 0.3f*Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/arrow_list_up.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.3f*Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_up.tga"), true, Transp);
+        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/arrow_list_up.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, Transp);
     }
 
 
@@ -690,7 +709,8 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
     if (Off || DragWeapon) {
         DstRect(X+2,Y+2,X+32-2,Y+32-2);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
+        constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/arrow_list_down.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.3f*Transp);
 
         if (vw_MouseOverRect(MouseRect) && !isDialogBoxDrawing() && Transp == 1.0f && !DragWeapon) {
             SetCursorStatus(eCursorStatus::ActionProhibited);
@@ -741,9 +761,11 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
 
     if (!ON) {
         DstRect(X+2,Y+2,X+32-2,Y+32-2);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, 0.3f*Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/arrow_list_down.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.3f*Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/arrow_list_down.tga"), true, Transp);
+        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/arrow_list_down.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, Transp);
     }
 
 

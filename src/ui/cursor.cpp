@@ -71,8 +71,10 @@ void CursorInit(bool ShowSystemCursor)
 
     CursorBlinkingLastTime = vw_GetTimeThread(0);
 
-    CursorFront = GetPreloadedTextureAsset("menu/cursor.tga");
-    CursorShadow = GetPreloadedTextureAsset("menu/cursor_shadow.tga");
+    constexpr unsigned tmpCursorFrontHash = constexpr_hash_djb2a("menu/cursor.tga");
+    CursorFront = GetPreloadedTextureAsset(tmpCursorFrontHash);
+    constexpr unsigned tmpCursorShadowHash = constexpr_hash_djb2a("menu/cursor_shadow.tga");
+    CursorShadow = GetPreloadedTextureAsset(tmpCursorShadowHash);
 }
 
 /*

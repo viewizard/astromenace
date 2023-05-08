@@ -68,11 +68,11 @@ struct sProjectileData {
     int GraphicFXQuantity;
 };
 
-const std::string MissileTrailTextures[]{{"gfx/trail1.tga"},
-                                         {"gfx/trail2.tga"},
-                                         {"gfx/trail3.tga"},
-                                         {"gfx/trail4.tga"},
-                                         {"gfx/trail5.tga"}};
+const unsigned MissileTrailTexturesHash[]{constexpr_hash_djb2a("gfx/trail1.tga"),
+                                          constexpr_hash_djb2a("gfx/trail2.tga"),
+                                          constexpr_hash_djb2a("gfx/trail3.tga"),
+                                          constexpr_hash_djb2a("gfx/trail4.tga"),
+                                          constexpr_hash_djb2a("gfx/trail5.tga")};
 
 // earth 1-99
 const std::vector<sProjectileData> PresetEarthProjectileData{
@@ -421,7 +421,10 @@ float GetProjectileSpeed(int Num)
  */
 static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    {
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+        ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
+    }
 
     switch (GFXNum) {
     case 1: // Kinetic
@@ -947,7 +950,10 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
         ParticleSystem->ParticlesPerSec = 200;
         ParticleSystem->CreationType = eParticleCreationType::Sphere;
         ParticleSystem->CreationSize = sVECTOR3D{4.0f, 4.0f, 4.0f};
-        ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+            ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
+        }
         ParticleSystem->Light = vw_CreatePointLight(sVECTOR3D{0.0f, 0.0f, 0.0f}, 0.5f, 0.25f, 0.05f, 0.0f, 0.05f);
         break;
 
@@ -1234,7 +1240,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
         break;
 
     case 101: // earth/pirate missile trail
-        ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_uRandNum(4)]);
+        ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTexturesHash[vw_uRandNum(4)]);
         ParticleSystem->ColorStart.r = 1.00f;
         ParticleSystem->ColorStart.g = 1.00f;
         ParticleSystem->ColorStart.b = 1.00f;
@@ -1256,7 +1262,7 @@ static void SetProjectileGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, i
         break;
 
     case 102: // alien missile trail
-        ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTextures[vw_uRandNum(4)]);
+        ParticleSystem->Texture = GetPreloadedTextureAsset(MissileTrailTexturesHash[vw_uRandNum(4)]);
         ParticleSystem->ColorStart.r = 0.00f;
         ParticleSystem->ColorStart.g = 0.70f;
         ParticleSystem->ColorStart.b = 1.00f;
@@ -1554,7 +1560,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // missile
     case 16:
         LoadObjectData("models/earthfighter/missile.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 13);
@@ -1571,7 +1580,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // swarm
     case 17:
         LoadObjectData("models/earthfighter/swarm.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 16);
@@ -1589,7 +1601,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // torpedo
     case 18:
         LoadObjectData("models/earthfighter/torpedo.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 14);
@@ -1606,7 +1621,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // bomb
     case 19:
         LoadObjectData("models/earthfighter/nuke.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 15);
@@ -1774,7 +1792,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // pirate, like Missile1
     case 205:
         LoadObjectData("models/earthfighter/missile.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 27);
@@ -1791,7 +1812,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // pirate, like Missile2
     case 206:
         LoadObjectData("models/earthfighter/swarm.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 31);
@@ -1828,7 +1852,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // pirate, like torpedo
     case 209:
         LoadObjectData("models/earthfighter/torpedo.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 32);
@@ -1845,7 +1872,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     // pirate, like bomb
     case 210:
         LoadObjectData("models/earthfighter/nuke.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/earthfighter/rockets.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+        }
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
             SetProjectileGFX(sharedGFX, 33);
@@ -1893,16 +1923,24 @@ cProjectile::cProjectile(const int ProjectileNum)
         MineIData = 0.0f;
         ArmorCurrentStatus = ArmorInitialStatus = 10.0f;
         LoadObjectData("models/mine/mine-01.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/mine/mine1.tga");
-        TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine1i.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine1.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+            constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine1i.tga");
+            TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
+        }
         break;
     // mine 2
     case 215:
         MineIData = 0.0f;
         ArmorCurrentStatus = ArmorInitialStatus = 15.0f;
         LoadObjectData("models/mine/mine-02.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/mine/mine2.tga");
-        TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine2i.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine2.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+            constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine2i.tga");
+            TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
+        }
 
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
@@ -1917,8 +1955,12 @@ cProjectile::cProjectile(const int ProjectileNum)
         ArmorCurrentStatus = ArmorInitialStatus = 20.0f;
         MineReloadTime = MineNextFireTime = 1.0f;
         LoadObjectData("models/mine/mine-03.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/mine/mine3.tga");
-        TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine3i.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine3.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+            constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine3i.tga");
+            TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
+        }
 
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
@@ -1933,8 +1975,12 @@ cProjectile::cProjectile(const int ProjectileNum)
         ArmorCurrentStatus = ArmorInitialStatus = 40.0f;
         MineReloadTime = MineNextFireTime = 3.0f;
         LoadObjectData("models/mine/mine-04.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/mine/mine4.tga");
-        TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine4i.tga");
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine4.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpHash);
+            constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine4i.tga");
+            TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
+        }
 
         GraphicFX[0] = vw_CreateParticleSystem();
         if (auto sharedGFX = GraphicFX[0].lock()) {
@@ -2558,7 +2604,8 @@ missile:
         MineIData += TimeDelta;
         if (MineIData >= 0.1f) {
             if (!TextureIllum[0]) {
-                TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine1i.tga");
+                constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine1i.tga");
+                TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
             } else {
                 TextureIllum[0] = 0;
             }
@@ -2603,7 +2650,8 @@ missile:
         MineIData += TimeDelta;
         if (MineIData >= 0.1f) {
             if (!TextureIllum[0]) {
-                TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine2i.tga");
+                constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine2i.tga");
+                TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
             } else {
                 TextureIllum[0] = 0;
             }
@@ -2692,7 +2740,8 @@ missile:
         MineIData += TimeDelta;
         if (MineIData >= 0.1f) {
             if (!TextureIllum[0]) {
-                TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine3i.tga");
+                constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine3i.tga");
+                TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
             } else {
                 TextureIllum[0] = 0;
             }
@@ -2784,7 +2833,8 @@ missile:
         MineIData += TimeDelta;
         if (MineIData >= 0.1f) {
             if (!TextureIllum[0]) {
-                TextureIllum[0] = GetPreloadedTextureAsset("models/mine/mine4i.tga");
+                constexpr unsigned tmpIllumHash = constexpr_hash_djb2a("models/mine/mine4i.tga");
+                TextureIllum[0] = GetPreloadedTextureAsset(tmpIllumHash);
             } else {
                 TextureIllum[0] = 0;
             }

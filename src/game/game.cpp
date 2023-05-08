@@ -562,7 +562,8 @@ void DrawGame()
             // back
             sRECT SrcRect(2, 2, 564-2, 564-2);
             sRECT DstRect(GameConfig().InternalWidth / 2 - 256 - 26, 128 - 28, GameConfig().InternalWidth / 2 - 256 + 534, 128 + 532);
-            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
+            constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/dialog512_512.tga");
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1),
                       true, GameContentTransp);
             // title
             int Size = vw_TextWidthUTF32(vw_GetTextUTF32("Mission Complete"));
@@ -707,7 +708,8 @@ void DrawGame()
                 // back
                 sRECT SrcRect(2, 2, 564-2, 564-2);
                 sRECT DstRect(GameConfig().InternalWidth / 2 - 256+4-30, 128+2-30, GameConfig().InternalWidth / 2 - 256+564-30, 128+564-2-30);
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"),
+                constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/dialog512_512.tga");
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2),
                           true, GameContentTransp);
                 // title
                 int SizeI = 17 + (234-vw_TextWidthUTF32(vw_GetTextUTF32("GAME MENU")))/2;
@@ -782,9 +784,9 @@ void DrawGame()
             sRECT SrcRect(0, 0, 256, 64);
             sRECT DstRect(GameConfig().InternalWidth - 256 + 60, 768 - 54, GameConfig().InternalWidth + 60, 768 + 10);
             if (GameContentTransp == 1.0f) {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/pause.tga")), true, CurrentAlert2*GameContentTransp);
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/pause.tga").c_str())), true, CurrentAlert2*GameContentTransp);
             } else {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(vw_GetText("lang/en/game/pause.tga")), true, GameContentTransp);
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/pause.tga").c_str())), true, GameContentTransp);
             }
 
         }
@@ -861,7 +863,8 @@ void DrawGame()
 
         sRECT SrcRect(0, 0, 2, 2);
         sRECT DstRect(0, 0, GameConfig().InternalWidth, 768);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, GameBlackTransp);
+        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/blackpoint.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, GameBlackTransp);
     }
 
     // fade-out
@@ -878,7 +881,8 @@ void DrawGame()
 
         sRECT SrcRect(0, 0, 2, 2);
         sRECT DstRect(0, 0, GameConfig().InternalWidth, 768);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, GameBlackTransp);
+        constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/blackpoint.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, GameBlackTransp);
     }
 
 

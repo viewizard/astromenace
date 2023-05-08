@@ -78,10 +78,16 @@ cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
 
     LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileName, *this);
 
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/building/bld.vw2d");
+    GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);
+    constexpr unsigned tmpTextureIllumHash = constexpr_hash_djb2a("models/building/bld_illum.vw2d");
+    GLtexture tmpTextureIllum = GetPreloadedTextureAsset(tmpTextureIllumHash);
+    constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/buildings_nm.tga");
+    GLtexture tmpNormalMap = GetPreloadedTextureAsset(tmpNormalMapHash);
     for (unsigned int i = 0; i < Chunks.size(); i++) {
-        Texture[i] = GetPreloadedTextureAsset("models/building/bld.vw2d");
-        TextureIllum[i] = GetPreloadedTextureAsset("models/building/bld_illum.vw2d");
-        NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/buildings_nm.tga");
+        Texture[i] = tmpTexture;
+        TextureIllum[i] = tmpTextureIllum;
+        NormalMap[i] = tmpNormalMap;
     }
 
     ArmorCurrentStatus = ArmorInitialStatus = PresetBuildingData[BuildingNum - 1].Armor / GameEnemyArmorPenalty;

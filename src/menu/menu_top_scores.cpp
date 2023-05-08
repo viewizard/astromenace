@@ -111,7 +111,8 @@ void TopScoresMenu()
     sRECT SrcRect, DstRect;
     SrcRect(0, 0, 2, 2);
     DstRect(0, 0, GameConfig().InternalWidth, 768);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/blackpoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, 0.5f * MenuContentTransp);
 
 
     int X1 = GameConfig().InternalWidth / 2 - 362;

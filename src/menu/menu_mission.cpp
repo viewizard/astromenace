@@ -53,7 +53,7 @@ struct cMission {
     std::string Descr{};
     sRGBCOLOR TitleColor{sRGBCOLOR{eRGBCOLOR::orange}};
     sRGBCOLOR DescrColor{sRGBCOLOR{eRGBCOLOR::white}};
-    std::string Icon{};
+    unsigned IconHash = 0;
     std::string File{};
 };
 
@@ -182,7 +182,7 @@ void MissionListInit()
                     }
                     MissionList.back().Descr = TMission.Content;
                 } else if (TMission.Name == "Icon") {
-                    MissionList.back().Icon = TMission.Content;
+                    MissionList.back().IconHash = constexpr_hash_djb2a(TMission.Content.c_str());
                 } else if (TMission.Name == "File") {
                     MissionList.back().File = TMission.Content;
                 }
@@ -220,7 +220,8 @@ void MissionMenu()
     sRECT SrcRect, DstRect;
     SrcRect(2, 2, 863-2, 484-2);
     DstRect(GameConfig().InternalWidth/2-427, 175-15, GameConfig().InternalWidth/2-427+863-4, 175-15+484-4);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel800_444_back.tga"), true, 0.9f * MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/panel800_444_back.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.9f * MenuContentTransp);
 
 
 
@@ -252,9 +253,10 @@ void MissionMenu()
 
     SrcRect(0,0,2,2);
     DstRect(X1-2,Y1-2,X1+2+710,Y1+2+320);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.2f*MenuContentTransp);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/blackpoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.2f*MenuContentTransp);
     DstRect(X1,Y1,X1+710,Y1+320);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f*MenuContentTransp);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.5f*MenuContentTransp);
 
 
 
@@ -268,7 +270,8 @@ void MissionMenu()
 
         SrcRect(0,0,2,2);
         DstRect(X1+1,Y1 + 64*ShowLine+1,X1+709,Y1 + 64*ShowLine+63);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+        constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/whitepoint.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, 0.1f*MenuContentTransp);
     }
 
 
@@ -283,7 +286,7 @@ void MissionMenu()
                 SrcRect(0,0,64,64);
                 DstRect(X1+2,Y1+2,X1+62,Y1+62);
 
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, 0.3f*MenuContentTransp);
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].IconHash), true, 0.3f*MenuContentTransp);
                 vw_DrawTextUTF32(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, 0.3f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Title));
                 vw_DrawTextUTF32(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, 0.3f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Descr));
             }
@@ -314,7 +317,7 @@ void MissionMenu()
 
                     SrcRect(0,0,64,64);
                     DstRect(X1,Y1,X1+64,Y1+64);
-                    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, MenuContentTransp);
+                    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].IconHash), true, MenuContentTransp);
                     vw_DrawTextUTF32(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, MenuContentTransp, vw_GetTextUTF32(MissionList[i].Title));
                     vw_DrawTextUTF32(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, MenuContentTransp, vw_GetTextUTF32(MissionList[i].Descr));
 
@@ -322,7 +325,8 @@ void MissionMenu()
                     if (CurrentMission != i) {
                         SrcRect(0,0,2,2);
                         DstRect(X1+64,Y1+1,X1+709,Y1+63);
-                        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"), true, 0.1f*MenuContentTransp);
+                        constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/whitepoint.tga");
+                        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, 0.1f*MenuContentTransp);
                     }
                     if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
 
@@ -356,7 +360,7 @@ void MissionMenu()
                 } else {
                     SrcRect(0,0,64,64);
                     DstRect(X1+2,Y1+2,X1+62,Y1+62);
-                    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].Icon), true, 0.8f*MenuContentTransp);
+                    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(MissionList[i].IconHash), true, 0.8f*MenuContentTransp);
                     vw_DrawTextUTF32(X1+20+64, Y1+9, -610, 0, 1.0f, MissionList[i].TitleColor, 0.8f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Title));
                     vw_DrawTextUTF32(X1+20+64, Y1+33, -610, 0, 1.0f, MissionList[i].DescrColor, 0.8f*MenuContentTransp, vw_GetTextUTF32(MissionList[i].Descr));
                 }
@@ -409,7 +413,8 @@ void MissionMenu()
     // display position in the list on the strip with arrows
     SrcRect(0,0,32,32);
     DstRect(X1+750-32+4,Y1+32+((320.0f-64)/AllMission)*StartMission,X1+750-4,Y1+32+((320.0f-64)/AllMission)*(EndMission+1));
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/whitepoint.tga"), true, 0.3f*MenuContentTransp);
+    constexpr unsigned tmpHash5 = constexpr_hash_djb2a("menu/whitepoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash5), true, 0.3f*MenuContentTransp);
 
     // handle dragging the slider to display the list position
     // if we stand on the slider and press the mouse button - "capture"

@@ -116,7 +116,8 @@ void ReleaseAllExplosions()
  */
 void SetExplosionGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, int GFXNum)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+    ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
 
     switch (GFXNum) {
     case 0: // projectile

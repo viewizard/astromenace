@@ -50,61 +50,99 @@ cPlanet::cPlanet(const int PlanetNum)
         NeedCullFaces = false;
         NeedAlphaTest = true;
         LoadObjectData("models/planet/aplanet.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
+        }
         TextureIllum[0] = 0;
-        NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-        Texture[1] = GetPreloadedTextureAsset("models/planet/asteroid.tga");
-        TextureIllum[1] = 0;
-        NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/planet_asteroids_nm.tga");
-        Texture[2] = GetPreloadedTextureAsset("models/planet/asteroid.tga");
-        TextureIllum[2] = 0;
-        NormalMap[2] = GetPreloadedTextureAsset("models/normalmap/planet_asteroids_nm.tga");
-        Texture[3] = GetPreloadedTextureAsset("models/planet/asteroid.tga");
-        TextureIllum[3] = 0;
-        NormalMap[3] = GetPreloadedTextureAsset("models/normalmap/planet_asteroids_nm.tga");
+        {
+            constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+            NormalMap[0] = GetPreloadedTextureAsset(tmpNormalMapHash);
+        }
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/asteroid.tga");
+            Texture[1] = Texture[2] = Texture[3] = GetPreloadedTextureAsset(tmpTextureHash);
+        }
+        TextureIllum[1] = TextureIllum[2] = TextureIllum[3] = 0;
+        {
+            constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/planet_asteroids_nm.tga");
+            NormalMap[1] = NormalMap[2] = NormalMap[3] = GetPreloadedTextureAsset(tmpNormalMapHash);
+        }
         break;
 
     case 2:
         PromptDrawDist2 = 100.0f;
         LoadObjectData("models/planet/dplanet.vw3d", *this);
-        for (unsigned int i = 0; i < Chunks.size(); i++) {
-            Texture[i] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
-            TextureIllum[i] = 0;
-            NormalMap[i] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
+            GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);
+            constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+            GLtexture tmpNormalMap = GetPreloadedTextureAsset(tmpNormalMapHash);
+            for (unsigned int i = 0; i < Chunks.size(); i++) {
+                Texture[i] = tmpTexture;
+                TextureIllum[i] = 0;
+                NormalMap[i] = tmpNormalMap;
+            }
         }
         break;
 
     case 3:
         NeedCullFaces = false;
         LoadObjectData("models/planet/gplanet.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/planet/m_class7.tga");
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/m_class7.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
+        }
         TextureIllum[0] = 0;
-        NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/m_class7_nm.tga");
-
-        Texture[1] = GetPreloadedTextureAsset("models/planet/clouds.tga");
+        {
+            constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/m_class7_nm.tga");
+            NormalMap[0] = GetPreloadedTextureAsset(tmpNormalMapHash);
+        }
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/clouds.tga");
+            Texture[1] = GetPreloadedTextureAsset(tmpTextureHash);
+        }
         TextureIllum[1] = 0;
         Chunks[1].DrawType = eModel3DDrawType::Blend;
         break;
 
     case 4:
         LoadObjectData("models/planet/moon.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/planet/q_class2.tga");
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/q_class2.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
+        }
         TextureIllum[0] = 0;
-        NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/q_class2_nm.tga");
+        {
+            constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/q_class2_nm.tga");
+            NormalMap[0] = GetPreloadedTextureAsset(tmpNormalMapHash);
+        }
         break;
 
     case 5:
         LoadObjectData("models/planet/planet5.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/planet/a_class4.tga");
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/a_class4.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
+        }
         TextureIllum[0] = 0;
-        NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/a_class4_nm.tga");
+        {
+            constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/a_class4_nm.tga");
+            NormalMap[0] = GetPreloadedTextureAsset(tmpNormalMapHash);
+        }
         break;
 
     case 6:
         LoadObjectData("models/planet/planet6.vw3d", *this);
-        Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+        {
+            constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
+            Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
+        }
         TextureIllum[0] = 0;
-        NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+        {
+            constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+            NormalMap[0] = GetPreloadedTextureAsset(tmpNormalMapHash);
+        }
         break;
     }
 }

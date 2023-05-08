@@ -563,9 +563,10 @@ void Workshop_Shipyard()
     // fade-in/fade-out
     SrcRect(0,0,256,256 );
     DstRect(GameConfig().InternalWidth/2-480, 100-32, GameConfig().InternalWidth/2-32, 450+32);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/back_spot2.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.45f * MenuContentTransp);
     DstRect(GameConfig().InternalWidth/2+32, 100-32, GameConfig().InternalWidth/2+480, 450+32);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot2.tga"), true, 0.45f * MenuContentTransp);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.45f * MenuContentTransp);
 
 
 
@@ -647,11 +648,13 @@ void Workshop_Shipyard()
     // borders
     SrcRect(0,0,400,35 );
     DstRect(GameConfig().InternalWidth/2-457, 100-11, GameConfig().InternalWidth/2-57, 100+35-11);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel4.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/workshop_panel4.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, MenuContentTransp);
 
     SrcRect(0,0,400,173 );
     DstRect(GameConfig().InternalWidth/2-457, 450-13, GameConfig().InternalWidth/2-57, 450+173-13);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel1.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/workshop_panel1.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, MenuContentTransp);
 
 
     // check mouse wheel
@@ -815,11 +818,13 @@ void Workshop_Shipyard()
     // borders
     SrcRect(0,0,400,35 );
     DstRect(GameConfig().InternalWidth/2+57, 100-11, GameConfig().InternalWidth/2+457, 100+35-11);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel4.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/workshop_panel4.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, MenuContentTransp);
 
     SrcRect(0,0,400,173 );
     DstRect(GameConfig().InternalWidth/2+57, 450-13, GameConfig().InternalWidth/2+457, 450+173-13);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel1+.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash5 = constexpr_hash_djb2a("menu/workshop_panel1+.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash5), true, MenuContentTransp);
 
 
 

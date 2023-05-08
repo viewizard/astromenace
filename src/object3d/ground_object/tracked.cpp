@@ -37,24 +37,24 @@ struct sTrackedData {
     float Armor;
     float SpeedToWheelRotarySpeedFactor;
     std::string Model3DFileName;
-    std::string TextureFileName;
+    unsigned TextureFileNameHash;
 };
 
 const std::vector<sTrackedData> PresetTrackedData{
-    {250,   60.0f,    "models/tracked/tank-01.vw3d", "models/gr-01.vw2d"},
-    {200,   45.0f,    "models/tracked/tank-03.vw3d", "models/gr-01.vw2d"},
-    {300,   45.0f,    "models/tracked/tank-05.vw3d", "models/gr-06.vw2d"},
-    {300,   55.0f,    "models/tracked/tank-06.vw3d", "models/gr-03.vw2d"},
-    {400,   60.0f,    "models/tracked/tank-07.vw3d", "models/gr-06.vw2d"},
-    {250,   70.0f,    "models/tracked/tank-08.vw3d", "models/gr-01.vw2d"},
-    {400,   60.0f,    "models/tracked/tank-09.vw3d", "models/gr-01.vw2d"},
-    {300,   60.0f,    "models/tracked/tank-10.vw3d", "models/gr-03.vw2d"},
-    {350,   60.0f,    "models/tracked/tank-11.vw3d", "models/gr-03.vw2d"},
-    {300,   60.0f,    "models/tracked/apc-01.vw3d", "models/gr-03.vw2d"},
-    {400,   60.0f,    "models/tracked/apc-03.vw3d", "models/gr-03.vw2d"},
-    {250,   60.0f,    "models/tracked/apc-aa-01.vw3d", "models/gr-03.vw2d"},
-    {200,   42.0f,    "models/tracked/apc-aa-02.vw3d", "models/gr-02.vw2d"},
-    {50,    50.0f,    "models/tracked/engineering-01.vw3d", "models/gr-03.vw2d"}
+    {250,   60.0f,    "models/tracked/tank-01.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {200,   45.0f,    "models/tracked/tank-03.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {300,   45.0f,    "models/tracked/tank-05.vw3d", constexpr_hash_djb2a("models/gr-06.vw2d")},
+    {300,   55.0f,    "models/tracked/tank-06.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {400,   60.0f,    "models/tracked/tank-07.vw3d", constexpr_hash_djb2a("models/gr-06.vw2d")},
+    {250,   70.0f,    "models/tracked/tank-08.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {400,   60.0f,    "models/tracked/tank-09.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {300,   60.0f,    "models/tracked/tank-10.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {350,   60.0f,    "models/tracked/tank-11.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {300,   60.0f,    "models/tracked/apc-01.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {400,   60.0f,    "models/tracked/apc-03.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {250,   60.0f,    "models/tracked/apc-aa-01.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {200,   42.0f,    "models/tracked/apc-aa-02.vw3d", constexpr_hash_djb2a("models/gr-02.vw2d")},
+    {50,    50.0f,    "models/tracked/engineering-01.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")}
 };
 
 
@@ -81,7 +81,7 @@ cTracked::cTracked(const int TrackedNum)
     LoadObjectData(PresetTrackedData[TrackedNum - 1].Model3DFileName, *this);
 
     for (unsigned int i = 0; i < Chunks.size(); i++) {
-        Texture[i] = GetPreloadedTextureAsset(PresetTrackedData[TrackedNum - 1].TextureFileName);
+        Texture[i] = GetPreloadedTextureAsset(PresetTrackedData[TrackedNum - 1].TextureFileNameHash);
     }
     SpeedToWheelRotarySpeedFactor = PresetTrackedData[TrackedNum - 1].SpeedToWheelRotarySpeedFactor;
 
@@ -530,7 +530,8 @@ cTracked::cTracked(const int TrackedNum)
 
     assert(TrackChunkNum >= 0);
     assert(TrackChunkNum < static_cast<int>(Texture.size()));
-    Texture[TrackChunkNum] = GetPreloadedTextureAsset("models/track.vw2d");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/track.vw2d");
+    Texture[TrackChunkNum] = GetPreloadedTextureAsset(tmpTextureHash);
 
     // randomize wheels initial rotation for better look
     for (const auto &WheelChunkNum : WheelChunkNums) {

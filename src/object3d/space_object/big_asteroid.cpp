@@ -71,9 +71,11 @@ cBigAsteroid::cBigAsteroid(const int AsteroidNum)
     RotationSpeed.x = 10.0f + 10.0f * vw_fRand0();
     RotationSpeed.y = 2.0f + 20.0f * vw_fRand0();
 
-    Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
-    NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+    constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+    NormalMap[0] = GetPreloadedTextureAsset(tmpNormalMapHash);
 }
 
 } // astromenace namespace

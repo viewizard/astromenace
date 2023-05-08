@@ -183,7 +183,8 @@ bool SetEarthSpaceFighterWeapon(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
  */
 static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+    ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
 
     static const sRGBCOLOR LightYellow{1.0f, 0.7f, 0.3f};
     static const sRGBCOLOR Red{1.0f, 0.0f, 0.0f};
@@ -281,7 +282,8 @@ static void CreateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSyst
  */
 static void CreateRotateSpaceShipEngine(std::shared_ptr<cParticleSystem> &ParticleSystem, const int EngineType)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+    ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
 
     static const sRGBCOLOR LightYellow{1.0f, 0.7f, 0.3f};
     static const sRGBCOLOR Red{1.0f, 0.0f, 0.0f};
@@ -451,37 +453,23 @@ void SetEarthSpaceFighterEngine(std::weak_ptr<cSpaceShip> &SpaceShip, const int 
  */
 static GLtexture GetArmorTexture(const int ArmorType)
 {
-    switch (ArmorType) {
-    case 0:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text00.vw2d");
-
-    case 1:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text04.vw2d");
-
-    case 2:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text05.vw2d");
-
-    case 3:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text07.vw2d");
-
-    case 4:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text08.vw2d");
-
-    case 5:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text09.vw2d");
-
-    case 6:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text10.vw2d");
-
-    case 7:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-text06.vw2d");
-
-    default:
+    if (ArmorType < 0 || ArmorType > 7) {
         std::cerr << __func__ << "(): " << "wrong ArmorType.\n";
-        break;
+        return 0;
     }
 
-    return 0;
+    static unsigned ArmorTextureNameHash[]{
+        constexpr_hash_djb2a("models/earthfighter/sf-text00.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-text04.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-text05.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-text07.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-text08.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-text09.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-text10.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-text06.vw2d")
+    };
+
+    return GetPreloadedTextureAsset(ArmorTextureNameHash[ArmorType]);
 }
 
 /*
@@ -490,37 +478,23 @@ static GLtexture GetArmorTexture(const int ArmorType)
  */
 static GLtexture GetArmorIllumTexture(const int ArmorType)
 {
-    switch (ArmorType) {
-    case 0:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum01.vw2d");
-
-    case 1:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum02.vw2d");
-
-    case 2:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
-
-    case 3:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
-
-    case 4:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
-
-    case 5:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum02.vw2d");
-
-    case 6:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum04.vw2d");
-
-    case 7:
-        return GetPreloadedTextureAsset("models/earthfighter/sf-illum03.vw2d");
-
-    default:
+    if (ArmorType < 0 || ArmorType > 7) {
         std::cerr << __func__ << "(): " << "wrong ArmorType.\n";
-        break;
+        return 0;
     }
 
-    return 0;
+    static unsigned ArmorIllumTextureNameHash[]{
+        constexpr_hash_djb2a("models/earthfighter/sf-illum01.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-illum02.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-illum02.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-illum04.vw2d"),
+        constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")
+    };
+
+    return GetPreloadedTextureAsset(ArmorIllumTextureNameHash[ArmorType]);
 }
 
 /*

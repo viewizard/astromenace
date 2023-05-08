@@ -36,19 +36,19 @@ namespace astromenace {
 struct sMilitaryBuildingData {
     float Armor;
     std::string Model3DFileName;
-    std::string TextureFileName;
+    unsigned TextureFileNameHash;
 };
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sMilitaryBuildingData> PresetMilitaryBuildingData {
-    {80,    "models/militarybuilding/aa-gun-01.vw3d", "models/gr-01.vw2d"},
-    {120,   "models/militarybuilding/aa-gun-02.vw3d", "models/gr-01.vw2d"},
-    {80,    "models/militarybuilding/aa-gun-03.vw3d", "models/gr-02.vw2d"},
-    {150,   "models/militarybuilding/aa-gun-04.vw3d", "models/gr-01.vw2d"},
-    {250,   "models/militarybuilding/aa-gun-05.vw3d", "models/gr-03.vw2d"},
-    {50,    "models/militarybuilding/artiler-gun-01.vw3d", "models/gr-03.vw2d"},
-    {200,   "models/militarybuilding/artiler-gun-02.vw3d", "models/gr-01.vw2d"}
+    {80,    "models/militarybuilding/aa-gun-01.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {120,   "models/militarybuilding/aa-gun-02.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {80,    "models/militarybuilding/aa-gun-03.vw3d", constexpr_hash_djb2a("models/gr-02.vw2d")},
+    {150,   "models/militarybuilding/aa-gun-04.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")},
+    {250,   "models/militarybuilding/aa-gun-05.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {50,    "models/militarybuilding/artiler-gun-01.vw3d", constexpr_hash_djb2a("models/gr-03.vw2d")},
+    {200,   "models/militarybuilding/artiler-gun-02.vw3d", constexpr_hash_djb2a("models/gr-01.vw2d")}
 };
 #pragma GCC diagnostic pop
 
@@ -72,7 +72,7 @@ cMilitaryBuilding::cMilitaryBuilding(const int MilitaryBuildingNum)
     LoadObjectData(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].Model3DFileName, *this);
 
     for (unsigned int i = 0; i < Chunks.size(); i++) {
-        Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileName);
+        Texture[i] = GetPreloadedTextureAsset(PresetMilitaryBuildingData[MilitaryBuildingNum - 1].TextureFileNameHash);
     }
 
     ArmorCurrentStatus = ArmorInitialStatus =

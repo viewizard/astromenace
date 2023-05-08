@@ -102,7 +102,8 @@ static void InitHUDParticleSystems()
         sharedEnergyEmblem->IsMagnet = true;
         sharedEnergyEmblem->MagnetFactor = 150.0f;
         sharedEnergyEmblem->CreationType = eParticle2DCreationType::Point;
-        sharedEnergyEmblem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+        sharedEnergyEmblem->Texture = GetPreloadedTextureAsset(tmpHash);
         sharedEnergyEmblem->MoveSystem(sVECTOR3D{33.0f, 29.0f, 0.0f});
     }
 
@@ -126,7 +127,8 @@ static void InitHUDParticleSystems()
         sharedArmorEmblemVert->ParticlesPerSec = 50;
         sharedArmorEmblemVert->CreationType = eParticle2DCreationType::Quad;
         sharedArmorEmblemVert->CreationSize(1.0f, 18.0f, 0.0f);
-        sharedArmorEmblemVert->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+        sharedArmorEmblemVert->Texture = GetPreloadedTextureAsset(tmpHash);
         sharedArmorEmblemVert->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
     }
 
@@ -150,7 +152,8 @@ static void InitHUDParticleSystems()
         sharedArmorEmblemHoriz->ParticlesPerSec = 50;
         sharedArmorEmblemHoriz->CreationType = eParticle2DCreationType::Quad;
         sharedArmorEmblemHoriz->CreationSize(18.0f, 1.0f, 0.0f);
-        sharedArmorEmblemHoriz->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+        sharedArmorEmblemHoriz->Texture = GetPreloadedTextureAsset(tmpHash);
         sharedArmorEmblemHoriz->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
     }
 
@@ -178,7 +181,8 @@ static void InitHUDParticleSystems()
         sharedArmorEmblemCircle->DeadZone = 24.0f;
         sharedArmorEmblemCircle->IsMagnet = true;
         sharedArmorEmblemCircle->MagnetFactor = 25.0f;
-        sharedArmorEmblemCircle->Texture = GetPreloadedTextureAsset("gfx/flare.tga");
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare.tga");
+        sharedArmorEmblemCircle->Texture = GetPreloadedTextureAsset(tmpHash);
         sharedArmorEmblemCircle->MoveSystem(sVECTOR3D{GameConfig().InternalWidth - 33.0f, 29.0f, 0.0f});
         sharedArmorEmblemCircle->SetRotation(sVECTOR3D{0.0f, 0.0f, 90.0f});
     }
@@ -278,9 +282,11 @@ static void ResizeHUDParticleSystems()
 static void InitHUDBorder()
 {
     if (GameConfig().InternalWidth == config::VirtualWidth_Standard) {
-        HUDBorderTexture = GetPreloadedTextureAsset("game/game_panel.tga");
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("game/game_panel.tga");
+        HUDBorderTexture = GetPreloadedTextureAsset(tmpHash);
     } else {
-        HUDBorderTexture = GetPreloadedTextureAsset("game/game_panel2.tga");
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("game/game_panel2.tga");
+        HUDBorderTexture = GetPreloadedTextureAsset(tmpHash);
     }
 }
 
@@ -495,7 +501,8 @@ void SetupHUDText(const int Experience, const int Money)
  */
 static void InitHUDText(const int Experience, const int Money)
 {
-    HUDFontTexture = GetPreloadedTextureAsset("game/game_num.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("game/game_num.tga");
+    HUDFontTexture = GetPreloadedTextureAsset(tmpHash);
     if (HUDFontTexture && vw_FindTextureSizeByID(HUDFontTexture, &HUDFontImageWidth, &HUDFontImageHeight)) {
         SetupHUDText(Experience, Money);
     }
@@ -538,7 +545,8 @@ static void InitHUDProgressBars(std::weak_ptr<cSpaceShip> &SpaceShip, float Ener
         CurrentDrawArmorStatus = sharedSpaceShip->ArmorCurrentStatus / sharedSpaceShip->ArmorInitialStatus;
     }
 
-    ProgressBarTexture = GetPreloadedTextureAsset("game/game_panel_el.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("game/game_panel_el.tga");
+    ProgressBarTexture = GetPreloadedTextureAsset(tmpHash);
     if (!ProgressBarTexture) {
         return;
     }

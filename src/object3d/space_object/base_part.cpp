@@ -49,7 +49,8 @@ enum class eEngineGFX {
  */
 static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const eEngineGFX EngineType)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+    ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
 
     static const sRGBCOLOR MuddyYellow{0.6f, 0.6f, 0.3f};
     static const sRGBCOLOR LightGreen{0.3f, 1.0f, 0.3f};
@@ -102,12 +103,16 @@ static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, con
  */
 void cBasePart::SetupBasePartType1()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
-    NormalMap[0] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-    Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+    NormalMap[0] = GetPreloadedTextureAsset(tmpNormalMapHash);
+    constexpr unsigned tmpTextureHash2 = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[1] = GetPreloadedTextureAsset(tmpTextureHash2);
     TextureIllum[1] = 0;
-    Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+    constexpr unsigned tmpTextureHash3 = constexpr_hash_djb2a("models/spacebase/metal.tga");
+    Texture[2] = GetPreloadedTextureAsset(tmpTextureHash3);
     TextureIllum[2] = 0;
 
     GraphicFXLocation.resize(8);
@@ -168,12 +173,16 @@ void cBasePart::SetupBasePartType1()
  */
 void cBasePart::SetupBasePartType2()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
-    Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+    constexpr unsigned tmpTextureHash2 = constexpr_hash_djb2a("models/planet/d_class3.tga");
+    Texture[1] = GetPreloadedTextureAsset(tmpTextureHash2);
     TextureIllum[1] = 0;
-    NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
-    Texture[2] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+    constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+    NormalMap[1] = GetPreloadedTextureAsset(tmpNormalMapHash);
+    constexpr unsigned tmpTextureHash3 = constexpr_hash_djb2a("models/spacebase/metal.tga");
+    Texture[2] = GetPreloadedTextureAsset(tmpTextureHash3);
     TextureIllum[2] = 0;
 }
 
@@ -182,9 +191,11 @@ void cBasePart::SetupBasePartType2()
  */
 void cBasePart::SetupBasePartType3()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/spacebase/metal.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
-    Texture[1] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpTextureHash2 = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[1] = GetPreloadedTextureAsset(tmpTextureHash2);
     TextureIllum[1] = 0;
 
     GraphicFXLocation.resize(2);
@@ -214,7 +225,8 @@ void cBasePart::SetupBasePartType3()
  */
 void cBasePart::SetupBasePartType4()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
 }
 
@@ -223,7 +235,8 @@ void cBasePart::SetupBasePartType4()
  */
 void cBasePart::SetupBasePartType5()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
 }
 
@@ -232,11 +245,14 @@ void cBasePart::SetupBasePartType5()
  */
 void cBasePart::SetupBasePartType6()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
-    Texture[1] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+    constexpr unsigned tmpTextureHash2 = constexpr_hash_djb2a("models/planet/d_class3.tga");
+    Texture[1] = GetPreloadedTextureAsset(tmpTextureHash2);
     TextureIllum[1] = 0;
-    NormalMap[1] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+    constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+    NormalMap[1] = GetPreloadedTextureAsset(tmpNormalMapHash);
 }
 
 /*
@@ -244,7 +260,8 @@ void cBasePart::SetupBasePartType6()
  */
 void cBasePart::SetupBasePartType7()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
 }
 
@@ -253,13 +270,17 @@ void cBasePart::SetupBasePartType7()
  */
 void cBasePart::SetupBasePartType8()
 {
-    Texture[0] = GetPreloadedTextureAsset("models/spacebase/allalpha.tga");
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/spacebase/allalpha.tga");
+    Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
     TextureIllum[0] = 0;
-    Texture[1] = GetPreloadedTextureAsset("models/spacebase/metal.tga");
+    constexpr unsigned tmpTextureHash2 = constexpr_hash_djb2a("models/spacebase/metal.tga");
+    Texture[1] = GetPreloadedTextureAsset(tmpTextureHash2);
     TextureIllum[1] = 0;
-    Texture[2] = GetPreloadedTextureAsset("models/planet/d_class3.tga");
+    constexpr unsigned tmpTextureHash3 = constexpr_hash_djb2a("models/planet/d_class3.tga");
+    Texture[2] = GetPreloadedTextureAsset(tmpTextureHash3);
     TextureIllum[2] = 0;
-    NormalMap[2] = GetPreloadedTextureAsset("models/normalmap/d_class3_nm.tga");
+    constexpr unsigned tmpNormalMapHash = constexpr_hash_djb2a("models/normalmap/d_class3_nm.tga");
+    NormalMap[2] = GetPreloadedTextureAsset(tmpNormalMapHash);
 }
 
 /*

@@ -57,8 +57,8 @@ struct sWeaponData {
     sVECTOR3D FireLocation;
     sVECTOR3D DestrFireLocation;
     std::string NameVW3D;
-    std::string TextureName;
-    std::string TextureIllumName;
+    unsigned TextureNameHash;
+    unsigned TextureIllumNameHash;
 };
 
 // earth 1-99
@@ -66,32 +66,32 @@ struct sWeaponData {
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetEarthWeaponData {
     // Kinetic
-    {eGameSFX::WeaponFire_Kinetic1,     true, 25,    1,    1.5f,    3000,   0.4f, sVECTOR3D{0.0f, -0.613f, 2.0f},   sVECTOR3D{0.0f, -0.65f, 1.0f}, "models/earthfighter/weapon5.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-    {eGameSFX::WeaponFire_Kinetic2,     true, 25,    1,    3,       1500,   0.6f, sVECTOR3D{0.0f, -0.613f, 2.93f},  sVECTOR3D{0.0f, -0.6f, 1.8f}, "models/earthfighter/weapon11.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-    {eGameSFX::WeaponFire_Kinetic3,     true, 30,    2,    3.5,     1000,   0.7f, sVECTOR3D{0.0f, -0.613f, 3.33f},  sVECTOR3D{0.0f, -0.6f, 2.2f}, "models/earthfighter/weapon13.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
-    {eGameSFX::WeaponFire_Kinetic4,     true, 30,    2,    5,       7000,   0.3f, sVECTOR3D{0.0f, -0.613f, 2.33f},  sVECTOR3D{0.0f, -0.6f, 1.2f}, "models/earthfighter/weapon8.vw3d", "models/earthfighter/sf-text00.vw2d", "models/earthfighter/sf-illum01.vw2d"},
+    {eGameSFX::WeaponFire_Kinetic1,     true, 25,    1,    1.5f,    3000,   0.4f, sVECTOR3D{0.0f, -0.613f, 2.0f},   sVECTOR3D{0.0f, -0.65f, 1.0f}, "models/earthfighter/weapon5.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text00.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum01.vw2d")},
+    {eGameSFX::WeaponFire_Kinetic2,     true, 25,    1,    3,       1500,   0.6f, sVECTOR3D{0.0f, -0.613f, 2.93f},  sVECTOR3D{0.0f, -0.6f, 1.8f}, "models/earthfighter/weapon11.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text00.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum01.vw2d")},
+    {eGameSFX::WeaponFire_Kinetic3,     true, 30,    2,    3.5,     1000,   0.7f, sVECTOR3D{0.0f, -0.613f, 3.33f},  sVECTOR3D{0.0f, -0.6f, 2.2f}, "models/earthfighter/weapon13.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text00.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum01.vw2d")},
+    {eGameSFX::WeaponFire_Kinetic4,     true, 30,    2,    5,       7000,   0.3f, sVECTOR3D{0.0f, -0.613f, 2.33f},  sVECTOR3D{0.0f, -0.6f, 1.2f}, "models/earthfighter/weapon8.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text00.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum01.vw2d")},
     // Ion
-    {eGameSFX::WeaponFire_Ion1,         true, 10,    1,    7,       1000,   0.7f, sVECTOR3D{0.0f, -0.43f, 2.13f},   sVECTOR3D{0.0f, -0.45f, 1.5f}, "models/earthfighter/weapon1.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
-    {eGameSFX::WeaponFire_Ion2,         true, 10,    1,    10,      2000,   0.9f, sVECTOR3D{0.0f, -0.53f, 1.86f},   sVECTOR3D{0.0f, -0.5f, 1.8f}, "models/earthfighter/weapon4.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
-    {eGameSFX::WeaponFire_Ion3,         true, 15,    2,    11.5,    3000,   1.0f, sVECTOR3D{0.0f, -0.63f, 2.26f},   sVECTOR3D{0.0f, -0.65f, 2.3f}, "models/earthfighter/weapon6.vw3d", "models/earthfighter/sf-text04.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+    {eGameSFX::WeaponFire_Ion1,         true, 10,    1,    7,       1000,   0.7f, sVECTOR3D{0.0f, -0.43f, 2.13f},   sVECTOR3D{0.0f, -0.45f, 1.5f}, "models/earthfighter/weapon1.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text04.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum02.vw2d")},
+    {eGameSFX::WeaponFire_Ion2,         true, 10,    1,    10,      2000,   0.9f, sVECTOR3D{0.0f, -0.53f, 1.86f},   sVECTOR3D{0.0f, -0.5f, 1.8f}, "models/earthfighter/weapon4.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text04.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum02.vw2d")},
+    {eGameSFX::WeaponFire_Ion3,         true, 15,    2,    11.5,    3000,   1.0f, sVECTOR3D{0.0f, -0.63f, 2.26f},   sVECTOR3D{0.0f, -0.65f, 2.3f}, "models/earthfighter/weapon6.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text04.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum02.vw2d")},
     // Plasma
-    {eGameSFX::WeaponFire_Plasma1,      true, 10,    2,    20,      2000,   0.6f, sVECTOR3D{0.0f, -0.613f, 2.0f},   sVECTOR3D{0.0f, -0.65f, 1.8f}, "models/earthfighter/weapon3.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-    {eGameSFX::WeaponFire_Plasma2,      true, 15,    2,    30,      1000,   0.7f, sVECTOR3D{0.0f, -0.8f, 1.86f},    sVECTOR3D{0.0f, -0.8f, 1.8f}, "models/earthfighter/weapon2.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-    {eGameSFX::WeaponFire_Plasma3,      true, 10,    3,    50,      800,    0.9f, sVECTOR3D{0.0f, -0.613f, 1.2f},   sVECTOR3D{0.0f, -0.7f, 1.6f}, "models/earthfighter/weapon7.vw3d", "models/earthfighter/sf-text06.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+    {eGameSFX::WeaponFire_Plasma1,      true, 10,    2,    20,      2000,   0.6f, sVECTOR3D{0.0f, -0.613f, 2.0f},   sVECTOR3D{0.0f, -0.65f, 1.8f}, "models/earthfighter/weapon3.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text06.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")},
+    {eGameSFX::WeaponFire_Plasma2,      true, 15,    2,    30,      1000,   0.7f, sVECTOR3D{0.0f, -0.8f, 1.86f},    sVECTOR3D{0.0f, -0.8f, 1.8f}, "models/earthfighter/weapon2.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text06.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")},
+    {eGameSFX::WeaponFire_Plasma3,      true, 10,    3,    50,      800,    0.9f, sVECTOR3D{0.0f, -0.613f, 1.2f},   sVECTOR3D{0.0f, -0.7f, 1.6f}, "models/earthfighter/weapon7.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text06.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")},
     // Maser
-    {eGameSFX::WeaponFire_Maser1,       true, 10,    3,    50,      800,    3.0f, sVECTOR3D{0.0f, -0.55f, 2.1f},    sVECTOR3D{0.0f, -0.55f, 1.4f}, "models/earthfighter/weapon10.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
-    {eGameSFX::WeaponFire_Maser2,       true, 15,    4,    80,      1000,   2.4f, sVECTOR3D{0.0f, -0.55f, 2.5f},    sVECTOR3D{0.0f, -0.55f, 1.8f}, "models/earthfighter/weapon9.vw3d", "models/earthfighter/sf-text07.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+    {eGameSFX::WeaponFire_Maser1,       true, 10,    3,    50,      800,    3.0f, sVECTOR3D{0.0f, -0.55f, 2.1f},    sVECTOR3D{0.0f, -0.55f, 1.4f}, "models/earthfighter/weapon10.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text07.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")},
+    {eGameSFX::WeaponFire_Maser2,       true, 15,    4,    80,      1000,   2.4f, sVECTOR3D{0.0f, -0.55f, 2.5f},    sVECTOR3D{0.0f, -0.55f, 1.8f}, "models/earthfighter/weapon9.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text07.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")},
     // Antimatter
-    {eGameSFX::WeaponFire_Antimatter,   true, 20,    4,    50,      5000,   0.8f, sVECTOR3D{0.0f, -0.65f, 2.1f},    sVECTOR3D{0.0f, -0.65f, 1.9f}, "models/earthfighter/weapon12.vw3d", "models/earthfighter/sf-text09.vw2d", "models/earthfighter/sf-illum02.vw2d"},
+    {eGameSFX::WeaponFire_Antimatter,   true, 20,    4,    50,      5000,   0.8f, sVECTOR3D{0.0f, -0.65f, 2.1f},    sVECTOR3D{0.0f, -0.65f, 1.9f}, "models/earthfighter/weapon12.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text09.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum02.vw2d")},
     // Laser
-    {eGameSFX::WeaponFire_Laser,        true, 15,    5,    150,     800,    1.2f, sVECTOR3D{0.0f, -0.6f, 2.5f},     sVECTOR3D{0.0f, -0.6f, 2.1f}, "models/earthfighter/weapon14.vw3d", "models/earthfighter/sf-text05.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+    {eGameSFX::WeaponFire_Laser,        true, 15,    5,    150,     800,    1.2f, sVECTOR3D{0.0f, -0.6f, 2.5f},     sVECTOR3D{0.0f, -0.6f, 2.1f}, "models/earthfighter/weapon14.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text05.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")},
     // Gauss
-    {eGameSFX::WeaponFire_Gauss,        true, 20,    5,    150,     2000,   0.7f, sVECTOR3D{0.0f, -0.65f, 3.6f},    sVECTOR3D{0.0f, -0.55f, 2.2f}, "models/earthfighter/weapon15.vw3d", "models/earthfighter/sf-text08.vw2d", "models/earthfighter/sf-illum03.vw2d"},
+    {eGameSFX::WeaponFire_Gauss,        true, 20,    5,    150,     2000,   0.7f, sVECTOR3D{0.0f, -0.65f, 3.6f},    sVECTOR3D{0.0f, -0.55f, 2.2f}, "models/earthfighter/weapon15.vw3d", constexpr_hash_djb2a("models/earthfighter/sf-text08.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum03.vw2d")},
     // Missiles
-    {eGameSFX::WeaponFire_SmallMissile, false, 30,    4,    5,      200,    3.0f, sVECTOR3D{0.0f, -0.8f, 4.7f},     sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch1.vw3d", "models/earthfighter/lnch12.tga", ""},
-    {eGameSFX::WeaponFire_NormalMissile,false, 30,    4,    15,     400,    8.0f, sVECTOR3D{0.2f, -0.95f, 2.6f},    sVECTOR3D{0.0f, -0.6f, 1.0f}, "models/earthfighter/lnch2.vw3d", "models/earthfighter/lnch12.tga", ""},
-    {eGameSFX::WeaponFire_Torpedo,      false, 25,    5,    10,     50,     8.0f, sVECTOR3D{0.0f, -0.95f, 4.0f},    sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch3.vw3d", "models/earthfighter/lnch34.tga", ""},
-    {eGameSFX::WeaponFire_Bomb,         false, 30,    5,    15,     25,     10.0f, sVECTOR3D{0.0f, -0.95f, 5.0f},   sVECTOR3D{0.0f, -0.9f, 1.8f}, "models/earthfighter/lnch4.vw3d", "models/earthfighter/lnch34.tga", ""}
+    {eGameSFX::WeaponFire_SmallMissile, false, 30,    4,    5,      200,    3.0f, sVECTOR3D{0.0f, -0.8f, 4.7f},     sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch1.vw3d", constexpr_hash_djb2a("models/earthfighter/lnch12.tga"), 0},
+    {eGameSFX::WeaponFire_NormalMissile,false, 30,    4,    15,     400,    8.0f, sVECTOR3D{0.2f, -0.95f, 2.6f},    sVECTOR3D{0.0f, -0.6f, 1.0f}, "models/earthfighter/lnch2.vw3d", constexpr_hash_djb2a("models/earthfighter/lnch12.tga"), 0},
+    {eGameSFX::WeaponFire_Torpedo,      false, 25,    5,    10,     50,     8.0f, sVECTOR3D{0.0f, -0.95f, 4.0f},    sVECTOR3D{0.0f, -0.9f, 1.5f}, "models/earthfighter/lnch3.vw3d", constexpr_hash_djb2a("models/earthfighter/lnch34.tga"), 0},
+    {eGameSFX::WeaponFire_Bomb,         false, 30,    5,    15,     25,     10.0f, sVECTOR3D{0.0f, -0.95f, 5.0f},   sVECTOR3D{0.0f, -0.9f, 1.8f}, "models/earthfighter/lnch4.vw3d", constexpr_hash_djb2a("models/earthfighter/lnch34.tga"), 0}
 };
 #pragma GCC diagnostic pop
 
@@ -100,25 +100,25 @@ const std::vector<sWeaponData> PresetEarthWeaponData {
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetAlienWeaponData {
     // like Kinetic1
-    {eGameSFX::WeaponFire_Ion2,     true,   1.0f,   1,    1,    5000,    0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Ion2,     true,   1.0f,   1,    1,    5000,    0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // homing, like Kinetic2
-    {eGameSFX::WeaponFire_Plasma1,  false,  1.0f,   1,    1,    2500,    3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Plasma1,  false,  1.0f,   1,    1,    2500,    3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Kinetic3
-    {eGameSFX::WeaponFire_Plasma2,  true,   1.0f,   1,    1,    2500,    3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Plasma2,  true,   1.0f,   1,    1,    2500,    3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // homing, like Kinetic3
-    {eGameSFX::WeaponFire_Plasma2,  false,  1.0f,   1,    1,    2500,    2.5f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Plasma2,  false,  1.0f,   1,    1,    2500,    2.5f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Kinetic2
-    {eGameSFX::WeaponFire_Plasma1,  true,   1.0f,   1,    1,    2500,    3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Plasma1,  true,   1.0f,   1,    1,    2500,    3.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // energy mine 1
-    {eGameSFX::WeaponFire_Antimatter, false, 1.0f,  1,    1,    50,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Antimatter, false, 1.0f,  1,    1,    50,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // energy mine 2, with homing
-    {eGameSFX::WeaponFire_Antimatter, false, 1.0f,  1,    1,    50,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Antimatter, false, 1.0f,  1,    1,    50,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Plasma3
-    {eGameSFX::WeaponFire_Plasma3,  true,   10,     3,    50,    800,    0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Plasma3,  true,   10,     3,    50,    800,    0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Plasma2
-    {eGameSFX::WeaponFire_Plasma2,  true,   15,     2,    25,    1000,    0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Plasma2,  true,   15,     2,    25,    1000,    0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Laser (for motherships)
-    {eGameSFX::WeaponFire_Laser,    true,   15,     5,    150,    800,    1.2f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""}
+    {eGameSFX::WeaponFire_Laser,    true,   15,     5,    150,    800,    1.2f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0}
 };
 #pragma GCC diagnostic pop
 
@@ -127,42 +127,42 @@ const std::vector<sWeaponData> PresetAlienWeaponData {
 #pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetPirateWeaponData {
     // turret 1
-    {eGameSFX::WeaponFire_Kinetic1,     false,  10,     1,    1,    3000,   0.7f, sVECTOR3D{0.0f, 1.5f, 1.0f}, sVECTOR3D{0.0f, 1.5f, 1.0f}, "models/turret/turret-01.vw3d", "models/turret/turrets.tga", ""},
+    {eGameSFX::WeaponFire_Kinetic1,     false,  10,     1,    1,    3000,   0.7f, sVECTOR3D{0.0f, 1.5f, 1.0f}, sVECTOR3D{0.0f, 1.5f, 1.0f}, "models/turret/turret-01.vw3d", constexpr_hash_djb2a("models/turret/turrets.tga"), 0},
     // turret 2
-    {eGameSFX::WeaponFire_Kinetic2,     false,  10,     1,    1,    3000,   0.7f, sVECTOR3D{0.0f, 1.0f, 0.0f}, sVECTOR3D{0.0f, 1.0f, 0.0f}, "models/turret/turret-02.vw3d", "models/turret/turrets.tga", ""},
+    {eGameSFX::WeaponFire_Kinetic2,     false,  10,     1,    1,    3000,   0.7f, sVECTOR3D{0.0f, 1.0f, 0.0f}, sVECTOR3D{0.0f, 1.0f, 0.0f}, "models/turret/turret-02.vw3d", constexpr_hash_djb2a("models/turret/turrets.tga"), 0},
 
     // flares
-    {eGameSFX::WeaponFire_Kinetic1,     false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Kinetic1,     false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
 
     // like Kinetic1
-    {eGameSFX::WeaponFire_Kinetic1,     true,   10,     1,    1.7f, 3000,   0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Kinetic1,     true,   10,     1,    1.7f, 3000,   0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Missile1
-    {eGameSFX::WeaponFire_SmallMissile, false,  80,     4,    5,    200,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_SmallMissile, false,  80,     4,    5,    200,    5.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Missile2
-    {eGameSFX::WeaponFire_NormalMissile, false, 30,     4,    5,    800,    8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_NormalMissile, false, 30,     4,    5,    800,    8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Ion2
-    {eGameSFX::WeaponFire_Ion2,         true,   10,     1,    10,   2000,   0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Ion2,         true,   10,     1,    10,   2000,   0.9f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Antimatter
-    {eGameSFX::WeaponFire_Antimatter,   true,   20,     4,    50,   5000,   0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Antimatter,   true,   20,     4,    50,   5000,   0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Missile3 (torpedo)
-    {eGameSFX::WeaponFire_Torpedo,      false,  25,     5,    10,   200,    8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Torpedo,      false,  25,     5,    10,   200,    8.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Missile4 (bomb)
-    {eGameSFX::WeaponFire_Bomb,         false,  30,     5,    15,   100,    10.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Bomb,         false,  30,     5,    15,   100,    10.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Kinetic2
-    {eGameSFX::WeaponFire_Kinetic2,     true,   25,     1,    3,    1500,   0.6f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Kinetic2,     true,   25,     1,    3,    1500,   0.6f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Kinetic3
-    {eGameSFX::WeaponFire_Kinetic3,     true,   30,     2,    3.5,  500,    0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Kinetic3,     true,   30,     2,    3.5,  500,    0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // like Plasma2
-    {eGameSFX::WeaponFire_Plasma2,      true,   15,     2,    25,   1000,   0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Plasma2,      true,   15,     2,    25,   1000,   0.8f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
 
     // mine 1
-    {eGameSFX::WeaponFire_Torpedo,      false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Torpedo,      false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // mine 2
-    {eGameSFX::WeaponFire_Torpedo,      false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Torpedo,      false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // mine 31
-    {eGameSFX::WeaponFire_Bomb,         false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""},
+    {eGameSFX::WeaponFire_Bomb,         false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0},
     // mine 4
-    {eGameSFX::WeaponFire_Bomb,         false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", "", ""}
+    {eGameSFX::WeaponFire_Bomb,         false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, "", 0, 0}
 };
 #pragma GCC diagnostic pop
 
@@ -253,7 +253,8 @@ void ReleaseAllWeapons()
  */
 static void SetWeaponFire(std::shared_ptr<cParticleSystem> &ParticleSystem, const int WeaponNum)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+    ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
     ParticleSystem->ParticlesPerSec = 50;
     ParticleSystem->IsSuppressed = true;
 
@@ -665,9 +666,9 @@ cWeapon::cWeapon(const int WeaponNum)
         LoadObjectData(PresetEarthWeaponData[WeaponNum - 1].NameVW3D, *this);
 
         for (unsigned int i = 0; i < Chunks.size(); i++) {
-            Texture[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum - 1].TextureName);
+            Texture[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum - 1].TextureNameHash);
             if (WeaponNum < 16) {
-                TextureIllum[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum - 1].TextureIllumName);
+                TextureIllum[i] = GetPreloadedTextureAsset(PresetEarthWeaponData[WeaponNum - 1].TextureIllumNameHash);
             }
         }
 
@@ -715,7 +716,7 @@ cWeapon::cWeapon(const int WeaponNum)
 
             LoadObjectData(PresetPirateWeaponData[IntWeaponNum - 1].NameVW3D, *this);
             for (unsigned int i = 0; i < Chunks.size(); i++) {
-                Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum - 1].TextureName);
+                Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum - 1].TextureNameHash);
                 TextureIllum[i] = 0;
             }
             break;
@@ -729,7 +730,7 @@ cWeapon::cWeapon(const int WeaponNum)
 
             LoadObjectData(PresetPirateWeaponData[IntWeaponNum - 1].NameVW3D, *this);
             for (unsigned int i = 0; i < Chunks.size(); i++) {
-                Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum - 1].TextureName);
+                Texture[i] = GetPreloadedTextureAsset(PresetPirateWeaponData[IntWeaponNum - 1].TextureNameHash);
                 TextureIllum[i] = 0;
             }
             break;
@@ -825,7 +826,10 @@ bool cWeapon::Update(float Time)
             sharedDestroyedFire->Theta = 5.00f;
             sharedDestroyedFire->Life = 0.50f * Length / 3.0f;
             sharedDestroyedFire->ParticlesPerSec = 70;
-            sharedDestroyedFire->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+            {
+                constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+                sharedDestroyedFire->Texture = GetPreloadedTextureAsset(tmpHash);
+            }
             sharedDestroyedFire->CreationType = eParticleCreationType::Cube;
             sharedDestroyedFire->CreationSize(Width / 2.0f, Width / 2.0f, 0.1f);
             sharedDestroyedFire->Direction(0.0f, 0.0f, -1.0f);
@@ -854,7 +858,10 @@ bool cWeapon::Update(float Time)
             sharedDestroyedSmoke->Theta = 35.00f;
             sharedDestroyedSmoke->Life = 2.00f * Length / 3.0f;
             sharedDestroyedSmoke->ParticlesPerSec = 300;
-            sharedDestroyedSmoke->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+            {
+                constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+                sharedDestroyedSmoke->Texture = GetPreloadedTextureAsset(tmpHash);
+            }
             sharedDestroyedSmoke->CreationType = eParticleCreationType::Point;
             sharedDestroyedSmoke->CreationSize(Width / 2.5f, Width / 2.5f, 0.1f);
             sharedDestroyedSmoke->Direction(0.0f, 0.0f, -1.0f);

@@ -81,7 +81,8 @@ static void ApplyBrightness()
     AddToDrawBuffer(GameConfig().InternalWidth, 0.0f, 0.0f, 0.0f);
     AddToDrawBuffer(GameConfig().InternalWidth, GameConfig().InternalHeight, 0.0f, 1.0f);
 
-    GLtexture TileTexture = GetPreloadedTextureAsset("menu/whitepoint.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/whitepoint.tga");
+    GLtexture TileTexture = GetPreloadedTextureAsset(tmpHash);
     vw_BindTexture(0, TileTexture);
 
     float BrightnessF = 1.0f + (GameConfig().Brightness - 5) / 5.0f;

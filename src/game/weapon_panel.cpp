@@ -116,7 +116,8 @@ static void DrawSlimWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
                   Y,
                   X + SlimBorder * 2 + SlimSeparator + ProgressBarWidth * 2,
                   Y + SlimBorder * 2 + ProgressBarHeight);
-    GLtexture tmpBlackPoint = GetPreloadedTextureAsset("menu/blackpoint.tga");
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/blackpoint.tga");
+    GLtexture tmpBlackPoint = GetPreloadedTextureAsset(tmpHash1);
     vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.2f);
 
     DstRect(X + SlimBorder + AmmoOffsetX,
@@ -142,7 +143,8 @@ static void DrawSlimWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
             Y + SlimBorder + AmmoProgressBar,
             X + SlimBorder + AmmoOffsetX + ProgressBarWidth,
             Y + SlimBorder + ProgressBarHeight);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("game/ammo.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 1.0f);
 
     int ReloadProgressBar = WeaponReloadProgress(sharedWeapon, TimeLastUpdate, ProgressBarHeight);
     SrcRect(0, ReloadProgressBar, ProgressBarWidth, ProgressBarHeight);
@@ -150,7 +152,8 @@ static void DrawSlimWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
             Y + SlimBorder + ReloadProgressBar,
             X + SlimBorder + ReloadOffsetX + ProgressBarWidth,
             Y + SlimBorder + ProgressBarHeight);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("game/energy.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, 1.0f);
 }
 
 /*
@@ -164,7 +167,8 @@ static void DrawFlatWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
                   Y,
                   X + FlatBorder * 2 + FlatSeparator * 2 + ProgressBarWidth * 2 + WeaponIconWidth,
                   Y + FlatBorder * 2 + WeaponIconHeight);
-    GLtexture tmpBlackPoint = GetPreloadedTextureAsset("menu/blackpoint.tga");
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/blackpoint.tga");
+    GLtexture tmpBlackPoint = GetPreloadedTextureAsset(tmpHash1);
     vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.2f);
 
     DstRect(X + FlatBorder + AmmoOffsetX,
@@ -186,12 +190,13 @@ static void DrawFlatWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
     vw_Draw2D(DstRect, SrcRect, tmpBlackPoint, true, 0.5f);
 
     SrcRect(0, 0, WeaponIconWidth, WeaponIconHeight);
-    GLtexture tmpWeaponStatus = GetPreloadedTextureAsset("menu/weapon_on_icon.tga");
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/weapon_on_icon.tga");
+    GLtexture tmpWeaponStatus = GetPreloadedTextureAsset(tmpHash2);
 
     bool WeaponDestroyed = (sharedWeapon->ArmorCurrentStatus <= 0.0f);
     if (WeaponDestroyed) {
         vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconNameHash(sharedWeapon->InternalType)), true, 1.0f);
         return;
     }
 
@@ -203,7 +208,7 @@ static void DrawFlatWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
         vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, 1.0f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
     }
 
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconNameHash(sharedWeapon->InternalType)), true, 1.0f);
 
     int AmmoProgressBar = WeaponAmmoProgress(sharedWeapon, ProgressBarHeight);
     SrcRect(0, AmmoProgressBar, ProgressBarWidth, ProgressBarHeight);
@@ -211,7 +216,8 @@ static void DrawFlatWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
             Y + FlatBorder + AmmoProgressBar,
             X + FlatBorder + AmmoOffsetX + ProgressBarWidth,
             Y + FlatBorder + ProgressBarHeight);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/ammo.tga"), true, 1.0f);
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("game/ammo.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, 1.0f);
 
     int ReloadProgressBar = WeaponReloadProgress(sharedWeapon, TimeLastUpdate, ProgressBarHeight);
     SrcRect(0, ReloadProgressBar, ProgressBarWidth, ProgressBarHeight);
@@ -219,7 +225,8 @@ static void DrawFlatWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
             Y + FlatBorder + ReloadProgressBar,
             X + FlatBorder + ReloadOffsetX + ProgressBarWidth,
             Y + FlatBorder + ProgressBarHeight);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/energy.tga"), true, 1.0f);
+    constexpr unsigned tmpHash4 = constexpr_hash_djb2a("game/energy.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, 1.0f);
 }
 
 /*
@@ -241,12 +248,13 @@ static void DrawFullWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
             Y + 12,
             X + IconOffsetX + WeaponIconWidth,
             Y + 12 + WeaponIconHeight);
-    GLtexture tmpWeaponStatus = GetPreloadedTextureAsset("menu/weapon_on_icon.tga");
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/weapon_on_icon.tga");
+    GLtexture tmpWeaponStatus = GetPreloadedTextureAsset(tmpHash1);
 
     bool WeaponDestroyed = (sharedWeapon->ArmorCurrentStatus <= 0.0f);
     if (WeaponDestroyed) {
         vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, WeaponStatusBlinking, 0.0f, sRGBCOLOR{eRGBCOLOR::red});
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconNameHash(sharedWeapon->InternalType)), true, 1.0f);
         return;
     }
 
@@ -258,7 +266,7 @@ static void DrawFullWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
         vw_Draw2D(DstRect, SrcRect, tmpWeaponStatus, true, 1.0f, 0.0f, sRGBCOLOR{eRGBCOLOR::green});
     }
 
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconName(sharedWeapon->InternalType)), true, 1.0f);
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(GetWeaponIconNameHash(sharedWeapon->InternalType)), true, 1.0f);
 
     int AmmoProgressBar = WeaponAmmoProgress(sharedWeapon, FullProgressBarHeight);
     SrcRect(0, AmmoProgressBar, ProgressBarWidth, FullProgressBarHeight);
@@ -266,7 +274,8 @@ static void DrawFullWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
             Y + 16 + AmmoProgressBar,
             X + AmmoOffsetX + ProgressBarWidth,
             Y + 16 + FullProgressBarHeight);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_ammo.tga"), true, 1.0f);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("game/weapon_ammo.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 1.0f);
 
     int ReloadProgressBar = WeaponReloadProgress(sharedWeapon, TimeLastUpdate, FullProgressBarHeight);
     SrcRect(0, ReloadProgressBar, ProgressBarWidth, FullProgressBarHeight);
@@ -274,7 +283,8 @@ static void DrawFullWeaponPanel(int X, int Y, int AmmoOffsetX, int ReloadOffsetX
             Y + 16 + ReloadProgressBar,
             X + ReloadOffsetX + ProgressBarWidth,
             Y + 16 + FullProgressBarHeight);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("game/weapon_energy.tga"), true, 1.0f);
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("game/weapon_energy.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, 1.0f);
 
 }
 
@@ -286,10 +296,13 @@ static void DrawLeftWeaponPanel(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 {
     switch (GameConfig().WeaponPanelView) {
     case eWeaponPanelView::full:
-        DrawFullWeaponPanel(0, 70 + DrawLevelPos * 85,
-                            2, 12, 24,
-                            GetPreloadedTextureAsset("game/weapon_panel_left.tga"),
-                            sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("game/weapon_panel_left.tga");
+            DrawFullWeaponPanel(0, 70 + DrawLevelPos * 85,
+                                2, 12, 24,
+                                GetPreloadedTextureAsset(tmpHash),
+                                sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+        }
         break;
 
     case eWeaponPanelView::flat:
@@ -323,11 +336,14 @@ static void DrawRightWeaponPanel(std::shared_ptr<cSpaceShip> &sharedSpaceShip,
 {
     switch (GameConfig().WeaponPanelView) {
     case eWeaponPanelView::full:
-        DrawFullWeaponPanel(GameConfig().InternalWidth - 164,
-                            70 + DrawLevelPos * 85,
-                            154, 144, 12,
-                            GetPreloadedTextureAsset("game/weapon_panel_right.tga"),
-                            sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("game/weapon_panel_right.tga");
+            DrawFullWeaponPanel(GameConfig().InternalWidth - 164,
+                                70 + DrawLevelPos * 85,
+                                154, 144, 12,
+                                GetPreloadedTextureAsset(tmpHash),
+                                sharedWeapon, sharedSpaceShip->TimeLastUpdate);
+        }
         break;
 
     case eWeaponPanelView::flat:

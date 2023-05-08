@@ -460,7 +460,8 @@ void DrawMenu()
         && MenuStatus != eMenuStatus::OPTIONS
         && MenuStatus != eMenuStatus::CONFCONTROL
         && MenuStatus != eMenuStatus::OPTIONS_ADVANCED) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/astromenace.tga"), true, MenuContentTransp);
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/astromenace.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, MenuContentTransp);
     }
 
     vw_End2DMode();
@@ -583,7 +584,8 @@ void DrawMenu()
 
         SrcRect(0, 0, 2, 2);
         DstRect(0, 0, GameConfig().InternalWidth, 768);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, MenuBlackTransp);
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/blackpoint.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, MenuBlackTransp);
 
         vw_End2DMode();
     }
@@ -603,7 +605,8 @@ void DrawMenu()
 
         SrcRect(0, 0, 2, 2);
         DstRect(0, 0, GameConfig().InternalWidth, 768);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, MenuBlackTransp);
+        constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/blackpoint.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, MenuBlackTransp);
 
         vw_End2DMode();
     }

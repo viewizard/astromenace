@@ -68,7 +68,8 @@ void InterfaceMenu(float ContentTransp, float &ButtonTransp1, float &LastButtonU
     sRECT SrcRect, DstRect;
     SrcRect(0, 0, 2, 2);
     DstRect(0, 0, GameConfig().InternalWidth, 768);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * ContentTransp);
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/blackpoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, 0.5f * ContentTransp);
 
     int X1 = GameConfig().InternalWidth / 2 - 375;
     int Y1 = 65;

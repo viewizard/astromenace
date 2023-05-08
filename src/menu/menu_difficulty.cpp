@@ -56,7 +56,8 @@ void DifficultyMenu()
 {
     sRECT SrcRect(2, 2, 861, 482);
     sRECT DstRect(GameConfig().InternalWidth / 2 - 427, 160, GameConfig().InternalWidth / 2 + 432, 160 + 480);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel800_444_back.tga"), true, 0.9f * MenuContentTransp);
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("menu/panel800_444_back.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash), true, 0.9f * MenuContentTransp);
 
     int X1 = GameConfig().InternalWidth / 2 - 372;
     int Y1 = 217;

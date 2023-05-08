@@ -162,9 +162,11 @@ static bool DrawDialogButton200(int X, int Y, const std::u32string &Text, float 
     SrcRect(2,2,230-2,64-2);
     DstRect(X-14+2,Y-14+2,X+230-14-2,Y+64-14-2);
     if (!ON) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_out.tga"), true, 0.8f*Transp);
+        constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/button_dialog200_out.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.8f*Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog200_in.tga"), true, 0.8f*Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/button_dialog200_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.8f*Transp);
     }
 
 
@@ -246,9 +248,11 @@ static bool DrawDialogButton128(int X, int Y, const std::u32string &Text, float 
     SrcRect(2,2,158-2,64-2);
     DstRect(X-14+2,Y-14+2,X+158-14-2,Y+64-14-2);
     if (!ON) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_out.tga"), true, 0.8f*Transp);
+        constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/button_dialog128_out.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.8f*Transp);
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/button_dialog128_in.tga"), true, 0.8f*Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/button_dialog128_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.8f*Transp);
     }
 
 
@@ -332,9 +336,11 @@ static void DrawCheckBox_2(int X, int Y, bool &CheckBoxStatus, const std::u32str
         vw_DrawTextUTF32(X+40+16, Y+8, 0, 0, 1.0f, sRGBCOLOR{eRGBCOLOR::orange}, Transp, Text);
     }
 
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_main.tga"), true, Transp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/checkbox_main.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, Transp);
     if (CheckBoxStatus) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/checkbox_in.tga"), true, Transp);
+        constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/checkbox_in.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, Transp);
     }
 
 
@@ -496,7 +502,8 @@ void DrawDialogBox()
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     SrcRect(0, 0, 2, 2);
     DstRect(0, 0, GameConfig().InternalWidth, 768);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.6f*DialogContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/blackpoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.6f*DialogContentTransp);
 
 
 
@@ -508,17 +515,24 @@ void DrawDialogBox()
     case eDialogTypeBySize::w512h256:
         SrcRect(2,2,572-2,316-2 );
         DstRect(X+2-30,Y+2-30,X+572-2-30,Y+316-2-30);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_256.tga"), true, DialogContentTransp);
+        {
+            constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/dialog512_256.tga");
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, DialogContentTransp);
+        }
         break;
     case eDialogTypeBySize::w512h512:
         SrcRect(2,2,564-2,564-2 );
         DstRect(X+4-30,Y+2-30,X+564-30,Y+564-2-30);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog512_512.tga"), true, DialogContentTransp);
+        {
+            constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/dialog512_512.tga");
+            vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, DialogContentTransp);
+        }
         break;
     case eDialogTypeBySize::w768h600:
         SrcRect(2,2,828-2,659-2 );
         DstRect(X+2-30,Y+2-30,X+828-2-30,Y+659-2-30);
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/dialog768_600.tga"), true, DialogContentTransp);
+        constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/dialog768_600.tga");
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, DialogContentTransp);
         break;
     }
 

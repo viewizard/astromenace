@@ -305,7 +305,10 @@ void InitGamePlayerShip()
             sharedShild1->AlphaShowHide = true;
             sharedShild1->IsMagnet = true;
             sharedShild1->MagnetFactor = -3.0f;
-            sharedShild1->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+            {
+                constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+                sharedShild1->Texture = GetPreloadedTextureAsset(tmpHash);
+            }
             sharedShild1->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
             sharedShild1->SetStartLocation(sharedPlayerFighter->Location + sharedPlayerFighter->OBB.Location);
         }
@@ -338,7 +341,10 @@ void InitGamePlayerShip()
             sharedShild1->IsMagnet = true;
             sharedShild1->AlphaShowHide = true;
             sharedShild1->MagnetFactor = 2.5f;
-            sharedShild1->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+            {
+                constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+                sharedShild1->Texture = GetPreloadedTextureAsset(tmpHash);
+            }
             sharedShild1->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
             sharedShild1->SetStartLocation(sharedPlayerFighter->Location + sharedPlayerFighter->OBB.Location);
         }
@@ -366,7 +372,10 @@ void InitGamePlayerShip()
             sharedShild2->DeadZone = ShildRadius - 0.05f;
             sharedShild2->IsMagnet = true;
             sharedShild2->MagnetFactor = 20.0f;
-            sharedShild2->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+            {
+                constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+                sharedShild2->Texture = GetPreloadedTextureAsset(tmpHash);
+            }
             sharedShild2->Direction = sVECTOR3D{0.0f, 0.0f, -1.0f};
         }
 

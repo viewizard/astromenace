@@ -50,28 +50,29 @@ struct sPirateShipData {
     unsigned int EngineQuantity;
     float Armor;
     std::string Name;
-    std::string TextureName;
-    std::string NormalMapName;
+    unsigned TextureNameHash;
+    bool HaveNormalMapNameHash;
+    unsigned NormalMapNameHash;
 };
 
 const std::vector<sPirateShipData> PresetPirateShipData{
-    {2,     20,     "models/pirateship/gunship-01.vw3d",    "models/gr-04.vw2d", ""},
-    {2,     30,     "models/pirateship/bomber-07.vw3d",     "models/gr-04.vw2d", ""},
-    {2,     100,    "models/pirateship/gunship-03.vw3d",    "models/gr-03.vw2d", ""},
-    {2,     200,    "models/pirateship/gunship-04.vw3d",    "models/gr-03.vw2d", ""},
-    {6,     400,    "models/pirateship/gunship-02.vw3d",    "models/gr-03.vw2d", ""},
+    {2,     20,     "models/pirateship/gunship-01.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), false, 0},
+    {2,     30,     "models/pirateship/bomber-07.vw3d",     constexpr_hash_djb2a("models/gr-04.vw2d"), false, 0},
+    {2,     100,    "models/pirateship/gunship-03.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {2,     200,    "models/pirateship/gunship-04.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {6,     400,    "models/pirateship/gunship-02.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
 
-    {2,     600,     "models/pirateship/bomber-03.vw3d",    "models/gr-05.vw2d", ""},
-    {4,     1200,    "models/pirateship/bomber-02.vw3d",    "models/gr-05.vw2d", ""},
-    {4,     1000,    "models/pirateship/bomber-04.vw3d",    "models/gr-03.vw2d", ""},
-    {6,     2000,    "models/pirateship/bomber-05.vw3d",    "models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"},
-    {8,     2500,    "models/pirateship/bomber-06.vw3d",    "models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"},
+    {2,     600,     "models/pirateship/bomber-03.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     1200,    "models/pirateship/bomber-02.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     1000,    "models/pirateship/bomber-04.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {6,     2000,    "models/pirateship/bomber-05.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
+    {8,     2500,    "models/pirateship/bomber-06.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
 
-    {2,     300,     "models/pirateship/bomber-03.vw3d",    "models/gr-05.vw2d", ""},
-    {4,     600,     "models/pirateship/bomber-02.vw3d",    "models/gr-05.vw2d", ""},
-    {4,     500,     "models/pirateship/bomber-04.vw3d",    "models/gr-03.vw2d", ""},
-    {6,     1000,    "models/pirateship/bomber-05.vw3d",    "models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"},
-    {8,     1500,    "models/pirateship/bomber-06.vw3d",    "models/gr-04.vw2d", "models/normalmap/bomber_nm.tga"}
+    {2,     300,     "models/pirateship/bomber-03.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     600,     "models/pirateship/bomber-02.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     500,     "models/pirateship/bomber-04.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {6,     1000,    "models/pirateship/bomber-05.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
+    {8,     1500,    "models/pirateship/bomber-06.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")}
 };
 
 } // unnamed namespace
@@ -82,7 +83,8 @@ const std::vector<sPirateShipData> PresetPirateShipData{
  */
 static void SetupEngineGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const eEngineGFX EngineType)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+    ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
     ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
     static const sRGBCOLOR MuddyYellow{0.6f, 0.6f, 0.3f};
@@ -225,9 +227,9 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
     LoadObjectData(PresetPirateShipData[SpaceShipNum - 1].Name, *this);
 
     for (unsigned int i = 0; i < Chunks.size(); i++) {
-        Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].TextureName);
-        if (!PresetPirateShipData[SpaceShipNum - 1].NormalMapName.empty() && GameConfig().UseGLSL120) {
-            NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].NormalMapName);
+        Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].TextureNameHash);
+        if (PresetPirateShipData[SpaceShipNum - 1].HaveNormalMapNameHash && GameConfig().UseGLSL120) {
+            NormalMap[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].NormalMapNameHash);
         }
     }
 

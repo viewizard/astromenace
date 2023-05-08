@@ -1475,12 +1475,14 @@ void InformationMenu()
 {
     sRECT SrcRect{0, 0, 2, 2};
     sRECT DstRect{0, 0, static_cast<int>(GameConfig().InternalWidth), 768};
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/blackpoint.tga"), true, 0.5f * MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/blackpoint.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.5f * MenuContentTransp);
 
 
     SrcRect(2,2,464-2,353-2);
     DstRect((GameConfig().InternalWidth/2-432)-8,80-8+80,(GameConfig().InternalWidth/2-432)-8+464-4, 80-8+353-4+80);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel444_333_back.tga"), true, 0.9f * MenuContentTransp);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/panel444_333_back.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, 0.9f * MenuContentTransp);
 
 
 
@@ -1669,7 +1671,8 @@ void InformationDrawObject()
 
     vw_SetColor(0.7f, 0.7f, 1.0f, 0.3f * MenuContentTransp);
     vw_SetTextureBlend(true, eTextureBlendFactor::SRC_ALPHA, eTextureBlendFactor::ONE);
-    vw_BindTexture(0, GetPreloadedTextureAsset("menu/line.tga"));
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/line.tga");
+    vw_BindTexture(0, GetPreloadedTextureAsset(tmpHash3));
     for (int i = -SizeCell; i < SizeCell + 2; i += 2) {
         int k=0;
 
@@ -1838,7 +1841,8 @@ void InformationDrawObject()
     sRECT SrcRect;
     SrcRect(2,2,482,371);
     sRECT DstRect(GameConfig().InternalWidth/2-450, 80-18+80, GameConfig().InternalWidth/2+30, 80+351+80);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/panel444_333_border.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash4 = constexpr_hash_djb2a("menu/panel444_333_border.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash4), true, MenuContentTransp);
 
     vw_End2DMode();
 }

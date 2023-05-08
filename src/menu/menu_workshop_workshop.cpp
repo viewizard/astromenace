@@ -171,69 +171,46 @@ const char *GetSystemName(int Num)
 
 GLtexture GetSystemIcon(int Num)
 {
-    switch (Num) {
-    case -4:
-        return GetPreloadedTextureAsset("menu/system_empty.tga");
-    case -3:
-        return GetPreloadedTextureAsset("menu/system_empty.tga");
-    case -2:
-        return GetPreloadedTextureAsset("menu/system_empty.tga");
-    case -1:
-        return GetPreloadedTextureAsset("menu/system_empty.tga");
-    case 0:
-        return GetPreloadedTextureAsset("menu/system_empty.tga");
-
-    case 1:
-        return GetPreloadedTextureAsset("menu/system_engine1.tga");
-    case 2:
-        return GetPreloadedTextureAsset("menu/system_engine2.tga");
-    case 3:
-        return GetPreloadedTextureAsset("menu/system_engine3.tga");
-    case 4:
-        return GetPreloadedTextureAsset("menu/system_engine4.tga");
-
-    case 5:
-        return GetPreloadedTextureAsset("menu/system_power1.tga");
-    case 6:
-        return GetPreloadedTextureAsset("menu/system_power2.tga");
-    case 7:
-        return GetPreloadedTextureAsset("menu/system_power3.tga");
-    case 8:
-        return GetPreloadedTextureAsset("menu/system_power4.tga");
-
-    case 9:
-        return GetPreloadedTextureAsset("menu/system_target1.tga");
-    case 10:
-        return GetPreloadedTextureAsset("menu/system_target2.tga");
-    case 11:
-        return GetPreloadedTextureAsset("menu/system_target3.tga");
-    case 12:
-        return GetPreloadedTextureAsset("menu/system_target4.tga");
-
-    case 13:
-        return GetPreloadedTextureAsset("menu/system_mechan1.tga");
-    case 14:
-        return GetPreloadedTextureAsset("menu/system_mechan2.tga");
-    case 15:
-        return GetPreloadedTextureAsset("menu/system_mechan3.tga");
-    case 16:
-        return GetPreloadedTextureAsset("menu/system_mechan4.tga");
-
-    case 17:
-        return GetPreloadedTextureAsset("menu/system_protect1.tga");
-    case 18:
-        return GetPreloadedTextureAsset("menu/system_protect2.tga");
-    case 19:
-        return GetPreloadedTextureAsset("menu/system_protect3.tga");
-    case 20:
-        return GetPreloadedTextureAsset("menu/system_protect4.tga");
-
-    default:
+    if (Num < -4 || Num > 20) {
         std::cerr << __func__ << "(): " << "wrong Num.\n";
-        break;
+        return 0;
     }
 
-    return 0;
+    static unsigned NumToFileHash[]{
+        constexpr_hash_djb2a("menu/system_empty.tga"),
+        constexpr_hash_djb2a("menu/system_empty.tga"),
+        constexpr_hash_djb2a("menu/system_empty.tga"),
+        constexpr_hash_djb2a("menu/system_empty.tga"),
+        constexpr_hash_djb2a("menu/system_empty.tga"),
+
+        constexpr_hash_djb2a("menu/system_engine1.tga"),
+        constexpr_hash_djb2a("menu/system_engine2.tga"),
+        constexpr_hash_djb2a("menu/system_engine3.tga"),
+        constexpr_hash_djb2a("menu/system_engine4.tga"),
+
+        constexpr_hash_djb2a("menu/system_power1.tga"),
+        constexpr_hash_djb2a("menu/system_power2.tga"),
+        constexpr_hash_djb2a("menu/system_power3.tga"),
+        constexpr_hash_djb2a("menu/system_power4.tga"),
+
+        constexpr_hash_djb2a("menu/system_target1.tga"),
+        constexpr_hash_djb2a("menu/system_target2.tga"),
+        constexpr_hash_djb2a("menu/system_target3.tga"),
+        constexpr_hash_djb2a("menu/system_target4.tga"),
+
+        constexpr_hash_djb2a("menu/system_mechan1.tga"),
+        constexpr_hash_djb2a("menu/system_mechan2.tga"),
+        constexpr_hash_djb2a("menu/system_mechan3.tga"),
+        constexpr_hash_djb2a("menu/system_mechan4.tga"),
+
+        constexpr_hash_djb2a("menu/system_protect1.tga"),
+        constexpr_hash_djb2a("menu/system_protect2.tga"),
+        constexpr_hash_djb2a("menu/system_protect3.tga"),
+        constexpr_hash_djb2a("menu/system_protect4.tga")
+    };
+
+    // Num range [-4; 20] -> NumToFileHash range [0, 24]
+    return GetPreloadedTextureAsset(NumToFileHash[Num + 4]);
 }
 
 
@@ -396,7 +373,8 @@ void Workshop_Workshop()
 {
     sRECT SrcRect(0, 0, 256, 256);
     sRECT DstRect(GameConfig().InternalWidth / 2 - 256, 0, GameConfig().InternalWidth / 2 - 256 + 512, 412);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/back_spot.tga"), true, 0.35f * MenuContentTransp);
+    constexpr unsigned tmpHash1 = constexpr_hash_djb2a("menu/back_spot.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash1), true, 0.35f * MenuContentTransp);
 
 
 
@@ -407,7 +385,8 @@ void Workshop_Workshop()
 
     SrcRect(0,0,210,600);
     DstRect(GameConfig().InternalWidth/2-492, 50-10, GameConfig().InternalWidth/2-492+210, 50+600-10);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel2.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash2 = constexpr_hash_djb2a("menu/workshop_panel2.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash2), true, MenuContentTransp);
 
 
 
@@ -589,7 +568,8 @@ void Workshop_Workshop()
 
     SrcRect(0,0,210,600);
     DstRect(GameConfig().InternalWidth/2+282, 50-10, GameConfig().InternalWidth/2+492, 50+600-10);
-    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset("menu/workshop_panel2+.tga"), true, MenuContentTransp);
+    constexpr unsigned tmpHash3 = constexpr_hash_djb2a("menu/workshop_panel2+.tga");
+    vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(tmpHash3), true, MenuContentTransp);
 
 
 

@@ -44,7 +44,7 @@ void ChangeTexturesAnisotropyLevel();
 // Get preloaded texture asset (preloaded by ForEachTextureAssetLoad() call).
 // Note, we don't validate textures, caller should care about call
 // ForEachTextureAssetLoad() each time, when this need.
-GLtexture GetPreloadedTextureAsset(const std::string &FileName);
+GLtexture GetPreloadedTextureAsset(unsigned FileNameHash);
 
 } // astromenace namespace
 } // viewizard namespace

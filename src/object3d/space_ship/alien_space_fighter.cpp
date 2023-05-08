@@ -82,7 +82,8 @@ const std::vector<sAlienSpaceFighterData> PresetAlienSpaceFighterData{
  */
 static void SetupGFX(std::shared_ptr<cParticleSystem> &ParticleSystem, const eGFX Type)
 {
-    ParticleSystem->Texture = GetPreloadedTextureAsset("gfx/flare1.tga");
+    constexpr unsigned tmpHash = constexpr_hash_djb2a("gfx/flare1.tga");
+    ParticleSystem->Texture = GetPreloadedTextureAsset(tmpHash);
     ParticleSystem->Direction(0.0f, 0.0f, -1.0f);
 
     static const sRGBCOLOR Turquoise{0.0f, 0.7f, 1.0f};
@@ -248,9 +249,13 @@ cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
 
     LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum - 1].Name, *this);
 
+    constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/alienfighter/al-text04.vw2d");
+    GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);
+    constexpr unsigned tmpTextureIllumHash = constexpr_hash_djb2a("models/alienfighter/al-illum04.vw2d");
+    GLtexture tmpTextureIllum = GetPreloadedTextureAsset(tmpTextureIllumHash);
     for (unsigned int i = 0; i < Chunks.size(); i++) {
-        Texture[i] = GetPreloadedTextureAsset("models/alienfighter/al-text04.vw2d");
-        TextureIllum[i] = GetPreloadedTextureAsset("models/alienfighter/al-illum04.vw2d");
+        Texture[i] = tmpTexture;
+        TextureIllum[i] = tmpTextureIllum;
     }
 
     Engines.resize(PresetAlienSpaceFighterData[SpaceShipNum - 1].EngineQuantity);
