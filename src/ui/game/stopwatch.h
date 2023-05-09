@@ -48,8 +48,8 @@ private:
     sRGBCOLOR TextColor_{eRGBCOLOR::white};
 
 public:
-    cStopwatch(cStopwatch const&) = delete;
-    void operator = (cStopwatch const&) = delete;
+    cStopwatch(const cStopwatch &) = delete;
+    void operator = (const cStopwatch &) = delete;
 
     static cStopwatch &GetInstance()
     {

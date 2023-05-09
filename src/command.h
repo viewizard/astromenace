@@ -66,8 +66,8 @@ private:
     eCommand Command_{eCommand::DO_NOTHING};
 
 public:
-    cCommand(cCommand const&) = delete;
-    void operator = (cCommand const&) = delete;
+    cCommand(const cCommand &) = delete;
+    void operator = (const cCommand &) = delete;
 
     static cCommand &GetInstance()
     {

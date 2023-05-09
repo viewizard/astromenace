@@ -53,8 +53,8 @@ private:
     std::u32string DrawStringUTF32_{};
 
 public:
-    cGameSpeed(cGameSpeed const&) = delete;
-    void operator = (cGameSpeed const&) = delete;
+    cGameSpeed(const cGameSpeed &) = delete;
+    void operator = (const cGameSpeed &) = delete;
 
     static cGameSpeed &GetInstance()
     {

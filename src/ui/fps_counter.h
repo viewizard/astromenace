@@ -50,8 +50,8 @@ private:
     sRGBCOLOR TextColor_{eRGBCOLOR::white};
 
 public:
-    cFPS(cFPS const&) = delete;
-    void operator = (cFPS const&) = delete;
+    cFPS(const cFPS &) = delete;
+    void operator = (const cFPS &) = delete;
 
     static cFPS &GetInstance()
     {
