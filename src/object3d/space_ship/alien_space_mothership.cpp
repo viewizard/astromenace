@@ -65,41 +65,41 @@ struct sAlienSpaceMotherShipData {
     unsigned int EngineQuantity;
     float Armor;
     float Shield;
-    std::string Name;
+    unsigned NameHash;
     unsigned TextureNameHash;
     unsigned TextureIllumNameHash;
 };
 
 const std::vector<sAlienSpaceMotherShipData> PresetAlienSpaceMotherShipData{
-    {10,    3000,   1500,   "models/alienmothership/alm-01.vw3d",
+    {10,    3000,   1500,   constexpr_hash_djb2a("models/alienmothership/alm-01.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text04.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum04.vw2d")},
 
-    {10,    4000,   3000,   "models/alienmothership/alm-02.vw3d",
+    {10,    4000,   3000,   constexpr_hash_djb2a("models/alienmothership/alm-02.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text04.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum04.vw2d")},
 
-    {8,     5000,   3300,   "models/alienmothership/alm-03.vw3d",
+    {8,     5000,   3300,   constexpr_hash_djb2a("models/alienmothership/alm-03.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text02.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum02.vw2d")},
 
-    {12,    6000,   3500,   "models/alienmothership/alm-04.vw3d",
+    {12,    6000,   3500,   constexpr_hash_djb2a("models/alienmothership/alm-04.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text02.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum02.vw2d")},
 
-    {19,    7000,   3800,   "models/alienmothership/alm-05.vw3d",
+    {19,    7000,   3800,   constexpr_hash_djb2a("models/alienmothership/alm-05.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text08.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum08.vw2d")},
 
-    {15,    8000,    4000,  "models/alienmothership/alm-06.vw3d",
+    {15,    8000,    4000,  constexpr_hash_djb2a("models/alienmothership/alm-06.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text08.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum08.vw2d")},
 
-    {6,     9000,   4300,   "models/alienmothership/alm-07.vw3d",
+    {6,     9000,   4300,   constexpr_hash_djb2a("models/alienmothership/alm-07.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text03.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum03.vw2d")},
 
-    {10,    10000,  4500,   "models/alienmothership/alm-08.vw3d",
+    {10,    10000,  4500,   constexpr_hash_djb2a("models/alienmothership/alm-08.vw3d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-text03.vw2d"),
                             constexpr_hash_djb2a("models/alienmothership/alm-illum03.vw2d")}
 };
@@ -490,7 +490,7 @@ cAlienSpaceMotherShip::cAlienSpaceMotherShip(const int SpaceShipNum)
     ShieldCurrentStatus = ShieldInitialStatus = PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
     ShieldRechargeRate = ShieldInitialStatus / 15.0f; // 15 seconds for full recharge
 
-    LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].Name, *this);
+    LoadObjectData(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].NameHash, *this);
 
     GLtexture tmpTexture = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].TextureNameHash);
     GLtexture tmpTextureIllum = GetPreloadedTextureAsset(PresetAlienSpaceMotherShipData[SpaceShipNum - 1].TextureIllumNameHash);

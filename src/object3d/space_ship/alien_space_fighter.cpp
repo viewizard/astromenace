@@ -51,27 +51,27 @@ struct sAlienSpaceFighterData {
     unsigned int EngineQuantity;
     float Armor;
     float Shield;
-    std::string Name;
+    unsigned NameHash;
 };
 
 const std::vector<sAlienSpaceFighterData> PresetAlienSpaceFighterData{
-    {4,     5,      0,      "models/alienfighter/al-01.vw3d"},
-    {5,     15,     0,      "models/alienfighter/al-02.vw3d"},
-    {5,     60,     0,      "models/alienfighter/al-03.vw3d"},
-    {8,     40,     0,      "models/alienfighter/al-04.vw3d"},
-    {7,     30,     0,      "models/alienfighter/al-05.vw3d"},
-    {6,     120,    0,      "models/alienfighter/al-06.vw3d"},
-    {8,     250,    100,    "models/alienfighter/al-07.vw3d"},
-    {7,     200,    50,     "models/alienfighter/al-08.vw3d"},
-    {11,    500,    200,    "models/alienfighter/al-09.vw3d"},
-    {7,     250,    50,     "models/alienfighter/al-10.vw3d"},
-    {6,     150,    100,    "models/alienfighter/al-11.vw3d"},
-    {5,     200,    100,    "models/alienfighter/al-12.vw3d"},
-    {5,     300,    200,    "models/alienfighter/al-13.vw3d"},
-    {8,     400,    300,    "models/alienfighter/al-14.vw3d"},
-    {4,     50,     100,    "models/alienfighter/al-15.vw3d"},
-    {4,     100,    150,    "models/alienfighter/al-16.vw3d"},
-    {6,     150,    200,    "models/alienfighter/al-17.vw3d"}
+    {4,     5,      0,      constexpr_hash_djb2a("models/alienfighter/al-01.vw3d")},
+    {5,     15,     0,      constexpr_hash_djb2a("models/alienfighter/al-02.vw3d")},
+    {5,     60,     0,      constexpr_hash_djb2a("models/alienfighter/al-03.vw3d")},
+    {8,     40,     0,      constexpr_hash_djb2a("models/alienfighter/al-04.vw3d")},
+    {7,     30,     0,      constexpr_hash_djb2a("models/alienfighter/al-05.vw3d")},
+    {6,     120,    0,      constexpr_hash_djb2a("models/alienfighter/al-06.vw3d")},
+    {8,     250,    100,    constexpr_hash_djb2a("models/alienfighter/al-07.vw3d")},
+    {7,     200,    50,     constexpr_hash_djb2a("models/alienfighter/al-08.vw3d")},
+    {11,    500,    200,    constexpr_hash_djb2a("models/alienfighter/al-09.vw3d")},
+    {7,     250,    50,     constexpr_hash_djb2a("models/alienfighter/al-10.vw3d")},
+    {6,     150,    100,    constexpr_hash_djb2a("models/alienfighter/al-11.vw3d")},
+    {5,     200,    100,    constexpr_hash_djb2a("models/alienfighter/al-12.vw3d")},
+    {5,     300,    200,    constexpr_hash_djb2a("models/alienfighter/al-13.vw3d")},
+    {8,     400,    300,    constexpr_hash_djb2a("models/alienfighter/al-14.vw3d")},
+    {4,     50,     100,    constexpr_hash_djb2a("models/alienfighter/al-15.vw3d")},
+    {4,     100,    150,    constexpr_hash_djb2a("models/alienfighter/al-16.vw3d")},
+    {6,     150,    200,    constexpr_hash_djb2a("models/alienfighter/al-17.vw3d")}
 };
 
 } // unnamed namespace
@@ -247,7 +247,7 @@ cAlienSpaceFighter::cAlienSpaceFighter(const int SpaceShipNum)
     ShieldCurrentStatus = ShieldInitialStatus = PresetAlienSpaceFighterData[SpaceShipNum - 1].Shield / GameEnemyArmorPenalty;
     ShieldRechargeRate = ShieldInitialStatus / 10.0f; // 10 seconds for full recharge
 
-    LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum - 1].Name, *this);
+    LoadObjectData(PresetAlienSpaceFighterData[SpaceShipNum - 1].NameHash, *this);
 
     constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/alienfighter/al-text04.vw2d");
     GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);

@@ -1559,7 +1559,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // missile
     case 16:
-        LoadObjectData("models/earthfighter/missile.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/missile.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1579,7 +1582,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // swarm
     case 17:
-        LoadObjectData("models/earthfighter/swarm.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/swarm.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1600,7 +1606,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // torpedo
     case 18:
-        LoadObjectData("models/earthfighter/torpedo.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/torpedo.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1620,7 +1629,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // bomb
     case 19:
-        LoadObjectData("models/earthfighter/nuke.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/nuke.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1791,7 +1803,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // pirate, like Missile1
     case 205:
-        LoadObjectData("models/earthfighter/missile.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/missile.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1811,7 +1826,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // pirate, like Missile2
     case 206:
-        LoadObjectData("models/earthfighter/swarm.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/swarm.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1851,7 +1869,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // pirate, like torpedo
     case 209:
-        LoadObjectData("models/earthfighter/torpedo.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/torpedo.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1871,7 +1892,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         break;
     // pirate, like bomb
     case 210:
-        LoadObjectData("models/earthfighter/nuke.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/nuke.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/earthfighter/rockets.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1922,7 +1946,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     case 214:
         MineIData = 0.0f;
         ArmorCurrentStatus = ArmorInitialStatus = 10.0f;
-        LoadObjectData("models/mine/mine-01.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine-01.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine1.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1934,7 +1961,10 @@ cProjectile::cProjectile(const int ProjectileNum)
     case 215:
         MineIData = 0.0f;
         ArmorCurrentStatus = ArmorInitialStatus = 15.0f;
-        LoadObjectData("models/mine/mine-02.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine-02.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine2.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1954,7 +1984,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         MineIData = 0.0f;
         ArmorCurrentStatus = ArmorInitialStatus = 20.0f;
         MineReloadTime = MineNextFireTime = 1.0f;
-        LoadObjectData("models/mine/mine-03.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine-03.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine3.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);
@@ -1974,7 +2007,10 @@ cProjectile::cProjectile(const int ProjectileNum)
         MineIData = 0.0f;
         ArmorCurrentStatus = ArmorInitialStatus = 40.0f;
         MineReloadTime = MineNextFireTime = 3.0f;
-        LoadObjectData("models/mine/mine-04.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine-04.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpHash = constexpr_hash_djb2a("models/mine/mine4.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpHash);

@@ -41,21 +41,21 @@ namespace {
 
 struct sBuildingData {
     float Armor;
-    std::string Model3DFileName;
+    unsigned Model3DFileNameHash;
 };
 
 const std::vector<sBuildingData> PresetBuildingData{
-    {150,    "models/building/bld-01.vw3d"},
-    {150,    "models/building/bld-02.vw3d"},
-    {150,    "models/building/bld-03.vw3d"},
-    {150,    "models/building/bld-04.vw3d"},
-    {150,    "models/building/bld-05.vw3d"},
-    {150,    "models/building/bld-06.vw3d"},
-    {150,    "models/building/bld-07.vw3d"},
-    {150,    "models/building/bld-08.vw3d"},
-    {150,    "models/building/bld-09.vw3d"},
-    {150,    "models/building/bld-10.vw3d"},
-    {150,    "models/building/bld-11.vw3d"}
+    {150,    constexpr_hash_djb2a("models/building/bld-01.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-02.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-03.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-04.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-05.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-06.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-07.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-08.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-09.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-10.vw3d")},
+    {150,    constexpr_hash_djb2a("models/building/bld-11.vw3d")}
 };
 
 } // unnamed namespace
@@ -76,7 +76,7 @@ cCivilianBuilding::cCivilianBuilding(const int BuildingNum)
     ShowStatus = false;
     PromptDrawDist2 = 100.0f;
 
-    LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileName, *this);
+    LoadObjectData(PresetBuildingData[BuildingNum - 1].Model3DFileNameHash, *this);
 
     constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/building/bld.vw2d");
     GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);

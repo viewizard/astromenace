@@ -301,106 +301,178 @@ cBasePart::cBasePart(const int BasePartNum)
 
     switch (InternalType) {
     case 11:
-        LoadObjectData("models/spacebase/1/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/1/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType1();
         break;
     case 12:
-        LoadObjectData("models/spacebase/1/2.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/1/2.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType1();
         break;
     case 13:
-        LoadObjectData("models/spacebase/1/3.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/1/3.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType1();
         break;
     case 14:
-        LoadObjectData("models/spacebase/1/4.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/1/4.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType1();
         break;
     case 15:
-        LoadObjectData("models/spacebase/1/5.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/1/5.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType1();
         break;
 
     case 21:
-        LoadObjectData("models/spacebase/2/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/2/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType2();
         break;
     case 22:
-        LoadObjectData("models/spacebase/2/2.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/2/2.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType2();
         break;
     case 23:
-        LoadObjectData("models/spacebase/2/3.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/2/3.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType2();
         break;
     case 24:
-        LoadObjectData("models/spacebase/2/4.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/2/4.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType2();
         break;
     case 25:
-        LoadObjectData("models/spacebase/2/5.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/2/5.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType2();
         break;
 
     case 3:
-        LoadObjectData("models/spacebase/3/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/3/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType3();
         break;
 
     case 4:
-        LoadObjectData("models/spacebase/4/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/4/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType4();
         break;
 
     case 5:
-        LoadObjectData("models/spacebase/5/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/5/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType5();
         break;
 
     case 61:
-        LoadObjectData("models/spacebase/6/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/6/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType6();
         break;
     case 62:
-        LoadObjectData("models/spacebase/6/2.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/6/2.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType6();
         break;
     case 63:
-        LoadObjectData("models/spacebase/6/3.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/6/3.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType6();
         break;
     case 64:
-        LoadObjectData("models/spacebase/6/4.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/6/4.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType6();
         break;
     case 65:
-        LoadObjectData("models/spacebase/6/5.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/6/5.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType6();
         break;
 
     case 7:
-        LoadObjectData("models/spacebase/7/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/7/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType7();
         break;
 
     case 81:
-        LoadObjectData("models/spacebase/8/1.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/8/1.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType8();
         break;
     case 82:
-        LoadObjectData("models/spacebase/8/2.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/8/2.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType8();
         break;
     case 83:
-        LoadObjectData("models/spacebase/8/3.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/8/3.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType8();
         break;
     case 84:
-        LoadObjectData("models/spacebase/8/4.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/8/4.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType8();
         break;
     case 85:
-        LoadObjectData("models/spacebase/8/5.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/spacebase/8/5.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         SetupBasePartType8();
         break;
     }

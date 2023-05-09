@@ -44,33 +44,33 @@ namespace {
 
 struct sEarthSpaceFighterData {
     float Armor;
-    unsigned int EngineQuantity;
-    std::string Name;
+    unsigned EngineQuantity;
+    unsigned NameHash;
 };
 
 const std::vector<sEarthSpaceFighterData> PresetEarthSpaceFighterData{
-    {30,    2,  "models/earthfighter/sf-01.vw3d"},
-    {40,    4,  "models/earthfighter/sf-02.vw3d"},
-    {60,    4,  "models/earthfighter/sf-03.vw3d"},
-    {35,    2,  "models/earthfighter/sf-04.vw3d"},
-    {45,    4,  "models/earthfighter/sf-05.vw3d"},
-    {50,    2,  "models/earthfighter/sf-06.vw3d"},
-    {60,    3,  "models/earthfighter/sf-07.vw3d"},
-    {25,    4,  "models/earthfighter/sf-08.vw3d"},
-    {55,    2,  "models/earthfighter/sf-09.vw3d"},
-    {55,    2,  "models/earthfighter/sf-10.vw3d"},
-    {60,    2,  "models/earthfighter/sf-11.vw3d"},
-    {70,    2,  "models/earthfighter/sf-12.vw3d"},
-    {80,    4,  "models/earthfighter/sf-13.vw3d"},
-    {65,    2,  "models/earthfighter/sf-14.vw3d"},
-    {70,    2,  "models/earthfighter/sf-15.vw3d"},
-    {90,    4,  "models/earthfighter/sf-16.vw3d"},
-    {75,    2,  "models/earthfighter/sf-17.vw3d"},
-    {110,   4,  "models/earthfighter/sf-18.vw3d"},
-    {55,    4,  "models/earthfighter/sf-19.vw3d"},
-    {80,    4,  "models/earthfighter/sf-20.vw3d"},
-    {80,    2,  "models/earthfighter/sf-21.vw3d"},
-    {100,   1,  "models/earthfighter/sf-22.vw3d"}
+    {30,    2,  constexpr_hash_djb2a("models/earthfighter/sf-01.vw3d")},
+    {40,    4,  constexpr_hash_djb2a("models/earthfighter/sf-02.vw3d")},
+    {60,    4,  constexpr_hash_djb2a("models/earthfighter/sf-03.vw3d")},
+    {35,    2,  constexpr_hash_djb2a("models/earthfighter/sf-04.vw3d")},
+    {45,    4,  constexpr_hash_djb2a("models/earthfighter/sf-05.vw3d")},
+    {50,    2,  constexpr_hash_djb2a("models/earthfighter/sf-06.vw3d")},
+    {60,    3,  constexpr_hash_djb2a("models/earthfighter/sf-07.vw3d")},
+    {25,    4,  constexpr_hash_djb2a("models/earthfighter/sf-08.vw3d")},
+    {55,    2,  constexpr_hash_djb2a("models/earthfighter/sf-09.vw3d")},
+    {55,    2,  constexpr_hash_djb2a("models/earthfighter/sf-10.vw3d")},
+    {60,    2,  constexpr_hash_djb2a("models/earthfighter/sf-11.vw3d")},
+    {70,    2,  constexpr_hash_djb2a("models/earthfighter/sf-12.vw3d")},
+    {80,    4,  constexpr_hash_djb2a("models/earthfighter/sf-13.vw3d")},
+    {65,    2,  constexpr_hash_djb2a("models/earthfighter/sf-14.vw3d")},
+    {70,    2,  constexpr_hash_djb2a("models/earthfighter/sf-15.vw3d")},
+    {90,    4,  constexpr_hash_djb2a("models/earthfighter/sf-16.vw3d")},
+    {75,    2,  constexpr_hash_djb2a("models/earthfighter/sf-17.vw3d")},
+    {110,   4,  constexpr_hash_djb2a("models/earthfighter/sf-18.vw3d")},
+    {55,    4,  constexpr_hash_djb2a("models/earthfighter/sf-19.vw3d")},
+    {80,    4,  constexpr_hash_djb2a("models/earthfighter/sf-20.vw3d")},
+    {80,    2,  constexpr_hash_djb2a("models/earthfighter/sf-21.vw3d")},
+    {100,   1,  constexpr_hash_djb2a("models/earthfighter/sf-22.vw3d")}
 };
 
 } // unnamed namespace
@@ -963,7 +963,7 @@ cEarthSpaceFighter::cEarthSpaceFighter(const int SpaceShipNum)
     PromptDrawDist2 = 100.0f;
 
     ArmorCurrentStatus = ArmorInitialStatus = PresetEarthSpaceFighterData[SpaceShipNum - 1].Armor;
-    LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum - 1].Name, *this);
+    LoadObjectData(PresetEarthSpaceFighterData[SpaceShipNum - 1].NameHash, *this);
 
     Engines.resize(PresetEarthSpaceFighterData[SpaceShipNum - 1].EngineQuantity);
     EnginesLocation.resize(Engines.size());

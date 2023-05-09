@@ -49,7 +49,10 @@ cPlanet::cPlanet(const int PlanetNum)
     case 1:
         NeedCullFaces = false;
         NeedAlphaTest = true;
-        LoadObjectData("models/planet/aplanet.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/planet/aplanet.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
@@ -72,7 +75,10 @@ cPlanet::cPlanet(const int PlanetNum)
 
     case 2:
         PromptDrawDist2 = 100.0f;
-        LoadObjectData("models/planet/dplanet.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/planet/dplanet.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
             GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);
@@ -88,7 +94,10 @@ cPlanet::cPlanet(const int PlanetNum)
 
     case 3:
         NeedCullFaces = false;
-        LoadObjectData("models/planet/gplanet.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/planet/gplanet.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/m_class7.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
@@ -107,7 +116,10 @@ cPlanet::cPlanet(const int PlanetNum)
         break;
 
     case 4:
-        LoadObjectData("models/planet/moon.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/planet/moon.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/q_class2.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
@@ -120,7 +132,10 @@ cPlanet::cPlanet(const int PlanetNum)
         break;
 
     case 5:
-        LoadObjectData("models/planet/planet5.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/planet/planet5.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/a_class4.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);
@@ -133,7 +148,10 @@ cPlanet::cPlanet(const int PlanetNum)
         break;
 
     case 6:
-        LoadObjectData("models/planet/planet6.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/planet/planet6.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         {
             constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/planet/d_class3.tga");
             Texture[0] = GetPreloadedTextureAsset(tmpTextureHash);

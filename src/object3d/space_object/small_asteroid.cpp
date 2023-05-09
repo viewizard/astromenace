@@ -41,8 +41,30 @@ cSmallAsteroid::cSmallAsteroid()
 {
     ObjectType = eObjectType::SmallAsteroid;
 
-    std::string Model3DFileName{"models/space/asteroid-01" + std::to_string(vw_uRandNum(19)) + ".vw3d"};
-    LoadObjectData(Model3DFileName, *this);
+    static unsigned Model3DFileNameHashes[]{
+        constexpr_hash_djb2a("models/space/asteroid-010.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-011.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-012.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-013.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-014.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-015.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-016.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-017.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-018.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-019.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0110.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0111.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0112.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0113.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0114.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0115.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0116.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0117.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0118.vw3d"),
+        constexpr_hash_djb2a("models/space/asteroid-0119.vw3d")
+    };
+
+    LoadObjectData(Model3DFileNameHashes[vw_uRandNum(19)], *this);
 
     constexpr unsigned tmpTextureHash = constexpr_hash_djb2a("models/space/asteroid-01.tga");
     GLtexture tmpTexture = GetPreloadedTextureAsset(tmpTextureHash);

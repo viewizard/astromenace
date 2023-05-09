@@ -296,7 +296,7 @@ void DetectCollisionAllObject3D();
 // Check for "mortal" objects, that could be used for collision detection.
 bool NeedCheckCollision(const cObject3D &Object3D);
 // Load 3D model data.
-void LoadObjectData(const std::string &FileName, cObject3D &Object3D);
+void LoadObjectData(unsigned FileNameHash, cObject3D &Object3D);
 // Setup shaders.
 bool SetupObject3DShaders();
 

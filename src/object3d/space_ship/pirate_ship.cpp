@@ -49,30 +49,30 @@ enum class eEngineGFX {
 struct sPirateShipData {
     unsigned int EngineQuantity;
     float Armor;
-    std::string Name;
+    unsigned NameHash;
     unsigned TextureNameHash;
     bool HaveNormalMapNameHash;
     unsigned NormalMapNameHash;
 };
 
 const std::vector<sPirateShipData> PresetPirateShipData{
-    {2,     20,     "models/pirateship/gunship-01.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), false, 0},
-    {2,     30,     "models/pirateship/bomber-07.vw3d",     constexpr_hash_djb2a("models/gr-04.vw2d"), false, 0},
-    {2,     100,    "models/pirateship/gunship-03.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
-    {2,     200,    "models/pirateship/gunship-04.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
-    {6,     400,    "models/pirateship/gunship-02.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {2,     20,     constexpr_hash_djb2a("models/pirateship/gunship-01.vw3d"),    constexpr_hash_djb2a("models/gr-04.vw2d"), false, 0},
+    {2,     30,     constexpr_hash_djb2a("models/pirateship/bomber-07.vw3d"),     constexpr_hash_djb2a("models/gr-04.vw2d"), false, 0},
+    {2,     100,    constexpr_hash_djb2a("models/pirateship/gunship-03.vw3d"),    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {2,     200,    constexpr_hash_djb2a("models/pirateship/gunship-04.vw3d"),    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {6,     400,    constexpr_hash_djb2a("models/pirateship/gunship-02.vw3d"),    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
 
-    {2,     600,     "models/pirateship/bomber-03.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
-    {4,     1200,    "models/pirateship/bomber-02.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
-    {4,     1000,    "models/pirateship/bomber-04.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
-    {6,     2000,    "models/pirateship/bomber-05.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
-    {8,     2500,    "models/pirateship/bomber-06.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
+    {2,     600,     constexpr_hash_djb2a("models/pirateship/bomber-03.vw3d"),    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     1200,    constexpr_hash_djb2a("models/pirateship/bomber-02.vw3d"),    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     1000,    constexpr_hash_djb2a("models/pirateship/bomber-04.vw3d"),    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {6,     2000,    constexpr_hash_djb2a("models/pirateship/bomber-05.vw3d"),    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
+    {8,     2500,    constexpr_hash_djb2a("models/pirateship/bomber-06.vw3d"),    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
 
-    {2,     300,     "models/pirateship/bomber-03.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
-    {4,     600,     "models/pirateship/bomber-02.vw3d",    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
-    {4,     500,     "models/pirateship/bomber-04.vw3d",    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
-    {6,     1000,    "models/pirateship/bomber-05.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
-    {8,     1500,    "models/pirateship/bomber-06.vw3d",    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")}
+    {2,     300,     constexpr_hash_djb2a("models/pirateship/bomber-03.vw3d"),    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     600,     constexpr_hash_djb2a("models/pirateship/bomber-02.vw3d"),    constexpr_hash_djb2a("models/gr-05.vw2d"), false, 0},
+    {4,     500,     constexpr_hash_djb2a("models/pirateship/bomber-04.vw3d"),    constexpr_hash_djb2a("models/gr-03.vw2d"), false, 0},
+    {6,     1000,    constexpr_hash_djb2a("models/pirateship/bomber-05.vw3d"),    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")},
+    {8,     1500,    constexpr_hash_djb2a("models/pirateship/bomber-06.vw3d"),    constexpr_hash_djb2a("models/gr-04.vw2d"), true, constexpr_hash_djb2a("models/normalmap/bomber_nm.tga")}
 };
 
 } // unnamed namespace
@@ -224,7 +224,7 @@ cPirateShip::cPirateShip(const int SpaceShipNum)
     ArmorCurrentStatus = ArmorInitialStatus = PresetPirateShipData[SpaceShipNum - 1].Armor / GameEnemyArmorPenalty;
     unsigned int EngineQuantity = PresetPirateShipData[SpaceShipNum - 1].EngineQuantity;
 
-    LoadObjectData(PresetPirateShipData[SpaceShipNum - 1].Name, *this);
+    LoadObjectData(PresetPirateShipData[SpaceShipNum - 1].NameHash, *this);
 
     for (unsigned int i = 0; i < Chunks.size(); i++) {
         Texture[i] = GetPreloadedTextureAsset(PresetPirateShipData[SpaceShipNum - 1].TextureNameHash);

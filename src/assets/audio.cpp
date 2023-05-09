@@ -74,6 +74,8 @@ struct sMusicMetadata {
     {}
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eMenuSFX, sSoundMetadata, sEnumHash> MenuSFXMap{
     // key                              metadata
     {eMenuSFX::OverSmallButton,         sSoundMetadata{"sfx/menu_onbutton2.wav", 0.15f, false}},
@@ -92,7 +94,10 @@ const std::unordered_map<eMenuSFX, sSoundMetadata, sEnumHash> MenuSFXMap{
     {eMenuSFX::MissionHideMenu,         sSoundMetadata{"sfx/game_hidemenu.wav", 1.0f, false}},
     {eMenuSFX::WarningLowLife,          sSoundMetadata{"sfx/lowlife.wav"}}
 };
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eGameSFX, sSoundMetadata, sEnumHash> GameSFXMap{
     // key                                  metadata
     {eGameSFX::WeaponMalfunction_Kinetic,   sSoundMetadata{"sfx/weapon1probl.wav"}},
@@ -129,7 +134,10 @@ const std::unordered_map<eGameSFX, sSoundMetadata, sEnumHash> GameSFXMap{
     {eGameSFX::Hit_Antimatter,              sSoundMetadata{"sfx/antimaterhit.wav"}},
     {eGameSFX::Hit_Gauss,                   sSoundMetadata{"sfx/gausshit.wav"}}
 };
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
     // key                                  metadata (note, 'en' here, since we use vw_GetText() for file name)
     {eVoicePhrase::Attention,               sSoundMetadata{"lang/en/voice/Attention.wav"}},
@@ -143,10 +151,11 @@ const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
     {eVoicePhrase::WeaponDestroyed,         sSoundMetadata{"lang/en/voice/WeaponDestroyed.wav"}},
     {eVoicePhrase::WeaponMalfunction,       sSoundMetadata{"lang/en/voice/WeaponMalfunction.wav"}}
 };
+#pragma GCC diagnostic pop
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winline"
-const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap {
+const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap{
     // key                  metadata
     {eMusicTheme::MENU,     sMusicMetadata{"music/menu.ogg"}},
     {eMusicTheme::GAME,     sMusicMetadata{"music/game.ogg", "", 1.0f, true}},

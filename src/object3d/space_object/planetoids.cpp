@@ -52,19 +52,34 @@ cPlanetoid::cPlanetoid(const int PlanetoidNum)
 
     switch (InternalType) {
     case 1:
-        LoadObjectData("models/space/bigasteroid-01.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/space/bigasteroid-01.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         break;
     case 2:
-        LoadObjectData("models/space/bigasteroid-02.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/space/bigasteroid-02.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         break;
     case 3:
-        LoadObjectData("models/space/bigasteroid-03.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/space/bigasteroid-03.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         break;
     case 4:
-        LoadObjectData("models/space/bigasteroid-04.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/space/bigasteroid-04.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         break;
     case 5:
-        LoadObjectData("models/space/bigasteroid-05.vw3d", *this);
+        {
+            constexpr unsigned tmpHash = constexpr_hash_djb2a("models/space/bigasteroid-05.vw3d");
+            LoadObjectData(tmpHash, *this);
+        }
         break;
     }
 

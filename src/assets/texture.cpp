@@ -51,7 +51,7 @@ struct sTextureAsset {
     // preload
     GLtexture PreloadedTexture{0};
 
-    explicit sTextureAsset(const std::string _TextureFile,
+    explicit sTextureAsset(const std::string &_TextureFile,
                            bool _Alpha = false,
                            eAlphaCreateMode _AlphaMode = eAlphaCreateMode::EQUAL,
                            eTextureWrapMode _TextWrap = eTextureWrapMode::CLAMP_TO_EDGE,
@@ -68,6 +68,8 @@ struct sTextureAsset {
     {}
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winline"
 std::unordered_map<unsigned, sTextureAsset> TextureMap{
     {constexpr_hash_djb2a("menu/astromenace.tga"),        sTextureAsset{"menu/astromenace.tga", true}},
     {constexpr_hash_djb2a("menu/button384_back.tga"),     sTextureAsset{"menu/button384_back.tga", true}},
@@ -386,8 +388,9 @@ std::unordered_map<unsigned, sTextureAsset> TextureMap{
     {constexpr_hash_djb2a("skybox/2/skybox_front5.tga"),      sTextureAsset{"skybox/2/skybox_front5.tga", false, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE}},
     {constexpr_hash_djb2a("skybox/2/skybox_left2.tga"),       sTextureAsset{"skybox/2/skybox_left2.tga", false, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE}},
     {constexpr_hash_djb2a("skybox/2/skybox_right1.tga"),      sTextureAsset{"skybox/2/skybox_right1.tga", false, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE}},
-    {constexpr_hash_djb2a("skybox/2/skybox_top3.tga"),        sTextureAsset{"skybox/2/skybox_top3.tga", false, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE}},
+    {constexpr_hash_djb2a("skybox/2/skybox_top3.tga"),        sTextureAsset{"skybox/2/skybox_top3.tga", false, eAlphaCreateMode::GREYSC, eTextureWrapMode::CLAMP_TO_EDGE}}
 };
+#pragma GCC diagnostic pop
 
 } // unnamed namespace
 
