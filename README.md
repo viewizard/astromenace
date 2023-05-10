@@ -50,6 +50,10 @@ sudo yum install astromenace
 sudo emerge astromenace
 ```
 
+#### FlatPak
+AstroMenace is also available as a [FlatPak](https://flatpak.org) package from
+[FlatHub](https://flathub.org/apps/com.viewizard.AstroMenace).
+
 ## Build (Windows)
 
 - Install MSYS2 from https://www.msys2.org (follow step-by-step instruction on first page in order to install MSYS2)
