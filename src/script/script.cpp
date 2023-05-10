@@ -153,8 +153,9 @@ static void SetDeleteAfterLeaveScene(cObject3D &Object, const sXMLEntry &xmlEntr
  * Set object's DebugInfo field.
  */
 #ifdef NDEBUG
-static void SetDebugInformation(cObject3D &UNUSED(Object), const sXMLEntry &UNUSED(xmlEntry),
-                                bool UNUSED(ShowLineNumber))
+static void SetDebugInformation([[gnu::unused, maybe_unused]] cObject3D &Object,
+                                [[gnu::unused, maybe_unused]] const sXMLEntry &xmlEntry,
+                                [[gnu::unused, maybe_unused]] bool ShowLineNumber)
 {
     return;
 }

@@ -52,13 +52,6 @@
 // don't setup NDEBUG in sources, use definition in build system instead
 #include <cassert>
 
-// suppress warnings about unused variables, when we need to
-#ifdef __GNUC__
-#  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
-#else
-#  define UNUSED(x) UNUSED_ ## x
-#endif
-
 namespace viewizard {
 
 // functor in order to use enumeration as a key (std::map, std::unordered_map, std::unordered_multimap)

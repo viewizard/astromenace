@@ -72,7 +72,7 @@ static int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
     cFILE *vorbisData = static_cast<cFILE *>(datasource);
     return vorbisData->fseek(offset, whence);
 }
-static int VorbisClose(void *UNUSED(datasource))
+static int VorbisClose([[gnu::unused, maybe_unused]] void *datasource)
 {
     return 1;
 }

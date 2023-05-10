@@ -191,6 +191,7 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -Werror=odr -Werror=lto-type-mismatch -Werror=strict-aliasing")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-attributes") # ignore "warning: scoped attribute directive ignored", since we use gnu/clang/msvc attributes
 
 # AppleClang 8.1.0.8020042 don't support this flag
 IF(NOT (MACOS AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))

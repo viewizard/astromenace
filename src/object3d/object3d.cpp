@@ -1054,7 +1054,7 @@ bool cObject3D::UpdateWithTimeSheetList(float Time)
 /*
  * Update.
  */
-bool cObject3D::Update(float UNUSED(Time))
+bool cObject3D::Update([[gnu::unused, maybe_unused]] float Time)
 {
     if (DeleteAfterLeaveScene == eDeleteAfterLeaveScene::need_delete) {
         Lifetime = DeleteAfterLeaveSceneDelay;

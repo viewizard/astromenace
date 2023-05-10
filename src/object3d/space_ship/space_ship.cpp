@@ -1101,7 +1101,7 @@ bool cSpaceShip::Update(float Time)
     if (!ShipShake.empty()) {
         ShipShake[0].Update(TimeDelta, [&] (const float ShakeIncrement,
                                             const sVECTOR3D &ShakeDirection,
-                                            const unsigned UNUSED(ShakeChunkNum)) {
+                                            [[gnu::unused, maybe_unused]] const unsigned ShakeChunkNum) {
             SetRotation(ShakeDirection ^ (ShakeIncrement * 50.0f));
         });
     }

@@ -50,7 +50,8 @@ const std::string EndLine{"\r\n"};
  * Line number in XML file.
  */
 #ifdef NDEBUG
-static std::string::size_type GetLineNumber(const std::string &UNUSED(Buffer), std::string::size_type UNUSED(Pos))
+static std::string::size_type GetLineNumber([[gnu::unused, maybe_unused]] const std::string &Buffer,
+                                            [[gnu::unused, maybe_unused]] std::string::size_type Pos)
 {
     return 0;
 }
