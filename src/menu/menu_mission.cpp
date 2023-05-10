@@ -182,7 +182,7 @@ void MissionListInit()
                     }
                     MissionList.back().Descr = TMission.Content;
                 } else if (TMission.Name == "Icon") {
-                    MissionList.back().IconHash = constexpr_hash_djb2a(TMission.Content.c_str());
+                    MissionList.back().IconHash = hash_djb2a(TMission.Content.c_str());
                 } else if (TMission.Name == "File") {
                     MissionList.back().File = TMission.Content;
                 }

@@ -341,4 +341,9 @@ void vw_RotatePointInv(sVECTOR3D &Point, const sVECTOR3D &Angle)
     }
 }
 
+unsigned hash_djb2a(const char *str, unsigned h)
+{
+    return !str[h] ? 5381 : (hash_djb2a(str, h + 1) * 33) ^ static_cast<unsigned>(str[h]);
+}
+
 } // viewizard namespace

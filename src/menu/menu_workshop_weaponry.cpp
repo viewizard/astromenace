@@ -442,7 +442,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
     if (((DstRect.right >= MouseX && DstRect.left <= MouseX && DstRect.bottom >= MouseY && DstRect.top <= MouseY)
          || InFocusByKeyboard)
         && !isDialogBoxDrawing() && !DragWeapon) {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/menu/button_weaponry_in.tga").c_str())), true, MenuContentTransp);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(hash_djb2a(vw_GetText("lang/en/menu/button_weaponry_in.tga").c_str())), true, MenuContentTransp);
         SetCursorStatus(eCursorStatus::ActionAllowed);
         if (vw_GetMouseLeftClick(true) || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)))) {
             PlayMenuSFX(eMenuSFX::Click, 1.0f);
@@ -453,7 +453,7 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
             }
         }
     } else {
-        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/menu/button_weaponry_out.tga").c_str())), true, MenuContentTransp);
+        vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(hash_djb2a(vw_GetText("lang/en/menu/button_weaponry_out.tga").c_str())), true, MenuContentTransp);
     }
 
 

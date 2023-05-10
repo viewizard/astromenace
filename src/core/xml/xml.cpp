@@ -78,7 +78,7 @@ bool cXMLDocument::ParseTagLine(unsigned int LineNumber, const std::string &Buff
     std::string::size_type TagNameEnd = Buffer.find_first_of(" />\t");
     XMLEntry->Name = Buffer.substr(1, TagNameEnd - 1);
     if (CalculateHash) {
-        XMLEntry->NameHash = constexpr_hash_djb2a(XMLEntry->Name.c_str());
+        XMLEntry->NameHash = hash_djb2a(XMLEntry->Name.c_str());
         auto tmpHash = HashCheckMap.find(XMLEntry->NameHash);
         if (tmpHash == HashCheckMap.end()) {
             HashCheckMap.emplace(XMLEntry->NameHash, XMLEntry->Name);

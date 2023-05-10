@@ -63,7 +63,7 @@ void SetupMissionNumberText(float NotificationTime, int Number)
 
     MissionNumberLastUpdateTime = vw_GetTimeThread(0);
     MissionNumberString = std::to_string(Number);
-    MissionNumberTexture = GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/mission.tga").c_str()));
+    MissionNumberTexture = GetPreloadedTextureAsset(hash_djb2a(vw_GetText("lang/en/game/mission.tga").c_str()));
 }
 
 /*
@@ -169,7 +169,7 @@ void SetupMissionFailedText(float NotificationTime)
     }
 
     MissionFailedLastUpdateTime = vw_GetTimeThread(0);
-    MissionFailedTexture = GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/missionfailed.tga").c_str()));
+    MissionFailedTexture = GetPreloadedTextureAsset(hash_djb2a(vw_GetText("lang/en/game/missionfailed.tga").c_str()));
 
     SetShowGameCursor(true);
     vw_GetMouseLeftClick(true);

@@ -784,9 +784,9 @@ void DrawGame()
             sRECT SrcRect(0, 0, 256, 64);
             sRECT DstRect(GameConfig().InternalWidth - 256 + 60, 768 - 54, GameConfig().InternalWidth + 60, 768 + 10);
             if (GameContentTransp == 1.0f) {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/pause.tga").c_str())), true, CurrentAlert2*GameContentTransp);
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(hash_djb2a(vw_GetText("lang/en/game/pause.tga").c_str())), true, CurrentAlert2*GameContentTransp);
             } else {
-                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(constexpr_hash_djb2a(vw_GetText("lang/en/game/pause.tga").c_str())), true, GameContentTransp);
+                vw_Draw2D(DstRect, SrcRect, GetPreloadedTextureAsset(hash_djb2a(vw_GetText("lang/en/game/pause.tga").c_str())), true, GameContentTransp);
             }
 
         }

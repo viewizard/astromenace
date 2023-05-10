@@ -125,13 +125,13 @@ private:
 /*
  * Compile-time Bernstein hash (djb2a) calculation.
  */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 constexpr unsigned constexpr_hash_djb2a(const char *str, unsigned h = 0)
 {
     return !str[h] ? 5381 : (constexpr_hash_djb2a(str, h + 1) * 33) ^ static_cast<unsigned>(str[h]);
 }
-#pragma GCC diagnostic pop
+
+// Located in src/core/math/math.cpp
+unsigned hash_djb2a(const char *str, unsigned h = 0);
 
 // error codes
 constexpr int ERR_PARAMETERS{-1};       // function's parameters related issue
