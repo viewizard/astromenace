@@ -384,4 +384,153 @@ bool cXMLDocument::Save(const std::string &XMLFileName)
     return true;
 }
 
+sXMLEntry *cXMLDocument::CreateRootEntry(const std::string &EntryName)
+{
+    RootXMLEntry.reset(new sXMLEntry);
+    RootXMLEntry->Name = EntryName;
+    return RootXMLEntry.get();
+}
+
+sXMLEntry *cXMLDocument::GetRootEntry()
+{
+    return RootXMLEntry.get();
+}
+
+sXMLEntry *cXMLDocument::AddEntry(sXMLEntry &ParentXMLEntry, const std::string &EntryName)
+{
+    // NOTE emplace_back() return reference to the inserted element (since C++17)
+    ParentXMLEntry.ChildrenList.emplace_back();
+    ParentXMLEntry.ChildrenList.back().Name = EntryName;
+    return &ParentXMLEntry.ChildrenList.back();
+}
+
+void cXMLDocument::AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData)
+{
+    if (!XMLEntry) {
+        return;
+    }
+
+    XMLEntry->Content = EntryData;
+}
+
+void cXMLDocument::AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
+{
+    if (!XMLEntry) {
+        return;
+    }
+
+    XMLEntry->Attributes[AttributeName] = AttributeData;
+}
+
+void cXMLDocument::AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
+{
+    if (!XMLEntry || !AttributeData) {
+        return;
+    }
+
+    XMLEntry->Attributes[AttributeName] = AttributeData;
+}
+
+void cXMLDocument::AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
+{
+    if (!XMLEntry) {
+        return;
+    }
+
+    AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
+}
+
+void cXMLDocument::AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
+{
+    if (!XMLEntry) {
+        return;
+    }
+
+    AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
+}
+
+void cXMLDocument::AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
+{
+    if (!XMLEntry) {
+        return;
+    }
+
+    if (AttributeData) {
+        AddEntryAttribute(XMLEntry, AttributeName, "on");
+    } else {
+        AddEntryAttribute(XMLEntry, AttributeName, "off");
+    }
+}
+
+void cXMLDocument::AddComment(sXMLEntry &ParentXMLEntry, const std::string &Text)
+{
+    // NOTE emplace_back() return reference to the inserted element (since C++17)
+    ParentXMLEntry.ChildrenList.emplace_back();
+    ParentXMLEntry.ChildrenList.back().Name = Text;
+    ParentXMLEntry.ChildrenList.back().EntryType = eEntryType::Comment;
+}
+
+// find first children element by name
+sXMLEntry *cXMLDocument::FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name)
+{
+    for (auto &tmpEntry : ParentXMLEntry.ChildrenList) {
+        if (tmpEntry.Name == Name) {
+            return &tmpEntry;
+        }
+    }
+
+    return nullptr;
+}
+
+bool cXMLDocument::GetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, std::string &Result)
+{
+    auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+    if (tmpAttr == XMLEntry.Attributes.end()) {
+        return false;
+    }
+
+    Result = tmpAttr->second;
+    return true;
+}
+
+bool cXMLDocument::iGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, int &Result)
+{
+    auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+    if (tmpAttr == XMLEntry.Attributes.end()) {
+        return false;
+    }
+
+    Result = std::stoi(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
+    return true;
+}
+
+bool cXMLDocument::fGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, float &Result)
+{
+    auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+    if (tmpAttr == XMLEntry.Attributes.end()) {
+        return false;
+    }
+
+    Result = std::stof(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
+    return true;
+}
+
+bool cXMLDocument::bGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, bool &Result)
+{
+    auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
+    if (tmpAttr == XMLEntry.Attributes.end()) {
+        return false;
+    }
+
+    Result = false;
+    if (tmpAttr->second == "on"
+        || tmpAttr->second == "true"
+        || tmpAttr->second == "yes"
+        || tmpAttr->second == "1") {
+        Result = true;
+    }
+
+    return true;
+}
+
 } // viewizard namespace

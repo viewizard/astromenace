@@ -48,6 +48,15 @@ struct sSoundMetadata {
     float VolumeCorrection{1.0f};
     bool AllowStop{true}; // allow stop this sfx in vw_StopAllSoundsIfAllowed()
 
+    sSoundMetadata() = delete;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    sSoundMetadata(const sSoundMetadata &) = default;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    sSoundMetadata(sSoundMetadata &&) = default;
+    void operator = (const sSoundMetadata &) = delete;
+    void operator = (sSoundMetadata &&) = delete;
+
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
     explicit sSoundMetadata(const std::string &_FileName,
                             float _VolumeCorrection = 1.0f,
                             bool _AllowStop = true) :
@@ -55,6 +64,9 @@ struct sSoundMetadata {
         VolumeCorrection{_VolumeCorrection},
         AllowStop{_AllowStop}
     {}
+
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    ~sSoundMetadata() = default;
 };
 
 struct sMusicMetadata {
@@ -63,6 +75,15 @@ struct sMusicMetadata {
     float VolumeCorrection{1.0f};
     bool NeedRelease{false}; // if this music theme playing now - release it first
 
+    sMusicMetadata() = delete;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    sMusicMetadata(const sMusicMetadata &) = default;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    sMusicMetadata(sMusicMetadata &&) = default;
+    void operator = (const sMusicMetadata &) = delete;
+    void operator = (sMusicMetadata &&) = delete;
+
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
     explicit sMusicMetadata(const std::string &_FileName,
                             const std::string &_FileNameLoop = std::string{},
                             float _VolumeCorrection = 1.0f,
@@ -72,10 +93,11 @@ struct sMusicMetadata {
         VolumeCorrection{_VolumeCorrection},
         NeedRelease{_NeedRelease}
     {}
+
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    ~sMusicMetadata() = default;
 };
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eMenuSFX, sSoundMetadata, sEnumHash> MenuSFXMap{
     // key                              metadata
     {eMenuSFX::OverSmallButton,         sSoundMetadata{"sfx/menu_onbutton2.wav", 0.15f, false}},
@@ -94,10 +116,7 @@ const std::unordered_map<eMenuSFX, sSoundMetadata, sEnumHash> MenuSFXMap{
     {eMenuSFX::MissionHideMenu,         sSoundMetadata{"sfx/game_hidemenu.wav", 1.0f, false}},
     {eMenuSFX::WarningLowLife,          sSoundMetadata{"sfx/lowlife.wav"}}
 };
-#pragma GCC diagnostic pop
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eGameSFX, sSoundMetadata, sEnumHash> GameSFXMap{
     // key                                  metadata
     {eGameSFX::WeaponMalfunction_Kinetic,   sSoundMetadata{"sfx/weapon1probl.wav"}},
@@ -134,10 +153,7 @@ const std::unordered_map<eGameSFX, sSoundMetadata, sEnumHash> GameSFXMap{
     {eGameSFX::Hit_Antimatter,              sSoundMetadata{"sfx/antimaterhit.wav"}},
     {eGameSFX::Hit_Gauss,                   sSoundMetadata{"sfx/gausshit.wav"}}
 };
-#pragma GCC diagnostic pop
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
     // key                                  metadata (note, 'en' here, since we use vw_GetText() for file name)
     {eVoicePhrase::Attention,               sSoundMetadata{"lang/en/voice/Attention.wav"}},
@@ -151,10 +167,7 @@ const std::unordered_map<eVoicePhrase, sSoundMetadata, sEnumHash> VoiceMap{
     {eVoicePhrase::WeaponDestroyed,         sSoundMetadata{"lang/en/voice/WeaponDestroyed.wav"}},
     {eVoicePhrase::WeaponMalfunction,       sSoundMetadata{"lang/en/voice/WeaponMalfunction.wav"}}
 };
-#pragma GCC diagnostic pop
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap{
     // key                  metadata
     {eMusicTheme::MENU,     sMusicMetadata{"music/menu.ogg"}},
@@ -163,7 +176,6 @@ const std::unordered_map<eMusicTheme, sMusicMetadata, sEnumHash> MusicMap{
     {eMusicTheme::FAILED,   sMusicMetadata{"music/missionfailed.ogg", "", 0.7f}},
     {eMusicTheme::CREDITS,  sMusicMetadata{"music/boss-intro.ogg", "music/boss-loop.ogg"}}
 };
-#pragma GCC diagnostic pop
 
 } // unnamed namespace
 

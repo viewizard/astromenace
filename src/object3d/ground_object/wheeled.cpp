@@ -40,8 +40,6 @@ struct sWheeledData {
     unsigned TextureFileNameHash;
 };
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWheeledData> PresetWheeledData {
     {120,   50.0f,    constexpr_hash_djb2a("models/wheeled/jeep-01.vw3d"), constexpr_hash_djb2a("models/gr-02.vw2d")},
     {70,    50.0f,    constexpr_hash_djb2a("models/wheeled/jeep-02.vw3d"), constexpr_hash_djb2a("models/gr-02.vw2d")},
@@ -52,7 +50,6 @@ const std::vector<sWheeledData> PresetWheeledData {
     {200,   30.0f,    constexpr_hash_djb2a("models/wheeled/apc-04.vw3d"), constexpr_hash_djb2a("models/gr-01.vw2d")},
     {400,   34.0f,    constexpr_hash_djb2a("models/wheeled/r-launcher-01.vw3d"), constexpr_hash_djb2a("models/gr-02.vw2d")}
 };
-#pragma GCC diagnostic pop
 
 
 /*

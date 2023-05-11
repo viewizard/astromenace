@@ -39,11 +39,20 @@ namespace {
 constexpr unsigned Model3DLoadValue{200};
 
 struct sModel3DAsset {
-    std::string Model3DFile;
+    std::string Model3DFile{};
     const float TriangleSizeLimit{-1.0f};
     const bool NeedTangentAndBinormal{false};
     std::weak_ptr<sModel3D> PreloadedModel3D{};
 
+    sModel3DAsset() = delete;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    sModel3DAsset(const sModel3DAsset &) = default;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    sModel3DAsset(sModel3DAsset &&) = default;
+    void operator = (const sModel3DAsset &) = delete;
+    void operator = (sModel3DAsset &&) = delete;
+
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
     explicit sModel3DAsset(const std::string &_Model3DFile,
                            float _TriangleSizeLimit = -1.0f,
                            bool _NeedTangentAndBinormal = false) :
@@ -51,10 +60,11 @@ struct sModel3DAsset {
         TriangleSizeLimit{_TriangleSizeLimit},
         NeedTangentAndBinormal{_NeedTangentAndBinormal}
     {}
+
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    ~sModel3DAsset() = default;
 };
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 std::unordered_map<unsigned, sModel3DAsset> Model3DMap{
     {constexpr_hash_djb2a("models/mine/mine-01.vw3d"),            sModel3DAsset{"models/mine/mine-01.vw3d", 2.0f}},
     {constexpr_hash_djb2a("models/mine/mine-02.vw3d"),            sModel3DAsset{"models/mine/mine-02.vw3d", 2.0f}},
@@ -238,7 +248,6 @@ std::unordered_map<unsigned, sModel3DAsset> Model3DMap{
     {constexpr_hash_djb2a("models/building/bld-10.vw3d"),          sModel3DAsset{"models/building/bld-10.vw3d", -1.0f, true}},
     {constexpr_hash_djb2a("models/building/bld-11.vw3d"),          sModel3DAsset{"models/building/bld-11.vw3d", -1.0f, true}}
 };
-#pragma GCC diagnostic pop
 
 } // unnamed namespace
 

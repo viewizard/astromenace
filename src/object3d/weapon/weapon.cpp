@@ -62,8 +62,6 @@ struct sWeaponData {
 };
 
 // earth 1-99
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetEarthWeaponData {
     // Kinetic
     {eGameSFX::WeaponFire_Kinetic1,     true, 25,    1,    1.5f,    3000,   0.4f, sVECTOR3D{0.0f, -0.613f, 2.0f},   sVECTOR3D{0.0f, -0.65f, 1.0f}, constexpr_hash_djb2a("models/earthfighter/weapon5.vw3d"), constexpr_hash_djb2a("models/earthfighter/sf-text00.vw2d"), constexpr_hash_djb2a("models/earthfighter/sf-illum01.vw2d")},
@@ -93,11 +91,8 @@ const std::vector<sWeaponData> PresetEarthWeaponData {
     {eGameSFX::WeaponFire_Torpedo,      false, 25,    5,    10,     50,     8.0f, sVECTOR3D{0.0f, -0.95f, 4.0f},    sVECTOR3D{0.0f, -0.9f, 1.5f}, constexpr_hash_djb2a("models/earthfighter/lnch3.vw3d"), constexpr_hash_djb2a("models/earthfighter/lnch34.tga"), 0},
     {eGameSFX::WeaponFire_Bomb,         false, 30,    5,    15,     25,     10.0f, sVECTOR3D{0.0f, -0.95f, 5.0f},   sVECTOR3D{0.0f, -0.9f, 1.8f}, constexpr_hash_djb2a("models/earthfighter/lnch4.vw3d"), constexpr_hash_djb2a("models/earthfighter/lnch34.tga"), 0}
 };
-#pragma GCC diagnostic pop
 
 // alien 101-199
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetAlienWeaponData {
     // like Kinetic1
     {eGameSFX::WeaponFire_Ion2,     true,   1.0f,   1,    1,    5000,    0.7f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, 0, 0, 0},
@@ -120,11 +115,8 @@ const std::vector<sWeaponData> PresetAlienWeaponData {
     // like Laser (for motherships)
     {eGameSFX::WeaponFire_Laser,    true,   15,     5,    150,    800,    1.2f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, 0, 0, 0}
 };
-#pragma GCC diagnostic pop
 
 // pirate 201-299
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winline"
 const std::vector<sWeaponData> PresetPirateWeaponData {
     // turret 1
     {eGameSFX::WeaponFire_Kinetic1,     false,  10,     1,    1,    3000,   0.7f, sVECTOR3D{0.0f, 1.5f, 1.0f}, sVECTOR3D{0.0f, 1.5f, 1.0f}, constexpr_hash_djb2a("models/turret/turret-01.vw3d"), constexpr_hash_djb2a("models/turret/turrets.tga"), 0},
@@ -164,7 +156,6 @@ const std::vector<sWeaponData> PresetPirateWeaponData {
     // mine 4
     {eGameSFX::WeaponFire_Bomb,         false,  1.0f,   1,    1,    2500,   4.0f, sVECTOR3D{0.0f, 0.0f, 0.0f}, sVECTOR3D{0.0f, 0.0f, 0.0f}, 0, 0, 0}
 };
-#pragma GCC diagnostic pop
 
 } // unnamed namespace
 

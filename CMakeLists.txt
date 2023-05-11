@@ -190,19 +190,15 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion")
-#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -Werror=odr -Werror=lto-type-mismatch -Werror=strict-aliasing")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-attributes") # ignore "warning: scoped attribute directive ignored", since we use gnu/clang/msvc attributes
+
+# Test only
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -Werror=odr -Werror=lto-type-mismatch -Werror=strict-aliasing")
 
 # AppleClang 8.1.0.8020042 don't support this flag
 IF(NOT (MACOS AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
 ENDIF(NOT (MACOS AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")))
-
-# Suppress GCC 9+ warning: -param max-inline-insns-single limit reached [-Winline]
-# Set max-inline-insns-single to 400, same as GCC 8 default value.
-IF((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.0.0))
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --param max-inline-insns-single=400")
-ENDIF((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.0.0))
 
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wundef")

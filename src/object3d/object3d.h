@@ -180,7 +180,9 @@ inline cDamage operator * (const cDamage &Damage, float Value)
 class cObject3D : public sModel3D {
 protected:
     // don't allow object of this class creation
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
     cObject3D() = default;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
     ~cObject3D() = default;
 
     // should be called in UpdateWithTimeSheetList() only

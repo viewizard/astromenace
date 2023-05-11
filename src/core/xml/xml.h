@@ -57,6 +57,11 @@ enum class eEntryType {
 };
 
 struct sXMLEntry {
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    sXMLEntry() = default;
+    [[gnu::noinline, clang::noinline, msvc::noinline]]
+    ~sXMLEntry() = default;
+
     eEntryType EntryType{eEntryType::Regular};
     std::string Name{}; // name, if entry type is comment - comment's text
     unsigned NameHash{0}; // name's hash
@@ -77,155 +82,26 @@ public:
     // Save XML to file (libSDL RWops).
     bool Save(const std::string &XMLFileName);
 
-    sXMLEntry *CreateRootEntry(const std::string &EntryName)
-    {
-        RootXMLEntry.reset(new sXMLEntry);
-        RootXMLEntry->Name = EntryName;
-        return RootXMLEntry.get();
-    }
+    sXMLEntry *CreateRootEntry(const std::string &EntryName);
+    sXMLEntry *GetRootEntry();
 
-    sXMLEntry *GetRootEntry()
-    {
-        return RootXMLEntry.get();
-    }
-
-    sXMLEntry *AddEntry(sXMLEntry &ParentXMLEntry, const std::string &EntryName)
-    {
-        // NOTE emplace_back() return reference to the inserted element (since C++17)
-        ParentXMLEntry.ChildrenList.emplace_back();
-        ParentXMLEntry.ChildrenList.back().Name = EntryName;
-        return &ParentXMLEntry.ChildrenList.back();
-    }
-
-    void AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData)
-    {
-        if (!XMLEntry) {
-            return;
-        }
-
-        XMLEntry->Content = EntryData;
-    }
-
-    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData)
-    {
-        if (!XMLEntry) {
-            return;
-        }
-
-        XMLEntry->Attributes[AttributeName] = AttributeData;
-    }
-
+    sXMLEntry *AddEntry(sXMLEntry &ParentXMLEntry, const std::string &EntryName);
+    void AddEntryContent(sXMLEntry *XMLEntry, const std::string &EntryData);
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const std::string &AttributeData);
     // string literal matches bool overload instead of "std::string&", forced to use "const char*" here too
-    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData)
-    {
-        if (!XMLEntry || !AttributeData) {
-            return;
-        }
-
-        XMLEntry->Attributes[AttributeName] = AttributeData;
-    }
-
-    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData)
-    {
-        if (!XMLEntry) {
-            return;
-        }
-
-        AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
-    }
-
-    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData)
-    {
-        if (!XMLEntry) {
-            return;
-        }
-
-        AddEntryAttribute(XMLEntry, AttributeName, std::to_string(AttributeData));
-    }
-
-    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData)
-    {
-        if (!XMLEntry) {
-            return;
-        }
-
-        if (AttributeData) {
-            AddEntryAttribute(XMLEntry, AttributeName, "on");
-        } else {
-            AddEntryAttribute(XMLEntry, AttributeName, "off");
-        }
-    }
-
-    void AddComment(sXMLEntry &ParentXMLEntry, const std::string &Text)
-    {
-        // NOTE emplace_back() return reference to the inserted element (since C++17)
-        ParentXMLEntry.ChildrenList.emplace_back();
-        ParentXMLEntry.ChildrenList.back().Name = Text;
-        ParentXMLEntry.ChildrenList.back().EntryType = eEntryType::Comment;
-    }
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, const char *AttributeData);
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, int AttributeData);
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, float AttributeData);
+    void AddEntryAttribute(sXMLEntry *XMLEntry, const std::string &AttributeName, bool AttributeData);
+    void AddComment(sXMLEntry &ParentXMLEntry, const std::string &Text);
 
     // find first children element by name
-    sXMLEntry *FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name)
-    {
-        for (auto &tmpEntry : ParentXMLEntry.ChildrenList) {
-            if (tmpEntry.Name == Name) {
-                return &tmpEntry;
-            }
-        }
+    sXMLEntry *FindEntryByName(sXMLEntry &ParentXMLEntry, const std::string &Name);
 
-        return nullptr;
-    }
-
-    bool GetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, std::string &Result)
-    {
-        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-        if (tmpAttr == XMLEntry.Attributes.end()) {
-            return false;
-        }
-
-        Result = tmpAttr->second;
-        return true;
-    }
-
-    bool iGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, int &Result)
-    {
-        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-        if (tmpAttr == XMLEntry.Attributes.end()) {
-            return false;
-        }
-
-        Result = std::stoi(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
-        return true;
-    }
-
-    bool fGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, float &Result)
-    {
-        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-        if (tmpAttr == XMLEntry.Attributes.end()) {
-            return false;
-        }
-
-        Result = std::stof(tmpAttr->second); // NOTE check exceptions std::invalid_argument and std::out_of_range
-        return true;
-    }
-
-    bool bGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, bool &Result)
-    {
-        auto tmpAttr = XMLEntry.Attributes.find(AttributeName);
-        if (tmpAttr == XMLEntry.Attributes.end()) {
-            return false;
-        }
-
-        Result = false;
-        if (tmpAttr->second == "on"
-            || tmpAttr->second == "true"
-            || tmpAttr->second == "yes"
-            || tmpAttr->second == "1") {
-            Result = true;
-        }
-
-        return true;
-    }
+    bool GetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, std::string &Result);
+    bool iGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, int &Result);
+    bool fGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, float &Result);
+    bool bGetEntryAttribute(const sXMLEntry &XMLEntry, const std::string &AttributeName, bool &Result);
 
 private:
     // Save XML elements to file recursively.

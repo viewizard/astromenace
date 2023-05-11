@@ -48,63 +48,11 @@ sources, you are free to change or add methods to sound.h header file instead.
 
 namespace viewizard {
 
-/*
- * Check ALC errors.
- */
-inline ALboolean CheckALCError(ALCdevice *Device, const char *FunctionName)
-{
-    ALenum ErrCode;
-    if ((ErrCode = alcGetError(Device)) != ALC_NO_ERROR) {
-        std::cerr << FunctionName << "(): " << "ALC error: " << alcGetString(Device, ErrCode) << "\n";
-        return AL_FALSE;
-    }
-    return AL_TRUE;
-}
-
-/*
- * Check AL errors.
- */
-inline ALboolean CheckALError(const char *FunctionName)
-{
-    ALenum ErrCode;
-    if ((ErrCode = alGetError()) != AL_NO_ERROR) {
-        std::cerr << FunctionName << "(): " << "OpenAL error: " << alGetString(ErrCode) << "\n";
-        return AL_FALSE;
-    }
-    return AL_TRUE;
-}
-
-/*
- * Reset AL errors.
- */
-inline void ResetALError()
-{
-    alGetError();
-}
-
-/*
- * Check ALUT errors.
- */
-inline ALboolean CheckALUTError(const char *FunctionName)
-{
-    ALenum ErrCode;
-    if ((ErrCode = alutGetError()) != ALUT_ERROR_NO_ERROR) {
-        std::cerr << FunctionName << "(): " << "OpenAL alut error: " << alutGetErrorString(ErrCode) << "\n";
-        return AL_FALSE;
-    }
-    return AL_TRUE;
-}
-
-/*
- * Check OpenAL source status.
- */
-inline bool CheckALSourceState(ALuint Source, ALint State)
-{
-    ALint tmpState;
-    alGetSourcei(Source, AL_SOURCE_STATE, &tmpState);
-    ResetALError();
-    return (tmpState == State);
-}
+ALboolean CheckALCError(ALCdevice *Device, const char *FunctionName);
+ALboolean CheckALError(const char *FunctionName);
+void ResetALError();
+ALboolean CheckALUTError(const char *FunctionName);
+bool CheckALSourceState(ALuint Source, ALint State);
 
 } // viewizard namespace
 
