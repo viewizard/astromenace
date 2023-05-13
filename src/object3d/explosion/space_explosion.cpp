@@ -439,7 +439,7 @@ cSpaceExplosion::cSpaceExplosion(cObject3D &Object, int ExplType, const sVECTOR3
 
         VelocityOrientation = Object.Orientation;
 
-        int TotalCount = 0;
+        unsigned TotalCount = 0;
 
         Texture = Object.Texture;
         Chunks = Object.Chunks;
