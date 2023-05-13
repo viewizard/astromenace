@@ -434,12 +434,28 @@ GLtexture vw_LoadTexture(const std::string &TextureName, eTextureCompressionType
         break;
 
     case eLoadTextureAs::VW2D:
-        pFile->fseek(4, SEEK_SET); // skip sign "VW2D"
-        pFile->fread(&DWidth, sizeof(DWidth), 1);
-        pFile->fread(&DHeight, sizeof(DHeight), 1);
-        pFile->fread(&DChanels, sizeof(DChanels), 1);
+        // check "VW2D" sign
+        {
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+            constexpr uint32_t SignVW2D = (uint32_t('D') << 8*3) + (uint32_t('2') << 8*2) + (uint32_t('W') << 8) + uint32_t('V'); // `V` `W` `2` `D`
+#else
+            constexpr uint32_t SignVW2D = (uint32_t('V') << 8*3) + (uint32_t('W') << 8*2) + (uint32_t('2') << 8) + uint32_t('D'); // `V` `W` `2` `D`
+#endif
+            uint32_t Sign;
+            if (pFile->fread(&Sign, 4, 1) != 1 ||
+                Sign != SignVW2D) {
+                return 0;
+            }
+        }
+        if (pFile->fread(&DWidth, sizeof(DWidth), 1) != 1 ||
+            pFile->fread(&DHeight, sizeof(DHeight), 1) != 1 ||
+            pFile->fread(&DChanels, sizeof(DChanels), 1) != 1) {
+            return 0;
+        }
         tmpPixelsArray.reset(new uint8_t[DWidth * DHeight * DChanels]);
-        pFile->fread(tmpPixelsArray.get(), DWidth * DHeight * DChanels, 1);
+        if (pFile->fread(tmpPixelsArray.get(), DWidth * DHeight * DChanels, 1) != 1) {
+            return 0;
+        }
         break;
 
     default:

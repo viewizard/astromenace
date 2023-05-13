@@ -447,14 +447,23 @@ int vw_fclose(std::unique_ptr<cFILE> &stream)
  */
 size_t cFILE::fread(void *buffer, size_t size, size_t count)
 {
-    if (!buffer || !Data_) {
-        return ERR_PARAMETERS;
+    if (!buffer) {
+        errno = EINVAL;
+        return 0;
+    }
+    if (!Data_) {
+        errno = EIO;
+        return 0;
     }
 
     size_t CopyCount{0};
     for (; (CopyCount < count) && (Size_ >= static_cast<long>(Pos_ + size)); CopyCount++) {
         memcpy(static_cast<uint8_t *>(buffer) + CopyCount * size, Data_.get() + Pos_, size);
         Pos_ += size;
+    }
+
+    if (CopyCount == 0) {
+        errno = 0;
     }
 
     return CopyCount;

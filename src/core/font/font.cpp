@@ -161,12 +161,15 @@ int vw_InitFont(const std::string &FontName)
         return ERR_FILE_NOT_FOUND;
     }
 
-    FontFile->fseek(0, SEEK_END);
+    int Status = RES_OK;
+    IfFailRet(FontFile->fseek(0, SEEK_END));
     long FontBufferSize = FontFile->ftell();
-    FontFile->fseek(0, SEEK_SET);
+    IfFailRet(FontFile->fseek(0, SEEK_SET));
 
     InternalFontBuffer.reset(new uint8_t[FontBufferSize]);
-    FontFile->fread(InternalFontBuffer.get(), FontBufferSize, 1);
+    if (FontFile->fread(InternalFontBuffer.get(), FontBufferSize, 1) != 1) {
+        return ERR_FILE_IO;
+    }
 
     vw_fclose(FontFile);
 

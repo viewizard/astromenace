@@ -593,15 +593,21 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
     }
 
     // check "VW3D" sign
-    char Sign[4];
-    File->fread(&Sign, 4, 1);
-    // Sign don't contain null-terminated string, strncmp() should be used
-    if (strncmp(Sign, "VW3D", 4) != 0) {
-        return false;
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+    constexpr uint32_t SignVW3D = (uint32_t('D') << 8*3) + (uint32_t('3') << 8*2) + (uint32_t('W') << 8) + uint32_t('V'); // `V` `W` `3` `D`
+#else
+    constexpr uint32_t SignVW3D = (uint32_t('V') << 8*3) + (uint32_t('W') << 8*2) + (uint32_t('3') << 8) + uint32_t('D'); // `V` `W` `3` `D`
+#endif
+    uint32_t Sign;
+    if (File->fread(&Sign, 4, 1) != 1 ||
+        Sign != SignVW3D) {
+        return 0;
     }
 
-    std::uint32_t ChunkArraySize;
-    File->fread(&ChunkArraySize, sizeof(ChunkArraySize), 1);
+    uint32_t ChunkArraySize;
+    if (File->fread(&ChunkArraySize, sizeof(ChunkArraySize), 1) != 1) {
+        return false;
+    }
 
     Chunks.resize(ChunkArraySize);
     GlobalIndexArrayCount = 0;
@@ -609,18 +615,17 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
     for (auto &tmpChunk : Chunks) {
         tmpChunk.RangeStart = GlobalIndexArrayCount;
 
-        // VertexFormat
-        File->fread(&tmpChunk.VertexFormat, sizeof(Chunks[0].VertexFormat), 1);
-        // VertexStride
-        File->fread(&tmpChunk.VertexStride, sizeof(Chunks[0].VertexStride), 1);
-        // VertexQuantity
-        File->fread(&tmpChunk.VertexQuantity, sizeof(Chunks[0].VertexQuantity), 1);
+        if (File->fread(&tmpChunk.VertexFormat, sizeof(Chunks[0].VertexFormat), 1) != 1 ||      // VertexFormat
+            File->fread(&tmpChunk.VertexStride, sizeof(Chunks[0].VertexStride), 1) != 1 ||      // VertexStride
+            File->fread(&tmpChunk.VertexQuantity, sizeof(Chunks[0].VertexQuantity), 1) != 1) {  // VertexQuantity
+            return false;
+        }
         GlobalIndexArrayCount += tmpChunk.VertexQuantity;
 
-        // Location
-        File->fread(&tmpChunk.Location, sizeof(Chunks[0].Location.x) * 3, 1);
-        // Rotation
-        File->fread(&tmpChunk.Rotation, sizeof(Chunks[0].Rotation.x) * 3, 1);
+        if (File->fread(&tmpChunk.Location, sizeof(Chunks[0].Location.x) * 3, 1) != 1 || // Location
+            File->fread(&tmpChunk.Rotation, sizeof(Chunks[0].Rotation.x) * 3, 1) != 1) { // Rotation
+            return false;
+        }
 
         tmpChunk.DrawType = eModel3DDrawType::Normal;
         tmpChunk.NeedReleaseOpenGLBuffers = false;
@@ -634,17 +639,20 @@ bool cModel3DWrapper::LoadVW3D(const std::string &FileName)
         assert(tmpChunk.VertexQuantity != 0);
     }
 
-    File->fread(&GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1);
+    if (File->fread(&GlobalVertexArrayCount, sizeof(GlobalVertexArrayCount), 1) != 1) {
+        return false;
+    }
 
-    GlobalVertexArray.reset(new float[GlobalVertexArrayCount * Chunks[0].VertexStride],
-                            std::default_delete<float[]>());
-    File->fread(GlobalVertexArray.get(),
-                GlobalVertexArrayCount * Chunks[0].VertexStride * sizeof(GlobalVertexArray.get()[0]),
-                1);
+    GlobalVertexArray.reset(new float[GlobalVertexArrayCount * Chunks[0].VertexStride], std::default_delete<float[]>());
+    if (File->fread(GlobalVertexArray.get(), GlobalVertexArrayCount * Chunks[0].VertexStride * sizeof(GlobalVertexArray.get()[0]), 1) != 1) {
+        return false;
+    }
 
     // index array
     GlobalIndexArray.reset(new unsigned[GlobalIndexArrayCount], std::default_delete<unsigned[]>());
-    File->fread(GlobalIndexArray.get(), GlobalIndexArrayCount * sizeof(GlobalIndexArray.get()[0]), 1);
+    if (File->fread(GlobalIndexArray.get(), GlobalIndexArrayCount * sizeof(GlobalIndexArray.get()[0]), 1) != 1) {
+        return false;
+    }
 
     // setup points to global arrays
     for (auto &tmpChunk : Chunks) {
@@ -679,7 +687,7 @@ bool cModel3DWrapper::SaveVW3D(const std::string &FileName)
     constexpr char Sign[4]{'V','W','3','D'};
     FileVW3D.write(Sign, 4);
 
-    std::uint32_t ChunkArraySize = static_cast<std::uint32_t>(Chunks.size());
+    uint32_t ChunkArraySize = static_cast<uint32_t>(Chunks.size());
     FileVW3D.write(reinterpret_cast<char*>(&ChunkArraySize), sizeof(ChunkArraySize));
 
     for (auto &tmpChunk : Chunks) {

@@ -41,22 +41,33 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, cFILE *pFile, int &DWidth, 
     uint8_t tmpTGAImageType{0};     // RLE, RGB
     uint8_t tmpBits{0};             // 16, 24, 32
 
-    pFile->fread(&tmpTGAHeaderLength, sizeof(tmpTGAHeaderLength), 1);
+    if (pFile->fread(&tmpTGAHeaderLength, sizeof(tmpTGAHeaderLength), 1) != 1) {
+        return ERR_FILE_IO;
+    }
     // jump over one byte
-    pFile->fseek(1, SEEK_CUR);
+    int Status = RES_OK;
+    IfFailRet(pFile->fseek(1, SEEK_CUR));
     // image type (RLE, RGB, ...)
-    pFile->fread(&tmpTGAImageType, sizeof(tmpTGAImageType), 1);
+    if (pFile->fread(&tmpTGAImageType, sizeof(tmpTGAImageType), 1) != 1) {
+        return ERR_FILE_IO;
+    }
     // skip past general information
-    pFile->fseek(9, SEEK_CUR);
+    IfFailRet(pFile->fseek(9, SEEK_CUR));
     // read the width, height and bpp
     uint16_t TmpReadData;
-    pFile->fread(&TmpReadData, sizeof(TmpReadData), 1);
+    if (pFile->fread(&TmpReadData, sizeof(TmpReadData), 1) != 1) {
+        return ERR_FILE_IO;
+    }
     DWidth = TmpReadData;
-    pFile->fread(&TmpReadData, sizeof(TmpReadData), 1);
+    if (pFile->fread(&TmpReadData, sizeof(TmpReadData), 1) != 1) {
+        return ERR_FILE_IO;
+    }
     DHeight = TmpReadData;
-    pFile->fread(&tmpBits, sizeof(tmpBits), 1);
+    if (pFile->fread(&tmpBits, sizeof(tmpBits), 1) != 1) {
+        return ERR_FILE_IO;
+    }
     // move to the pixel data
-    pFile->fseek(tmpTGAHeaderLength + 1, SEEK_CUR);
+    IfFailRet(pFile->fseek(tmpTGAHeaderLength + 1, SEEK_CUR));
 
     if (tmpTGAImageType == TGA_RGB) {
         if (tmpBits == 24 || tmpBits == 32) {
@@ -67,7 +78,9 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, cFILE *pFile, int &DWidth, 
             // load line by line
             for (int y = 0; y < DHeight; y++) {
                 uint8_t *pLine = PixelsArray.get() + tmpStride * y;
-                pFile->fread(pLine, tmpStride, 1);
+                if (pFile->fread(pLine, tmpStride, 1) != 1) {
+                    return ERR_FILE_IO;
+                }
             }
         } else {
             std::cerr << __func__ << "(): " << "16 bits TGA images are not supported.\n";
@@ -83,13 +96,17 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, cFILE *pFile, int &DWidth, 
 
         int i = 0;
         while (i < DWidth * DHeight) {
-            pFile->fread(&rleID, sizeof(rleID), 1);
+            if (pFile->fread(&rleID, sizeof(rleID), 1) != 1) {
+                return ERR_FILE_IO;
+            }
 
             if (rleID < 128) {
                 rleID++;
 
                 while (rleID && (i < DWidth * DHeight)) {
-                    pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1);
+                    if (pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1) != 1) {
+                        return ERR_FILE_IO;
+                    }
 
                     memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);
                     if (tmpBits == 32) {
@@ -105,7 +122,9 @@ int ReadTGA(std::unique_ptr<uint8_t[]> &PixelsArray, cFILE *pFile, int &DWidth, 
                 // they are really do nothing (same ASM result as for "rleID -= 127;")
                 rleID = static_cast<uint8_t>(static_cast<int8_t>(rleID) - 127);
 
-                pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1);
+                if (pFile->fread(pColors.data(), sizeof(pColors[0]) * DChanels, 1) != 1) {
+                    return ERR_FILE_IO;
+                }
 
                 while (rleID && (i < DWidth * DHeight)) {
                     memcpy(PixelsArray.get() + colorsRead, pColors.data(), sizeof(pColors[0]) * 3);

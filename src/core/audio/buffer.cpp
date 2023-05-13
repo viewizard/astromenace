@@ -64,13 +64,25 @@ std::unordered_map<std::string, sStreamBuffer> StreamBuffersMap;
  */
 static size_t VorbisRead(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource)
 {
+    // https://xiph.org/vorbis/doc/vorbisfile/callbacks.html
+    // The following behaviors are also expected:
+    //   - a return of '0' indicates end-of-data (if the by-thread errno is unset)
+    //   - short reads mean nothing special (short reads are not treated as error conditions)
+    //   - a return of zero with the by-thread errno set to nonzero indicates a read error
+
     cFILE *vorbisData = static_cast<cFILE *>(datasource);
     return vorbisData->fread(ptr, byteSize, sizeToRead);
 }
 static int VorbisSeek(void *datasource, ogg_int64_t offset, int whence)
 {
+    // https://xiph.org/vorbis/doc/vorbisfile/callbacks.html
+    // If the seek function is non-NULL, libvorbisfile mandates the following behavior:
+    //  - The seek function must always return -1 (failure) if the given data abstraction is not seekable. It may choose to always return -1 if the application desires libvorbisfile to treat the Vorbis data strictly as a stream (which makes for a less expensive open operation).
+    //  - If the seek function initially indicates seekability, it must always succeed upon being given a valid seek request.
+    //  - The seek function must implement all of SEEK_SET, SEEK_CUR and SEEK_END. The implementation of SEEK_END should set the access cursor one past the last byte of accessible data, as would stdio fseek()
+
     cFILE *vorbisData = static_cast<cFILE *>(datasource);
-    return vorbisData->fseek(offset, whence);
+    return FAILED(vorbisData->fseek(offset, whence)) ? -1 : 0;
 }
 static int VorbisClose([[gnu::unused, maybe_unused]] void *datasource)
 {

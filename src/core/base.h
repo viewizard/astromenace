@@ -127,6 +127,7 @@ constexpr unsigned constexpr_hash_djb2a(const char *str, unsigned h = 0)
 unsigned hash_djb2a(const char *str, unsigned h = 0);
 
 // error codes
+constexpr int RES_OK{0};
 constexpr int ERR_PARAMETERS{-1};       // function's parameters related issue
 constexpr int ERR_FILE_NOT_FOUND{-2};   // file not found
 constexpr int ERR_FILE_IO{-3};          // file I/O issue
@@ -134,6 +135,18 @@ constexpr int ERR_VFS_BUILD{-4};        // VFS build number issue
 constexpr int ERR_EXT_RES{-5};          // issue with external resources
 constexpr int ERR_MEM{-6};              // memory allocation related issue
 constexpr int ERR_NOT_SUPPORTED{-7};    // file format not supported
+
+#ifndef FAILED
+#define FAILED(res) (((int)(res)) < 0)
+#endif
+
+#ifndef SUCCEEDED
+#define SUCCEEDED(res) (((int)(res)) >= 0)
+#endif
+
+#ifndef IfFailRet
+#define IfFailRet(res) do { Status = (res); if (FAILED(Status)) { return (Status); } } while (0)
+#endif
 
 } // viewizard namespace
 
