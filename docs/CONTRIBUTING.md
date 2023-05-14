@@ -34,7 +34,7 @@ Only [Smart Pointers] are allowed. Manual memory management are prohibited. Even
 
 ## AstroMenace Coding Style
 
-AstroMenace coding style based on K&R coding style derivatives (line of text in code could be up to 130 characters long).
+AstroMenace coding style based on K&R coding style derivatives (line of text in code could be up to 200 characters long).
 
 <!-- Markdown links -->
 [ISO/IEC/C++11]: https://www.iso.org/standard/50372.html
