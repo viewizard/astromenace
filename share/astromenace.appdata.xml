@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
-  <id>com.viewizard.astromenace.desktop</id>
+<!-- Copyright 2023 Mikhail Kurinnoi <viewizard@viewizard.com> -->
+<component type="desktop-application">
+  <id>com.viewizard.AstroMenace</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+ AND GPL-3.0 AND CC-BY-SA-4.0 AND OFL-1.1</project_license>
   <name>AstroMenace</name>
   <summary>Hardcore 3D space scroll-shooter with spaceship upgrade possibilities</summary>
+  <icon type="remote" width="64" height="64">https://raw.githubusercontent.com/viewizard/astromenace/master/share/astromenace_64.png</icon>
+  <icon type="remote" width="128" height="128">https://raw.githubusercontent.com/viewizard/astromenace/master/share/astromenace_128.png</icon>
   <description>
     <p>
       AstroMenace is an astonishing hardcore scroll-shooter where brave space warriors may find a great opportunity to hone their combat skills. Gather money during the battle to spend them on turning your spaceship into an ultimate weapon of mass destruction and give hell to swarms of adversaries. Enjoy the wonderfully crafted 3d graphics and high-quality special effects along with a detailed difficulty adjustment and a handy interface of AstroMenace.
@@ -20,18 +23,45 @@
       <li>Flexible difficulty control</li>
     </ul>
   </description>
-  <launchable type="desktop-id">astomenace.desktop</launchable>
-​  <screenshots>
-​    <screenshot type="default">
-​      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide1.jpg</image>
- ​   </screenshot>
-​    <screenshot>
-​      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide2.jpg</image>
-​    </screenshot>
-​    <screenshot>
-​      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide3.jpg</image>
-​    </screenshot>
-​  </screenshots>
-  <url type="homepage">https://viewizard.com/</url>
+  <categories>
+    <category>Game</category>
+    <category>ArcadeGame</category>
+  </categories>
+  <keywords>
+    <keyword translate="no">astromenace</keyword>
+    <keyword>game</keyword>
+    <keyword>spaceshooter</keyword>
+    <keyword>arcade</keyword>
+    <keyword>shooter</keyword>
+  </keywords>
+  <launchable type="desktop-id">com.viewizard.AstroMenace.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide1.png</image>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide2.png</image>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="1366" height="768">https://raw.githubusercontent.com/viewizard/astromenace/master/share/preview_wide3.png</image>
+    </screenshot>
+  </screenshots>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>gamepad</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">640</display_length>
+    <internet>offline-only</internet>
+  </requires>
+  <url type="homepage">https://viewizard.com</url>
+  <url type="vcs-browser">https://github.com/viewizard/astromenace</url>
+  <url type="bugtracker">https://github.com/viewizard/astromenace/issues</url>
+  <url type="contribute">https://github.com/viewizard/astromenace/blob/master/docs/CONTRIBUTING.md</url>
   <developer_name>Viewizard</developer_name>
+  <update_contact>viewizard_AT_viewizard.com</update_contact>
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-fantasy">moderate</content_attribute>
+  </content_rating>
 </component>
