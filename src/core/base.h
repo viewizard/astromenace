@@ -70,9 +70,9 @@ template <typename I, typename F>
 struct sIF_dual_type {
 public:
     // caller should guarantee, that integral value will not exceed floating point value size
-    explicit sIF_dual_type(const I _i) :
-        __i{_i},
-        __f{static_cast<F>(_i)}
+    explicit sIF_dual_type(const I value) :
+        i_value{value},
+        f_value{static_cast<F>(value)}
     {
         static_assert(std::is_integral<I>::value, "First variable's type should be integral.");
         static_assert(std::is_floating_point<F>::value, "Second variable's type should be floating-point.");
@@ -80,40 +80,40 @@ public:
 
     unsigned i()
     {
-        return __i;
+        return i_value;
     }
 
     float f()
     {
-        return __f;
+        return f_value;
     }
 
     // caller should guarantee, that integral value will not exceed floating point value size
-    sIF_dual_type &operator = (const I _i)
+    sIF_dual_type &operator = (const I value)
     {
-        __i = _i;
-        __f = static_cast<F>(_i);
+        i_value = value;
+        f_value = static_cast<F>(value);
         return *this;
     }
 
     // caller should guarantee, that integral value will not exceed floating point value size
-    void operator () (const I _i)
+    void operator () (const I value)
     {
-        __i = _i;
-        __f = static_cast<F>(_i);
+        i_value = value;
+        f_value = static_cast<F>(value);
     }
 
-    bool operator == (sIF_dual_type &_dual)
+    bool operator == (sIF_dual_type &dual_value)
     {
         // since both parts synchronized, we need only one check
-        return (__i == _dual.i());
+        return (i_value == dual_value.i());
     }
 
 private:
     // don't allow direct access, we should guarantee, that all
     // parts have proper value, only public methods should be used
-    I __i;
-    F __f;
+    I i_value;
+    F f_value;
 };
 
 /*
