@@ -48,6 +48,7 @@
 #include <locale>
 #include <iostream>
 #include <functional>
+#include <stdint.h>
 
 // don't setup NDEBUG in sources, use definition in build system instead
 #include <cassert>
