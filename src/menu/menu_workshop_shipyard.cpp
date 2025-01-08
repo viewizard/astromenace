@@ -430,7 +430,9 @@ void WorkshopCreateBuyShip()
     }
     // for new ship with less count of weapons slots - don't re-buy rest
     for (unsigned j = sharedWorkshopFighterGame->WeaponSlots.size(); j < OldWeaponQuantity; j++) {
-        ChangeGameConfig().Profile[CurrentProfile].Weapon[j] = 0;
+        assert(j < config::MAX_WEAPONS);
+        if (j < config::MAX_WEAPONS)
+            ChangeGameConfig().Profile[CurrentProfile].Weapon[j] = 0;
     }
 
     // create internal systems (visual part)
