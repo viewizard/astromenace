@@ -46,6 +46,7 @@
 #include "graphics.h"
 #include "extensions.h"
 #include "SDL2/SDL.h"
+#include <string.h>
 
 namespace viewizard {
 
