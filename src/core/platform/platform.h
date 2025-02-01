@@ -40,10 +40,10 @@ struct sRECT;
 
 // Get key status (pressed or not).
 bool vw_GetKeyStatus(int Key);
-// Set key status (pressed or released).
-void vw_SetKeyStatus(int Key, bool NewKeyStatus);
+// Set key status released.
+void vw_SetKeyReleased(int Key);
 // Key status update. Should be called on SDL_KEYUP event.
-void vw_KeyStatusUpdate(int Key);
+void vw_KeyStatusUpdate(int Key, bool StatusDown);
 // Get libSDL2 keystate array size.
 int vw_GetKeyStateArraySize();
 // Set current unicode (UTF8) character.

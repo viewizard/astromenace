@@ -845,7 +845,7 @@ void DrawGame()
                     SetCurrentDialogBox(eDialogBox::QuiToMenuNoSave);
                 }
                 GameMissionCompleteStatusShowDialog = false;
-                vw_SetKeyStatus(SDLK_ESCAPE, false);
+                vw_SetKeyReleased(SDLK_ESCAPE);
             }
         }
     }

@@ -449,8 +449,8 @@ void ShipSlotWeapon(int SlotNum, int X, int Y)
             PlayMenuSFX(eMenuSFX::Click, 1.0f);
             WeaponSetupSlot = SlotNum;
             if (InFocusByKeyboard) {
-                vw_SetKeyStatus(SDLK_KP_ENTER, false);
-                vw_SetKeyStatus(SDLK_RETURN, false);
+                vw_SetKeyReleased(SDLK_KP_ENTER);
+                vw_SetKeyReleased(SDLK_RETURN);
             }
         }
     } else {

@@ -83,7 +83,7 @@ void Loop_Proc()
 
     if (vw_GetKeyStatus(SDLK_ESCAPE)) {
         SetCurrentDialogBox(eDialogBox::QuitFromGame);
-        vw_SetKeyStatus(SDLK_ESCAPE, false);
+        vw_SetKeyReleased(SDLK_ESCAPE);
     }
 
     cCommand::GetInstance().Proceed();
@@ -93,7 +93,7 @@ void Loop_Proc()
     // switch active menu element by keyboard (TAB key)
     if (vw_GetKeyStatus(SDLK_TAB)) {
         CurrentKeyboardSelectMenuElement++;
-        vw_SetKeyStatus(SDLK_TAB, false);
+        vw_SetKeyReleased(SDLK_TAB);
     }
 
     // switch active menu element by keyboard (arrow keys)
@@ -101,13 +101,13 @@ void Loop_Proc()
         || (MenuStatus == eMenuStatus::GAME && (isDialogBoxDrawing() || GameContentTransp >= 0.99f))) {
         if (vw_GetKeyStatus(SDLK_RIGHT) || vw_GetKeyStatus(SDLK_DOWN)) {
             CurrentKeyboardSelectMenuElement++;
-            vw_SetKeyStatus(SDLK_RIGHT, false);
-            vw_SetKeyStatus(SDLK_DOWN, false);
+            vw_SetKeyReleased(SDLK_RIGHT);
+            vw_SetKeyReleased(SDLK_DOWN);
         }
         if (vw_GetKeyStatus(SDLK_LEFT) || vw_GetKeyStatus(SDLK_UP)) {
             CurrentKeyboardSelectMenuElement--;
-            vw_SetKeyStatus(SDLK_LEFT, false);
-            vw_SetKeyStatus(SDLK_UP, false);
+            vw_SetKeyReleased(SDLK_LEFT);
+            vw_SetKeyReleased(SDLK_UP);
             if (CurrentKeyboardSelectMenuElement < 1) {
                 CurrentKeyboardSelectMenuElement = CurrentActiveMenuElement;
             }
@@ -133,15 +133,15 @@ void Loop_Proc()
         std::strftime(tmpBuffer.data(), tmpBuffer.size(), "AstroMenaceScreenshot%Y-%m-%d_%H-%M-%S.bmp", std::localtime(&RawTime));
 
         vw_Screenshot(GameConfig().Width, GameConfig().Height, GetDesktopPath() + std::string{tmpBuffer.data()});
-        vw_SetKeyStatus(SDLK_PRINTSCREEN, false);
-        vw_SetKeyStatus(SDLK_F12, false);
+        vw_SetKeyReleased(SDLK_PRINTSCREEN);
+        vw_SetKeyReleased(SDLK_F12);
     }
 
     if (MenuStatus == eMenuStatus::GAME) {
         // change weapon panel's view
         if (vw_GetKeyStatus(SDLK_F8)) {
             WeaponPanelViewNext(ChangeGameConfig().WeaponPanelView);
-            vw_SetKeyStatus(SDLK_F8, false);
+            vw_SetKeyReleased(SDLK_F8);
         }
         // change fire mode
         if (vw_GetKeyStatus(SDLK_F9)) {
@@ -149,14 +149,14 @@ void Loop_Proc()
             if (GameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode > 2) {
                 ChangeGameConfig().Profile[CurrentProfile].PrimaryWeaponFireMode = 1;
             }
-            vw_SetKeyStatus(SDLK_F9, false);
+            vw_SetKeyReleased(SDLK_F9);
         }
         if (vw_GetKeyStatus(SDLK_F10)) {
             ChangeGameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode++;
             if (GameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode > 2) {
                 ChangeGameConfig().Profile[CurrentProfile].SecondaryWeaponFireMode = 1;
             }
-            vw_SetKeyStatus(SDLK_F10, false);
+            vw_SetKeyReleased(SDLK_F10);
         }
     }
 }

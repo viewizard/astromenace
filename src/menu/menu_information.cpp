@@ -1551,7 +1551,7 @@ void InformationMenu()
             CreateNum = InfoEnd;
         }
         CreateInfoObject();
-        vw_SetKeyStatus(SDLK_PAGEUP, false);
+        vw_SetKeyReleased(SDLK_PAGEUP);
     }
 
     X = GameConfig().InternalWidth / 2 + 9;
@@ -1568,7 +1568,7 @@ void InformationMenu()
             CreateNum = 1;
         }
         CreateInfoObject();
-        vw_SetKeyStatus(SDLK_PAGEDOWN, false);
+        vw_SetKeyReleased(SDLK_PAGEDOWN);
     }
 
 

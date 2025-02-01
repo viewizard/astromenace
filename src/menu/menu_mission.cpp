@@ -334,8 +334,8 @@ void MissionMenu()
                         ChangeGameConfig().Profile[CurrentProfile].LastMission = CurrentMission;
                         PlayMenuSFX(eMenuSFX::SelectLine, 1.0f);
                         if (InFocusByKeyboard) {
-                            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-                            vw_SetKeyStatus(SDLK_RETURN, false);
+                            vw_SetKeyReleased(SDLK_KP_ENTER);
+                            vw_SetKeyReleased(SDLK_RETURN);
                         }
                     }
 

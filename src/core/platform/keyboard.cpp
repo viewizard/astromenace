@@ -32,15 +32,7 @@ namespace viewizard {
 
 namespace {
 
-// libSDL2 keystate array size
-int KeyStateArraySize{0};
-// since we can't prevent SDL_KEYDOWN event repeats from hardware in libSDL2, we are
-// forced to use additional array with locks in order to be sure, that we will not
-// handle one real key press more that one time per press, just because keyboard repeats
-// SDL_KEYDOWN every 30 ms
-// KeyStatus[N] == true  - we can get "real" key status
-// KeyStatus[N] == false - we locked "key released" manually by vw_SetKeyStatus() call
-std::vector<bool> KeyStatus{};
+std::unordered_map<int, bool> KeyStatus{};
 // unicode character for current pressed button
 std::u32string CurrentUnicodeChar{};
 
@@ -48,66 +40,30 @@ std::u32string CurrentUnicodeChar{};
 
 
 /*
- * Resize key status array.
- */
-static void ResizeKeyStatus(unsigned int NeedStoreElement)
-{
-    // since we start from 0 (first element), in order to access
-    // NeedStoreElement element, we need at least "NeedStoreElement + 1"
-    // elements in KeyStatus array
-    if (KeyStatus.size() + 1 < NeedStoreElement) {
-        KeyStatus.resize(NeedStoreElement + 1, true); // fill it with 'true' by default
-    }
-}
-
-/*
  * Get key status (pressed or not).
  */
 bool vw_GetKeyStatus(int Key)
 {
-    const uint8_t *KeyState = SDL_GetKeyboardState(&KeyStateArraySize);
-    ResizeKeyStatus(SDL_GetScancodeFromKey(Key));
-    // handle "key down" only if KeyStatus[] also 'true', mean, we don't "key up"
-    // it manually by vw_SetKeyStatus() call
-    if (KeyState[SDL_GetScancodeFromKey(Key)] && KeyStatus[SDL_GetScancodeFromKey(Key)]) {
-        return true;
-    }
+    if (KeyStatus.find(Key) == KeyStatus.end())
+        return false;
 
-    return false;
+    return KeyStatus[Key];
 }
 
 /*
- * Set key status (pressed or released).
+ * Set key status released.
  */
-void vw_SetKeyStatus(int Key, bool NewKeyStatus)
+void vw_SetKeyReleased(int Key)
 {
-    ResizeKeyStatus(SDL_GetScancodeFromKey(Key));
-    KeyStatus[SDL_GetScancodeFromKey(Key)] = NewKeyStatus;
+    KeyStatus[Key] = false;
 }
 
 /*
- * Key status update. Should be called on SDL_KEYUP event.
+ * Key status update. Should be called on SDL_KEYUP and SDL_KEYDOWN events.
  */
-void vw_KeyStatusUpdate(int Key)
+void vw_KeyStatusUpdate(int Key, bool StatusDown)
 {
-    const uint8_t *KeyState = SDL_GetKeyboardState(&KeyStateArraySize);
-    ResizeKeyStatus(SDL_GetScancodeFromKey(Key));
-    // reset KeyStatus[] to "true", since we have event SDL_KEYUP
-    if (!KeyState[SDL_GetScancodeFromKey(Key)]) {
-        KeyStatus[SDL_GetScancodeFromKey(Key)] = true;
-    }
-}
-
-/*
- * Get libSDL2 keystate array size.
- */
-int vw_GetKeyStateArraySize()
-{
-    if (!KeyStateArraySize) {
-        SDL_GetKeyboardState(&KeyStateArraySize);
-    }
-
-    return KeyStateArraySize;
+    KeyStatus[Key] = StatusDown;
 }
 
 /*

@@ -193,7 +193,7 @@ void ProfileInputText()
             }
             SDL_free(tmpUTF8);
         }
-        vw_SetKeyStatus(SDLK_v, false);
+        vw_SetKeyReleased(SDLK_v);
     }
 
 
@@ -220,14 +220,14 @@ void ProfileInputText()
         }
         SoundTaping = PlayMenuSFX(eMenuSFX::TapingClick, 1.0f);
 
-        vw_SetKeyStatus(SDLK_BACKSPACE, false);
+        vw_SetKeyReleased(SDLK_BACKSPACE);
     }
 
     if ((vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN)) && !NewProfileName.empty()) {
         NewRecord();
         //Audio_PlayMenuSound(4,1.0f);
-        vw_SetKeyStatus(SDLK_KP_ENTER, false);
-        vw_SetKeyStatus(SDLK_RETURN, false);
+        vw_SetKeyReleased(SDLK_KP_ENTER);
+        vw_SetKeyReleased(SDLK_RETURN);
     }
 
 
@@ -429,8 +429,8 @@ void ProfileMenu()
                     ChangeGameConfig().LastProfile = CurrentProfile;
                     PlayMenuSFX(eMenuSFX::SelectLine, 1.0f);
                     if (InFocusByKeyboard) {
-                        vw_SetKeyStatus(SDLK_KP_ENTER, false);
-                        vw_SetKeyStatus(SDLK_RETURN, false);
+                        vw_SetKeyReleased(SDLK_KP_ENTER);
+                        vw_SetKeyReleased(SDLK_RETURN);
                     }
                 }
 

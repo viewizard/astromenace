@@ -94,15 +94,15 @@ void cGameSpeed::CheckKeyboard()
 
     if (vw_GetKeyStatus(SDLK_F5)) {
         SetSpeed(GameConfig().GameSpeed - SpeedChangeStep);
-        vw_SetKeyStatus(SDLK_F5, false);
+        vw_SetKeyReleased(SDLK_F5);
     }
     if (vw_GetKeyStatus(SDLK_F6)) {
         SetSpeed(DefaultSpeed);
-        vw_SetKeyStatus(SDLK_F6, false);
+        vw_SetKeyReleased(SDLK_F6);
     }
     if (vw_GetKeyStatus(SDLK_F7)) {
         SetSpeed(GameConfig().GameSpeed + SpeedChangeStep);
-        vw_SetKeyStatus(SDLK_F7, false);
+        vw_SetKeyReleased(SDLK_F7);
     }
 }
 

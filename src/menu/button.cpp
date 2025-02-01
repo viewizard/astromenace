@@ -155,8 +155,8 @@ bool DrawButton384(int X, int Y, const std::u32string &Text, float Transp, float
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
         if (InFocusByKeyboard) {
-            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-            vw_SetKeyStatus(SDLK_RETURN, false);
+            vw_SetKeyReleased(SDLK_KP_ENTER);
+            vw_SetKeyReleased(SDLK_RETURN);
         }
         return true;
     }
@@ -306,8 +306,8 @@ bool DrawButton256(int X, int Y, const std::u32string &Text, float Transp, float
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
         if (InFocusByKeyboard) {
-            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-            vw_SetKeyStatus(SDLK_RETURN, false);
+            vw_SetKeyReleased(SDLK_KP_ENTER);
+            vw_SetKeyReleased(SDLK_RETURN);
         }
         return true;
     }
@@ -412,8 +412,8 @@ bool DrawButton200_2(int X, int Y, const std::u32string &Text, float Transp, boo
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
         if (InFocusByKeyboard) {
-            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-            vw_SetKeyStatus(SDLK_RETURN, false);
+            vw_SetKeyReleased(SDLK_KP_ENTER);
+            vw_SetKeyReleased(SDLK_RETURN);
         }
         return true;
     }
@@ -520,8 +520,8 @@ bool DrawButton128_2(int X, int Y, const std::u32string &Text, float Transp, boo
             PlayMenuSFX(eMenuSFX::Click, 1.0f);
         }
         if (InFocusByKeyboard) {
-            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-            vw_SetKeyStatus(SDLK_RETURN, false);
+            vw_SetKeyReleased(SDLK_KP_ENTER);
+            vw_SetKeyReleased(SDLK_RETURN);
         }
         return true;
     }
@@ -597,8 +597,8 @@ void DrawCheckBox(int X, int Y, bool &CheckBoxStatus, const std::u32string &Text
         CheckBoxStatus = !CheckBoxStatus;
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
         if (InFocusByKeyboard) {
-            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-            vw_SetKeyStatus(SDLK_RETURN, false);
+            vw_SetKeyReleased(SDLK_KP_ENTER);
+            vw_SetKeyReleased(SDLK_RETURN);
         }
     }
 }
@@ -685,8 +685,8 @@ bool DrawListUpButton(int X, int Y, float Transp, bool Off)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
         if (InFocusByKeyboard) {
-            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-            vw_SetKeyStatus(SDLK_RETURN, false);
+            vw_SetKeyReleased(SDLK_KP_ENTER);
+            vw_SetKeyReleased(SDLK_RETURN);
         }
         return true;
     }
@@ -774,8 +774,8 @@ bool DrawListDownButton(int X, int Y, float Transp, bool Off)
             || (InFocusByKeyboard && (vw_GetKeyStatus(SDLK_KP_ENTER) || vw_GetKeyStatus(SDLK_RETURN))))) {
         PlayMenuSFX(eMenuSFX::Click, 1.0f);
         if (InFocusByKeyboard) {
-            vw_SetKeyStatus(SDLK_KP_ENTER, false);
-            vw_SetKeyStatus(SDLK_RETURN, false);
+            vw_SetKeyReleased(SDLK_KP_ENTER);
+            vw_SetKeyReleased(SDLK_RETURN);
         }
         return true;
     }

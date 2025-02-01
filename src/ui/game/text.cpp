@@ -208,7 +208,7 @@ void DrawMissionFailedText()
 
     if (!isDialogBoxDrawing() && vw_GetKeyStatus(SDLK_ESCAPE)) {
         ExitGame(eCommand::SWITCH_FROM_GAME_TO_MAIN_MENU);
-        vw_SetKeyStatus(SDLK_ESCAPE, false);
+        vw_SetKeyReleased(SDLK_ESCAPE);
     }
 
     constexpr int Y{180 + 270};

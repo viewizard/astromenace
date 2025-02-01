@@ -80,7 +80,7 @@ void cFPS::CheckKeyboard()
         return;
     }
 
-    vw_SetKeyStatus(SDLK_F2, false);
+    vw_SetKeyReleased(SDLK_F2);
     Switch();
 }
 

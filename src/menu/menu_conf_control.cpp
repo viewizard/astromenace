@@ -59,7 +59,7 @@ static bool ReservedKeys(int Key)
         // don't remove this code duplication for now, don't use "[[fallthrough]];" (since C++17)
         // or "[[gnu::fallthrough]];" here for supress GCC7 warnings, since this produce another
         // warnings on old compiller versions
-        vw_SetKeyStatus(Key, false);
+        vw_SetKeyReleased(Key);
         return true;
     case SDLK_F1:
     case SDLK_F2:
@@ -86,7 +86,7 @@ static bool ReservedKeys(int Key)
     case SDLK_F23:
     case SDLK_F24:
     case SDLK_PRINTSCREEN:
-        vw_SetKeyStatus(Key, false);
+        vw_SetKeyReleased(Key);
         return true;
     }
 
@@ -100,7 +100,9 @@ void CheckMouseKeysJoystickState()
     if (!isDialogBoxDrawing() && NeedCheck > 0) {
         // keyboard
         if ((NeedCheck > 0 && NeedCheck <= 6) || NeedCheck == 100) {
-            for (int k = 0; k < vw_GetKeyStateArraySize(); k++) {
+            int KeyStateArraySize = 0;
+            SDL_GetKeyboardState(&KeyStateArraySize);
+            for (int k = 0; k < KeyStateArraySize; k++) {
                 int i = SDL_GetKeyFromScancode((SDL_Scancode)k);
                 if (vw_GetKeyStatus(i) && !ReservedKeys(i) && SDL_GetKeyName(i)) {
                     switch (NeedCheck) {
@@ -128,7 +130,7 @@ void CheckMouseKeysJoystickState()
                         break;
                     }
 
-                    vw_SetKeyStatus(i, false);
+                    vw_SetKeyReleased(i);
                     NeedCheck = 0;
                 }
             }
@@ -187,7 +189,7 @@ void CheckMouseKeysJoystickState()
 
         // in case Esc button - prevent future checks
         if (vw_GetKeyStatus(SDLK_ESCAPE)) {
-            vw_SetKeyStatus(SDLK_ESCAPE, false);
+            vw_SetKeyReleased(SDLK_ESCAPE);
             NeedCheck = 0;
         }
     }

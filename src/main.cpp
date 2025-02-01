@@ -322,8 +322,12 @@ static void Loop()
                 }
                 break;
 
+            case SDL_KEYDOWN:
+                vw_KeyStatusUpdate(event.key.keysym.sym, true);
+                break;
+
             case SDL_KEYUP:
-                vw_KeyStatusUpdate(event.key.keysym.sym);
+                vw_KeyStatusUpdate(event.key.keysym.sym, false);
                 break;
 
             case SDL_TEXTINPUT:
