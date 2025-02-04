@@ -26,7 +26,7 @@ More information and screenshots could be found at [AstroMenace website](https:/
 
 Installer for Windows could be found in [Releases](https://github.com/viewizard/astromenace/releases).
 
-Almost all popular Linux distros already have a stable version of the game in their repositories. Install the "astromenace" package with your distro's package manager. We do not provide packages for any Linux anymore, contact maintainers of your Linux distro.
+Almost all popular Linux distros, FlatPak and Snap already have a stable version of the game in their repositories. Install the "astromenace" package with your distro's package manager.
 
 [![latest packaged version(s)](https://repology.org/badge/latest-versions/astromenace.svg)](https://repology.org/metapackage/astromenace) [![Packaging status](https://repology.org/badge/tiny-repos/astromenace.svg)](https://repology.org/metapackage/astromenace)
 
@@ -51,8 +51,12 @@ sudo emerge astromenace
 ```
 
 #### FlatPak
-AstroMenace is also available as a [FlatPak](https://flatpak.org) package from
+AstroMenace available as a [FlatPak](https://flatpak.org) package from
 [FlatHub](https://flathub.org/apps/com.viewizard.AstroMenace).
+
+#### Snap
+
+AstroMenace available as a ***snap*** package on [Canonical Snapcraft](https://snapcraft.io/astromenace).
 
 ## Build (Windows)
 
