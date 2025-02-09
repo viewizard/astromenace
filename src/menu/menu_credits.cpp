@@ -2,7 +2,7 @@
 
     AstroMenace
     Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
+    Copyright (C) 2006-2025 Mikhail Kurinnoi, Viewizard
 
 
     AstroMenace is free software: you can redistribute it and/or modify
@@ -103,7 +103,7 @@ const std::vector<std::string> CreditsArray{
     "",
     "",
     " ", /* this is correct, we need not empty line for white text color in next line */
-    "Copyright © 2007-2022, Viewizard",
+    "Copyright © 2007-2025, Viewizard",
     "https://viewizard.com"
 };
 

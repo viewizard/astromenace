@@ -2,7 +2,7 @@
 
     AstroMenace
     Hardcore 3D space scroll-shooter with spaceship upgrade possibilities.
-    Copyright (c) 2006-2019 Mikhail Kurinnoi, Viewizard
+    Copyright (C) 2006-2025 Mikhail Kurinnoi, Viewizard
 
 
     AstroMenace is free software: you can redistribute it and/or modify
@@ -28,8 +28,8 @@
 #ifndef BUILDCONFIG_H
 #define BUILDCONFIG_H
 
-#define GAME_VERSION    "1.4.2"
-#define GAME_VFS_BUILD  221114
+#define GAME_VERSION    "1.4.3"
+#define GAME_VFS_BUILD  250208
 
 
 // define DATADIR with gamedata.vfs file location if you don't put it together in the same directory with binary file.

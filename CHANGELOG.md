@@ -1,3 +1,13 @@
+# Version 1.4.3
+
+### Overall changes:
+
+- Prevented assets loading slow down with enabled VSync.
+- Added <Ctrl>+<V> keys support for copy text from clipboard into new pilot's profile name.
+- Improved textures cache work.
+- Improved preloaded 3d models cache work.
+- Changes for better work with SDL2-compat.
+
 # Version 1.4.2
 
 ### Overall changes:
