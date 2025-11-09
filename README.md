@@ -187,7 +187,20 @@ cmake .. -G Ninja -DCMAKE_INSTALL_PREFIX=$PWD/../bin -DCMAKE_BUILD_TYPE=Release
 cmake --build . --target install
 ```
 
-### 4) Create desktop shortcut or start AstroMenace
+#### Desktop Entry and Icon Installation
+
+On Linux, the build system can optionally install desktop entry and icon files following the Freedesktop standard. This is disabled by default.
+
+The installation includes the Desktop entry file and two icons (64x64 and 128x128).
+
+**To enable desktop file installation:**
+```
+cmake .. -DINSTALL_DESKTOP_ENTRY=ON
+```
+
+If needed the default locations of those files can be overridden via `DESKTOP_FILE_DIR` and `ICON_DIR`.
+
+### 4) Start AstroMenace
 ```
 ~/astromenace/bin/astromenace
 ```
