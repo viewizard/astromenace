@@ -25,6 +25,12 @@
 
 *****************************************************************************/
 
+// Required for supporting vfork() with glibc
+#ifdef __unix
+#define _DEFAULT_SOURCE // Since glibc 2.19
+#define _BSD_SOURCE // glibc <= 2.19
+#endif // __unix
+
 #include "../base.h"
 #ifdef __unix
 #include <unistd.h>
