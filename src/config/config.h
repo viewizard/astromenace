@@ -74,6 +74,10 @@ constexpr float VirtualHeight_Wide{768.0f};
 constexpr float VirtualWidth_Standard{1024.0f};
 constexpr float VirtualHeight_Standard{768.0f};
 
+// Square (1:1) displays, e.g. HyperPixel 4.0 at 720x720
+constexpr float VirtualWidth_Square{768.0f};
+constexpr float VirtualHeight_Square{768.0f};
+
 } // config
 
 // This structure should be POD, since we "pack" it into config file
