@@ -106,8 +106,8 @@ static bool AllowedAspectRatio(const sViewSize &ViewSize)
 {
     float tmpAspectRatio = static_cast<float>(ViewSize.Width) / static_cast<float>(ViewSize.Height);
 
-    // only aspect ratio from 5:4 to 16:9 are allowed
-    if (tmpAspectRatio > 1.24f && tmpAspectRatio < 1.78f) {
+    // allow square (1:1) displays in addition to standard (5:4 to 4:3) and wide (up to 16:9)
+    if (tmpAspectRatio >= 0.99f && tmpAspectRatio < 1.78f) {
         return true;
     }
 
@@ -195,6 +195,7 @@ const std::vector<sViewSize> &DetectWindowSizeArray()
     // than use more or less popular resolutions as default array
     static const std::vector<sViewSize> DefaultWindowSizeArray{
         sViewSize{640, 480},
+        sViewSize{720, 720},
         sViewSize{768, 480},
         sViewSize{800, 480},
         sViewSize{800, 600},

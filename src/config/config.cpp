@@ -123,9 +123,15 @@ sGameConfig &ChangeGameConfig()
  */
 void ConfigVirtualInternalResolution()
 {
+    float tmpAspectRatio = static_cast<float>(GameConfig().Width) / static_cast<float>(GameConfig().Height);
+
     if (StandardAspectRation(sViewSize{GameConfig().Width, GameConfig().Height})) {
         ChangeGameConfig().InternalWidth = config::VirtualWidth_Standard;
         ChangeGameConfig().InternalHeight = config::VirtualHeight_Standard;
+    } else if (tmpAspectRatio < 1.1f) {
+        // square or near-square displays (e.g. 720x720)
+        ChangeGameConfig().InternalWidth = config::VirtualWidth_Square;
+        ChangeGameConfig().InternalHeight = config::VirtualHeight_Square;
     } else {
         ChangeGameConfig().InternalWidth = config::VirtualWidth_Wide;
         ChangeGameConfig().InternalHeight = config::VirtualHeight_Wide;
