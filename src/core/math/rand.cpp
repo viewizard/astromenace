@@ -32,8 +32,18 @@ namespace viewizard {
 
 namespace {
 
-std::random_device rd;
-std::default_random_engine gen(rd());
+// Function-local static so the engine is constructed (and seeded) on first
+// use. With a namespace-scope object, another translation unit's static
+// initializer that calls vw_fRand() may run first (initialization order
+// across translation units is unspecified); the engine is then still
+// zero-initialized, and state 0 is a fixed point of the minstd generator:
+// std::generate_canonical() maps the stuck value to >= 1.0f and retries
+// forever, hanging the process before main() is reached.
+std::default_random_engine &GetRandomEngine()
+{
+    static std::default_random_engine gen{std::random_device{}()};
+    return gen;
+}
 
 } // unnamed namespace
 
@@ -42,7 +52,7 @@ std::default_random_engine gen(rd());
  */
 float vw_fRand()
 {
-    return std::generate_canonical<float, 10>(gen);
+    return std::generate_canonical<float, 10>(GetRandomEngine());
 }
 
 /*
